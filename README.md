@@ -1,5 +1,9 @@
 # Icaro
 
+<p align="center">
+   <img src ="https://github.com/nethesis/icaro/raw/master/logo/logo.png" />
+</p>
+
 **"Easy and simple HotSpot for small and medium hotels"**
 
 ## Introduction
