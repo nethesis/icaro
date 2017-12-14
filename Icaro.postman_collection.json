@@ -1,0 +1,855 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Icaro",
+		"_postman_id": "bafd7e7d-6a48-dd60-8710-9ca5b0709ccc",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Manager",
+			"description": "",
+			"item": [
+				{
+					"name": "/login",
+					"request": {
+						"url": "https://{{hostname}}/api/login",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"\",\n\t\"password\": \"\"\n}"
+						},
+						"description": "Used for authenticate user"
+					},
+					"response": [
+						{
+							"id": "de390fcc-f3f7-4344-81b1-58da13edd42b",
+							"name": "login",
+							"originalRequest": {
+								"url": "https://{{hostname}}/api/login",
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"username\": \"luca,1234\",\n\t\"password\": \"password,1234\"\n}"
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "parsed",
+							"header": [],
+							"cookie": [],
+							"responseTime": 0,
+							"body": "{\n    \"status\": \"success\",\n    \"account_type\": \"desk\",\n    \"token\": \"c1b5ebd45281f0480cb9c6de963e5dd420c577d8b5abdc0e45944fddc988c67d\",\n    \"expires\": \"2017-12-15 23:59:59\"\n}"
+						}
+					]
+				},
+				{
+					"name": "/logout",
+					"request": {
+						"url": "https://{{hostname}}/api/logout",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Token",
+								"value": "c1b5ebd45281f0480cb9c6de963e5dd420c577d8b5abdc0e45944fddc988c67d",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Logout the user"
+					},
+					"response": [
+						{
+							"id": "01211117-f4bd-4cf3-869f-0d7d951a4e10",
+							"name": "/logout",
+							"originalRequest": {
+								"url": "https://{{hostname}}/api/logout",
+								"method": "POST",
+								"header": [
+									{
+										"key": "Token",
+										"value": "c1b5ebd45281f0480cb9c6de963e5dd420c577d8b5abdc0e45944fddc988c67d",
+										"description": ""
+									}
+								],
+								"body": {}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "parsed",
+							"header": [],
+							"cookie": [],
+							"responseTime": 0,
+							"body": "{\n\t\n}"
+						}
+					]
+				},
+				{
+					"name": "/users",
+					"request": {
+						"url": "https://{{hostname}}/api/users",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Token",
+								"value": "c1b5ebd45281f0480cb9c6de963e5dd420c577d8b5abdc0e45944fddc988c67d",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Get one user using its id"
+					},
+					"response": [
+						{
+							"id": "c4c93452-4b64-42f0-92c6-30b2b0657e2c",
+							"name": "users",
+							"originalRequest": {
+								"url": "https://{{hostname}}/api/users",
+								"method": "GET",
+								"header": [
+									{
+										"key": "Token",
+										"value": "c1b5ebd45281f0480cb9c6de963e5dd420c577d8b5abdc0e45944fddc988c67d",
+										"description": ""
+									}
+								],
+								"body": {}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "parsed",
+							"header": [],
+							"cookie": [],
+							"responseTime": 0,
+							"body": "[\n    {\n        \"id\": 1,\n        \"hotspot_id\": \"1\",\n        \"firstname\": \"john\",\n        \"lastname\": \"doe\",\n        \"username\": \"user@email.com\",\n        \"email\": \"user@email.com\",\n        \"kbps_down\": \"750\",\n        \"kbps_up\": \"150\",\n        \"valid_from\": \"2017-12-16 00:00:00\",\n        \"valid_until\": \"2017-12-25 23:59:59\",\n        \"created\": \"2017-12-15 10:30:00\"\n    },\n    {\n        \"id\": 2,\n        \"hotspot_id\": \"1\",\n        \"firstname\": \"john2\",\n        \"lastname\": \"doe2\",\n        \"username\": \"user2@email.com\",\n        \"password\": \"md5_of_mysecretpassword\",\n        \"email\": \"user2@email.com\",\n        \"kbps_down\": \"750\",\n        \"kbps_up\": \"150\",\n        \"valid_from\": \"2017-12-16 00:00:00\",\n        \"valid_until\": \"2017-12-25 23:59:59\",\n        \"created\": \"2017-12-15 10:30:00\"\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "/users:/id",
+					"request": {
+						"url": {
+							"raw": "https://{{hostname}}/api/users/:id",
+							"protocol": "https",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"api",
+								"users",
+								":id"
+							],
+							"query": [],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Token",
+								"value": "c1b5ebd45281f0480cb9c6de963e5dd420c577d8b5abdc0e45944fddc988c67d",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Get one user by its id"
+					},
+					"response": [
+						{
+							"id": "157163ee-5692-4aca-a951-bae85a4d7783",
+							"name": "user",
+							"originalRequest": {
+								"url": "https://{{hostname}}/api/users",
+								"method": "GET",
+								"header": [
+									{
+										"key": "Token",
+										"value": "c1b5ebd45281f0480cb9c6de963e5dd420c577d8b5abdc0e45944fddc988c67d",
+										"description": ""
+									}
+								],
+								"body": {}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "parsed",
+							"header": [],
+							"cookie": [],
+							"responseTime": 0,
+							"body": "{\n    \"id\": 1,\n    \"hotspot_id\": \"1\",\n    \"firstname\": \"john\",\n    \"lastname\": \"doe\",\n    \"username\": \"user@email.com\",\n    \"email\": \"user@email.com\",\n    \"kbps_down\": \"750\",\n    \"kbps_up\": \"150\",\n    \"valid_from\": \"2017-12-16 00:00:00\",\n    \"valid_until\": \"2017-12-25 23:59:59\",\n    \"created\": \"2017-12-15 10:30:00\"\n}"
+						}
+					]
+				},
+				{
+					"name": "users/:id",
+					"request": {
+						"url": {
+							"raw": "https://{{hostname}}/api/users/:id",
+							"protocol": "https",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"api",
+								"users",
+								":id"
+							],
+							"query": [],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Token",
+								"value": "c1b5ebd45281f0480cb9c6de963e5dd420c577d8b5abdc0e45944fddc988c67d",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"firstname\": \"\",\n  \"lastname\": \"\",\n  \"email\": \"\",\n  \"kbps_down\": \"\",\n  \"kbps_up\": \"\",\n  \"valid_from\": \"\",\n  \"valid_until\": \"\"\n}"
+						},
+						"description": "Update user's info"
+					},
+					"response": [
+						{
+							"id": "1dc50dc9-fcf5-49ca-bfc7-7ce48fe90dc0",
+							"name": "users/:id",
+							"originalRequest": {
+								"url": {
+									"raw": "https://{{hostname}}/api/users/:id",
+									"protocol": "https",
+									"host": [
+										"{{hostname}}"
+									],
+									"path": [
+										"api",
+										"users",
+										":id"
+									],
+									"query": [],
+									"variable": [
+										{
+											"key": "id",
+											"value": ""
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": "",
+										"warning": ""
+									},
+									{
+										"key": "Token",
+										"value": "c1b5ebd45281f0480cb9c6de963e5dd420c577d8b5abdc0e45944fddc988c67d",
+										"description": "",
+										"warning": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"firstname\": \"john\",\n\t\"lastname\": \"doe\",\n\t\"email\": \"user@email.com\",\n\t\"kbps_down\": \"750\",\n\t\"kbps_up\": \"150\",\n\t\"valid_from\": \"2017-12-15 00:00:00\",\n\t\"valid_until\": \"2017-12-25 23:59:59\"\n}"
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "parsed",
+							"header": [],
+							"cookie": [],
+							"responseTime": 0,
+							"body": "{\n\t\"status\": \"success\"\n}"
+						}
+					]
+				},
+				{
+					"name": "/users",
+					"request": {
+						"url": {
+							"raw": "https://{{hostname}}/api/users/:id",
+							"protocol": "https",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"api",
+								"users",
+								":id"
+							],
+							"query": [],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Token",
+								"value": "c1b5ebd45281f0480cb9c6de963e5dd420c577d8b5abdc0e45944fddc988c67d",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Delete a user by its id"
+					},
+					"response": [
+						{
+							"id": "b18d8837-d82a-4d04-b22b-ea9fa4228cbd",
+							"name": "users",
+							"originalRequest": {
+								"url": {
+									"raw": "https://{{hostname}}/api/users/:id",
+									"protocol": "https",
+									"host": [
+										"{{hostname}}"
+									],
+									"path": [
+										"api",
+										"users",
+										":id"
+									],
+									"query": [],
+									"variable": [
+										{
+											"key": "id",
+											"value": ""
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Token",
+										"value": "c1b5ebd45281f0480cb9c6de963e5dd420c577d8b5abdc0e45944fddc988c67d",
+										"description": ""
+									}
+								],
+								"body": {}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "parsed",
+							"header": [],
+							"cookie": [],
+							"responseTime": 0,
+							"body": "{\n\t\"status\": \"success\"\n}"
+						}
+					]
+				},
+				{
+					"name": "/sessions",
+					"request": {
+						"url": "https://{{hostname}}/api/sessions",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Token",
+								"value": "c1b5ebd45281f0480cb9c6de963e5dd420c577d8b5abdc0e45944fddc988c67d",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Get all sessions list"
+					},
+					"response": [
+						{
+							"id": "0976ab61-872c-40c0-b850-8313a37d729d",
+							"name": "sessions",
+							"originalRequest": {
+								"url": "https://{{hostname}}/api/sessions",
+								"method": "GET",
+								"header": [
+									{
+										"key": "Token",
+										"value": "c1b5ebd45281f0480cb9c6de963e5dd420c577d8b5abdc0e45944fddc988c67d",
+										"description": ""
+									}
+								],
+								"body": {}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "parsed",
+							"header": [],
+							"cookie": [],
+							"responseTime": 0,
+							"body": "[\n    {\n        \"id\": \"1\",\n        \"unit_id\": \"1\",\n        \"hotspot_id\": \"1\",\n        \"device_id\": \"1\",\n        \"user_id\": \"1\",\n        \"bytes_up\": \"15663\",\n        \"bytes_down\": \"24080\",\n        \"duration\": \"328\",\n        \"auth_time\": \"2017-12-12 09:48:27\",\n        \"start_time\": \"2017-12-12 09:48:27\",\n        \"update_time\": \"2017-12-12 09:53:55\",\n        \"stop_time\": \"2017-12-12 09:53:55\"\n    },\n    {\n        \"id\": \"2\",\n        \"unit_id\": \"1\",\n        \"hotspot_id\": \"1\",\n        \"device_id\": \"1\",\n        \"user_id\": \"1\",\n        \"bytes_up\": \"1511077\",\n        \"bytes_down\": \"2163304\",\n        \"duration\": \"1435\",\n        \"auth_time\": \"2017-12-12 09:48:27\",\n        \"start_time\": \"2017-12-12 09:48:27\",\n        \"update_time\": \"2017-12-12 09:53:55\",\n        \"stop_time\": \"2017-12-12 09:53:55\"\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "/sessions/:id",
+					"request": {
+						"url": {
+							"raw": "https://{{hostname}}/api/sessions/:id",
+							"protocol": "https",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"api",
+								"sessions",
+								":id"
+							],
+							"query": [],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Token",
+								"value": "c1b5ebd45281f0480cb9c6de963e5dd420c577d8b5abdc0e45944fddc988c67d",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Get one session detail"
+					},
+					"response": [
+						{
+							"id": "62029cc7-d76e-4754-b205-1660b1084ae3",
+							"name": "session",
+							"originalRequest": {
+								"url": {
+									"raw": "https://{{hostname}}/api/sessions/:id",
+									"protocol": "https",
+									"host": [
+										"{{hostname}}"
+									],
+									"path": [
+										"api",
+										"sessions",
+										":id"
+									],
+									"query": [],
+									"variable": [
+										{
+											"key": "id",
+											"value": ""
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Token",
+										"value": "c1b5ebd45281f0480cb9c6de963e5dd420c577d8b5abdc0e45944fddc988c67d",
+										"description": ""
+									}
+								],
+								"body": {}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "parsed",
+							"header": [],
+							"cookie": [],
+							"responseTime": 0,
+							"body": "{\n    \"id\": \"1\",\n    \"unit_id\": \"1\",\n    \"hotspot_id\": \"1\",\n    \"device_id\": \"1\",\n    \"user_id\": \"1\",\n    \"bytes_up\": \"15663\",\n    \"bytes_down\": \"24080\",\n    \"duration\": \"328\",\n    \"auth_time\": \"2017-12-12 09:48:27\",\n    \"start_time\": \"2017-12-12 09:48:27\",\n    \"update_time\": \"2017-12-12 09:53:55\",\n    \"stop_time\": \"2017-12-12 09:53:55\"\n}"
+						}
+					]
+				},
+				{
+					"name": "/units",
+					"request": {
+						"url": "https://{{hostname}}/api/units",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Token",
+								"value": "c1b5ebd45281f0480cb9c6de963e5dd420c577d8b5abdc0e45944fddc988c67d",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Get list of access points"
+					},
+					"response": [
+						{
+							"id": "386a54c6-e594-4bc2-8ed7-546e7c662f97",
+							"name": "units",
+							"originalRequest": {
+								"url": "https://{{hostname}}/api/units",
+								"method": "GET",
+								"header": [
+									{
+										"key": "Token",
+										"value": "c1b5ebd45281f0480cb9c6de963e5dd420c577d8b5abdc0e45944fddc988c67d",
+										"description": ""
+									}
+								],
+								"body": {}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "parsed",
+							"header": [],
+							"cookie": [],
+							"responseTime": 0,
+							"body": "[\n    {\n        \"id\": \"1\",\n        \"hotspot_id\": \"1\",\n        \"mac_address\": \"00-0D-B9-41-7C-F8\",\n        \"description\": \"hotel one's ap\"\n    },\n    {\n        \"id\": \"2\",\n        \"hotspot_id\": \"1\",\n        \"mac_address\": \"00-0D-B9-41-7C-FF\",\n        \"description\": \"hotel two's ap\"\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "/units/:id",
+					"request": {
+						"url": {
+							"raw": "https://{{hostname}}/api/units/:id",
+							"protocol": "https",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"api",
+								"units",
+								":id"
+							],
+							"query": [],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Token",
+								"value": "c1b5ebd45281f0480cb9c6de963e5dd420c577d8b5abdc0e45944fddc988c67d",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Get one access point detail"
+					},
+					"response": [
+						{
+							"id": "4a5f75d7-360e-4e75-aa51-4a96e51f861e",
+							"name": "unit",
+							"originalRequest": {
+								"url": {
+									"raw": "https://{{hostname}}/api/units/:id",
+									"protocol": "https",
+									"host": [
+										"{{hostname}}"
+									],
+									"path": [
+										"api",
+										"units",
+										":id"
+									],
+									"query": [],
+									"variable": [
+										{
+											"key": "id",
+											"value": ""
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Token",
+										"value": "c1b5ebd45281f0480cb9c6de963e5dd420c577d8b5abdc0e45944fddc988c67d",
+										"description": ""
+									}
+								],
+								"body": {}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "parsed",
+							"header": [],
+							"cookie": [],
+							"responseTime": 0,
+							"body": "{\n    \"id\": \"1\",\n    \"hotspot_id\": \"1\",\n    \"mac_address\": \"00-0D-B9-41-7C-F8\",\n    \"description\": \"hotel one's ap\"\n}"
+						}
+					]
+				},
+				{
+					"name": "/devices",
+					"request": {
+						"url": "https://{{hostname}}/api/devices",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Token",
+								"value": "c1b5ebd45281f0480cb9c6de963e5dd420c577d8b5abdc0e45944fddc988c67d",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Get list of devices"
+					},
+					"response": [
+						{
+							"id": "c4a330e1-3a4c-4284-a3d2-9180f01460de",
+							"name": "devices",
+							"originalRequest": {
+								"url": "https://{{hostname}}/api/devices",
+								"method": "GET",
+								"header": [
+									{
+										"key": "Token",
+										"value": "c1b5ebd45281f0480cb9c6de963e5dd420c577d8b5abdc0e45944fddc988c67d",
+										"description": ""
+									}
+								],
+								"body": {}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "parsed",
+							"header": [],
+							"cookie": [],
+							"responseTime": 0,
+							"body": "[\n    {\n        \"id\": \"1\",\n        \"hotspot_id\": \"1\",\n        \"user_id\": \"1\",\n        \"mac_address\": \"78-F8-82-A2-FE-0E\",\n        \"description\": \"Nexus 5X\",\n        \"created\": \"2017-12-13 11:59:10\"\n    },\n    {\n        \"id\": \"2\",\n        \"hotspot_id\": \"1\",\n        \"user_id\": \"2\",\n        \"mac_address\": \"78-F8-82-A2-FE-AA\",\n        \"description\": \"iPhone 7\",\n        \"created\": \"2017-12-14 11:59:10\"\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "/devices/:id",
+					"request": {
+						"url": {
+							"raw": "https://{{hostname}}/api/devices/:id",
+							"protocol": "https",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"api",
+								"devices",
+								":id"
+							],
+							"query": [],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Token",
+								"value": "c1b5ebd45281f0480cb9c6de963e5dd420c577d8b5abdc0e45944fddc988c67d",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Get one device detail"
+					},
+					"response": [
+						{
+							"id": "3b56ffd1-c573-4407-8ec9-f8e88182b2bd",
+							"name": "device",
+							"originalRequest": {
+								"url": {
+									"raw": "https://{{hostname}}/api/device/:id",
+									"protocol": "https",
+									"host": [
+										"{{hostname}}"
+									],
+									"path": [
+										"api",
+										"device",
+										":id"
+									],
+									"query": [],
+									"variable": [
+										{
+											"key": "id",
+											"value": ""
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Token",
+										"value": "c1b5ebd45281f0480cb9c6de963e5dd420c577d8b5abdc0e45944fddc988c67d",
+										"description": ""
+									}
+								],
+								"body": {}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "parsed",
+							"header": [],
+							"cookie": [],
+							"responseTime": 0,
+							"body": "{\n    \"id\": \"2\",\n    \"hotspot_id\": \"1\",\n    \"user_id\": \"2\",\n    \"mac_address\": \"78-F8-82-A2-FE-AA\",\n    \"description\": \"iPhone 7\",\n    \"created\": \"2017-12-13 11:59:10\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Captive Portal",
+			"description": "",
+			"item": [
+				{
+					"name": "/utils/captive_auth",
+					"request": {
+						"url": "http://{{hostname}}/api/utils/auth",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"digest\": \"\",\n    \"uuid\": \"\"\n}"
+						},
+						"description": "Use to authenticate captive portal requests"
+					},
+					"response": [
+						{
+							"id": "a0e6c063-c006-45b8-9b46-b395ed1fede7",
+							"name": "/utils/captive_auth",
+							"originalRequest": {
+								"url": "https://{{hostname}}/api/utils/auth",
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"digest\": \"e07910a06a086c83ba41827aa00b26ed\",\n    \"uuid\": \"caef9b53-9923-4f0c-9407-5169c931f6a2\"\n}"
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "parsed",
+							"header": [],
+							"cookie": [],
+							"responseTime": 0,
+							"body": "{\n    \"token\": \"27a4f4e7e61ac5bc6ec4d7efd1544315c007580caf921cc504e97f9602c8c5da\",\n    \"expires\": \"2017-12-15 23:59:59\"\n}"
+						}
+					]
+				},
+				{
+					"name": "/users",
+					"request": {
+						"url": "https://{{hostname}}/api/users",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Token",
+								"value": "27a4f4e7e61ac5bc6ec4d7efd1544315c007580caf921cc504e97f9602c8c5da",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"firstname\": \"\",\n  \"lastname\": \"\",\n  \"username\": \"\",\n  \"email\": \"\",\n  \"type\": \"\",\n  \"kbps_down\": \"\",\n  \"kbps_up\": \"\",\n  \"valid_from\": \"\",\n  \"valid_until\": \"\"\n}"
+						},
+						"description": "Create new user"
+					},
+					"response": [
+						{
+							"id": "f8638b7b-549d-4a8d-933c-918b7e4ed316",
+							"name": "users",
+							"originalRequest": {
+								"url": "https://{{hostname}}/api/users",
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									},
+									{
+										"key": "Token",
+										"value": "27a4f4e7e61ac5bc6ec4d7efd1544315c007580caf921cc504e97f9602c8c5da",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"firstname\": \"john\",\n\t\"lastname\": \"doe\",\n\t\"username\": \"user@email.com\",\n\t\"email\": \"user@email.com\",\n\t\"type\": \"facebook\",\n\t\"kbps_down\": \"750\",\n\t\"kbps_up\": \"150\",\n\t\"valid_from\": \"2017-12-15 00:00:00\",\n\t\"valid_until\": \"2017-12-25 23:59:59\"\n}"
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "parsed",
+							"header": [],
+							"cookie": [],
+							"responseTime": 0,
+							"body": "{\n    \"status\": \"success\",\n    \"id\": \"1\"\n}"
+						}
+					]
+				}
+			]
+		}
+	]
+}
