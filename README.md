@@ -12,7 +12,6 @@ Design documentation:
 - [Hotspot manager](docs/manager.md)
 - [Mockups](https://nethservice.nethesis.it/nextcloud/index.php/s/V8qmUUEXUk1rEie)
 
-
 Techincal documentation:
 
 - [API](https://documenter.getpostman.com/view/3364668/icaro/7LhhQDd)
