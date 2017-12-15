@@ -1,7 +1,7 @@
 # Icaro
 
 <p align="center">
-   <img src ="https://github.com/gsanchietti/icaro/raw/master/img/logo.png" />
+   <img src ="https://github.com/nethesis/icaro/raw/master/img/logo.png" />
 </p>
 
 **"Easy and simple HotSpot for small and medium hotels"**
