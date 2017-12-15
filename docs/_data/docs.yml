@@ -1,0 +1,11 @@
+- title: Design
+  docs:
+  - home
+  - manager
+  - captive
+
+- title: Installation
+  docs:
+  - components
+  - provisioning
+  - client_installation
