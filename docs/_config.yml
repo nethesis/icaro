@@ -1,0 +1,9 @@
+title: Project Icaro
+email: sviluppo@nethesis.it
+description: >
+        Icaro is an easy and simple HotSpot for small and medium hotels
+
+baseurl: "/icaro"
+
+markdown: kramdown
+theme: minima
