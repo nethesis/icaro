@@ -1,9 +1,47 @@
+/* HOTSPOT MANAGER */
+CREATE TABLE accounts (
+  id serial,
+  uuid varchar(200),
+  type varchar(200),
+  name varchar(200),
+  username varchar (200),
+  password varchar (200),
+  email varchar(250),
+  created datetime,
+  KEY(username),
+  KEY(uuid),
+  PRIMARY KEY(id)
+);
+
+CREATE TABLE account_preferences (
+  id serial,
+  account_id bigint,
+  key varchar(250),
+  value varchar(250),
+  FOREIGN KEY (account_id) REFERENCES accounts(id),
+  UNIQUE KEY (account_id, key),
+  PRIMARY KEY(id)
+);
+
+CREATE TABLE access_tokens (
+  id serial,
+  account_id bigint,
+  token varchar(200),
+  role varchar(200),
+  FOREIGN KEY (account_id) REFERENCES accounts(id),
+  UNIQUE KEY (account_id, id),
+  PRIMARY KEY(id)
+)
+/* --------------- */
+
 /* ACCOUNTING AAA */
 CREATE TABLE hotspots (
   id serial,
+  account_id bigint,
   name varchar(200),
   description varchar(250),
   created datetime,
+  FOREIGN KEY (account_id) REFERENCES accounts(id),
   KEY(name),
   PRIMARY KEY(id)
 );
@@ -21,6 +59,7 @@ CREATE TABLE hotspot_preferences (
 CREATE TABLE users (
   id serial,
   hotspot_id bigint unsigned,
+  name varchar(200),
   username varchar(200),
   password varchar(200),
   email varchar(200),
@@ -92,39 +131,3 @@ CREATE TABLE sessions (
   PRIMARY KEY(id)
 );
 /* -------------------- */
-
-/* HOTSPOT MANAGER */
-CREATE TABLE resellers (
-  id serial,
-  name varchar(200),
-  email varchar(250),
-  username varchar (200),
-  password varchar (200),
-  created datetime,
-  uuid varchar(200),
-  KEY(username),
-  KEY(uuid),
-  PRIMARY KEY(id)
-);
-
-CREATE TABLE reseller_preferences (
-  id serial,
-  reseller_id bigint,
-  key varchar(250),
-  value varchar(250),
-  FOREIGN KEY (reseller_id) REFERENCES resellers(id),
-  UNIQUE KEY (reseller_id, key),
-  PRIMARY KEY(id)
-);
-
-CREATE TABLE hotspot_accounts (
-  id serial,
-  email varchar(250),
-  username varchar (200),
-  password varchar (200),
-  created datetime,
-  type varchar(200),
-  KEY(username),
-  PRIMARY KEY(id)
-)
-/* --------------- */
