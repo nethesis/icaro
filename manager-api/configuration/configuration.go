@@ -37,7 +37,7 @@ var Config = Configuration{}
 
 func Init() {
 	// read configuration
-	file, _ := os.Open("/opt/icaro/manager-ui/conf.json")
+	file, _ := os.Open("/opt/icaro/manager-api/conf.json")
 	decoder := json.NewDecoder(file)
 
 	// check errors or parse JSON

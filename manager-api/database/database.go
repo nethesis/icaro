@@ -26,11 +26,11 @@ import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 
-	"ronzinante/configuration"
+	"manager-api/configuration"
 )
 
 func Database() *gorm.DB {
-	db, err := gorm.Open("mysql", configuration.Config.DbUser+":"+configuration.Config.DbPassword+"@tcp(localhost:3306)/icaro?charset=utf8")
+	db, err := gorm.Open("mysql", configuration.Config.DbUser+":"+configuration.Config.DbPassword+"@tcp(localhost:3306)/icaro?charset=utf8&parseTime=True")
 	if err != nil {
 		panic(err.Error())
 	}

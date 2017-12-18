@@ -22,10 +22,12 @@
 
 package models
 
+import "time"
+
 type Hotspot struct {
-	Id          int    `db:"id" json:"id"`
-	AccountId   int    `db:"account_id" json:"account"`
-	Name        string `db:"name" json:"name"`
-	Description string `db:"description" json:"description"`
-	Created     string `db:"created" json:"created"`
+	Id          int       `db:"id" json:"id"`
+	AccountId   int       `db:"account_id" json:"account"`
+	Name        string    `db:"name" json:"name"`
+	Description string    `db:"description" json:"description"`
+	Created     time.Time `db:"created" json:"created"`
 }

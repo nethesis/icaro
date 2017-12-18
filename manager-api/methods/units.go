@@ -25,6 +25,7 @@ package methods
 import (
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
@@ -44,6 +45,7 @@ func CreateUnit(c *gin.Context) {
 		MacAddress:  macAddress,
 		Description: description,
 		Uuid:        uuid,
+		Created:     time.Now(),
 	}
 
 	if hotspotIdInt, err := strconv.Atoi(hotspotId); err == nil {

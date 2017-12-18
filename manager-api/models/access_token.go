@@ -24,11 +24,10 @@ package models
 
 import "time"
 
-type Device struct {
-	Id          int       `db:"id" json:"id"`
-	HotspotId   int       `db:"hotspot_id" json:"hotspot"`
-	UserId      int       `db:"user_id" json:"user"`
-	MacAddress  string    `db:"mac_address" json:"mac_address"`
-	Description string    `db:"description" json:"description"`
-	Created     time.Time `db:"created" json:"created"`
+type AccessToken struct {
+	Id        int       `db:"id" json:"id"`
+	AccountId int       `db:"account_id" json:"account"`
+	Token     string    `db:"token" json:"token"`
+	Role      string    `db:"role" json:"role"`
+	Expires   time.Time `db:"expires" json:"expires"`
 }

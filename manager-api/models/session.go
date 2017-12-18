@@ -22,18 +22,20 @@
 
 package models
 
+import "time"
+
 type Session struct {
-	Id         int    `db:"id" json:"id"`
-	UnitId     string `db:"unit_id" json:"unit"`
-	HotspotId  int    `db:"hotspot_id" json:"hotspot"`
-	DeviceId   string `db:"device_id" json:"device"`
-	UserId     string `db:"user_id" json:"user"`
-	BytesUp    int    `db:"bytes_up" json:"bytes_up"`
-	BytesDown  int    `db:"bytes_down" json:"bytes_down"`
-	Duration   int    `db:"duration" json:"duration"`
-	AuthTime   string `db:"auth_time" json:"auth_time"`
-	StartTime  string `db:"start_time" json:"start_time"`
-	UpdateTime string `db:"update_time" json:"update_time"`
-	StopTime   string `db:"stop_time" json:"stop_time"`
-	SessionKey string `db:"session_key" json:"session_key"`
+	Id         int       `db:"id" json:"id"`
+	UnitId     string    `db:"unit_id" json:"unit"`
+	HotspotId  int       `db:"hotspot_id" json:"hotspot"`
+	DeviceId   string    `db:"device_id" json:"device"`
+	UserId     string    `db:"user_id" json:"user"`
+	BytesUp    int       `db:"bytes_up" json:"bytes_up"`
+	BytesDown  int       `db:"bytes_down" json:"bytes_down"`
+	Duration   int       `db:"duration" json:"duration"`
+	AuthTime   time.Time `db:"auth_time" json:"auth_time"`
+	StartTime  time.Time `db:"start_time" json:"start_time"`
+	UpdateTime time.Time `db:"update_time" json:"update_time"`
+	StopTime   time.Time `db:"stop_time" json:"stop_time"`
+	SessionKey string    `db:"session_key" json:"session_key"`
 }

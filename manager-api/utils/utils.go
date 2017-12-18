@@ -25,6 +25,10 @@ package utils
 import (
 	"fmt"
 	"strconv"
+	"time"
+
+	"manager-api/database"
+	"manager-api/models"
 )
 
 func OffsetCalc(page string, limit string) [2]int {
@@ -46,4 +50,25 @@ func OffsetCalc(page string, limit string) [2]int {
 
 	result := [2]int{resOffset, resLimit}
 	return result
+}
+
+func ExtractToken(token string) models.AccessToken {
+	var accessToken models.AccessToken
+	db := database.Database()
+	db.Where("token = ?", token).First(&accessToken)
+	db.Close()
+
+	return accessToken
+}
+
+func RefreshToken(token string) {
+	var accessToken models.AccessToken
+	db := database.Database()
+	db.Where("token = ?", token).First(&accessToken)
+
+	// add 1 month to expiration date
+	accessToken.Expires = time.Now().AddDate(0, 0, 1)
+	db.Save(&accessToken)
+
+	db.Close()
 }

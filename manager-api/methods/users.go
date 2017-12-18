@@ -54,10 +54,14 @@ func CreateUser(c *gin.Context) {
 		Password:    password,
 		Email:       email,
 		AccountType: accountType,
-		ValidFrom:   validFrom,
-		ValidUntil:  validUntil,
-		Created:     time.Now().String(),
+		Created:     time.Now(),
 	}
+
+	fromT, _ := time.Parse("2017-12-31 00:00:00", validFrom)
+	user.ValidFrom = fromT
+
+	untilT, _ := time.Parse("2017-12-31 00:00:00", validUntil)
+	user.ValidUntil = untilT
 
 	if hotspotIdInt, err := strconv.Atoi(hotspotId); err == nil {
 		user.HotspotId = hotspotIdInt
@@ -107,8 +111,11 @@ func UpdateUser(c *gin.Context) {
 		user.KbpsUp = kbpsUpInt
 	}
 
-	user.ValidFrom = validFrom
-	user.ValidUntil = validUntil
+	fromT, _ := time.Parse("2017-12-31 00:00:00", validFrom)
+	user.ValidFrom = fromT
+
+	untilT, _ := time.Parse("2017-12-31 00:00:00", validUntil)
+	user.ValidUntil = untilT
 
 	db.Save(&user)
 

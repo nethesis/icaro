@@ -22,17 +22,19 @@
 
 package models
 
+import "time"
+
 type User struct {
-	Id          int    `db:"id" json:"id"`
-	HotspotId   int    `db:"hotspot_id" json:"hotspot"`
-	Name        string `db:"name" json:"name"`
-	Username    string `db:"username" json:"username"`
-	Password    string `db:"password" json:"password"`
-	Email       string `db:"email" json:"email"`
-	AccountType string `db:"account_type" json:"type"`
-	KbpsDown    int    `db:"kbps_down" json:"kbps_down"`
-	KbpsUp      int    `db:"kbps_up" json:"kbps_up"`
-	ValidFrom   string `db:"valid_from" json:"valid_from"`
-	ValidUntil  string `db:"valid_until" json:"valid_until"`
-	Created     string `db:"created" json:"created"`
+	Id          int       `db:"id" json:"id"`
+	HotspotId   int       `db:"hotspot_id" json:"hotspot"`
+	Name        string    `db:"name" json:"name"`
+	Username    string    `db:"username" json:"username"`
+	Password    string    `db:"password" json:"password"`
+	Email       string    `db:"email" json:"email"`
+	AccountType string    `db:"account_type" json:"type"`
+	KbpsDown    int       `db:"kbps_down" json:"kbps_down"`
+	KbpsUp      int       `db:"kbps_up" json:"kbps_up"`
+	ValidFrom   time.Time `db:"valid_from" json:"valid_from"`
+	ValidUntil  time.Time `db:"valid_until" json:"valid_until"`
+	Created     time.Time `db:"created" json:"created"`
 }
