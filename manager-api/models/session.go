@@ -35,4 +35,5 @@ type Session struct {
 	StartTime  string `db:"start_time" json:"start_time"`
 	UpdateTime string `db:"update_time" json:"update_time"`
 	StopTime   string `db:"stop_time" json:"stop_time"`
+	SessionKey string `db:"session_key" json:"session_key"`
 }

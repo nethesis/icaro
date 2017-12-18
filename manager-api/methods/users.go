@@ -36,8 +36,7 @@ import (
 )
 
 func CreateUser(c *gin.Context) {
-	firstName := c.PostForm("firstname")
-	lastName := c.PostForm("lastname")
+	name := c.PostForm("name")
 	username := c.PostForm("username")
 	email := c.PostForm("email")
 	accountType := c.PostForm("type")
@@ -45,19 +44,23 @@ func CreateUser(c *gin.Context) {
 	kbpsUp := c.PostForm("kbps_up")
 	validFrom := c.PostForm("valid_from")
 	validUntil := c.PostForm("valid_until")
+	hotspotId := c.PostForm("hotspot_id")
 
-	hotspotId := 1
+	password := "password,1234" // TODO generate randomly
 
 	user := models.User{
-		HotspotId:   hotspotId,
-		FirstName:   firstName,
-		LastName:    lastName,
-		UserName:    username,
+		Name:        name,
+		Username:    username,
+		Password:    password,
 		Email:       email,
 		AccountType: accountType,
 		ValidFrom:   validFrom,
 		ValidUntil:  validUntil,
 		Created:     time.Now().String(),
+	}
+
+	if hotspotIdInt, err := strconv.Atoi(hotspotId); err == nil {
+		user.HotspotId = hotspotIdInt
 	}
 
 	if kbpsDownInt, err := strconv.Atoi(kbpsDown); err == nil {
@@ -79,8 +82,7 @@ func UpdateUser(c *gin.Context) {
 	var user models.User
 	userId := c.Param("user_id")
 
-	firstName := c.PostForm("firstname")
-	lastName := c.PostForm("lastname")
+	name := c.PostForm("name")
 	email := c.PostForm("email")
 	kbpsDown := c.PostForm("kbps_down")
 	kbpsUp := c.PostForm("kbps_up")
@@ -95,8 +97,7 @@ func UpdateUser(c *gin.Context) {
 		return
 	}
 
-	user.FirstName = firstName
-	user.LastName = lastName
+	user.Name = name
 	user.Email = email
 
 	if kbpsDownInt, err := strconv.Atoi(kbpsDown); err == nil {
@@ -112,6 +113,8 @@ func UpdateUser(c *gin.Context) {
 	db.Save(&user)
 
 	db.Close()
+
+	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }
 
 func GetUsers(c *gin.Context) {
@@ -168,5 +171,5 @@ func DeleteUser(c *gin.Context) {
 
 	db.Close()
 
-	c.JSON(http.StatusOK, gin.H{"message": "User deleted successfully!"})
+	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }

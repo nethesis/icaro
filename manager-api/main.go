@@ -36,6 +36,41 @@ func main() {
 	// init routers
 	router := gin.Default()
 
+	devices := router.Group("/api/devices")
+	{
+		devices.GET("/", methods.GetDevices)
+		devices.GET("/:device_id", methods.GetDevice)
+	}
+
+	hotspots := router.Group("/api/hotspots")
+	{
+		hotspots.GET("/", methods.GetHotspots)
+		hotspots.GET("/:hotspot_id", methods.GetHotspot)
+		hotspots.POST("/", methods.CreateHotspot)
+		hotspots.PUT("/:hotspot_id", methods.UpdateHotspot)
+		hotspots.DELETE("/:hotspot_id", methods.DeleteHotspot)
+	}
+
+	preferences := router.Group("/api/preferences")
+	{
+		resellers_pref := preferences.Group("/accounts")
+		resellers_pref.GET("/", methods.GetAccountPrefs)
+		resellers_pref.POST("/", methods.CreateAccountPrefs)
+
+		hotspots_pref := preferences.Group("/hotspots")
+		hotspots_pref.GET("/", methods.GetHotspotPrefs)
+		hotspots_pref.POST("/", methods.CreateHotspotPrefs)
+	}
+
+	accounts := router.Group("/api/accounts")
+	{
+		accounts.GET("/", methods.GetAccounts)
+		accounts.GET("/:account_id", methods.GetAccount)
+		accounts.POST("/", methods.CreateAccount)
+		accounts.PUT("/:account_id", methods.UpdateAccount)
+		accounts.DELETE("/:account_id", methods.DeleteAccount)
+	}
+
 	sessions := router.Group("/api/sessions")
 	{
 		sessions.GET("/", methods.GetSessions)
@@ -46,12 +81,8 @@ func main() {
 	{
 		units.GET("/", methods.GetUnits)
 		units.GET("/:unit_id", methods.GetUnit)
-	}
-
-	devices := router.Group("/api/devices")
-	{
-		devices.GET("/", methods.GetDevices)
-		devices.GET("/:device_id", methods.GetDevice)
+		units.POST("/", methods.CreateUnit)
+		units.DELETE("/:unit_id", methods.DeleteUnit)
 	}
 
 	users := router.Group("/api/users")

@@ -27,4 +27,5 @@ type Unit struct {
 	HotspotId   int    `db:"hotspot_id" json:"hotspot"`
 	MacAddress  string `db:"mac_address" json:"mac_address"`
 	Description string `db:"description" json:"description"`
+	Uuid        string `db:"uuid" json:"uuid"`
 }

@@ -24,6 +24,7 @@ package methods
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
@@ -32,6 +33,30 @@ import (
 	"manager-api/models"
 	"manager-api/utils"
 )
+
+func CreateUnit(c *gin.Context) {
+	macAddress := c.PostForm("mac_address")
+	description := c.PostForm("description")
+	uuid := c.PostForm("uuid")
+	hotspotId := c.PostForm("hotspot_id")
+
+	unit := models.Unit{
+		MacAddress:  macAddress,
+		Description: description,
+		Uuid:        uuid,
+	}
+
+	if hotspotIdInt, err := strconv.Atoi(hotspotId); err == nil {
+		unit.HotspotId = hotspotIdInt
+	}
+
+	db := database.Database()
+	db.Save(&unit)
+
+	db.Close()
+
+	c.JSON(http.StatusCreated, gin.H{"id": unit.Id, "status": "success"})
+}
 
 func GetUnits(c *gin.Context) {
 	var units []models.Unit
@@ -69,4 +94,23 @@ func GetUnit(c *gin.Context) {
 	db.Close()
 
 	c.JSON(http.StatusOK, unit)
+}
+
+func DeleteUnit(c *gin.Context) {
+	var unit models.Unit
+	unitId := c.Param("unit_id")
+
+	db := database.Database()
+	db.Where("id = ?", unitId).First(&unit)
+
+	if unit.Id == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"message": "No unit found!"})
+		return
+	}
+
+	db.Delete(&unit)
+
+	db.Close()
+
+	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }

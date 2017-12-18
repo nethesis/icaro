@@ -25,9 +25,9 @@ package models
 type User struct {
 	Id          int    `db:"id" json:"id"`
 	HotspotId   int    `db:"hotspot_id" json:"hotspot"`
-	FirstName   string `db:"firstname" json:"firstname"`
-	LastName    string `db:"lastname" json:"lastname"`
-	UserName    string `db:"username" json:"username"`
+	Name        string `db:"name" json:"name"`
+	Username    string `db:"username" json:"username"`
+	Password    string `db:"password" json:"password"`
 	Email       string `db:"email" json:"email"`
 	AccountType string `db:"account_type" json:"type"`
 	KbpsDown    int    `db:"kbps_down" json:"kbps_down"`
