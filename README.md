@@ -14,7 +14,7 @@ Design documentation:
 
 Techincal documentation:
 
-- [API](https://documenter.getpostman.com/view/3364668/icaro/7LjC4mUt)
+- [API](https://documenter.getpostman.com/view/3364668/icaro/7LjC4mU)
 - [Software components](docs/components.md)
 
 See also the [wiki](https://github.com/nethesis/icaro/wiki) for temporary documentation.
