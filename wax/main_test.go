@@ -23,32 +23,28 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
-
-	"sun-api/configuration"
-	"wax/methods"
+	"github.com/appleboy/gofight"
+	"github.com/stretchr/testify/assert"
+	"net/http"
+	"testing"
 )
 
 
-func Init(testMode bool) *gin.Engine {
-	var r *gin.Engine
-	if (testMode == true) {
-		gin.SetMode(gin.TestMode)
-		r = gin.New()
-	} else {
-		r = gin.Default()
-	}
-
-	r.GET("/aaa", methods.Dispatch)
-
-        return r
+func startupEnv() {
 }
 
-func main() {
-	// read and init configuration
-	configuration.Init()
-
-	r := Init(false)
-
-	r.Run(":8181")
+func destroyEnv() {
 }
+
+func TestDispatch(t *testing.T) {
+	r := gofight.New()
+
+	startupEnv()
+	r.GET("/aaa?stage=login").SetDebug(true).
+		Run(Init(true), func(r gofight.HTTPResponse, rq gofight.HTTPRequest) {
+			assert.Equal(t, "login", r.Body.String())
+			assert.Equal(t, http.StatusOK, r.Code)
+		})
+	destroyEnv()
+}
+
