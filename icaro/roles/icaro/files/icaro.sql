@@ -1,6 +1,7 @@
 /* HOTSPOT MANAGER */
 CREATE TABLE `accounts` (
   `id` serial,
+  `creator_id` bigint unsigned,
   `uuid` varchar(200),
   `type` varchar(200),
   `name` varchar(200),
