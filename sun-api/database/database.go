@@ -20,29 +20,19 @@
  * author: Edoardo Spadoni <edoardo.spadoni@nethesis.it>
  */
 
-package configuration
+package database
 
 import (
-	"encoding/json"
-	"fmt"
-	"os"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
+
+	"sun-api/configuration"
 )
 
-type Configuration struct {
-	DbUser     string `json:"db_user"`
-	DbPassword string `json:"db_password"`
-}
-
-var Config = Configuration{}
-
-func Init() {
-	// read configuration
-	file, _ := os.Open("/opt/icaro/manager-api/conf.json")
-	decoder := json.NewDecoder(file)
-
-	// check errors or parse JSON
-	err := decoder.Decode(&Config)
+func Database() *gorm.DB {
+	db, err := gorm.Open("mysql", configuration.Config.DbUser+":"+configuration.Config.DbPassword+"@tcp(localhost:3306)/icaro?charset=utf8&parseTime=True")
 	if err != nil {
-		fmt.Println("error:", err)
+		panic(err.Error())
 	}
+	return db
 }

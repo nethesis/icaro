@@ -25,9 +25,9 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 
-	"manager-api/configuration"
-	"manager-api/methods"
-	"manager-api/middleware"
+	"sun-api/configuration"
+	"sun-api/methods"
+	"sun-api/middleware"
 )
 
 func main() {
@@ -38,6 +38,9 @@ func main() {
 	router := gin.Default()
 
 	api := router.Group("/api")
+
+	api.POST("/login", methods.Login)
+	api.POST("/logout", methods.Login)
 
 	api.Use(middleware.Authentication)
 	{

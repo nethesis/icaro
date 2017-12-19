@@ -20,53 +20,46 @@
  * author: Edoardo Spadoni <edoardo.spadoni@nethesis.it>
  */
 
-package methods
+package middleware
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
 
-	"manager-api/database"
-	"manager-api/models"
-	"manager-api/utils"
+	"sun-api/models"
+	"sun-api/utils"
 )
 
-func GetSessions(c *gin.Context) {
-	var sessions []models.Session
-
-	page := c.Query("page")
-	limit := c.Query("limit")
-
-	offsets := utils.OffsetCalc(page, limit)
-
-	db := database.Database()
-	db.Offset(offsets[0]).Limit(offsets[1]).Find(&sessions)
-
-	if len(sessions) <= 0 {
-		c.JSON(http.StatusNotFound, gin.H{"message": "No sessions found!"})
-		return
-	}
-
-	db.Close()
-
-	c.JSON(http.StatusOK, sessions)
+func respondWithError(code int, message string, c *gin.Context) {
+	c.JSON(code, gin.H{"message": message})
+	c.Abort()
 }
 
-func GetSession(c *gin.Context) {
-	var session models.Session
-	sessionId := c.Param("session_id")
+func Authentication(c *gin.Context) {
+	var accessToken models.AccessToken
+	token := c.GetHeader("Token")
 
-	db := database.Database()
-	db.Where("id = ?", sessionId).First(&session)
-
-	if session.Id == 0 {
-		c.JSON(http.StatusNotFound, gin.H{"message": "No session found!"})
+	if token == "" {
+		respondWithError(http.StatusUnauthorized, "API token required", c)
 		return
+	} else {
+		// check token validation
+		accessToken = utils.ExtractToken(token)
+
+		if accessToken.Id == 0 {
+			respondWithError(http.StatusUnauthorized, "API token is invalid", c)
+			return
+		}
+		if accessToken.Expires.After(time.Now()) {
+			respondWithError(http.StatusUnauthorized, "API token is expired", c)
+			return
+		}
+
+		// Refresh token and go ahead
+		utils.RefreshToken(accessToken.Token)
+		c.Set("token", accessToken)
+		c.Next()
 	}
-
-	db.Close()
-
-	c.JSON(http.StatusOK, session)
 }

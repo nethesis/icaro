@@ -29,9 +29,9 @@ import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 
-	"manager-api/database"
-	"manager-api/models"
-	"manager-api/utils"
+	"sun-api/database"
+	"sun-api/models"
+	"sun-api/utils"
 )
 
 func CreateAccount(c *gin.Context) {

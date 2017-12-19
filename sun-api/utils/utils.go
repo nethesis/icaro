@@ -20,53 +20,55 @@
  * author: Edoardo Spadoni <edoardo.spadoni@nethesis.it>
  */
 
-package methods
+package utils
 
 import (
-	"net/http"
+	"fmt"
+	"strconv"
+	"time"
 
-	"github.com/gin-gonic/gin"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
-
-	"manager-api/database"
-	"manager-api/models"
-	"manager-api/utils"
+	"sun-api/database"
+	"sun-api/models"
 )
 
-func GetDevices(c *gin.Context) {
-	var devices []models.Device
+func OffsetCalc(page string, limit string) [2]int {
+	var resLimit = 0
+	var resOffset = 0
 
-	page := c.Query("page")
-	limit := c.Query("limit")
-
-	offsets := utils.OffsetCalc(page, limit)
-
-	db := database.Database()
-	db.Offset(offsets[0]).Limit(offsets[1]).Find(&devices)
-
-	if len(devices) <= 0 {
-		c.JSON(http.StatusNotFound, gin.H{"message": "No devices found!"})
-		return
+	limitInt, errLimit := strconv.Atoi(limit)
+	if errLimit != nil {
+		fmt.Println(errLimit.Error())
 	}
 
-	db.Close()
+	pageInt, errPage := strconv.Atoi(page)
+	if errPage != nil {
+		fmt.Println(errPage.Error())
+	}
 
-	c.JSON(http.StatusOK, devices)
+	resLimit = limitInt
+	resOffset = (pageInt - 1) * resLimit
+
+	result := [2]int{resOffset, resLimit}
+	return result
 }
 
-func GetDevice(c *gin.Context) {
-	var device models.Device
-	deviceId := c.Param("device_id")
-
+func ExtractToken(token string) models.AccessToken {
+	var accessToken models.AccessToken
 	db := database.Database()
-	db.Where("id = ?", deviceId).First(&device)
-
-	if device.Id == 0 {
-		c.JSON(http.StatusNotFound, gin.H{"message": "No device found!"})
-		return
-	}
-
+	db.Where("token = ?", token).First(&accessToken)
 	db.Close()
 
-	c.JSON(http.StatusOK, device)
+	return accessToken
+}
+
+func RefreshToken(token string) {
+	var accessToken models.AccessToken
+	db := database.Database()
+	db.Where("token = ?", token).First(&accessToken)
+
+	// add 1 month to expiration date
+	accessToken.Expires = time.Now().AddDate(0, 0, 1)
+	db.Save(&accessToken)
+
+	db.Close()
 }

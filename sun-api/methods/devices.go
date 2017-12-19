@@ -20,19 +20,53 @@
  * author: Edoardo Spadoni <edoardo.spadoni@nethesis.it>
  */
 
-package database
+package methods
 
 import (
-	"github.com/jinzhu/gorm"
+	"net/http"
+
+	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 
-	"manager-api/configuration"
+	"sun-api/database"
+	"sun-api/models"
+	"sun-api/utils"
 )
 
-func Database() *gorm.DB {
-	db, err := gorm.Open("mysql", configuration.Config.DbUser+":"+configuration.Config.DbPassword+"@tcp(localhost:3306)/icaro?charset=utf8&parseTime=True")
-	if err != nil {
-		panic(err.Error())
+func GetDevices(c *gin.Context) {
+	var devices []models.Device
+
+	page := c.Query("page")
+	limit := c.Query("limit")
+
+	offsets := utils.OffsetCalc(page, limit)
+
+	db := database.Database()
+	db.Offset(offsets[0]).Limit(offsets[1]).Find(&devices)
+
+	if len(devices) <= 0 {
+		c.JSON(http.StatusNotFound, gin.H{"message": "No devices found!"})
+		return
 	}
-	return db
+
+	db.Close()
+
+	c.JSON(http.StatusOK, devices)
+}
+
+func GetDevice(c *gin.Context) {
+	var device models.Device
+	deviceId := c.Param("device_id")
+
+	db := database.Database()
+	db.Where("id = ?", deviceId).First(&device)
+
+	if device.Id == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"message": "No device found!"})
+		return
+	}
+
+	db.Close()
+
+	c.JSON(http.StatusOK, device)
 }
