@@ -2,7 +2,7 @@
  * Copyright (C) 2017 Nethesis S.r.l.
  * http://www.nethesis.it - info@nethesis.it
  *
- * This file is part of Windmill project.
+ * This file is part of Icaro project.
  *
  * NethServer is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
