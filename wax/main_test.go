@@ -36,15 +36,56 @@ func startupEnv() {
 func destroyEnv() {
 }
 
-func TestDispatch(t *testing.T) {
-	r := gofight.New()
 
-	startupEnv()
-	r.GET("/aaa?stage=login").SetDebug(true).
-		Run(Init(true), func(r gofight.HTTPResponse, rq gofight.HTTPRequest) {
-			assert.Equal(t, "login", r.Body.String())
-			assert.Equal(t, http.StatusOK, r.Code)
-		})
-	destroyEnv()
+
+func TestNoStage(t *testing.T) {
+        r := gofight.New()
+
+        r.GET("/aaa").SetDebug(true).
+                Run(Init(true), func(r gofight.HTTPResponse, rq gofight.HTTPRequest) {
+			assert.Equal(t, "No stage provided", r.Body.String())
+                        assert.Equal(t, http.StatusBadRequest, r.Code)
+                })
+}
+
+func TestRegisterStage(t *testing.T) {
+        r := gofight.New()
+
+        r.GET("/aaa?stage=register").SetDebug(true).
+                Run(Init(true), func(r gofight.HTTPResponse, rq gofight.HTTPRequest) {
+                        assert.Equal(t, "Not implemented: register", r.Body.String())
+                        assert.Equal(t, http.StatusNotImplemented, r.Code)
+                })
+}
+
+
+func TestLoginStage(t *testing.T) {
+        r := gofight.New()
+
+        r.GET("/aaa?stage=login").SetDebug(true).
+                Run(Init(true), func(r gofight.HTTPResponse, rq gofight.HTTPRequest) {
+                        assert.Equal(t, "login", r.Body.String())
+                        assert.Equal(t, http.StatusOK, r.Code)
+                })
+}
+
+func TestCountersStage(t *testing.T) {
+        r := gofight.New()
+
+        r.GET("/aaa?stage=counters").SetDebug(true).
+                Run(Init(true), func(r gofight.HTTPResponse, rq gofight.HTTPRequest) {
+                        assert.Equal(t, "counters", r.Body.String())
+                        assert.Equal(t, http.StatusOK, r.Code)
+                })
+}
+
+func TestInvalidStage(t *testing.T) {
+        r := gofight.New()
+
+        r.GET("/aaa?stage=BAD").SetDebug(true).
+                Run(Init(true), func(r gofight.HTTPResponse, rq gofight.HTTPRequest) {
+			assert.Equal(t, "Invalid stage: 'BAD'", r.Body.String())
+                        assert.Equal(t, http.StatusNotFound, r.Code)
+                })
 }
 
