@@ -36,6 +36,7 @@ import (
 	"sun-api/configuration"
 	"sun-api/database"
 	"sun-api/models"
+	"sun-api/utils"
 )
 
 func Login(c *gin.Context) {
@@ -85,4 +86,18 @@ func Login(c *gin.Context) {
 		}
 	}
 
+}
+
+func Logout(c *gin.Context) {
+	token := c.GetHeader("Token")
+
+	if token == "" {
+		c.JSON(http.StatusUnauthorized, gin.H{"message": "Token is invalid"})
+		return
+	} else {
+		// delete token
+		utils.DeleteToken(token)
+
+		c.JSON(http.StatusOK, gin.H{"status": "success"})
+	}
 }

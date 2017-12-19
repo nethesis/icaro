@@ -69,6 +69,15 @@ func ExtractToken(token string) models.AccessToken {
 	return accessToken
 }
 
+func DeleteToken(token string) {
+	var accessToken models.AccessToken
+	db := database.Database()
+	db.Where("token = ?", token).First(&accessToken)
+
+	db.Delete(&accessToken)
+	db.Close()
+}
+
 func RefreshToken(token string) {
 	var accessToken models.AccessToken
 	db := database.Database()

@@ -40,7 +40,7 @@ func main() {
 	api := router.Group("/api")
 
 	api.POST("/login", methods.Login)
-	api.POST("/logout", methods.Login)
+	api.POST("/logout", methods.Logout)
 
 	api.Use(middleware.Authentication)
 	{
