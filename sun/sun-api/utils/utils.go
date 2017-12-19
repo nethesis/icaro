@@ -24,6 +24,7 @@ package utils
 
 import (
 	"fmt"
+	"reflect"
 	"strconv"
 	"time"
 
@@ -88,4 +89,30 @@ func RefreshToken(token string) {
 	db.Save(&accessToken)
 
 	db.Close()
+}
+
+func ExtractHotspotIds(accountId int) []int {
+	var hotspots []models.Hotspot
+
+	db := database.Database()
+	db.Select("id").Where("account_id = ?", accountId).Find(&hotspots)
+	db.Close()
+
+	v := reflect.ValueOf(hotspots)
+	result := []int{}
+
+	for i := 0; i < v.NumField(); i++ {
+		result[i] = int(v.Field(i).Int())
+	}
+
+	return result
+}
+
+func Contains(intSlice []int, searchInt int) bool {
+	for _, value := range intSlice {
+		if value == searchInt {
+			return true
+		}
+	}
+	return false
 }

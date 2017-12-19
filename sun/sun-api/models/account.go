@@ -25,12 +25,13 @@ package models
 import "time"
 
 type Account struct {
-	Id       int       `db:"id" json:"id"`
-	Uuid     string    `db:"uuid" json:"uuid"`
-	Type     string    `db:"type" json:"type"`
-	Name     string    `db:"name" json:"name"`
-	Username string    `db:"username" json:"username"`
-	Password string    `db:"password" json:"password"`
-	Email    string    `db:"email" json:"email"`
-	Created  time.Time `db:"created" json:"created"`
+	Id        int       `db:"id" json:"id"`
+	CreatorId int       `db:"creator_id" json:"creator"`
+	Uuid      string    `db:"uuid" json:"uuid"`
+	Type      string    `db:"type" json:"type"`
+	Name      string    `db:"name" json:"name"`
+	Username  string    `db:"username" json:"username"`
+	Password  string    `db:"password" json:"password"`
+	Email     string    `db:"email" json:"email"`
+	Created   time.Time `db:"created" json:"created"`
 }

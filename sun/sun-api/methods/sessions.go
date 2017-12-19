@@ -35,6 +35,7 @@ import (
 
 func GetSessions(c *gin.Context) {
 	var sessions []models.Session
+	accountId := c.MustGet("token").(*models.AccessToken).AccountId
 
 	page := c.Query("page")
 	limit := c.Query("limit")
@@ -42,7 +43,7 @@ func GetSessions(c *gin.Context) {
 	offsets := utils.OffsetCalc(page, limit)
 
 	db := database.Database()
-	db.Offset(offsets[0]).Limit(offsets[1]).Find(&sessions)
+	db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId)).Offset(offsets[0]).Limit(offsets[1]).Find(&sessions)
 
 	if len(sessions) <= 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No sessions found!"})

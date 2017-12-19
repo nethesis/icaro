@@ -41,15 +41,17 @@ func CreateAccount(c *gin.Context) {
 	username := c.PostForm("username")
 	password := c.PostForm("password")
 	email := c.PostForm("email")
+	creatorId := c.MustGet("token").(*models.AccessToken).AccountId
 
 	account := models.Account{
-		Uuid:     uuid,
-		Type:     typeField,
-		Name:     name,
-		Username: username,
-		Password: password,
-		Email:    email,
-		Created:  time.Now().UTC(),
+		CreatorId: creatorId,
+		Uuid:      uuid,
+		Type:      typeField,
+		Name:      name,
+		Username:  username,
+		Password:  password,
+		Email:     email,
+		Created:   time.Now().UTC(),
 	}
 
 	db := database.Database()
@@ -62,6 +64,8 @@ func CreateAccount(c *gin.Context) {
 
 func UpdateAccount(c *gin.Context) {
 	var account models.Account
+	creatorId := c.MustGet("token").(*models.AccessToken).AccountId
+
 	accountId := c.Param("account_id")
 
 	name := c.PostForm("name")
@@ -70,7 +74,7 @@ func UpdateAccount(c *gin.Context) {
 	email := c.PostForm("email")
 
 	db := database.Database()
-	db.Where("id = ?", accountId).First(&account)
+	db.Where("id = ? AND creator_id = ?", accountId, creatorId).First(&account)
 
 	if account.Id == 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No account found!"})
@@ -91,6 +95,7 @@ func UpdateAccount(c *gin.Context) {
 
 func GetAccounts(c *gin.Context) {
 	var accounts []models.Account
+	creatorId := c.MustGet("token").(*models.AccessToken).AccountId
 
 	page := c.Query("page")
 	limit := c.Query("limit")
@@ -98,7 +103,7 @@ func GetAccounts(c *gin.Context) {
 	offsets := utils.OffsetCalc(page, limit)
 
 	db := database.Database()
-	db.Offset(offsets[0]).Limit(offsets[1]).Find(&accounts)
+	db.Where("creator_id = ?", creatorId).Offset(offsets[0]).Limit(offsets[1]).Find(&accounts)
 
 	if len(accounts) <= 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No accounts found!"})
@@ -112,10 +117,11 @@ func GetAccounts(c *gin.Context) {
 
 func GetAccount(c *gin.Context) {
 	var account models.Account
+	creatorId := c.MustGet("token").(*models.AccessToken).AccountId
 	accountId := c.Param("account_id")
 
 	db := database.Database()
-	db.Where("id = ?", accountId).First(&account)
+	db.Where("id = ? AND creator_id = ?", accountId, creatorId).First(&account)
 
 	if account.Id == 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No account found!"})
@@ -129,10 +135,11 @@ func GetAccount(c *gin.Context) {
 
 func DeleteAccount(c *gin.Context) {
 	var account models.Account
+	creatorId := c.MustGet("token").(*models.AccessToken).AccountId
 	accountId := c.Param("account_id")
 
 	db := database.Database()
-	db.Where("id = ?", accountId).First(&account)
+	db.Where("id = ? AND creator_id = ?", accountId, creatorId).First(&account)
 
 	if account.Id == 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No account found!"})

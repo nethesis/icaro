@@ -23,6 +23,7 @@
 package methods
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -36,6 +37,8 @@ import (
 )
 
 func CreateUser(c *gin.Context) {
+	accountId := c.MustGet("token").(*models.AccessToken).AccountId
+
 	name := c.PostForm("name")
 	username := c.PostForm("username")
 	email := c.PostForm("email")
@@ -63,27 +66,40 @@ func CreateUser(c *gin.Context) {
 	untilT, _ := time.Parse("2017-12-31 00:00:00", validUntil)
 	user.ValidUntil = untilT
 
-	if hotspotIdInt, err := strconv.Atoi(hotspotId); err == nil {
-		user.HotspotId = hotspotIdInt
+	hotspotIdInt, err := strconv.Atoi(hotspotId)
+	if err != nil {
+		fmt.Println(err.Error())
 	}
+	user.HotspotId = hotspotIdInt
 
-	if kbpsDownInt, err := strconv.Atoi(kbpsDown); err == nil {
-		user.KbpsDown = kbpsDownInt
+	kbpsDownInt, err := strconv.Atoi(kbpsDown)
+	if err != nil {
+		fmt.Println(err.Error())
 	}
-	if kbpsUpInt, err := strconv.Atoi(kbpsUp); err == nil {
-		user.KbpsUp = kbpsUpInt
+	user.KbpsDown = kbpsDownInt
+
+	kbpsUpInt, err := strconv.Atoi(kbpsUp)
+	if err != nil {
+		fmt.Println(err.Error())
 	}
+	user.KbpsUp = kbpsUpInt
 
-	db := database.Database()
-	db.Save(&user)
+	// check hotspot ownership
+	if utils.Contains(utils.ExtractHotspotIds(accountId), hotspotIdInt) {
+		db := database.Database()
+		db.Save(&user)
+		db.Close()
 
-	db.Close()
-
-	c.JSON(http.StatusCreated, gin.H{"id": user.Id, "status": "success"})
+		c.JSON(http.StatusCreated, gin.H{"id": user.Id, "status": "success"})
+	} else {
+		c.JSON(http.StatusUnauthorized, gin.H{"message": "This hotspot is not yours"})
+	}
 }
 
 func UpdateUser(c *gin.Context) {
 	var user models.User
+	accountId := c.MustGet("token").(*models.AccessToken).AccountId
+
 	userId := c.Param("user_id")
 
 	name := c.PostForm("name")
@@ -101,31 +117,41 @@ func UpdateUser(c *gin.Context) {
 		return
 	}
 
-	user.Name = name
-	user.Email = email
+	// check hotspot ownership
+	if utils.Contains(utils.ExtractHotspotIds(accountId), user.HotspotId) {
+		user.Name = name
+		user.Email = email
 
-	if kbpsDownInt, err := strconv.Atoi(kbpsDown); err == nil {
+		kbpsDownInt, err := strconv.Atoi(kbpsDown)
+		if err != nil {
+			fmt.Println(err.Error())
+		}
 		user.KbpsDown = kbpsDownInt
-	}
-	if kbpsUpInt, err := strconv.Atoi(kbpsUp); err == nil {
+
+		kbpsUpInt, err := strconv.Atoi(kbpsUp)
+		if err != nil {
+			fmt.Println(err.Error())
+		}
 		user.KbpsUp = kbpsUpInt
+
+		fromT, _ := time.Parse("2017-12-31 00:00:00", validFrom)
+		user.ValidFrom = fromT
+
+		untilT, _ := time.Parse("2017-12-31 00:00:00", validUntil)
+		user.ValidUntil = untilT
+
+		db.Save(&user)
+		db.Close()
+
+		c.JSON(http.StatusOK, gin.H{"status": "success"})
+	} else {
+		c.JSON(http.StatusUnauthorized, gin.H{"message": "This user is not yours"})
 	}
-
-	fromT, _ := time.Parse("2017-12-31 00:00:00", validFrom)
-	user.ValidFrom = fromT
-
-	untilT, _ := time.Parse("2017-12-31 00:00:00", validUntil)
-	user.ValidUntil = untilT
-
-	db.Save(&user)
-
-	db.Close()
-
-	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }
 
 func GetUsers(c *gin.Context) {
 	var users []models.User
+	accountId := c.MustGet("token").(*models.AccessToken).AccountId
 
 	page := c.Query("page")
 	limit := c.Query("limit")
@@ -133,7 +159,7 @@ func GetUsers(c *gin.Context) {
 	offsets := utils.OffsetCalc(page, limit)
 
 	db := database.Database()
-	db.Offset(offsets[0]).Limit(offsets[1]).Find(&users)
+	db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId)).Offset(offsets[0]).Limit(offsets[1]).Find(&users)
 
 	if len(users) <= 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No users found!"})
@@ -147,10 +173,12 @@ func GetUsers(c *gin.Context) {
 
 func GetUser(c *gin.Context) {
 	var user models.User
+	accountId := c.MustGet("token").(*models.AccessToken).AccountId
+
 	userId := c.Param("user_id")
 
 	db := database.Database()
-	db.Where("id = ?", userId).First(&user)
+	db.Where("id = ? AND hotspot_id in (?)", userId, utils.ExtractHotspotIds(accountId)).First(&user)
 
 	if user.Id == 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No user found!"})
@@ -164,10 +192,12 @@ func GetUser(c *gin.Context) {
 
 func DeleteUser(c *gin.Context) {
 	var user models.User
+	accountId := c.MustGet("token").(*models.AccessToken).AccountId
+
 	userId := c.Param("user_id")
 
 	db := database.Database()
-	db.Where("id = ?", userId).First(&user)
+	db.Where("id = ? AND hotspot_id in (?)", userId, utils.ExtractHotspotIds(accountId)).First(&user)
 
 	if user.Id == 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No user found!"})

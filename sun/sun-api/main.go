@@ -75,7 +75,7 @@ func main() {
 			resellers_pref.POST("", methods.CreateAccountPrefs)
 
 			hotspots_pref := preferences.Group("/hotspots")
-			hotspots_pref.GET("", methods.GetHotspotPrefs)
+			hotspots_pref.GET("/:hotspot_id", methods.GetHotspotPrefs)
 			hotspots_pref.POST("", methods.CreateHotspotPrefs)
 		}
 

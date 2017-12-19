@@ -35,6 +35,7 @@ import (
 
 func GetDevices(c *gin.Context) {
 	var devices []models.Device
+	accountId := c.MustGet("token").(*models.AccessToken).AccountId
 
 	page := c.Query("page")
 	limit := c.Query("limit")
@@ -42,7 +43,7 @@ func GetDevices(c *gin.Context) {
 	offsets := utils.OffsetCalc(page, limit)
 
 	db := database.Database()
-	db.Offset(offsets[0]).Limit(offsets[1]).Find(&devices)
+	db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId)).Offset(offsets[0]).Limit(offsets[1]).Find(&devices)
 
 	if len(devices) <= 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No devices found!"})
@@ -56,10 +57,12 @@ func GetDevices(c *gin.Context) {
 
 func GetDevice(c *gin.Context) {
 	var device models.Device
+	accountId := c.MustGet("token").(*models.AccessToken).AccountId
+
 	deviceId := c.Param("device_id")
 
 	db := database.Database()
-	db.Where("id = ?", deviceId).First(&device)
+	db.Where("id = ? AND hotspot_id in (?)", deviceId, utils.ExtractHotspotIds(accountId)).First(&device)
 
 	if device.Id == 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No device found!"})

@@ -23,6 +23,7 @@
 package methods
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -31,13 +32,14 @@ import (
 
 	"sun-api/database"
 	"sun-api/models"
+	"sun-api/utils"
 )
 
 func CreateAccountPrefs(c *gin.Context) {
 	key := c.PostForm("key")
 	value := c.PostForm("value")
 
-	accountId := 1 // TODO get from token
+	accountId := c.MustGet("token").(*models.AccessToken).AccountId
 
 	preference := models.AccountPreference{
 		AccountId: accountId,
@@ -55,7 +57,7 @@ func CreateAccountPrefs(c *gin.Context) {
 
 func GetAccountPrefs(c *gin.Context) {
 	var preferences []models.AccountPreference
-	accountId := 1 // TODO get from token
+	accountId := c.MustGet("token").(*models.AccessToken).AccountId
 
 	db := database.Database()
 	db.Where("account_id = ?", accountId).Find(&preferences)
@@ -71,6 +73,8 @@ func GetAccountPrefs(c *gin.Context) {
 }
 
 func CreateHotspotPrefs(c *gin.Context) {
+	accountId := c.MustGet("token").(*models.AccessToken).AccountId
+
 	key := c.PostForm("key")
 	value := c.PostForm("value")
 	hotspotId := c.PostForm("hotspot_id")
@@ -80,21 +84,27 @@ func CreateHotspotPrefs(c *gin.Context) {
 		Value: value,
 	}
 
-	if hotspotIdInt, err := strconv.Atoi(hotspotId); err == nil {
-		preference.HotspotId = hotspotIdInt
+	hotspotIdInt, err := strconv.Atoi(hotspotId)
+	if err != nil {
+		fmt.Println(err.Error())
 	}
+	preference.HotspotId = hotspotIdInt
 
-	db := database.Database()
-	db.Save(&preference)
+	// check hotspot ownership
+	if utils.Contains(utils.ExtractHotspotIds(accountId), hotspotIdInt) {
+		db := database.Database()
+		db.Save(&preference)
+		db.Close()
 
-	db.Close()
-
-	c.JSON(http.StatusCreated, gin.H{"status": "success"})
+		c.JSON(http.StatusCreated, gin.H{"status": "success"})
+	} else {
+		c.JSON(http.StatusUnauthorized, gin.H{"message": "This hotspot is not yours"})
+	}
 }
 
 func GetHotspotPrefs(c *gin.Context) {
 	var preferences []models.HotspotPreference
-	hotspotId := 1 // TODO get from token
+	hotspotId := c.Param("hotspot_id")
 
 	db := database.Database()
 	db.Where("hotspot_id = ?", hotspotId).Find(&preferences)

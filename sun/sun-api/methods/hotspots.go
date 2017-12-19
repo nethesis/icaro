@@ -38,7 +38,7 @@ func CreateHotspot(c *gin.Context) {
 	name := c.PostForm("name")
 	description := c.PostForm("description")
 
-	accountId := 1 // TODO get from token
+	accountId := c.MustGet("token").(*models.AccessToken).AccountId
 
 	hotspot := models.Hotspot{
 		AccountId:   accountId,
@@ -57,13 +57,15 @@ func CreateHotspot(c *gin.Context) {
 
 func UpdateHotspot(c *gin.Context) {
 	var hotspot models.Hotspot
+	accountId := c.MustGet("token").(*models.AccessToken).AccountId
+
 	hotspotId := c.Param("hotspot_id")
 
 	name := c.PostForm("name")
 	description := c.PostForm("description")
 
 	db := database.Database()
-	db.Where("id = ?", hotspotId).First(&hotspot)
+	db.Where("id = ? AND account_id = ?", hotspotId, accountId).First(&hotspot)
 
 	if hotspot.Id == 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No hotspot found!"})
@@ -82,6 +84,7 @@ func UpdateHotspot(c *gin.Context) {
 
 func GetHotspots(c *gin.Context) {
 	var hotspots []models.Hotspot
+	accountId := c.MustGet("token").(*models.AccessToken).AccountId
 
 	page := c.Query("page")
 	limit := c.Query("limit")
@@ -89,7 +92,7 @@ func GetHotspots(c *gin.Context) {
 	offsets := utils.OffsetCalc(page, limit)
 
 	db := database.Database()
-	db.Offset(offsets[0]).Limit(offsets[1]).Find(&hotspots)
+	db.Where("account_id = ?", accountId).Offset(offsets[0]).Limit(offsets[1]).Find(&hotspots)
 
 	if len(hotspots) <= 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No hotspots found!"})
@@ -103,10 +106,12 @@ func GetHotspots(c *gin.Context) {
 
 func GetHotspot(c *gin.Context) {
 	var hotspot models.Hotspot
+	accountId := c.MustGet("token").(*models.AccessToken).AccountId
+
 	hotspotId := c.Param("hotspot_id")
 
 	db := database.Database()
-	db.Where("id = ?", hotspotId).First(&hotspot)
+	db.Where("id = ? AND account_id = ?", hotspotId, accountId).First(&hotspot)
 
 	if hotspot.Id == 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No hotspot found!"})
@@ -120,10 +125,12 @@ func GetHotspot(c *gin.Context) {
 
 func DeleteHotspot(c *gin.Context) {
 	var hotspot models.Hotspot
+	accountId := c.MustGet("token").(*models.AccessToken).AccountId
+
 	hotspotId := c.Param("hotspot_id")
 
 	db := database.Database()
-	db.Where("id = ?", hotspotId).First(&hotspot)
+	db.Where("id = ? AND account_id = ?", hotspotId, accountId).First(&hotspot)
 
 	if hotspot.Id == 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No hotspot found!"})
