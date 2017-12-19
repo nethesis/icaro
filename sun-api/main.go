@@ -44,17 +44,26 @@ func main() {
 
 	api.Use(middleware.Authentication)
 	{
+		accounts := api.Group("/accounts")
+		{
+			accounts.GET("", methods.GetAccounts)
+			accounts.GET("/:account_id", methods.GetAccount)
+			accounts.POST("", methods.CreateAccount)
+			accounts.PUT("/:account_id", methods.UpdateAccount)
+			accounts.DELETE("/:account_id", methods.DeleteAccount)
+		}
+
 		devices := api.Group("/devices")
 		{
-			devices.GET("/", methods.GetDevices)
+			devices.GET("", methods.GetDevices)
 			devices.GET("/:device_id", methods.GetDevice)
 		}
 
 		hotspots := api.Group("/hotspots")
 		{
-			hotspots.GET("/", methods.GetHotspots)
+			hotspots.GET("", methods.GetHotspots)
 			hotspots.GET("/:hotspot_id", methods.GetHotspot)
-			hotspots.POST("/", methods.CreateHotspot)
+			hotspots.POST("", methods.CreateHotspot)
 			hotspots.PUT("/:hotspot_id", methods.UpdateHotspot)
 			hotspots.DELETE("/:hotspot_id", methods.DeleteHotspot)
 		}
@@ -62,42 +71,33 @@ func main() {
 		preferences := api.Group("/preferences")
 		{
 			resellers_pref := preferences.Group("/accounts")
-			resellers_pref.GET("/", methods.GetAccountPrefs)
-			resellers_pref.POST("/", methods.CreateAccountPrefs)
+			resellers_pref.GET("", methods.GetAccountPrefs)
+			resellers_pref.POST("", methods.CreateAccountPrefs)
 
 			hotspots_pref := preferences.Group("/hotspots")
-			hotspots_pref.GET("/", methods.GetHotspotPrefs)
-			hotspots_pref.POST("/", methods.CreateHotspotPrefs)
-		}
-
-		accounts := api.Group("/accounts")
-		{
-			accounts.GET("/", methods.GetAccounts)
-			accounts.GET("/:account_id", methods.GetAccount)
-			accounts.POST("/", methods.CreateAccount)
-			accounts.PUT("/:account_id", methods.UpdateAccount)
-			accounts.DELETE("/:account_id", methods.DeleteAccount)
+			hotspots_pref.GET("", methods.GetHotspotPrefs)
+			hotspots_pref.POST("", methods.CreateHotspotPrefs)
 		}
 
 		sessions := api.Group("/sessions")
 		{
-			sessions.GET("/", methods.GetSessions)
+			sessions.GET("", methods.GetSessions)
 			sessions.GET("/:session_id", methods.GetSession)
 		}
 
 		units := api.Group("/units")
 		{
-			units.GET("/", methods.GetUnits)
+			units.GET("", methods.GetUnits)
 			units.GET("/:unit_id", methods.GetUnit)
-			units.POST("/", methods.CreateUnit)
+			units.POST("", methods.CreateUnit)
 			units.DELETE("/:unit_id", methods.DeleteUnit)
 		}
 
 		users := api.Group("/users")
 		{
-			users.GET("/", methods.GetUsers)
+			users.GET("", methods.GetUsers)
 			users.GET("/:user_id", methods.GetUser)
-			users.POST("/", methods.CreateUser)
+			users.POST("", methods.CreateUser)
 			users.PUT("/:user_id", methods.UpdateUser)
 			users.DELETE("/:user_id", methods.DeleteUser)
 		}

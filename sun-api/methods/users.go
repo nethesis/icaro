@@ -54,7 +54,7 @@ func CreateUser(c *gin.Context) {
 		Password:    password,
 		Email:       email,
 		AccountType: accountType,
-		Created:     time.Now(),
+		Created:     time.Now().UTC(),
 	}
 
 	fromT, _ := time.Parse("2017-12-31 00:00:00", validFrom)

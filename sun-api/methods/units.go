@@ -45,7 +45,7 @@ func CreateUnit(c *gin.Context) {
 		MacAddress:  macAddress,
 		Description: description,
 		Uuid:        uuid,
-		Created:     time.Now(),
+		Created:     time.Now().UTC(),
 	}
 
 	if hotspotIdInt, err := strconv.Atoi(hotspotId); err == nil {

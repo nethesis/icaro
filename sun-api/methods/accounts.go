@@ -49,7 +49,7 @@ func CreateAccount(c *gin.Context) {
 		Username: username,
 		Password: password,
 		Email:    email,
-		Created:  time.Now(),
+		Created:  time.Now().UTC(),
 	}
 
 	db := database.Database()

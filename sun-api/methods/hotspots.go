@@ -44,7 +44,7 @@ func CreateHotspot(c *gin.Context) {
 		AccountId:   accountId,
 		Name:        name,
 		Description: description,
-		Created:     time.Now(),
+		Created:     time.Now().UTC(),
 	}
 
 	db := database.Database()

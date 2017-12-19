@@ -52,7 +52,7 @@ func Authentication(c *gin.Context) {
 			respondWithError(http.StatusUnauthorized, "API token is invalid", c)
 			return
 		}
-		if accessToken.Expires.After(time.Now()) {
+		if accessToken.Expires.Before(time.Now().UTC()) {
 			respondWithError(http.StatusUnauthorized, "API token is expired", c)
 			return
 		}

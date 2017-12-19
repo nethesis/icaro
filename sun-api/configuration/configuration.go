@@ -29,8 +29,10 @@ import (
 )
 
 type Configuration struct {
-	DbUser     string `json:"db_user"`
-	DbPassword string `json:"db_password"`
+	DbUser          string `json:"db_user"`
+	DbPassword      string `json:"db_password"`
+	PageLimit       string `json:"page_limit"`
+	TokenExpiresDay int    `json:"token_expires_day"`
 }
 
 var Config = Configuration{}

@@ -27,6 +27,7 @@ import (
 	"strconv"
 	"time"
 
+	"sun-api/configuration"
 	"sun-api/database"
 	"sun-api/models"
 )
@@ -34,6 +35,13 @@ import (
 func OffsetCalc(page string, limit string) [2]int {
 	var resLimit = 0
 	var resOffset = 0
+
+	if len(page) == 0 {
+		page = "1"
+	}
+	if len(page) == 0 {
+		limit = configuration.Config.PageLimit
+	}
 
 	limitInt, errLimit := strconv.Atoi(limit)
 	if errLimit != nil {
@@ -67,7 +75,7 @@ func RefreshToken(token string) {
 	db.Where("token = ?", token).First(&accessToken)
 
 	// add 1 month to expiration date
-	accessToken.Expires = time.Now().AddDate(0, 0, 1)
+	accessToken.Expires = time.Now().UTC().AddDate(0, 0, configuration.Config.TokenExpiresDay)
 	db.Save(&accessToken)
 
 	db.Close()
