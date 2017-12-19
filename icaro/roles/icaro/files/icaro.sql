@@ -30,7 +30,7 @@ CREATE TABLE `access_tokens` (
   `role` varchar(200),
   `expires` datetime,
   FOREIGN KEY (`account_id`) REFERENCES accounts(`id`),
-  UNIQUE KEY (`account_id`, `id`),
+  UNIQUE KEY (`account_id`),
   PRIMARY KEY(`id`)
 );
 /* --------------- */

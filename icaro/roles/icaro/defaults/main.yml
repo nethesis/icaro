@@ -1,0 +1,7 @@
+---
+machine_hostname:
+    "example.com"
+admin_email:
+    "admin@example.com"
+mariadb_root_password:
+    "YourMariaDBPassWordHere"
