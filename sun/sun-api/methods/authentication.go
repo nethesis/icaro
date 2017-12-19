@@ -64,7 +64,7 @@ func Login(c *gin.Context) {
 			token := fmt.Sprintf("%x", h.Sum(nil))
 
 			// set expiration date
-			expires := time.Now().UTC().AddDate(0, 0, configuration.Config.TokenExpiresDay)
+			expires := time.Now().UTC().AddDate(0, 0, configuration.Config.TokenExpiresDays)
 
 			accessToken := models.AccessToken{
 				AccountId: account.Id,

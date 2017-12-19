@@ -74,8 +74,8 @@ func RefreshToken(token string) {
 	db := database.Database()
 	db.Where("token = ?", token).First(&accessToken)
 
-	// add 1 month to expiration date
-	accessToken.Expires = time.Now().UTC().AddDate(0, 0, configuration.Config.TokenExpiresDay)
+	// add 1 day to expiration date
+	accessToken.Expires = time.Now().UTC().AddDate(0, 0, configuration.Config.TokenExpiresDays)
 	db.Save(&accessToken)
 
 	db.Close()
