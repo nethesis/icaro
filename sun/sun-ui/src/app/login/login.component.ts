@@ -6,7 +6,8 @@ import { error } from 'util';
 @Component({
     moduleId:module.id,
     selector: 'router-outlet',
-    templateUrl:'login.component.html'
+    templateUrl:'login.component.html',
+    styleUrls: ['login.component.css']
 })
 
 
