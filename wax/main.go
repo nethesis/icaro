@@ -24,7 +24,6 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-
 	"sun-api/configuration"
 	"wax/methods"
 )
