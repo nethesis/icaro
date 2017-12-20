@@ -1,8 +1,6 @@
-import { AuthenticationService } from './../_services/authentication.service';
-import {Component, OnInit} from '@angular/core';
-import {Router, ActivatedRoute} from '@angular/router';
-import { error } from 'util';
-
+import {Component} from '@angular/core';
+import {Router} from '@angular/router';
+import {Http, Headers} from '@angular/http'
 @Component({
     moduleId:module.id,
     selector: 'router-outlet',
@@ -12,36 +10,23 @@ import { error } from 'util';
 
 
 export class LoginComponent{
-    model:any = {};
-    loading=false;
-    returnUrl:string;
-
-
     constructor (
-        private route: ActivatedRoute,
-        private router:Router,
-        private authenticationService:AuthenticationService,
+        public router: Router, public http: Http
     ){}
 
-
-    // ngOnInit(){
-    //     this.authenticationService.
-    // }
-
-    login(){
-        this.loading= true;
-        this.authenticationService.login(this.model.username, this.model.password)
-            .subscribe(
-                data=>{
-                    console.log('Logged in!!');
-                },
-                error=>{
-                    this.loading = false;
-                    console.log('Fail attempt');
-                }
-            );
+    login(username:string, password:string) {
+        let contentHeaders = new Headers({'Content-Type': 'application/json'});
+        let body = JSON.stringify({ username, password });
+        this.http.post('http://localhost:6900/api/login',body)
+          .subscribe(
+            response => {
+              localStorage.setItem('id_token', response.json().id_token);
+              console.log(response.json());
+            },
+            error => {
+             alert(error.text());
+              console.log(error.text());
+            }
+          );
     }
-
-
-
 }
