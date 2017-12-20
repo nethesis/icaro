@@ -1,12 +1,12 @@
 /* HOTSPOT MANAGER */
 CREATE TABLE `accounts` (
   `id` serial,
-  `creator_id` bigint unsigned,
+  `creator_id` bigint unsigned NOT NULL,
   `uuid` varchar(200),
-  `type` varchar(200),
-  `name` varchar(200),
-  `username` varchar (200),
-  `password` varchar (200),
+  `type` varchar(200) NOT NULL,
+  `name` varchar(200) NOT NULL,
+  `username` varchar (200) NOT NULL,
+  `password` varchar (200) NOT NULL,
   `email` varchar(250),
   `created` datetime,
   KEY(`username`),
@@ -14,23 +14,26 @@ CREATE TABLE `accounts` (
   PRIMARY KEY(`id`)
 );
 
+/* CREATE DEFAULT ADMIN USER */
+INSERT INTO `accounts` VALUES (1, 0, "", "admin", "Admin", "admin", MD5("admin"), "", NOW());
+
 CREATE TABLE `account_preferences` (
   `id` serial,
-  `account_id` bigint unsigned,
-  `key` varchar(250),
-  `value` varchar(250),
-  FOREIGN KEY (`account_id`) REFERENCES accounts(`id`),
+  `account_id` bigint unsigned NOT NULL,
+  `key` varchar(250) NOT NULL,
+  `value` varchar(250) NOT NULL,
+  FOREIGN KEY (`account_id`) REFERENCES accounts(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   UNIQUE KEY (`account_id`, `key`),
   PRIMARY KEY(`id`)
 );
 
 CREATE TABLE `access_tokens` (
   `id` serial,
-  `account_id` bigint unsigned,
-  `token` varchar(200),
-  `role` varchar(200),
-  `expires` datetime,
-  FOREIGN KEY (`account_id`) REFERENCES accounts(`id`),
+  `account_id` bigint unsigned NOT NULL,
+  `token` varchar(200) NOT NULL,
+  `role` varchar(200) NOT NULL,
+  `expires` datetime NOT NULL,
+  FOREIGN KEY (`account_id`) REFERENCES accounts(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   UNIQUE KEY (`account_id`, `id`),
   PRIMARY KEY(`id`)
 );
@@ -39,39 +42,49 @@ CREATE TABLE `access_tokens` (
 /* ACCOUNTING AAA */
 CREATE TABLE `hotspots` (
   `id` serial,
-  `account_id` bigint unsigned,
-  `name` varchar(200),
+  `account_id` bigint unsigned NOT NULL,
+  `name` varchar(200) NOT NULL,
   `description` varchar(250),
   `created` datetime,
-  FOREIGN KEY (`account_id`) REFERENCES accounts(`id`),
+  FOREIGN KEY (`account_id`) REFERENCES accounts(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   KEY(`name`),
+  PRIMARY KEY(`id`)
+);
+
+CREATE TABLE `accounts_hotspots` (
+  `id` serial,
+  `account_id` bigint unsigned NOT NULL,
+  `hotspot_id` bigint unsigned NOT NULL,
+  FOREIGN KEY (`account_id`) REFERENCES accounts(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  FOREIGN KEY (`hotspot_id`) REFERENCES hotspots(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  KEY(`account_id`, `hotspot_id`),
   PRIMARY KEY(`id`)
 );
 
 CREATE TABLE `hotspot_preferences` (
   `id` serial,
-  `hotspot_id` bigint unsigned,
-  `key` varchar(250),
-  `value` varchar(250),
-  FOREIGN KEY (`hotspot_id`) REFERENCES hotspots(`id`),
+  `hotspot_id` bigint unsigned NOT NULL,
+  `key` varchar(250) NOT NULL,
+  `value` varchar(250) NOT NULL,
+  FOREIGN KEY (`hotspot_id`) REFERENCES hotspots(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   UNIQUE KEY (`hotspot_id`, `key`),
   PRIMARY KEY(`id`)
 );
 
 CREATE TABLE `users` (
   `id` serial,
-  `hotspot_id` bigint unsigned,
-  `name` varchar(200),
-  `username` varchar(200),
-  `password` varchar(200),
+  `hotspot_id` bigint unsigned NOT NULL,
+  `name` varchar(200) NOT NULL,
+  `username` varchar(200) NOT NULL,
+  `password` varchar(200) NOT NULL,
   `email` varchar(200),
-  `account_type` varchar(200),
+  `account_type` varchar(200) NOT NULL,
   `kbps_down` integer unsigned,
   `kbps_up` integer unsigned,
   `valid_from` datetime,
   `valid_until` datetime,
   `created` datetime,
-  FOREIGN KEY (`hotspot_id`) REFERENCES hotspots(`id`),
+  FOREIGN KEY (`hotspot_id`) REFERENCES hotspots(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   UNIQUE KEY (`hotspot_id`, `username`),
   KEY(`created`),
   KEY(`username`),
@@ -81,25 +94,25 @@ CREATE TABLE `users` (
 
 CREATE TABLE `devices` (
   `id` serial,
-  `hotspot_id` bigint unsigned,
-  `user_id` bigint unsigned,
-  `mac_address` varchar(200),
+  `hotspot_id` bigint unsigned NOT NULL,
+  `user_id` bigint unsigned NOT NULL,
+  `mac_address` varchar(200) NOT NULL,
   `description` varchar(200),
   `created` datetime,
-  FOREIGN KEY (`hotspot_id`) REFERENCES hotspots(`id`),
-  FOREIGN KEY (`user_id`) REFERENCES users(`id`),
+  FOREIGN KEY (`hotspot_id`) REFERENCES hotspots(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  FOREIGN KEY (`user_id`) REFERENCES users(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   KEY(`mac_address`),
   PRIMARY KEY(`id`)
 );
 
 CREATE TABLE `units` (
   `id` serial,
-  `hotspot_id` bigint unsigned,
-  `mac_address` varchar(200),
+  `hotspot_id` bigint unsigned NOT NULL,
+  `mac_address` varchar(200) NOT NULL,
   `description` varchar(200),
-  `uuid` varchar(200),
+  `uuid` varchar(200) NOT NULL,
   `created` datetime,
-  FOREIGN KEY (`hotspot_id`) REFERENCES hotspots(`id`),
+  FOREIGN KEY (`hotspot_id`) REFERENCES hotspots(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   KEY(`mac_address`),
   KEY(`uuid`),
   PRIMARY KEY(`id`)
@@ -107,10 +120,10 @@ CREATE TABLE `units` (
 
 CREATE TABLE `sessions` (
   `id` serial,
-  `unit_id` bigint unsigned,
-  `hotspot_id` bigint unsigned,
-  `device_id` bigint unsigned,
-  `user_id` bigint unsigned,
+  `unit_id` bigint unsigned NOT NULL,
+  `hotspot_id` bigint unsigned NOT NULL,
+  `device_id` bigint unsigned NOT NULL,
+  `user_id` bigint unsigned NOT NULL,
   `bytes_up` bigint unsigned,
   `bytes_down` bigint unsigned,
   `duration` bigint unsigned,
@@ -119,10 +132,10 @@ CREATE TABLE `sessions` (
   `update_time` datetime,
   `stop_time` datetime,
   `session_key` varchar(200),
-  FOREIGN KEY (`unit_id`) REFERENCES units(`id`),
-  FOREIGN KEY (`hotspot_id`) REFERENCES hotspots(`id`),
-  FOREIGN KEY (`device_id`) REFERENCES devices(`id`),
-  FOREIGN KEY (`user_id`) REFERENCES users(`id`),
+  FOREIGN KEY (`unit_id`) REFERENCES units(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  FOREIGN KEY (`hotspot_id`) REFERENCES hotspots(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  FOREIGN KEY (`device_id`) REFERENCES devices(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  FOREIGN KEY (`user_id`) REFERENCES users(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   PRIMARY KEY(`id`)
 );
 /* -------------------- */
