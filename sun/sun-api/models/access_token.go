@@ -26,7 +26,7 @@ import "time"
 
 type AccessToken struct {
 	Id        int       `db:"id" json:"id"`
-	AccountId int       `db:"account_id" json:"account"`
+	AccountId int       `db:"account_id" json:"account_id"`
 	Token     string    `db:"token" json:"token"`
 	Role      string    `db:"role" json:"role"`
 	Expires   time.Time `db:"expires" json:"expires"`

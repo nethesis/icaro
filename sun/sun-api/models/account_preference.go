@@ -24,7 +24,7 @@ package models
 
 type AccountPreference struct {
 	Id        int    `db:"id" json:"id"`
-	AccountId int    `db:"account_id" json:"account"`
+	AccountId int    `db:"account_id" json:"account_id"`
 	Key       string `db:"key" json:"key"`
 	Value     string `db:"value" json:"value"`
 }

@@ -35,21 +35,23 @@ import (
 )
 
 func CreateHotspot(c *gin.Context) {
-	name := c.PostForm("name")
-	description := c.PostForm("description")
+	var json models.Hotspot
+	if err := c.BindJSON(&json); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Request fields malformed", "error": err.Error()})
+		return
+	}
 
-	accountId := c.MustGet("token").(*models.AccessToken).AccountId
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
 
 	hotspot := models.Hotspot{
 		AccountId:   accountId,
-		Name:        name,
-		Description: description,
+		Name:        json.Name,
+		Description: json.Description,
 		Created:     time.Now().UTC(),
 	}
 
 	db := database.Database()
 	db.Save(&hotspot)
-
 	db.Close()
 
 	c.JSON(http.StatusCreated, gin.H{"id": hotspot.Id, "status": "success"})
@@ -57,26 +59,29 @@ func CreateHotspot(c *gin.Context) {
 
 func UpdateHotspot(c *gin.Context) {
 	var hotspot models.Hotspot
-	accountId := c.MustGet("token").(*models.AccessToken).AccountId
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
 
 	hotspotId := c.Param("hotspot_id")
 
-	name := c.PostForm("name")
-	description := c.PostForm("description")
+	var json models.Hotspot
+	if err := c.BindJSON(&json); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Request fields malformed", "error": err.Error()})
+		return
+	}
 
 	db := database.Database()
 	db.Where("id = ? AND account_id = ?", hotspotId, accountId).First(&hotspot)
 
 	if hotspot.Id == 0 {
+		db.Close()
 		c.JSON(http.StatusNotFound, gin.H{"message": "No hotspot found!"})
 		return
 	}
 
-	hotspot.Name = name
-	hotspot.Description = description
+	hotspot.Name = json.Name
+	hotspot.Description = json.Description
 
 	db.Save(&hotspot)
-
 	db.Close()
 
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
@@ -84,7 +89,7 @@ func UpdateHotspot(c *gin.Context) {
 
 func GetHotspots(c *gin.Context) {
 	var hotspots []models.Hotspot
-	accountId := c.MustGet("token").(*models.AccessToken).AccountId
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
 
 	page := c.Query("page")
 	limit := c.Query("limit")
@@ -93,39 +98,37 @@ func GetHotspots(c *gin.Context) {
 
 	db := database.Database()
 	db.Where("account_id = ?", accountId).Offset(offsets[0]).Limit(offsets[1]).Find(&hotspots)
+	db.Close()
 
 	if len(hotspots) <= 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No hotspots found!"})
 		return
 	}
 
-	db.Close()
-
 	c.JSON(http.StatusOK, hotspots)
 }
 
 func GetHotspot(c *gin.Context) {
 	var hotspot models.Hotspot
-	accountId := c.MustGet("token").(*models.AccessToken).AccountId
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
 
 	hotspotId := c.Param("hotspot_id")
 
 	db := database.Database()
 	db.Where("id = ? AND account_id = ?", hotspotId, accountId).First(&hotspot)
+	db.Close()
 
 	if hotspot.Id == 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No hotspot found!"})
 		return
 	}
-
-	db.Close()
 
 	c.JSON(http.StatusOK, hotspot)
 }
 
 func DeleteHotspot(c *gin.Context) {
 	var hotspot models.Hotspot
-	accountId := c.MustGet("token").(*models.AccessToken).AccountId
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
 
 	hotspotId := c.Param("hotspot_id")
 
@@ -133,12 +136,12 @@ func DeleteHotspot(c *gin.Context) {
 	db.Where("id = ? AND account_id = ?", hotspotId, accountId).First(&hotspot)
 
 	if hotspot.Id == 0 {
+		db.Close()
 		c.JSON(http.StatusNotFound, gin.H{"message": "No hotspot found!"})
 		return
 	}
 
 	db.Delete(&hotspot)
-
 	db.Close()
 
 	c.JSON(http.StatusOK, gin.H{"status": "success"})

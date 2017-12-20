@@ -24,7 +24,6 @@ package utils
 
 import (
 	"fmt"
-	"reflect"
 	"strconv"
 	"time"
 
@@ -98,11 +97,10 @@ func ExtractHotspotIds(accountId int) []int {
 	db.Select("id").Where("account_id = ?", accountId).Find(&hotspots)
 	db.Close()
 
-	v := reflect.ValueOf(hotspots)
 	result := []int{}
 
-	for i := 0; i < v.NumField(); i++ {
-		result[i] = int(v.Field(i).Int())
+	for _, hotspot := range hotspots {
+		result = append(result, hotspot.Id)
 	}
 
 	return result
@@ -110,6 +108,7 @@ func ExtractHotspotIds(accountId int) []int {
 
 func Contains(intSlice []int, searchInt int) bool {
 	for _, value := range intSlice {
+		fmt.Println(value, searchInt)
 		if value == searchInt {
 			return true
 		}

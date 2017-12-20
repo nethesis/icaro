@@ -24,7 +24,7 @@ package models
 
 type HotspotPreference struct {
 	Id        int    `db:"id" json:"id"`
-	HotspotId int    `db:"hotspot_id" json:"hotspot"`
+	HotspotId int    `db:"hotspot_id" json:"hotspot_id"`
 	Key       string `db:"key" json:"key"`
 	Value     string `db:"value" json:"value"`
 }

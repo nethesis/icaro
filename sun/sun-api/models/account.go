@@ -26,7 +26,7 @@ import "time"
 
 type Account struct {
 	Id        int       `db:"id" json:"id"`
-	CreatorId int       `db:"creator_id" json:"creator"`
+	CreatorId int       `db:"creator_id" json:"creator_id"`
 	Uuid      string    `db:"uuid" json:"uuid"`
 	Type      string    `db:"type" json:"type"`
 	Name      string    `db:"name" json:"name"`

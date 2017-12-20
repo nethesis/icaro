@@ -23,9 +23,7 @@
 package methods
 
 import (
-	"fmt"
 	"net/http"
-	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -37,28 +35,25 @@ import (
 )
 
 func CreateUnit(c *gin.Context) {
-	accountId := c.MustGet("token").(*models.AccessToken).AccountId
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
 
-	macAddress := c.PostForm("mac_address")
-	description := c.PostForm("description")
-	uuid := c.PostForm("uuid")
-	hotspotId := c.PostForm("hotspot_id")
+	var json models.Unit
+	if err := c.BindJSON(&json); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Request fields malformed", "error": err.Error()})
+		return
+	}
 
 	unit := models.Unit{
-		MacAddress:  macAddress,
-		Description: description,
-		Uuid:        uuid,
+		MacAddress:  json.MacAddress,
+		Description: json.Description,
+		Uuid:        json.Uuid,
 		Created:     time.Now().UTC(),
 	}
 
-	hotspotIdInt, err := strconv.Atoi(hotspotId)
-	if err != nil {
-		fmt.Println(err.Error())
-	}
-	unit.HotspotId = hotspotIdInt
+	unit.HotspotId = json.HotspotId
 
 	// check hotspot ownership
-	if utils.Contains(utils.ExtractHotspotIds(accountId), hotspotIdInt) {
+	if utils.Contains(utils.ExtractHotspotIds(accountId), json.HotspotId) {
 		db := database.Database()
 		db.Save(&unit)
 		db.Close()
@@ -71,7 +66,7 @@ func CreateUnit(c *gin.Context) {
 
 func GetUnits(c *gin.Context) {
 	var units []models.Unit
-	accountId := c.MustGet("token").(*models.AccessToken).AccountId
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
 
 	page := c.Query("page")
 	limit := c.Query("limit")
@@ -80,39 +75,37 @@ func GetUnits(c *gin.Context) {
 
 	db := database.Database()
 	db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId)).Offset(offsets[0]).Limit(offsets[1]).Find(&units)
+	db.Close()
 
 	if len(units) <= 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No units found!"})
 		return
 	}
 
-	db.Close()
-
 	c.JSON(http.StatusOK, units)
 }
 
 func GetUnit(c *gin.Context) {
 	var unit models.Unit
-	accountId := c.MustGet("token").(*models.AccessToken).AccountId
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
 
 	unitId := c.Param("unit_id")
 
 	db := database.Database()
 	db.Where("id = ? AND hotspot_id in (?)", unitId, utils.ExtractHotspotIds(accountId)).First(&unit)
+	db.Close()
 
 	if unit.Id == 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No unit found!"})
 		return
 	}
-
-	db.Close()
 
 	c.JSON(http.StatusOK, unit)
 }
 
 func DeleteUnit(c *gin.Context) {
 	var unit models.Unit
-	accountId := c.MustGet("token").(*models.AccessToken).AccountId
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
 
 	unitId := c.Param("unit_id")
 
@@ -120,12 +113,12 @@ func DeleteUnit(c *gin.Context) {
 	db.Where("id = ? AND hotspot_id in (?)", unitId, utils.ExtractHotspotIds(accountId)).First(&unit)
 
 	if unit.Id == 0 {
+		db.Close()
 		c.JSON(http.StatusNotFound, gin.H{"message": "No unit found!"})
 		return
 	}
 
 	db.Delete(&unit)
-
 	db.Close()
 
 	c.JSON(http.StatusOK, gin.H{"status": "success"})

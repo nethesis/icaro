@@ -26,7 +26,7 @@ import "time"
 
 type Hotspot struct {
 	Id          int       `db:"id" json:"id"`
-	AccountId   int       `db:"account_id" json:"account"`
+	AccountId   int       `db:"account_id" json:"account_id"`
 	Name        string    `db:"name" json:"name"`
 	Description string    `db:"description" json:"description"`
 	Created     time.Time `db:"created" json:"created"`

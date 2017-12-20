@@ -35,22 +35,22 @@ import (
 )
 
 func CreateAccount(c *gin.Context) {
-	uuid := c.PostForm("uuid")
-	typeField := c.PostForm("type")
-	name := c.PostForm("name")
-	username := c.PostForm("username")
-	password := c.PostForm("password")
-	email := c.PostForm("email")
-	creatorId := c.MustGet("token").(*models.AccessToken).AccountId
+	creatorId := c.MustGet("token").(models.AccessToken).AccountId
+
+	var json models.Account
+	if err := c.BindJSON(&json); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Request fields malformed", "error": err.Error()})
+		return
+	}
 
 	account := models.Account{
 		CreatorId: creatorId,
-		Uuid:      uuid,
-		Type:      typeField,
-		Name:      name,
-		Username:  username,
-		Password:  password,
-		Email:     email,
+		Uuid:      json.Uuid,
+		Type:      json.Type,
+		Name:      json.Name,
+		Username:  json.Username,
+		Password:  json.Password,
+		Email:     json.Email,
 		Created:   time.Now().UTC(),
 	}
 
@@ -64,30 +64,31 @@ func CreateAccount(c *gin.Context) {
 
 func UpdateAccount(c *gin.Context) {
 	var account models.Account
-	creatorId := c.MustGet("token").(*models.AccessToken).AccountId
+	creatorId := c.MustGet("token").(models.AccessToken).AccountId
 
 	accountId := c.Param("account_id")
 
-	name := c.PostForm("name")
-	username := c.PostForm("username")
-	password := c.PostForm("password")
-	email := c.PostForm("email")
+	var json models.Account
+	if err := c.BindJSON(&json); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Request fields malformed", "error": err.Error()})
+		return
+	}
 
 	db := database.Database()
 	db.Where("id = ? AND creator_id = ?", accountId, creatorId).First(&account)
 
 	if account.Id == 0 {
+		db.Close()
 		c.JSON(http.StatusNotFound, gin.H{"message": "No account found!"})
 		return
 	}
 
-	account.Name = name
-	account.Username = username
-	account.Password = password
-	account.Email = email
+	account.Name = json.Name
+	account.Username = json.Username
+	account.Password = json.Password
+	account.Email = json.Email
 
 	db.Save(&account)
-
 	db.Close()
 
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
@@ -95,7 +96,7 @@ func UpdateAccount(c *gin.Context) {
 
 func GetAccounts(c *gin.Context) {
 	var accounts []models.Account
-	creatorId := c.MustGet("token").(*models.AccessToken).AccountId
+	creatorId := c.MustGet("token").(models.AccessToken).AccountId
 
 	page := c.Query("page")
 	limit := c.Query("limit")
@@ -104,50 +105,48 @@ func GetAccounts(c *gin.Context) {
 
 	db := database.Database()
 	db.Where("creator_id = ?", creatorId).Offset(offsets[0]).Limit(offsets[1]).Find(&accounts)
+	db.Close()
 
 	if len(accounts) <= 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No accounts found!"})
 		return
 	}
 
-	db.Close()
-
 	c.JSON(http.StatusOK, accounts)
 }
 
 func GetAccount(c *gin.Context) {
 	var account models.Account
-	creatorId := c.MustGet("token").(*models.AccessToken).AccountId
+	creatorId := c.MustGet("token").(models.AccessToken).AccountId
 	accountId := c.Param("account_id")
 
 	db := database.Database()
 	db.Where("id = ? AND creator_id = ?", accountId, creatorId).First(&account)
+	db.Close()
 
 	if account.Id == 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No account found!"})
 		return
 	}
-
-	db.Close()
 
 	c.JSON(http.StatusOK, account)
 }
 
 func DeleteAccount(c *gin.Context) {
 	var account models.Account
-	creatorId := c.MustGet("token").(*models.AccessToken).AccountId
+	creatorId := c.MustGet("token").(models.AccessToken).AccountId
 	accountId := c.Param("account_id")
 
 	db := database.Database()
 	db.Where("id = ? AND creator_id = ?", accountId, creatorId).First(&account)
 
 	if account.Id == 0 {
+		db.Close()
 		c.JSON(http.StatusNotFound, gin.H{"message": "No account found!"})
 		return
 	}
 
 	db.Delete(&account)
-
 	db.Close()
 
 	c.JSON(http.StatusOK, gin.H{"status": "success"})

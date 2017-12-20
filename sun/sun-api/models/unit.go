@@ -26,7 +26,7 @@ import "time"
 
 type Unit struct {
 	Id          int       `db:"id" json:"id"`
-	HotspotId   int       `db:"hotspot_id" json:"hotspot"`
+	HotspotId   int       `db:"hotspot_id" json:"hotspot_id"`
 	MacAddress  string    `db:"mac_address" json:"mac_address"`
 	Description string    `db:"description" json:"description"`
 	Uuid        string    `db:"uuid" json:"uuid"`

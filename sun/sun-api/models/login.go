@@ -22,20 +22,7 @@
 
 package models
 
-import "time"
-
-type Session struct {
-	Id         int       `db:"id" json:"id"`
-	UnitId     string    `db:"unit_id" json:"unit_id"`
-	HotspotId  int       `db:"hotspot_id" json:"hotspot_id"`
-	DeviceId   string    `db:"device_id" json:"device_id"`
-	UserId     string    `db:"user_id" json:"user_id"`
-	BytesUp    int       `db:"bytes_up" json:"bytes_up"`
-	BytesDown  int       `db:"bytes_down" json:"bytes_down"`
-	Duration   int       `db:"duration" json:"duration"`
-	AuthTime   time.Time `db:"auth_time" json:"auth_time"`
-	StartTime  time.Time `db:"start_time" json:"start_time"`
-	UpdateTime time.Time `db:"update_time" json:"update_time"`
-	StopTime   time.Time `db:"stop_time" json:"stop_time"`
-	SessionKey string    `db:"session_key" json:"session_key"`
+type Login struct {
+	Username string `json:"username" binding:"required"`
+	Password string `json:"password" binding:"required"`
 }

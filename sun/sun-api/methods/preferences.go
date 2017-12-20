@@ -23,9 +23,7 @@
 package methods
 
 import (
-	"fmt"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
@@ -36,20 +34,22 @@ import (
 )
 
 func CreateAccountPrefs(c *gin.Context) {
-	key := c.PostForm("key")
-	value := c.PostForm("value")
+	var json models.AccountPreference
+	if err := c.BindJSON(&json); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Request fields malformed", "error": err.Error()})
+		return
+	}
 
-	accountId := c.MustGet("token").(*models.AccessToken).AccountId
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
 
 	preference := models.AccountPreference{
 		AccountId: accountId,
-		Key:       key,
-		Value:     value,
+		Key:       json.Key,
+		Value:     json.Value,
 	}
 
 	db := database.Database()
 	db.Save(&preference)
-
 	db.Close()
 
 	c.JSON(http.StatusCreated, gin.H{"status": "success"})
@@ -57,41 +57,38 @@ func CreateAccountPrefs(c *gin.Context) {
 
 func GetAccountPrefs(c *gin.Context) {
 	var preferences []models.AccountPreference
-	accountId := c.MustGet("token").(*models.AccessToken).AccountId
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
 
 	db := database.Database()
 	db.Where("account_id = ?", accountId).Find(&preferences)
+	db.Close()
 
 	if len(preferences) <= 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No preferences found!"})
 		return
 	}
 
-	db.Close()
-
 	c.JSON(http.StatusOK, preferences)
 }
 
 func CreateHotspotPrefs(c *gin.Context) {
-	accountId := c.MustGet("token").(*models.AccessToken).AccountId
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
 
-	key := c.PostForm("key")
-	value := c.PostForm("value")
-	hotspotId := c.PostForm("hotspot_id")
+	var json models.HotspotPreference
+	if err := c.BindJSON(&json); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Request fields malformed", "error": err.Error()})
+		return
+	}
 
 	preference := models.HotspotPreference{
-		Key:   key,
-		Value: value,
+		Key:   json.Key,
+		Value: json.Value,
 	}
 
-	hotspotIdInt, err := strconv.Atoi(hotspotId)
-	if err != nil {
-		fmt.Println(err.Error())
-	}
-	preference.HotspotId = hotspotIdInt
+	preference.HotspotId = json.HotspotId
 
 	// check hotspot ownership
-	if utils.Contains(utils.ExtractHotspotIds(accountId), hotspotIdInt) {
+	if utils.Contains(utils.ExtractHotspotIds(accountId), json.HotspotId) {
 		db := database.Database()
 		db.Save(&preference)
 		db.Close()
@@ -108,13 +105,12 @@ func GetHotspotPrefs(c *gin.Context) {
 
 	db := database.Database()
 	db.Where("hotspot_id = ?", hotspotId).Find(&preferences)
+	db.Close()
 
 	if len(preferences) <= 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No preferences found!"})
 		return
 	}
-
-	db.Close()
 
 	c.JSON(http.StatusOK, preferences)
 }

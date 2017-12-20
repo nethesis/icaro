@@ -42,8 +42,14 @@ import (
 func Login(c *gin.Context) {
 	var account models.Account
 
-	username := c.PostForm("username")
-	password := c.PostForm("password")
+	var json models.Login
+	if err := c.BindJSON(&json); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Request fields malformed", "error": err.Error()})
+		return
+	}
+
+	username := json.Username
+	password := json.Password
 
 	db := database.Database()
 	db.Where("username = ?", username).First(&account)
@@ -82,7 +88,6 @@ func Login(c *gin.Context) {
 		} else {
 			db.Close()
 			c.JSON(http.StatusNotFound, gin.H{"message": "Password is invalid"})
-			return
 		}
 	}
 
