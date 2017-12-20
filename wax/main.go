@@ -38,7 +38,7 @@ func Init(testMode bool) *gin.Engine {
 		r = gin.Default()
 	}
 
-	r.GET("/aaa", methods.Dispatch)
+	r.GET("/", methods.Dispatch)
 
         return r
 }
