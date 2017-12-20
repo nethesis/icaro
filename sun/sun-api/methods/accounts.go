@@ -37,7 +37,7 @@ import (
 func CreateAccount(c *gin.Context) {
 	creatorId := c.MustGet("token").(models.AccessToken).AccountId
 
-	var json models.Account
+	var json models.AccountJSON
 	if err := c.BindJSON(&json); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "Request fields malformed", "error": err.Error()})
 		return
@@ -56,6 +56,14 @@ func CreateAccount(c *gin.Context) {
 
 	db := database.Database()
 	db.Save(&account)
+
+	if json.Type == "customer" || json.Type == "desk" {
+		accountHotspot := models.AccountsHotspot{
+			AccountId: account.Id,
+			HotspotId: json.HotspotId,
+		}
+		db.Save(&accountHotspot)
+	}
 
 	db.Close()
 

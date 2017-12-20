@@ -22,7 +22,7 @@
 
 package models
 
-type AccountHotspot struct {
+type AccountsHotspot struct {
 	Id        int `db:"id" json:"id"`
 	AccountId int `db:"account_id" json:"account_id"`
 	HotspotId int `db:"hotspot_id" json:"hotspot_id"`
