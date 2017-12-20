@@ -4,7 +4,7 @@ import {Router} from '@angular/router';
 
 @Component({
     moduleId: module.id,
-    selector: 'router-outlet',
+    selector: 'r-outlet',
     templateUrl:'home.component.html'
 })
 
