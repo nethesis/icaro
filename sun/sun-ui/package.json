@@ -24,6 +24,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@angular/cli": "^1.6.1",
     "@angular/common": "~4.3.4",
     "@angular/compiler": "~4.3.4",
     "@angular/core": "~4.3.4",
@@ -33,9 +34,10 @@
     "@angular/platform-browser-dynamic": "~4.3.4",
     "@angular/router": "~4.3.4",
     "angular-in-memory-web-api": "~0.3.0",
-    "systemjs": "0.19.40",
+    "angular-patternfly": "^4.14.0",
     "core-js": "^2.4.1",
     "rxjs": "5.0.1",
+    "systemjs": "0.19.40",
     "zone.js": "^0.8.4"
   },
   "devDependencies": {
