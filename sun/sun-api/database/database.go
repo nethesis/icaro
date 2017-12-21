@@ -30,7 +30,8 @@ import (
 )
 
 func Database() *gorm.DB {
-	db, err := gorm.Open("mysql", configuration.Config.DbUser+":"+configuration.Config.DbPassword+"@tcp(localhost:3306)/icaro?charset=utf8&parseTime=True")
+	uri := configuration.Config.DbUser+":"+configuration.Config.DbPassword+"@tcp("+configuration.Config.DbHost+":"+configuration.Config.DbPort+")/"+configuration.Config.DbName
+	db, err := gorm.Open("mysql", uri+"?charset=utf8&parseTime=True")
 	if err != nil {
 		panic(err.Error())
 	}

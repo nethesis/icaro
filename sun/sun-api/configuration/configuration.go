@@ -31,10 +31,13 @@ import (
 )
 
 type Configuration struct {
-	DbUser           string          `json:"db_user"`
-	DbPassword       string          `json:"db_password"`
-	PageLimit        string          `json:"page_limit"`
-	TokenExpiresDays int             `json:"token_expires_days"`
+	DbHost           string `json:"db_host"`
+	DbPort           string `json:"db_port"`
+	DbUser           string `json:"db_user"`
+	DbName           string `json:"db_name"`
+	DbPassword       string `json:"db_password"`
+	PageLimit        string `json:"page_limit"`
+	TokenExpiresDays int    `json:"token_expires_days"`
 	Authorizations   models.AuthMaps `json:"authorizations"`
 }
 
@@ -42,12 +45,30 @@ var Config = Configuration{}
 
 func Init() {
 	// read configuration
-	file, _ := os.Open("/opt/icaro/sun-api/conf.json")
-	decoder := json.NewDecoder(file)
+	if _, err := os.Stat("/opt/icaro/sun-api/conf.json"); err == nil {
+		file, _ := os.Open("/opt/icaro/sun-api/conf.json")
+		decoder := json.NewDecoder(file)
+		// check errors or parse JSON
+		err := decoder.Decode(&Config)
+		if err != nil {
+			fmt.Println("Configuration parsing error:", err)
+		}
+	}
 
-	// check errors or parse JSON
-	err := decoder.Decode(&Config)
-	if err != nil {
-		fmt.Println("error:", err)
+
+	if (os.Getenv("DB_USER") != "") {
+		Config.DbUser = os.Getenv("DB_USER")
+	}
+	if (os.Getenv("DB_PASSWORD") != "") {
+		Config.DbPassword = os.Getenv("DB_PASSWORD")
+	}
+	if (os.Getenv("DB_HOST") != "") {
+		Config.DbHost = os.Getenv("DB_HOST")
+	}
+	if (os.Getenv("DB_PORT") != "") {
+		Config.DbPort = os.Getenv("DB_PORT")
+	}
+	if (os.Getenv("DB_NAME") != "") {
+		Config.DbName = os.Getenv("DB_NAME")
 	}
 }
