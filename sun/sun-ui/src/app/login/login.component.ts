@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {Router} from '@angular/router';
-import {Http, Headers} from '@angular/http'
+import {Http, Headers} from '@angular/http';
 @Component({
     moduleId:module.id,
     selector: 'router-outlet',
@@ -10,23 +10,31 @@ import {Http, Headers} from '@angular/http'
 
 
 export class LoginComponent{
+    responseApi: string;
     constructor (
         public router: Router, public http: Http
     ){}
 
-    login(username:string, password:string) {
-        let contentHeaders = new Headers({'Content-Type': 'application/json'});
+    login(username: string, password: string) {
+        const contentHeaders = new Headers();
+        contentHeaders.append('Content-Type', 'application/X-www-form-urlencoded');
+        console.log(contentHeaders);
         let body = JSON.stringify({ username, password });
-        this.http.post('http://localhost:6900/api/login',body)
+        this.http.post('http://hstest.neth.eu:8080/api/login', body, {headers:contentHeaders})
           .subscribe(
             response => {
-              localStorage.setItem('id_token', response.json().id_token);
-              console.log(response.json());
-              this.router.navigate(['home']);
+              if(response.json().token){
+                  localStorage.setItem('id_token', response.json().token);
+                  console.log(response.json());
+                   this.responseApi = response.json().account_type;
+              }
             },
             error => {
-             alert(error.text());
-              console.log(error.text());
+              console.log(error);
+              console.log("error1"+error.text().message);
+              this.responseApi = error.text().message;
+              console.log("error1"+error.json().message);
+              this.responseApi = error.json().message;
             }
           );
     }
