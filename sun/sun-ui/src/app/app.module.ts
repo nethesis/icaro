@@ -10,6 +10,8 @@ import {AuthenticationService} from './_services/authentication.service';
 import {LoginComponent} from './login/login.component';
 import {NavbarComponent} from './navbar/navbar.component';
 import {SidenavComponent} from './sidenav/sidenav.component';
+import {NotFoundComponent} from './404/404.component';
+
 
 @NgModule({
 	imports:
@@ -28,6 +30,7 @@ import {SidenavComponent} from './sidenav/sidenav.component';
 		HomeComponent,
 		NavbarComponent,
 		SidenavComponent,
+		NotFoundComponent,
 	],
 
 	providers:
