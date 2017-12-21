@@ -5,8 +5,13 @@ import { Routes, RouterModule} from '@angular/router';
 // import { NotFoundComponent } from './404/404.component'
 
 const appRouter: Routes = [
+
+	{path: '', redirectTo: '/login', pathMatch: 'full'},
     {path: 'login', component:LoginComponent},
-    {path: 'home', component:HomeComponent},
+    {
+    	path: 'home', component:HomeComponent
+    },
+	
     // {path: '**', component:NotFoundComponent}
 ];
 
