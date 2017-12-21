@@ -5,7 +5,15 @@ import (
         "github.com/gin-gonic/gin"
 )
 
+func AuthAccept(c *gin.Context) {
+	c.String(http.StatusOK, "Auth: 1")
+}
+
+func AuthReject(c *gin.Context) {
+	c.String(http.StatusForbidden, "Auth: 0")
+}
+
 func Login(c *gin.Context, hotspotId string, user string, password string, challenge string) {
-	c.String(http.StatusOK, "login")
+	AuthAccept(c)
 }
 
