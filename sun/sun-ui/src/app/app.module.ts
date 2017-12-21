@@ -8,11 +8,36 @@ import {routing} from './app.routing';
 import { AppComponent }  from './app.component';
 import {AuthenticationService} from './_services/authentication.service';
 import {LoginComponent} from './login/login.component';
+import {NavbarComponent} from './navbar/navbar.component';
+import {SidenavComponent} from './sidenav/sidenav.component';
 
 @NgModule({
-  imports:      [ BrowserModule, FormsModule, HttpClientModule, routing,  HttpModule ],
-  declarations: [ AppComponent, LoginComponent, HomeComponent],
-  providers:    [ AuthenticationService],
-  bootstrap:    [ AppComponent ]
+	imports:
+	[
+		BrowserModule,
+		FormsModule,
+		HttpClientModule,
+		routing,
+		HttpModule
+	],
+
+	declarations:
+	[
+		AppComponent,
+		LoginComponent,
+		HomeComponent,
+		NavbarComponent,
+		SidenavComponent,
+	],
+
+	providers:
+	[
+		AuthenticationService
+	],
+
+	bootstrap:
+	[
+		AppComponent
+	]
 })
 export class AppModule { }
