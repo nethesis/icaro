@@ -3,7 +3,7 @@ import {Router} from '@angular/router';
 import {Http, Headers} from '@angular/http'
 @Component({
     moduleId:module.id,
-    selector: 'router-outlet',
+    selector: 'login',
     templateUrl:'login.component.html',
     styleUrls: ['login.component.css']
 })
