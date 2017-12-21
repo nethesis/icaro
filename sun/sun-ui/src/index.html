@@ -1,17 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-us" class="layout-pf layout-pf-fixed transitions">
 	<head>
-		<title>Angular QuickStart</title>
+		<title>Hotspot Manager</title>
 		<base href="/">
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
-		<!-- Angular-PatternFly Styles -->
-		<link rel="stylesheet" href="node_modules/angular-patternfly/dist/styles/angular-patternfly.min.css" />
 		<!-- PatternFly Styles -->
 		<!-- Note: No other CSS files are needed regardless of what other JS packages located in patternfly/components that you decide to pull in -->
 		<link rel="stylesheet" href="node_modules/angular-patternfly/node_modules/patternfly/dist/css/patternfly.min.css">
 		<link rel="stylesheet" href="node_modules/angular-patternfly/node_modules/patternfly/dist/css/patternfly-additions.min.css">
+
+		<!-- Patternfly required settings (no jquery or further JS dependencies required by this include) -->
+		<script src="node_modules/angular-patternfly/node_modules/patternfly/dist/js/patternfly-settings.min.js"></script>
 
 		<link rel="stylesheet" href="styles.css">
 
@@ -21,7 +22,12 @@
 		<script src="node_modules/zone.js/dist/zone.js"></script>
 		<script src="node_modules/systemjs/dist/system.src.js"></script>
 
+		<script src="node_modules/angular-patternfly/node_modules/jquery/dist/jquery.min.js"></script>
 
+		<script src="node_modules/jquery-match-height/dist/jquery.matchHeight-min.js"></script>
+
+		<!-- if you are using PatternFly jQuery Sidebar, Popovers or Datatables -->
+		<script src="node_modules/angular-patternfly/node_modules/patternfly/dist/js/patternfly.min.js"></script>
 		<!-- Angular-PatternFly Script -->
 		<script src="node_modules/angular-patternfly/node_modules/angular/angular.min.js"></script>
 		<!-- Angular-Sanitize -->
@@ -35,7 +41,20 @@
 		</script>
 	</head>
 
-	<body>
+	<body class="cards-pf">
 		<my-app>Loading AppComponent content here ...</my-app>
+
+		<script>
+		// 	$(document).ready(function() {
+		// 	// matchHeight the contents of each .card-pf and then the .card-pf itself
+		// 	$(".row-cards-pf > [class*='col'] > .card-pf .card-pf-title").matchHeight();
+		// 	$(".row-cards-pf > [class*='col'] > .card-pf > .card-pf-body").matchHeight();
+		// 	$(".row-cards-pf > [class*='col'] > .card-pf > .card-pf-footer").matchHeight();
+		// 	$(".row-cards-pf > [class*='col'] > .card-pf").matchHeight();
+
+		// 	// Initialize the vertical navigation
+		// 	$().setupVerticalNavigation(true);
+		// });
+		</script>
 	</body>
 </html>
