@@ -93,7 +93,7 @@ func Authentication(c *gin.Context) {
 
 		authorized := Authorization(accessToken.Role, route)
 		if !authorized {
-			respondWithError(http.StatusUnauthorized, "Unauthorized action", c)
+			respondWithError(http.StatusForbidden, "Unauthorized action", c)
 			return
 		}
 

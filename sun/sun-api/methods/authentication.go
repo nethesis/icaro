@@ -56,7 +56,7 @@ func Login(c *gin.Context) {
 
 	if account.Id == 0 {
 		db.Close()
-		c.JSON(http.StatusNotFound, gin.H{"message": "No username found!"})
+		c.JSON(http.StatusUnauthorized, gin.H{"message": "No username found!"})
 		return
 	} else {
 		// check password
@@ -87,7 +87,7 @@ func Login(c *gin.Context) {
 
 		} else {
 			db.Close()
-			c.JSON(http.StatusNotFound, gin.H{"message": "Password is invalid"})
+			c.JSON(http.StatusUnauthorized, gin.H{"message": "Password is invalid"})
 		}
 	}
 
