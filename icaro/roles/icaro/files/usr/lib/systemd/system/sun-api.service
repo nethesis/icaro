@@ -1,0 +1,14 @@
+[Unit]
+Description=Hotspot manager, web applications which talks with Wax
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/icaro/sun-api/
+Environment=GIN_MODE=release
+ExecStart=/opt/icaro/sun-api/sun-api
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target
