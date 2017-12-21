@@ -23,6 +23,8 @@
 package main
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 
 	"sun-api/configuration"
@@ -102,6 +104,10 @@ func main() {
 			users.DELETE("/:user_id", methods.DeleteUser)
 		}
 	}
+
+	router.NoRoute(func(c *gin.Context) {
+		c.JSON(http.StatusNotFound, gin.H{"message": "API not found"})
+	})
 
 	router.Run()
 

@@ -2,5 +2,67 @@
     "db_user": "root",
     "db_password": "{{ mariadb_root_password }}",
     "page_limit": "25",
-    "token_expires_days": 1
+    "token_expires_days": 1,
+    "authorizations": {
+        "admin": [{}],
+        "customer": [{
+            "verb": "POST",
+            "endpoint": "/api/accounts"
+        }, {
+            "verb": "PUT",
+            "endpoint": "/api/accounts/[0-9]+"
+        }, {
+            "verb": "DELETE",
+            "endpoint": "/api/accounts/[0-9]+"
+        }, {
+            "verb": "POST",
+            "endpoint": "/api/hotspots"
+        }, {
+            "verb": "PUT",
+            "endpoint": "/api/hotspots/[0-9]+"
+        }, {
+            "verb": "DELETE",
+            "endpoint": "/api/hotspots/[0-9]+"
+        }, {
+            "verb": "POST",
+            "endpoint": "/api/units/"
+        }, {
+            "verb": "DELETE",
+            "endpoint": "/api/units/[0-9]+"
+        }, {
+            "verb": "POST",
+            "endpoint": "/api/users"
+        }],
+        "desk": [{
+            "verb": "POST",
+            "endpoint": "/api/accounts"
+        }, {
+            "verb": "PUT",
+            "endpoint": "/api/accounts/[0-9]+"
+        }, {
+            "verb": "DELETE",
+            "endpoint": "/api/accounts/[0-9]+"
+        }, {
+            "verb": "POST",
+            "endpoint": "/api/hotspots"
+        }, {
+            "verb": "PUT",
+            "endpoint": "/api/hotspots/[0-9]+"
+        }, {
+            "verb": "DELETE",
+            "endpoint": "/api/hotspots/[0-9]+"
+        }, {
+            "verb": "POST",
+            "endpoint": "/api/preferences/hotspots"
+        }, {
+            "verb": "POST",
+            "endpoint": "/api/units/"
+        }, {
+            "verb": "DELETE",
+            "endpoint": "/api/units/[0-9]+"
+        }, {
+            "verb": "POST",
+            "endpoint": "/api/users"
+        }]
+    }
 }

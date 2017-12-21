@@ -20,34 +20,15 @@
  * author: Edoardo Spadoni <edoardo.spadoni@nethesis.it>
  */
 
-package configuration
+package models
 
-import (
-	"encoding/json"
-	"fmt"
-	"os"
-
-	"sun-api/models"
-)
-
-type Configuration struct {
-	DbUser           string          `json:"db_user"`
-	DbPassword       string          `json:"db_password"`
-	PageLimit        string          `json:"page_limit"`
-	TokenExpiresDays int             `json:"token_expires_days"`
-	Authorizations   models.AuthMaps `json:"authorizations"`
+type Route struct {
+	Verb     string `json:"verb"`
+	Endpoint string `json:"endpoint"`
 }
 
-var Config = Configuration{}
-
-func Init() {
-	// read configuration
-	file, _ := os.Open("/opt/icaro/sun-api/conf.json")
-	decoder := json.NewDecoder(file)
-
-	// check errors or parse JSON
-	err := decoder.Decode(&Config)
-	if err != nil {
-		fmt.Println("error:", err)
-	}
+type AuthMaps struct {
+	Admin    []Route `json:"admin"`
+	Customer []Route `json:"customer"`
+	Desk     []Route `json:"desk"`
 }

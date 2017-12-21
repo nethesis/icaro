@@ -37,11 +37,11 @@ type Account struct {
 }
 
 type AccountJSON struct {
-	HotspotId int    `db:"hotspot_id" json:"hotspot_id"`
-	Uuid      string `db:"uuid" json:"uuid"`
-	Type      string `db:"type" json:"type"`
-	Name      string `db:"name" json:"name"`
-	Username  string `db:"username" json:"username"`
-	Password  string `db:"password" json:"password"`
-	Email     string `db:"email" json:"email"`
+	HotspotId int    `json:"hotspot_id"`
+	Uuid      string `json:"uuid"`
+	Type      string `json:"type"`
+	Name      string `json:"name"`
+	Username  string `json:"username"`
+	Password  string `json:"password"`
+	Email     string `json:"email"`
 }

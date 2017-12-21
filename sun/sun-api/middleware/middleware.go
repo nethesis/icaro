@@ -24,10 +24,14 @@ package middleware
 
 import (
 	"net/http"
+	"reflect"
+	"regexp"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
 
+	"sun-api/configuration"
 	"sun-api/models"
 	"sun-api/utils"
 )
@@ -35,6 +39,30 @@ import (
 func respondWithError(code int, message string, c *gin.Context) {
 	c.JSON(code, gin.H{"message": message})
 	c.Abort()
+}
+
+func Authorization(role string, route models.Route) bool {
+
+	// extract authorizations from configs
+	auths := reflect.ValueOf(configuration.Config.Authorizations)
+
+	// loop and check current route with authorized routes
+	for i := 0; i < auths.NumField(); i++ {
+		roleConfig := strings.ToLower(auths.Type().Field(i).Name)
+		routesConfig := auths.Field(i).Interface().([]models.Route)
+
+		for _, routeConfig := range routesConfig {
+			if roleConfig == role {
+				matched, _ := regexp.MatchString(routeConfig.Endpoint, route.Endpoint)
+
+				if routeConfig.Verb == route.Verb && matched {
+					return false
+				}
+			}
+		}
+	}
+
+	return true
 }
 
 func Authentication(c *gin.Context) {
@@ -54,6 +82,18 @@ func Authentication(c *gin.Context) {
 		}
 		if accessToken.Expires.Before(time.Now().UTC()) {
 			respondWithError(http.StatusUnauthorized, "API token is expired", c)
+			return
+		}
+
+		// check authorization for api route
+		route := models.Route{
+			Verb:     c.Request.Method,
+			Endpoint: c.Request.URL.Path,
+		}
+
+		authorized := Authorization(accessToken.Role, route)
+		if !authorized {
+			respondWithError(http.StatusUnauthorized, "Unauthorized action", c)
 			return
 		}
 

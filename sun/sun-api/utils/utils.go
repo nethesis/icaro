@@ -39,7 +39,7 @@ func OffsetCalc(page string, limit string) [2]int {
 	if len(page) == 0 {
 		page = "1"
 	}
-	if len(page) == 0 {
+	if len(limit) == 0 {
 		limit = configuration.Config.PageLimit
 	}
 
