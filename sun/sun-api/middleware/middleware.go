@@ -65,10 +65,11 @@ func Authorization(role string, route models.Route) bool {
 	return true
 }
 
-func Authentication(c *gin.Context) {
+func AAWall(c *gin.Context) {
 	var accessToken models.AccessToken
 	token := c.GetHeader("Token")
 
+	// check authentication
 	if token == "" {
 		respondWithError(http.StatusUnauthorized, "API token required", c)
 		return
@@ -85,7 +86,7 @@ func Authentication(c *gin.Context) {
 			return
 		}
 
-		// check authorization for api route
+		// check authorization
 		route := models.Route{
 			Verb:     c.Request.Method,
 			Endpoint: c.Request.URL.Path,

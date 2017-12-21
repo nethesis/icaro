@@ -44,7 +44,7 @@ func main() {
 	api.POST("/login", methods.Login)
 	api.POST("/logout", methods.Logout)
 
-	api.Use(middleware.Authentication)
+	api.Use(middleware.AAWall)
 	{
 		accounts := api.Group("/accounts")
 		{
@@ -105,6 +105,7 @@ func main() {
 		}
 	}
 
+	// handle missing endpoint
 	router.NoRoute(func(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{"message": "API not found"})
 	})
