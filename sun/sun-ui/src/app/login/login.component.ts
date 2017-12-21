@@ -26,7 +26,8 @@ export class LoginComponent{
               if(response.json().token){
                   localStorage.setItem('id_token', response.json().token);
                   console.log(response.json());
-                   this.responseApi = response.json().account_type;
+                this.responseApi = response.json().account_type;
+                this.router.navigate(['/home']);
               }
             },
             error => {
