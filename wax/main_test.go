@@ -15,7 +15,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with NethServer.  If not, see COPYING.
+ * along with Icaro.  If not, see COPYING.
  *
  * author: Giacomo Sanchietti <giacomo.sanchietti@nethesis.it>
  */
