@@ -1,7 +1,9 @@
+import { AppComponent } from './../app.component';
 import { HomeComponent } from './../home/home.component';
 import {Component, Input} from '@angular/core';
 import {Router} from '@angular/router';
 import {Http, Headers} from '@angular/http';
+import { AuthenticationService } from '../_services/authentication.service';
 @Component({
     moduleId:module.id,
     selector: 'login',
@@ -11,36 +13,24 @@ import {Http, Headers} from '@angular/http';
 
 
 export class LoginComponent{
-    @Input('parentData') public accountType: string;
-          responseApi:string;
-
-          
+    model: any = {};
+    responseApi:string;
     constructor (
-        public router: Router, public http: Http
+        public router: Router, public http: Http, private authenticationService: AuthenticationService
     ){}
-    
-    login(username: string, password: string) {
-        const contentHeaders = new Headers();
-        contentHeaders.append('Content-Type', 'application/X-www-form-urlencoded');
-        console.log(contentHeaders);
-        let body = JSON.stringify({ username, password });
-        this.http.post('http://hstest.neth.eu:8080/api/login', body, {headers:contentHeaders})
+
+    login() {
+      this.authenticationService.login(this.model.username, this.model.password)
           .subscribe(
-            response => {
-              if(response.json().token){
-                  localStorage.setItem('id_token', response.json().token);
-                  console.log(response.json());
-                this.accountType = response.json().account_type;
-                this.router.navigate(['/home']);
-              }
-            },
-            error => {
-              console.log(error);
-              console.log("error1"+error.text().message);
-              this.responseApi = error.text().message;
-              console.log("error1"+error.json().message);
-              this.responseApi = error.json().message;
-            }
-          );
-    }
+              data => {
+                  console.log(data);
+                  this.router.navigate(['/home']);
+              },
+              error => {
+                console.log(error);
+              });
+  }
+
+
+
 }

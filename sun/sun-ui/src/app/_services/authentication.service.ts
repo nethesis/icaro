@@ -11,11 +11,9 @@ export class AuthenticationService  {
     login (username:string, password:string){
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
-        
-        return  this.http.post<any>('http://localhost:6900/api/login/',{username:username,password:password
+        return  this.http.post<any>('http://hstest.neth.eu:8080/api/login',{username:username,password:password
         })
         .map(user=>{
-            //login succesful if there is a jwk token in response
             if(user && user.token){
                 localStorage.setItem('currentUser', JSON.stringify(user));
             }
