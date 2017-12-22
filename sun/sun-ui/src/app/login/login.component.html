@@ -14,11 +14,11 @@
 			<div class="row">
 				<!--/.col-*-->
 				<div class="col-sm-7 col-md-6 col-lg-5 col-lg-offset-1 login-form-container">
-					<form class="form-horizontal" (submit)="login(username.value, password.value)" role="form" name="form">
+					<form class="form-horizontal" (ngSubmit)="login()" role="form" #f="ngForm" name="form">
 						<div class="form-group">
 							<label for="inputUsername" class="col-sm-2 col-md-2 control-label">Username</label>
 							<div class="col-sm-10 col-md-10">
-								<input type="text" #username class="form-control" id="inputUsername" placeholder="" tabindex="1">
+								<input type="text" name="username" [(ngModel)]="model.username" #username="ngModel" required class="form-control" id="inputUsername" placeholder="" tabindex="1">
 							</div>
 						</div>
 						<div class="alert alert-danger alert-dismissable">
@@ -31,7 +31,7 @@
 						<div class="form-group">
 							<label for="inputPassword" class="col-sm-2 col-md-2 control-label">Password</label>
 							<div class="col-sm-10 col-md-10">
-								<input type="password" #password class="form-control" id="inputPassword" placeholder="" tabindex="2">
+								<input type="password" name="password" [(ngModel)]="model.password" #password="ngModel" required class="form-control" id="inputPassword" placeholder="" tabindex="2">
 							</div>
 						</div>
 						<div class="alert alert-danger alert-dismissable">
@@ -51,7 +51,7 @@
 								<span class="help-block"> Forgot <a href="#" tabindex="5">username</a> or <a href="#" tabindex="6">password</a>?</span>
 							</div> -->
 							<div class="col-xs-12 col-sm-12 col-md-12 text-right submit">
-								<button type="submit" class="btn btn-primary btn-lg" tabindex="4">Log In</button>
+								<button [disabled]="loading" class="btn btn-primary btn-lg" tabindex="4">Log In</button>
 							</div>
 						</div>
 					</form>
