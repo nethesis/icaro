@@ -24,7 +24,8 @@ package methods
 
 import (
 	"net/http"
-        "github.com/gin-gonic/gin"
+
+	"github.com/gin-gonic/gin"
 )
 
 func AuthAccept(c *gin.Context) {
@@ -39,4 +40,3 @@ func Login(c *gin.Context, hotspotId string, user string, password string, chall
 	//TODO
 	AuthAccept(c)
 }
-

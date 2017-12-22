@@ -23,15 +23,15 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
 	"sun-api/configuration"
 	"wax/methods"
-)
 
+	"github.com/gin-gonic/gin"
+)
 
 func Init(testMode bool) *gin.Engine {
 	var r *gin.Engine
-	if (testMode == true) {
+	if testMode == true {
 		gin.SetMode(gin.TestMode)
 		r = gin.New()
 	} else {
@@ -40,7 +40,7 @@ func Init(testMode bool) *gin.Engine {
 
 	r.GET("/", methods.Dispatch)
 
-        return r
+	return r
 }
 
 func main() {

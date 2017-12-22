@@ -25,7 +25,8 @@ package methods
 import (
 	"net/http"
 	"net/url"
-        "github.com/gin-gonic/gin"
+
+	"github.com/gin-gonic/gin"
 )
 
 func Ack(c *gin.Context) {
@@ -36,15 +37,15 @@ func Counters(c *gin.Context, parameters url.Values) {
 	status := parameters.Get("status")
 
 	switch status {
-        case "start":
+	case "start":
 		Ack(c)
-        case "stop":
+	case "stop":
 		Ack(c)
-        case "update":
+	case "update":
 		Ack(c)
-        case "":
-                c.String(http.StatusBadRequest, "No status provided")
-        default:
-                c.String(http.StatusNotImplemented, "Invalid status: '%s'", status)
+	case "":
+		c.String(http.StatusBadRequest, "No status provided")
+	default:
+		c.String(http.StatusNotImplemented, "Invalid status: '%s'", status)
 	}
 }
