@@ -11,9 +11,14 @@
 
 	<div class="jumbotron">
 		<div class="container">
+				
 			<div class="row">
+				
 				<!--/.col-*-->
 				<div class="col-sm-7 col-md-6 col-lg-5 col-lg-offset-1 login-form-container">
+						<div *ngIf="!isLogged"  class="alert alert-danger alert-dismissable">
+								{{responseApi}}.
+						</div>
 					<form class="form-horizontal" (ngSubmit)="f.form.valid && login()" role="form" #f="ngForm" name="form">
 						<div class="form-group">
 							<label for="inputUsername" class="col-sm-2 col-md-2 control-label">Username</label>
@@ -21,26 +26,20 @@
 								<input type="text" name="username" [(ngModel)]="model.username" #username="ngModel" required class="form-control" id="inputUsername" placeholder="" tabindex="1">
 							</div>
 						</div>
-						<div class="alert alert-danger alert-dismissable">
-								<button type="button" class="close" data-dismiss="alert" aria-hidden="true">
-								  <span class="pficon pficon-close"></span>
-								</button>
+						<div *ngIf="f.submitted && !username.valid" class="alert alert-danger alert-dismissable">
 								<span class="pficon pficon-error-circle-o"></span>
-								<strong>Error!</strong> Wrong username<a href="#" class="alert-link">know about it</a>.
-							  </div>
+								<strong>Required! </strong>Username is required.
+						</div>
 						<div class="form-group">
 							<label for="inputPassword" class="col-sm-2 col-md-2 control-label">Password</label>
 							<div class="col-sm-10 col-md-10">
 								<input type="password" name="password" [(ngModel)]="model.password" #password="ngModel" required class="form-control" id="inputPassword" placeholder="" tabindex="2">
 							</div>
 						</div>
-						<div class="alert alert-danger alert-dismissable">
-								<button type="button" class="close" data-dismiss="alert" aria-hidden="true">
-								  <span class="pficon pficon-close"></span>
-								</button>
+						<div *ngIf="f.submitted && !password.valid"  class="alert alert-danger alert-dismissable">
 								<span class="pficon pficon-error-circle-o"></span>
-								<strong>Error!</strong>Wrong Password<a href="#" class="alert-link">know about it</a>.
-							  </div>
+								<strong>Required! </strong>Password is required.
+						</div>
 						<div class="form-group">
 							<!-- <div class="col-xs-8 col-sm-offset-2 col-sm-6 col-md-6">
 								<div class="checkbox">

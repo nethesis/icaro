@@ -15,6 +15,7 @@ import { loginResponse } from '../_models/loginResponse';
 
 export class LoginComponent{
     home : Array<any> = [];
+    isLogged:boolean = true;
     model: any = {};
     responseApi:string;
     constructor (
@@ -25,12 +26,14 @@ export class LoginComponent{
       this.authenticationService.login(this.model.username, this.model.password)
           .subscribe(
               data => {
+                  this.isLogged = true;
                   this.home = data;
                   console.log(data);
                   this.router.navigate(['/home']);
               },
               error => {
-                console.log(error.error.message);
+                  this.isLogged = false;
+                  this.responseApi = error.error.message;
               });
 
             this.authenticationService.homeObject.subscribe(
