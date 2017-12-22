@@ -1,4 +1,5 @@
-import {Component} from '@angular/core';
+import { HomeComponent } from './../home/home.component';
+import {Component, Input} from '@angular/core';
 import {Router} from '@angular/router';
 import {Http, Headers} from '@angular/http';
 @Component({
@@ -10,11 +11,14 @@ import {Http, Headers} from '@angular/http';
 
 
 export class LoginComponent{
-    responseApi: string;
+    @Input('parentData') public accountType: string;
+          responseApi:string;
+
+          
     constructor (
         public router: Router, public http: Http
     ){}
-
+    
     login(username: string, password: string) {
         const contentHeaders = new Headers();
         contentHeaders.append('Content-Type', 'application/X-www-form-urlencoded');
@@ -26,7 +30,7 @@ export class LoginComponent{
               if(response.json().token){
                   localStorage.setItem('id_token', response.json().token);
                   console.log(response.json());
-                this.responseApi = response.json().account_type;
+                this.accountType = response.json().account_type;
                 this.router.navigate(['/home']);
               }
             },
