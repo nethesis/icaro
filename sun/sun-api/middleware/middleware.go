@@ -69,38 +69,40 @@ func AAWall(c *gin.Context) {
 	var accessToken models.AccessToken
 	token := c.GetHeader("Token")
 
-	// check authentication
+	// check if token exists
 	if token == "" {
 		respondWithError(http.StatusUnauthorized, "API token required", c)
 		return
-	} else {
-		// check token validation
-		accessToken = utils.ExtractToken(token)
-
-		if accessToken.Id == 0 {
-			respondWithError(http.StatusUnauthorized, "API token is invalid", c)
-			return
-		}
-		if accessToken.Expires.Before(time.Now().UTC()) {
-			respondWithError(http.StatusUnauthorized, "API token is expired", c)
-			return
-		}
-
-		// check authorization
-		route := models.Route{
-			Verb:     c.Request.Method,
-			Endpoint: c.Request.URL.Path,
-		}
-
-		authorized := Authorization(accessToken.Role, route)
-		if !authorized {
-			respondWithError(http.StatusForbidden, "Unauthorized action", c)
-			return
-		}
-
-		// Refresh token and go ahead
-		utils.RefreshToken(accessToken.Token)
-		c.Set("token", accessToken)
-		c.Next()
 	}
+
+	// check token validation
+	accessToken = utils.ExtractToken(token)
+
+	if accessToken.Id == 0 {
+		respondWithError(http.StatusUnauthorized, "API token is invalid", c)
+		return
+	}
+
+	if accessToken.Expires.Before(time.Now().UTC()) {
+		respondWithError(http.StatusUnauthorized, "API token is expired", c)
+		return
+	}
+
+	// check authorization
+	route := models.Route{
+		Verb:     c.Request.Method,
+		Endpoint: c.Request.URL.Path,
+	}
+
+	authorized := Authorization(accessToken.Role, route)
+	if !authorized {
+		respondWithError(http.StatusForbidden, "Unauthorized action", c)
+		return
+	}
+
+	// refresh token and go ahead
+	utils.RefreshToken(accessToken.Token)
+	c.Set("token", accessToken)
+	c.Next()
+
 }
