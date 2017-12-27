@@ -62,7 +62,6 @@ func CheckAuth(digest string, uuid string, c *gin.Context) (bool, string) {
 
 	// check if uuid is valid
 	unit := utils.ExtractUnit(uuid)
-
 	if unit.Id == 0 {
 		return false, "uuid is invalid"
 	}
@@ -103,6 +102,7 @@ func CaptiveWings(c *gin.Context) {
 		return
 	}
 
+	// server static files of captive portal
 	fileserver := http.FileServer(LocalFile(configuration.Config.CaptivePath, true))
 	fileserver = http.StripPrefix("/wax/captive", fileserver)
 	fileserver.ServeHTTP(c.Writer, c.Request)
