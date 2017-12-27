@@ -108,7 +108,6 @@ func ExtractHotspotIds(accountId int) []int {
 
 func Contains(intSlice []int, searchInt int) bool {
 	for _, value := range intSlice {
-		fmt.Println(value, searchInt)
 		if value == searchInt {
 			return true
 		}

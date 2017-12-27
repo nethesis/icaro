@@ -111,6 +111,7 @@ CREATE TABLE `units` (
   `mac_address` varchar(200) NOT NULL,
   `description` varchar(200),
   `uuid` varchar(200) NOT NULL,
+  `secret` varchar(200) NOT NULL,
   `created` datetime,
   FOREIGN KEY (`hotspot_id`) REFERENCES hotspots(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   KEY(`mac_address`),

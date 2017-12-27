@@ -36,6 +36,7 @@ type Configuration struct {
 	DbUser           string          `json:"db_user"`
 	DbName           string          `json:"db_name"`
 	DbPassword       string          `json:"db_password"`
+	CaptivePath      string          `json:"captive_path"`
 	PageLimit        string          `json:"page_limit"`
 	TokenExpiresDays int             `json:"token_expires_days"`
 	Authorizations   models.AuthMaps `json:"authorizations"`
@@ -45,8 +46,8 @@ var Config = Configuration{}
 
 func Init() {
 	// read configuration
-	if _, err := os.Stat("/opt/icaro/sun-api/conf.json"); err == nil {
-		file, _ := os.Open("/opt/icaro/sun-api/conf.json")
+	if _, err := os.Stat("/opt/icaro/conf.json"); err == nil {
+		file, _ := os.Open("/opt/icaro/conf.json")
 		decoder := json.NewDecoder(file)
 		// check errors or parse JSON
 		err := decoder.Decode(&Config)
