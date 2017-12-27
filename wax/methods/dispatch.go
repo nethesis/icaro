@@ -24,11 +24,12 @@ package methods
 
 import (
 	"net/http"
-	"sun-api/database"
-	"sun-api/models"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
+
+	"sun-api/database"
+	"sun-api/models"
 )
 
 func Reply(c *gin.Context, httpCode int, message string) {

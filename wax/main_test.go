@@ -25,114 +25,125 @@ package main
 import (
 	"net/http"
 	"os"
-	"sun-api/configuration"
 	"testing"
 
 	"github.com/appleboy/gofight"
+	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
+
+	"sun-api/configuration"
 )
 
-var e = Init(true)
+func startupEnv() (*gofight.RequestConfig, *gin.Engine) {
+	// set test mode to test suite
+	fight := gofight.New()
+	fight.SetDebug(true)
 
-func startupEnv() *gofight.RequestConfig {
-	r := gofight.New()
-	r.SetDebug(false)
-	return r
+	// set test mode to gin
+	gin.SetMode(gin.TestMode)
+	router := gin.New()
+
+	// define API
+	DefineAPI(router)
+
+	return fight, router
 }
 
 func destroyEnv() {
 }
 
 func TestMain(m *testing.M) {
+	// read and init configuration
 	configuration.Init()
 
+	// run tester
 	os.Exit(m.Run())
 }
 
 /** Stage **/
 
 func TestNoStage(t *testing.T) {
-	r := startupEnv()
+	f, r := startupEnv()
 
-	r.GET("/?nasid=HSTest&ap=00-00-00-00-00-00").
-		Run(Init(true), func(r gofight.HTTPResponse, rq gofight.HTTPRequest) {
-			assert.Equal(t, "No stage provided", r.Body.String())
-			assert.Equal(t, http.StatusBadRequest, r.Code)
+	f.GET("/wax/aaa?nasid=HSTest&ap=00-00-00-00-00-00").
+		Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
+			assert.Equal(t, "No stage provided", f.Body.String())
+			assert.Equal(t, http.StatusBadRequest, f.Code)
 		})
 }
 
 func TestRegisterStage(t *testing.T) {
-	r := startupEnv()
+	f, r := startupEnv()
 
-	r.GET("/?stage=register&nasid=HSTest&ap=00-00-00-00-00-00").
-		Run(e, func(r gofight.HTTPResponse, rq gofight.HTTPRequest) {
-			assert.Equal(t, "Not implemented: register", r.Body.String())
-			assert.Equal(t, http.StatusNotImplemented, r.Code)
+	f.GET("/wax/aaa?stage=register&nasid=HSTest&ap=00-00-00-00-00-00").
+		Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
+			assert.Equal(t, "Not implemented: register", f.Body.String())
+			assert.Equal(t, http.StatusNotImplemented, f.Code)
 		})
 }
 
 func TestLoginStage(t *testing.T) {
-	r := startupEnv()
+	f, r := startupEnv()
 
-	r.GET("/?stage=login&nasid=HSTest&ap=00-00-00-00-00-00").
-		Run(e, func(r gofight.HTTPResponse, rq gofight.HTTPRequest) {
-			//               assert.Equal(t, "login", r.Body.String())
-			assert.Equal(t, http.StatusOK, r.Code)
+	f.GET("/wax/aaa?stage=login&nasid=HSTest&ap=00-00-00-00-00-00").
+		Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
+			//assert.Equal(t, "login", f.Body.String())
+			assert.Equal(t, http.StatusOK, f.Code)
 		})
 }
 
 func TestInvalidStage(t *testing.T) {
-	r := startupEnv()
+	f, r := startupEnv()
 
-	r.GET("/?stage=BAD&nasid=HSTest&ap=00-00-00-00-00-00").
-		Run(e, func(r gofight.HTTPResponse, rq gofight.HTTPRequest) {
-			assert.Equal(t, "Invalid stage: 'BAD'", r.Body.String())
-			assert.Equal(t, http.StatusNotFound, r.Code)
+	f.GET("/wax/aaa?stage=BAD&nasid=HSTest&ap=00-00-00-00-00-00").
+		Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
+			assert.Equal(t, "Invalid stage: 'BAD'", f.Body.String())
+			assert.Equal(t, http.StatusNotFound, f.Code)
 		})
 }
 
 /** Counters **/
 
 func TestCountersInvalidHotspot(t *testing.T) {
-	r := startupEnv()
+	f, r := startupEnv()
 
-	r.GET("/?stage=counters&nasid=BAD&ap=00-00-00-00-00-00&status=start").
-		Run(e, func(r gofight.HTTPResponse, rq gofight.HTTPRequest) {
-			assert.Equal(t, http.StatusNotFound, r.Code)
+	f.GET("/wax/aaa?stage=counters&nasid=BAD&ap=00-00-00-00-00-00&status=start").
+		Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
+			assert.Equal(t, http.StatusNotFound, f.Code)
 		})
 }
 
 func TestCountersInvalidUnit(t *testing.T) {
-	r := startupEnv()
+	f, r := startupEnv()
 
-	r.GET("/?stage=counters&nasid=HSTest&ap=xx-00-00-00-00-00&status=start").
-		Run(e, func(r gofight.HTTPResponse, rq gofight.HTTPRequest) {
-			assert.Equal(t, http.StatusNotFound, r.Code)
+	f.GET("/wax/aaa?stage=counters&nasid=HSTest&ap=xx-00-00-00-00-00&status=start").
+		Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
+			assert.Equal(t, http.StatusNotFound, f.Code)
 		})
 }
 
 func TestCountersStage(t *testing.T) {
-	r := startupEnv()
+	f, r := startupEnv()
 
-	r.GET("/?stage=counters&nasid=HSTest&ap=00-00-00-00-00-00&status=start").
-		Run(e, func(r gofight.HTTPResponse, rq gofight.HTTPRequest) {
-			assert.Equal(t, http.StatusOK, r.Code)
+	f.GET("/wax/aaa?stage=counters&nasid=HSTest&ap=00-00-00-00-00-00&status=start").
+		Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
+			assert.Equal(t, http.StatusOK, f.Code)
 		})
 }
 
 func TestCountersInvalid(t *testing.T) {
-	r := startupEnv()
+	f, r := startupEnv()
 
-	r.GET("/?stage=counters&nasid=HSTest&ap=00-00-00-00-00-00").
-		Run(e, func(r gofight.HTTPResponse, rq gofight.HTTPRequest) {
-			assert.Equal(t, "No status provided", r.Body.String())
-			assert.Equal(t, http.StatusBadRequest, r.Code)
+	f.GET("/wax/aaa?stage=counters&nasid=HSTest&ap=00-00-00-00-00-00").
+		Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
+			assert.Equal(t, "No status provided", f.Body.String())
+			assert.Equal(t, http.StatusBadRequest, f.Code)
 		})
 
-	r.GET("/?stage=counters&nasid=HSTest&ap=00-00-00-00-00-00&status=invalid").
-		Run(e, func(r gofight.HTTPResponse, rq gofight.HTTPRequest) {
-			assert.Equal(t, "Invalid status: 'invalid'", r.Body.String())
-			assert.Equal(t, http.StatusNotImplemented, r.Code)
+	f.GET("/wax/aaa?stage=counters&nasid=HSTest&ap=00-00-00-00-00-00&status=invalid").
+		Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
+			assert.Equal(t, "Invalid status: 'invalid'", f.Body.String())
+			assert.Equal(t, http.StatusNotImplemented, f.Code)
 
 		})
 }

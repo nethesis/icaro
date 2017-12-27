@@ -17,49 +17,42 @@
  * You should have received a copy of the GNU General Public License
  * along with Icaro.  If not, see COPYING.
  *
- * author: Giacomo Sanchietti <giacomo.sanchietti@nethesis.it>
  * author: Edoardo Spadoni <edoardo.spadoni@nethesis.it>
  */
 
-package main
+package utils
 
 import (
-	"net/http"
+	"crypto/md5"
+	"fmt"
+	"io"
 
-	"github.com/gin-gonic/gin"
-
-	"sun-api/configuration"
-	"wax/methods"
-	"wax/middleware"
+	"sun-api/database"
+	"sun-api/models"
 )
 
-func DefineAPI(router *gin.Engine) {
-	wax := router.Group("/wax")
+func ExtractUnit(uuid string) models.Unit {
+	var unit models.Unit
+	db := database.Database()
+	db.Where("uuid = ?", uuid).First(&unit)
+	db.Close()
 
-	wax.Use(middleware.WaxWall)
-	{
-		wax.GET("/aaa", methods.Dispatch)
-		wax.GET("/register", methods.Dispatch)
-	}
-
-	// handle static captive portal files (aka wings)
-	router.Use(middleware.CaptiveWings)
-
-	// handle missing endpoint
-	router.NoRoute(func(c *gin.Context) {
-		c.JSON(http.StatusNotFound, gin.H{"message": "API not found"})
-	})
+	return unit
 }
 
-func main() {
-	// read and init configuration
-	configuration.Init()
+func CalcDigest(unit models.Unit) string {
+	h := md5.New()
+	io.WriteString(h, unit.Secret+unit.Uuid)
+	digest := fmt.Sprintf("%x", h.Sum(nil))
 
-	// init routers
-	router := gin.Default()
+	return digest
+}
 
-	// define API
-	DefineAPI(router)
-
-	router.Run(":8181")
+func Contains(intSlice []int, searchInt int) bool {
+	for _, value := range intSlice {
+		if value == searchInt {
+			return true
+		}
+	}
+	return false
 }
