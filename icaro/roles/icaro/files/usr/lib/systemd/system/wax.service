@@ -1,0 +1,14 @@
+[Unit]
+Description=accounting server, it speaks RADIUS AAA protocol via HTTP with Dedalo
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/icaro/wax/
+Environment=GIN_MODE=release
+ExecStart=/opt/icaro/wax/wax
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target
