@@ -31,23 +31,9 @@ import (
 	"wax/utils"
 )
 
-type localFileSystem struct {
-	http.FileSystem
-	root    string
-	indexes bool
-}
-
 func respondWithError(code int, message string, c *gin.Context) {
 	c.JSON(code, gin.H{"message": message})
 	c.Abort()
-}
-
-func LocalFile(root string, indexes bool) *localFileSystem {
-	return &localFileSystem{
-		FileSystem: gin.Dir(root, indexes),
-		root:       root,
-		indexes:    indexes,
-	}
 }
 
 func CheckAuth(digest string, uuid string, c *gin.Context) (bool, string) {
@@ -103,8 +89,8 @@ func CaptiveWings(c *gin.Context) {
 	}
 
 	// server static files of captive portal
-	fileserver := http.FileServer(LocalFile(configuration.Config.CaptivePath, true))
-	fileserver = http.StripPrefix("/wax/captive", fileserver)
+	fileserver := http.FileServer(gin.Dir(configuration.Config.CaptivePath, true))
+	fileserver = http.StripPrefix("/wax/captive/home", fileserver)
 	fileserver.ServeHTTP(c.Writer, c.Request)
 	c.Abort()
 
