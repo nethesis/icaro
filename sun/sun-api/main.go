@@ -28,6 +28,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"sun-api/configuration"
+	"sun-api/crons"
 	"sun-api/methods"
 	"sun-api/middleware"
 )
@@ -35,6 +36,9 @@ import (
 func main() {
 	// read and init configuration
 	configuration.Init()
+
+	// init crons
+	crons.Init()
 
 	// init routers
 	router := gin.Default()
