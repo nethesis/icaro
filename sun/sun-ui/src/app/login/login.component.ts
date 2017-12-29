@@ -32,7 +32,6 @@ export class LoginComponent{
               error => {
                   this.isLogged = false;
                   this.responseApi = error.error.message;
-
               });
 
             this.authenticationService.homeObject.subscribe(
