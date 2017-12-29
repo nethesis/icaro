@@ -1,0 +1,81 @@
+<section id="login" class="login-pf">
+		<!-- Logo  -->
+		<span id="badge">
+			<img src="/assets/images/login-images/nethesis-logo.png" alt="Nethesis Operation Center">
+		</span>
+
+		<!-- Login container -->
+		<div class="container">
+			<!-- Title container -->
+			<div class="row">
+				<div class="col-lg-12 title-col">
+					<!-- Title -->
+					<div class="title">
+						<h4>Nethesis Operation Center</h4>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+
+				<!-- Alert Response message from api on submit button-->
+				<div class="col-md-12">
+					<div *ngIf="f.submitted && (!isLogeged || !username.valid || !password.valid)" class="form-group alert-block">
+						<div class="col-md-1 text-left">
+							<span  class="help-block">Error</span>
+						</div>
+						<div class="col-md-11 text-left">
+							<span class="help-block">{{messageResponseFromApi}}</span>
+							<span  *ngIf="f.submitted && (!username.valid && !password.valid)" class="help-block">Username and password is required </span>
+							<span  *ngIf="f.submitted && (password.valid && !username.valid)" class="help-block">Username is required </span>
+							<span  *ngIf="f.submitted && (username.valid && !password.valid)" class="help-block">Password is required </span>
+						</div>
+					</div>
+				</div>
+
+				<!-- Login form column -->
+				<div class="col-md-6 login-form-container">
+					<!-- Login form -->
+					<form class="form-horizontal" (ngSubmit)="f.form.valid && login(f)" role="form" #f="ngForm" name="form">
+
+						<!-- Username  -->
+						<div class="form-group" [ngClass]="{'has-error': f.submitted && !username.valid || !isUsernameWrong}" >
+							<label for="inputUsername" class="col-sm-2 col-md-2 username-label">Username</label>
+							<div class="col-sm-10 col-md-10">
+								<input type="text" name="username" [(ngModel)]="model.username" #username="ngModel" required class="form-control" id="inputUsername" placeholder="" tabindex="1">
+							</div>
+						</div>
+
+						<!-- Password  -->
+						<div class="form-group" [ngClass]="{'has-error': f.submitted && !password.valid || !isPasswordWrong}" >
+							<label for="inputPassword" class="col-sm-2 col-md-2 password-label">Password</label>
+							<div class="col-sm-10 col-md-10">
+								<input type="password" name="password" [(ngModel)]="model.password" #password="ngModel" required class="form-control" id="inputPassword" placeholder="" tabindex="2">
+							</div>
+						</div>
+
+						<!-- Login button -->
+						<div class="form-group">
+							<div class="col-xs-12 col-sm-12 col-md-12 text-right submit">
+								<button [disabled]="loading" class="btn btn-primary btn-lg" tabindex="4">Log In</button>
+							</div>
+						</div>
+
+					</form>
+
+				</div>
+				<!-- ./login-form-container -->
+
+				<!-- Details Columns -->
+				<div class="col-lg-6 details">
+					<h4><strong>Welcome to Nethesis Operantion Center</strong></h4>
+				</div>
+
+				<!-- Copyright container -->
+				<div class="col-lg-12 copyright">
+					<span> Copyright @2017 Nethesis</span>
+				</div>
+
+			</div>
+			<!-- ./row -->
+		</div>
+</section>

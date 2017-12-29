@@ -1,0 +1,81 @@
+section {
+	background: url('/assets/images/login-images/dark-mountain.jpg') no-repeat center center;
+	background-size: cover;
+}
+
+section .container {
+	padding: 0;
+	background: none;
+}
+
+/* Resize logo */
+#badge img {
+	width: 100px;
+}
+
+/* Add background only to last row (login form) */
+.container .row:last-child {
+	padding: 30px 15px;
+	background-color: rgba(255, 255, 255, .055);
+	width: 100%;
+}
+
+.alert-block div {
+	padding-left: 5px;
+}
+
+.alert {
+	padding: 3px;
+	margin-bottom: 5px;
+}
+
+
+/* Style for Login Title */
+.title-col {
+	padding: 0 50px;
+}
+
+.title {
+	color: #fff;
+	padding: 15px 0;
+	line-height: 1.5px;
+	text-transform: capitalize;
+}
+
+.title h4 {
+	text-align: left;
+	font-size: 30px;
+}
+/* End style for Login Title */
+
+
+/* Align left username and password labels */
+.username-label,
+.password-label {
+	text-align: left;
+}
+
+input {
+	border-width: 2px;
+}
+
+.login-pf .container .help-block {
+	color: #c00;
+	font-weight: bolder;
+}
+
+/* Make login submit button more larger */
+.submit button {
+	padding-left: 40px;
+	padding-right: 40px;
+}
+
+.login-pf .container .details {
+	border-left: 1px solid rgba(255,255,255,.7);
+}
+
+/* Remove margins from details text */
+.details h4 {
+	margin-top: 0;
+	margin-bottom: 0;
+}
