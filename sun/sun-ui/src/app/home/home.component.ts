@@ -1,6 +1,7 @@
 import { LoginComponent } from './../login/login.component';
-import {Component, } from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {Router} from '@angular/router';
+import {loginResponse} from './../_models/loginResponse'
 
 
 @Component({
@@ -13,8 +14,8 @@ import {Router} from '@angular/router';
 
 
 export class HomeComponent {
+	@Input('home') home: any;
 	accountType:string;
 	constructor(public router: Router){
-		
 	}
 }
