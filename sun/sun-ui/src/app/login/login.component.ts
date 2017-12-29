@@ -27,13 +27,12 @@ export class LoginComponent{
           .subscribe(
               data => {
                   this.isLogged = true;
-                  this.home = data;
-                  console.log(data);
                   this.router.navigate(['/home']);
               },
               error => {
                   this.isLogged = false;
                   this.responseApi = error.error.message;
+
               });
 
             this.authenticationService.homeObject.subscribe(
