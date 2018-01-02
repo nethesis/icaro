@@ -1,9 +1,12 @@
+import { apConfig } from './../../global';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import 'rxjs/add/operator/map';
 
 @Injectable()
 export class AuthenticationService {
+  private apiLoginUrl = apConfig.API_ENDPOINT_URL;
+
   constructor(private http: HttpClient) {}
 
   /**
@@ -13,7 +16,7 @@ export class AuthenticationService {
    */
   authentication(username: string, password: string) {
     return this.http
-      .post<any>('http://hstest.neth.eu:8080/api/login', {
+      .post<any>(this.apiLoginUrl, {
         username: username,
         password: password
       })
