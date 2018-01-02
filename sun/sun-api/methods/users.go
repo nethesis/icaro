@@ -23,7 +23,6 @@
 package methods
 
 import (
-	"fmt"
 	"net/http"
 	"time"
 
@@ -35,42 +34,16 @@ import (
 	"sun-api/utils"
 )
 
-func CreateUser(c *gin.Context) {
-	accountId := c.MustGet("token").(models.AccessToken).AccountId
+func CreateUser(user models.User) {
+	password := "" // TODO generate randomly
 
-	var json models.User
-	if err := c.BindJSON(&json); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"message": "Request fields malformed", "error": err.Error()})
-		return
-	}
+	user.Password = password
+	user.Created = time.Now().UTC()
 
-	password := "password,1234" // TODO generate randomly
-
-	user := models.User{
-		HotspotId:   json.HotspotId,
-		Name:        json.Name,
-		Username:    json.Username,
-		Password:    password,
-		Email:       json.Email,
-		AccountType: json.AccountType,
-		KbpsDown:    json.KbpsDown,
-		KbpsUp:      json.KbpsUp,
-		ValidFrom:   json.ValidFrom,
-		ValidUntil:  json.ValidUntil,
-		Created:     time.Now().UTC(),
-	}
-
-	// check hotspot ownership
-	fmt.Println(json)
-	if utils.Contains(utils.ExtractHotspotIds(accountId), json.HotspotId) {
-		db := database.Database()
-		db.Save(&user)
-		db.Close()
-
-		c.JSON(http.StatusCreated, gin.H{"id": user.Id, "status": "success"})
-	} else {
-		c.JSON(http.StatusUnauthorized, gin.H{"message": "This hotspot is not yours"})
-	}
+	// save new user
+	db := database.Database()
+	db.Save(&user)
+	db.Close()
 }
 
 func UpdateUser(c *gin.Context) {

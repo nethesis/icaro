@@ -103,7 +103,6 @@ func main() {
 		{
 			users.GET("", methods.GetUsers)
 			users.GET("/:user_id", methods.GetUser)
-			users.POST("", methods.CreateUser)
 			users.PUT("/:user_id", methods.UpdateUser)
 			users.DELETE("/:user_id", methods.DeleteUser)
 		}

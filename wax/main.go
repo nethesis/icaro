@@ -40,7 +40,9 @@ func DefineAPI(router *gin.Engine) {
 
 	wax.Use(middleware.WaxWall)
 	{
-		wax.GET("/register", methods.Dispatch)
+		// handle social logins
+		wax.GET("/social/facebook/:code", methods.FacebookAuth)
+		wax.GET("/social/google/:code", methods.GoogleAuth)
 	}
 
 	// handle static captive portal files (aka wings)

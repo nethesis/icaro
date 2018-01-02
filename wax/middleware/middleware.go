@@ -62,8 +62,8 @@ func CheckAuth(digest string, uuid string, c *gin.Context) (bool, string) {
 }
 
 func WaxWall(c *gin.Context) {
-	digest := c.Param("digest")
-	uuid := c.Param("uuid")
+	digest := c.Query("digest")
+	uuid := c.Query("uuid")
 
 	check, message := CheckAuth(digest, uuid, c)
 
@@ -78,8 +78,8 @@ func WaxWall(c *gin.Context) {
 }
 
 func CaptiveWings(c *gin.Context) {
-	digest := c.Request.URL.Query().Get("digest")
-	uuid := c.Request.URL.Query().Get("uuid")
+	digest := c.Query("digest")
+	uuid := c.Query("uuid")
 
 	check, message := CheckAuth(digest, uuid, c)
 
