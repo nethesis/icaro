@@ -33,6 +33,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"sun-api/configuration"
+	"sun-api/database"
 	"sun-api/methods"
 	"sun-api/models"
 )
@@ -44,8 +45,6 @@ func GoogleAuth(c *gin.Context) {
 	// retrieve access token
 	url := "https://www.googleapis.com/oauth2/v3/tokeninfo?" +
 		"&access_token=" + code
-
-	fmt.Println("url", url)
 
 	resp, err := http.Get(url)
 	if err != nil {
@@ -64,8 +63,6 @@ func GoogleAuth(c *gin.Context) {
 	url = "https://www.googleapis.com/plus/v1/people/me" +
 		"?access_token=" + code
 
-	fmt.Println("extract", url)
-
 	resp, err = http.Get(url)
 	if err != nil {
 		fmt.Println(err.Error())
@@ -79,24 +76,38 @@ func GoogleAuth(c *gin.Context) {
 		fmt.Println(err.Error())
 	}
 
-	fmt.Println("detail", glUserDetail)
-
-	// create user
-	unit := utils.ExtractUnit(uuid)
-	user := models.User{
-		HotspotId:   unit.HotspotId,
-		Name:        glUserDetail.DisplayName,
-		Username:    glUserDetail.Id,
-		Email:       glRespToken.Email,
-		AccountType: "google",
-		KbpsDown:    0,
-		KbpsUp:      0,
-		ValidFrom:   time.Now().UTC(),
-		ValidUntil:  time.Now().UTC().AddDate(0, 0, 30), // TODO: get days from hotspot account preferences
+	if glUserDetail.Id == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "access token is invalid"})
+		return
 	}
-	methods.CreateUser(user)
 
-	// TODO: create marketing info with user likes and birthday
+	// check if user exists
+	user := utils.ExtractUser(glUserDetail.Id)
+	if user.Id == 0 {
+		// create user
+		unit := utils.ExtractUnit(uuid)
+		newUser := models.User{
+			HotspotId:   unit.HotspotId,
+			Name:        glUserDetail.DisplayName,
+			Username:    glUserDetail.Id,
+			Password:    "",
+			Email:       glRespToken.Email,
+			AccountType: "google",
+			KbpsDown:    0,
+			KbpsUp:      0,
+			ValidFrom:   time.Now().UTC(),
+			ValidUntil:  time.Now().UTC().AddDate(0, 0, 30), // TODO: get days from hotspot account preferences
+		}
+		methods.CreateUser(newUser)
+
+		// TODO: create marketing info with user infos and birthday
+	} else {
+		// update user info
+		user.ValidUntil = time.Now().UTC().AddDate(0, 0, 30) // TODO: days info from hotspot account preferences
+		db := database.Database()
+		db.Save(&user)
+		db.Close()
+	}
 
 	// response to client
 	c.JSON(http.StatusOK, gin.H{"user_id": glUserDetail.Id})
@@ -166,22 +177,38 @@ func FacebookAuth(c *gin.Context) {
 		fmt.Println(err.Error())
 	}
 
-	// create user
-	unit := utils.ExtractUnit(uuid)
-	user := models.User{
-		HotspotId:   unit.HotspotId,
-		Name:        fbUserDetail.Name,
-		Username:    fbInspectToken.Data.UserId,
-		Email:       fbUserDetail.Email,
-		AccountType: "facebook",
-		KbpsDown:    0,
-		KbpsUp:      0,
-		ValidFrom:   time.Now().UTC(),
-		ValidUntil:  time.Now().UTC().AddDate(0, 0, 30), // TODO: days info from hotspot account preferences
+	if fbInspectToken.Data.UserId == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "access token is invalid"})
+		return
 	}
-	methods.CreateUser(user)
 
-	// TODO: create marketing info with user likes and birthday
+	// check if user exists
+	user := utils.ExtractUser(fbInspectToken.Data.UserId)
+	if user.Id == 0 {
+		// create user
+		unit := utils.ExtractUnit(uuid)
+		newUser := models.User{
+			HotspotId:   unit.HotspotId,
+			Name:        fbUserDetail.Name,
+			Username:    fbInspectToken.Data.UserId,
+			Password:    "",
+			Email:       fbUserDetail.Email,
+			AccountType: "facebook",
+			KbpsDown:    0,
+			KbpsUp:      0,
+			ValidFrom:   time.Now().UTC(),
+			ValidUntil:  time.Now().UTC().AddDate(0, 0, 30), // TODO: days info from hotspot account preferences
+		}
+		methods.CreateUser(newUser)
+
+		// TODO: create marketing info with user likes and birthday
+	} else {
+		// update user info
+		user.ValidUntil = time.Now().UTC().AddDate(0, 0, 30) // TODO: days info from hotspot account preferences
+		db := database.Database()
+		db.Save(&user)
+		db.Close()
+	}
 
 	// response to client
 	c.JSON(http.StatusOK, gin.H{"user_id": fbInspectToken.Data.UserId})

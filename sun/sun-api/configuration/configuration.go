@@ -42,6 +42,7 @@ type Configuration struct {
 	PageLimit         string            `json:"page_limit"`
 	TokenExpiresDays  int               `json:"token_expires_days"`
 	Authorizations    models.AuthMaps   `json:"authorizations"`
+	Endpoints         models.Endpoints  `json:"endpoints"`
 }
 
 var Config = Configuration{}

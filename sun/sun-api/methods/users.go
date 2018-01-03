@@ -35,9 +35,6 @@ import (
 )
 
 func CreateUser(user models.User) {
-	password := "" // TODO generate randomly
-
-	user.Password = password
 	user.Created = time.Now().UTC()
 
 	// save new user
