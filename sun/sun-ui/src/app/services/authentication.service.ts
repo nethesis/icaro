@@ -20,6 +20,17 @@ export class AuthenticationService {
         username: username,
         password: password
       })
-      .map(res => res);
+      .map(user => {
+        // login successful if there's a jwt token in the response
+        if (user && user.token) {
+          // store user details and jwt token in local storage to keep user logged in between page refreshes
+          localStorage.setItem('currentUser', JSON.stringify(user));
+        }
+        return user;
+      });
+  }
+
+  logout() {
+    localStorage.removeItem('currentUser');
   }
 }

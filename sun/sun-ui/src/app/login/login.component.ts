@@ -28,7 +28,11 @@ export class LoginComponent implements OnInit {
     private authenticationService: AuthenticationService
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.checkIsLogged();
+  }
+
+
 
   /**
    * Call authentication method from authenticationService,
@@ -40,7 +44,7 @@ export class LoginComponent implements OnInit {
       .subscribe(
         data => {
           this.router.navigate(['/home']);
-          localStorage.setItem('api_token', data.token);
+          localStorage.setItem('account_type', data.account_type);
           // Reset form, when user is logged in!
           f.reset();
         },
@@ -67,6 +71,15 @@ export class LoginComponent implements OnInit {
     } else {
       this.isUsernameWrong = true;
       this.isPasswordWrong = false;
+    }
+  }
+
+  /**
+   * Check if session isseted
+   */
+  private checkIsLogged() {
+    if (localStorage.getItem('currentUser')) {
+      this.router.navigate(['/home']);
     }
   }
 }
