@@ -5,7 +5,7 @@ import 'rxjs/add/operator/map';
 
 @Injectable()
 export class AuthenticationService {
-  private apiLoginUrl = apConfig.API_ENDPOINT_URL;
+  private apiLoginUrl = apConfig.API_ENDPOINT_URL + '/login';
 
   constructor(private http: HttpClient) {}
 
