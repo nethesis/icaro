@@ -16,7 +16,7 @@ import { apConfig } from '../../global';
 export class LoginComponent implements OnInit {
   model: any = {};
   messageResponseFromApi: string;
-  isLogeged = true;
+  isLogged = true;
   isUsernameWrong = true;
   isPasswordWrong = true;
   mainTitle = apConfig.MAIN_TITLE;
@@ -55,7 +55,7 @@ export class LoginComponent implements OnInit {
           } else {
             this.switchAlertsMethod('username');
           }
-          this.isLogeged = false;
+          this.isLogged = false;
         }
       );
   }
