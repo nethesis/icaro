@@ -37,7 +37,7 @@ import (
 func startupEnv() (*gofight.RequestConfig, *gin.Engine) {
 	// set test mode to test suite
 	fight := gofight.New()
-	fight.SetDebug(true)
+	fight.SetDebug(false)
 
 	// set test mode to gin
 	gin.SetMode(gin.TestMode)
