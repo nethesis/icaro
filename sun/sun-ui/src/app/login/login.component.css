@@ -1,6 +1,5 @@
 section {
-	background: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.95));
-	background: url('/assets/images/login-images/dark-mountain.jpg') no-repeat center center;
+	background: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.85)), url('/assets/images/login-images/dark-mountain.jpg') no-repeat center center;
 	background-size: cover;
 }
 

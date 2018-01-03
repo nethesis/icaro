@@ -21,13 +21,13 @@
 				<div class="col-md-12">
 					<div *ngIf="f.submitted && (!isLogged || !username.valid || !password.valid)" class="form-group alert-block">
 						<div class="col-md-1 text-left">
-							<span  class="help-block">Error</span>
+							<span  class="help-block"></span>
 						</div>
 						<div class="col-md-11 text-left">
 							<span class="help-block">{{messageResponseFromApi}}</span>
-							<span  *ngIf="f.submitted && (!username.valid && !password.valid)" class="help-block">Username and password is required </span>
-							<span  *ngIf="f.submitted && (password.valid && !username.valid)" class="help-block">Username is required </span>
-							<span  *ngIf="f.submitted && (username.valid && !password.valid)" class="help-block">Password is required </span>
+							<span  *ngIf="f.submitted && (!username.valid && !password.valid)" class="help-block">Error&nbsp;&nbsp;&nbsp;Username and password is required </span>
+							<span  *ngIf="f.submitted && (password.valid && !username.valid)" class="help-block">Error&nbsp;&nbsp;&nbsp;Username is required </span>
+							<span  *ngIf="f.submitted && (username.valid && !password.valid)" class="help-block">Error&nbsp;&nbsp;&nbsp;Password is required </span>
 						</div>
 					</div>
 				</div>
