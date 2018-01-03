@@ -5,3 +5,26 @@ admin_email:
     "admin@example.com"
 mariadb_root_password:
     "YourMariaDBPassWordHere"
+facebook_client_id:
+    "FacebookClientID"
+facebook_client_secret:
+    "FacebookClientSecret"
+google_client_id:
+    "GoogleClientID"
+twilio_account_sid:
+    "TwilioAccountSID"
+twilio_auth_token:
+    "TwilioAuthToken"
+twilio_number:
+    "TwilioNumber"
+email_smtp_host:
+    "EmailSMTPHost"
+
+email_smtp_port:
+    "EmailSMTPPort"
+
+email_smtp_user:
+    "EmailSMTPUser"
+
+email_smtp_password:
+    "EmailSMTPPassword"
