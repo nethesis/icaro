@@ -86,7 +86,7 @@ func startSession(userName string, deviceMacAddress string, deviceIp string, ses
 	return 1;
 }
 
-func stopSession(sessionId string, unitMacAddress string, bytesDown string, bytesUp string) int {
+func stopSession(sessionId string, unitMacAddress string, bytesDown string, bytesUp string, duration string) int {
 	unit := utils.GetUnitByMacAddress(unitMacAddress)
 	if (unit.Id <= 0) {
 		return 0
@@ -98,6 +98,9 @@ func stopSession(sessionId string, unitMacAddress string, bytesDown string, byte
 
 	session.UpdateTime = time.Now().UTC()
 	session.StopTime = time.Now().UTC()
+        if d, err := strconv.Atoi(duration); err == nil {
+                session.Duration = d
+        }
 	if bd, err := strconv.Atoi(bytesDown); err == nil {
 		session.BytesDown = bd
 	}
@@ -111,7 +114,7 @@ func stopSession(sessionId string, unitMacAddress string, bytesDown string, byte
 	return 1;
 }
 
-func updateSession(sessionId string, unitMacAddress string, bytesDown string, bytesUp string) int {
+func updateSession(sessionId string, unitMacAddress string, bytesDown string, bytesUp string, duration string) int {
 	unit := utils.GetUnitByMacAddress(unitMacAddress)
 	if (unit.Id <= 0) {
 		return 0
@@ -122,6 +125,9 @@ func updateSession(sessionId string, unitMacAddress string, bytesDown string, by
 	}
 
         session.UpdateTime = time.Now().UTC()
+        if d, err := strconv.Atoi(duration); err == nil {
+                session.Duration = d
+        }
         if bd, err := strconv.Atoi(bytesDown); err == nil {
                 session.BytesDown = bd
         }
@@ -142,9 +148,9 @@ func Counters(c *gin.Context, parameters url.Values) {
 	case "start":
 		Ack(c, startSession(c.Query("user"),c.Query("mac"),c.Query("ip"),c.Query("sessionid"),c.Query("nasid"),c.Query("ap")))
 	case "stop":
-		Ack(c, stopSession(c.Query("sessionid"),c.Query("ap"),c.Query("bytes_down"),c.Query("bytes_up")))
+		Ack(c, stopSession(c.Query("sessionid"),c.Query("ap"),c.Query("bytes_down"),c.Query("bytes_up"),c.Query("duration")))
 	case "update":
-		Ack(c, updateSession(c.Query("sessionid"),c.Query("ap"),c.Query("bytes_down"),c.Query("bytes_up")))
+		Ack(c, updateSession(c.Query("sessionid"),c.Query("ap"),c.Query("bytes_down"),c.Query("bytes_up"),c.Query("duration")))
 	case "":
 		c.String(http.StatusBadRequest, "No status provided")
 	default:
