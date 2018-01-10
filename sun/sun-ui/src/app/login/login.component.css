@@ -20,6 +20,10 @@ section .container {
 	width: 100%;
 }
 
+.form-group {
+	margin-bottom: 0;
+}
+
 .alert-block div {
 	padding-left: 5px;
 }
@@ -61,7 +65,8 @@ input {
 
 .login-pf .container .help-block {
 	color: #c00;
-	font-weight: bolder;
+	margin-top: 0;
+	margin-bottom: 5px;
 }
 
 /* Make login submit button more larger */

@@ -19,15 +19,9 @@
 
 				<!-- Alert Response message from api on submit button-->
 				<div class="col-md-12">
-					<div *ngIf="f.submitted && (!isLogged || !username.valid || !password.valid)" class="form-group alert-block">
-						<div class="col-md-1 text-left">
-							<span  class="help-block"></span>
-						</div>
-						<div class="col-md-11 text-left">
-							<span class="help-block">{{messageResponseFromApi}}</span>
-							<span  *ngIf="f.submitted && (!username.valid && !password.valid)" class="help-block">Error&nbsp;&nbsp;&nbsp;Username and password is required </span>
-							<span  *ngIf="f.submitted && (password.valid && !username.valid)" class="help-block">Error&nbsp;&nbsp;&nbsp;Username is required </span>
-							<span  *ngIf="f.submitted && (username.valid && !password.valid)" class="help-block">Error&nbsp;&nbsp;&nbsp;Password is required </span>
+					<div class="form-group alert-block">
+						<div class="col-md-11 col-md-offset-1 text-left">
+							<span class="help-block"><b *ngIf="f.submitted && (!isLogged || !username.valid || !password.valid)">{{messageResponseFromApi}}</b>&nbsp;</span>
 						</div>
 					</div>
 				</div>
@@ -42,6 +36,7 @@
 							<label for="inputUsername" class="col-sm-2 col-md-2 username-label">Username</label>
 							<div class="col-sm-10 col-md-10">
 								<input type="text" name="username" [(ngModel)]="model.username" #username="ngModel" required class="form-control" id="inputUsername" placeholder="" tabindex="1">
+								<span class="help-block"><b *ngIf="f.submitted && !username.valid" >Enter your username </b>&nbsp;</span>
 							</div>
 						</div>
 
@@ -50,6 +45,7 @@
 							<label for="inputPassword" class="col-sm-2 col-md-2 password-label">Password</label>
 							<div class="col-sm-10 col-md-10">
 								<input type="password" name="password" [(ngModel)]="model.password" #password="ngModel" required class="form-control" id="inputPassword" placeholder="" tabindex="2">
+								<span  class="help-block"><b *ngIf="f.submitted && !password.valid">Enter your password </b>&nbsp;</span>
 							</div>
 						</div>
 
