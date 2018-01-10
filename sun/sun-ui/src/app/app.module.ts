@@ -10,19 +10,21 @@ import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
 import { routing } from './router/route-routing';
 import { AuthenticationGuard } from './guards/authentication.guard';
+import { NavigationModule } from 'patternfly-ng';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    HomeComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
     routing,
     HttpClientModule,
     HttpModule,
-    FormsModule
+    FormsModule,
+    NavigationModule
   ],
   providers: [AuthenticationService, AuthenticationGuard],
   bootstrap: [AppComponent]

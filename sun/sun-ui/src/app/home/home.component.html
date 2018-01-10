@@ -1,34 +1,38 @@
-<!-- Navbar content -->
-<nav class="navbar navbar-pf-vertical">
-	<div class="navbar-header">
-		<button type="button" class="navbar-toggle">
-			<span class="sr-only">Toggle navigation</span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-		</button>
-		<a class="navbar-brand">
-			<!-- Insert logo here -->
-			<!-- <img class="navbar-brand-icon" src="" alt=""/> -->
-			<!-- <img class="navbar-brand-name" src="" alt="" /> -->
-		</a>
+<!-- Topbar and vertical navigation content -->
+<div id="verticalNavLayout" class="layout-pf layout-pf-fixed faux-layout">
+	<pfng-vertical-navigation
+	[items]="navigationItems"
+	(onItemClickEvent)="onItemClicked($event)"
+	(onNavigationEvent)="onNavigation($event)"
+	[showBadges]="true"
+	[hiddenIcons]="false"
+	[persistentSecondary]="false"
+	[updateActiveItemsOnClick]="true"
+	[pinnableMenus]="true">
+	<div>
+	<!-- Topbar menu with icons -->
+		<ul class="nav navbar-nav navbar-right navbar-iconic">
+			<li class="dropdown">
+				<!-- User info -->
+				<a class="dropdown-toggle nav-item-iconic" id="userDropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+					<span>
+						<span title="Username" class="fa pficon-user"></span>
+						{{account_type | uppercase}}
+					</span>
+					<span class="caret"></span>
+				</a>
+				<!-- User dropdown list -->
+				<ul class="dropdown-menu" aria-labelledby="userDropdownMenu">
+					<li>
+						<!-- Logout -->
+						<a class="logout" href="#"(click)="logOut()">
+							<span title="logout" class="fa pficon-arrow"></span>
+							Logout
+						</a>
+					</li>
+				</ul>
+			</li>
+		</ul>
 	</div>
-	
-	<ul class="nav navbar-nav navbar-right navbar-iconic navbar-utility">
-		<li class="dropdown">
-			<a href="" (click)="logOut();" class="dropdown-toggle nav-item-iconic" id="dropdownMenu28" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-				<span title="Username" class="fa pficon-user"></span>
-				{{account_type}} Logout
-				<span class="caret"></span>
-			</a>
-		</li>
-	</ul>
-
-</nav>
-
-<!-- Sidenav content -->
-<div class="nav-pf-vertical nav-pf-vertical-with-sub-menus nav-pf-persistent-secondary"></div>
-
-
-<!-- Dashboard content -->
-<div class="container-fluid container-cards-pf container-pf-nav-pf-vertical nav-pf-persistent-secondary"></div>
+	</pfng-vertical-navigation>
+</div>
