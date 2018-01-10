@@ -44,13 +44,13 @@ func SMSAuth(c *gin.Context) {
 	}
 
 	// check if user exists
-	user := utils.ExtractUser(number)
+	user := utils.GetUserByUsername(number)
 	if user.Id == 0 {
 		// generate code
 		code := utils.GenerateCode(6)
 
 		// create user
-		unit := utils.ExtractUnit(uuid)
+		unit := utils.GetUnitByUuid(uuid)
 		newUser := models.User{
 			HotspotId:   unit.HotspotId,
 			Name:        number, // TODO: how we can get the name?
@@ -94,13 +94,13 @@ func EmailAuth(c *gin.Context) {
 	}
 
 	// check if user exists
-	user := utils.ExtractUser(email)
+	user := utils.GetUserByUsername(email)
 	if user.Id == 0 {
 		// generate code
 		code := utils.GenerateCode(6)
 
 		// create user
-		unit := utils.ExtractUnit(uuid)
+		unit := utils.GetUnitByUuid(uuid)
 		newUser := models.User{
 			HotspotId:   unit.HotspotId,
 			Name:        email, // TODO: how we can get the name?

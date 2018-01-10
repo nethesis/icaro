@@ -26,10 +26,10 @@ import "time"
 
 type Session struct {
 	Id         int       `db:"id" json:"id"`
-	UnitId     string    `db:"unit_id" json:"unit_id"`
+	UnitId     int       `db:"unit_id" json:"unit_id"`
 	HotspotId  int       `db:"hotspot_id" json:"hotspot_id"`
-	DeviceId   string    `db:"device_id" json:"device_id"`
-	UserId     string    `db:"user_id" json:"user_id"`
+	DeviceId   int       `db:"device_id" json:"device_id"`
+	UserId     int       `db:"user_id" json:"user_id"`
 	BytesUp    int       `db:"bytes_up" json:"bytes_up"`
 	BytesDown  int       `db:"bytes_down" json:"bytes_down"`
 	Duration   int       `db:"duration" json:"duration"`

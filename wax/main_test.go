@@ -144,14 +144,36 @@ func TestCountersInvalidUnit(t *testing.T) {
 		})
 }
 
-func TestCountersStage(t *testing.T) {
-	f, r, uri := startupEnv("/wax/aaa","stage=counters&nasid=HSTest&ap=00-00-00-00-00-00&status=start")
+func TestCountersStart(t *testing.T) {
+	f, r, uri := startupEnv("/wax/aaa","stage=counters&nasid=HSTest&ap=00-00-00-00-00-00&status=start&user=firstuser&mac=11-11-11-11-11&ip=10.1.0.3&sessionid=151318020800000001")
 
 	f.GET(uri).
 		Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
+			assert.Equal(t, "Ack: 1", f.Body.String())
 			assert.Equal(t, http.StatusOK, f.Code)
 		})
 }
+
+func TestCountersUpdate(t *testing.T) {
+        f, r, uri := startupEnv("/wax/aaa","stage=counters&nasid=HSTest&ap=00-00-00-00-00-00&status=update&user=firstuser&mac=11-11-11-11-11&ip=10.1.0.3&sessionid=151318020800000001&duration=222&bytes_down=80000&pkts_down=3000&bytes_up=189235&pkts_up=2071")
+
+        f.GET(uri).
+                Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
+                        assert.Equal(t, "Ack: 1", f.Body.String())
+                        assert.Equal(t, http.StatusOK, f.Code)
+                })
+}
+
+func TestCountersStop(t *testing.T) {
+        f, r, uri := startupEnv("/wax/aaa","stage=counters&nasid=HSTest&ap=00-00-00-00-00-00&status=stop&user=firstuser&mac=11-11-11-11-11&ip=10.1.0.3&sessionid=151318020800000001&duration=16036&bytes_down=727516&pkts_down=1906&bytes_up=189235&pkts_up=2071")
+
+        f.GET(uri).
+                Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
+                        assert.Equal(t, "Ack: 1", f.Body.String())
+                        assert.Equal(t, http.StatusOK, f.Code)
+                })
+}
+
 
 func TestCountersInvalid(t *testing.T) {
 	f, r, uri := startupEnv("/wax/aaa","stage=counters&nasid=HSTest&ap=00-00-00-00-00-00")

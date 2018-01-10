@@ -39,7 +39,44 @@ import (
 	"sun-api/models"
 )
 
-func ExtractUnit(uuid string) models.Unit {
+
+func GetSessionByKeyAndUnitId(key string, unitId int) models.Session {
+        var session models.Session
+        db := database.Database()
+        db.Where("session_key = ? and unit_id = ?", key, unitId).First(&session)
+        db.Close()
+
+	return session;
+}
+
+func GetDeviceByMacAddress(mac string) models.Device {
+        var unit models.Device
+        db := database.Database()
+        db.Where("mac_address = ?", mac).First(&unit)
+        db.Close()
+
+        return unit
+}
+
+func GetUnitByMacAddress(mac string) models.Unit {
+        var unit models.Unit
+        db := database.Database()
+        db.Where("mac_address = ?", mac).First(&unit)
+        db.Close()
+
+        return unit
+}
+
+func GetUserByNameAndHotspotId(name string, hotspotId int) models.User {
+        var unit models.User
+        db := database.Database()
+        db.Where("username = ? and hotspot_id = ?",name,hotspotId).First(&unit)
+        db.Close()
+
+        return unit
+}
+
+func GetUnitByUuid(uuid string) models.Unit {
 	var unit models.Unit
 	db := database.Database()
 	db.Where("uuid = ?", uuid).First(&unit)
@@ -48,7 +85,7 @@ func ExtractUnit(uuid string) models.Unit {
 	return unit
 }
 
-func ExtractUser(id string) models.User {
+func GetUserByUsername(id string) models.User {
 	var user models.User
 	db := database.Database()
 	db.Where("username = ?", id).First(&user)
