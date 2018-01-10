@@ -84,10 +84,10 @@ func GoogleAuth(c *gin.Context) {
 	}
 
 	// check if user exists
-	user := utils.ExtractUser(glUserDetail.Id)
+	user := utils.GetUserByUsername(glUserDetail.Id)
 	if user.Id == 0 {
 		// create user
-		unit := utils.ExtractUnit(uuid)
+		unit := utils.GetUnitByUuid(uuid)
 		newUser := models.User{
 			HotspotId:   unit.HotspotId,
 			Name:        glUserDetail.DisplayName,
@@ -185,10 +185,10 @@ func FacebookAuth(c *gin.Context) {
 	}
 
 	// check if user exists
-	user := utils.ExtractUser(fbInspectToken.Data.UserId)
+	user := utils.GetUserByUsername(fbInspectToken.Data.UserId)
 	if user.Id == 0 {
 		// create user
-		unit := utils.ExtractUnit(uuid)
+		unit := utils.GetUnitByUuid(uuid)
 		newUser := models.User{
 			HotspotId:   unit.HotspotId,
 			Name:        fbUserDetail.Name,

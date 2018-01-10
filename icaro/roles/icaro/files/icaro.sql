@@ -97,6 +97,7 @@ CREATE TABLE `devices` (
   `hotspot_id` bigint unsigned NOT NULL,
   `user_id` bigint unsigned NOT NULL,
   `mac_address` varchar(200) NOT NULL,
+  `ip_address` varchar(200),
   `description` varchar(200),
   `created` datetime,
   FOREIGN KEY (`hotspot_id`) REFERENCES hotspots(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,

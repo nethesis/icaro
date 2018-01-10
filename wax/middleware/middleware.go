@@ -47,7 +47,7 @@ func CheckAuth(digest string, uuid string, c *gin.Context) (bool, string) {
 	}
 
 	// check if uuid is valid
-	unit := utils.ExtractUnit(uuid)
+	unit := utils.GetUnitByUuid(uuid)
 	if unit.Id == 0 {
 		return false, "uuid is invalid"
 	}
