@@ -106,6 +106,13 @@ func main() {
 			users.PUT("/:user_id", methods.UpdateUser)
 			users.DELETE("/:user_id", methods.DeleteUser)
 		}
+
+		vouchers := api.Group("/vouchers")
+		{
+			vouchers.GET("", methods.GetVouchers)
+			vouchers.POST("", methods.CreateVoucher)
+			vouchers.DELETE("/:voucher_id", methods.DeleteVoucher)
+		}
 	}
 
 	// handle missing endpoint
