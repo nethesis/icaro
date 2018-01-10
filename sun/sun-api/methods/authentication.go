@@ -67,7 +67,7 @@ func Login(c *gin.Context) {
 		if account.Password == digest {
 			// create authorization token
 			h := sha256.New()
-			h.Write([]byte(time.Now().UTC().String()))
+			h.Write([]byte(time.Now().UTC().String() + username + password))
 			token := fmt.Sprintf("%x", h.Sum(nil))
 
 			// set expiration date
