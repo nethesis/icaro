@@ -40,6 +40,9 @@ func DefineAPI(router *gin.Engine) {
 
 	wax.Use(middleware.WaxWall)
 	{
+		// handle voucher control
+		wax.GET("/register/voucher/:code", methods.VoucherAuth)
+
 		// handle social logins
 		wax.GET("/register/social/facebook/:code", methods.FacebookAuth)
 		wax.GET("/register/social/google/:code", methods.GoogleAuth)

@@ -39,41 +39,40 @@ import (
 	"sun-api/models"
 )
 
-
 func GetSessionByKeyAndUnitId(key string, unitId int) models.Session {
-        var session models.Session
-        db := database.Database()
-        db.Where("session_key = ? and unit_id = ?", key, unitId).First(&session)
-        db.Close()
+	var session models.Session
+	db := database.Database()
+	db.Where("session_key = ? and unit_id = ?", key, unitId).First(&session)
+	db.Close()
 
-	return session;
+	return session
 }
 
 func GetDeviceByMacAddress(mac string) models.Device {
-        var unit models.Device
-        db := database.Database()
-        db.Where("mac_address = ?", mac).First(&unit)
-        db.Close()
+	var unit models.Device
+	db := database.Database()
+	db.Where("mac_address = ?", mac).First(&unit)
+	db.Close()
 
-        return unit
+	return unit
 }
 
 func GetUnitByMacAddress(mac string) models.Unit {
-        var unit models.Unit
-        db := database.Database()
-        db.Where("mac_address = ?", mac).First(&unit)
-        db.Close()
+	var unit models.Unit
+	db := database.Database()
+	db.Where("mac_address = ?", mac).First(&unit)
+	db.Close()
 
-        return unit
+	return unit
 }
 
 func GetUserByNameAndHotspotId(name string, hotspotId int) models.User {
-        var unit models.User
-        db := database.Database()
-        db.Where("username = ? and hotspot_id = ?",name,hotspotId).First(&unit)
-        db.Close()
+	var unit models.User
+	db := database.Database()
+	db.Where("username = ? and hotspot_id = ?", name, hotspotId).First(&unit)
+	db.Close()
 
-        return unit
+	return unit
 }
 
 func GetUnitByUuid(uuid string) models.Unit {
@@ -85,13 +84,22 @@ func GetUnitByUuid(uuid string) models.Unit {
 	return unit
 }
 
-func GetUserByUsername(id string) models.User {
+func GetUserByUsername(username string) models.User {
 	var user models.User
 	db := database.Database()
-	db.Where("username = ?", id).First(&user)
+	db.Where("username = ?", username).First(&user)
 	db.Close()
 
 	return user
+}
+
+func GetVoucherByCode(code string, hotspotId int) models.HotspotVoucher {
+	var hotspotVoucher models.HotspotVoucher
+	db := database.Database()
+	db.Where("code = ? AND hotspot_id = ?", code, hotspotId).First(&hotspotVoucher)
+	db.Close()
+
+	return hotspotVoucher
 }
 
 func CalcDigest(unit models.Unit) string {

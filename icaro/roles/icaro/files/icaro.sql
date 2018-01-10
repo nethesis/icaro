@@ -71,6 +71,16 @@ CREATE TABLE `hotspot_preferences` (
   PRIMARY KEY(`id`)
 );
 
+CREATE TABLE `hotspot_vouchers` (
+  `id` serial,
+  `hotspot_id` bigint unsigned NOT NULL,
+  `code` varchar(250) NOT NULL,
+  `expires` datetime NOT NULL,
+  FOREIGN KEY (`hotspot_id`) REFERENCES hotspots(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  UNIQUE KEY (`hotspot_id`, `code`),
+  PRIMARY KEY(`id`)
+);
+
 CREATE TABLE `users` (
   `id` serial,
   `hotspot_id` bigint unsigned NOT NULL,

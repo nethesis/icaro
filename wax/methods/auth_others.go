@@ -133,3 +133,26 @@ func EmailAuth(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"user_id": email, "password": user.Password})
 	}
 }
+
+func VoucherAuth(c *gin.Context) {
+	code := c.Param("code")
+	uuid := c.Query("uuid")
+
+	// extract unit
+	unit := utils.GetUnitByUuid(uuid)
+
+	// extract voucher
+	voucher := utils.GetVoucherByCode(code, unit.HotspotId)
+
+	// check voucher validity
+	if voucher.Id == 0 {
+		c.JSON(http.StatusUnauthorized, gin.H{"message": "Voucher is invalid"})
+	} else {
+		if voucher.Expires.Before(time.Now().UTC()) {
+			c.JSON(http.StatusOK, gin.H{"message": "Voucher is expired"})
+		} else {
+			c.JSON(http.StatusOK, gin.H{"message": "Voucher is valid"})
+		}
+	}
+
+}
