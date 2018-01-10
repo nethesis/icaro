@@ -9,13 +9,17 @@
     "captive_path": "/opt/icaro/wings",
     "captive_public_path": "/opt/icaro/wings/assets",
     "auth_social": {
+        "redirect_uri": "http://{{ machine_hostname }}/hotspot/index.html"
         "facebook": {
             "client_id": "{{ facebook_client_id }}",
-            "client_secret": "{{ facebook_client_secret }}",
-            "redirect_uri": "http://{{ machine_hostname }}/hotspot/index.html"
+            "client_secret": "{{ facebook_client_secret }}"
         },
         "google": {},
-        "twitter": {}
+        "twitter": {},
+        "linkedin": {
+            "client_id": "{{ linkedin_client_id }}",
+            "client_secret": "{{ linkedin_client_secret }}"
+        }
     },
     "endpoints": {
         "sms": {

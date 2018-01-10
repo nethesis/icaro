@@ -23,10 +23,12 @@
 package methods
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"time"
 	"wax/utils"
 
@@ -119,7 +121,7 @@ func FacebookAuth(c *gin.Context) {
 
 	clientId := configuration.Config.AuthSocial.Facebook.ClientId
 	clientSecret := configuration.Config.AuthSocial.Facebook.ClientSecret
-	redirectURI := configuration.Config.AuthSocial.Facebook.RedirectURI
+	redirectURI := configuration.Config.AuthSocial.RedirectURI
 
 	// retrieve access token
 	url := "https://graph.facebook.com/v2.11/oauth/access_token?" +
@@ -213,4 +215,97 @@ func FacebookAuth(c *gin.Context) {
 	// response to client
 	c.JSON(http.StatusOK, gin.H{"user_id": fbInspectToken.Data.UserId})
 
+}
+
+func LinkedInAuth(c *gin.Context) {
+	code := c.Param("code")
+	uuid := c.Query("uuid")
+
+	clientId := configuration.Config.AuthSocial.LinkedIn.ClientId
+	clientSecret := configuration.Config.AuthSocial.LinkedIn.ClientSecret
+	redirectURI := configuration.Config.AuthSocial.RedirectURI
+
+	// retrieve access token
+	urlEndpoint := "https://www.linkedin.com/oauth/v2/accessToken"
+
+	form := url.Values{
+		"grant_type":    {"authorization_code"},
+		"code":          {code},
+		"redirect_uri":  {redirectURI},
+		"client_id":     {clientId},
+		"client_secret": {clientSecret},
+	}
+	bodyByte := bytes.NewBufferString(form.Encode())
+
+	resp, err := http.Post(urlEndpoint, "application/x-www-form-urlencoded", bodyByte)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+
+	var liRespToken models.LinkedInRespToken
+	err = json.Unmarshal(body, &liRespToken)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	// extract user info
+	urlAPI := "https://api.linkedin.com/v1/people/~:(id,first-name,last-name,email-address)?format=json"
+
+	client := &http.Client{}
+	req, err := http.NewRequest("GET", urlAPI, nil)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	req.Header.Add("Authorization", "Bearer "+liRespToken.AccessToken)
+	resp, err = client.Do(req)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	defer resp.Body.Close()
+	body, err = ioutil.ReadAll(resp.Body)
+
+	var liUserDetail models.LinkedInUserDetail
+	err = json.Unmarshal(body, &liUserDetail)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	if liUserDetail.Id == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "access token is invalid"})
+		return
+	}
+
+	// check if user exists
+	user := utils.ExtractUser(liUserDetail.Id)
+	if user.Id == 0 {
+		// create user
+		unit := utils.ExtractUnit(uuid)
+		newUser := models.User{
+			HotspotId:   unit.HotspotId,
+			Name:        liUserDetail.FirstName + " " + liUserDetail.LastName,
+			Username:    liUserDetail.Id,
+			Password:    "",
+			Email:       liUserDetail.Email,
+			AccountType: "linkedin",
+			KbpsDown:    0,
+			KbpsUp:      0,
+			ValidFrom:   time.Now().UTC(),
+			ValidUntil:  time.Now().UTC().AddDate(0, 0, 30), // TODO: get days from hotspot account preferences
+		}
+		methods.CreateUser(newUser)
+
+		// TODO: create marketing info with user infos and birthday
+	} else {
+		// update user info
+		user.ValidUntil = time.Now().UTC().AddDate(0, 0, 30) // TODO: days info from hotspot account preferences
+		db := database.Database()
+		db.Save(&user)
+		db.Close()
+	}
+
+	// response to client
+	c.JSON(http.StatusOK, gin.H{"user_id": liUserDetail.Id})
 }

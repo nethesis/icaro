@@ -25,13 +25,13 @@ package models
 type Social struct {
 	ClientId     string `json:"client_id"`
 	ClientSecret string `json:"client_secret"`
-	RedirectURI  string `json:"redirect_uri"`
 }
 
 type AuthSocial struct {
-	Facebook Social `json:"facebook"`
-	Google   Social `json:"google"`
-	Twitter  Social `json:"twitter"`
+	Facebook    Social `json:"facebook"`
+	Google      Social `json:"google"`
+	LinkedIn    Social `json:"linkedin"`
+	RedirectURI string `json:"redirect_uri"`
 }
 
 type FacebookRespToken struct {
@@ -46,6 +46,11 @@ type GoogleRespToken struct {
 	Scope     string `json:"scope"`
 	ExpiresIn string `json:"expires_in"`
 	Email     string `json:"email"`
+}
+
+type LinkedInRespToken struct {
+	AccessToken string `json:"access_token"`
+	ExpiresIn   int    `json:"expires_in"`
 }
 
 type FacebookInspectToken struct {
@@ -89,4 +94,11 @@ type GoogleUserDetail struct {
 	AgeRange    struct {
 		Min int `json:"min"`
 	} `json:"ageRange"`
+}
+
+type LinkedInUserDetail struct {
+	Id        string `json:"id"`
+	FirstName string `json:"firstName"`
+	LastName  string `json:"lastName"`
+	Email     string `json:"emailAddress"`
 }

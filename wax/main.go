@@ -43,6 +43,7 @@ func DefineAPI(router *gin.Engine) {
 		// handle social logins
 		wax.GET("/register/social/facebook/:code", methods.FacebookAuth)
 		wax.GET("/register/social/google/:code", methods.GoogleAuth)
+		wax.GET("/register/social/linkedin/:code", methods.LinkedInAuth)
 
 		// handle sms login
 		wax.GET("/register/sms/:number", methods.SMSAuth)
