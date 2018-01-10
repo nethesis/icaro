@@ -1,0 +1,74 @@
+<section id="login" class="login-pf">
+		<!-- Logo  -->
+		<span id="badge">
+			<img [src] = "logo" alt="{{mainTitle}}">
+		</span>
+
+		<!-- Login container -->
+		<div class="container">
+			<!-- Title container -->
+			<div class="row">
+				<div class="col-lg-12 title-col">
+					<!-- Title -->
+					<div class="title">
+						<h4>{{mainTitle}}</h4>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+
+				<!-- Alert Response message from api on submit button-->
+				<div class="col-md-12">
+					<div class="form-group alert-block">
+						<div class="col-md-11 col-md-offset-1 text-left">
+							<span class="help-block"><b *ngIf="f.submitted && (!isLogged || !username.valid || !password.valid)">{{messageResponseFromApi}}</b>&nbsp;</span>
+						</div>
+					</div>
+				</div>
+
+				<!-- Login form column -->
+				<div class="col-md-6 login-form-container">
+					<!-- Login form -->
+					<form class="form-horizontal" (ngSubmit)="f.form.valid && login(f)" role="form" #f="ngForm" name="form">
+
+						<!-- Username  -->
+						<div class="form-group" [ngClass]="{'has-error': f.submitted && !username.valid || !isUsernameWrong}" >
+							<label for="inputUsername" class="col-sm-2 col-md-2 username-label">Username</label>
+							<div class="col-sm-10 col-md-10">
+								<input type="text" name="username" [(ngModel)]="model.username" #username="ngModel" required class="form-control" id="inputUsername" placeholder="" tabindex="1">
+								<span class="help-block"><b *ngIf="f.submitted && !username.valid" >Enter your username </b>&nbsp;</span>
+							</div>
+						</div>
+
+						<!-- Password  -->
+						<div class="form-group" [ngClass]="{'has-error': f.submitted && !password.valid || !isPasswordWrong}" >
+							<label for="inputPassword" class="col-sm-2 col-md-2 password-label">Password</label>
+							<div class="col-sm-10 col-md-10">
+								<input type="password" name="password" [(ngModel)]="model.password" #password="ngModel" required class="form-control" id="inputPassword" placeholder="" tabindex="2">
+								<span  class="help-block"><b *ngIf="f.submitted && !password.valid">Enter your password </b>&nbsp;</span>
+							</div>
+						</div>
+
+						<!-- Login button -->
+						<div class="form-group">
+							<div class="col-xs-12 col-sm-12 col-md-12 text-right submit">
+								<button [disabled]="loading" class="btn btn-primary btn-lg" tabindex="4">Log In</button>
+							</div>
+						</div>
+
+					</form>
+
+				</div>
+				<!-- ./login-form-container -->
+
+				<!-- Details Columns -->
+				<div class="col-lg-6 details">
+					<h4><strong>{{mainTitle}}</strong></h4>
+				</div>
+
+				<!-- Copyright container -->
+
+			</div>
+			<!-- ./row -->
+		</div>
+</section>
