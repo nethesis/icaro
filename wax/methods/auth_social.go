@@ -279,10 +279,10 @@ func LinkedInAuth(c *gin.Context) {
 	}
 
 	// check if user exists
-	user := utils.ExtractUser(liUserDetail.Id)
+	user := utils.GetUserByUsername(liUserDetail.Id)
 	if user.Id == 0 {
 		// create user
-		unit := utils.ExtractUnit(uuid)
+		unit := utils.GetUnitByUuid(uuid)
 		newUser := models.User{
 			HotspotId:   unit.HotspotId,
 			Name:        liUserDetail.FirstName + " " + liUserDetail.LastName,
