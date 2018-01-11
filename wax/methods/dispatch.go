@@ -23,18 +23,18 @@
 package methods
 
 import (
+	"crypto/md5"
+	"fmt"
+	"io"
 	"net/http"
+	"regexp"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 
 	"sun-api/database"
 	"sun-api/models"
-	"fmt"
-	"regexp"
-	"crypto/md5"
-	"io"
-	"strings"
 )
 
 func Reply(c *gin.Context, httpCode int, message string) {
@@ -62,21 +62,21 @@ func isHotspot(hotspotName string) bool {
 }
 
 func isValidSecret(c *gin.Context, hotspotUnitMac string, md string) bool {
-        var unit models.Unit
+	var unit models.Unit
 	var stripper = regexp.MustCompile(`&md=[^&=]+$`)
-	var strippedQuery = stripper.ReplaceAllString(c.Request.URL.RawQuery,"")
-	var uri = fmt.Sprintf("%s%s?%s",  "http://", c.Request.Host, strippedQuery)
+	var strippedQuery = stripper.ReplaceAllString(c.Request.URL.RawQuery, "")
+	var uri = fmt.Sprintf("%s%s?%s", "http://", c.Request.Host, strippedQuery)
 
-        db := database.Database()
-        db.Where("mac_address = ?", hotspotUnitMac).First(&unit)
-        db.Close()
+	db := database.Database()
+	db.Where("mac_address = ?", hotspotUnitMac).First(&unit)
+	db.Close()
 
 	h := md5.New()
 	io.WriteString(h, uri)
 	io.WriteString(h, unit.Secret)
 	var check = strings.ToUpper(fmt.Sprintf("%x", h.Sum(nil)))
 
-	return (check == md);
+	return (check == md)
 }
 
 func Dispatch(c *gin.Context) {

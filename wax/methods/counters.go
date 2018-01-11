@@ -25,47 +25,46 @@ package methods
 import (
 	"net/http"
 	"net/url"
-	"time"
 	"strconv"
-        _ "github.com/jinzhu/gorm/dialects/mysql"
-
-        "sun-api/database"
-	"wax/utils"
+	"time"
 
 	"github.com/gin-gonic/gin"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
+
+	"sun-api/database"
+	"wax/utils"
 )
 
 func Ack(c *gin.Context, act int) {
 	c.String(http.StatusOK, "Ack: %d", act)
 }
 
-
 func startSession(userName string, deviceMacAddress string, deviceIp string, sessionId string, hotspotName string, unitMacAddress string) int {
 	unit := utils.GetUnitByMacAddress(unitMacAddress)
-	if (unit.Id <= 0) {
+	if unit.Id <= 0 {
 		return 0
 	}
 	user := utils.GetUserByNameAndHotspotId(userName, unit.HotspotId)
-	if (user.Id <= 0) {
+	if user.Id <= 0 {
 		return 0
 	}
 	device := utils.GetDeviceByMacAddress(deviceMacAddress)
-	if (device.Id <= 0) {
+	if device.Id <= 0 {
 		device.HotspotId = unit.HotspotId
 		device.UserId = user.Id
 		device.MacAddress = deviceMacAddress
 		device.IpAddress = deviceIp
 		device.Description = ""
-	        device.Created = time.Now().UTC()
+		device.Created = time.Now().UTC()
 
 		// save new device
 		db := database.Database()
 		db.Save(&device)
 		db.Close()
 	} else {
-		if  (device.IpAddress != deviceIp) {
+		if device.IpAddress != deviceIp {
 			db := database.Database()
-			db.Model(&device).Update("IpAddress",deviceIp);
+			db.Model(&device).Update("IpAddress", deviceIp)
 			db.Close()
 		}
 	}
@@ -76,31 +75,31 @@ func startSession(userName string, deviceMacAddress string, deviceIp string, ses
 	session.UserId = user.Id
 	session.BytesUp = 0
 	session.BytesDown = 0
-	session.StartTime =  time.Now().UTC()
+	session.StartTime = time.Now().UTC()
 	session.UpdateTime = time.Now().UTC()
 	session.SessionKey = sessionId
 
-        db := database.Database()
-        db.Save(&session)
-        db.Close()
-	return 1;
+	db := database.Database()
+	db.Save(&session)
+	db.Close()
+	return 1
 }
 
 func stopSession(sessionId string, unitMacAddress string, bytesDown string, bytesUp string, duration string) int {
 	unit := utils.GetUnitByMacAddress(unitMacAddress)
-	if (unit.Id <= 0) {
+	if unit.Id <= 0 {
 		return 0
 	}
 	session := utils.GetSessionByKeyAndUnitId(sessionId, unit.Id)
-	if (session.Id < 0) {
+	if session.Id < 0 {
 		return 0
 	}
 
 	session.UpdateTime = time.Now().UTC()
 	session.StopTime = time.Now().UTC()
-        if d, err := strconv.Atoi(duration); err == nil {
-                session.Duration = d
-        }
+	if d, err := strconv.Atoi(duration); err == nil {
+		session.Duration = d
+	}
 	if bd, err := strconv.Atoi(bytesDown); err == nil {
 		session.BytesDown = bd
 	}
@@ -108,37 +107,37 @@ func stopSession(sessionId string, unitMacAddress string, bytesDown string, byte
 		session.BytesUp = bu
 	}
 
-        db := database.Database()
-        db.Save(&session)
-        db.Close()
-	return 1;
+	db := database.Database()
+	db.Save(&session)
+	db.Close()
+	return 1
 }
 
 func updateSession(sessionId string, unitMacAddress string, bytesDown string, bytesUp string, duration string) int {
 	unit := utils.GetUnitByMacAddress(unitMacAddress)
-	if (unit.Id <= 0) {
+	if unit.Id <= 0 {
 		return 0
 	}
-        session := utils.GetSessionByKeyAndUnitId(sessionId, unit.Id)
-	if (session.Id < 0) {
+	session := utils.GetSessionByKeyAndUnitId(sessionId, unit.Id)
+	if session.Id < 0 {
 		return 0
 	}
 
-        session.UpdateTime = time.Now().UTC()
-        if d, err := strconv.Atoi(duration); err == nil {
-                session.Duration = d
-        }
-        if bd, err := strconv.Atoi(bytesDown); err == nil {
-                session.BytesDown = bd
-        }
-        if bu, err := strconv.Atoi(bytesUp); err == nil {
-                session.BytesUp = bu
-        }
+	session.UpdateTime = time.Now().UTC()
+	if d, err := strconv.Atoi(duration); err == nil {
+		session.Duration = d
+	}
+	if bd, err := strconv.Atoi(bytesDown); err == nil {
+		session.BytesDown = bd
+	}
+	if bu, err := strconv.Atoi(bytesUp); err == nil {
+		session.BytesUp = bu
+	}
 
-        db := database.Database()
-        db.Save(&session)
-        db.Close()
-        return 1;
+	db := database.Database()
+	db.Save(&session)
+	db.Close()
+	return 1
 }
 
 func Counters(c *gin.Context, parameters url.Values) {
@@ -146,11 +145,11 @@ func Counters(c *gin.Context, parameters url.Values) {
 
 	switch status {
 	case "start":
-		Ack(c, startSession(c.Query("user"),c.Query("mac"),c.Query("ip"),c.Query("sessionid"),c.Query("nasid"),c.Query("ap")))
+		Ack(c, startSession(c.Query("user"), c.Query("mac"), c.Query("ip"), c.Query("sessionid"), c.Query("nasid"), c.Query("ap")))
 	case "stop":
-		Ack(c, stopSession(c.Query("sessionid"),c.Query("ap"),c.Query("bytes_down"),c.Query("bytes_up"),c.Query("duration")))
+		Ack(c, stopSession(c.Query("sessionid"), c.Query("ap"), c.Query("bytes_down"), c.Query("bytes_up"), c.Query("duration")))
 	case "update":
-		Ack(c, updateSession(c.Query("sessionid"),c.Query("ap"),c.Query("bytes_down"),c.Query("bytes_up"),c.Query("duration")))
+		Ack(c, updateSession(c.Query("sessionid"), c.Query("ap"), c.Query("bytes_down"), c.Query("bytes_up"), c.Query("duration")))
 	case "":
 		c.String(http.StatusBadRequest, "No status provided")
 	default:
