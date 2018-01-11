@@ -96,7 +96,7 @@ func CaptiveWings(c *gin.Context) {
 
 	// server static files of captive portal
 	fileserver := http.FileServer(gin.Dir(configuration.Config.CaptivePath, true))
-	fileserver = http.StripPrefix("/wax/captive/home", fileserver)
+	fileserver = http.StripPrefix("/wings/home", fileserver)
 	fileserver.ServeHTTP(c.Writer, c.Request)
 	c.Abort()
 

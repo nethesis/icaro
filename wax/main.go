@@ -56,7 +56,7 @@ func DefineAPI(router *gin.Engine) {
 	}
 
 	// handle static captive portal files (aka wings)
-	router.StaticFS("/wax/captive/assets", gin.Dir(configuration.Config.CaptivePublicPath, true))
+	router.StaticFS("/wings/assets", gin.Dir(configuration.Config.CaptivePublicPath, true))
 	router.Use(middleware.CaptiveWings)
 
 	// handle missing endpoint
