@@ -43,6 +43,7 @@ import (
 func GoogleAuth(c *gin.Context) {
 	code := c.Param("code")
 	uuid := c.Query("uuid")
+	sessionId := c.Query("sessionid")
 
 	// retrieve access token
 	url := "https://www.googleapis.com/oauth2/v3/tokeninfo?" +
@@ -102,6 +103,9 @@ func GoogleAuth(c *gin.Context) {
 		}
 		methods.CreateUser(newUser)
 
+		// create user session check
+		utils.CreateUserSession(newUser.Id, sessionId)
+
 		// TODO: create marketing info with user infos and birthday
 	} else {
 		// update user info
@@ -118,6 +122,7 @@ func GoogleAuth(c *gin.Context) {
 func FacebookAuth(c *gin.Context) {
 	code := c.Param("code")
 	uuid := c.Query("uuid")
+	sessionId := c.Query("sessionid")
 
 	clientId := configuration.Config.AuthSocial.Facebook.ClientId
 	clientSecret := configuration.Config.AuthSocial.Facebook.ClientSecret
@@ -203,6 +208,9 @@ func FacebookAuth(c *gin.Context) {
 		}
 		methods.CreateUser(newUser)
 
+		// create user session check
+		utils.CreateUserSession(newUser.Id, sessionId)
+
 		// TODO: create marketing info with user likes and birthday
 	} else {
 		// update user info
@@ -220,6 +228,7 @@ func FacebookAuth(c *gin.Context) {
 func LinkedInAuth(c *gin.Context) {
 	code := c.Param("code")
 	uuid := c.Query("uuid")
+	sessionId := c.Query("sessionid")
 
 	clientId := configuration.Config.AuthSocial.LinkedIn.ClientId
 	clientSecret := configuration.Config.AuthSocial.LinkedIn.ClientSecret
@@ -296,6 +305,9 @@ func LinkedInAuth(c *gin.Context) {
 			ValidUntil:  time.Now().UTC().AddDate(0, 0, 30), // TODO: get days from hotspot account preferences
 		}
 		methods.CreateUser(newUser)
+
+		// create user session check
+		utils.CreateUserSession(newUser.Id, sessionId)
 
 		// TODO: create marketing info with user infos and birthday
 	} else {

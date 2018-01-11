@@ -37,6 +37,7 @@ import (
 func SMSAuth(c *gin.Context) {
 	number := c.Param("number")
 	uuid := c.Query("uuid")
+	sessionsId := c.Query("sessionid")
 
 	if number == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "number is required"})
@@ -65,6 +66,9 @@ func SMSAuth(c *gin.Context) {
 		}
 		methods.CreateUser(newUser)
 
+		// create user session check
+		utils.CreateUserSession(newUser.Id, sessionsId)
+
 		// send sms with code
 		utils.SendSMSCode(number, code)
 
@@ -87,6 +91,7 @@ func SMSAuth(c *gin.Context) {
 func EmailAuth(c *gin.Context) {
 	email := c.Param("email")
 	uuid := c.Query("uuid")
+	sessionsId := c.Query("sessionid")
 
 	if email == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "email is required"})
@@ -114,6 +119,9 @@ func EmailAuth(c *gin.Context) {
 			ValidUntil:  time.Now().UTC().AddDate(0, 0, 30), // TODO: get days from hotspot account preferences
 		}
 		methods.CreateUser(newUser)
+
+		// create user session check
+		utils.CreateUserSession(newUser.Id, sessionsId)
 
 		// send email with code
 		utils.SendEmailCode(email, code)

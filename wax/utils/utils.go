@@ -31,6 +31,7 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"time"
 
 	gomail "gopkg.in/gomail.v2"
 
@@ -38,6 +39,52 @@ import (
 	"sun-api/database"
 	"sun-api/models"
 )
+
+func CreateUserSession(userId int, sessionKey string) {
+	userSession := models.UserSession{
+		UserId:     userId,
+		SessionKey: sessionKey,
+		Created:    time.Now().UTC(),
+	}
+
+	// save user session
+	db := database.Database()
+	db.Save(&userSession)
+	db.Close()
+}
+
+func CheckUserSession(userId int, sessionKey string) bool {
+	var userSession models.UserSession
+
+	// check if user session exists
+	db := database.Database()
+	db.Where("user_id = ? AND session_key = ?", userId, sessionKey).First(&userSession)
+	db.Close()
+
+	if userSession.Id == 0 {
+		return false
+	}
+
+	return true
+}
+
+func DeleteUserSession(userId int, sessionKey string) bool {
+	var userSession models.UserSession
+
+	// check if user session exists
+	db := database.Database()
+	db.Where("user_id = ? AND session_key = ?", userId, sessionKey).First(&userSession)
+
+	if userSession.Id == 0 {
+		db.Close()
+		return false
+	}
+
+	// delete user session
+	db.Delete(&userSession)
+	db.Close()
+	return true
+}
 
 func GetSessionByKeyAndUnitId(key string, unitId int) models.Session {
 	var session models.Session

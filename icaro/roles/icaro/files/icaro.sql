@@ -102,6 +102,15 @@ CREATE TABLE `users` (
   PRIMARY KEY(`id`)
 );
 
+CREATE TABLE `user_sessions` (
+  `id` serial,
+  `user_id` bigint unsigned NOT NULL,
+  `session_key` varchar(200),
+  `created` datetime,
+  FOREIGN KEY (`user_id`) REFERENCES users(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  PRIMARY KEY(`id`)
+);
+
 CREATE TABLE `devices` (
   `id` serial,
   `hotspot_id` bigint unsigned NOT NULL,

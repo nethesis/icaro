@@ -36,7 +36,7 @@ func respondWithError(code int, message string, c *gin.Context) {
 	c.Abort()
 }
 
-func CheckAuth(digest string, uuid string, c *gin.Context) (bool, string) {
+func CheckAuth(digest string, uuid string, sessionId string, c *gin.Context) (bool, string) {
 	// check if digest exists
 	if digest == "" {
 		return false, "digest required"
@@ -44,6 +44,10 @@ func CheckAuth(digest string, uuid string, c *gin.Context) (bool, string) {
 	// check if uuid exists
 	if uuid == "" {
 		return false, "uuid required"
+	}
+	// check if sessionId exists
+	if sessionId == "" {
+		return false, "sessionid is required"
 	}
 
 	// check if uuid is valid
@@ -64,8 +68,9 @@ func CheckAuth(digest string, uuid string, c *gin.Context) (bool, string) {
 func WaxWall(c *gin.Context) {
 	digest := c.Query("digest")
 	uuid := c.Query("uuid")
+	sessionId := c.Query("sessionid")
 
-	check, message := CheckAuth(digest, uuid, c)
+	check, message := CheckAuth(digest, uuid, sessionId, c)
 
 	if !check {
 		respondWithError(http.StatusBadRequest, message, c)
@@ -80,8 +85,9 @@ func WaxWall(c *gin.Context) {
 func CaptiveWings(c *gin.Context) {
 	digest := c.Query("digest")
 	uuid := c.Query("uuid")
+	sessionId := c.Query("sessionid")
 
-	check, message := CheckAuth(digest, uuid, c)
+	check, message := CheckAuth(digest, uuid, sessionId, c)
 
 	if !check {
 		respondWithError(http.StatusBadRequest, message, c)
