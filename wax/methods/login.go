@@ -38,5 +38,16 @@ func AuthReject(c *gin.Context) {
 
 func Login(c *gin.Context, hotspotId string, user string, password string, challenge string) {
 	//TODO
+	/*
+	Social:
+	- check the user exists on db
+	- check valid until field isn't expired
+	- validate with session id
+
+	SMS/Email:
+	- check the user exists on db
+	- check user/password
+	- validate with session id
+	*/
 	AuthAccept(c)
 }
