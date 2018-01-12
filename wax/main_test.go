@@ -23,13 +23,13 @@
 package main
 
 import (
+	"crypto/md5"
+	"fmt"
+	"io"
 	"net/http"
 	"os"
-	"io"
-	"crypto/md5"
 	"strings"
 	"testing"
-	"fmt"
 
 	"github.com/appleboy/gofight"
 	"github.com/gin-gonic/gin"
@@ -38,7 +38,7 @@ import (
 	"sun-api/configuration"
 )
 
-func startupEnv(endpoint string, query string) (*gofight.RequestConfig, *gin.Engine,string) {
+func startupEnv(endpoint string, query string) (*gofight.RequestConfig, *gin.Engine, string) {
 	// set test mode to test suite
 	fight := gofight.New()
 	fight.SetDebug(false)
@@ -60,15 +60,15 @@ func destroyEnv() {
 }
 
 func calculateUri(endpoint string, query string) string {
-	md := calculateMd(query)
-	return endpoint+"?"+query+"&md="+md
+	md := calculateMd(endpoint + "?" + query)
+	return endpoint + "?" + query + "&md=" + md
 }
 
 func calculateMd(query string) string {
-	uri := "http://?"+query
-        h := md5.New()
-        io.WriteString(h, uri)
-        io.WriteString(h, "secret") // secret for AP HSTest
+	uri := "http://" + query
+	h := md5.New()
+	io.WriteString(h, uri)
+	io.WriteString(h, "secret") // secret for AP HSTest
 	check := strings.ToUpper(fmt.Sprintf("%x", h.Sum(nil)))
 
 	return check
@@ -85,7 +85,7 @@ func TestMain(m *testing.M) {
 /** Stage **/
 
 func TestNoStage(t *testing.T) {
-	f, r, uri := startupEnv("/wax/aaa","nasid=HSTest&ap=00-00-00-00-00-00")
+	f, r, uri := startupEnv("/wax/aaa", "nasid=HSTest&ap=00-00-00-00-00-00")
 
 	f.GET(uri).
 		Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
@@ -105,7 +105,7 @@ func TestRegisterStage(t *testing.T) {
 }
 
 func TestLoginStage(t *testing.T) {
-	f, r, uri := startupEnv("/wax/aaa","stage=login&nasid=HSTest&ap=00-00-00-00-00-00")
+	f, r, uri := startupEnv("/wax/aaa", "stage=login&nasid=HSTest&ap=00-00-00-00-00-00")
 
 	f.GET(uri).
 		Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
@@ -115,7 +115,7 @@ func TestLoginStage(t *testing.T) {
 }
 
 func TestInvalidStage(t *testing.T) {
-	f, r, uri := startupEnv("/wax/aaa","stage=BAD&nasid=HSTest&ap=00-00-00-00-00-00")
+	f, r, uri := startupEnv("/wax/aaa", "stage=BAD&nasid=HSTest&ap=00-00-00-00-00-00")
 
 	f.GET(uri).
 		Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
@@ -127,7 +127,7 @@ func TestInvalidStage(t *testing.T) {
 /** Counters **/
 
 func TestCountersInvalidHotspot(t *testing.T) {
-	f, r, uri := startupEnv("/wax/aaa","stage=counters&nasid=BAD&ap=00-00-00-00-00-00&status=start")
+	f, r, uri := startupEnv("/wax/aaa", "stage=counters&nasid=BAD&ap=00-00-00-00-00-00&status=start")
 
 	f.GET(uri).
 		Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
@@ -136,7 +136,7 @@ func TestCountersInvalidHotspot(t *testing.T) {
 }
 
 func TestCountersInvalidUnit(t *testing.T) {
-	f, r, uri := startupEnv("/wax/aaa","stage=counters&nasid=HSTest&ap=xx-00-00-00-00-00&status=start")
+	f, r, uri := startupEnv("/wax/aaa", "stage=counters&nasid=HSTest&ap=xx-00-00-00-00-00&status=start")
 
 	f.GET(uri).
 		Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
@@ -145,7 +145,7 @@ func TestCountersInvalidUnit(t *testing.T) {
 }
 
 func TestCountersStart(t *testing.T) {
-	f, r, uri := startupEnv("/wax/aaa","stage=counters&nasid=HSTest&ap=00-00-00-00-00-00&status=start&user=firstuser&mac=11-11-11-11-11&ip=10.1.0.3&sessionid=151318020800000001")
+	f, r, uri := startupEnv("/wax/aaa", "stage=counters&nasid=HSTest&ap=00-00-00-00-00-00&status=start&user=firstuser&mac=11-11-11-11-11&ip=10.1.0.3&sessionid=151318020800000001")
 
 	f.GET(uri).
 		Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
@@ -155,28 +155,27 @@ func TestCountersStart(t *testing.T) {
 }
 
 func TestCountersUpdate(t *testing.T) {
-        f, r, uri := startupEnv("/wax/aaa","stage=counters&nasid=HSTest&ap=00-00-00-00-00-00&status=update&user=firstuser&mac=11-11-11-11-11&ip=10.1.0.3&sessionid=151318020800000001&duration=222&bytes_down=80000&pkts_down=3000&bytes_up=189235&pkts_up=2071")
+	f, r, uri := startupEnv("/wax/aaa", "stage=counters&nasid=HSTest&ap=00-00-00-00-00-00&status=update&user=firstuser&mac=11-11-11-11-11&ip=10.1.0.3&sessionid=151318020800000001&duration=222&bytes_down=80000&pkts_down=3000&bytes_up=189235&pkts_up=2071")
 
-        f.GET(uri).
-                Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
-                        assert.Equal(t, "Ack: 1", f.Body.String())
-                        assert.Equal(t, http.StatusOK, f.Code)
-                })
+	f.GET(uri).
+		Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
+			assert.Equal(t, "Ack: 1", f.Body.String())
+			assert.Equal(t, http.StatusOK, f.Code)
+		})
 }
 
 func TestCountersStop(t *testing.T) {
-        f, r, uri := startupEnv("/wax/aaa","stage=counters&nasid=HSTest&ap=00-00-00-00-00-00&status=stop&user=firstuser&mac=11-11-11-11-11&ip=10.1.0.3&sessionid=151318020800000001&duration=16036&bytes_down=727516&pkts_down=1906&bytes_up=189235&pkts_up=2071")
+	f, r, uri := startupEnv("/wax/aaa", "stage=counters&nasid=HSTest&ap=00-00-00-00-00-00&status=stop&user=firstuser&mac=11-11-11-11-11&ip=10.1.0.3&sessionid=151318020800000001&duration=16036&bytes_down=727516&pkts_down=1906&bytes_up=189235&pkts_up=2071")
 
-        f.GET(uri).
-                Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
-                        assert.Equal(t, "Ack: 1", f.Body.String())
-                        assert.Equal(t, http.StatusOK, f.Code)
-                })
+	f.GET(uri).
+		Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
+			assert.Equal(t, "Ack: 1", f.Body.String())
+			assert.Equal(t, http.StatusOK, f.Code)
+		})
 }
 
-
 func TestCountersInvalid(t *testing.T) {
-	f, r, uri := startupEnv("/wax/aaa","stage=counters&nasid=HSTest&ap=00-00-00-00-00-00")
+	f, r, uri := startupEnv("/wax/aaa", "stage=counters&nasid=HSTest&ap=00-00-00-00-00-00")
 
 	f.GET(uri).
 		Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
