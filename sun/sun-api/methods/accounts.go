@@ -24,6 +24,7 @@ package methods
 
 import (
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -75,6 +76,10 @@ func UpdateAccount(c *gin.Context) {
 	creatorId := c.MustGet("token").(models.AccessToken).AccountId
 
 	accountId := c.Param("account_id")
+	accountIdInt, err := strconv.Atoi(accountId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Request fields malformed", "error": err.Error()})
+	}
 
 	var json models.Account
 	if err := c.BindJSON(&json); err != nil {
@@ -83,7 +88,13 @@ func UpdateAccount(c *gin.Context) {
 	}
 
 	db := database.Database()
-	db.Where("id = ? AND creator_id = ?", accountId, creatorId).First(&account)
+
+	// check if the user is me or not
+	if accountIdInt == creatorId {
+		db.Where("id = ?", accountId).First(&account)
+	} else {
+		db.Where("id = ? AND creator_id = ?", accountId, creatorId).First(&account)
+	}
 
 	if account.Id == 0 {
 		db.Close()
