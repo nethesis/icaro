@@ -107,11 +107,11 @@ func Dispatch(c *gin.Context) {
 
 	switch stage {
 	case "login":
-		hotspotId := c.Query("nasid")
+		unitMacAddress := c.Query("ap")
 		user := c.Query("user")
 		password := c.Query("chap_pass")
 		challenge := c.Query("chap_chal")
-		Login(c, hotspotId, user, password, challenge)
+		Login(c, unitMacAddress, user, password, challenge)
 
 	case "counters":
 		parameters := c.Request.URL.Query()

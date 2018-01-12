@@ -40,6 +40,15 @@ import (
 	"sun-api/models"
 )
 
+func GetHotspotPreferencesByKeys(hotspotId int, keys []string) []models.HotspotPreference{
+        var prefs []models.HotspotPreference
+        db := database.Database()
+        db.Where("`key` in (?) and hotspot_id = ?", keys, hotspotId).Find(&prefs)
+        db.Close()
+
+        return prefs
+}
+
 func CreateUserSession(userId int, sessionKey string) {
 	userSession := models.UserSession{
 		UserId:     userId,
