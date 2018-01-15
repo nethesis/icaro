@@ -1,64 +1,80 @@
 <!-- Topbar and vertical navigation content -->
 <div id="verticalNavLayout" class="layout-pf layout-pf-fixed faux-layout">
-	<pfng-vertical-navigation [items]="navigationItems" (onItemClickEvent)="onItemClicked($event)" (onNavigationEvent)="onNavigation($event)"
-	 [brandSrc]="logo" [brandAlt]="mainTitle" [showBadges]="true" [hiddenIcons]="false" [persistentSecondary]="false" [updateActiveItemsOnClick]="true"
-	 [pinnableMenus]="true">
-		<div>
-			<!-- Topbar menu with icons -->
-			<ul class="nav navbar-nav navbar-right navbar-iconic">
-				<li class="dropdown">
-					<!-- User info -->
-					<a class="dropdown-toggle nav-item-iconic" id="userDropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-						<span class="username">
-							{{account_type | uppercase}}
-						</span>
-						<span class="caret"></span>
-					</a>
-					<!-- User dropdown list -->
-					<ul class="dropdown-menu" aria-labelledby="userDropdownMenu">
-						<li>
-							<!-- Profile -->
-							<a class="profile" routerLink="/home/profile">
-								<i class="fa fa-user" aria-hidden="true"></i>
-								Profile
-							</a>
-							<hr>
-							<!-- Logout -->
-							<a class="logout" href="#" (click)="logOut()">
-								<i class="fa fa-sign-out" aria-hidden="true"></i>
-								Logout
-							</a>
-						</li>
-					</ul>
-				</li>
-				<li class="dropdown">
-					<!-- Languarges Dropdown -->
-					<a class="dropdown-toggle nav-item-iconic" id="languagesDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-						<span title="Change Languages" class="fa fa-globe"></span>
-					</a>
-					<!-- Select language (English, Italian) -->
-					<ul class="dropdown-menu" aria-labelledby="languagesDropdown">
-						<!-- English -->
-						<li>
-							<a href="#" class="english">
-								<i class="fa fa-check" aria-hidden="true"></i>
-								English
-							</a>
-						</li>
-						<!-- Italian -->
-						<li>
-							<a href="#" class="italian">
-								<i class="fa fa-check" aria-hidden="true"></i>
-								Italian
-							</a>
-						</li>
-					</ul>
-				</li>
-			</ul>
+	<!-- Topbar menu -->
+	<nav class="navbar navbar-pf-vertical">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" (click)="toggleOnClick = !toggleOnClick">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a href="/" class="navbar-brand">
+				<img class="navbar-brand-icon" [src]="logo" [alt]="mainTitle"/>
+			</a>
 		</div>
-	</pfng-vertical-navigation>
-	<div class="container-fluid container-cards-pf container-pf-nav-pf-vertical nav-pf-vertical-with-badges"
-	 id="contentContainer">
+		<!-- Topbar menu with icons -->
+		<ul class="nav navbar-nav navbar-right navbar-iconic">
+			<li class="dropdown">
+				<!-- User info -->
+				<a class="dropdown-toggle nav-item-iconic" id="userDropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+					<span class="email">
+						{{email}}
+					</span>
+					<br>
+					<span class="account-type">
+						{{account_type }}
+					</span>
+					<span class="caret"></span>
+				</a>
+				<!-- User dropdown list -->
+				<ul class="dropdown-menu" aria-labelledby="userDropdownMenu">
+					<li>
+						<!-- Profile -->
+						<a class="profile" routerLink="/home/profile">
+							<i class="fa fa-user" aria-hidden="true"></i>
+							Profile
+						</a>
+						<hr>
+						<!-- Logout -->
+						<a class="logout" href="#" (click)="logOut()">
+							<i class="fa fa-sign-out" aria-hidden="true"></i>
+							Logout
+						</a>
+					</li>
+				</ul>
+			</li>
+			<li class="dropdown">
+				<!-- Languarges Dropdown -->
+				<a class="dropdown-toggle nav-item-iconic" id="languagesDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+					<span title="Change Languages" class="fa fa-globe"></span>
+				</a>
+				<!-- Select language (English, Italian) -->
+				<ul class="dropdown-menu" aria-labelledby="languagesDropdown">
+					<!-- English -->
+					<li>
+						<a href="#" class="english">
+							<i class="fa fa-check" aria-hidden="true"></i>
+							English
+						</a>
+					</li>
+					<!-- Italian -->
+					<li>
+						<a href="#" class="italian">
+							<i class="fa fa-check" aria-hidden="true"></i>
+							Italian
+						</a>
+					</li>
+				</ul>
+			</li>
+		</ul>
+	</nav>
+
+	<!-- Sidebar menu content -->
+	<div class="nav-pf-vertical nav-pf-vertical-with-sub-menus nav-pf-persistent-secondary" [style.width] = "toggleSidebar()"></div>
+
+	<!-- Main content -->
+	<div class="container-fluid container-cards-pf container-pf-nav-pf-vertical" id="contentContainer" [style.marginLeft] = "toggleSidebar()">
 		<router-outlet></router-outlet>
 	</div>
 </div>
