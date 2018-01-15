@@ -26,7 +26,6 @@ import (
 	"crypto/md5"
 	"crypto/sha256"
 	"fmt"
-	"io"
 	"net/http"
 	"time"
 
@@ -61,7 +60,7 @@ func Login(c *gin.Context) {
 	} else {
 		// check password
 		h := md5.New()
-		io.WriteString(h, password)
+		h.Write([]byte(password))
 		digest := fmt.Sprintf("%x", h.Sum(nil))
 
 		if account.Password == digest {

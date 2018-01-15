@@ -23,52 +23,76 @@
 package methods
 
 import (
-	"net/http"
 	"bytes"
 	"fmt"
+	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 
 	"wax/utils"
 )
 
-
 func AuthAccept(c *gin.Context, prefs string) {
-	fmt.Println("Auth: 1\n" + prefs)
-	c.String(http.StatusOK, "Auth: 1\n" + prefs)
+	c.String(http.StatusOK, "Auth: 1\n"+prefs)
 }
 
-func AuthReject(c *gin.Context) {
-	c.String(http.StatusForbidden, "Auth: 0")
-}
+func AuthReject(c *gin.Context, description string) {
+	message := "Auth: 0"
 
-func Login(c *gin.Context, unitMacAddress string, user string, password string, challenge string) {
-	//TODO
-	/*
-		Social:
-		- check the user exists on db
-		- check valid until field isn't expired
-		- validate with session id
-
-		SMS/Email:
-		- check the user exists on db
-		- check user/password
-		- validate with session id
-
-		Example:
-		service=login&user=aaa&chap_chal=c49f036173dbc004943a5a0aaabdbb96&chap_pass=47bce5c74f589f4867dbd57e9ca9f808&chap_id=0&ap=00-0D-B9-41-7C-F8&mac=88-C9-D0-FD-52-93&ip=10.1.0.2&sessionid=151318020000000003&nasid=hs-test
-	*/
-	unit := utils.GetUnitByMacAddress(unitMacAddress)
-	if (unit.Id <= 0) {
-		AuthReject(c)
+	if len(description) > 0 {
+		message = message + " \nReply-Message: " + description
 	}
-	prefs := utils.GetHotspotPreferencesByKeys(unit.HotspotId, []string{"Idle-Timeout", "Acct-Session-Time", "Session-Timeout", "CoovaChilli-Bandwidth-Max-Up", "CoovaChilli-Bandwidth-Max-Down"})
+
+	c.String(http.StatusForbidden, message)
+	c.Abort()
+}
+
+func Login(c *gin.Context, unitMacAddress string, username string, chapPass string, chapChal string, sessionId string) {
+	// check if unit exists
+	unit := utils.GetUnitByMacAddress(unitMacAddress)
+	if unit.Id <= 0 {
+		AuthReject(c, "unit not found")
+		return
+	}
+
+	// check if user exists
+	user := utils.GetUserByUsername(username)
+	if user.Id <= 0 {
+		AuthReject(c, "user not found")
+		return
+	}
+
+	// check if user-sessions exists
+	valid := utils.CheckUserSession(user.Id, sessionId)
+	if !valid {
+		AuthReject(c, "user-session not found")
+		return
+	}
+
+	// check if user credentials are valid
+	if chapPass != utils.CalcUserDigest(user, chapChal) {
+		AuthReject(c, "password mismatch")
+		return
+	}
+
+	// check if user account is not expired
+	if user.ValidUntil.Before(time.Now().UTC()) {
+		AuthReject(c, "user account is expired")
+		return
+	}
+
+	// extract preferences
+	prefs := utils.GetHotspotPreferencesByKeys(
+		unit.HotspotId,
+		[]string{"Idle-Timeout", "Acct-Session-Time", "Session-Timeout", "CoovaChilli-Bandwidth-Max-Up", "CoovaChilli-Bandwidth-Max-Down"},
+	)
 	var outPrefs bytes.Buffer
 	for _, pref := range prefs {
-		outPrefs.WriteString(fmt.Sprintf("%s:%s\n",pref.Key, pref.Value))
+		outPrefs.WriteString(fmt.Sprintf("%s:%s\n", pref.Key, pref.Value))
 	}
 
+	// response to dedalo
 	AuthAccept(c, outPrefs.String())
-
 
 }

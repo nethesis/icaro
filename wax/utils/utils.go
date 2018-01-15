@@ -40,13 +40,13 @@ import (
 	"sun-api/models"
 )
 
-func GetHotspotPreferencesByKeys(hotspotId int, keys []string) []models.HotspotPreference{
-        var prefs []models.HotspotPreference
-        db := database.Database()
-        db.Where("`key` in (?) and hotspot_id = ?", keys, hotspotId).Find(&prefs)
-        db.Close()
+func GetHotspotPreferencesByKeys(hotspotId int, keys []string) []models.HotspotPreference {
+	var prefs []models.HotspotPreference
+	db := database.Database()
+	db.Where("`key` in (?) and hotspot_id = ?", keys, hotspotId).Find(&prefs)
+	db.Close()
 
-        return prefs
+	return prefs
 }
 
 func CreateUserSession(userId int, sessionKey string) {
@@ -158,9 +158,17 @@ func GetVoucherByCode(code string, hotspotId int) models.HotspotVoucher {
 	return hotspotVoucher
 }
 
-func CalcDigest(unit models.Unit) string {
+func CalcUnitDigest(unit models.Unit) string {
 	h := md5.New()
 	io.WriteString(h, unit.Secret+unit.Uuid)
+	digest := fmt.Sprintf("%x", h.Sum(nil))
+
+	return digest
+}
+
+func CalcUserDigest(user models.User, challenge string) string {
+	h := md5.New()
+	io.WriteString(h, "00"+user.Password+challenge)
 	digest := fmt.Sprintf("%x", h.Sum(nil))
 
 	return digest

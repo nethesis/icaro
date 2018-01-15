@@ -23,12 +23,7 @@
 package methods
 
 import (
-	"crypto/md5"
-	"fmt"
-	"io"
 	"net/http"
-	"regexp"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
@@ -61,29 +56,10 @@ func isHotspot(hotspotName string) bool {
 	return (hotspot.Id != 0)
 }
 
-func isValidSecret(c *gin.Context, hotspotUnitMac string, md string) bool {
-	var unit models.Unit
-	var stripper = regexp.MustCompile(`&md=[^&=]+$`)
-	var strippedQuery = stripper.ReplaceAllString(c.Request.URL.RawQuery, "")
-	var uri = fmt.Sprintf("%s%s?%s", "http://", c.Request.Host, strippedQuery)
-
-	db := database.Database()
-	db.Where("mac_address = ?", hotspotUnitMac).First(&unit)
-	db.Close()
-
-	h := md5.New()
-	io.WriteString(h, uri)
-	io.WriteString(h, unit.Secret)
-	var check = strings.ToUpper(fmt.Sprintf("%x", h.Sum(nil)))
-
-	return (check == md)
-}
-
 func Dispatch(c *gin.Context) {
 	stage := c.Query("stage")
 	hotspotName := c.Query("nasid")
 	hotspotUnitMac := c.Query("ap")
-	md := c.Query("md")
 
 	if stage == "" {
 		c.String(http.StatusBadRequest, "No stage provided")
@@ -100,18 +76,14 @@ func Dispatch(c *gin.Context) {
 		return
 	}
 
-	if !isValidSecret(c, hotspotUnitMac, md) {
-		Reply(c, http.StatusForbidden, "Invalid unit secret")
-		return
-	}
-
 	switch stage {
 	case "login":
 		unitMacAddress := c.Query("ap")
 		user := c.Query("user")
-		password := c.Query("chap_pass")
-		challenge := c.Query("chap_chal")
-		Login(c, unitMacAddress, user, password, challenge)
+		chap_pass := c.Query("chap_pass")
+		chap_chal := c.Query("chap_chal")
+		sessionId := c.Query("sessionid")
+		Login(c, unitMacAddress, user, chap_pass, chap_chal, sessionId)
 
 	case "counters":
 		parameters := c.Request.URL.Query()

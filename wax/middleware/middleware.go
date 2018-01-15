@@ -57,7 +57,7 @@ func CheckAuth(digest string, uuid string, sessionId string, c *gin.Context) (bo
 	}
 
 	// check if digest is valid
-	calcDigest := utils.CalcDigest(unit)
+	calcDigest := utils.CalcUnitDigest(unit)
 	if digest != calcDigest {
 		return false, "digest is invalid"
 	}
