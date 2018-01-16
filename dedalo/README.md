@@ -16,6 +16,17 @@ HS_SECRET="your-secret"
 HS_ALLOW_ORIGINS="your-allow-origin-for-cors"
 ```
 
+### Example
+```ini
+HS_INTERFACE="eth2"
+HS_HOSTNAME="myicaro"
+HS_ID="hotel-king"
+HS_UNIT_NAME="unit-king"
+HS_UUID="1610fe6d-8578-4247-b4a2-c40dced94ber"
+HS_SECRET="My__Secret99"
+HS_ALLOW_ORIGINS="*"
+```
+
 ## Helper
 `Usage: ./dedalo { query | config | start | stop | restart | status | info }`
 - **query**: wrapper to chilli_query
