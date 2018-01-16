@@ -2,7 +2,6 @@ import { NgForm } from '@angular/forms';
 import { ProfileService } from './../services/profile.service';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { CardConfig, InfoStatusCardConfig } from 'patternfly-ng';
-import { Account, AccountFull } from '../interfaces/account';
 import { error } from 'util';
 import { Router, ActivatedRoute } from '@angular/router';
 
