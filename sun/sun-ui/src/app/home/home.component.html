@@ -53,15 +53,15 @@
 				<ul class="dropdown-menu" aria-labelledby="languagesDropdown">
 					<!-- English -->
 					<li>
-						<a href="#" class="english">
-							<i class="fa fa-check" aria-hidden="true"></i>
+						<a (click)=" getLanguage('eng')" class="english">
+							<i [ngClass]="{'i18n':currentLanguage!='eng'}"  class="fa fa-check" aria-hidden="true"></i>
 							English
 						</a>
 					</li>
 					<!-- Italian -->
 					<li>
-						<a href="#" class="italian">
-							<i class="fa fa-check" aria-hidden="true"></i>
+						<a (click)=" getLanguage('it')" class="italian">
+							<i [ngClass]="{'i18n':currentLanguage!='it'}" class="fa fa-check" aria-hidden="true"></i>
 							Italian
 						</a>
 					</li>

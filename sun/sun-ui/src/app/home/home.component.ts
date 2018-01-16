@@ -15,6 +15,7 @@ export class HomeComponent implements OnInit {
   mainTitle = apConfig.MAIN_TITLE;
   logo = apConfig.LOGO_URL;
   public account_type = localStorage.getItem('account_type');
+  private currentLanguage = localStorage.getItem('language');
   email: string;
   constructor(
     private authenticationService: AuthenticationService,
@@ -23,7 +24,12 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.profileService.getAccount(5).subscribe(
+    this.getAccount(5);
+    this.getFirstLanguage(this.currentLanguage);
+  }
+
+  private getAccount(id: number) {
+    this.profileService.getAccount(id).subscribe(
       data => {
         for (let key in data) {
           if (key === 'email') {
@@ -56,5 +62,25 @@ export class HomeComponent implements OnInit {
     } else {
       return '75' + 'px';
     }
+  }
+
+  getLanguage(flag: string) {
+    if (flag === 'eng') {
+      localStorage.setItem('language', 'eng');
+    } else if (flag === 'it') {
+      localStorage.setItem('language', 'it');
+    }
+    this.currentLanguage = localStorage.getItem('language');
+  }
+
+  getFirstLanguage(lang: string) {
+    if (lang === 'eng') {
+      localStorage.setItem('language', 'eng');
+    } else if (lang === 'it') {
+      localStorage.setItem('language', 'it');
+    } else {
+      localStorage.setItem('language', 'eng');
+    }
+    this.currentLanguage = localStorage.getItem('language');
   }
 }
