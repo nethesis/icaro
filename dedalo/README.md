@@ -18,13 +18,13 @@ HS_ALLOW_ORIGINS="your-allow-origin-for-cors"
 
 ## Helper
 `Usage: ./dedalo { query | config | start | stop | restart | status | info }`
-- query: wrapper to chilli_query
-- config: generate `chilli.conf` based on your `config` file
-- start: equal to `systemctl start dedalo`
-- stop: equal to `systemctl stop dedalo`
-- restart: equal to `systemctl restart dedalo`
-- status: equal to `systemctl status dedalo`
-- info: show the hotspot unit info
+- **query**: wrapper to chilli_query
+- **config**: generate `chilli.conf` based on your `config` file
+- **start**: equal to `systemctl start dedalo`
+- **stop**: equal to `systemctl stop dedalo`
+- **restart**: equal to `systemctl restart dedalo`
+- **status**: equal to `systemctl status dedalo`
+- **info**: show the hotspot unit info
   ```
   Dedalo: Network Access Controller
     HotSpot:    hs-test
