@@ -23,6 +23,8 @@
 package methods
 
 import (
+	"crypto/md5"
+	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -44,13 +46,17 @@ func CreateAccount(c *gin.Context) {
 		return
 	}
 
+	h := md5.New()
+	h.Write([]byte(json.Password))
+	passwordHash := fmt.Sprintf("%x", h.Sum(nil))
+
 	account := models.Account{
 		CreatorId: creatorId,
 		Uuid:      json.Uuid,
 		Type:      json.Type,
 		Name:      json.Name,
 		Username:  json.Username,
-		Password:  json.Password,
+		Password:  passwordHash,
 		Email:     json.Email,
 		Created:   time.Now().UTC(),
 	}
@@ -102,9 +108,13 @@ func UpdateAccount(c *gin.Context) {
 		return
 	}
 
+	h := md5.New()
+	h.Write([]byte(json.Password))
+	passwordHash := fmt.Sprintf("%x", h.Sum(nil))
+
 	account.Name = json.Name
 	account.Username = json.Username
-	account.Password = json.Password
+	account.Password = passwordHash
 	account.Email = json.Email
 
 	db.Save(&account)

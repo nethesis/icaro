@@ -82,7 +82,13 @@ func Login(c *gin.Context) {
 			db.Save(&accessToken)
 			db.Close()
 
-			c.JSON(http.StatusCreated, gin.H{"account_type": account.Type, "status": "success", "token": token, "expires": expires.String()})
+			c.JSON(http.StatusCreated, gin.H{
+				"account_type": account.Type,
+				"status":       "success",
+				"token":        token,
+				"expires":      expires.String(),
+				"id":           account.Id,
+			})
 
 		} else {
 			db.Close()

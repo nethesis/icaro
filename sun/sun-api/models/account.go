@@ -31,7 +31,7 @@ type Account struct {
 	Type      string    `db:"type" json:"type"`
 	Name      string    `db:"name" json:"name"`
 	Username  string    `db:"username" json:"username"`
-	Password  string    `db:"password" json:"password"`
+	Password  string    `db:"password" json:"-"`
 	Email     string    `db:"email" json:"email"`
 	Created   time.Time `db:"created" json:"created"`
 }
@@ -42,6 +42,6 @@ type AccountJSON struct {
 	Type      string `json:"type"`
 	Name      string `json:"name"`
 	Username  string `json:"username"`
-	Password  string `json:"password"`
+	Password  string `json:"-"`
 	Email     string `json:"email"`
 }

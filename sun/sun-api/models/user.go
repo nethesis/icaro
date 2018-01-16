@@ -29,7 +29,7 @@ type User struct {
 	HotspotId   int       `db:"hotspot_id" json:"hotspot_id"`
 	Name        string    `db:"name" json:"name"`
 	Username    string    `db:"username" json:"username"`
-	Password    string    `db:"password" json:"password"`
+	Password    string    `db:"password" json:"-"`
 	Email       string    `db:"email" json:"email"`
 	AccountType string    `db:"account_type" json:"account_type"`
 	KbpsDown    int       `db:"kbps_down" json:"kbps_down"`
