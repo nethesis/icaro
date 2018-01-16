@@ -16,16 +16,16 @@ case "$OPT" in
         fi
     ;;
     start)
-            systemctl start dedalo
+        systemctl start dedalo
     ;;
     restart)
-            systemctl restart dedalo
+        systemctl restart dedalo
     ;;
     stop)
-            systemctl stop dedalo
+        systemctl stop dedalo
     ;;
     status)
-            systemctl status dedalo
+        systemctl status dedalo
     ;;
     info)
         echo "Dedalo: Network Access Controller"
