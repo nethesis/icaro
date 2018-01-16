@@ -28,12 +28,12 @@ case "$OPT" in
             systemctl status dedalo
     ;;
     info)
-        echo "Dedalo: network access controller"
+        echo "Dedalo: Network Access Controller"
         echo -e "  HotSpot:\t$HS_ID"
+        echo -e "  Unit name:\t$HS_UNIT_NAME"
         echo -e "  UUID:\t\t$HS_UUID"
         echo -e "  Secret:\t$HS_SECRET"
-        echo -e "  Name:\t\t$HS_UNIT_NAME"
-        echo -e "  MAC:\t\t$(cat /sys/class/net/$HS_INTERFACE/address)"
+        echo -e "  MAC:\t\t$(cat /sys/class/net/$HS_INTERFACE/address | tr ':' '-' | awk '{print toupper($0)}')"
     ;;
     *)
         echo "Usage: $0 { query | config | start | stop | restart | status | info }"
