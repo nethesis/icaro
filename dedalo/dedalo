@@ -1,0 +1,40 @@
+#!/bin/sh
+OPT=$1
+shift
+source template/config
+
+case "$OPT" in
+    query)
+        chilli_query -s /var/run/dedalo/chilli.sock "$@"
+    ;;
+    config)
+        template/template template/chilli.conf.tpl
+        if [ $? -eq 0 ]; then
+            echo "Configuration generated successfully"
+        else
+            echo "Error on configuration generating"
+        fi
+    ;;
+    start)
+            systemctl start dedalo
+    ;;
+    restart)
+            systemctl restart dedalo
+    ;;
+    stop)
+            systemctl stop dedalo
+    ;;
+    status)
+            systemctl status dedalo
+    ;;
+    info)
+        echo "Dedalo: network access controller"
+        echo -e "  HotSpot:\t$HS_ID"
+        echo -e "  UUID:\t\t$HS_UUID"
+        echo -e "  Secret:\t$HS_SECRET"
+        echo -e "  Name:\t\t$HS_UNIT_NAME"
+        echo -e "  MAC:\t\t$(cat /sys/class/net/$HS_INTERFACE/address)"
+    ;;
+    *)
+        echo "Usage: $0 { query | config | start | stop | restart | status | info }"
+esac

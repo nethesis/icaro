@@ -1,0 +1,7 @@
+#!/bin/sh
+source template/config
+HS_DIGEST=$(echo -n "$HS_SECRET$HS_UUID" | md5sum | awk '{print $1}')
+
+eval "cat <<EOF
+$(cat "$1")
+EOF" > chilli.conf
