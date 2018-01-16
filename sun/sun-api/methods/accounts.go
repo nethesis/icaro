@@ -147,10 +147,22 @@ func GetAccounts(c *gin.Context) {
 func GetAccount(c *gin.Context) {
 	var account models.Account
 	creatorId := c.MustGet("token").(models.AccessToken).AccountId
+
 	accountId := c.Param("account_id")
+	accountIdInt, err := strconv.Atoi(accountId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Request fields malformed", "error": err.Error()})
+	}
 
 	db := database.Database()
-	db.Where("id = ? AND creator_id = ?", accountId, creatorId).First(&account)
+
+	// check if the user is me or not
+	if accountIdInt == creatorId {
+		db.Where("id = ?", accountId).First(&account)
+	} else {
+		db.Where("id = ? AND creator_id = ?", accountId, creatorId).First(&account)
+	}
+
 	db.Close()
 
 	if account.Id == 0 {
@@ -176,6 +188,10 @@ func DeleteAccount(c *gin.Context) {
 	}
 
 	db.Delete(&account)
+
+	// delete also all accounts created from deleted account
+	db.Where("creator_id = ?", accountId).Delete(models.Account{})
+
 	db.Close()
 
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
