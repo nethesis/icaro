@@ -1,6 +1,6 @@
 # Dedalo
 
-## Daemons
+## Daemon
 - dedalo (ad-hoc instance of chilli with dedalo configuration)
 - check dedalo status: `systemctl status dedalo`
 
