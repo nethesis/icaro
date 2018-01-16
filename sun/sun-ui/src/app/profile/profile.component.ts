@@ -12,6 +12,7 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
+  private id_profile = Number(localStorage.getItem('id'));
   config: CardConfig;
   model: any = {};
   accountArray: any[] = [];
@@ -34,19 +35,11 @@ export class ProfileComponent implements OnInit {
       noPadding: false,
       topBorder: true
     } as CardConfig;
-    this.getAccount();
+    this.getAccount(this.id_profile);
     this.getPreferences();
   }
 
   private postAccount() {
-    this.fullAccount.email = 'test@hotmail.com';
-    this.fullAccount.name = 'Test';
-    this.fullAccount.username = 'Test';
-    this.fullAccount.uuid = '29';
-    this.fullAccount.hotspotid = '29';
-    this.fullAccount.password = 'password';
-    this.fullAccount.type = 'type1';
-
     this.profileService.postAccount(this.fullAccount).subscribe(
       data => {
         console.log(data);
@@ -57,8 +50,8 @@ export class ProfileComponent implements OnInit {
     );
   }
 
-  private getAccount() {
-    this.profileService.getAccount(5).subscribe(
+  private getAccount(id: number) {
+    this.profileService.getAccount(id).subscribe(
       data => {
         this.accountArray = data;
         console.log(data);
