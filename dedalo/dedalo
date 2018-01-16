@@ -1,14 +1,14 @@
 #!/bin/sh
 OPT=$1
 shift
-source template/config
+source /opt/icaro/dedalo/config
 
 case "$OPT" in
     query)
-        chilli_query -s /var/run/dedalo/chilli.sock "$@"
+        /usr/sbin/chilli_query -s /var/run/dedalo/chilli.sock "$@"
     ;;
     config)
-        template/template template/chilli.conf.tpl
+        /opt/icaro/dedalo/template/engine /opt/icaro/dedalo/template/chilli.conf.tpl
         if [ $? -eq 0 ]; then
             echo "Configuration generated successfully"
         else
