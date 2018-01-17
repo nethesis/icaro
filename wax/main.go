@@ -53,6 +53,9 @@ func DefineAPI(router *gin.Engine) {
 
 		// handle email login
 		wax.GET("/register/email/:email", methods.EmailAuth)
+
+		// handle wings preferences
+		wax.GET("/preferences", methods.GetWingsPrefs)
 	}
 
 	// handle static captive portal files (aka wings)

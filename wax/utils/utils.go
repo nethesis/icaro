@@ -40,6 +40,15 @@ import (
 	"sun-api/models"
 )
 
+func GetHotspotPreferences(hotspotId int) []models.HotspotPreference {
+	var prefs []models.HotspotPreference
+	db := database.Database()
+	db.Where("hotspot_id = ?", hotspotId).Find(&prefs)
+	db.Close()
+
+	return prefs
+}
+
 func GetHotspotPreferencesByKeys(hotspotId int, keys []string) []models.HotspotPreference {
 	var prefs []models.HotspotPreference
 	db := database.Database()
@@ -138,6 +147,15 @@ func GetUnitByUuid(uuid string) models.Unit {
 	db.Close()
 
 	return unit
+}
+
+func GetHotspotById(id int) models.Hotspot {
+	var hotspot models.Hotspot
+	db := database.Database()
+	db.Where("id = ?", id).First(&hotspot)
+	db.Close()
+
+	return hotspot
 }
 
 func GetUserByUsername(username string) models.User {

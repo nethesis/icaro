@@ -76,13 +76,13 @@ func main() {
 
 		preferences := api.Group("/preferences")
 		{
-			resellers_pref := preferences.Group("/accounts")
-			resellers_pref.GET("", methods.GetAccountPrefs)
-			resellers_pref.POST("", methods.CreateAccountPrefs)
+			resellersPref := preferences.Group("/accounts")
+			resellersPref.GET("", methods.GetAccountPrefs)
+			resellersPref.POST("", methods.CreateAccountPrefs)
 
-			hotspots_pref := preferences.Group("/hotspots")
-			hotspots_pref.GET("/:hotspot_id", methods.GetHotspotPrefs)
-			hotspots_pref.POST("", methods.CreateHotspotPrefs)
+			hotspotsPref := preferences.Group("/hotspots")
+			hotspotsPref.GET("/:hotspot_id", methods.GetHotspotPrefs)
+			hotspotsPref.POST("", methods.CreateHotspotPrefs)
 		}
 
 		sessions := api.Group("/sessions")

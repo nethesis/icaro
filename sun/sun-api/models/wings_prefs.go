@@ -22,9 +22,8 @@
 
 package models
 
-type HotspotPreference struct {
-	Id        int    `db:"id" json:"-"`
-	HotspotId int    `db:"hotspot_id" json:"-"`
-	Key       string `db:"key" json:"key"`
-	Value     string `db:"value" json:"value"`
+type WingsPrefs struct {
+	HotspotId   int                 `json:"hotspot_id"`
+	HotspotName string              `json:"hotspot_name"`
+	Prefs       []HotspotPreference `json:"prefs"`
 }

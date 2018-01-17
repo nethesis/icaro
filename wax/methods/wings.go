@@ -20,11 +20,34 @@
  * author: Edoardo Spadoni <edoardo.spadoni@nethesis.it>
  */
 
-package models
+package methods
 
-type HotspotPreference struct {
-	Id        int    `db:"id" json:"-"`
-	HotspotId int    `db:"hotspot_id" json:"-"`
-	Key       string `db:"key" json:"key"`
-	Value     string `db:"value" json:"value"`
+import (
+	"net/http"
+	"wax/utils"
+
+	"github.com/gin-gonic/gin"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
+
+	"sun-api/models"
+)
+
+func GetWingsPrefs(c *gin.Context) {
+	uuid := c.Query("uuid")
+
+	// extract unit info
+	unit := utils.GetUnitByUuid(uuid)
+
+	// extract hotspot info
+	hotspot := utils.GetHotspotById(unit.HotspotId)
+
+	// get hotspot preferences
+	prefs := utils.GetHotspotPreferences(hotspot.Id)
+
+	var wingsPrefs models.WingsPrefs
+	wingsPrefs.HotspotId = hotspot.Id
+	wingsPrefs.HotspotName = hotspot.Name
+	wingsPrefs.Prefs = prefs
+
+	c.JSON(http.StatusOK, wingsPrefs)
 }
