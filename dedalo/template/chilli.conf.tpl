@@ -1,4 +1,4 @@
-cmdsocket       /var/run/dedalo/chilli.sock
+cmdsocket       /run/dedalo/chilli.sock
 unixipc         /run/dedalo/chilli.ipc
 pidfile         /run/dedalo/chilli.pid
 

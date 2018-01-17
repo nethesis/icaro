@@ -5,7 +5,7 @@ source /opt/icaro/dedalo/config
 
 case "$OPT" in
     query)
-        /usr/sbin/chilli_query -s /var/run/dedalo/chilli.sock "$@"
+        /usr/sbin/chilli_query -s /run/dedalo/chilli.sock "$@"
     ;;
     config)
         /opt/icaro/dedalo/template/engine /opt/icaro/dedalo/template/chilli.conf.tpl
