@@ -28,8 +28,8 @@ export class ChangePasswordModalComponent implements OnInit {
      this.getAccount(this.id_profile);
   }
 
-  private getPasswordLength(value: string = '') {
-    this.passwordLength = value.length;
+  private getPasswordLength(value: string) {
+    if (value !== undefined) this.passwordLength = value.length;
   }
 
   private changePassword(changepasswordform: NgForm) {
