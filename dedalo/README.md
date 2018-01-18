@@ -1,5 +1,7 @@
 # Dedalo
 
+Network Access Controller, runs on the firewall and intercepts all guest connections, based on CoovaChilli
+
 ## Daemon
 - dedalo (ad-hoc instance of chilli with dedalo configuration)
 - check dedalo status: `systemctl status dedalo`
