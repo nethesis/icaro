@@ -1,0 +1,24 @@
+{
+  "HOME": {
+    "Dashboard": "Cruscotto",
+    "Accounts": "Conti",
+    "Sessions": "Sessioni",
+    "English" : "English",
+    "Italian" : "Italian",
+    "Profile":"Profile",
+    "Logout" : "Logout"
+  },
+  "PROFILE": {
+    "Information": "Information",
+    "Name": "Name",
+    "Uuid": "UUID",
+    "Email": "Email",
+    "Profile": "Profile",
+    "ChangePassword": "Change password",
+    "Preferences": "Preferences",
+    "NoData": "No data found!",
+    "OldPassword":"Current Password",
+    "NewPassword":"New Password",
+    "ConfirmPassword":"Confirm New Password"
+  }
+}

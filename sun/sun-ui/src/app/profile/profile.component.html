@@ -8,20 +8,20 @@
 					<div class="card-pf-heading">
 						<h2 class="card-pf-title">
 							<span class="pficon pficon-user status-info"></span>
-							&nbsp;Information
+							&nbsp;{{ 'PROFILE.Profile' | translate }}
 						</h2>
 					</div>
 					<!-- Username info -->
 					<div class="card-pf-body">
 						<dl>
-							<dt>Name</dt>
+							<dt>{{ 'PROFILE.Name' | translate }}</dt>
 							<dd>{{accountArray.name}}</dd>
-							<dt>UUID</dt>
+							<dt>{{ 'PROFILE.Uuid' | translate }}</dt>
 							<dd> {{accountArray.uuid}}</dd>
 							<hr>
-							<dt>Email</dt>
+							<dt>{{ 'PROFILE.Email' | translate }}</dt>
 							<dd> {{accountArray.email}} </dd>
-							<dt>Profile</dt>
+							<dt>{{ 'PROFILE.Profile' | translate }}</dt>
 							<dd> {{accountArray.type}} </dd>
 						</dl>
 					</div>
@@ -29,7 +29,7 @@
 					<div class="card-pf-footer">
 						<div class="dropdown card-pf-time-frame-filter">
 							<button class="btn btn-default" data-toggle="modal" data-target="#change-password" class="btn btn-default">
-								Change password
+								{{ 'PROFILE.ChangePassword' | translate }}
 							</button>
 						</div>
 					</div>
@@ -42,7 +42,7 @@
 					<div class="card-pf-heading">
 						<h2 class="card-pf-title">
 							<span class="fa fa-wrench status-info"></span>
-							&nbsp;Preferences
+							&nbsp;{{ 'PROFILE.Preferences' | translate }}
 						</h2>
 					</div>
 					<!-- Preferences info -->
@@ -50,7 +50,7 @@
 						<dl class="no-data">
 							<div *ngIf="!preferenceArray?.length > 0" class="alert alert-warning alert-dismissable">
 								<span class="pficon pficon-warning-triangle-o"></span>
-								<strong>No data found!</strong>
+								<strong>{{ 'PROFILE.NoData' | translate }}</strong>
 							</div>
 						</dl>
 					</div>

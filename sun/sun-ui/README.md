@@ -4,8 +4,8 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 ## Must do commands
 To start the sun-ui part you must follow these steps (run these commands inside sun-ui directory):
-	1- Run npm install
-	2- Run npm install -g @angular/cli
+1. Run npm install
+2. Run npm install -g @angular/cli
 
 ## Development server
 
@@ -30,3 +30,38 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+## Steps to implement the translation of a language
+
+1-Add the initials of the language in the file AppComponent.ts ,
+`this.translateService.addLangs(['en', 'it','initialsofthelanguage',..]);`
+
+2-Add a file initialsofthelanguage.json in the directory /assets/i18n on project.
+
+3-Edit the value of the language based in you translation in your json file you just added.
+
+````bash{
+  "my_english_string1": "Text to translate",
+  ....
+}
+````
+
+4-Adapt getLanguage and getFirstLanguage functions in base of language you added.
+
+```bash
+else if (flag === 'initialsofthelanguage') {
+      localStorage.setItem('language', 'initialsofthelanguage');
+    }
+```
+
+
+5-Add in languages dropdown menu in home.html, your langage following on existing structure.
+
+```bash
+<li>
+						<a (click)=" getLanguage('initialsofthelanguage')" class="english">
+							<i [ngClass]="{'i18n':currentLanguage!='initialsofthelanguage'}"  class="fa fa-check" aria-hidden="true"></i>
+							{{ 'HOME.English' | translate }}
+						</a>
+</li>
+```

@@ -3,7 +3,7 @@
 	<!-- Topbar menu -->
 	<nav class="navbar navbar-pf-vertical">
 		<div class="navbar-header">
-			<button type="button" class="navbar-toggle" (click)="toggleOnClick = !toggleOnClick">
+			<button type="button" class="navbar-toggle"(click)="toggleOnClick = !toggleOnClick"  >
 				<span class="sr-only">Toggle navigation</span>
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
@@ -33,13 +33,13 @@
 						<!-- Profile -->
 						<a class="profile" routerLink="/home/profile">
 							<i class="fa fa-user" aria-hidden="true"></i>
-							Profile
+							{{ 'HOME.Profile' | translate }}
 						</a>
 						<hr>
 						<!-- Logout -->
 						<a class="logout" href="#" (click)="logOut()">
 							<i class="fa fa-sign-out" aria-hidden="true"></i>
-							Logout
+							{{ 'HOME.Logout' | translate }}
 						</a>
 					</li>
 				</ul>
@@ -53,16 +53,16 @@
 				<ul class="dropdown-menu" aria-labelledby="languagesDropdown">
 					<!-- English -->
 					<li>
-						<a (click)=" getLanguage('eng')" class="english">
-							<i [ngClass]="{'i18n':currentLanguage!='eng'}"  class="fa fa-check" aria-hidden="true"></i>
-							English
+						<a (click)=" getLanguage('en')" class="english">
+							<i [ngClass]="{'i18n':currentLanguage!='en'}"  class="fa fa-check" aria-hidden="true"></i>
+							{{ 'HOME.English' | translate }}
 						</a>
 					</li>
 					<!-- Italian -->
 					<li>
 						<a (click)=" getLanguage('it')" class="italian">
 							<i [ngClass]="{'i18n':currentLanguage!='it'}" class="fa fa-check" aria-hidden="true"></i>
-							Italian
+							{{ 'HOME.Italian' | translate }}
 						</a>
 					</li>
 				</ul>
@@ -70,11 +70,11 @@
 		</ul>
 	</nav>
 
-	<!-- Sidebar menu content -->
+	<!-- Sidebar content -->
 	<div class="nav-pf-vertical nav-pf-vertical-with-sub-menus nav-pf-persistent-secondary" [style.width] = "toggleSidebar()"></div>
 
 	<!-- Main content -->
-	<div class="container-fluid container-cards-pf container-pf-nav-pf-vertical" id="contentContainer" [style.marginLeft] = "toggleSidebar()">
+	<div class="container-fluid container-cards-pf container-pf-nav-pf-vertical" id="contentContainer" [ngStyle]="{'margin-left': toggleSidebar()}">
 		<router-outlet></router-outlet>
 	</div>
 </div>
