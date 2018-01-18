@@ -42,6 +42,6 @@ type AccountJSON struct {
 	Type      string `json:"type"`
 	Name      string `json:"name"`
 	Username  string `json:"username"`
-	Password  string `json:"-"`
+	Password  string `json:"password"`
 	Email     string `json:"email"`
 }

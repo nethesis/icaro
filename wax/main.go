@@ -26,6 +26,7 @@ package main
 import (
 	"net/http"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 
 	"sun-api/configuration"
@@ -34,6 +35,11 @@ import (
 )
 
 func DefineAPI(router *gin.Engine) {
+	// cors
+	corsConf := cors.DefaultConfig()
+	corsConf.AllowAllOrigins = true
+	router.Use(cors.New(corsConf))
+
 	wax := router.Group("/wax")
 
 	wax.GET("/aaa", methods.Dispatch)

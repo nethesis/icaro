@@ -87,7 +87,7 @@ func UpdateAccount(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "Request fields malformed", "error": err.Error()})
 	}
 
-	var json models.Account
+	var json models.AccountJSON
 	if err := c.BindJSON(&json); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "Request fields malformed", "error": err.Error()})
 		return
