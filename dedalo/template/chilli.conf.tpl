@@ -12,9 +12,9 @@ uamport         3990
 locationname    "${HS_UNIT_NAME}"
 uamaaaurl       "http://${HS_HOSTNAME}/wax/aaa"
 radiusserver1   "localhost"
-uamserver       "http://${HS_HOSTNAME}/wings/home?digest=${HS_DIGEST}&uuid=${HS_UUID}"
+uamserver       "http://${HS_HOSTNAME}/wings/home/#/?digest=${HS_DIGEST}&uuid=${HS_UUID}"
 radiusnasid     "${HS_ID}"
-alloworigins    "${HS_ALLOW_ORIGINS}"
+alloworigin     "${HS_ALLOW_ORIGINS}"
 
 ipup=/etc/chilli/up.sh
 ipdown=/etc/chilli/down.sh

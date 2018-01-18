@@ -1,7 +1,7 @@
 Name: dedalo
 Version: 0.0.1
 Release: 1%{?dist}
-Summary: Network Access Controller, runs on the firewal and intercepts all guest connections
+Summary: Network Access Controller, runs on the firewall and intercepts all guest connections
 
 License: GPLv3
 URL: https://github.com/nethesis/icaro
@@ -9,10 +9,10 @@ Source0: https://github.com/nethesis/icaro/archive/master.tar.gz
 
 %{?systemd_requires}
 BuildRequires: systemd
-Requires: openvpn nmap-ncat
+Requires: coova-chilli
 
 %description
-Dedalo is the Network Access Controller, runs on the firewal and intercepts all guest connections.
+Dedalo is the Network Access Controller, runs on the firewall and intercepts all guest connections.
 It's a configuration helper for Coova-Chilli
 
 %post
