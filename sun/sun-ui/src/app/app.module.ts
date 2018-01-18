@@ -15,6 +15,7 @@ import { PatternFlyNgModule } from 'patternfly-ng';
 import { ProfileComponent } from './profile/profile.component';
 import { ChangePasswordModalComponent } from './modals/change-password-modal/change-password-modal.component';
 import { ProfileService } from './services/profile.service';
+import { AccountsComponent } from './accounts/accounts.component';
 import {TranslateModule, TranslateLoader, TranslateStaticLoader} from 'ng2-translate';
 
 
@@ -24,7 +25,8 @@ import {TranslateModule, TranslateLoader, TranslateStaticLoader} from 'ng2-trans
     LoginComponent,
     HomeComponent,
     ProfileComponent,
-    ChangePasswordModalComponent
+    ChangePasswordModalComponent,
+    AccountsComponent
   ],
   imports: [
     BrowserModule,

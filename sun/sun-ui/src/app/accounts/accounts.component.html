@@ -1,0 +1,116 @@
+<div class="padding-15">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="form-group">
+                       <button *ngIf="isDataArrived" [disabled]="!seletedItem?.length > 0" class="btn btn-default" type="button" id="deleteRows">Delete Rows</button>
+          <hr>
+          <br>
+          <div *ngIf="!isDataArrived"  class="spinner spinner-lg"></div>
+          <pfng-list 
+                     [actionHeadingTemplate]="actionHeadingTemplate"
+                     [actionTemplate]="actionTemplate"
+                     [config]="listConfig"
+                     [expandTemplate]="expandTemplate"
+                     [items]="accountList"
+                     [itemTemplate]="itemTemplate"
+                     [itemHeadingTemplate]="itemHeadingTemplate"
+                     (onActionSelect)="handleAction($event, null)"
+                     (onClick)="handleClick($event, null)"
+                     (onSelectionChange)="handleSelectionChange($event)">
+                    <ng-template #itemHeadingTemplate let-item="item">
+                      <div class="list-pf-content-wrapper">
+                        <div class="list-pf-main-content">
+                          <div class="list-pf-title">ID</div>
+                          <div class="list-pf-title">&nbsp;NAME</div>
+                          <div class="list-pf-title">&nbsp;EMAIL</div>
+                          <div class="list-pf-title">TYPE</div>
+                          <div class="list-pf-title">USERNAME</div>
+                        </div>
+                      </div>
+                    </ng-template>
+            <ng-template #itemTemplate let-item="item" let-index="index">
+              <div class="list-pf-content-wrapper">
+                <div class="list-pf-main-content">
+                  <div class="list-pf-title">{{item.id}}</div>
+                  <div class="list-pf-title">{{item.name}}</div>
+                  <div class="list-pf-title">{{item.email}}</div>
+                  <div class="list-pf-title">{{item.type}}</div>
+                  <div class="list-pf-title">{{item.username}}</div>
+                </div>
+              </div>
+            </ng-template>
+            <ng-template #actionHeadingTemplate let-item="item">
+               <p>&nbsp;&nbsp;</p>
+                <span class="margin-left-40">ACTIONS</span>
+                <!-- Place holder to match action button width below -->
+                <div class="actions-placeholder"></div>
+              </ng-template>
+            <ng-template #actionTemplate let-item="item" let-index="index">
+              <pfng-action class="list-pf-actions"
+                           [config]="actionConfig"
+                           (onActionSelect)="handleAction($event, item)">
+              </pfng-action>
+            </ng-template>
+          </pfng-list>
+          <pfng-pagination [config]="paginationConfig"
+                           (onPageNumberChange)="handlePageNumber($event)"
+                           (onPageSizeChange)="handlePageSize($event)"></pfng-pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+ <!-- Edit Account Modal -->
+ <div class="modal fade" id="change-password" #myModal tabindex="-1" role="dialog"
+ data-target="#myModal" aria-labelledby="ChangePassword" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <span class="pficon pficon-close"></span>
+        </button>
+        <h4 class="modal-title">Edit Accounts</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal" name="changePasswordForm">
+          <div class="form-group">
+            <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label" for="account-id">ID</label>
+            <div class="col-lg-8 col-md-6 col-sm-6 col-xs-12">
+              <input type="text" disabled="true" id="account-id" name="account-id" value="{{itemToEdit.id}}" class="form-control">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label" for="Username">Username</label>
+            <div class="col-lg-8 col-md-6 col-sm-6 col-xs-12">
+              <input type="text" disabled="true" id="username" name="username" class="form-control" value="{{itemToEdit.username}}">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label" for="name">Name</label>
+            <div class="col-lg-8 col-md-6 col-sm-6 col-xs-12">
+              <input type="text" id="Name" name="Name" value="{{itemToEdit.name}}" class="form-control">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label" for="email">Email</label>
+            <div class="col-lg-8 col-md-6 col-sm-6 col-xs-12">
+              <input type="text" id="account-id" name="account-id" class="form-control" value="{{itemToEdit.email}}">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label" for="type">Type</label>
+            <div class="col-lg-8 col-md-6 col-sm-6 col-xs-12">
+              <input type="text" id="type" name="type" class="form-control" value="{{itemToEdit.type}}">
+            </div>
+          </div>
+          
+          <div class="modal-footer">
+            <button  class="btn btn-danger" name="CancelEditAccount"  data-dismiss="modal">Cancel</button>
+            <button class="btn btn-success" name="SaveEditAccount" type="submit" >Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+ </div>
