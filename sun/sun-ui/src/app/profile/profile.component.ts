@@ -38,18 +38,7 @@ export class ProfileComponent implements OnInit {
     this.getAccount(this.id_profile);
     this.getPreferences();
   }
-
-  private postAccount() {
-    this.profileService.postAccount(this.fullAccount).subscribe(
-      data => {
-        console.log(data);
-      },
-      error => {
-        console.log(error);
-      }
-    );
-  }
-
+  
   private getAccount(id: number) {
     this.profileService.getAccount(id).subscribe(
       data => {
