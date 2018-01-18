@@ -51,18 +51,10 @@
 				</a>
 				<!-- Select language (English, Italian) -->
 				<ul class="dropdown-menu" aria-labelledby="languagesDropdown">
-					<!-- English -->
-					<li>
-						<a (click)=" getLanguage('en')" class="english">
-							<i [ngClass]="{'i18n':currentLanguage!='en'}"  class="fa fa-check" aria-hidden="true"></i>
-							{{ 'HOME.English' | translate }}
-						</a>
-					</li>
-					<!-- Italian -->
-					<li>
-						<a (click)=" getLanguage('it')" class="italian">
-							<i [ngClass]="{'i18n':currentLanguage!='it'}" class="fa fa-check" aria-hidden="true"></i>
-							{{ 'HOME.Italian' | translate }}
+					<li *ngFor="let item of allLanguages" >
+						<a (click)=" getLanguage(item)" >
+							<i [ngClass]="{'i18n':currentLanguage!=item}" class="fa fa-check" aria-hidden="true"></i>
+							{{langFullName[item]}}
 						</a>
 					</li>
 				</ul>

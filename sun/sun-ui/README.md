@@ -46,22 +46,10 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 }
 ````
 
-4-Adapt getLanguage and getFirstLanguage functions in base of language you added.
+4-Add full language name in lang.ts file in /assets/i18n dir.
 
 ```bash
-else if (flag === 'initialsofthelanguage') {
-      localStorage.setItem('language', 'initialsofthelanguage');
-    }
-```
-
-
-5-Add in languages dropdown menu in home.html, your langage following on existing structure.
-
-```bash
-<li>
-						<a (click)=" getLanguage('initialsofthelanguage')" class="english">
-							<i [ngClass]="{'i18n':currentLanguage!='initialsofthelanguage'}"  class="fa fa-check" aria-hidden="true"></i>
-							{{ 'HOME.English' | translate }}
-						</a>
-</li>
+    en: 'English',
+    it: 'Italian',
+    .....
 ```
