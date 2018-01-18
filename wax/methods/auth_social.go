@@ -101,7 +101,7 @@ func GoogleAuth(c *gin.Context) {
 			ValidFrom:   time.Now().UTC(),
 			ValidUntil:  time.Now().UTC().AddDate(0, 0, 30), // TODO: get days from hotspot account preferences
 		}
-		methods.CreateUser(newUser)
+		newUser.Id = methods.CreateUser(newUser)
 
 		// create user session check
 		utils.CreateUserSession(newUser.Id, sessionId)
@@ -113,6 +113,9 @@ func GoogleAuth(c *gin.Context) {
 		db := database.Database()
 		db.Save(&user)
 		db.Close()
+
+		// create user session check
+		utils.CreateUserSession(user.Id, sessionId)
 	}
 
 	// response to client
@@ -206,7 +209,7 @@ func FacebookAuth(c *gin.Context) {
 			ValidFrom:   time.Now().UTC(),
 			ValidUntil:  time.Now().UTC().AddDate(0, 0, 30), // TODO: days info from hotspot account preferences
 		}
-		methods.CreateUser(newUser)
+		newUser.Id = methods.CreateUser(newUser)
 
 		// create user session check
 		utils.CreateUserSession(newUser.Id, sessionId)
@@ -218,6 +221,9 @@ func FacebookAuth(c *gin.Context) {
 		db := database.Database()
 		db.Save(&user)
 		db.Close()
+
+		// create user session check
+		utils.CreateUserSession(user.Id, sessionId)
 	}
 
 	// response to client
@@ -304,7 +310,7 @@ func LinkedInAuth(c *gin.Context) {
 			ValidFrom:   time.Now().UTC(),
 			ValidUntil:  time.Now().UTC().AddDate(0, 0, 30), // TODO: get days from hotspot account preferences
 		}
-		methods.CreateUser(newUser)
+		newUser.Id = methods.CreateUser(newUser)
 
 		// create user session check
 		utils.CreateUserSession(newUser.Id, sessionId)
@@ -316,6 +322,9 @@ func LinkedInAuth(c *gin.Context) {
 		db := database.Database()
 		db.Save(&user)
 		db.Close()
+
+		// create user session check
+		utils.CreateUserSession(user.Id, sessionId)
 	}
 
 	// response to client

@@ -37,7 +37,7 @@ import (
 func SMSAuth(c *gin.Context) {
 	number := c.Param("number")
 	uuid := c.Query("uuid")
-	sessionsId := c.Query("sessionid")
+	sessionId := c.Query("sessionid")
 
 	if number == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "number is required"})
@@ -64,10 +64,10 @@ func SMSAuth(c *gin.Context) {
 			ValidFrom:   time.Now().UTC(),
 			ValidUntil:  time.Now().UTC().AddDate(0, 0, 30), // TODO: get days from hotspot account preferences
 		}
-		methods.CreateUser(newUser)
+		newUser.Id = methods.CreateUser(newUser)
 
 		// create user session check
-		utils.CreateUserSession(newUser.Id, sessionsId)
+		utils.CreateUserSession(newUser.Id, sessionId)
 
 		// send sms with code
 		utils.SendSMSCode(number, code)
@@ -83,6 +83,9 @@ func SMSAuth(c *gin.Context) {
 		db.Save(&user)
 		db.Close()
 
+		// create user session check
+		utils.CreateUserSession(user.Id, sessionId)
+
 		// response to client
 		c.JSON(http.StatusOK, gin.H{"user_id": number, "password": user.Password})
 	}
@@ -91,7 +94,7 @@ func SMSAuth(c *gin.Context) {
 func EmailAuth(c *gin.Context) {
 	email := c.Param("email")
 	uuid := c.Query("uuid")
-	sessionsId := c.Query("sessionid")
+	sessionId := c.Query("sessionid")
 
 	if email == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "email is required"})
@@ -118,10 +121,10 @@ func EmailAuth(c *gin.Context) {
 			ValidFrom:   time.Now().UTC(),
 			ValidUntil:  time.Now().UTC().AddDate(0, 0, 30), // TODO: get days from hotspot account preferences
 		}
-		methods.CreateUser(newUser)
+		newUser.Id = methods.CreateUser(newUser)
 
 		// create user session check
-		utils.CreateUserSession(newUser.Id, sessionsId)
+		utils.CreateUserSession(newUser.Id, sessionId)
 
 		// send email with code
 		utils.SendEmailCode(email, code)
@@ -136,6 +139,9 @@ func EmailAuth(c *gin.Context) {
 		db := database.Database()
 		db.Save(&user)
 		db.Close()
+
+		// create user session check
+		utils.CreateUserSession(user.Id, sessionId)
 
 		// response to client
 		c.JSON(http.StatusOK, gin.H{"user_id": email, "password": user.Password})

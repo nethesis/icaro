@@ -34,13 +34,15 @@ import (
 	"sun-api/utils"
 )
 
-func CreateUser(user models.User) {
+func CreateUser(user models.User) int {
 	user.Created = time.Now().UTC()
 
 	// save new user
 	db := database.Database()
 	db.Save(&user)
 	db.Close()
+
+	return user.Id
 }
 
 func UpdateUser(c *gin.Context) {

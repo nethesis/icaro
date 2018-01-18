@@ -43,6 +43,12 @@ func main() {
 	// init routers
 	router := gin.Default()
 
+	// cors
+	corsConf := cors.DefaultConfig()
+	corsConf.AllowAllOrigins = true
+	corsConf.AddAllowHeaders("Token")
+	router.Use(cors.New(corsConf))
+
 	api := router.Group("/api")
 
 	api.POST("/login", methods.Login)

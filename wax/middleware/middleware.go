@@ -27,7 +27,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"sun-api/configuration"
 	"wax/utils"
 )
 
@@ -79,25 +78,4 @@ func WaxWall(c *gin.Context) {
 
 	// go ahead
 	c.Next()
-
-}
-
-func CaptiveWings(c *gin.Context) {
-	digest := c.Query("digest")
-	uuid := c.Query("uuid")
-	sessionId := c.Query("sessionid")
-
-	check, message := CheckAuth(digest, uuid, sessionId, c)
-
-	if !check {
-		respondWithError(http.StatusBadRequest, message, c)
-		return
-	}
-
-	// server static files of captive portal
-	fileserver := http.FileServer(gin.Dir(configuration.Config.CaptivePath, true))
-	fileserver = http.StripPrefix("/wings/home", fileserver)
-	fileserver.ServeHTTP(c.Writer, c.Request)
-	c.Abort()
-
 }
