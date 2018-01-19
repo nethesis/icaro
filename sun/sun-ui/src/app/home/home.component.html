@@ -54,7 +54,7 @@
 					<li *ngFor="let item of allLanguages" >
 						<a (click)=" getLanguage(item)" >
 							<i [ngClass]="{'i18n':currentLanguage!=item}" class="fa fa-check" aria-hidden="true"></i>
-							{{langFullName[item]}}
+							{{langFullName[item].nativeName}}
 						</a>
 					</li>
 				</ul>

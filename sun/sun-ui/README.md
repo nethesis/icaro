@@ -45,11 +45,3 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
   ....
 }
 ````
-
-4-Add full language name in lang.ts file in /assets/i18n dir.
-
-```bash
-    en: 'English',
-    it: 'Italian',
-    .....
-```
