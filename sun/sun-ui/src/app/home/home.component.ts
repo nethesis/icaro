@@ -34,7 +34,7 @@ export class HomeComponent implements OnInit {
 
 
  private getAccount(id: number) {
-    this.profileService.getAccount(id).subscribe(
+    this.profileService.getProfilebyId(id).subscribe(
       data => {
         for (let key in data) {
           if (key === 'email') {

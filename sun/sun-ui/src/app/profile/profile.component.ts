@@ -12,6 +12,7 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
+  
   private id_profile = Number(localStorage.getItem('id'));
   config: CardConfig;
   model: any = {};
@@ -35,12 +36,12 @@ export class ProfileComponent implements OnInit {
       noPadding: false,
       topBorder: true
     } as CardConfig;
-    this.getAccount(this.id_profile);
+    this.getProfile(this.id_profile);
     this.getPreferences();
   }
-  
-  private getAccount(id: number) {
-    this.profileService.getAccount(id).subscribe(
+
+  private getProfile(id: number) {
+    this.profileService.getProfilebyId(id).subscribe(
       data => {
         this.accountArray = data;
         console.log(data);
@@ -60,7 +61,7 @@ export class ProfileComponent implements OnInit {
         }
         this.preferenceArray = myArray;
       },
-      error => {}
+      error => { }
     );
   }
 }

@@ -17,6 +17,7 @@ import { ChangePasswordModalComponent } from './modals/change-password-modal/cha
 import { ProfileService } from './services/profile.service';
 import { AccountsComponent } from './accounts/accounts.component';
 import {TranslateModule, TranslateLoader, TranslateStaticLoader} from 'ng2-translate';
+import { AccountsService } from './services/accounts.service';
 
 
 @NgModule({
@@ -41,7 +42,7 @@ import {TranslateModule, TranslateLoader, TranslateStaticLoader} from 'ng2-trans
       deps: [Http]
   })
   ],
-  providers: [AuthenticationService, AuthenticationGuard, ProfileService, HeaderService],
+  providers: [AuthenticationService, AuthenticationGuard, ProfileService, HeaderService, AccountsService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

@@ -2,7 +2,7 @@
     <div class="row">
       <div class="col-sm-12">
         <div class="form-group">
-                       <button *ngIf="isDataArrived" [disabled]="!seletedItem?.length > 0" class="btn btn-default" type="button" id="deleteRows">Delete Rows</button>
+                       <button (click)="deleteMultiply();" *ngIf="isDataArrived" [disabled]="!seletedItem?.length > 0" class="btn btn-default" type="button" id="deleteRows">Delete Rows</button>
           <hr>
           <br>
           <div *ngIf="!isDataArrived"  class="spinner spinner-lg"></div>
@@ -11,7 +11,7 @@
                      [actionTemplate]="actionTemplate"
                      [config]="listConfig"
                      [expandTemplate]="expandTemplate"
-                     [items]="accountList"
+                     [items]="items"
                      [itemTemplate]="itemTemplate"
                      [itemHeadingTemplate]="itemHeadingTemplate"
                      (onActionSelect)="handleAction($event, null)"
@@ -60,10 +60,9 @@
     </div>
   </div>
 
-
  <!-- Edit Account Modal -->
  <div class="modal fade" id="change-password" #myModal tabindex="-1" role="dialog"
- data-target="#myModal" aria-labelledby="ChangePassword" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+ data-target="#myModal" aria-labelledby="EditAccounts" aria-hidden="true" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -73,41 +72,41 @@
         <h4 class="modal-title">Edit Accounts</h4>
       </div>
       <div class="modal-body">
-        <form class="form-horizontal" name="changePasswordForm">
+        <form class="form-horizontal" name="EditAccounts" role="form" #editaccount="ngForm" (ngSubmit)="editAccount(editaccount)">
           <div class="form-group">
             <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label" for="account-id">ID</label>
             <div class="col-lg-8 col-md-6 col-sm-6 col-xs-12">
-              <input type="text" disabled="true" id="account-id" name="account-id" value="{{itemToEdit.id}}" class="form-control">
+              <input type="text" disabled="true" id="account-id" name="id" [(ngModel)]="itemToEdit.id" #id="ngModel" [value]="itemToEdit.id" class="form-control">
             </div>
           </div>
           <div class="form-group">
             <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label" for="Username">Username</label>
             <div class="col-lg-8 col-md-6 col-sm-6 col-xs-12">
-              <input type="text" disabled="true" id="username" name="username" class="form-control" value="{{itemToEdit.username}}">
+              <input type="text" disabled="true" id="username" name="username" [(ngModel)]="itemToEdit.username" #username="ngModel" [value]="itemToEdit.username">
             </div>
           </div>
           <div class="form-group">
             <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label" for="name">Name</label>
             <div class="col-lg-8 col-md-6 col-sm-6 col-xs-12">
-              <input type="text" id="Name" name="Name" value="{{itemToEdit.name}}" class="form-control">
+              <input type="text" id="Name" name="name"  [(ngModel)]="itemToEdit.name" #name="ngModel" [value]="itemToEdit.name" class="form-control">
             </div>
           </div>
           <div class="form-group">
             <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label" for="email">Email</label>
             <div class="col-lg-8 col-md-6 col-sm-6 col-xs-12">
-              <input type="text" id="account-id" name="account-id" class="form-control" value="{{itemToEdit.email}}">
+              <input type="text" id="account-id" name="email" [(ngModel)]="itemToEdit.email" #email="ngModel" [value]="itemToEdit.email" class="form-control">
             </div>
           </div>
           <div class="form-group">
             <label class="col-lg-4 col-md-4 col-sm-4 col-xs-12 control-label" for="type">Type</label>
             <div class="col-lg-8 col-md-6 col-sm-6 col-xs-12">
-              <input type="text" id="type" name="type" class="form-control" value="{{itemToEdit.type}}">
+              <input type="text" id="type" name="type" [(ngModel)]="itemToEdit.type" #type="ngModel" [value]="itemToEdit.type" class="form-control">
             </div>
           </div>
           
           <div class="modal-footer">
-            <button  class="btn btn-danger" name="CancelEditAccount"  data-dismiss="modal">Cancel</button>
-            <button class="btn btn-success" name="SaveEditAccount" type="submit" >Save</button>
+            <button  class="btn btn-default" name="CancelEditAccount" data-dismiss="modal">Cancel</button>
+            <button class="btn btn-primary"  name="SaveEditAccount" type="submit" >Save</button>
           </div>
         </form>
       </div>

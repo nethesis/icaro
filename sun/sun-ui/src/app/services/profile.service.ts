@@ -13,19 +13,10 @@ export class ProfileService {
   constructor(private http: Http, private headerService: HeaderService) {}
 
   /**
-   * Get Accounts list from API
-   */
-  getAllAccounts() {
-    return this.http
-      .get(this.apiAccountsUrl, this.headerService.setHeader())
-      .map(res => res.json());
-  }
-
-  /**
    * Get Account in base of id
    * @param id
    */
-  getAccount(id: number) {
+  getProfilebyId(id: number) {
     return this.http
       .get(this.apiAccountsUrl + '/' + id, this.headerService.setHeader())
       .map(res => res.json());

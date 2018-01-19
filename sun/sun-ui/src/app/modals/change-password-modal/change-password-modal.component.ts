@@ -55,7 +55,7 @@ export class ChangePasswordModalComponent implements OnInit {
   }
 
   private getAccount(id:number) {
-    this.profileService.getAccount(id).subscribe(
+    this.profileService.getProfilebyId(id).subscribe(
       data => {
         this.fullAccount = data;
       },
