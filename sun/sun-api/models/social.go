@@ -25,13 +25,13 @@ package models
 type Social struct {
 	ClientId     string `json:"client_id"`
 	ClientSecret string `json:"client_secret"`
+	RedirectURI  string `json:"redirect_uri"`
 }
 
 type AuthSocial struct {
-	Facebook    Social `json:"facebook"`
-	Google      Social `json:"google"`
-	LinkedIn    Social `json:"linkedin"`
-	RedirectURI string `json:"redirect_uri"`
+	Facebook Social `json:"facebook"`
+	Google   Social `json:"google"`
+	LinkedIn Social `json:"linkedin"`
 }
 
 type FacebookRespToken struct {

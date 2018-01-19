@@ -129,7 +129,7 @@ func FacebookAuth(c *gin.Context) {
 
 	clientId := configuration.Config.AuthSocial.Facebook.ClientId
 	clientSecret := configuration.Config.AuthSocial.Facebook.ClientSecret
-	redirectURI := configuration.Config.AuthSocial.RedirectURI
+	redirectURI := configuration.Config.AuthSocial.Facebook.RedirectURI
 
 	// retrieve access token
 	url := "https://graph.facebook.com/v2.11/oauth/access_token?" +
@@ -238,7 +238,7 @@ func LinkedInAuth(c *gin.Context) {
 
 	clientId := configuration.Config.AuthSocial.LinkedIn.ClientId
 	clientSecret := configuration.Config.AuthSocial.LinkedIn.ClientSecret
-	redirectURI := configuration.Config.AuthSocial.RedirectURI
+	redirectURI := configuration.Config.AuthSocial.LinkedIn.RedirectURI
 
 	// retrieve access token
 	urlEndpoint := "https://www.linkedin.com/oauth/v2/accessToken"

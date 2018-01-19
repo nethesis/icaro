@@ -64,9 +64,6 @@ func DefineAPI(router *gin.Engine) {
 		wax.GET("/preferences", methods.GetWingsPrefs)
 	}
 
-	// handle static captive portal files (aka wings)
-	router.StaticFS("/wings/home", gin.Dir(configuration.Config.CaptivePath, true))
-
 	// handle missing endpoint
 	router.NoRoute(func(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{"message": "API not found"})
