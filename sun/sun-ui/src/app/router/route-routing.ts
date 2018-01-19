@@ -1,5 +1,6 @@
 import { ProfileComponent } from './../profile/profile.component';
 import { AuthenticationGuard } from './../guards/authentication.guard';
+import { AccountsComponent } from './../accounts/accounts.component';
 import { HomeComponent } from './../home/home.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
@@ -18,7 +19,13 @@ const routes: Routes = [
         path: 'profile',
         component: ProfileComponent,
         canActivate: [AuthenticationGuard]
+      },
+      {
+        path: 'accounts',
+        component: AccountsComponent,
+        canActivate: [AuthenticationGuard]
       }
+
     ]
   },
 
