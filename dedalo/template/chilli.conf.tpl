@@ -12,7 +12,7 @@ uamport         3990
 locationname    "${HS_UNIT_NAME}"
 uamaaaurl       "${HS_AAA_URL}/wax/aaa"
 radiusserver1   "localhost"
-uamserver       "${HS_SPLASH_PAGE_URL}/wings/home/#/?digest=${HS_DIGEST}&uuid=${HS_UUID}"
+uamserver       "${HS_SPLASH_PAGE_URL}/?digest=${HS_DIGEST}&uuid=${HS_UUID}"
 radiusnasid     "${HS_ID}"
 alloworigin     "${HS_ALLOW_ORIGINS}"
 
