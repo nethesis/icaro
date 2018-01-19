@@ -23,7 +23,7 @@
 package models
 
 type WingsPrefs struct {
-	HotspotId   int                 `json:"hotspot_id"`
-	HotspotName string              `json:"hotspot_name"`
-	Prefs       []HotspotPreference `json:"prefs"`
+	HotspotId   int               `json:"hotspot_id"`
+	HotspotName string            `json:"hotspot_name"`
+	Prefs       map[string]string `json:"prefs"`
 }

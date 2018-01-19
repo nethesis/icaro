@@ -47,7 +47,12 @@ func GetWingsPrefs(c *gin.Context) {
 	var wingsPrefs models.WingsPrefs
 	wingsPrefs.HotspotId = hotspot.Id
 	wingsPrefs.HotspotName = hotspot.Name
-	wingsPrefs.Prefs = prefs
+
+	prefsMap := make(map[string]string)
+	for i := 0; i < len(prefs); i += 2 {
+		prefsMap[prefs[i].Key] = prefs[i].Value
+	}
+	wingsPrefs.Prefs = prefsMap
 
 	c.JSON(http.StatusOK, wingsPrefs)
 }
