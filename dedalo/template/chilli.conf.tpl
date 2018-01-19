@@ -10,9 +10,9 @@ dns1            "208.67.222.222"
 dns2            "208.67.220.220"
 uamport         3990
 locationname    "${HS_UNIT_NAME}"
-uamaaaurl       "http://${HS_HOSTNAME}/wax/aaa"
+uamaaaurl       "${HS_AAA_URL}/wax/aaa"
 radiusserver1   "localhost"
-uamserver       "http://${HS_HOSTNAME}/wings/home/#/?digest=${HS_DIGEST}&uuid=${HS_UUID}"
+uamserver       "${HS_SPLASH_PAGE_URL}/wings/home/#/?digest=${HS_DIGEST}&uuid=${HS_UUID}"
 radiusnasid     "${HS_ID}"
 alloworigin     "${HS_ALLOW_ORIGINS}"
 
