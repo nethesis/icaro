@@ -1,0 +1,26 @@
+<!-- Sidebar content -->
+	<div class="nav-pf-vertical nav-pf-vertical-with-sub-menus nav-pf-persistent-secondary" [ngStyle]="{'width': toggleSidebar()}">
+		<ul class="list-group">
+			<!-- Dashboard -->
+			<li class="list-group-item collapse-menu">
+				<a routerLink="/home" [ngStyle]="{'width': toggleSidebar()}">
+					<span class="fa fa-dashboard" title data-toggle="tooltip" data-placement="right" data-original-title="Dashboard"></span>
+					<span class="list-group-item-value" [ngStyle]="{'display': toggleSidebarText()}">{{ 'HOME.Dashboard' | translate }}</span>
+				</a>
+			</li>
+			<!-- Accounts -->
+			<li class="list-group-item collapse-menu">
+				<a routerLink="/home/accounts" [ngStyle]="{'width': toggleSidebar()}">
+					<span class="pficon pficon-users" title data-toggle="tooltip" data-placement="right" data-original-title="Accounts"></span>
+					<span class="list-group-item-value" [ngStyle]="{'display': toggleSidebarText()}">{{ 'HOME.Accounts' | translate }}</span>
+				</a>
+			</li>
+			<!-- Sessions -->
+			<li class="list-group-item collapse-menu ">
+				<a href="#" [ngStyle]="{'width': toggleSidebar()}">
+					<span class="fa fa-space-shuttle" title data-toggle="tooltip" data-placement="right" data-original-title="Sessions"></span>
+					<span class="list-group-item-value" [ngStyle]="{'display': toggleSidebarText()}">{{ 'HOME.Sessions' | translate }}</span>
+				</a>
+			</li>
+		</ul>
+	</div>

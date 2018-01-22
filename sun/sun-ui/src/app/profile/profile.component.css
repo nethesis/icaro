@@ -1,0 +1,29 @@
+.cards-pf .row-cards-pf:first-child {
+	padding-top: 10px;
+}
+
+.cards-pf .row-cards-pf {
+	padding: 0;
+}
+
+.card-pf-body {
+	margin: 20px 0 0 0; 
+	padding: 0; 
+}
+
+.card-pf-body dl {
+	padding-bottom: 20px;
+}
+
+.pfng-card .card-pf-footer {
+	min-height: 55px!important;
+	padding: 15px 20px;
+}
+
+.no-data {
+	padding-bottom: 20px!important;
+}
+
+.alert {
+	margin-bottom: 0px;
+}
