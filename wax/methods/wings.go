@@ -24,11 +24,13 @@ package methods
 
 import (
 	"net/http"
+
 	"github.com/nethesis/icaro/wax/utils"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 
+	"github.com/nethesis/icaro/sun/sun-api/configuration"
 	"github.com/nethesis/icaro/sun/sun-api/models"
 )
 
@@ -49,10 +51,15 @@ func GetWingsPrefs(c *gin.Context) {
 	wingsPrefs.HotspotName = hotspot.Name
 
 	prefsMap := make(map[string]string)
-	for i := 0; i < len(prefs); i += 2 {
+	for i := 0; i < len(prefs); i++ {
 		prefsMap[prefs[i].Key] = prefs[i].Value
 	}
-	wingsPrefs.Prefs = prefsMap
+	wingsPrefs.Preferences = prefsMap
+
+	// get social ids
+	wingsPrefs.Socials.FacebookClientId = configuration.Config.AuthSocial.Facebook.ClientId
+	wingsPrefs.Socials.GoogleClientId = configuration.Config.AuthSocial.Google.ClientId
+	wingsPrefs.Socials.LinkedInClientId = configuration.Config.AuthSocial.LinkedIn.ClientId
 
 	c.JSON(http.StatusOK, wingsPrefs)
 }
