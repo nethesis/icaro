@@ -20,6 +20,7 @@ new Vue({
     uuid: '',
     sessionid: '',
     onError: false,
-    preferences: {}
+    preferences: {},
+    socials: {}
   }
 })

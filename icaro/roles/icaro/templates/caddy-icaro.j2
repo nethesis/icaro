@@ -1,0 +1,13 @@
+https://{{ machine_hostname }} {
+  root /opt/icaro/sun-ui
+  proxy /api localhost:8080
+  proxy /wax localhost:8181
+}
+
+http://{{ machine_hostname }} {
+  root /opt/icaro/wings
+  rewrite {
+    regexp .*
+    to {path} /
+  }
+}
