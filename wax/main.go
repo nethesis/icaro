@@ -29,9 +29,9 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 
-	"sun-api/configuration"
-	"wax/methods"
-	"wax/middleware"
+	"github.com/nethesis/icaro/sun/sun-api/configuration"
+	"github.com/nethesis/icaro/wax/methods"
+	"github.com/nethesis/icaro/wax/middleware"
 )
 
 func DefineAPI(router *gin.Engine) {

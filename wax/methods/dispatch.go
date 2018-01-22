@@ -28,8 +28,8 @@ import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 
-	"sun-api/database"
-	"sun-api/models"
+	"github.com/nethesis/icaro/sun/sun-api/database"
+	"github.com/nethesis/icaro/sun/sun-api/models"
 )
 
 func Reply(c *gin.Context, httpCode int, message string) {

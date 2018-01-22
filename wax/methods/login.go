@@ -30,7 +30,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"wax/utils"
+	"github.com/nethesis/icaro/wax/utils"
 )
 
 func AuthAccept(c *gin.Context, prefs string) {

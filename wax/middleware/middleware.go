@@ -27,7 +27,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"wax/utils"
+	"github.com/nethesis/icaro/wax/utils"
 )
 
 func respondWithError(code int, message string, c *gin.Context) {

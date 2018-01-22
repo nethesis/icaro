@@ -24,12 +24,12 @@ package methods
 
 import (
 	"net/http"
-	"wax/utils"
+	"github.com/nethesis/icaro/wax/utils"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 
-	"sun-api/models"
+	"github.com/nethesis/icaro/sun/sun-api/models"
 )
 
 func GetWingsPrefs(c *gin.Context) {

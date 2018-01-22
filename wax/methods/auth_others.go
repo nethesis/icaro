@@ -25,13 +25,13 @@ package methods
 import (
 	"net/http"
 	"time"
-	"wax/utils"
+	"github.com/nethesis/icaro/wax/utils"
 
 	"github.com/gin-gonic/gin"
 
-	"sun-api/database"
-	"sun-api/methods"
-	"sun-api/models"
+	"github.com/nethesis/icaro/sun/sun-api/database"
+	"github.com/nethesis/icaro/sun/sun-api/methods"
+	"github.com/nethesis/icaro/sun/sun-api/models"
 )
 
 func SMSAuth(c *gin.Context) {
