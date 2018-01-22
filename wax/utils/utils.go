@@ -35,9 +35,9 @@ import (
 
 	gomail "gopkg.in/gomail.v2"
 
-	"sun-api/configuration"
-	"sun-api/database"
-	"sun-api/models"
+	"github.com/nethesis/icaro/sun/sun-api/configuration"
+	"github.com/nethesis/icaro/sun/sun-api/database"
+	"github.com/nethesis/icaro/sun/sun-api/models"
 )
 
 func GetHotspotPreferences(hotspotId int) []models.HotspotPreference {

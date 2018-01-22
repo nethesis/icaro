@@ -35,7 +35,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 
-	"sun-api/configuration"
+	"github.com/nethesis/icaro/sun/sun-api/configuration"
 )
 
 func startupEnv(endpoint string, query string) (*gofight.RequestConfig, *gin.Engine, string) {
