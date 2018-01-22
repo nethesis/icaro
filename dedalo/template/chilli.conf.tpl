@@ -16,5 +16,10 @@ uamserver       "${HS_SPLASH_PAGE_URL}/?digest=${HS_DIGEST}&uuid=${HS_UUID}"
 radiusnasid     "${HS_ID}"
 alloworigin     "${HS_ALLOW_ORIGINS}"
 
+include /opt/icaro/dedalo/walled_gardens/local.conf
+include /opt/icaro/dedalo/walled_gardens/facebook.conf
+include /opt/icaro/dedalo/walled_gardens/google.conf
+include /opt/icaro/dedalo/walled_gardens/linkedin.conf
+
 ipup=/etc/chilli/up.sh
 ipdown=/etc/chilli/down.sh
