@@ -30,6 +30,7 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 
 	"github.com/nethesis/icaro/sun/sun-api/models"
+  "github.com/nethesis/icaro/sun/sun-api/configuration"
 )
 
 func GetWingsPrefs(c *gin.Context) {
@@ -47,7 +48,17 @@ func GetWingsPrefs(c *gin.Context) {
 	var wingsPrefs models.WingsPrefs
 	wingsPrefs.HotspotId = hotspot.Id
 	wingsPrefs.HotspotName = hotspot.Name
-	wingsPrefs.Prefs = prefs
+
+	prefsMap := make(map[string]string)
+	for i := 0; i < len(prefs); i++ {
+		prefsMap[prefs[i].Key] = prefs[i].Value
+	}
+	wingsPrefs.Preferences = prefsMap
+
+	// get social ids
+	wingsPrefs.Socials.FacebookClientId = configuration.Config.AuthSocial.Facebook.ClientId
+	wingsPrefs.Socials.GoogleClientId = configuration.Config.AuthSocial.Google.ClientId
+	wingsPrefs.Socials.LinkedInClientId = configuration.Config.AuthSocial.LinkedIn.ClientId
 
 	c.JSON(http.StatusOK, wingsPrefs)
 }
