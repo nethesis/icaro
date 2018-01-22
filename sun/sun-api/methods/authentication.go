@@ -32,10 +32,10 @@ import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 
-	"sun-api/configuration"
-	"sun-api/database"
-	"sun-api/models"
-	"sun-api/utils"
+	"github.com/nethesis/icaro/sun/sun-api/configuration"
+	"github.com/nethesis/icaro/sun/sun-api/database"
+	"github.com/nethesis/icaro/sun/sun-api/models"
+	"github.com/nethesis/icaro/sun/sun-api/utils"
 )
 
 func Login(c *gin.Context) {
