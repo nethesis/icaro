@@ -4,7 +4,7 @@ var AuthMixin = {
     methods: {
         getPreferences(params, callback) {
             var host = window.location.host
-            this.$http.get("http://" + host + '/wax/preferences' +
+            this.$http.get("https://" + host + '/wax/preferences' +
                 '?digest=' + params.digest +
                 '&uuid=' + params.uuid +
                 '&sessionid=' + params.sessionid
@@ -50,7 +50,7 @@ var AuthMixin = {
         },
         createWaxURL(code, params, endpoint) {
             var host = window.location.host
-            var url = 'http://' + host + '/wax/register/' + endpoint + '/' + encodeURIComponent(code) +
+            var url = 'https://' + host + '/wax/register/' + endpoint + '/' + encodeURIComponent(code) +
                 '?digest=' + params.digest +
                 '&uuid=' + params.uuid +
                 '&sessionid=' + params.sessionid
