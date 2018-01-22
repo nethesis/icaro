@@ -3,14 +3,14 @@ import CryptoJS from 'crypto-js'
 var AuthMixin = {
     methods: {
         getPreferences(params, callback) {
-            var host = 'hstest.neth.eu:8181' //window.location.host
+            var host = window.location.host
             this.$http.get("http://" + host + '/wax/preferences' +
                 '?digest=' + params.digest +
                 '&uuid=' + params.uuid +
                 '&sessionid=' + params.sessionid
             ).then(callback);
         },
-        extractParams(searchURL) {
+        extractParams() {
             var code = this.$route.query.code || null
             var state = this.$route.query.state || null
 
@@ -48,9 +48,9 @@ var AuthMixin = {
                 sessionid: sessionid
             }
         },
-        createWaxURL(code, state, endpoint) {
-            var params = this.parseState(state)
-            var url = 'http://' + window.location.host + ':8181/wax/register/' + endpoint + '/' + code +
+        createWaxURL(code, params, endpoint) {
+            var host = window.location.host
+            var url = 'http://' + host + '/wax/register/' + endpoint + '/' + encodeURIComponent(code) +
                 '?digest=' + params.digest +
                 '&uuid=' + params.uuid +
                 '&sessionid=' + params.sessionid

@@ -19,7 +19,7 @@
         setTimeout
     } from 'timers';
     export default {
-        name: 'GooglePage',
+        name: 'LinkedInPage',
         mixins: [AuthMixin],
         data() {
             var authorized = false
@@ -39,7 +39,7 @@
                 })
 
                 // make request to wax
-                var url = this.createWaxURL(params.code, this.parseState(params.state), 'social/google')
+                var url = this.createWaxURL(params.code, this.parseState(params.state), 'social/linkedin')
 
                 // get user id
                 this.$http.get(url).then(responseAuth => {
@@ -68,8 +68,8 @@
                 });
             } else {
                 // get social login url
-                params.fb_client_id = this.$root.$options.hotspot.socials.google_client_id
-                var url = this.getSocialLoginURL(params, 'google')
+                params.fb_client_id = this.$root.$options.hotspot.socials.linkedin_client_id
+                var url = this.getSocialLoginURL(params, 'linkedin')
 
                 // open social login url
                 window.location.replace(url)

@@ -1,16 +1,18 @@
 <template>
   <div class="ui segment">
     <div v-if="!hotspot.onError">
-      <h3>Welcome</h3>
-      <img class="ui centered small image" src="../assets/logo.png">
-      <p>
-        Quo homero blandit intellegebat. Incorrupte consequuntur mei id. Mei ut facer dolores adolescens, no illum aperiri quo, usu
-        odio brute at
-      </p>
-      <div class="ui divider"></div>
-      <router-link to='/login' class="big ui green button">
-        Start Navigate
-      </router-link>
+      <div v-if="!hotspot.loaded" class="ui active centered inline text loader">Retrieve info...</div>
+      <div v-if="hotspot.loaded">
+        <h3>{{hotspot.preferences.captive_subtitle}}</h3>
+        <img class="ui centered small image" :src="hotspot.preferences.captive_banner">
+        <p>
+          {{hotspot.preferences.captive_description}}
+        </p>
+        <div class="ui divider"></div>
+        <router-link to='/login' class="big ui green button">
+          Start Navigate
+        </router-link>
+      </div>
     </div>
     <div v-if="hotspot.onError" class="ui icon negative message">
       <i class="warning icon"></i>
@@ -26,12 +28,28 @@
 </template>
 
 <script>
+  import AuthMixin from './../mixins/auth';
   export default {
     name: 'SplashPage',
+    mixins: [AuthMixin],
     data() {
+      var loaded = false
+      this.getPreferences({
+        digest: this.$root.$options.hotspot.digest,
+        uuid: this.$root.$options.hotspot.uuid,
+        sessionid: this.$root.$options.hotspot.sessionid,
+      }, success => {
+        this.hotspot.preferences = success.body.preferences
+        this.hotspot.loaded = true
+      }, error => {
+        this.hotspot.loaded = false
+        console.error(error)
+      })
       return {
         hotspot: {
-          onError: this.$root.$options.hotspot.onError
+          onError: this.$root.$options.hotspot.onError,
+          preferences: {},
+          loaded: loaded
         }
       }
     }

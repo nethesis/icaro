@@ -1,8 +1,8 @@
 <template>
   <div id="app" class="ui container">
     <div class="ui center aligned">
-      <h2>Icarus Hotel ({{hotspot.name}})</h2>
-      <img src="./assets/logo.png" class="ui centered image tiny">
+      <h2>{{hotspot.preferences.captive_title}}</h2>
+      <img :src="hotspot.preferences.captive_logo" class="ui centered image tiny">
     </div>
     <div class="ui segments route-container">
       <router-view class="ui segment"></router-view>
@@ -22,13 +22,17 @@
         uuid: this.$root.$options.hotspot.uuid,
         sessionid: this.$root.$options.hotspot.sessionid,
       }, success => {
+        this.$root.$options.hotspot.preferences = success.body.preferences
+        this.$root.$options.hotspot.socials = success.body.socials
         this.hotspot.name = success.body.hotspot_name
+        this.hotspot.preferences = success.body.preferences
       }, error => {
         console.error(error)
       })
       return {
         hotspot: {
-          name: ''
+          name: '',
+          preferences: {}
         }
       }
     },
@@ -70,6 +74,7 @@
     text-align: center !important;
     color: #eff7fc !important;
     margin-top: 30px !important;
+    margin-bottom: 30px !important;
   }
 
   .route-container {
