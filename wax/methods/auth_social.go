@@ -30,14 +30,14 @@ import (
 	"net/http"
 	"net/url"
 	"time"
-	"wax/utils"
+	"github.com/nethesis/icaro/wax/utils"
 
 	"github.com/gin-gonic/gin"
 
-	"sun-api/configuration"
-	"sun-api/database"
-	"sun-api/methods"
-	"sun-api/models"
+	"github.com/nethesis/icaro/sun/sun-api/configuration"
+	"github.com/nethesis/icaro/sun/sun-api/database"
+	"github.com/nethesis/icaro/sun/sun-api/methods"
+	"github.com/nethesis/icaro/sun/sun-api/models"
 )
 
 func GoogleAuth(c *gin.Context) {

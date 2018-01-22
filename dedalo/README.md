@@ -10,7 +10,8 @@ Network Access Controller, runs on the firewall and intercepts all guest connect
 `# cat /opt/icaro/dedalo/config`
 ```ini
 HS_INTERFACE="interface_eth"
-HS_HOSTNAME="host:port"
+HS_SPLASH_PAGE_URL="http://host[:port]"
+HS_AAA_URL="http[s]://host[:port]"
 HS_ID="hotspot-id"
 HS_UNIT_NAME="unit-id"
 HS_UUID="generated-uuid"
@@ -21,7 +22,8 @@ HS_ALLOW_ORIGINS="your-allow-origin-for-cors"
 ### Example
 ```ini
 HS_INTERFACE="eth2"
-HS_HOSTNAME="myicaro"
+HS_SPLASH_PAGE_URL="http://myicaro"
+HS_AAA_URL="https://myicaro"
 HS_ID="hotel-king"
 HS_UNIT_NAME="unit-king"
 HS_UUID="1610fe6d-8578-4247-b4a2-c40dced94ber"

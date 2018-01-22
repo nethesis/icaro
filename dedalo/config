@@ -1,5 +1,6 @@
 HS_INTERFACE="interface_eth"
-HS_HOSTNAME="host:port"
+HS_SPLASH_PAGE_URL="http[s]://host[:port]"
+HS_AAA_URL="http://host[:port]"
 HS_ID="hotspot-id"
 HS_UNIT_NAME="unit-id"
 HS_UUID="generated-uuid"
