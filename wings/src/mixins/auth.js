@@ -101,7 +101,7 @@ var AuthMixin = {
                 this.$http.get('http://10.1.0.1:3990/json/logon?username=' + user.id +
                     '&response=' + response).then(callback);
             }, response => {
-                console.error(response)
+                callback(response)
             });
         }
     }

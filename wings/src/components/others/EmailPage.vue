@@ -3,7 +3,7 @@
         <div v-if="!dedaloRequested">
             <div class="ui big left icon input">
                 <input v-model="authEmail" type="email" placeholder="Insert your email">
-                <i class="talk icon"></i>
+                <i class="mail icon"></i>
             </div>
             <button v-on:click="getCode()" class="ui big button auth-code-cont">Get Code</button>
             <div v-if="errors.badMail" class="ui tiny icon negative message">
@@ -27,7 +27,7 @@
             </button>
         </div>
         <div v-if="dedaloRequested">
-            <div v-if="!authorized" class="ui active centered inline text loader">Authorization in progress...</div>
+            <div v-if="!authorized && !errors.dedaloError" class="ui active centered inline text loader">Authorization in progress...</div>
             <div v-if="authorized" class="ui icon positive message">
                 <i class="check icon"></i>
                 <div class="content">
@@ -35,6 +35,15 @@
                         You are successfully authenticated
                     </div>
                     <p>In a few seconds you will be redirected...</p>
+                </div>
+            </div>
+            <div v-if="errors.dedaloError" class="ui icon negative message">
+                <i class="check icon"></i>
+                <div class="content">
+                    <div class="header">
+                        Error on authentication
+                    </div>
+                    <p>Something went wrong on authentication process </p>
                 </div>
             </div>
         </div>
@@ -53,6 +62,7 @@
             var authorized = false
             var codeRequested = false
             var dedaloRequested = false
+            var dedaloError = false
             var badMail = false
             var badCode = false
 
@@ -64,7 +74,8 @@
                 authCode: '',
                 errors: {
                     badMail: badMail,
-                    badCode: badCode
+                    badCode: badCode,
+                    dedaloError: dedaloError
                 }
             }
         },
@@ -95,6 +106,7 @@
             execLogin() {
                 this.dedaloRequested = true
                 this.authorized = false
+                this.errors.dedaloError = false
                 this.errors.badCode = false
 
                 // exec dedalo login
@@ -104,6 +116,7 @@
                 }, responseDedalo => {
                     if (responseDedalo.body.clientState == 1) {
                         this.authorized = true
+                        this.errors.dedaloError = false
                         setTimeout(function () {
                             // open redir url
                             window.location.replace(this.$root.$options.hotspot.preferences
@@ -111,10 +124,12 @@
                         }.bind(this), 2500)
                     } else {
                         this.authorized = false
+                        this.errors.dedaloError = true
                         this.errors.badCode = true
                     }
                 }, error => {
                     this.authorized = false
+                    this.errors.dedaloError = true
                     console.error(error)
                 })
             }
