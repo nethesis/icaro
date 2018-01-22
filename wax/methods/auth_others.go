@@ -50,6 +50,14 @@ func SMSAuth(c *gin.Context) {
 		// generate code
 		code := utils.GenerateCode(6)
 
+		// send sms with code
+		status := utils.SendSMSCode(number, code)
+		// check response
+		if status != 201 {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "authorization code not send"})
+			return
+		}
+
 		// create user
 		unit := utils.GetUnitByUuid(uuid)
 		newUser := models.User{
@@ -68,9 +76,6 @@ func SMSAuth(c *gin.Context) {
 
 		// create user session check
 		utils.CreateUserSession(newUser.Id, sessionId)
-
-		// send sms with code
-		utils.SendSMSCode(number, code)
 
 		// TODO: create marketing info with user infos and birthday
 
@@ -107,6 +112,15 @@ func EmailAuth(c *gin.Context) {
 		// generate code
 		code := utils.GenerateCode(6)
 
+		// send email with code
+		status := utils.SendEmailCode(email, code)
+
+		// check response
+		if !status {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "authorization code not send"})
+			return
+		}
+
 		// create user
 		unit := utils.GetUnitByUuid(uuid)
 		newUser := models.User{
@@ -125,9 +139,6 @@ func EmailAuth(c *gin.Context) {
 
 		// create user session check
 		utils.CreateUserSession(newUser.Id, sessionId)
-
-		// send email with code
-		utils.SendEmailCode(email, code)
 
 		// TODO: create marketing info with user infos and birthday
 

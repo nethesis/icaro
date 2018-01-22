@@ -25,7 +25,6 @@ package utils
 import (
 	"crypto/md5"
 	"crypto/rand"
-	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -205,7 +204,7 @@ func GenerateCode(max int) string {
 	return string(b)
 }
 
-func SendSMSCode(number string, code string) {
+func SendSMSCode(number string, code string) int {
 	// retrieve account info and token
 	accountSid := configuration.Config.Endpoints.Sms.AccountSid
 	authToken := configuration.Config.Endpoints.Sms.AuthToken
@@ -225,21 +224,13 @@ func SendSMSCode(number string, code string) {
 	req.Header.Add("Accept", "application/json")
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 
-	// make HTTP POST request and return message SID
+	// make HTTP POST request
 	resp, _ := client.Do(req)
-	if resp.StatusCode >= 200 && resp.StatusCode < 300 {
-		var data map[string]interface{}
-		decoder := json.NewDecoder(resp.Body)
-		err := decoder.Decode(&data)
-		if err != nil {
-			fmt.Println(err.Error())
-		}
-	} else {
-		fmt.Println(resp.Status)
-	}
+	return resp.StatusCode
 }
 
-func SendEmailCode(email string, code string) {
+func SendEmailCode(email string, code string) bool {
+	status := true
 	m := gomail.NewMessage()
 	m.SetHeader("From", configuration.Config.Endpoints.Email.From)
 	m.SetHeader("To", email)
@@ -255,8 +246,10 @@ func SendEmailCode(email string, code string) {
 
 	// send the email
 	if err := d.DialAndSend(m); err != nil {
-		fmt.Println(err.Error())
+		status = false
 	}
+
+	return status
 }
 
 func Contains(intSlice []int, searchInt int) bool {
