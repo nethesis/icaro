@@ -27,9 +27,9 @@ import (
 	"strconv"
 	"time"
 
-	"sun-api/configuration"
-	"sun-api/database"
-	"sun-api/models"
+	"github.com/nethesis/icaro/sun/sun-api/configuration"
+	"github.com/nethesis/icaro/sun/sun-api/database"
+	"github.com/nethesis/icaro/sun/sun-api/models"
 )
 
 func OffsetCalc(page string, limit string) [2]int {

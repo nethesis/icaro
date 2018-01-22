@@ -26,7 +26,7 @@ import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 
-	"sun-api/configuration"
+	"github.com/nethesis/icaro/sun/sun-api/configuration"
 )
 
 func Database() *gorm.DB {

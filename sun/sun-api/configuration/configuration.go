@@ -27,7 +27,7 @@ import (
 	"fmt"
 	"os"
 
-	"sun-api/models"
+	"github.com/nethesis/icaro/sun/sun-api/models"
 )
 
 type Configuration struct {

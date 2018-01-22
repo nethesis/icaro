@@ -31,9 +31,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"sun-api/configuration"
-	"sun-api/models"
-	"sun-api/utils"
+	"github.com/nethesis/icaro/sun/sun-api/configuration"
+	"github.com/nethesis/icaro/sun/sun-api/models"
+	"github.com/nethesis/icaro/sun/sun-api/utils"
 )
 
 func respondWithError(code int, message string, c *gin.Context) {

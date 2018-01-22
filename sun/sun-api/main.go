@@ -28,10 +28,10 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 
-	"sun-api/configuration"
-	"sun-api/crons"
-	"sun-api/methods"
-	"sun-api/middleware"
+	"github.com/nethesis/icaro/sun/sun-api/configuration"
+	"github.com/nethesis/icaro/sun/sun-api/crons"
+	"github.com/nethesis/icaro/sun/sun-api/methods"
+	"github.com/nethesis/icaro/sun/sun-api/middleware"
 )
 
 func main() {
