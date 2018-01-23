@@ -112,6 +112,17 @@ CREATE TABLE `user_sessions` (
   PRIMARY KEY(`id`)
 );
 
+CREATE TABLE `user_temp_sessions` (
+  `id` serial,
+  `user_id` bigint unsigned NOT NULL,
+  `device_mac` varchar(200) NOT NULL,
+  `session_key` varchar(200),
+  `created` datetime,
+  FOREIGN KEY (`user_id`) REFERENCES users(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  UNIQUE KEY (`user_id`, `session_key`),
+  PRIMARY KEY(`id`)
+);
+
 CREATE TABLE `devices` (
   `id` serial,
   `hotspot_id` bigint unsigned NOT NULL,
