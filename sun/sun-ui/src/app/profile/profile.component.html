@@ -1,0 +1,64 @@
+<div class="padding-15">
+	<div class="cards-pf">
+		<div class="row row-cards-pf">
+			<div class="col-sm-4">
+				<!-- Profile card -->
+				<pfng-card class="custom-card">
+					<!-- Profile Title -->
+					<div class="card-pf-heading">
+						<h2 class="card-pf-title">
+							<span class="pficon pficon-user status-info"></span>
+							&nbsp;{{ 'PROFILE.Profile' | translate }}
+						</h2>
+					</div>
+					<!-- Username info -->
+					<div class="card-pf-body">
+						<dl>
+							<dt>{{ 'PROFILE.Name' | translate }}</dt>
+							<dd>{{accountArray.name}}</dd>
+							<dt>{{ 'PROFILE.Uuid' | translate }}</dt>
+							<dd> {{accountArray.uuid}}</dd>
+							<hr>
+							<dt>{{ 'PROFILE.Email' | translate }}</dt>
+							<dd> {{accountArray.email}} </dd>
+							<dt>{{ 'PROFILE.Profile' | translate }}</dt>
+							<dd> {{accountArray.type}} </dd>
+						</dl>
+					</div>
+					<!-- Change password modal button -->
+					<div class="card-pf-footer">
+						<div class="dropdown card-pf-time-frame-filter">
+							<button class="btn btn-default" data-toggle="modal" data-target="#change-password" class="btn btn-default">
+								{{ 'PROFILE.ChangePassword' | translate }}
+							</button>
+						</div>
+					</div>
+				</pfng-card>
+			</div>
+		</div>
+		<div class="row row-cards-pf">
+			<div class="col-sm-4">
+				<pfng-card class="custom-card">
+					<div class="card-pf-heading">
+						<h2 class="card-pf-title">
+							<span class="fa fa-wrench status-info"></span>
+							&nbsp;{{ 'PROFILE.Preferences' | translate }}
+						</h2>
+					</div>
+					<!-- Preferences info -->
+					<div class="card-pf-body">
+						<dl class="no-data">
+							<div *ngIf="!preferenceArray?.length > 0" class="alert alert-warning alert-dismissable">
+								<span class="pficon pficon-warning-triangle-o"></span>
+								<strong>{{ 'PROFILE.NoData' | translate }}</strong>
+							</div>
+						</dl>
+					</div>
+				</pfng-card>
+			</div>
+		</div>
+	</div>
+
+	<!-- Change password Modal -->
+	<app-change-password-modal></app-change-password-modal>
+</div>

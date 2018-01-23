@@ -1,34 +1,72 @@
-<!-- Navbar content -->
-<nav class="navbar navbar-pf-vertical">
-	<div class="navbar-header">
-		<button type="button" class="navbar-toggle">
-			<span class="sr-only">Toggle navigation</span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-		</button>
-		<a class="navbar-brand">
-			<!-- Insert logo here -->
-			<!-- <img class="navbar-brand-icon" src="" alt=""/> -->
-			<!-- <img class="navbar-brand-name" src="" alt="" /> -->
-		</a>
-	</div>
-	
-	<ul class="nav navbar-nav navbar-right navbar-iconic navbar-utility">
-		<li class="dropdown">
-			<a href="" (click)="logOut();" class="dropdown-toggle nav-item-iconic" id="dropdownMenu28" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-				<span title="Username" class="fa pficon-user"></span>
-				{{account_type}} Logout
-				<span class="caret"></span>
+<!-- Topbar and vertical navigation content -->
+<div id="verticalNavLayout" class="layout-pf layout-pf-fixed faux-layout">
+	<!-- Topbar menu -->
+	<nav class="navbar navbar-pf-vertical">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle"(click)="toggleOnClick = !toggleOnClick"  >
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a href="/" class="navbar-brand">
+				<img class="navbar-brand-icon" [src]="logo" [alt]="mainTitle"/>
 			</a>
-		</li>
-	</ul>
+		</div>
+		<!-- Topbar menu with icons -->
+		<ul class="nav navbar-nav navbar-right navbar-iconic">
+			<li class="dropdown">
+				<!-- User info -->
+				<a class="dropdown-toggle nav-item-iconic" id="userDropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+					<span class="email">
+						{{email}}
+					</span>
+					<br>
+					<span class="account-type">
+						{{account_type }}
+					</span>
+					<span class="caret"></span>
+				</a>
+				<!-- User dropdown list -->
+				<ul class="dropdown-menu" aria-labelledby="userDropdownMenu">
+					<li>
+						<!-- Profile -->
+						<a class="profile" routerLink="/home/profile">
+							<i class="fa fa-user" aria-hidden="true"></i>
+							{{ 'HOME.Profile' | translate }}
+						</a>
+						<hr>
+						<!-- Logout -->
+						<a class="logout" href="#" (click)="logOut()">
+							<i class="fa fa-sign-out" aria-hidden="true"></i>
+							{{ 'HOME.Logout' | translate }}
+						</a>
+					</li>
+				</ul>
+			</li>
+			<li class="dropdown">
+				<!-- Languarges Dropdown -->
+				<a class="dropdown-toggle nav-item-iconic" id="languagesDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+					<span title="Change Languages" class="fa fa-globe"></span>
+				</a>
+				<!-- Select language (English, Italian) -->
+				<ul class="dropdown-menu" aria-labelledby="languagesDropdown">
+					<li *ngFor="let item of allLanguages" >
+						<a (click)=" getLanguage(item)" >
+							<i [ngClass]="{'i18n':currentLanguage!=item}" class="fa fa-check" aria-hidden="true"></i>
+							{{langFullName[item].nativeName}}
+						</a>
+					</li>
+				</ul>
+			</li>
+		</ul>
+	</nav>
 
-</nav>
+	<!-- Sidebar content -->
+	<div class="nav-pf-vertical nav-pf-vertical-with-sub-menus nav-pf-persistent-secondary" [style.width] = "toggleSidebar()"></div>
 
-<!-- Sidenav content -->
-<div class="nav-pf-vertical nav-pf-vertical-with-sub-menus nav-pf-persistent-secondary"></div>
-
-
-<!-- Dashboard content -->
-<div class="container-fluid container-cards-pf container-pf-nav-pf-vertical nav-pf-persistent-secondary"></div>
+	<!-- Main content -->
+	<div class="container-fluid container-cards-pf container-pf-nav-pf-vertical" id="contentContainer" [ngStyle]="{'margin-left': toggleSidebar()}">
+		<router-outlet></router-outlet>
+	</div>
+</div>

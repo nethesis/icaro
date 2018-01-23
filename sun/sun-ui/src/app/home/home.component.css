@@ -1,3 +1,69 @@
-.navbar-pf-vertical .navbar-brand {
-	padding: 20px;
+.faux-layout {
+	position: fixed;
+	top: 37px;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background-color: #f5f5f5;
+	padding-top: 15px;
+	z-index: 1100;
+}
+
+#contentContainer,
+.nav-pf-persistent-secondary {
+	transition: .25s ease-in-out;
+}
+
+.nav-pf-vertical .list-group-item > a {
+	width: 185px;
+}
+
+.hide-vertical-nav {
+	margin-top: 15px;
+	margin-left: 30px;
+}
+
+.navbar-brand-txt {
+	line-height: 34px;
+}
+
+.navbar-brand img {
+	height: 30px;
+}
+
+#userDropdownMenu span {
+	vertical-align: sub;
+}
+
+#userDropdownMenu {
+	padding: 15px 15px 11px 0;
+	text-align: right;
+}
+
+hr {
+	margin: 5px;
+}
+
+.logout i {
+	margin-right: 10px;
+	vertical-align: initial;
+}
+
+.profile i {
+	margin-right: 12px;
+	vertical-align: initial;
+}
+
+.english,
+.italian {
+	cursor: pointer;
+}
+
+.i18n {
+	visibility: hidden;
+}
+
+.container-cards-pf {
+	height: 100%;
+	overflow: auto;
 }

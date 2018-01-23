@@ -45,6 +45,8 @@ export class LoginComponent implements OnInit {
         data => {
           this.router.navigate(['/home']);
           localStorage.setItem('account_type', data.account_type);
+          localStorage.setItem('id', data.id);
+
           // Reset form, when user is logged in!
           f.reset();
         },
