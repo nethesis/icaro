@@ -44,10 +44,11 @@ func DefineAPI(router *gin.Engine) {
 
 	wax := router.Group("/wax")
 
-	wax.GET("/aaa", methods.Dispatch)
-
 	wax.Use(middleware.WaxWall)
 	{
+		// handle AAA requests
+		wax.GET("/aaa", methods.Dispatch)
+
 		// handle voucher control
 		wax.GET("/register/voucher/:code", methods.VoucherAuth)
 

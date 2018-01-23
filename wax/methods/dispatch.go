@@ -80,10 +80,10 @@ func Dispatch(c *gin.Context) {
 	case "login":
 		unitMacAddress := c.Query("ap")
 		user := c.Query("user")
-		chap_pass := c.Query("chap_pass")
-		chap_chal := c.Query("chap_chal")
+		chapPass := c.Query("chap_pass")
+		chapChal := c.Query("chap_chal")
 		sessionId := c.Query("sessionid")
-		Login(c, unitMacAddress, user, chap_pass, chap_chal, sessionId)
+		Login(c, unitMacAddress, user, chapPass, chapChal, sessionId)
 
 	case "counters":
 		parameters := c.Request.URL.Query()
@@ -94,6 +94,11 @@ func Dispatch(c *gin.Context) {
 
 	case "register":
 		c.String(http.StatusNotImplemented, "Not implemented: %s", stage)
+
+	case "temporary":
+		parameters := c.Request.URL.Query()
+
+		Temporary(c, parameters)
 	default:
 		c.String(http.StatusNotFound, "Invalid stage: '%s'", stage)
 	}

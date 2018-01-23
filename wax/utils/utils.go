@@ -85,6 +85,36 @@ func CheckUserSession(userId int, sessionKey string) bool {
 	return true
 }
 
+func CheckTempUserSession(userId int, deviceMac string, sessionKey string) bool {
+	var check = true
+	var userTempSession models.UserTempSession
+
+	// check if user session exists
+	db := database.Database()
+	db.Where("user_id = ? AND device_mac = ? AND session_key = ?", userId, deviceMac, sessionKey).First(&userTempSession)
+	db.Close()
+
+	// if not exists create one
+	if userTempSession.Id == 0 {
+		userTempSessionNew := models.UserTempSession{
+			UserId:     userId,
+			DeviceMac:  deviceMac,
+			SessionKey: sessionKey,
+			Created:    time.Now().UTC(),
+		}
+
+		// save user temp session
+		db := database.Database()
+		db.Save(&userTempSessionNew)
+		db.Close()
+		check = true
+	} else {
+		check = false
+	}
+
+	return check
+}
+
 func DeleteUserSession(userId int, sessionKey string) bool {
 	var userSession models.UserSession
 
