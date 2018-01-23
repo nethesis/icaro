@@ -103,6 +103,10 @@ var AuthMixin = {
             }, response => {
                 callback(response)
             });
+        },
+        doTempSession(email, callback) {
+            // do dedalo login
+            this.$http.get('http://10.1.0.1:3990/www/temporary.chi?username=' + email).then(callback);
         }
     }
 };

@@ -101,12 +101,30 @@
 
                 // get user id
                 this.$http.get(url).then(responseAuth => {
-                    this.codeRequested = true
                     this.authCode = responseAuth.body.password || ''
-                }, response => {
+
+                    // chech if user already exists
+                    if (this.authCode.length > 0) {
+                        this.codeRequested = true
+                    } else {
+                        // open temp session for the user
+                        this.doTempSession(this.authEmail, responseTmp => {
+                            if (responseTmp.body.clientState == 1) {
+                                this.codeRequested = true
+                            } else {
+                                this.codeRequested = false
+                                this.errors.badMail = true
+                            }
+                        }, error => {
+                            this.codeRequested = false
+                            this.errors.badMail = true
+                            console.error(error)
+                        })
+                    }
+                }, error => {
                     this.codeRequested = false
                     this.errors.badMail = true
-                    console.error(response)
+                    console.error(error)
                 });
             },
             execLogin() {
