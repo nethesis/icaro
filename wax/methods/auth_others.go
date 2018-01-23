@@ -24,7 +24,9 @@ package methods
 
 import (
 	"net/http"
+	"strconv"
 	"time"
+
 	"github.com/nethesis/icaro/wax/utils"
 
 	"github.com/gin-gonic/gin"
@@ -60,6 +62,8 @@ func SMSAuth(c *gin.Context) {
 
 		// create user
 		unit := utils.GetUnitByUuid(uuid)
+		days := utils.GetHotspotPreferencesByKey(unit.HotspotId, "user_expiration")
+		daysInt, _ := strconv.Atoi(days.Value)
 		newUser := models.User{
 			HotspotId:   unit.HotspotId,
 			Name:        number, // TODO: how we can get the name?
@@ -70,7 +74,7 @@ func SMSAuth(c *gin.Context) {
 			KbpsDown:    0,
 			KbpsUp:      0,
 			ValidFrom:   time.Now().UTC(),
-			ValidUntil:  time.Now().UTC().AddDate(0, 0, 30), // TODO: get days from hotspot account preferences
+			ValidUntil:  time.Now().UTC().AddDate(0, 0, daysInt),
 		}
 		newUser.Id = methods.CreateUser(newUser)
 
@@ -83,7 +87,9 @@ func SMSAuth(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"user_id": number})
 	} else {
 		// update user info
-		user.ValidUntil = time.Now().UTC().AddDate(0, 0, 30) // TODO: days info from hotspot account preferences
+		days := utils.GetHotspotPreferencesByKey(user.HotspotId, "user_expiration")
+		daysInt, _ := strconv.Atoi(days.Value)
+		user.ValidUntil = time.Now().UTC().AddDate(0, 0, daysInt)
 		db := database.Database()
 		db.Save(&user)
 		db.Close()
@@ -123,6 +129,8 @@ func EmailAuth(c *gin.Context) {
 
 		// create user
 		unit := utils.GetUnitByUuid(uuid)
+		days := utils.GetHotspotPreferencesByKey(unit.HotspotId, "user_expiration")
+		daysInt, _ := strconv.Atoi(days.Value)
 		newUser := models.User{
 			HotspotId:   unit.HotspotId,
 			Name:        email, // TODO: how we can get the name?
@@ -133,7 +141,7 @@ func EmailAuth(c *gin.Context) {
 			KbpsDown:    0,
 			KbpsUp:      0,
 			ValidFrom:   time.Now().UTC(),
-			ValidUntil:  time.Now().UTC().AddDate(0, 0, 30), // TODO: get days from hotspot account preferences
+			ValidUntil:  time.Now().UTC().AddDate(0, 0, daysInt),
 		}
 		newUser.Id = methods.CreateUser(newUser)
 
@@ -146,7 +154,9 @@ func EmailAuth(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"user_id": email})
 	} else {
 		// update user info
-		user.ValidUntil = time.Now().UTC().AddDate(0, 0, 30) // TODO: days info from hotspot account preferences
+		days := utils.GetHotspotPreferencesByKey(user.HotspotId, "user_expiration")
+		daysInt, _ := strconv.Atoi(days.Value)
+		user.ValidUntil = time.Now().UTC().AddDate(0, 0, daysInt)
 		db := database.Database()
 		db.Save(&user)
 		db.Close()

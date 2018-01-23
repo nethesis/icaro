@@ -48,6 +48,15 @@ func GetHotspotPreferences(hotspotId int) []models.HotspotPreference {
 	return prefs
 }
 
+func GetHotspotPreferencesByKey(hotspotId int, key string) models.HotspotPreference {
+	var pref models.HotspotPreference
+	db := database.Database()
+	db.Where("`key` = ? and hotspot_id = ?", key, hotspotId).First(&pref)
+	db.Close()
+
+	return pref
+}
+
 func GetHotspotPreferencesByKeys(hotspotId int, keys []string) []models.HotspotPreference {
 	var prefs []models.HotspotPreference
 	db := database.Database()
