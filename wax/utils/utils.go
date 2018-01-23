@@ -169,7 +169,7 @@ func GetUserByUsername(username string) models.User {
 func GetVoucherByCode(code string, hotspotId int) models.HotspotVoucher {
 	var hotspotVoucher models.HotspotVoucher
 	db := database.Database()
-	db.Where("code = ? AND hotspot_id = ?", code, hotspotId).First(&hotspotVoucher)
+	db.Where("binary code = ? AND hotspot_id = ?", code, hotspotId).First(&hotspotVoucher)
 	db.Close()
 
 	return hotspotVoucher

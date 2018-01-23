@@ -37,7 +37,9 @@ import (
 func DefineAPI(router *gin.Engine) {
 	// cors
 	corsConf := cors.DefaultConfig()
-	corsConf.AllowAllOrigins = true
+	corsConf.AllowOrigins = configuration.Config.Cors.Origins
+	corsConf.AllowHeaders = configuration.Config.Cors.Headers
+	corsConf.AllowMethods = configuration.Config.Cors.Methods
 	router.Use(cors.New(corsConf))
 
 	wax := router.Group("/wax")

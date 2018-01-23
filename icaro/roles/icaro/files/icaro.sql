@@ -108,6 +108,7 @@ CREATE TABLE `user_sessions` (
   `session_key` varchar(200),
   `created` datetime,
   FOREIGN KEY (`user_id`) REFERENCES users(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  UNIQUE KEY (`user_id`, `session_key`),
   PRIMARY KEY(`id`)
 );
 

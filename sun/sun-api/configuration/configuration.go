@@ -43,6 +43,11 @@ type Configuration struct {
 	TokenExpiresDays  int               `json:"token_expires_days"`
 	Authorizations    models.AuthMaps   `json:"authorizations"`
 	Endpoints         models.Endpoints  `json:"endpoints"`
+	Cors              struct {
+		Headers []string `json:"headers"`
+		Origins []string `json:"origins"`
+		Methods []string `json:"methods"`
+	} `json:"cors"`
 }
 
 var Config = Configuration{}

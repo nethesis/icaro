@@ -38,7 +38,7 @@
                 </div>
             </div>
             <div v-if="errors.dedaloError" class="ui icon negative message">
-                <i class="check icon"></i>
+                <i class="remove icon"></i>
                 <div class="content">
                     <div class="header">
                         Error on authentication

@@ -38,6 +38,11 @@
             "smtp_password": "{{ email_smtp_password }}"
         }
     },
+    "cors": {
+        "origins": ["http://{{ machine_hostname }}"],
+        "headers": ["Token"],
+        "methods": ["GET", "PUT", "POST", "DELETE"]
+    },
     "authorizations": {
         "admin": [{}],
         "customer": [{

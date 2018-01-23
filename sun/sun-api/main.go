@@ -46,8 +46,9 @@ func main() {
 
 	// cors
 	corsConf := cors.DefaultConfig()
-	corsConf.AllowAllOrigins = true
-	corsConf.AddAllowHeaders("Token")
+	corsConf.AllowOrigins = configuration.Config.Cors.Origins
+	corsConf.AllowHeaders = configuration.Config.Cors.Headers
+	corsConf.AllowMethods = configuration.Config.Cors.Methods
 	router.Use(cors.New(corsConf))
 
 	api := router.Group("/api")
