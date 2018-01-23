@@ -75,10 +75,10 @@
                         this.dedaloError = true
                         console.error(error)
                     })
-                }, response => {
+                }, error => {
                     this.authorized = false
                     this.dedaloError = true
-                    console.error(response)
+                    console.error(error)
                 });
             } else {
                 // get social login url

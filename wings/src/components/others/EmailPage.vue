@@ -1,11 +1,14 @@
 <template>
-    <div class="ui segment">
+    <div class="ui segment form">
         <div v-if="!dedaloRequested">
-            <div class="ui big left icon input">
-                <input v-model="authEmail" type="email" placeholder="Insert your email">
-                <i class="mail icon"></i>
+            <div class="inline field">
+                <label>Email</label>
+                <div class="ui big left icon input">
+                    <input v-model="authEmail" type="email" placeholder="Insert your email">
+                    <i class="mail icon"></i>
+                </div>
             </div>
-            <button v-on:click="getCode()" class="ui big button auth-code-cont">Get Code</button>
+            <button v-on:click="getCode()" class="ui big button">Get Code</button>
             <div v-if="errors.badMail" class="ui tiny icon negative message">
                 <i class="remove icon"></i>
                 <div class="content">
@@ -16,9 +19,12 @@
                 </div>
             </div>
             <div v-if="codeRequested" class="auth-code-cont">
-                <div class="ui big left icon input">
-                    <input v-model="authCode" type="number" placeholder="Insert your code">
-                    <i class="braille icon"></i>
+                <div class="inline field">
+                    <label>Code</label>
+                    <div class="ui big left icon input">
+                        <input v-model="authCode" type="number" placeholder="Insert your code">
+                        <i class="braille icon"></i>
+                    </div>
                 </div>
             </div>
             <div class="ui divider"></div>

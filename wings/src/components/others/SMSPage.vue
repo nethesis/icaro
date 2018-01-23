@@ -1,11 +1,14 @@
 <template>
-    <div class="ui segment">
+    <div class="ui segment form">
         <div v-if="!dedaloRequested">
-            <div class="ui big left icon input">
-                <input v-model="authSMS" type="tel" placeholder="Insert your number">
-                <i class="talk icon"></i>
+            <div class="inline field">
+                <label>Number</label>
+                <div class="ui big left icon input">
+                    <input v-model="authSMS" type="tel" placeholder="Insert your number">
+                    <i class="talk icon"></i>
+                </div>
             </div>
-            <button v-on:click="getCode()" class="ui big button auth-code-cont">Get Code</button>
+            <button v-on:click="getCode()" class="ui big button">Get Code</button>
             <div v-if="errors.badNumber" class="ui tiny icon negative message">
                 <i class="remove icon"></i>
                 <div class="content">
@@ -16,9 +19,12 @@
                 </div>
             </div>
             <div v-if="codeRequested" class="auth-code-cont">
-                <div class="ui big left icon input">
-                    <input v-model="authCode" type="number" placeholder="Insert your code">
-                    <i class="braille icon"></i>
+                <div class="inline field">
+                    <label>Code</label>
+                    <div class="ui big left icon input">
+                        <input v-model="authCode" type="number" placeholder="Insert your code">
+                        <i class="braille icon"></i>
+                    </div>
                 </div>
             </div>
             <div class="ui divider"></div>
@@ -97,10 +103,10 @@
                 this.$http.get(url).then(responseAuth => {
                     this.codeRequested = true
                     this.authCode = responseAuth.body.password || ''
-                }, response => {
+                }, error => {
                     this.codeRequested = false
                     this.errors.badNumber = true
-                    console.error(response)
+                    console.error(error)
                 });
             },
             execLogin() {

@@ -1,12 +1,15 @@
 <template>
-    <div class="ui segment">
+    <div class="ui segment form">
         <div v-if="voucherAvailable && !voucherValidated">
-            <h3>Insert Voucher code</h3>
-            <div class="ui big left icon input">
-                <input v-model="authCode" type="email" placeholder="Insert voucher code">
-                <i class="braille icon"></i>
+            <h3>Voucher code</h3>
+            <div class="inline field">
+                <label>Voucher</label>
+                <div class="ui big left icon input">
+                    <input v-model="authCode" type="email" placeholder="Insert voucher code">
+                    <i class="braille icon"></i>
+                </div>
             </div>
-            <button v-on:click="validateCode()" class="ui big button auth-code-cont">Validate Code</button>
+            <button v-on:click="validateCode()" class="ui big button">Validate Code</button>
             <div v-if="badCode" class="ui tiny icon negative message">
                 <i class="remove icon"></i>
                 <div class="content">
@@ -95,10 +98,10 @@
                 // get user id
                 this.$http.get(url).then(responseAuth => {
                     this.voucherValidated = true
-                }, response => {
+                }, error => {
                     this.voucherValidated = false
                     this.badCode = true
-                    console.error(response)
+                    console.error(error)
                 });
             }
         }
@@ -132,10 +135,5 @@
 
     .item {
         margin: 10px;
-    }
-
-    .auth-code-cont {
-        margin-top: 15px !important;
-        margin: 0;
     }
 </style>
