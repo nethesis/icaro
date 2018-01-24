@@ -30,6 +30,6 @@ type Unit struct {
 	MacAddress  string    `db:"mac_address" json:"mac_address"`
 	Description string    `db:"description" json:"description"`
 	Uuid        string    `db:"uuid" json:"uuid"`
-	Secret      string    `db:"secret" json:"-"`
+	Secret      string    `db:"secret" json:"secret"`
 	Created     time.Time `db:"created" json:"created"`
 }

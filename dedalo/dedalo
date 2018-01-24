@@ -3,6 +3,8 @@ OPT=$1
 shift
 source /opt/icaro/dedalo/config
 
+MAC_ADDRESS=$(cat /sys/class/net/$HS_INTERFACE/address | tr ':' '-' | awk '{print toupper($0)}')
+
 case "$OPT" in
     query)
         /usr/sbin/chilli_query -s /run/dedalo/chilli.sock "$@"
@@ -13,6 +15,58 @@ case "$OPT" in
             echo "Configuration generated successfully"
         else
             echo "Error on configuration generating"
+        fi
+    ;;
+    register)
+        # get opts
+        while getopts ":u:p:" o; do
+            case "${o}" in
+                u)
+                    USERNAME=${OPTARG}
+                    ;;
+                p)
+                    PASSWORD=${OPTARG}
+                    ;;
+                *)
+                    exit 1
+                    ;;
+            esac
+        done
+        # check if username exists
+        if [ -z "$USERNAME" ]; then
+            echo "Username is required, use -u <username>"
+            exit 1
+        fi
+        # check if password exists
+        if [ -z "$PASSWORD" ]; then
+            echo "Password is required, use -p <password>"
+            exit 1
+        fi
+        # get auth token using /login API
+        TOKEN=$(curl -s --request POST \
+            --url "$HS_API_URL/login" \
+            --header "Content-Type: application/json" \
+            --data "{
+                \"username\": \"$USERNAME\",
+                \"password\": \"$PASSWORD\"
+            }" | jq -r '.token')
+        # create a new unit using /units API
+        RESP=$(curl -s --request POST \
+            --url "$HS_API_URL/units" \
+            --header 'Content-Type: application/json' \
+            --header "Token: $TOKEN" \
+            --data "{
+                \"mac_address\": \"$MAC_ADDRESS\",
+                \"description\": \"$HS_UNIT_NAME\",
+                \"uuid\": \"$HS_UUID\",
+                \"secret\": \"$HS_SECRET\",
+                \"hotspot_id\": 1
+            }" | jq -r '.status')
+        # check if everything is ok
+        if [ $? -eq 0 ] && [ "$RESP" == "success" ]; then
+            echo "Unit added successfully"
+        else
+            echo "Error on unit adding"
         fi
     ;;
     start)
@@ -29,12 +83,12 @@ case "$OPT" in
     ;;
     info)
         echo "Dedalo: Network Access Controller"
-        echo -e "  HotSpot:\t$HS_ID"
-        echo -e "  Unit name:\t$HS_UNIT_NAME"
-        echo -e "  UUID:\t\t$HS_UUID"
-        echo -e "  Secret:\t$HS_SECRET"
-        echo -e "  MAC:\t\t$(cat /sys/class/net/$HS_INTERFACE/address | tr ':' '-' | awk '{print toupper($0)}')"
+        echo -e "  HotSpot ID:\t$HS_ID"
+        echo -e "  Unit Name:\t$HS_UNIT_NAME"
+        echo -e "  Unit UUID:\t$HS_UUID"
+        echo -e "  Unit Secret:\t$HS_SECRET"
+        echo -e "  Unit MAC:\t$MAC_ADDRESS"
     ;;
     *)
-        echo "Usage: $0 { query | config | start | stop | restart | status | info }"
+        echo "Usage: $0 { query | config | register | start | stop | restart | status | info }"
 esac

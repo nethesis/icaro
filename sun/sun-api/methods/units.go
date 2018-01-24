@@ -47,6 +47,7 @@ func CreateUnit(c *gin.Context) {
 		MacAddress:  json.MacAddress,
 		Description: json.Description,
 		Uuid:        json.Uuid,
+		Secret:      json.Secret,
 		Created:     time.Now().UTC(),
 	}
 

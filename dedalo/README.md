@@ -32,9 +32,13 @@ HS_ALLOW_ORIGINS="*"
 ```
 
 ## Helper
-`Usage: ./dedalo { query | config | start | stop | restart | status | info }`
+`Usage: ./dedalo { query | config | register| start | stop | restart | status | info }`
 - **query**: wrapper to chilli_query
 - **config**: generate `chilli.conf` based on your `config` file
+- **register**: register an unit using SUN accounts credentials
+  ```
+  dedalo register -u sun-username -p sun-password
+  ```
 - **start**: equal to `systemctl start dedalo`
 - **stop**: equal to `systemctl stop dedalo`
 - **restart**: equal to `systemctl restart dedalo`
