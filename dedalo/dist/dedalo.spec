@@ -37,6 +37,11 @@ install -D -m755 dedalo/dedalo %{buildroot}/%{_bindir}/dedalo
 mkdir -p %{buildroot}/opt/icaro/dedalo/template
 install -D -m644 dedalo/template/chilli.conf.tpl %{buildroot}/opt/icaro/dedalo/template/chilli.conf.tpl
 install -D -m775 dedalo/template/engine %{buildroot}/opt/icaro/dedalo/template/engine
+mkdir -p %{buildroot}/opt/icaro/dedalo/walled_gardens
+install -D -m644 dedalo/walled_gardens/local.conf %{buildroot}/opt/icaro/dedalo/walled_gardens/local.conf
+install -D -m644 dedalo/walled_gardens/facebook.conf %{buildroot}/opt/icaro/dedalo/walled_gardens/facebook.conf
+install -D -m644 dedalo/walled_gardens/google.conf %{buildroot}/opt/icaro/dedalo/walled_gardens/google.conf
+install -D -m644 dedalo/walled_gardens/linkedin.conf %{buildroot}/opt/icaro/dedalo/walled_gardens/linkedin.conf
 
 %files
 /usr/lib/systemd/system/dedalo.service
@@ -44,8 +49,13 @@ install -D -m775 dedalo/template/engine %{buildroot}/opt/icaro/dedalo/template/e
 /opt/icaro/dedalo
 /opt/icaro/dedalo/template
 /opt/icaro/dedalo/template/engine
+/opt/icaro/dedalo/walled_gardens
 %config /opt/icaro/dedalo/config
 %config /opt/icaro/dedalo/template/chilli.conf.tpl
+%config(noreplace) /opt/icaro/dedalo/walled_gardens/local.conf
+%config /opt/icaro/dedalo/walled_gardens/facebook.conf
+%config /opt/icaro/dedalo/walled_gardens/google.conf
+%config /opt/icaro/dedalo/walled_gardens/linkedin.conf
 %doc dedalo/README.md
 
 
