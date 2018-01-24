@@ -2,6 +2,9 @@ cmdsocket       /run/dedalo/chilli.sock
 unixipc         /run/dedalo/chilli.ipc
 pidfile         /run/dedalo/chilli.pid
 
+wwwdir          /opt/icaro/dedalo/www
+wwwbin          /etc/chilli/wwwsh
+
 net             10.1.0.0/255.255.255.0
 uamlisten       10.1.0.1
 dhcpif          ${HS_INTERFACE}
