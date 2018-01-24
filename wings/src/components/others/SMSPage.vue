@@ -1,7 +1,7 @@
 <template>
     <div class="ui segment form">
         <div v-if="!dedaloRequested">
-            <div class="inline field">
+            <div class="inline field" v-bind:class="{ error: errors.badInput }">
                 <label>Number</label>
                 <div class="ui big left icon input">
                     <input v-model="authSMS" type="tel" placeholder="Insert your number">
@@ -71,6 +71,7 @@
             var dedaloError = false
             var badNumber = false
             var badCode = false
+            var badInput = false
 
             return {
                 authorized: authorized,
@@ -81,7 +82,8 @@
                 errors: {
                     badNumber: badNumber,
                     badCode: badCode,
-                    dedaloError: dedaloError
+                    dedaloError: dedaloError,
+                    badInput: badInput
                 }
             }
         },
@@ -92,7 +94,8 @@
             getCode() {
                 this.errors.badNumber = false
                 if (!this.authSMS.startsWith('+')) {
-                    this.errors.badNumber = true
+                    this.errors.badInput = true
+                    return
                 }
                 var params = this.extractParams()
 

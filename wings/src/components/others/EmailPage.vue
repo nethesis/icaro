@@ -1,7 +1,7 @@
 <template>
     <div class="ui segment form">
         <div v-if="!dedaloRequested">
-            <div class="inline field">
+            <div class="inline field" v-bind:class="{ error: errors.badInput }">
                 <label>Email</label>
                 <div class="ui big left icon input">
                     <input v-model="authEmail" type="email" placeholder="Insert your email">
@@ -71,6 +71,7 @@
             var dedaloError = false
             var badMail = false
             var badCode = false
+            var badInput = false
 
             return {
                 authorized: authorized,
@@ -81,7 +82,8 @@
                 errors: {
                     badMail: badMail,
                     badCode: badCode,
-                    dedaloError: dedaloError
+                    dedaloError: dedaloError,
+                    badInput: badInput
                 }
             }
         },
@@ -91,8 +93,9 @@
             },
             getCode() {
                 this.errors.badMail = false
-                if (!this.authEmail.indexOf('@') == -1) {
-                    this.errors.badMail = true
+                if (this.authEmail.indexOf('@') == -1) {
+                    this.errors.badInput = true
+                    return
                 }
                 var params = this.extractParams()
 

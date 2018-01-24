@@ -2,7 +2,7 @@
     <div class="ui segment form">
         <div v-if="voucherAvailable && !voucherValidated">
             <h3>Voucher code</h3>
-            <div class="inline field">
+            <div class="inline field" v-bind:class="{ error: badInput }">
                 <label>Voucher</label>
                 <div class="ui big left icon input">
                     <input v-model="authCode" type="email" placeholder="Insert voucher code">
@@ -70,6 +70,8 @@
             var voucherAvailable = false
             var voucherValidated = false
             var badCode = false
+            var badInput = false
+
             var authCode = ''
             if (this.$root.$options.hotspot.preferences.voucher_login == "true") {
                 voucherAvailable = true
@@ -81,14 +83,16 @@
                 voucherAvailable: voucherAvailable,
                 voucherValidated: voucherValidated,
                 authCode: authCode,
-                badCode: badCode
+                badCode: badCode,
+                badInput: badInput
             }
         },
         methods: {
             validateCode() {
                 this.badCode = false
-                if (!this.authCode.length > 1) {
-                    this.badCode = true
+                if (this.authCode.length == 0) {
+                    this.badInput = true
+                    return
                 }
                 var params = this.extractParams()
 
