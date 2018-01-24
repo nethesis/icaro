@@ -78,9 +78,6 @@ func SMSAuth(c *gin.Context) {
 		}
 		newUser.Id = methods.CreateUser(newUser)
 
-		// create user session check
-		utils.CreateUserSession(newUser.Id, sessionId)
-
 		// TODO: create marketing info with user infos and birthday
 
 		// response to client
@@ -144,9 +141,6 @@ func EmailAuth(c *gin.Context) {
 			ValidUntil:  time.Now().UTC().AddDate(0, 0, daysInt),
 		}
 		newUser.Id = methods.CreateUser(newUser)
-
-		// create user session check
-		utils.CreateUserSession(newUser.Id, sessionId)
 
 		// TODO: create marketing info with user infos and birthday
 

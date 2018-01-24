@@ -64,10 +64,12 @@ func Login(c *gin.Context, unitMacAddress string, username string, chapPass stri
 	}
 
 	// check if user-sessions exists
-	valid := utils.CheckUserSession(user.Id, sessionId)
-	if !valid {
-		AuthReject(c, "user-session not found")
-		return
+	if user.AccountType != "email" && user.AccountType != "sms" {
+		valid := utils.CheckUserSession(user.Id, sessionId)
+		if !valid {
+			AuthReject(c, "user-session not found")
+			return
+		}
 	}
 
 	// check if user credentials are valid

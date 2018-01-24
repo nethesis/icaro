@@ -109,12 +109,7 @@
                     } else {
                         // open temp session for the user
                         this.doTempSession(this.authEmail, responseTmp => {
-                            if (responseTmp.body.clientState == 1) {
-                                this.codeRequested = true
-                            } else {
-                                this.codeRequested = false
-                                this.errors.badMail = true
-                            }
+                            this.codeRequested = true
                         }, error => {
                             this.codeRequested = false
                             this.errors.badMail = true
@@ -133,24 +128,31 @@
                 this.errors.dedaloError = false
                 this.errors.badCode = false
 
-                // exec dedalo login
-                this.doDedaloLogin({
-                    id: this.authEmail,
-                    password: this.authCode || ''
-                }, responseDedalo => {
-                    if (responseDedalo.body.clientState == 1) {
-                        this.authorized = true
-                        this.errors.dedaloError = false
-                        setTimeout(function () {
-                            // open redir url
-                            window.location.replace(this.$root.$options.hotspot.preferences
-                                .captive_redir)
-                        }.bind(this), 2500)
-                    } else {
+                // exec logout
+                this.doDedaloLogout(responseDedaloLogout => {
+                    // exec dedalo login
+                    this.doDedaloLogin({
+                        id: this.authEmail,
+                        password: this.authCode || ''
+                    }, responseDedalo => {
+                        if (responseDedalo.body.clientState == 1) {
+                            this.authorized = true
+                            this.errors.dedaloError = false
+                            setTimeout(function () {
+                                // open redir url
+                                window.location.replace(this.$root.$options.hotspot.preferences
+                                    .captive_redir)
+                            }.bind(this), 2500)
+                        } else {
+                            this.authorized = false
+                            this.errors.dedaloError = true
+                            this.errors.badCode = true
+                        }
+                    }, error => {
                         this.authorized = false
                         this.errors.dedaloError = true
-                        this.errors.badCode = true
-                    }
+                        console.error(error)
+                    })
                 }, error => {
                     this.authorized = false
                     this.errors.dedaloError = true
