@@ -4,52 +4,52 @@
             <div class="inline field" v-bind:class="{ error: errors.badInput }">
                 <label>Email</label>
                 <div class="ui big left icon input">
-                    <input v-model="authEmail" type="email" placeholder="Insert your email">
+                    <input v-model="authEmail" type="email" :placeholder="$t('email.insert_email')">
                     <i class="mail icon"></i>
                 </div>
             </div>
-            <button v-on:click="getCode()" class="ui big button">Get Code</button>
+            <button v-on:click="getCode()" class="ui big button">{{ $t("email.insert_email") }}</button>
             <div v-if="errors.badMail" class="ui tiny icon negative message">
                 <i class="remove icon"></i>
                 <div class="content">
                     <div class="header">
-                        Error sending verification code
+                        {{ $t("email.error_code") }}
                     </div>
-                    <p>Something gone wrong sending code to your email</p>
+                    <p>{{ $t("email.error_code_sub") }}</p>
                 </div>
             </div>
             <div v-if="codeRequested" class="auth-code-cont">
                 <div class="inline field">
-                    <label>Code</label>
+                    <label>{{ $t("email.code") }}</label>
                     <div class="ui big left icon input">
-                        <input v-model="authCode" type="number" placeholder="Insert your code">
+                        <input v-model="authCode" type="number" :placeholder="$t('email.insert_code')">
                         <i class="braille icon"></i>
                     </div>
                 </div>
             </div>
             <div class="ui divider"></div>
             <button v-on:click="execLogin()" :disabled="isDisabled()" class="big ui green button">
-                Start Navigate
+                {{ $t("email.start_navigate") }}
             </button>
         </div>
         <div v-if="dedaloRequested">
-            <div v-if="!authorized && !errors.dedaloError" class="ui active centered inline text loader">Authorization in progress...</div>
+            <div v-if="!authorized && !errors.dedaloError" class="ui active centered inline text loader">{{ $t("email.auth_progress") }}...</div>
             <div v-if="authorized" class="ui icon positive message">
                 <i class="check icon"></i>
                 <div class="content">
                     <div class="header">
-                        You are successfully authenticated
+                        {{ $t("email.auth_success") }}
                     </div>
-                    <p>In a few seconds you will be redirected...</p>
+                    <p>{{ $t("email.auth_success_sub") }}...</p>
                 </div>
             </div>
             <div v-if="errors.dedaloError" class="ui icon negative message">
                 <i class="remove icon"></i>
                 <div class="content">
                     <div class="header">
-                        Error on authentication
+                        {{ $t("email.auth_error") }}
                     </div>
-                    <p>Something went wrong on authentication process </p>
+                    <p>{{ $t("email.auth_error_sub") }}</p>
                 </div>
             </div>
         </div>

@@ -1,7 +1,7 @@
 <template>
   <div class="ui segment">
     <div v-if="!hotspot.onError">
-      <div v-if="!hotspot.loaded" class="ui active centered inline text loader">Retrieve info...</div>
+      <div v-if="!hotspot.loaded" class="ui active centered inline text loader">{{ $t("splash.retrieve_info") }}...</div>
       <div v-if="hotspot.loaded">
         <h3>{{hotspot.preferences.captive_subtitle}}</h3>
         <img class="ui centered small image" :src="hotspot.preferences.captive_banner">
@@ -10,7 +10,7 @@
         </p>
         <div class="ui divider"></div>
         <router-link to='/login' class="big ui green button">
-          Start Navigate
+          {{ $t("splash.start_navigate") }}
         </router-link>
       </div>
     </div>
@@ -18,9 +18,9 @@
       <i class="warning icon"></i>
       <div class="content">
         <div class="header">
-          Some params are missing. Can't we go ahead
+          {{ $t("splash.main_error") }}
         </div>
-        <p>Something gone wrong opening the page...</p>
+        <p>{{ $t("splash.main_error_sub") }}...</p>
       </div>
     </div>
   </div>

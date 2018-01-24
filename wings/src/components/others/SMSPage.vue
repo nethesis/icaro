@@ -2,54 +2,54 @@
     <div class="ui segment form">
         <div v-if="!dedaloRequested">
             <div class="inline field" v-bind:class="{ error: errors.badInput }">
-                <label>Number</label>
+                <label>{{ $t("sms.number") }}</label>
                 <div class="ui big left icon input">
-                    <input v-model="authSMS" type="tel" placeholder="Insert your number">
+                    <input v-model="authSMS" type="tel" :placeholder="$t('sms.insert_number')">
                     <i class="talk icon"></i>
                 </div>
             </div>
-            <button v-on:click="getCode()" class="ui big button">Get Code</button>
+            <button v-on:click="getCode()" class="ui big button">{{ $t("sms.get_code") }}</button>
             <div v-if="errors.badNumber" class="ui tiny icon negative message">
                 <i class="remove icon"></i>
                 <div class="content">
                     <div class="header">
-                        Error sending verification code
+                        {{ $t("sms.error_code") }}
                     </div>
-                    <p>Your cellphone number is invalid (use the international prefix)</p>
+                    <p>{{ $t("sms.error_code_sub") }}</p>
                 </div>
             </div>
             <div v-if="codeRequested" class="auth-code-cont">
                 <div class="inline field">
                     <label>Code</label>
                     <div class="ui big left icon input">
-                        <input v-model="authCode" type="number" placeholder="Insert your code">
+                        <input v-model="authCode" type="number" :placeholder="$t('sms.insert_code')">
                         <i class="braille icon"></i>
                     </div>
                 </div>
             </div>
             <div class="ui divider"></div>
             <button v-on:click="execLogin()" :disabled="isDisabled()" class="big ui green button">
-                Start Navigate
+                {{ $t("sms.start_navigate") }}
             </button>
         </div>
         <div v-if="dedaloRequested">
-            <div v-if="!authorized && !errors.dedaloError" class="ui active centered inline text loader">Authorization in progress...</div>
+            <div v-if="!authorized && !errors.dedaloError" class="ui active centered inline text loader">{{ $t("sms.auth_progress") }}...</div>
             <div v-if="authorized" class="ui icon positive message">
                 <i class="check icon"></i>
                 <div class="content">
                     <div class="header">
-                        You are successfully authenticated
+                        {{ $t("sms.auth_success") }}
                     </div>
-                    <p>In a few seconds you will be redirected...</p>
+                    <p>{{ $t("sms.auth_success_sub") }}...</p>
                 </div>
             </div>
             <div v-if="errors.dedaloError" class="ui icon negative message">
                 <i class="remove icon"></i>
                 <div class="content">
                     <div class="header">
-                        Error on authentication
+                        {{ $t("sms.auth_error") }}
                     </div>
-                    <p>Something went wrong on authentication process </p>
+                    <p>{{ $t("sms.auth_error_sub") }}</p>
                 </div>
             </div>
         </div>

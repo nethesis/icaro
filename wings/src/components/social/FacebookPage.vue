@@ -1,22 +1,22 @@
 <template>
     <div class="ui segment">
-        <div v-if="!authorized && !dedaloError" class="ui active centered inline text loader">Authorization in progress...</div>
+        <div v-if="!authorized && !dedaloError" class="ui active centered inline text loader">{{ $t("social.auth_progress") }}...</div>
         <div v-if="authorized" class="ui icon positive message">
             <i class="check icon"></i>
             <div class="content">
                 <div class="header">
-                    You are successfully authenticated
+                    {{ $t("social.auth_success") }}
                 </div>
-                <p>In a few seconds you will be redirected...</p>
+                <p>{{ $t("social.auth_success_sub") }}...</p>
             </div>
         </div>
         <div v-if="dedaloError" class="ui icon negative message">
             <i class="remove icon"></i>
             <div class="content">
                 <div class="header">
-                    Error on authentication
+                    {{ $t("social.auth_error") }}
                 </div>
-                <p>Something went wrong on authentication process </p>
+                <p>{{ $t("social.auth_error_sub") }}</p>
             </div>
         </div>
     </div>

@@ -1,27 +1,27 @@
 <template>
     <div class="ui segment form">
         <div v-if="voucherAvailable && !voucherValidated">
-            <h3>Voucher code</h3>
+            <h3>{{ $t("login.voucher_title") }}</h3>
             <div class="inline field" v-bind:class="{ error: badInput }">
                 <label>Voucher</label>
                 <div class="ui big left icon input">
-                    <input v-model="authCode" type="email" placeholder="Insert voucher code">
+                    <input v-model="authCode" type="email" :placeholder="$t('login.insert_voucher')">
                     <i class="braille icon"></i>
                 </div>
             </div>
-            <button v-on:click="validateCode()" class="ui big button">Validate Code</button>
+            <button v-on:click="validateCode()" class="ui big button">{{ $t("login.validate_code") }}</button>
             <div v-if="badCode" class="ui tiny icon negative message">
                 <i class="remove icon"></i>
                 <div class="content">
                     <div class="header">
-                        Error validating voucher code
+                        {{ $t("login.error_voucher_code") }}
                     </div>
-                    <p>It seems that your voucher code is not correct</p>
+                    <p>{{ $t("login.error_voucher_code_sub") }}</p>
                 </div>
             </div>
         </div>
         <div v-if="!voucherAvailable || (voucherAvailable && voucherValidated)">
-            <h3>Choose your Login</h3>
+            <h3>{{ $t("login.choose_login") }}</h3>
             <div class="ui relaxed list">
                 <div v-if="hotspot.preferences.facebook_login == 'true'" class="item">
                     <router-link to="/login/facebook" class="ui facebook button big fluid">
