@@ -91,7 +91,7 @@ func GoogleAuth(c *gin.Context) {
 	if user.Id == 0 {
 		// create user
 		unit := utils.GetUnitByUuid(uuid)
-		days := utils.GetHotspotPreferencesByKey(unit.HotspotId, "user_expiration")
+		days := utils.GetHotspotPreferencesByKey(unit.HotspotId, "user_expiration_days")
 		daysInt, _ := strconv.Atoi(days.Value)
 		newUser := models.User{
 			HotspotId:   unit.HotspotId,
@@ -113,7 +113,7 @@ func GoogleAuth(c *gin.Context) {
 		// TODO: create marketing info with user infos and birthday
 	} else {
 		// update user info
-		days := utils.GetHotspotPreferencesByKey(user.HotspotId, "user_expiration")
+		days := utils.GetHotspotPreferencesByKey(user.HotspotId, "user_expiration_days")
 		daysInt, _ := strconv.Atoi(days.Value)
 		user.ValidUntil = time.Now().UTC().AddDate(0, 0, daysInt)
 		db := database.Database()
@@ -203,7 +203,7 @@ func FacebookAuth(c *gin.Context) {
 	if user.Id == 0 {
 		// create user
 		unit := utils.GetUnitByUuid(uuid)
-		days := utils.GetHotspotPreferencesByKey(unit.HotspotId, "user_expiration")
+		days := utils.GetHotspotPreferencesByKey(unit.HotspotId, "user_expiration_days")
 		daysInt, _ := strconv.Atoi(days.Value)
 		newUser := models.User{
 			HotspotId:   unit.HotspotId,
@@ -225,7 +225,7 @@ func FacebookAuth(c *gin.Context) {
 		// TODO: create marketing info with user likes and birthday
 	} else {
 		// update user info
-		days := utils.GetHotspotPreferencesByKey(user.HotspotId, "user_expiration")
+		days := utils.GetHotspotPreferencesByKey(user.HotspotId, "user_expiration_days")
 		daysInt, _ := strconv.Atoi(days.Value)
 		user.ValidUntil = time.Now().UTC().AddDate(0, 0, daysInt)
 		db := database.Database()
@@ -308,7 +308,7 @@ func LinkedInAuth(c *gin.Context) {
 	if user.Id == 0 {
 		// create user
 		unit := utils.GetUnitByUuid(uuid)
-		days := utils.GetHotspotPreferencesByKey(unit.HotspotId, "user_expiration")
+		days := utils.GetHotspotPreferencesByKey(unit.HotspotId, "user_expiration_days")
 		daysInt, _ := strconv.Atoi(days.Value)
 		newUser := models.User{
 			HotspotId:   unit.HotspotId,
@@ -330,7 +330,7 @@ func LinkedInAuth(c *gin.Context) {
 		// TODO: create marketing info with user infos and birthday
 	} else {
 		// update user info
-		days := utils.GetHotspotPreferencesByKey(user.HotspotId, "user_expiration")
+		days := utils.GetHotspotPreferencesByKey(user.HotspotId, "user_expiration_days")
 		daysInt, _ := strconv.Atoi(days.Value)
 		user.ValidUntil = time.Now().UTC().AddDate(0, 0, daysInt)
 		db := database.Database()

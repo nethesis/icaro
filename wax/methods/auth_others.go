@@ -62,7 +62,7 @@ func SMSAuth(c *gin.Context) {
 
 		// create user
 		unit := utils.GetUnitByUuid(uuid)
-		days := utils.GetHotspotPreferencesByKey(unit.HotspotId, "user_expiration")
+		days := utils.GetHotspotPreferencesByKey(unit.HotspotId, "user_expiration_days")
 		daysInt, _ := strconv.Atoi(days.Value)
 		newUser := models.User{
 			HotspotId:   unit.HotspotId,
@@ -87,7 +87,7 @@ func SMSAuth(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"user_id": number})
 	} else {
 		// update user info
-		days := utils.GetHotspotPreferencesByKey(user.HotspotId, "user_expiration")
+		days := utils.GetHotspotPreferencesByKey(user.HotspotId, "user_expiration_days")
 		daysInt, _ := strconv.Atoi(days.Value)
 		user.ValidUntil = time.Now().UTC().AddDate(0, 0, daysInt)
 		db := database.Database()
@@ -129,7 +129,7 @@ func EmailAuth(c *gin.Context) {
 
 		// create user
 		unit := utils.GetUnitByUuid(uuid)
-		days := utils.GetHotspotPreferencesByKey(unit.HotspotId, "user_expiration")
+		days := utils.GetHotspotPreferencesByKey(unit.HotspotId, "user_expiration_days")
 		daysInt, _ := strconv.Atoi(days.Value)
 		newUser := models.User{
 			HotspotId:   unit.HotspotId,
@@ -154,7 +154,7 @@ func EmailAuth(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"user_id": email})
 	} else {
 		// update user info
-		days := utils.GetHotspotPreferencesByKey(user.HotspotId, "user_expiration")
+		days := utils.GetHotspotPreferencesByKey(user.HotspotId, "user_expiration_days")
 		daysInt, _ := strconv.Atoi(days.Value)
 		user.ValidUntil = time.Now().UTC().AddDate(0, 0, daysInt)
 		db := database.Database()
