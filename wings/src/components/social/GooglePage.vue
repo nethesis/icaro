@@ -82,7 +82,7 @@
                 });
             } else {
                 // get social login url
-                params.fb_client_id = this.$root.$options.hotspot.socials.google_client_id
+                params.gl_client_id = this.$root.$options.hotspot.socials.google_client_id
                 var url = this.getSocialLoginURL(params, 'google')
 
                 // open social login url
