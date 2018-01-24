@@ -58,6 +58,6 @@ func Temporary(c *gin.Context, parameters url.Values) {
 	}
 
 	seconds := utils.GetHotspotPreferencesByKey(unit.HotspotId, "temp_session_duration")
-	c.String(http.StatusOK, "Session-Timeout: "+seconds.Value)
+	c.String(http.StatusOK, seconds.Value)
 
 }
