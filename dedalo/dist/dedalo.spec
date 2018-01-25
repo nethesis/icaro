@@ -52,7 +52,7 @@ mkdir -p %{buildroot}/opt/icaro/dedalo/wwww
 /opt/icaro/dedalo/template/engine
 /opt/icaro/dedalo/walled_gardens
 /opt/icaro/dedalo/wwww
-%config /opt/icaro/dedalo/config
+%config(noreplace) /opt/icaro/dedalo/config
 %config /opt/icaro/dedalo/template/chilli.conf.tpl
 %config(noreplace) /opt/icaro/dedalo/walled_gardens/local.conf
 %config /opt/icaro/dedalo/walled_gardens/facebook.conf
