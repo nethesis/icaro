@@ -33,7 +33,7 @@ const i18n = new VueI18n({
   messages,
 })
 
-// init VUe app
+// init Vue app
 new Vue({
   el: '#app',
   router,

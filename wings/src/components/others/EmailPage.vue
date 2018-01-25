@@ -1,14 +1,14 @@
 <template>
     <div class="ui segment form">
         <div v-if="!dedaloRequested">
-            <div class="inline field" v-bind:class="{ error: errors.badInput }">
+            <div v-if="!codeRequested" class="inline field" v-bind:class="{ error: errors.badInput }">
                 <label>Email</label>
                 <div class="ui big left icon input">
                     <input v-model="authEmail" type="email" :placeholder="$t('email.insert_email')">
                     <i class="mail icon"></i>
                 </div>
             </div>
-            <button v-on:click="getCode()" class="ui big button">{{ $t("email.insert_email") }}</button>
+            <button v-if="!codeRequested" v-on:click="getCode()" class="ui big button">{{ $t("email.get_code") }}</button>
             <div v-if="errors.badMail" class="ui tiny icon negative message">
                 <i class="remove icon"></i>
                 <div class="content">
@@ -18,15 +18,18 @@
                     <p>{{ $t("email.error_code_sub") }}</p>
                 </div>
             </div>
-            <div v-if="codeRequested" class="auth-code-cont">
+            <div v-if="codeRequested">
                 <div class="inline field">
                     <label>{{ $t("email.code") }}</label>
                     <div class="ui big left icon input">
-                        <input v-model="authCode" type="number" :placeholder="$t('email.insert_code')">
+                        <input v-model="authCode" type="number" :placeholder="$t('email.insert_your_code')">
                         <i class="braille icon"></i>
                     </div>
                 </div>
             </div>
+            <button v-on:click="getCode(true)" v-if="authReset && resetDone != 'true'" class="ui red button auth-code-cont">
+                {{ $t("email.reset_code") }}
+            </button>
             <div class="ui divider"></div>
             <button v-on:click="execLogin()" :disabled="isDisabled()" class="big ui green button">
                 {{ $t("email.start_navigate") }}
@@ -72,6 +75,8 @@
             var badMail = false
             var badCode = false
             var badInput = false
+            var authReset = false
+            var resetDone = false
 
             return {
                 authorized: authorized,
@@ -79,6 +84,8 @@
                 dedaloRequested: dedaloRequested,
                 authEmail: '',
                 authCode: '',
+                authReset: authReset,
+                resetDone: resetDone,
                 errors: {
                     badMail: badMail,
                     badCode: badCode,
@@ -91,7 +98,7 @@
             isDisabled() {
                 return this.authEmail.length == 0 || this.authCode.length == 0
             },
-            getCode() {
+            getCode(reset) {
                 this.errors.badMail = false
                 if (this.authEmail.indexOf('@') == -1) {
                     this.errors.badInput = true
@@ -100,14 +107,15 @@
                 var params = this.extractParams()
 
                 // make request to wax
-                var url = this.createWaxURL(this.authEmail, params, 'email')
+                var url = this.createWaxURL(this.authEmail, params, 'email', reset)
 
                 // get user id
                 this.$http.get(url).then(responseAuth => {
-                    this.authCode = responseAuth.body.password || ''
+                    this.authReset = responseAuth.body.exists
+                    this.resetDone = responseAuth.body.reset
 
-                    // chech if user already exists
-                    if (this.authCode.length > 0) {
+                    // check if user already exists
+                    if (this.authReset && !(this.resetDone && this.resetDone == 'true')) {
                         this.codeRequested = true
                     } else {
                         // open temp session for the user

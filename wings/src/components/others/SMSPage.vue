@@ -1,14 +1,14 @@
 <template>
     <div class="ui segment form">
         <div v-if="!dedaloRequested">
-            <div class="inline field" v-bind:class="{ error: errors.badInput }">
+            <div v-if="!codeRequested" class="inline field" v-bind:class="{ error: errors.badInput }">
                 <label>{{ $t("sms.number") }}</label>
                 <div class="ui big left icon input">
                     <input v-model="authSMS" type="tel" :placeholder="$t('sms.insert_number')">
                     <i class="talk icon"></i>
                 </div>
             </div>
-            <button v-on:click="getCode()" class="ui big button">{{ $t("sms.get_code") }}</button>
+            <button v-if="!codeRequested" v-on:click="getCode()" class="ui big button">{{ $t("sms.get_code") }}</button>
             <div v-if="errors.badNumber" class="ui tiny icon negative message">
                 <i class="remove icon"></i>
                 <div class="content">
@@ -18,15 +18,18 @@
                     <p>{{ $t("sms.error_code_sub") }}</p>
                 </div>
             </div>
-            <div v-if="codeRequested" class="auth-code-cont">
+            <div v-if="codeRequested">
                 <div class="inline field">
                     <label>Code</label>
                     <div class="ui big left icon input">
-                        <input v-model="authCode" type="number" :placeholder="$t('sms.insert_code')">
+                        <input v-model="authCode" type="number" :placeholder="$t('sms.insert_your_code')">
                         <i class="braille icon"></i>
                     </div>
                 </div>
             </div>
+            <button v-on:click="getCode(true)" v-if="authReset && resetDone != 'true'" class="ui red button auth-code-cont">
+                {{ $t("sms.reset_code") }}
+            </button>
             <div class="ui divider"></div>
             <button v-on:click="execLogin()" :disabled="isDisabled()" class="big ui green button">
                 {{ $t("sms.start_navigate") }}
@@ -72,6 +75,8 @@
             var badNumber = false
             var badCode = false
             var badInput = false
+            var authReset = false
+            var resetDone = false
 
             return {
                 authorized: authorized,
@@ -79,6 +84,8 @@
                 dedaloRequested: dedaloRequested,
                 authSMS: '',
                 authCode: '',
+                authReset: authReset,
+                resetDone: resetDone,
                 errors: {
                     badNumber: badNumber,
                     badCode: badCode,
@@ -91,7 +98,7 @@
             isDisabled() {
                 return this.authSMS.length == 0 || this.authCode.length == 0
             },
-            getCode() {
+            getCode(reset) {
                 this.errors.badNumber = false
                 if (!this.authSMS.startsWith('+')) {
                     this.errors.badInput = true
@@ -100,12 +107,13 @@
                 var params = this.extractParams()
 
                 // make request to wax
-                var url = this.createWaxURL(this.authSMS, params, 'sms')
+                var url = this.createWaxURL(this.authSMS, params, 'sms', reset)
 
                 // get user id
                 this.$http.get(url).then(responseAuth => {
                     this.codeRequested = true
-                    this.authCode = responseAuth.body.password || ''
+                    this.authReset = responseAuth.body.exists
+                    this.resetDone = responseAuth.body.reset
                 }, error => {
                     this.codeRequested = false
                     this.errors.badNumber = true

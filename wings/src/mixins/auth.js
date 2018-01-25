@@ -48,12 +48,13 @@ var AuthMixin = {
                 sessionid: sessionid
             }
         },
-        createWaxURL(code, params, endpoint) {
+        createWaxURL(code, params, endpoint, reset) {
             var host = window.location.host
             var url = 'https://' + host + '/wax/register/' + endpoint + '/' + encodeURIComponent(code) +
                 '?digest=' + params.digest +
                 '&uuid=' + params.uuid +
-                '&sessionid=' + params.sessionid
+                '&sessionid=' + params.sessionid +
+                '&reset=' + reset
             return url
         },
         getSocialLoginURL(params, social) {
