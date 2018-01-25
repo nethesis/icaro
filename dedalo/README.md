@@ -7,17 +7,17 @@ Network Access Controller, runs on the firewall and intercepts all guest connect
 - check dedalo status: `systemctl status dedalo`
 
 ## Configuration
-`# cat /opt/icaro/dedalo/config`
-```ini
-HS_INTERFACE="interface_eth"
-HS_SPLASH_PAGE_URL="http://host[:port]"
-HS_AAA_URL="http[s]://host[:port]"
-HS_ID="hotspot-id"
-HS_UNIT_NAME="unit-id"
-HS_UUID="generated-uuid"
-HS_SECRET="your-secret"
-HS_ALLOW_ORIGINS="your-allow-origin-for-cors"
-```
+
+Available options:
+
+- ``HS_INTERFACE``: dedicated network interface for CoovaChilli
+- ``HS_SPLASH_PAGE_URL``: Sun (capitve portal) URL hosted on your Icaro installation, eg: ``http://icaro.mydomain.com``
+- ``HS_AAA_URL``: Wax (Radius over HTTP) URL hosted on your Icaro installation, eg: ``http://icaro.mydomain.com/wax/aaa``
+- ``HS_ID``: the name of the Hotspot already present inside Icaro, eg: ``MyHotelCompany``
+- ``HS_UNIT_NAME``: a descriptive name of local installation, eg: ``MyHotelAtTheSea``
+- ``HS_UUID``: a unique unit idenifier, usually a UUID, eg ``161fre6d-8578-4247-b4a2-c40dced94bdd``
+- ``HS_SECRET``: a shared secret between this unit and Icaro installation, eg: ``My$uperS3cret``
+- ``HS_ALLOW_ORIGIN``: hosts allowed to execute CORS requests to Dedalo, usually it corresponds to ``HS_SPLASH_PAGE_URL``, eg: ``http://icaro.mydomain.com``
 
 ### Example
 ```ini
