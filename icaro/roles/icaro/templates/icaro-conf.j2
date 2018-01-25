@@ -27,11 +27,11 @@
     "endpoints": {
         "sms": {
             "account_sid": "{{ twilio_account_sid }}",
-            "auth_token": "{{  twilio_auth_token}}",
+            "auth_token": "{{ twilio_auth_token }}",
             "number": "{{ twilio_number }}"
         },
         "email": {
-            "from": "{{ admin_email}}",
+            "from": "{{ admin_email }}",
             "smtp_host": "{{ email_smtp_host }}",
             "smtp_port": {{ email_smtp_port }},
             "smtp_user": "{{ email_smtp_user }}",
@@ -43,7 +43,7 @@
         "headers": ["Token"],
         "methods": ["GET", "PUT", "POST", "DELETE"]
     },
-    "authorizations": {
+    "route_blocked": {
         "admin": [{}],
         "customer": [{
             "verb": "POST",

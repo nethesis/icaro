@@ -44,7 +44,7 @@ func respondWithError(code int, message string, c *gin.Context) {
 func Authorization(role string, route models.Route) bool {
 
 	// extract authorizations from configs
-	auths := reflect.ValueOf(configuration.Config.Authorizations)
+	auths := reflect.ValueOf(configuration.Config.RouteBlocked)
 
 	// loop and check current route with authorized routes
 	for i := 0; i < auths.NumField(); i++ {

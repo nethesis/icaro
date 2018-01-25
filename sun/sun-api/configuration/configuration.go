@@ -41,7 +41,7 @@ type Configuration struct {
 	AuthSocial        models.AuthSocial `json:"auth_social"`
 	PageLimit         string            `json:"page_limit"`
 	TokenExpiresDays  int               `json:"token_expires_days"`
-	Authorizations    models.AuthMaps   `json:"authorizations"`
+	RouteBlocked      models.AuthMaps   `json:"route_blocked"`
 	Endpoints         models.Endpoints  `json:"endpoints"`
 	Cors              struct {
 		Headers []string `json:"headers"`
