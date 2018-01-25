@@ -14,15 +14,26 @@ Vue.use(VueResource)
 Vue.use(VueI18n)
 
 // get browser lang and init locales
+var messages = {}
 var userLang = navigator.language || navigator.userLanguage;
 userLang = userLang.replace('-', '_').split('_')[0];
-var messages = require('./i18n/locale-' + userLang + '.json')
+
+// try loading browser locale
+try {
+  messages = require('./i18n/locale-' + userLang + '.json')
+} catch (e) {
+  console.log('locale: '+ userLang +' not found. fallback to en')
+  messages = require('./i18n/locale-en.json')
+  userLang = 'en'
+}
+
+// configure i18n
 const i18n = new VueI18n({
   locale: userLang,
   messages,
 })
 
-/* eslint-disable no-new */
+// init VUe app
 new Vue({
   el: '#app',
   router,
