@@ -1,0 +1,71 @@
+<?
+
+. /opt/icaro/dedalo/config
+
+http_header ()
+{
+	case $1 in
+		200)
+			echo "HTTP/1.1 200 OK"
+		;;
+		403)
+			echo "HTTP/1.1 403 Forbidden"
+		;;
+		404)
+			echo "HTTP/1.1 404 Not Found"
+		;;
+		500)
+			echo "HTTP/1.1 500 Internal Server Error"
+		;;
+	esac
+
+	echo Connection: close
+	echo Cache: none
+	echo Access-Control-Allow-Origin: "$HS_ALLOW_ORIGINS"
+
+}
+
+if [ "$AUTHENTICATED" != "1" ]
+then
+	HS_DIGEST=$(echo -n "$HS_SECRET$HS_UUID" | md5sum | awk '{print $1}')
+	AP_MAC=$(cat /sys/class/net/$HS_INTERFACE/address | tr ':' '-' | awk '{print toupper($0)}')
+
+	http_req=$(printf "%s?digest=%s&uuid=%s&stage=temporary&status=new&user=%s&mac=%s&sessionid=%s&ap=%s&nasid=%s" \
+			$HS_AAA_URL \
+			$HS_DIGEST \
+			$HS_UUID \
+			$FORM_username \
+			$REMOTE_MAC \
+			$CHI_SESSION_ID \
+			$AP_MAC \
+			$HS_ID )
+
+	http_res=$(curl -s -w ",%{http_code}"  "$http_req")
+
+	if [ "$?" == "0" ]
+	then
+		sessiontimeout=$(echo "$http_res" | cut -d ',' -f 1)
+		http_code=$(echo "$http_res" | cut -d ',' -f 2)
+
+		if [ "$http_code" == "200" ]
+		then
+
+			http_header 200
+
+			dedalo query authorize mac "$REMOTE_MAC" sessiontimeout "$sessiontimeout" noacct
+
+		else
+			http_header 403
+		fi
+
+	else
+		http_header 500
+	fi
+
+else
+
+	http_header 404
+
+fi
+
+?>
