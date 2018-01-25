@@ -3,7 +3,7 @@ OPT=$1
 shift
 source /opt/icaro/dedalo/config
 
-MAC_ADDRESS=$(cat /sys/class/net/$HS_INTERFACE/address | tr ':' '-' | awk '{print toupper($0)}')
+MAC_ADDRESS=$(cat /sys/class/net/$HS_INTERFACE/address 2>/dev/null| tr ':' '-' | awk '{print toupper($0)}')
 
 case "$OPT" in
     query)
