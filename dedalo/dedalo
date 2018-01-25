@@ -61,10 +61,16 @@ case "$OPT" in
                 \"uuid\": \"$HS_UUID\",
                 \"secret\": \"$HS_SECRET\",
                 \"hotspot_id\": 1
-            }" | jq -r '.status')
+            }")
         # check if everything is ok
-        if [ $? -eq 0 ] && [ "$RESP" == "success" ]; then
-            echo "Unit added successfully"
+        ID=$(echo $RESP | jq -r '.id')
+        STATUS=$(echo $RESP | jq -r '.status')
+        if [ $? -eq 0 ] && [ "$STATUS" == "success" ]; then
+            if [ "$ID" == "0" ]; then
+                echo "Unit already added"
+            else
+                echo "Unit added successfully"
+            fi
         else
             echo "Error on unit adding"
         fi
