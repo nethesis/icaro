@@ -19,6 +19,8 @@ uamserver       "${HS_SPLASH_PAGE_URL}/?digest=${HS_DIGEST}&uuid=${HS_UUID}"
 radiusnasid     "${HS_ID}"
 alloworigin     "${HS_ALLOW_ORIGINS}"
 
+uamdomain       "${HS_AAA_HOST}"
+
 include /opt/icaro/dedalo/walled_gardens/local.conf
 include /opt/icaro/dedalo/walled_gardens/facebook.conf
 include /opt/icaro/dedalo/walled_gardens/google.conf

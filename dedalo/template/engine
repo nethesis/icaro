@@ -1,6 +1,7 @@
 #!/bin/sh
 source /opt/icaro/dedalo/config
 HS_DIGEST=$(echo -n "$HS_SECRET$HS_UUID" | md5sum | awk '{print $1}')
+HS_AAA_HOST=$(echo "$HS_AAA_URL" | sed -e 's|https\?://\([^/:]\+\)\(.*\)|\1|')
 
 eval "cat <<EOF
 $(cat "$1")
