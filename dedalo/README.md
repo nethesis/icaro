@@ -11,6 +11,7 @@ Network Access Controller, runs on the firewall and intercepts all guest connect
 Available options:
 
 - ``HS_INTERFACE``: dedicated network interface for CoovaChilli
+- ``HS_NETWORK``: network for clients connected to Dedalo
 - ``HS_SPLASH_PAGE_URL``: Sun (capitve portal) URL hosted on your Icaro installation, eg: ``http://icaro.mydomain.com``
 - ``HS_AAA_URL``: Wax (Radius over HTTP) URL hosted on your Icaro installation, eg: ``http://icaro.mydomain.com/wax/aaa``
 - ``HS_ID``: the name of the Hotspot already present inside Icaro, eg: ``MyHotelCompany``
@@ -22,6 +23,7 @@ Available options:
 ### Example
 ```ini
 HS_INTERFACE="eth2"
+HS_NETWORK="192.168.182.0/24"
 HS_SPLASH_PAGE_URL="http://myicaro"
 HS_AAA_URL="https://myicaro"
 HS_ID="hotel-king"
