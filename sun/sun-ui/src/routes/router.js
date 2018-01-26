@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+
 import Dashboard from '../components/Dashboard.vue'
 import Hotspots from '../components/Hotspots.vue'
 import Users from '../components/Users.vue'

@@ -1,5 +1,10 @@
 {
     "en": {
+        "login": {
+            "welcome": "Welcome to",
+            "insert_username": "Insert you username",
+            "insert_password": "Insert your password"
+        },
         "dashboard": {
             "preferences": "Preferences",
             "help": "Help",
