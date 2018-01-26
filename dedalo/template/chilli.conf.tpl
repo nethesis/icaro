@@ -26,7 +26,7 @@ include /opt/icaro/dedalo/walled_gardens/facebook.conf
 include /opt/icaro/dedalo/walled_gardens/google.conf
 include /opt/icaro/dedalo/walled_gardens/linkedin.conf
 
-${USE_UPDOWN_SCRIPTS:+"ipup=/etc/chilli/up.sh"}
-${USE_UPDOWN_SCRIPTS:+"ipdown=/etc/chilli/down.sh"}
+${USE_UPDOWN_SCRIPTS:+"ipup=/opt/icaro/dedalo/up.sh"}
+${USE_UPDOWN_SCRIPTS:+"ipdown=/opt/icaro/dedalo/down.sh"}
 
 include /opt/icaro/dedalo/local.conf
