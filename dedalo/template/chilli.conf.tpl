@@ -7,6 +7,7 @@ wwwbin          /etc/chilli/wwwsh
 
 net             ${HS_NETWORK}
 dhcpif          ${HS_INTERFACE}
+tundev          tun-dedalo
 uamanydns
 dns1            "208.67.222.222"
 dns2            "208.67.220.220"
