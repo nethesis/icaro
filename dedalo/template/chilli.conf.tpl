@@ -28,3 +28,5 @@ include /opt/icaro/dedalo/walled_gardens/linkedin.conf
 
 ${USE_UPDOWN_SCRIPTS:+"ipup=/etc/chilli/up.sh"}
 ${USE_UPDOWN_SCRIPTS:+"ipdown=/etc/chilli/down.sh"}
+
+include /opt/icaro/dedalo/local.conf
