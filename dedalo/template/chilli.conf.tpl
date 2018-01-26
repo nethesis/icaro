@@ -5,8 +5,7 @@ pidfile         /run/dedalo/chilli.pid
 wwwdir          /opt/icaro/dedalo/www
 wwwbin          /etc/chilli/wwwsh
 
-net             10.1.0.0/255.255.255.0
-uamlisten       10.1.0.1
+net             ${HS_NETWORK}
 dhcpif          ${HS_INTERFACE}
 uamanydns
 dns1            "208.67.222.222"
