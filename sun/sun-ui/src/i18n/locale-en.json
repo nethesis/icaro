@@ -1,0 +1,12 @@
+{
+    "en": {
+        "dashboard": {
+            "preferences": "Preferences",
+            "help": "Help",
+            "about": "About",
+            "profile": "Profile",
+            "user": "User",
+            "users": "Users"
+        }
+    }
+}

@@ -40,6 +40,7 @@ func SMSAuth(c *gin.Context) {
 	number := c.Param("number")
 	uuid := c.Query("uuid")
 	sessionId := c.Query("sessionid")
+	reset := c.Query("reset")
 
 	if number == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "number is required"})
@@ -54,6 +55,7 @@ func SMSAuth(c *gin.Context) {
 
 		// send sms with code
 		status := utils.SendSMSCode(number, code)
+
 		// check response
 		if status != 201 {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "authorization code not send"})
@@ -87,15 +89,33 @@ func SMSAuth(c *gin.Context) {
 		days := utils.GetHotspotPreferencesByKey(user.HotspotId, "user_expiration_days")
 		daysInt, _ := strconv.Atoi(days.Value)
 		user.ValidUntil = time.Now().UTC().AddDate(0, 0, daysInt)
-		db := database.Database()
-		db.Save(&user)
-		db.Close()
 
 		// create user session check
 		utils.CreateUserSession(user.Id, sessionId)
 
+		// check if is reset
+		if reset == "true" {
+			// generate code
+			code := utils.GenerateCode(6)
+
+			// send sms with code
+			status := utils.SendSMSCode(number, code)
+			// check response
+			if status != 201 {
+				c.JSON(http.StatusBadRequest, gin.H{"error": "authorization code not send"})
+				return
+			}
+
+			// update code
+			user.Password = code
+		}
+
+		db := database.Database()
+		db.Save(&user)
+		db.Close()
+
 		// response to client
-		c.JSON(http.StatusOK, gin.H{"user_id": number, "password": user.Password})
+		c.JSON(http.StatusOK, gin.H{"user_id": number, "exists": true, "reset": reset})
 	}
 }
 
@@ -103,6 +123,7 @@ func EmailAuth(c *gin.Context) {
 	email := c.Param("email")
 	uuid := c.Query("uuid")
 	sessionId := c.Query("sessionid")
+	reset := c.Query("reset")
 
 	if email == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "email is required"})
@@ -151,15 +172,34 @@ func EmailAuth(c *gin.Context) {
 		days := utils.GetHotspotPreferencesByKey(user.HotspotId, "user_expiration_days")
 		daysInt, _ := strconv.Atoi(days.Value)
 		user.ValidUntil = time.Now().UTC().AddDate(0, 0, daysInt)
-		db := database.Database()
-		db.Save(&user)
-		db.Close()
 
 		// create user session check
 		utils.CreateUserSession(user.Id, sessionId)
 
+		// check if is reset
+		if reset == "true" {
+			// generate code
+			code := utils.GenerateCode(6)
+
+			// send email with code
+			status := utils.SendEmailCode(email, code)
+
+			// check response
+			if !status {
+				c.JSON(http.StatusBadRequest, gin.H{"error": "authorization code not send"})
+				return
+			}
+
+			// update code
+			user.Password = code
+		}
+
+		db := database.Database()
+		db.Save(&user)
+		db.Close()
+
 		// response to client
-		c.JSON(http.StatusOK, gin.H{"user_id": email, "password": user.Password})
+		c.JSON(http.StatusOK, gin.H{"user_id": email, "exists": true, "reset": reset})
 	}
 }
 
