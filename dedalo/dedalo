@@ -19,7 +19,7 @@ case "$OPT" in
     ;;
     register)
         # get opts
-        while getopts ":u:p:" o; do
+        while getopts ":u:p:t:" o; do
             case "${o}" in
                 u)
                     USERNAME=${OPTARG}
@@ -27,29 +27,32 @@ case "$OPT" in
                 p)
                     PASSWORD=${OPTARG}
                     ;;
+                t)
+                    TOKEN=${OPTARG}
+                    ;;
                 *)
                     exit 1
                     ;;
             esac
         done
-        # check if username exists
-        if [ -z "$USERNAME" ]; then
-            echo "Username is required, use -u <username>"
+        # check if username, password or token exits
+        if [ -z "$USERNAME" ] &&  [ -z "$PASSWORD" ] && [ -z "$TOKEN" ]; then
+            echo "Enter username and password or use an existing token:"
+            echo
+            echo "  $0 register -u <username> -p <password>"
+            echo "  $0 register -t <token>"
             exit 1
         fi
-        # check if password exists
-        if [ -z "$PASSWORD" ]; then
-            echo "Password is required, use -p <password>"
-            exit 1
+        if [ -z "$TOKEN" ]; then
+            # get auth token using /login API
+            TOKEN=$(curl -s --request POST \
+                --url "$HS_API_URL/login" \
+                --header "Content-Type: application/json" \
+                --data "{
+                    \"username\": \"$USERNAME\",
+                    \"password\": \"$PASSWORD\"
+                }" | jq -r '.token')
         fi
-        # get auth token using /login API
-        TOKEN=$(curl -s --request POST \
-            --url "$HS_API_URL/login" \
-            --header "Content-Type: application/json" \
-            --data "{
-                \"username\": \"$USERNAME\",
-                \"password\": \"$PASSWORD\"
-            }" | jq -r '.token')
         # create a new unit using /units API
         RESP=$(curl -s --request POST \
             --url "$HS_API_URL/units" \
@@ -60,7 +63,7 @@ case "$OPT" in
                 \"description\": \"$HS_UNIT_NAME\",
                 \"uuid\": \"$HS_UUID\",
                 \"secret\": \"$HS_SECRET\",
-                \"hotspot_id\": 1
+                \"hotspot\": \"$HS_ID\"
             }")
         # check if everything is ok
         ID=$(echo $RESP | jq -r '.id')
@@ -68,11 +71,14 @@ case "$OPT" in
         if [ $? -eq 0 ] && [ "$STATUS" == "success" ]; then
             if [ "$ID" == "0" ]; then
                 echo "Unit already added"
+                exit 0
             else
                 echo "Unit added successfully"
+                exit 0
             fi
         else
-            echo "Error on unit adding"
+            echo "Error: unit not added!"
+            exit 1
         fi
     ;;
     start)
