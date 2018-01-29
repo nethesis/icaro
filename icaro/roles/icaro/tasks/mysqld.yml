@@ -1,0 +1,66 @@
+---
+- name: Install mariadb server
+  yum:
+    name: mariadb-server
+    state: present
+
+- name: Install ansible dependencies
+  yum:
+    name: MySQL-python
+    state: present
+
+- name: Enable and start mariadb server
+  service:
+    name: mariadb
+    state: started
+    enabled: yes
+
+- name: Create a new database with name 'icaro'
+  mysql_db:
+    name: icaro
+    state: present
+
+- name: Copy icaro.sql to host
+  copy:
+    src: icaro.sql
+    dest: /tmp/icaro.sql
+
+- name: Import Icaro scheme
+  mysql_db:
+    name: icaro
+    state: import
+    target: /tmp/icaro.sql
+
+- stat:
+    path: /root/.my.cnf
+  register: mariadb_pass
+
+- name: Hardening mariadb installation
+  shell: |
+    mysql_secure_installation <<EOF
+
+    y
+    {{ mariadb_root_password }}
+    {{ mariadb_root_password }}
+    y
+    y
+    y
+    y
+    EOF
+  when: mariadb_pass.stat.exists == False
+
+- name: Copy mysql conf file
+  template:
+    src: my.cnf.j2
+    dest: /root/.my.cnf
+
+- name: Remove ansible dependencies
+  yum:
+    name: MySQL-python
+    state: absent
+
+- name: Remove temp files
+  file:
+    path:
+      - /tmp/icaro.sql
+    state: absent
