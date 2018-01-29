@@ -37,13 +37,21 @@ import (
 func CreateUnit(c *gin.Context) {
 	accountId := c.MustGet("token").(models.AccessToken).AccountId
 
-	var json models.Unit
+	var json models.UnitJSON
 	if err := c.BindJSON(&json); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "Request fields malformed", "error": err.Error()})
 		return
 	}
 
+	hotspot := utils.GetHotspotByName(json.Hotspot)
+
+	if hotspot.Id == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"message": "No hotspot found!"})
+		return
+	}
+
 	unit := models.Unit{
+		HotspotId:   hotspot.Id,
 		MacAddress:  json.MacAddress,
 		Description: json.Description,
 		Uuid:        json.Uuid,
@@ -51,10 +59,8 @@ func CreateUnit(c *gin.Context) {
 		Created:     time.Now().UTC(),
 	}
 
-	unit.HotspotId = json.HotspotId
-
 	// check hotspot ownership
-	if utils.Contains(utils.ExtractHotspotIds(accountId), json.HotspotId) {
+	if utils.Contains(utils.ExtractHotspotIds(accountId), hotspot.Id) {
 		db := database.Database()
 		db.Save(&unit)
 		db.Close()

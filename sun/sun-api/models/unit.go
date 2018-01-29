@@ -33,3 +33,11 @@ type Unit struct {
 	Secret      string    `db:"secret" json:"secret"`
 	Created     time.Time `db:"created" json:"created"`
 }
+
+type UnitJSON struct {
+	Hotspot     string `json:"hotspot"`
+	MacAddress  string `json:"mac_address"`
+	Description string `json:"description"`
+	Uuid        string `json:"uuid"`
+	Secret      string `json:"secret"`
+}

@@ -106,6 +106,15 @@ func ExtractHotspotIds(accountId int) []int {
 	return result
 }
 
+func GetHotspotByName(name string) models.Hotspot {
+	var hotspot models.Hotspot
+	db := database.Database()
+	db.Where("name = ?", name).First(&hotspot)
+	db.Close()
+
+	return hotspot
+}
+
 func Contains(intSlice []int, searchInt int) bool {
 	for _, value := range intSlice {
 		if value == searchInt {
