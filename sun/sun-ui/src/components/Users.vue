@@ -86,7 +86,7 @@
     name: 'Users',
     data() {
       return {
-        msg: 'Welcome to Users View'
+        msg: 'Users'
       }
     }
   }

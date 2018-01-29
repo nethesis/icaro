@@ -86,7 +86,7 @@
     name: 'Hotspots',
     data() {
       return {
-        msg: 'Welcome to Hotspots View'
+        msg: 'Hotspots'
       }
     }
   }

@@ -86,7 +86,7 @@
     name: 'Dashboard',
     data() {
       return {
-        msg: 'Welcome to Dashboard View'
+        msg: 'Dashboard'
       }
     }
   }

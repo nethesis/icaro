@@ -86,7 +86,7 @@
     name: 'Accounts',
     data() {
       return {
-        msg: 'Welcome to Accounts View'
+        msg: 'Accounts'
       }
     }
   }

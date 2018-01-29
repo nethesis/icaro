@@ -16,6 +16,15 @@ var LoginService = {
                     'Token': token
                 }
             }).then(success, error);
+        },
+        execChangePassword(password, id, token, success, error) {
+            this.$http.put('https://hstest.neth.eu/api/accounts/' + id, {
+                password: password
+            }, {
+                headers: {
+                    'Token': token
+                }
+            }).then(success, error);
         }
     }
 };

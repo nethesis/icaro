@@ -15,7 +15,7 @@
             </div>
             <!--/.col-*-->
             <div class="col-sm-7 col-md-6 col-lg-5 login">
-              <form class="form-horizontal" role="form" v-on:submit.prevent="doLogin()" action="/?#/">
+              <form class="form-horizontal" role="form" v-on:submit.prevent="doLogin()">
                 <div v-bind:class="[errors.username ? 'has-error' : '', 'form-group']">
                   <label for="inputUsername" class="col-sm-2 col-md-2 control-label">Username</label>
                   <div class="col-sm-10 col-md-10">
@@ -100,10 +100,10 @@
               </a>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                 <li>
-                  <a href="#">{{ $t("dashboard.help") }}</a>
+                  <a target="blank" href="https://github.com/nethesis/icaro">{{ $t("dashboard.help") }}</a>
                 </li>
                 <li>
-                  <a href="#">{{ $t("dashboard.about") }}</a>
+                  <a data-toggle="modal" data-target="#about-modal">{{ $t("dashboard.about") }}</a>
                 </li>
               </ul>
             </li>
@@ -198,13 +198,8 @@
               </div>
               <ul class="list-group">
                 <li class="list-group-item">
-                  <a href="#">
+                  <a target="blank" href="https://github.com/nethesis/icaro">
                     <span class="list-group-item-value">{{ $t("dashboard.help") }}</span>
-                  </a>
-                </li>
-                <li class="list-group-item">
-                  <a href="#">
-                    <span class="list-group-item-value">{{ $t("dashboard.about") }}</span>
                   </a>
                 </li>
               </ul>
@@ -228,6 +223,40 @@
       <!-- end footer -->
     </div>
     <!-- end logged view -->
+
+    <!-- modals -->
+    <div class="modal fade" id="about-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content about-modal-pf">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              <span class="pficon pficon-close"></span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h1>Icaro Hotspot Manager</h1>
+            <div class="product-versions-pf">
+              <ul class="list-unstyled">
+                <li>
+                  <strong>Sun UI</strong> <a target="blank" href="https://github.com/nethesis/icaro/tree/master/sun/sun-ui">GitHub</a></li>
+                <li>
+                  <strong>Sun API</strong> <a target="blank" href="https://github.com/nethesis/icaro/tree/master/sun/sun-api">GitHub</a></li>
+                <li>
+                  <strong>Wax</strong> <a target="blank" href="https://github.com/nethesis/icaro/tree/master/wax">GitHub</a></li>
+                <li>
+                  <strong>Wings</strong> <a target="blank" href="https://github.com/nethesis/icaro/tree/master/wings">GitHub</a></li>
+                <li>
+                  <strong>Dedalo</strong> <a target="blank" href="https://github.com/nethesis/icaro/tree/master/dedalo">GitHub</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <img class="about-logo" src="src/assets/logo.png" alt="Patternfly Symbol">
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end modals -->
   </div>
 </template>
 
@@ -266,9 +295,7 @@
           if (response) {
             this.user.info = response
             this.isLogged = true
-            setTimeout(function () {
-              $().setupVerticalNavigation(true);
-            }, 1000);
+            this.initGraphics()
           } else {
             this.isLogged = false
           }
@@ -321,9 +348,7 @@
             if (response) {
               this.user.info = response
               this.isLogged = true
-              setTimeout(function () {
-                $().setupVerticalNavigation(true);
-              }, 1000);
+              this.initGraphics()
             } else {
               this.isLogged = false
             }
@@ -353,9 +378,20 @@
           // change route
           this.isLogged = false
           this.$router.push('/')
+          this.resetGraphics()
         }, error => {
           console.log(error.body.message);
         })
+      },
+      initGraphics() {
+        setTimeout(function () {
+          $().setupVerticalNavigation(true);
+        }, 1000);
+        $('body').css('background-color', '#f5f5f5')
+      },
+      resetGraphics() {
+        $('body').css('background-color', '#1e1e1e')
+        window.location.reload()
       }
     }
   }
@@ -425,5 +461,17 @@
   .login-main-type {
     margin-top: -4px;
     text-align: right;
+  }
+
+  .about-logo {
+    height: 50px;
+  }
+
+  .modal-footer {
+    margin-top: 0px !important;
+  }
+
+  .alert {
+    margin-bottom: 0px !important;
   }
 </style>

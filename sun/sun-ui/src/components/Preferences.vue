@@ -86,7 +86,7 @@
     name: 'Preferences',
     data() {
       return {
-        msg: 'Welcome to Preferences View'
+        msg: 'Preferences'
       }
     }
   }

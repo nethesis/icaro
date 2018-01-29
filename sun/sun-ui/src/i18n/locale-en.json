@@ -14,6 +14,21 @@
             "profile": "Profile",
             "user": "User",
             "users": "Users"
-        }
+        },
+        "profile": {
+            "info": "Information",
+            "change_password": "Change password",
+            "username": "Username",
+            "name": "Name",
+            "email": "Email",
+            "type": "Type",
+            "new_password": "New password",
+            "confirm_password": "Confirm password",
+            "change_password_error_title": "Change password error",
+            "change_password_error_sub": "Something went wrong on changing password"
+        },
+        "cancel": "Cancel",
+        "save": "Save",
+        "update": "Update"
     }
 }
