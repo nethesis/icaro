@@ -108,14 +108,21 @@ func UpdateAccount(c *gin.Context) {
 		return
 	}
 
-	h := md5.New()
-	h.Write([]byte(json.Password))
-	passwordHash := fmt.Sprintf("%x", h.Sum(nil))
-
-	account.Name = json.Name
-	account.Username = json.Username
-	account.Password = passwordHash
-	account.Email = json.Email
+	if len(json.Password) > 0 {
+		h := md5.New()
+		h.Write([]byte(json.Password))
+		passwordHash := fmt.Sprintf("%x", h.Sum(nil))
+		account.Password = passwordHash
+	}
+	if len(json.Name) > 0 {
+		account.Name = json.Name
+	}
+	if len(json.Username) > 0 {
+		account.Username = json.Username
+	}
+	if len(json.Email) > 0 {
+		account.Email = json.Email
+	}
 
 	db.Save(&account)
 	db.Close()
