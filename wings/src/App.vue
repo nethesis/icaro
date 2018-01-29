@@ -49,6 +49,8 @@
             this.$root.$options.hotspot.digest = this.$route.query.digest
             this.$root.$options.hotspot.uuid = this.$route.query.uuid
             this.$root.$options.hotspot.sessionid = this.$route.query.sessionid
+            this.$root.$options.hotspot.uamip = this.$route.query.uamip
+            this.$root.$options.hotspot.uamport = this.$route.query.uamport
           }
         } else {
           this.$root.$options.hotspot.onError = true

@@ -22,7 +22,7 @@ userLang = userLang.replace('-', '_').split('_')[0];
 try {
   messages = require('./i18n/locale-' + userLang + '.json')
 } catch (e) {
-  console.log('locale: '+ userLang +' not found. fallback to en')
+  console.log('locale: ' + userLang + ' not found. fallback to en')
   messages = require('./i18n/locale-en.json')
   userLang = 'en'
 }
@@ -46,6 +46,8 @@ new Vue({
     digest: '',
     uuid: '',
     sessionid: '',
+    uamip: '',
+    uamport: '',
     onError: false,
     preferences: {},
     socials: {}
