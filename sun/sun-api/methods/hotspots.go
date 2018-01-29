@@ -94,11 +94,17 @@ func GetHotspots(c *gin.Context) {
 	page := c.Query("page")
 	limit := c.Query("limit")
 
-	offsets := utils.OffsetCalc(page, limit)
+	if len(page) > 0 && len(limit) > 0 {
+		offsets := utils.OffsetCalc(page, limit)
 
-	db := database.Database()
-	db.Where("account_id = ?", accountId).Offset(offsets[0]).Limit(offsets[1]).Find(&hotspots)
-	db.Close()
+		db := database.Database()
+		db.Where("account_id = ?", accountId).Offset(offsets[0]).Limit(offsets[1]).Find(&hotspots)
+		db.Close()
+	} else {
+		db := database.Database()
+		db.Where("account_id = ?", accountId).Find(&hotspots)
+		db.Close()
+	}
 
 	if len(hotspots) <= 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No hotspots found!"})
