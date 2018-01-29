@@ -1,5 +1,5 @@
 {
-  "name": "sun-ui-vue",
+  "name": "sun-ui",
   "version": "0.1.0",
   "description": "Hotspot manager, web applications which talks with Wax",
   "author": "Edoardo Spadoni <edoardo.spadoni@nethesis.it>",
@@ -8,7 +8,7 @@
     "watchify": "watchify -vd -p browserify-hmr -e src/main.js -o dist/build.js",
     "serve": "http-server -o -c 1 -a localhost",
     "dev": "npm-run-all --parallel watchify serve",
-    "build": "cross-env NODE_ENV=production browserify -g envify -p [ vueify/plugins/extract-css -o dist/build.css ] -e src/main.js | uglifyjs -c warnings=false -m > dist/build.js"
+    "build": "cross-env NODE_ENV=production browserify -g envify -p [ vueify/plugins/extract-css -o dist/build.css ] -e src/main.js| uglifyjs -c warnings=false -m > dist/build.js; cp node_modules/patternfly/dist/css/patternfly.min.css dist/vendor/; cp node_modules/patternfly/dist/css/patternfly-additions.min.css dist/vendor/; sed -i 's#\"../node_modules/patternfly/dist/css#\"vendor#g' dist/build.css; cp node_modules/patternfly/dist/fonts/*.{woff,woff2,ttf} dist/fonts/; cp src/assets/* dist/assets/; sed -i 's#src/assets#dist/assets#g' dist/build.js"
   },
   "browserify": {
     "transform": [

@@ -1,4 +1,4 @@
-# sun-ui-vue
+# sun-ui
 
 Hotspot manager, web applications which talks with Wax
 

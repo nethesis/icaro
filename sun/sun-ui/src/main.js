@@ -20,7 +20,6 @@ const i18n = new VueI18n({
   messages: langConf.messages,
 })
 
-
 // init Vue app
 new Vue({
   el: '#app',
