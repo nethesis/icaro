@@ -3,7 +3,9 @@
         "login": {
             "welcome": "Welcome to",
             "insert_username": "Insert you username",
-            "insert_password": "Insert your password"
+            "insert_password": "Insert your password",
+            "user_error": "Invalid username",
+            "password_error": "Invalid password"
         },
         "dashboard": {
             "preferences": "Preferences",

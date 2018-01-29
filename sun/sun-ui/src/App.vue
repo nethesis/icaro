@@ -15,19 +15,21 @@
             </div>
             <!--/.col-*-->
             <div class="col-sm-7 col-md-6 col-lg-5 login">
-              <form class="form-horizontal" role="form" v-on:submit="doLogin()">
+              <form class="form-horizontal" role="form" v-on:submit.prevent="doLogin()" action="/?#/">
                 <div v-bind:class="[errors.username ? 'has-error' : '', 'form-group']">
                   <label for="inputUsername" class="col-sm-2 col-md-2 control-label">Username</label>
                   <div class="col-sm-10 col-md-10">
-                    <input required v-model="username" type="text" class="form-control" id="inputUsername" :placeholder="$t('login.insert_username')" tabindex="1">
-                    <span v-if="errors.username" class="help-block">Please correct the error</span>
+                    <input required v-model="username" type="text" class="form-control" id="inputUsername" :placeholder="$t('login.insert_username')"
+                      tabindex="1">
+                    <span v-if="errors.username" class="help-block">{{ $t("login.user_error") }}</span>
                   </div>
                 </div>
                 <div v-bind:class="[errors.password ? 'has-error' : '', 'form-group']">
                   <label for="inputPassword" class="col-sm-2 col-md-2 control-label">Password</label>
                   <div class="col-sm-10 col-md-10">
-                    <input required v-model="password" type="password" class="form-control" id="inputPassword" :placeholder="$t('login.insert_password')" tabindex="2">
-                    <span v-if="errors.password" class="help-block">Please correct the error</span>
+                    <input required v-model="password" type="password" class="form-control" id="inputPassword" :placeholder="$t('login.insert_password')"
+                      tabindex="2">
+                    <span v-if="errors.password" class="help-block">{{ $t("login.password_error") }}</span>
                   </div>
                 </div>
                 <div class="form-group">
@@ -236,7 +238,9 @@
 
   import LoginService from './services/login';
   import StorageService from './services/storage';
-import { setTimeout } from 'timers';
+  import {
+    setTimeout
+  } from 'timers';
 
   export default {
     name: 'app',
@@ -262,7 +266,7 @@ import { setTimeout } from 'timers';
           if (response) {
             this.user.info = response
             this.isLogged = true
-            setTimeout(function(){
+            setTimeout(function () {
               $().setupVerticalNavigation(true);
             }, 1000);
           } else {
@@ -317,6 +321,9 @@ import { setTimeout } from 'timers';
             if (response) {
               this.user.info = response
               this.isLogged = true
+              setTimeout(function () {
+                $().setupVerticalNavigation(true);
+              }, 1000);
             } else {
               this.isLogged = false
             }
