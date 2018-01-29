@@ -238,15 +238,25 @@
             <div class="product-versions-pf">
               <ul class="list-unstyled">
                 <li>
-                  <strong>Sun UI</strong> <a target="blank" href="https://github.com/nethesis/icaro/tree/master/sun/sun-ui">GitHub</a></li>
+                  <strong>Sun UI</strong>
+                  <a target="blank" href="https://github.com/nethesis/icaro/tree/master/sun/sun-ui">GitHub</a>
+                </li>
                 <li>
-                  <strong>Sun API</strong> <a target="blank" href="https://github.com/nethesis/icaro/tree/master/sun/sun-api">GitHub</a></li>
+                  <strong>Sun API</strong>
+                  <a target="blank" href="https://github.com/nethesis/icaro/tree/master/sun/sun-api">GitHub</a>
+                </li>
                 <li>
-                  <strong>Wax</strong> <a target="blank" href="https://github.com/nethesis/icaro/tree/master/wax">GitHub</a></li>
+                  <strong>Wax</strong>
+                  <a target="blank" href="https://github.com/nethesis/icaro/tree/master/wax">GitHub</a>
+                </li>
                 <li>
-                  <strong>Wings</strong> <a target="blank" href="https://github.com/nethesis/icaro/tree/master/wings">GitHub</a></li>
+                  <strong>Wings</strong>
+                  <a target="blank" href="https://github.com/nethesis/icaro/tree/master/wings">GitHub</a>
+                </li>
                 <li>
-                  <strong>Dedalo</strong> <a target="blank" href="https://github.com/nethesis/icaro/tree/master/dedalo">GitHub</a></li>
+                  <strong>Dedalo</strong>
+                  <a target="blank" href="https://github.com/nethesis/icaro/tree/master/dedalo">GitHub</a>
+                </li>
               </ul>
             </div>
           </div>
@@ -298,8 +308,11 @@
             this.initGraphics()
           } else {
             this.isLogged = false
+            this.showBody()
           }
         })
+      } else {
+        this.showBody()
       }
 
       return {
@@ -388,10 +401,14 @@
           $().setupVerticalNavigation(true);
         }, 1000);
         $('body').css('background-color', '#f5f5f5')
+        this.showBody()
       },
       resetGraphics() {
         $('body').css('background-color', '#1e1e1e')
         window.location.reload()
+      },
+      showBody() {
+        $('body').show()
       }
     }
   }
@@ -404,6 +421,7 @@
   body {
     background-color: #1e1e1e;
     overflow: hidden;
+    display: none;
   }
 
   h2 {
