@@ -122,4 +122,8 @@
     line-height: 31px;
   }
 
+  .responsive {
+    overflow-x: auto;
+  }
+
 </style>

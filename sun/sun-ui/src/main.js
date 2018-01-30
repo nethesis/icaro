@@ -33,5 +33,6 @@ new Vue({
   el: '#app',
   router,
   i18n,
-  render: (h) => h(App)
+  render: (h) => h(App),
+  api_host: window.location.host
 })
