@@ -3,7 +3,7 @@
     <h2>{{ msg }}</h2>
 
     <div class="row row-cards-pf">
-      <div class="col-xs-12 col-sm-6 col-md-6">
+      <div class="col-xs-12 col-sm-12 col-md-6">
         <div class="card-pf card-pf-accented">
           <div class="card-pf-heading">
             <h2 class="card-pf-title">
