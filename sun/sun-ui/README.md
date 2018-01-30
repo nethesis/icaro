@@ -7,6 +7,7 @@ Hotspot manager, web applications which talks with Wax
 - NodeJS
 - npm
 
+
 ## Build Setup
 
 ``` bash
@@ -19,11 +20,8 @@ npm run dev
 # build for production with minification
 npm run build
 
-# lint all *.js and *.vue files
-npm run lint
-
-# run unit tests
-npm test
+# build for production and view the bundle analyzer report
+npm run build --report
 ```
 
-For more information see the [docs for vueify](https://github.com/vuejs/vueify).
+For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).

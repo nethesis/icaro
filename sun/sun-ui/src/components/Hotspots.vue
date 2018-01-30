@@ -1,97 +1,125 @@
 <template>
   <div>
     <h2>{{ msg }}</h2>
-
-    <div class="row row-cards-pf">
-      <div class="col-xs-12 col-sm-6 col-md-3">
-        <div class="card-pf card-pf-accented card-pf-aggregate-status">
-          <h2 class="card-pf-title">
-            <span class="fa fa-shield"></span>
-            <span class="card-pf-aggregate-status-count">0</span> Ipsum
-          </h2>
-          <div class="card-pf-body">
-            <p class="card-pf-aggregate-status-notifications">
-              <span class="card-pf-aggregate-status-notification">
-                <a href="#" class="add" data-toggle="tooltip" data-placement="top" title="Add Ipsum">
-                  <span class="pficon pficon-add-circle-o"></span>
-                </a>
-              </span>
-            </p>
-          </div>
-        </div>
-
-      </div>
-      <div class="col-xs-12 col-sm-6 col-md-3">
-        <div class="card-pf card-pf-accented card-pf-aggregate-status">
-          <h2 class="card-pf-title">
-            <a href="#">
-              <span class="fa fa-shield"></span>
-              <span class="card-pf-aggregate-status-count">20</span> Amet</a>
-          </h2>
-          <div class="card-pf-body">
-            <p class="card-pf-aggregate-status-notifications">
-              <span class="card-pf-aggregate-status-notification">
-                <a href="#">
-                  <span class="pficon pficon-error-circle-o"></span>4</a>
-              </span>
-              <span class="card-pf-aggregate-status-notification">
-                <a href="#">
-                  <span class="pficon pficon-warning-triangle-o"></span>1</a>
-              </span>
-            </p>
-          </div>
-        </div>
-
-      </div>
-      <div class="col-xs-12 col-sm-6 col-md-3">
-        <div class="card-pf card-pf-accented card-pf-aggregate-status">
-          <h2 class="card-pf-title">
-            <a href="#">
-              <span class="fa fa-shield"></span>
-              <span class="card-pf-aggregate-status-count">9</span> Adipiscing</a>
-          </h2>
-          <div class="card-pf-body">
-            <p class="card-pf-aggregate-status-notifications">
-              <span class="card-pf-aggregate-status-notification">
-                <span class="pficon pficon-ok"></span>
-              </span>
-            </p>
-          </div>
-        </div>
-
-      </div>
-      <div class="col-xs-12 col-sm-6 col-md-3">
-        <div class="card-pf card-pf-accented card-pf-aggregate-status">
-          <h2 class="card-pf-title">
-            <a href="#">
-              <span class="fa fa-shield"></span>
-              <span class="card-pf-aggregate-status-count">12</span> Lorem</a>
-          </h2>
-          <div class="card-pf-body">
-            <p class="card-pf-aggregate-status-notifications">
-              <a href="#">
-                <span class="card-pf-aggregate-status-notification">
-                  <span class="pficon pficon-error-circle-o"></span>1</span>
-              </a>
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
+    <vue-good-table :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'name', type: 'asc'}" :globalSearch="true"
+      :paginate="true" styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText" :rowsPerPageText="tableLangsTexts.rowsPerPageText"
+      :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder" :ofText="tableLangsTexts.ofText">
+      <template slot="table-row" scope="props">
+        <td>
+          <strong>{{ props.row.name }}</strong>
+        </td>
+        <td class="fancy">{{ props.row.description }}</td>
+        <td class="fancy">{{ props.row.created }}</td>
+        <td>
+          <a :href="'#/hotspots/'+ props.row.id" class="btn btn-primary" type="button">{{ $t('hotspot.details') }}</a>
+        </td>
+      </template>
+    </vue-good-table>
   </div>
 </template>
 
 <script>
+  import HotspotService from '../services/hotspot';
+  import StorageService from '../services/storage';
+  import UtilService from '../services/util';
+
   export default {
     name: 'Hotspots',
+    mixins: [HotspotService, StorageService, UtilService],
     data() {
+      // get hotspot list
+      this.getAll()
+
       return {
-        msg: 'Hotspots'
+        msg: 'Hotspots',
+        columns: [{
+            label: this.$i18n.t('hotspot.name'),
+            field: 'name',
+            filterable: true,
+          },
+          {
+            label: this.$i18n.t('hotspot.description'),
+            field: 'description',
+            filterable: true,
+          },
+          {
+            label: this.$i18n.t('hotspot.created'),
+            field: 'created',
+            sortable: false
+          },
+          {
+            label: this.$i18n.t('hotspot.action'),
+            field: '',
+            sortable: false
+          },
+        ],
+        rows: [],
+        tableLangsTexts: this.tableLangs()
+      }
+    },
+    methods: {
+      getAll() {
+        this.execGetAll(success => {
+          this.rows = success.body
+        }, error => {
+          console.log(error)
+        })
       }
     }
   }
+
 </script>
 
-<style scoped>
+<style>
+  .global-search {
+    padding-left: 0px !important;
+  }
+
+  .global-search-icon {
+    display: none;
+  }
+
+  .good-table {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .table thead input {
+    background-image: none;
+    border-radius: 1px !important;
+  }
+
+  .table thead {
+    background-image: none;
+  }
+
+  .table thead tr th:first-child {
+    padding-left: 25px !important;
+  }
+
+  .table tbody tr td:first-child {
+    padding-left: 25px !important;
+  }
+
+  .table thead th {
+    color: #464646 !important;
+    border: none !important;
+    background: #f5f5f5 !important;
+    border-bottom: 2px solid #39a5dd !important;
+    font-size: 14px !important;
+  }
+
+  .table tbody tr {
+    background-color: white;
+    height: 47px;
+  }
+
+  .table tbody tr:hover {
+    background-color: #def3ff;
+  }
+
+  .table tbody tr td {
+    line-height: 31px;
+  }
 
 </style>

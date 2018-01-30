@@ -117,7 +117,7 @@
     },
     methods: {
       changePassword() {
-        this.execChangePassword(this.newPassword, this.user.login.id, this.user.login.token, success => {
+        this.execChangePassword(this.newPassword, this.user.login.id, success => {
           $('#changePassModal').modal('toggle');
         }, error => {
           this.errors.password = true

@@ -4,7 +4,7 @@
     <div v-if="!isLogged" class="login-pf">
       <div>
         <span id="badge">
-          <img src="src/assets/logo.png" alt=" logo" />
+          <img src="./assets/logo.png" alt=" logo" />
         </span>
         <div class="container">
           <div class="row">
@@ -19,7 +19,7 @@
                 <div v-bind:class="[errors.username ? 'has-error' : '', 'form-group']">
                   <label for="inputUsername" class="col-sm-2 col-md-2 control-label">Username</label>
                   <div class="col-sm-10 col-md-10">
-                    <input required v-model="username" type="text" class="form-control" id="inputUsername" :placeholder="$t('login.insert_username')"
+                    <input autocomplete="username" required v-model="username" type="text" class="form-control" id="inputUsername" :placeholder="$t('login.insert_username')"
                       tabindex="1">
                     <span v-if="errors.username" class="help-block">{{ $t("login.user_error") }}</span>
                   </div>
@@ -27,7 +27,7 @@
                 <div v-bind:class="[errors.password ? 'has-error' : '', 'form-group']">
                   <label for="inputPassword" class="col-sm-2 col-md-2 control-label">Password</label>
                   <div class="col-sm-10 col-md-10">
-                    <input required v-model="password" type="password" class="form-control" id="inputPassword" :placeholder="$t('login.insert_password')"
+                    <input autocomplete="current-password" required v-model="password" type="password" class="form-control" id="inputPassword" :placeholder="$t('login.insert_password')"
                       tabindex="2">
                     <span v-if="errors.password" class="help-block">{{ $t("login.password_error") }}</span>
                   </div>
@@ -68,7 +68,7 @@
             <span class="icon-bar"></span>
           </button>
           <a href="/" class="navbar-brand">
-            <img class="navbar-brand-icon" src="src/assets/logo.png" alt="" />
+            <img class="navbar-brand-icon" src="./assets/logo.png" alt="" />
             <p class="navbar-brand-name">Icaro Hotspot Manager</p>
           </a>
         </div>
@@ -103,7 +103,7 @@
                   <a target="blank" href="https://github.com/nethesis/icaro">{{ $t("dashboard.help") }}</a>
                 </li>
                 <li>
-                  <a data-toggle="modal" data-target="#about-modal">{{ $t("dashboard.about") }}</a>
+                  <a href="#" data-toggle="modal" data-target="#about-modal">{{ $t("dashboard.about") }}</a>
                 </li>
               </ul>
             </li>
@@ -216,11 +216,6 @@
         <router-view></router-view>
       </div>
       <!-- end main view -->
-
-      <!-- footer -->
-      <footer class="container-fluid footer-pf-alt">
-      </footer>
-      <!-- end footer -->
     </div>
     <!-- end logged view -->
 
@@ -261,7 +256,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <img class="about-logo" src="src/assets/logo.png" alt="Patternfly Symbol">
+            <img class="about-logo" src="./assets/logo.png" alt="Patternfly Symbol">
           </div>
         </div>
       </div>
@@ -271,10 +266,6 @@
 </template>
 
 <script>
-  window.$ = window.jQuery = require('jquery')
-  require('bootstrap')
-  require('../node_modules/patternfly/dist/js/patternfly')
-
   import LoginService from './services/login';
   import StorageService from './services/storage';
   import {
@@ -301,7 +292,7 @@
       }
 
       if (user.login) {
-        this.getInfo(user.login.id, user.login.token, response => {
+        this.getInfo(user.login.id, response => {
           if (response) {
             this.user.info = response
             this.isLogged = true
@@ -316,6 +307,8 @@
       }
 
       return {
+        username: '',
+        password: '',
         user: user,
         currentPath: currentPath,
         isLogged: isLogged,
@@ -341,8 +334,8 @@
         }
         return icon
       },
-      getInfo(id, token, callback) {
-        this.execGetInfo(id, token, success => {
+      getInfo(id, callback) {
+        this.execGetInfo(id, success => {
           callback(success.body)
         }, error => {
           callback(null)
@@ -357,7 +350,11 @@
         }, success => {
           // extract loggedUser info
           var loggedUser = success.body
-          this.getInfo(loggedUser.id, loggedUser.token, response => {
+          // save to localstorage
+          this.set('loggedUser', loggedUser)
+
+          // get user info
+          this.getInfo(loggedUser.id, response => {
             if (response) {
               this.user.info = response
               this.isLogged = true
@@ -366,9 +363,6 @@
               this.isLogged = false
             }
           })
-
-          // save to localstorage
-          this.set('loggedUser', loggedUser)
 
           // change route
           this.isLogged = true
@@ -384,7 +378,7 @@
         })
       },
       doLogout() {
-        this.execLogout(this.get('loggedUser').token, success => {
+        this.execLogout(success => {
           // save to localstorage
           this.delete('loggedUser')
 
@@ -397,30 +391,30 @@
         })
       },
       initGraphics() {
+        $('body').addClass('logged')
+        $('body').removeClass('not-logged')
         setTimeout(function () {
           $().setupVerticalNavigation(true);
         }, 1000);
-        $('body').css('background-color', '#f5f5f5')
         this.showBody()
       },
       resetGraphics() {
-        $('body').css('background-color', '#1e1e1e')
+        $('body').addClass('not-logged')
+        $('body').removeClass('logged')
         window.location.reload()
       },
       showBody() {
         $('body').show()
+        $('body').addClass('not-logged')
       }
     }
   }
+
 </script>
 
 <style>
-  @import url('../node_modules/patternfly/dist/css/patternfly.min.css');
-  @import url('../node_modules/patternfly/dist/css/patternfly-additions.min.css');
-
   body {
-    background-color: #1e1e1e;
-    overflow: hidden;
+    overflow: hidden !important;
     display: none;
   }
 
@@ -432,6 +426,14 @@
 
   a {
     text-decoration: none !important;
+  }
+
+  .not-logged {
+    background-color: #010101;
+  }
+
+  .logged {
+    background-color: #f5f5f5
   }
 
   #brand {
@@ -452,15 +454,15 @@
   }
 
   .col-brand {
-    height: 15px;
+    height: 15px !important;
   }
 
   .container-fluid {
-    padding: 0px;
+    padding: 0px !important;
   }
 
   .container-cards-pf {
-    margin-top: 0px;
+    margin-top: 0px !important;
   }
 
   .list-group-item {
@@ -468,21 +470,21 @@
   }
 
   .login-main-name {
-    margin-top: -10px;
-    font-size: 16px;
+    margin-top: -10px !important;
+    font-size: 16px !important;
   }
 
   .login-main-icon {
-    margin-right: 6px;
+    margin-right: 6px !important;
   }
 
   .login-main-type {
-    margin-top: -4px;
-    text-align: right;
+    margin-top: -4px !important;
+    text-align: right !important;
   }
 
   .about-logo {
-    height: 50px;
+    height: 50px !important;
   }
 
   .modal-footer {
@@ -492,4 +494,5 @@
   .alert {
     margin-bottom: 0px !important;
   }
+
 </style>

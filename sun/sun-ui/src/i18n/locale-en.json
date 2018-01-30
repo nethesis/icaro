@@ -1,34 +1,46 @@
 {
-    "en": {
-        "login": {
-            "welcome": "Welcome to",
-            "insert_username": "Insert you username",
-            "insert_password": "Insert your password",
-            "user_error": "Invalid username",
-            "password_error": "Invalid password"
-        },
-        "dashboard": {
-            "preferences": "Preferences",
-            "help": "Help",
-            "about": "About",
-            "profile": "Profile",
-            "user": "User",
-            "users": "Users"
-        },
-        "profile": {
-            "info": "Information",
-            "change_password": "Change password",
-            "username": "Username",
-            "name": "Name",
-            "email": "Email",
-            "type": "Type",
-            "new_password": "New password",
-            "confirm_password": "Confirm password",
-            "change_password_error_title": "Change password error",
-            "change_password_error_sub": "Something went wrong on changing password"
-        },
-        "cancel": "Cancel",
-        "save": "Save",
-        "update": "Update"
-    }
+  "en": {
+    "login": {
+      "welcome": "Welcome to",
+      "insert_username": "Insert you username",
+      "insert_password": "Insert your password",
+      "user_error": "Invalid username",
+      "password_error": "Invalid password"
+    },
+    "dashboard": {
+      "preferences": "Preferences",
+      "help": "Help",
+      "about": "About",
+      "profile": "Profile",
+      "user": "User",
+      "users": "Users"
+    },
+    "profile": {
+      "info": "Information",
+      "change_password": "Change password",
+      "username": "Username",
+      "name": "Name",
+      "email": "Email",
+      "type": "Type",
+      "new_password": "New password",
+      "confirm_password": "Confirm password",
+      "change_password_error_title": "Change password error",
+      "change_password_error_sub": "Something went wrong on changing password"
+    },
+    "hotspot": {
+      "name": "Name",
+      "description": "Description",
+      "created": "Created",
+      "action": "Action",
+      "details": "Details"
+    },
+    "cancel": "Cancel",
+    "save": "Save",
+    "update": "Update",
+    "next": "Next",
+    "prev": "Prev",
+    "of": "of",
+    "search": "Search",
+    "rows_per_page": "Rows per page"
+  }
 }
