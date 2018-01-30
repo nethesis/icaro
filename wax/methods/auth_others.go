@@ -154,7 +154,7 @@ func EmailAuth(c *gin.Context) {
 			Name:        email, // TODO: how we can get the name?
 			Username:    email,
 			Password:    code,
-			Email:       "",
+			Email:       email,
 			AccountType: "email",
 			KbpsDown:    0,
 			KbpsUp:      0,
