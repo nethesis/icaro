@@ -1,0 +1,103 @@
+if: tag != autobuild
+
+matrix:
+  include:
+    - language: go
+      env:
+        - NAME=sun-api
+        - DEPLOY_FILES=sun/sun-api/sun-api
+      script:
+        - cd $TRAVIS_BUILD_DIR/sun/sun-api && go build
+
+    - language: go
+      env:
+        - NAME=wax
+        - DEPLOY_FILES=wax/wax
+      script:
+        - cd $TRAVIS_BUILD_DIR/wax && go build
+
+    - language: node_js
+      node_js: 8
+      env:
+        - NAME=sun-ui
+        - DEPLOY_FILES=sun/sun-ui/sun-ui.tar.gz
+      script:
+        - cd $TRAVIS_BUILD_DIR/sun/sun-ui
+        - npm install && npm run build
+      after_success:
+        - cd dist && tar cvzf ../sun-ui.tar.gz .
+
+    - language: node_js
+      node_js: 8
+      env:
+        - NAME=wings
+        - DEPLOY_FILES=wings/wings.tar.gz
+      script:
+        - cd $TRAVIS_BUILD_DIR/wings
+        - npm install && npm run build
+      after_success:
+        - cd dist/ && tar cvzf ../wings.tar.gz .
+
+    - language: minimal
+      sevices:
+        - docker
+      env:
+        - NAME=dedalo
+        - DEPLOY_FILES=dedalo/dist/dedalo.rpm
+        - DEST_ID=core
+        - NSVER=7
+        - DOCKER_IMAGE=nethserver/makerpms:${NSVER}
+        - >
+            EVARS="
+            -e DEST_ID
+            -e TRAVIS_BRANCH
+            -e TRAVIS_BUILD_ID
+            -e TRAVIS_PULL_REQUEST_BRANCH
+            -e TRAVIS_PULL_REQUEST
+            -e TRAVIS_REPO_SLUG
+            -e TRAVIS_TAG
+            -e NSVER
+            -e VERSIONS_PACK
+            -e STAGES_PACK
+            -e ENDPOINTS_PACK"
+      script:
+        - cd $TRAVIS_BUILD_DIR/dedalo/dist/
+        - >
+          docker run -ti --name makerpms ${EVARS}
+          --hostname b${TRAVIS_BUILD_NUMBER}.nethserver.org
+          --volume $PWD:/srv/makerpms/src:ro ${DOCKER_IMAGE} makerpms-travis -s *.spec
+      after_success:
+        - docker commit makerpms nethserver/build
+        - docker cp makerpms:/srv/makerpms/rpmbuild/RPMS/x86_64/ RPMS
+        - rsync  --exclude "dedalo-debuginfo-*"  RPMS/* dedalo.rpm
+
+before_deploy:
+  - mkdir $TRAVIS_BUILD_DIR/deploy_files
+  - cd $TRAVIS_BUILD_DIR
+  - mv $DEPLOY_FILES $TRAVIS_BUILD_DIR/deploy_files/
+  - if test -z "$TRAVIS_TAG"; then  git tag -f autobuild; export TRAVIS_TAG=autobuild; else true; fi
+
+deploy:
+  - provider: releases
+    api_key: ${GITHUB_TOKEN}
+    file_glob: true
+    skip_cleanup: true
+    on:
+      repo: ${TRAVIS_REPO_SLUG}
+      condition: $TRAVIS_BRANCH = "master"
+    file: ${TRAVIS_BUILD_DIR}/deploy_files/*
+    prerelease: true
+
+  - provider: releases
+    api_key: ${GITHUB_TOKEN}
+    file_glob: true
+    skip_cleanup: true
+    on:
+      repo: ${TRAVIS_REPO_SLUG}
+      tags: true
+      condition: $TRAVIS_TAG != "autobuild"
+    file: ${TRAVIS_BUILD_DIR}/deploy_files/*
+    overwrite: true
+
+after_deploy:
+  - if test "$TRAVIS_TAG" == "autobuild" -a "$TRAVIS_BRANCH" == "master" ; then git push -f https://$GITHUB_TOKEN@github.com/$TRAVIS_REPO_SLUG autobuild;  else true; fi
