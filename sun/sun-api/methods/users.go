@@ -68,14 +68,26 @@ func UpdateUser(c *gin.Context) {
 
 	// check hotspot ownership
 	if utils.Contains(utils.ExtractHotspotIds(accountId), user.HotspotId) {
-		user.Name = json.Name
-		user.Email = json.Email
+		if len(json.Name) > 0 {
+			user.Name = json.Name
+		}
+		if len(json.Email) > 0 {
+			user.Email = json.Email
+		}
 
-		user.KbpsDown = json.KbpsDown
-		user.KbpsUp = json.KbpsUp
+		if json.KbpsDown >= 0 {
+			user.KbpsDown = json.KbpsDown
+		}
+		if json.KbpsUp >= 0 {
+			user.KbpsUp = json.KbpsUp
+		}
 
-		user.ValidFrom = json.ValidFrom
-		user.ValidUntil = json.ValidUntil
+		if !json.ValidFrom.IsZero() {
+			user.ValidFrom = json.ValidFrom
+		}
+		if !json.ValidUntil.IsZero() {
+			user.ValidUntil = json.ValidUntil
+		}
 
 		db.Save(&user)
 		db.Close()

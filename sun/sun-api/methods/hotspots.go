@@ -78,8 +78,12 @@ func UpdateHotspot(c *gin.Context) {
 		return
 	}
 
-	hotspot.Name = json.Name
-	hotspot.Description = json.Description
+	if len(json.Name) > 0 {
+		hotspot.Name = json.Name
+	}
+	if len(json.Description) > 0 {
+		hotspot.Description = json.Description
+	}
 
 	db.Save(&hotspot)
 	db.Close()
