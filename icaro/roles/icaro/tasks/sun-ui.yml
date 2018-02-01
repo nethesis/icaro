@@ -1,0 +1,24 @@
+---
+- name: Create Sun-ui root directory
+  file:
+    path: /opt/icaro/sun-ui/
+    state: directory
+    recurse: yes
+
+- name: Download Sun-ui package
+  get_url:
+    url: "{{ icaro.url }}/releases/download/{{ icaro.version }}/sun-ui.tar.gz"
+    force: yes
+    dest: /tmp/sun-ui.tar.gz
+
+- name: Unpack Sun-ui package
+  unarchive:
+    src: /tmp/sun-ui.tar.gz
+    dest: /opt/icaro/sun-ui/
+    remote_src: yes
+
+- name: Remove temp files
+  file:
+    path:
+      - /tmp/sun-ui.tar.gz
+    state: absent
