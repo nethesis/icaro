@@ -111,7 +111,7 @@ func UpdateHotspotPrefs(c *gin.Context) {
 		db.Save(&hsPref)
 		db.Close()
 
-		c.JSON(http.StatusCreated, gin.H{"status": "success"})
+		c.JSON(http.StatusOK, gin.H{"status": "success"})
 	} else {
 		c.JSON(http.StatusUnauthorized, gin.H{"message": "This hotspot is not yours"})
 	}
