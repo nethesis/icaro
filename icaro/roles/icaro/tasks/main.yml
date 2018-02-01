@@ -2,6 +2,7 @@
 - import_tasks: mysqld.yml
   become: true
 - import_tasks: sun-api.yml
+  become: true
 - import_tasks: sun-ui.yml
 - import_tasks: wax.yml
 - import_tasks: wings.yml
