@@ -1,0 +1,29 @@
+---
+- name: Create Wax working directory
+  file:
+    path: /opt/icaro/wax/
+    state: directory
+    recurse: yes
+
+- name: Copy Wax configuration file
+  template:
+    src: wax-conf.j2
+    dest: /opt/icaro/wax/conf.json
+
+- name: Download and install Wax executable
+  get_url:
+    url: "{{ icaro.url }}/releases/download/{{ icaro.version }}/wax"
+    force: true
+    dest: /opt/icaro/wax/wax
+    mode: 0755
+
+- name: Copy Wax sytemd unit
+  copy:
+    src: usr/lib/systemd/system/wax.service
+    dest: /usr/lib/systemd/system/wax.service
+
+- name: Enable Wax service
+  systemd:
+    name: wax
+    daemon_reload: yes
+    enabled: yes
