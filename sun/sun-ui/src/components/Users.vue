@@ -29,11 +29,6 @@
         <td>
           <user-action details="false" :obj="props.row" :update="getAll"></user-action>
         </td>
-        <td>
-          <a :href="'#/users/'+ props.row.id">
-            <span class="fa fa-angle-right details-arrow"></span>
-          </a>
-        </td>
       </template>
     </vue-good-table>
   </div>
@@ -81,19 +76,16 @@
             label: this.$i18n.t('user.bandwidth'),
             field: 'bandwidth',
             filterable: true,
+            sortable: false
           },
           {
             label: this.$i18n.t('user.valid'),
             field: 'valid',
             filterable: true,
-          },
-          {
-            label: this.$i18n.t('action'),
-            field: '',
             sortable: false
           },
           {
-            label: '',
+            label: this.$i18n.t('action'),
             field: '',
             sortable: false
           },

@@ -67,14 +67,13 @@
               <div class="form-group">
                 <label class="col-sm-4 control-label" for="textInput2-modal-markup">{{ $t("user.valid_from") }}</label>
                 <div class="col-sm-8">
-                  <input v-model="currentObj.valid_from" type="date" id="textInput2-modal-markup" class="form-control" :placeholder="$t('user.valid_from')">
+                  <date-picker v-model="currentObj.valid_from" :config="dateConfig"></date-picker>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-4 control-label" for="textInput2-modal-markup">{{ $t("user.valid_until") }}</label>
                 <div class="col-sm-8">
-                  <input type="text" class="form-control bootstrap-datepicker">
-                  <!-- <input v-model="currentObj.valid_until" type="date" id="textInput2-modal-markup" class="form-control" :placeholder="$t('user.valid_until')"> -->
+                  <date-picker v-model="currentObj.valid_until" :config="dateConfig"></date-picker>
                 </div>
               </div>
 
@@ -124,10 +123,16 @@
 <script>
   import UserService from '../services/user';
   import StorageService from '../services/storage';
+
+  import datePicker from 'vue-bootstrap-datetimepicker';
+
   export default {
     name: 'UserAction',
     props: ['details', 'obj', 'update'],
     mixins: [UserService, StorageService],
+    components: {
+      datePicker
+    },
     data() {
       var currentObj = {}
       var errors = {
@@ -135,26 +140,18 @@
         delete: false
       }
 
-      this.initGraphics()
-
       return {
         errors: errors,
-        currentObj: currentObj
+        currentObj: currentObj,
+        dateConfig: {
+          format: 'YYYY-MM-DD HH:mm:ss',
+          useCurrent: false,
+          sideBySide: true,
+          locale: this.$root.$options.currentLocale
+        }
       }
     },
     methods: {
-      initGraphics() {
-        $(document).ready(function () {
-          console.log("ready!");
-          $('.bootstrap-datepicker').datepicker({
-            autoclose: true,
-            todayBtn: "linked",
-            todayHighlight: true
-          });
-        });
-
-
-      },
       setCurrentObj(obj) {
         this.currentObj = Object.assign({}, obj);
       },
@@ -164,8 +161,8 @@
           email: obj.email,
           kbps_down: obj.kbps_down,
           kbps_up: obj.kbps_up,
-          valid_from: obj.valid_from,
-          valid_until: obj.valid_until
+          valid_from: new Date(obj.valid_from).toISOString(),
+          valid_until: new Date(obj.valid_until).toISOString(),
         }, success => {
           $('#UsmodifyModal' + obj.id).modal('toggle');
           this.update()

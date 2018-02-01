@@ -16,6 +16,7 @@ require('patternfly/dist/js/patternfly.min');
 require('patternfly/dist/css/patternfly.min.css');
 require('patternfly/dist/css/patternfly-additions.min.css');
 
+
 Vue.config.productionTip = true
 Vue.use(VueResource)
 Vue.use(VueI18n)
@@ -34,5 +35,6 @@ new Vue({
   router,
   i18n,
   render: (h) => h(App),
-  api_host: window.location.host
+  api_host: window.location.host,
+  currentLocale: langConf.locale
 })
