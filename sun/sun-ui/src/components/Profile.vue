@@ -82,7 +82,6 @@
               <button :disabled="newPassword != confirmPassword" type="submit" class="btn btn-primary">{{ $t("update") }}</button>
             </div>
           </form>
-
         </div>
       </div>
     </div>

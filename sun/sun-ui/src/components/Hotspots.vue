@@ -1,20 +1,80 @@
 <template>
   <div>
     <h2>{{ msg }}</h2>
-    <vue-good-table :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'name', type: 'asc'}" :globalSearch="true"
-      :paginate="true" styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText" :rowsPerPageText="tableLangsTexts.rowsPerPageText"
-      :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder" :ofText="tableLangsTexts.ofText">
-      <template slot="table-row" scope="props">
+    <button v-if="rows.length > 0" data-toggle="modal" data-target="#HScreateModal" class="btn btn-primary btn-lg create-hotspot">
+      {{ $t('hotspot.create_new') }} </button>
+    <div v-if="rows.length == 0" class="blank-slate-pf " id="">
+      <div class="blank-slate-pf-icon">
+        <span class="fa fa-wifi"></span>
+      </div>
+      <h1>
+        {{ $t('hotspot.no_hotspot_found') }}
+      </h1>
+      <p>
+        {{ $t('hotspot.no_hotspot_found_sub') }}.
+      </p>
+      <div class="blank-slate-pf-main-action">
+        <button data-toggle="modal" data-target="#HScreateModal" class="btn btn-primary btn-lg"> {{ $t('hotspot.create_new') }} </button>
+      </div>
+    </div>
+    <vue-good-table v-if="rows.length > 0" :perPage="25" :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'name', type: 'asc'}"
+      :globalSearch="true" :paginate="true" styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText"
+      :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
+      :ofText="tableLangsTexts.ofText">
+      <template slot="table-row" slot-scope="props">
         <td>
-          <strong>{{ props.row.name }}</strong>
+          <a :href="'#/hotspots/'+ props.row.id">
+            <strong>{{ props.row.name }}</strong>
+          </a>
         </td>
         <td class="fancy">{{ props.row.description }}</td>
         <td class="fancy">{{ props.row.created }}</td>
         <td>
-          <a :href="'#/hotspots/'+ props.row.id" class="btn btn-primary" type="button">{{ $t('hotspot.details') }}</a>
+          <hotspot-action details="true" :obj="props.row" :update="getAll"></hotspot-action>
+        </td>
+        <td>
+          <a :href="'#/hotspots/'+ props.row.id">
+            <span class="fa fa-angle-right details-arrow"></span>
+          </a>
         </td>
       </template>
     </vue-good-table>
+    <div class="modal fade" id="HScreateModal" tabindex="-1" role="dialog" aria-labelledby="HScreateModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              <span class="pficon pficon-close"></span>
+            </button>
+            <h4 class="modal-title" id="HScreateModalLabel">{{ $t("create") }}</h4>
+          </div>
+          <form class="form-horizontal" role="form" v-on:submit.prevent="createHotspot()">
+            <div class="modal-body">
+              <div class="form-group">
+                <label class="col-sm-4 control-label" for="textInput-modal-markup">{{ $t("hotspot.name") }}</label>
+                <div class="col-sm-8">
+                  <input required v-model="newObj.name" type="text" id="textInput-modal-markup" class="form-control" :placeholder="$t('hotspot.name')">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-4 control-label" for="textInput2-modal-markup">{{ $t("hotspot.description") }}</label>
+                <div class="col-sm-8">
+                  <input required v-model="newObj.description" type="text" id="textInput2-modal-markup" class="form-control" :placeholder="$t('hotspot.description')">
+                </div>
+              </div>
+              <div v-if="errors.create" class="alert alert-danger alert-dismissable">
+                <span class="pficon pficon-error-circle-o"></span>
+                <strong>{{ $t("hotspot.create_error_title") }}</strong>. {{ $t("hotspot.create_error_sub") }}.
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">{{ $t("cancel") }}</button>
+              <button type="submit" class="btn btn-primary">{{ $t("create") }}</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -23,12 +83,25 @@
   import StorageService from '../services/storage';
   import UtilService from '../services/util';
 
+  import HotspotAction from '../directives/HotspotAction.vue';
+
   export default {
     name: 'Hotspots',
     mixins: [HotspotService, StorageService, UtilService],
+    components: {
+      hotspotAction: HotspotAction
+    },
     data() {
       // get hotspot list
       this.getAll()
+
+      var newObj = {
+        name: '',
+        description: ''
+      }
+      var errors = {
+        create: false,
+      }
 
       return {
         msg: 'Hotspots',
@@ -48,13 +121,20 @@
             sortable: false
           },
           {
-            label: this.$i18n.t('hotspot.action'),
+            label: this.$i18n.t('action'),
+            field: '',
+            sortable: false
+          },
+          {
+            label: '',
             field: '',
             sortable: false
           },
         ],
         rows: [],
-        tableLangsTexts: this.tableLangs()
+        tableLangsTexts: this.tableLangs(),
+        newObj: newObj,
+        errors: errors
       }
     },
     methods: {
@@ -64,6 +144,15 @@
         }, error => {
           console.log(error)
         })
+      },
+      createHotspot() {
+        this.execCreate(this.newObj, success => {
+          $('#HScreateModal').modal('toggle');
+          this.getAll()
+        }, error => {
+          this.errors.create = true
+          console.log(error.body.message);
+        })
       }
     }
   }
@@ -71,59 +160,10 @@
 </script>
 
 <style>
-  .global-search {
-    padding-left: 0px !important;
-  }
-
-  .global-search-icon {
-    display: none;
-  }
-
-  .good-table {
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-
-  .table thead input {
-    background-image: none;
-    border-radius: 1px !important;
-  }
-
-  .table thead {
-    background-image: none;
-  }
-
-  .table thead tr th:first-child {
-    padding-left: 25px !important;
-  }
-
-  .table tbody tr td:first-child {
-    padding-left: 25px !important;
-  }
-
-  .table thead th {
-    color: #464646 !important;
-    border: none !important;
-    background: #f5f5f5 !important;
-    border-bottom: 2px solid #39a5dd !important;
-    font-size: 14px !important;
-  }
-
-  .table tbody tr {
-    background-color: white;
-    height: 47px;
-  }
-
-  .table tbody tr:hover {
-    background-color: #def3ff;
-  }
-
-  .table tbody tr td {
-    line-height: 31px;
-  }
-
-  .responsive {
-    overflow-x: auto;
+  .create-hotspot {
+    float: right;
+    margin-top: -52px;
+    margin-right: 35px;
   }
 
 </style>

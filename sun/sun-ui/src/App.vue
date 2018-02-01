@@ -27,8 +27,8 @@
                 <div v-bind:class="[errors.password ? 'has-error' : '', 'form-group']">
                   <label for="inputPassword" class="col-sm-2 col-md-2 control-label">Password</label>
                   <div class="col-sm-10 col-md-10">
-                    <input autocomplete="current-password" required v-model="password" type="password" class="form-control" id="inputPassword" :placeholder="$t('login.insert_password')"
-                      tabindex="2">
+                    <input autocomplete="current-password" required v-model="password" type="password" class="form-control" id="inputPassword"
+                      :placeholder="$t('login.insert_password')" tabindex="2">
                     <span v-if="errors.password" class="help-block">{{ $t("login.password_error") }}</span>
                   </div>
                 </div>
@@ -117,12 +117,12 @@
       <div class="nav-pf-vertical nav-pf-vertical-with-sub-menus nav-pf-persistent-secondary">
         <ul class="list-group">
 
-          <li v-bind:class="[currentPath == '/' ? 'active' : '', 'list-group-item']">
+          <!-- <li v-bind:class="[currentPath == '/' ? 'active' : '', 'list-group-item']">
             <a href="#/">
               <span class="fa fa-dashboard" data-toggle="tooltip" title="Dashboard"></span>
               <span class="list-group-item-value">Dashboard</span>
             </a>
-          </li>
+          </li> -->
           <li v-bind:class="[currentPath == '/hotspots' ? 'active' : '', 'list-group-item']">
             <a href="#/hotspots">
               <span class="fa fa-wifi" data-toggle="tooltip" title="Dolor"></span>
@@ -137,12 +137,12 @@
 
             </a>
           </li>
-          <li v-bind:class="[currentPath == '/reports' ? 'active' : '', 'list-group-item']">
+          <!-- <li v-bind:class="[currentPath == '/reports' ? 'active' : '', 'list-group-item']">
             <a href="#/reports">
               <span class="fa fa-list" data-toggle="tooltip" title="Adipscing"></span>
               <span class="list-group-item-value">Report</span>
             </a>
-          </li>
+          </li> -->
 
           <li></li>
 
@@ -153,12 +153,12 @@
 
             </a>
           </li>
-          <li v-bind:class="[currentPath == '/preferences' ? 'active' : '', 'list-group-item']">
+          <!-- <li v-bind:class="[currentPath == '/preferences' ? 'active' : '', 'list-group-item']">
             <a href="#/preferences">
               <span class="fa fa-gear" data-toggle="tooltip" title="Lorem"></span>
               <span class="list-group-item-value">{{ $t("dashboard.preferences") }}</span>
             </a>
-          </li>
+          </li> -->
 
           <li class="list-group-item secondary-nav-item-pf mobile-nav-item-pf visible-xs-block" data-target="#user-secondary">
             <a href="#">
@@ -414,7 +414,7 @@
 
 <style>
   body {
-    overflow: hidden !important;
+    overflow-x: hidden !important;
     display: none;
   }
 
@@ -493,6 +493,105 @@
 
   .alert {
     margin-bottom: 0px !important;
+  }
+
+  .global-search {
+    padding-left: 0px !important;
+  }
+
+  .global-search-icon {
+    display: none;
+  }
+
+  .good-table {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .table thead input {
+    background-image: none;
+    border-radius: 1px !important;
+    width: calc(50%) !important;
+  }
+
+  .table thead {
+    background-image: none;
+  }
+
+  .table thead tr th:first-child {
+    padding-left: 25px !important;
+  }
+
+  .table tbody tr td:first-child {
+    padding-left: 25px !important;
+  }
+
+  .table thead th {
+    color: #464646 !important;
+    border: none !important;
+    background: #f5f5f5 !important;
+    border-bottom: 2px solid #39a5dd !important;
+    font-size: 14px !important;
+  }
+
+  .table tbody tr {
+    background-color: white;
+    height: 47px;
+  }
+
+  .table tbody tr:hover {
+    background-color: #def3ff;
+  }
+
+  .table tbody tr td {
+    line-height: 31px;
+    white-space: nowrap;
+  }
+
+  .table tbody tr td .modal {
+    line-height: initial;
+  }
+
+  .table-footer {
+    padding-left: 20px;
+    padding-top: 5px;
+    padding: 0px;
+  }
+
+  .table-footer select {
+    font-size: 12px !important;
+  }
+
+  .table-footer .pull-left {
+    font-size: 12px;
+    line-height: 26px;
+  }
+
+  .table-footer .pull-left label {
+    margin-bottom: 0px;
+  }
+
+  .pagination-controls a {
+    font-size: 12px !important;
+  }
+
+  .pagination-controls .info {
+    font-size: 12px !important;
+  }
+
+  .responsive {
+    overflow-x: auto;
+  }
+
+  .details-arrow {
+    font-size: 20px;
+  }
+
+  .action-icon-menu {
+    display: inline-block;
+    width: 10px;
+    text-align: center;
+    margin-right: 10px;
   }
 
 </style>

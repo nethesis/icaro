@@ -10,8 +10,8 @@ import App from './App.vue'
 import router from './routes/router'
 import languages from './i18n/lang'
 
-window.$ = window.jQuery = require('jquery')
-require('bootstrap/dist/js/bootstrap.min');
+window.$ = window.jQuery = require('patternfly/node_modules/jquery/dist/jquery.min.js')
+require('patternfly/node_modules/bootstrap/dist/js/bootstrap.min.js');
 require('patternfly/dist/js/patternfly.min');
 require('patternfly/dist/css/patternfly.min.css');
 require('patternfly/dist/css/patternfly-additions.min.css');

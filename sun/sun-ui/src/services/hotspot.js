@@ -14,8 +14,12 @@ var HotspotService = {
         }
       }).then(success, error);
     },
-    execCreate() {
-
+    execCreate(body, success, error) {
+      this.$http.post('https://' + this.$root.$options.api_host + '/api/hotspots', body, {
+        headers: {
+          'Token': this.get('loggedUser') && this.get('loggedUser').token || ''
+        }
+      }).then(success, error);
     },
     execModify(id, body, success, error) {
       this.$http.put('https://' + this.$root.$options.api_host + '/api/hotspots/' + id, body, {
