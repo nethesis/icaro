@@ -1,4 +1,9 @@
 ---
+
+icaro:
+  url: "https://github.com/nethesis/icaro"
+  version: "autobuild"
+
 machine_hostname:
     "example.com"
 admin_email:
