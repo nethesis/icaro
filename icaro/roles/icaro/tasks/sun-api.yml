@@ -1,0 +1,29 @@
+---
+- name: Create Sun-api working directory
+  file:
+    path: /opt/icaro/sun-api/
+    state: directory
+    recurse: yes
+
+- name: Copy Sun-api configuration file
+  template:
+    src: sun-api-conf.j2
+    dest: /opt/icaro/sun-api/conf.json
+
+- name: Download and install Sun-api executable
+  get_url:
+    url: "{{ icaro.url }}/releases/download/{{ icaro.version }}/sun-api"
+    force: true
+    dest: /opt/icaro/sun-api/sun-api
+    mode: 0755
+
+- name: Copy Sun-api sytemd unit
+  copy:
+    src: usr/lib/systemd/system/sun-api.service
+    dest: /usr/lib/systemd/system/sun-api.service
+
+- name: Enable sun-ui service
+  systemd:
+    name: sun-api
+    daemon_reload: yes
+    enabled: yes
