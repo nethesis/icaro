@@ -1,0 +1,24 @@
+---
+- name: Create Wings root directory
+  file:
+    path: /opt/icaro/wings/
+    state: directory
+    recurse: yes
+
+- name: Download Wings package
+  get_url:
+    url: "{{ icaro.url }}/releases/download/{{ icaro.version }}/wings.tar.gz"
+    force: yes
+    dest: /tmp/wings.tar.gz
+
+- name: Unpack Wings package
+  unarchive:
+    src: /tmp/wings.tar.gz
+    dest: /opt/icaro/wings/
+    remote_src: yes
+
+- name: Remove temp files
+  file:
+    path:
+      - /tmp/wings.tar.gz
+    state: absent

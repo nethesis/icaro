@@ -8,5 +8,6 @@
 - import_tasks: wax.yml
   become: true
 - import_tasks: wings.yml
+  become: true
 - import_tasks: caddy.yml
   become: true
