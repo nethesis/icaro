@@ -86,11 +86,11 @@ func main() {
 		{
 			resellersPref := preferences.Group("/accounts")
 			resellersPref.GET("", methods.GetAccountPrefs)
-			resellersPref.POST("", methods.CreateAccountPrefs)
+			resellersPref.PUT("", methods.UpdateAccountPrefs)
 
 			hotspotsPref := preferences.Group("/hotspots")
 			hotspotsPref.GET("/:hotspot_id", methods.GetHotspotPrefs)
-			hotspotsPref.POST("", methods.CreateHotspotPrefs)
+			hotspotsPref.PUT("/:hotspot_id", methods.UpdateHotspotPrefs)
 		}
 
 		sessions := api.Group("/sessions")

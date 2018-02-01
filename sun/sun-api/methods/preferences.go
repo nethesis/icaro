@@ -24,6 +24,7 @@ package methods
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
@@ -33,23 +34,28 @@ import (
 	"github.com/nethesis/icaro/sun/sun-api/utils"
 )
 
-func CreateAccountPrefs(c *gin.Context) {
+func UpdateAccountPrefs(c *gin.Context) {
+	var accountPref models.AccountPreference
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
+
 	var json models.AccountPreference
 	if err := c.BindJSON(&json); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "Request fields malformed", "error": err.Error()})
 		return
 	}
 
-	accountId := c.MustGet("token").(models.AccessToken).AccountId
+	db := database.Database()
+	db.Where("`key` = ? AND account_id = ?", json.Key, accountId).First(&accountPref)
 
-	preference := models.AccountPreference{
-		AccountId: accountId,
-		Key:       json.Key,
-		Value:     json.Value,
+	if accountPref.Id == 0 {
+		db.Close()
+		c.JSON(http.StatusNotFound, gin.H{"message": "No preference found!"})
+		return
 	}
 
-	db := database.Database()
-	db.Save(&preference)
+	accountPref.Value = json.Value
+
+	db.Save(&accountPref)
 	db.Close()
 
 	c.JSON(http.StatusCreated, gin.H{"status": "success"})
@@ -71,8 +77,11 @@ func GetAccountPrefs(c *gin.Context) {
 	c.JSON(http.StatusOK, preferences)
 }
 
-func CreateHotspotPrefs(c *gin.Context) {
+func UpdateHotspotPrefs(c *gin.Context) {
+	var hsPref models.HotspotPreference
 	accountId := c.MustGet("token").(models.AccessToken).AccountId
+
+	hotspotId := c.Param("hotspot_id")
 
 	var json models.HotspotPreference
 	if err := c.BindJSON(&json); err != nil {
@@ -80,17 +89,26 @@ func CreateHotspotPrefs(c *gin.Context) {
 		return
 	}
 
-	preference := models.HotspotPreference{
-		Key:   json.Key,
-		Value: json.Value,
+	// convert hotspot id to int
+	hotspotIdInt, err := strconv.Atoi(hotspotId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Hotspot id error", "error": err.Error()})
 	}
 
-	preference.HotspotId = json.HotspotId
-
 	// check hotspot ownership
-	if utils.Contains(utils.ExtractHotspotIds(accountId), json.HotspotId) {
+	if utils.Contains(utils.ExtractHotspotIds(accountId), hotspotIdInt) {
 		db := database.Database()
-		db.Save(&preference)
+		db.Where("`key` = ? AND hotspot_id = ?", json.Key, hotspotIdInt).First(&hsPref)
+
+		if hsPref.Id == 0 {
+			db.Close()
+			c.JSON(http.StatusNotFound, gin.H{"message": "No preference found!"})
+			return
+		}
+
+		hsPref.Value = json.Value
+
+		db.Save(&hsPref)
 		db.Close()
 
 		c.JSON(http.StatusCreated, gin.H{"status": "success"})

@@ -50,6 +50,8 @@ func CreateHotspot(c *gin.Context) {
 		Created:     time.Now().UTC(),
 	}
 
+	// TODO: init hotspot preferences to database
+
 	db := database.Database()
 	db.Save(&hotspot)
 	db.Close()

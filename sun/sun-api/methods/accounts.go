@@ -72,6 +72,8 @@ func CreateAccount(c *gin.Context) {
 		db.Save(&accountHotspot)
 	}
 
+	// TODO: init account preferences to database
+
 	db.Close()
 
 	c.JSON(http.StatusCreated, gin.H{"id": account.Id, "status": "success"})
