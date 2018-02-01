@@ -156,7 +156,7 @@
         this.currentObj = Object.assign({}, obj);
       },
       modifyUser(obj) {
-        this.execModify(obj.id, {
+        this.userModify(obj.id, {
           name: obj.name,
           email: obj.email,
           kbps_down: obj.kbps_down,
@@ -172,7 +172,7 @@
         })
       },
       deleteUser(obj) {
-        this.execDelete(obj.id, success => {
+        this.userDelete(obj.id, success => {
           $('#UsdeleteModal' + obj.id).modal('toggle');
           this.update()
         }, error => {

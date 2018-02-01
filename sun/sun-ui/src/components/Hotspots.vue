@@ -1,9 +1,10 @@
 <template>
   <div>
     <h2>{{ msg }}</h2>
-    <button v-if="rows.length > 0" data-toggle="modal" data-target="#HScreateModal" class="btn btn-primary btn-lg create-hotspot">
+    <div v-if="isLoading" class="spinner spinner-lg"></div>
+    <button v-if="rows.length > 0 && !isLoading" data-toggle="modal" data-target="#HScreateModal" class="btn btn-primary btn-lg create-hotspot">
       {{ $t('hotspot.create_new') }} </button>
-    <div v-if="rows.length == 0" class="blank-slate-pf " id="">
+    <div v-if="rows.length == 0 && !isLoading" class="blank-slate-pf " id="">
       <div class="blank-slate-pf-icon">
         <span class="fa fa-wifi"></span>
       </div>
@@ -17,7 +18,7 @@
         <button data-toggle="modal" data-target="#HScreateModal" class="btn btn-primary btn-lg"> {{ $t('hotspot.create_new') }} </button>
       </div>
     </div>
-    <vue-good-table v-if="rows.length > 0" :perPage="25" :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'name', type: 'asc'}"
+    <vue-good-table v-if="rows.length > 0 && !isLoading" :perPage="25" :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'name', type: 'asc'}"
       :globalSearch="true" :paginate="true" styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText"
       :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
       :ofText="tableLangsTexts.ofText">
@@ -105,6 +106,7 @@
 
       return {
         msg: 'Hotspots',
+        isLoading: true,
         columns: [{
             label: this.$i18n.t('hotspot.name'),
             field: 'name',
@@ -139,14 +141,15 @@
     },
     methods: {
       getAll() {
-        this.execGetAll(success => {
+        this.hotspotGetAll(success => {
           this.rows = success.body
+          this.isLoading = false
         }, error => {
           console.log(error)
         })
       },
       createHotspot() {
-        this.execCreate(this.newObj, success => {
+        this.hotspotCreate(this.newObj, success => {
           $('#HScreateModal').modal('toggle');
           this.getAll()
         }, error => {

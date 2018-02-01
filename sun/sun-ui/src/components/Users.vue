@@ -1,7 +1,8 @@
 <template>
   <div>
     <h2>{{ msg }}</h2>
-    <vue-good-table :perPage="25" :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'username', type: 'asc'}"
+    <div v-if="isLoading" class="spinner spinner-lg"></div>
+    <vue-good-table v-if="!isLoading" :perPage="25" :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'username', type: 'asc'}"
       :globalSearch="true" :paginate="true" styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText"
       :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
       :ofText="tableLangsTexts.ofText">
@@ -53,6 +54,7 @@
 
       return {
         msg: 'Users',
+        isLoading: true,
         columns: [{
             label: this.$i18n.t('user.username'),
             field: 'username',
@@ -96,8 +98,9 @@
     },
     methods: {
       getAll() {
-        this.execGetAll(success => {
+        this.userGetAll(success => {
           this.rows = success.body
+          this.isLoading = false
         }, error => {
           console.log(error)
         })

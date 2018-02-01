@@ -6,7 +6,7 @@ var UtilService = {
         prevText: this.$i18n.t('prev'),
         ofText: this.$i18n.t('of'),
         rowsPerPageText: this.$i18n.t('rows_per_page'),
-        globalSearchPlaceholder:this.$i18n.t('search'),
+        globalSearchPlaceholder: this.$i18n.t('search'),
       }
     },
   }

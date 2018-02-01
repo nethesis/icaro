@@ -13,7 +13,11 @@
       "about": "About",
       "profile": "Profile",
       "user": "User",
-      "users": "Users"
+      "users": "Users",
+      "units": "Units",
+      "sessions": "Sessions",
+      "devices": "Devices",
+      "accounts": "Accounts"
     },
     "profile": {
       "info": "Information",
@@ -41,7 +45,10 @@
       "create_error_sub": "Something went wrong on creating hotspot",
       "create_new": "Create Hotspot",
       "no_hotspot_found": "No Hotspots found",
-      "no_hotspot_found_sub": "Click on the button below to add a new hotspot"
+      "no_hotspot_found_sub": "Click on the button below to add a new hotspot",
+      "info": "Information",
+      "owner": "Owner",
+      "preferences": "Preferences"
     },
     "user": {
       "username": "Username",

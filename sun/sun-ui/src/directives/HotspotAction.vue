@@ -117,7 +117,7 @@
         this.currentObj = Object.assign({}, obj);
       },
       modifyHotspot(obj) {
-        this.execModify(obj.id, {
+        this.hotspotModify(obj.id, {
           description: obj.description
         }, success => {
           $('#HSmodifyModal' + obj.id).modal('toggle');
@@ -128,7 +128,7 @@
         })
       },
       deleteHotspot(obj) {
-        this.execDelete(obj.id, success => {
+        this.hotspotDelete(obj.id, success => {
           $('#HSdeleteModal' + obj.id).modal('toggle');
           this.update()
         }, error => {

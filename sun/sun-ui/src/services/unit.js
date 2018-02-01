@@ -1,28 +1,28 @@
-var UserService = {
+var UnitService = {
   methods: {
-    userGetAll(success, error) {
-      this.$http.get('https://' + this.$root.$options.api_host + '/api/users', {
+    unitGetAll(success, error) {
+      this.$http.get('https://' + this.$root.$options.api_host + '/api/units', {
         headers: {
           'Token': this.get('loggedUser') && this.get('loggedUser').token || ''
         }
       }).then(success, error);
     },
-    userGet(id, success, error) {
-      this.$http.get('https://' + this.$root.$options.api_host + '/api/users/' + id, {
+    unitGet(id, success, error) {
+      this.$http.get('https://' + this.$root.$options.api_host + '/api/units/' + id, {
         headers: {
           'Token': this.get('loggedUser') && this.get('loggedUser').token || ''
         }
       }).then(success, error);
     },
-    userModify(id, body, success, error) {
-      this.$http.put('https://' + this.$root.$options.api_host + '/api/users/' + id, body, {
+    unitModify(id, body, success, error) {
+      this.$http.put('https://' + this.$root.$options.api_host + '/api/units/' + id, body, {
         headers: {
           'Token': this.get('loggedUser') && this.get('loggedUser').token || ''
         }
       }).then(success, error);
     },
-    userDelete(id, success, error) {
-      this.$http.delete('https://' + this.$root.$options.api_host + '/api/users/' + id, {
+    unitDelete(id, success, error) {
+      this.$http.delete('https://' + this.$root.$options.api_host + '/api/units/' + id, {
         headers: {
           'Token': this.get('loggedUser') && this.get('loggedUser').token || ''
         }
@@ -30,4 +30,4 @@ var UserService = {
     },
   }
 };
-export default UserService;
+export default UnitService;

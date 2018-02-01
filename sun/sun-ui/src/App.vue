@@ -117,12 +117,12 @@
       <div class="nav-pf-vertical nav-pf-vertical-with-sub-menus nav-pf-persistent-secondary">
         <ul class="list-group">
 
-          <!-- <li v-bind:class="[currentPath == '/' ? 'active' : '', 'list-group-item']">
+          <li v-bind:class="[currentPath == '/' ? 'active' : '', 'list-group-item']">
             <a href="#/">
               <span class="fa fa-dashboard" data-toggle="tooltip" title="Dashboard"></span>
               <span class="list-group-item-value">Dashboard</span>
             </a>
-          </li> -->
+          </li>
           <li v-bind:class="[currentPath == '/hotspots' ? 'active' : '', 'list-group-item']">
             <a href="#/hotspots">
               <span class="fa fa-wifi" data-toggle="tooltip" title="Dolor"></span>
@@ -149,7 +149,7 @@
           <li v-bind:class="[currentPath == '/accounts' ? 'active' : '', 'list-group-item']">
             <a href="#/accounts">
               <span class="fa pficon-users" data-toggle="tooltip" title="Dolor"></span>
-              <span class="list-group-item-value">Accounts</span>
+              <span class="list-group-item-value">{{ $t("dashboard.accounts") }}</span>
 
             </a>
           </li>
@@ -453,6 +453,18 @@
     color: #c00 !important;
   }
 
+  .right {
+    float: right;
+  }
+
+  .soft {
+    font-weight: 600;
+  }
+
+  .card-info-title {
+    margin-right: 8px;
+  }
+
   .col-brand {
     height: 15px !important;
   }
@@ -508,28 +520,29 @@
     padding-right: 20px;
   }
 
-  .table > thead input {
+  .table>thead input {
     background-image: none;
     border-radius: 1px !important;
     width: calc(50%) !important;
   }
 
-  .table > thead {
+  .table>thead {
     background-image: none;
   }
 
-  .table > thead tr th:first-child {
+  .table>thead tr th:first-child {
     padding-left: 25px !important;
   }
 
-  .table > tbody tr td:first-child {
+  .table>tbody tr td:first-child {
     padding-left: 25px;
   }
-  .table-condensed > tbody tr td:first-child {
+
+  .table-condensed>tbody tr td:first-child {
     padding-left: initial;
   }
 
-  .table > thead th {
+  .table>thead th {
     color: #464646 !important;
     border: none !important;
     background: #f5f5f5 !important;
@@ -537,27 +550,29 @@
     font-size: 14px !important;
   }
 
-  .table > tbody tr {
+  .table>tbody tr {
     background-color: white;
     height: 47px;
   }
-  .table-condensed > tbody tr {
-    height: 30px;
-  }
-  .table-condensed > tr td {
+
+  .table-condensed>tbody tr {
     height: 30px;
   }
 
-  .table > tbody tr:hover {
+  .table-condensed>tr td {
+    height: 30px;
+  }
+
+  .table>tbody tr:hover {
     background-color: #def3ff;
   }
 
-  .table > tbody tr td {
+  .table>tbody tr td {
     line-height: 31px;
     white-space: nowrap;
   }
 
-  .table > tbody tr td .modal {
+  .table>tbody tr td .modal {
     line-height: initial;
   }
 
