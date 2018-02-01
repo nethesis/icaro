@@ -123,6 +123,9 @@ func UpdateAccount(c *gin.Context) {
 	if len(json.Email) > 0 {
 		account.Email = json.Email
 	}
+	if len(json.Type) > 0 {
+		account.Type = json.Type
+	}
 
 	db.Save(&account)
 	db.Close()
