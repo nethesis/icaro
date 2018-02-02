@@ -145,6 +145,7 @@
           this.rows = success.body
           this.isLoading = false
         }, error => {
+          this.isLoading = false
           console.log(error)
         })
       },
