@@ -76,7 +76,12 @@ func CreateAccount(c *gin.Context) {
 
 	db.Close()
 
-	c.JSON(http.StatusCreated, gin.H{"id": account.Id, "status": "success"})
+	if account.Id == 0 {
+		c.JSON(http.StatusConflict, gin.H{"id": account.Id, "status": "account already exists"})
+	} else {
+		c.JSON(http.StatusCreated, gin.H{"id": account.Id, "status": "success"})
+	}
+
 }
 
 func UpdateAccount(c *gin.Context) {
@@ -145,7 +150,11 @@ func GetAccounts(c *gin.Context) {
 	offsets := utils.OffsetCalc(page, limit)
 
 	db := database.Database()
-	db.Where("creator_id = ?", creatorId).Offset(offsets[0]).Limit(offsets[1]).Find(&accounts)
+	if creatorId == 1 {
+		db.Offset(offsets[0]).Limit(offsets[1]).Find(&accounts)
+	} else {
+		db.Where("creator_id = ?", creatorId).Offset(offsets[0]).Limit(offsets[1]).Find(&accounts)
+	}
 	db.Close()
 
 	if len(accounts) <= 0 {

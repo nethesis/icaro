@@ -56,7 +56,11 @@ func CreateHotspot(c *gin.Context) {
 	db.Save(&hotspot)
 	db.Close()
 
-	c.JSON(http.StatusCreated, gin.H{"id": hotspot.Id, "status": "success"})
+	if hotspot.Id == 0 {
+		c.JSON(http.StatusConflict, gin.H{"id": hotspot.Id, "status": "hotspot already exists"})
+	} else {
+		c.JSON(http.StatusCreated, gin.H{"id": hotspot.Id, "status": "success"})
+	}
 }
 
 func UpdateHotspot(c *gin.Context) {

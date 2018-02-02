@@ -9,6 +9,8 @@ CREATE TABLE `accounts` (
   `password` varchar (200) NOT NULL,
   `email` varchar(250),
   `created` datetime,
+  UNIQUE KEY (`username`),
+  UNIQUE KEY (`uuid`),
   KEY(`username`),
   KEY(`uuid`),
   PRIMARY KEY(`id`)

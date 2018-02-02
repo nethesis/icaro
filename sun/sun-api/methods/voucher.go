@@ -24,6 +24,7 @@ package methods
 
 import (
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -32,6 +33,7 @@ import (
 	"github.com/nethesis/icaro/sun/sun-api/database"
 	"github.com/nethesis/icaro/sun/sun-api/models"
 	"github.com/nethesis/icaro/sun/sun-api/utils"
+	waxUtils "github.com/nethesis/icaro/wax/utils"
 )
 
 func CreateVoucher(c *gin.Context) {
@@ -43,9 +45,12 @@ func CreateVoucher(c *gin.Context) {
 		return
 	}
 
+	days := waxUtils.GetHotspotPreferencesByKey(json.HotspotId, "voucher_expiration_days")
+	daysInt, _ := strconv.Atoi(days.Value)
+
 	hotspotVoucher := models.HotspotVoucher{
 		Code:    json.Code,
-		Expires: time.Now().UTC().AddDate(0, 0, 30), // TODO: get days from hotspot account preferences
+		Expires: time.Now().UTC().AddDate(0, 0, daysInt),
 	}
 
 	hotspotVoucher.HotspotId = json.HotspotId
@@ -56,7 +61,11 @@ func CreateVoucher(c *gin.Context) {
 		db.Save(&hotspotVoucher)
 		db.Close()
 
-		c.JSON(http.StatusCreated, gin.H{"id": hotspotVoucher.Id, "status": "success"})
+		if hotspotVoucher.Id == 0 {
+			c.JSON(http.StatusConflict, gin.H{"id": hotspotVoucher.Id, "status": "voucher already exists"})
+		} else {
+			c.JSON(http.StatusCreated, gin.H{"id": hotspotVoucher.Id, "status": "success"})
+		}
 	} else {
 		c.JSON(http.StatusUnauthorized, gin.H{"message": "This hotspot is not yours"})
 	}

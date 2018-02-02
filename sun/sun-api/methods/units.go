@@ -65,7 +65,11 @@ func CreateUnit(c *gin.Context) {
 		db.Save(&unit)
 		db.Close()
 
-		c.JSON(http.StatusCreated, gin.H{"id": unit.Id, "status": "success"})
+		if unit.Id == 0 {
+			c.JSON(http.StatusConflict, gin.H{"id": unit.Id, "status": "unit already exists"})
+		} else {
+			c.JSON(http.StatusCreated, gin.H{"id": unit.Id, "status": "success"})
+		}
 	} else {
 		c.JSON(http.StatusUnauthorized, gin.H{"message": "This hotspot is not yours"})
 	}
