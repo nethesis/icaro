@@ -17,7 +17,8 @@
       "units": "Units",
       "sessions": "Sessions",
       "devices": "Devices",
-      "accounts": "Managers"
+      "accounts": "Managers",
+      "hotspots": "Hotspots"
     },
     "profile": {
       "info": "Information",
