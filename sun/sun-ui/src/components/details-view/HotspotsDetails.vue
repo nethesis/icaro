@@ -142,6 +142,7 @@
 <script>
   import HotspotService from '../../services/hotspot';
   import PreferenceService from '../../services/preference';
+  import AccountService from '../../services/account';
   import UnitService from '../../services/unit';
   import UserService from '../../services/user';
   import DeviceService from '../../services/device';
@@ -152,7 +153,7 @@
 
   export default {
     name: 'HotspotDetails',
-    mixins: [HotspotService, PreferenceService, UnitService, UserService, DeviceService, SessionService, StorageService],
+    mixins: [HotspotService, PreferenceService, AccountService, UnitService, UserService, DeviceService, SessionService, StorageService],
     components: {
       hotspotAction: HotspotAction
     },
@@ -209,6 +210,13 @@
         })
       },
       getTotals() {
+        this.accountGetAll(success => {
+          this.totals.accounts.count = success.body.length
+          this.totals.accounts.isLoading = false
+        }, error => {
+          console.log(error.body)
+          this.totals.accounts.isLoading = false
+        })
         this.unitGetAll(success => {
           this.totals.units.count = success.body.length
           this.totals.units.isLoading = false
