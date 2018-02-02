@@ -17,7 +17,7 @@
       "units": "Units",
       "sessions": "Sessions",
       "devices": "Devices",
-      "accounts": "Accounts"
+      "accounts": "Managers"
     },
     "profile": {
       "info": "Information",
@@ -77,8 +77,8 @@
       "name": "Name",
       "email": "Email",
       "created": "Created",
-      "create_title": "Create new account",
-      "create_new": "Create account",
+      "create_title": "Create new manager",
+      "create_new": "Create manager",
       "type": "Type", 
       "new_password": "New password",
       "confirm_password": "Confirm password",
@@ -88,7 +88,6 @@
       "delete_error_sub": "Something went wrong on deleting user",
       "warning_delete_title": "Be careful",
       "warning_delete_sub": "Are you sure?",
-      "select_one": "Choose one account type",
       "type_desk": "Desk",
       "type_customer": "Customer",
       "change_password_error_title": "Change password error",

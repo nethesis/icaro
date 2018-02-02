@@ -42,7 +42,7 @@
               <div class="form-group">
                 <label class="col-sm-4 control-label" for="accuuid">{{ $t("account.uuid") }}</label>
                 <div class="col-sm-8">
-                  <input required v-model="newObj.uuid" readonly type="text" id="accuuid" class="form-control" :placeholder="$t('account.uuid')">
+                  <input required v-model="newObj.uuid" type="text" id="accuuid" class="form-control" :placeholder="$t('account.uuid')">
                 </div>
               </div>
               <div class="form-group">
@@ -60,14 +60,13 @@
               <div class="form-group">
                 <label class="col-sm-4 control-label" for="ACtextInput2-modal-markup">{{ $t("account.email") }}</label>
                 <div class="col-sm-8">
-                  <input required v-model="newObj.email" type="text" id="ACtextInput2-modal-markup" class="form-control" :placeholder="$t('account.email')">
+                  <input required v-model="newObj.email" type="email" id="ACtextInput2-modal-markup" class="form-control" :placeholder="$t('account.email')">
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-4 control-label" for="ACtextInput2-modal-markup">{{ $t("account.type") }}</label>
                 <div class="col-sm-8">
                   <select v-model="newObj.type" class="bootstrap-select">
-                    <option disabled value="">{{ $t("account.select_one") }}</option>
                     <option value="customer">{{ $t("account.type_customer") }}</option>
                     <option value="desk">{{ $t("account.type_desk") }}</option>
                   </select>
@@ -91,17 +90,10 @@
                   <span v-bind:class="[newPassword == confirmPassword ? 'pass-confirm-ok' : 'pass-confirm-err', '']"></span>
                 </div>
               </div>
-              <div v-if="errors.password" class="alert alert-danger alert-dismissable">
-                <span class="pficon pficon-error-circle-o"></span>
-                <strong>{{ $t("profile.change_password_error_title") }}</strong>. {{ $t("account.change_password_error_sub") }}.
-              </div>
-              <div v-if="errors.update" class="alert alert-danger alert-dismissable">
-                <span class="pficon pficon-error-circle-o"></span>
-                <strong>{{ $t("account.update_error_title") }}</strong>. {{ $t("account.update_error_sub") }}.
-              </div>
               <div v-if="errors.create" class="alert alert-danger alert-dismissable">
                 <span class="pficon pficon-error-circle-o"></span>
-                <strong>{{ $t("account.create_error_title") }}</strong>. {{ $t("account.create_error_sub") }}.
+                <strong>{{ $t("account.create_error_title") }}</strong>. 
+                <span>{{ errors.status != 409 ? $t("account.create_error_sub") : $t("account.duplicate_error") }}.</span>
               </div>
             </div>
             <div class="modal-footer">
@@ -120,13 +112,14 @@
 <script>
   import AccountService from '../services/account';
   import StorageService from '../services/storage';
+  import HotspotService from '../services/hotspot';
   import UtilService from '../services/util';
 
   import AccountAction from '../directives/AccountAction.vue';
 
   export default {
     name: 'Accounts',
-    mixins: [AccountService, StorageService, UtilService],
+    mixins: [AccountService, StorageService, UtilService, HotspotService],
     components: {
       accountAction: AccountAction
     },
@@ -152,8 +145,9 @@
 
 
       return {
-        msg: 'Accounts',
+        msg: 'Managers',
 	isLoading: true,
+        accountType: this.get("loggedUser").account_type,
         columns: [{
             label: this.$i18n.t('account.username'),
             field: 'username',
@@ -212,10 +206,12 @@
       },
       execCreate(obj) {
         this.accountCreate(obj, success => {
-          $('#ACcreateModall').modal('toggle');
+          $('#ACcreateModal').modal('toggle');
           this.getAll()
         }, error => {
-          console.log(error.body.message);
+          this.errors.create = true
+          this.errors.status = error.status;
+          console.log(error);
         })
       },
       getAll() {

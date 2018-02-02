@@ -60,7 +60,6 @@
                 <label class="col-sm-4 control-label" for="ACtextInput2-modal-markup">{{ $t("account.type") }}</label>
                 <div class="col-sm-8">
                   <select v-model="currentObj.type" class="form-control">
-		    <option disabled value="">{{ $t("account.select_one") }}</option>
                     <option value="customer">{{ $t("account.type_customer") }}</option>
                     <option value="desk">{{ $t("account.type_desk") }}</option>
                   </select>
