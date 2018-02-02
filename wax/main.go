@@ -24,6 +24,7 @@
 package main
 
 import (
+	"flag"
 	"net/http"
 
 	"github.com/gin-contrib/cors"
@@ -75,7 +76,9 @@ func DefineAPI(router *gin.Engine) {
 
 func main() {
 	// read and init configuration
-	configuration.Init()
+	ConfigFilePtr := flag.String("c", "/opt/icaro/wax/conf.json", "Path to configuration file")
+	flag.Parse()
+	configuration.Init(ConfigFilePtr)
 
 	// init routers
 	router := gin.Default()

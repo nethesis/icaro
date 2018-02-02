@@ -52,10 +52,10 @@ type Configuration struct {
 
 var Config = Configuration{}
 
-func Init() {
+func Init(ConfigFilePtr *string) {
 	// read configuration
-	if _, err := os.Stat("/opt/icaro/conf.json"); err == nil {
-		file, _ := os.Open("/opt/icaro/conf.json")
+	if _, err := os.Stat(*ConfigFilePtr); err == nil {
+		file, _ := os.Open(*ConfigFilePtr)
 		decoder := json.NewDecoder(file)
 		// check errors or parse JSON
 		err := decoder.Decode(&Config)

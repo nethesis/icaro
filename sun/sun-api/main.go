@@ -23,6 +23,7 @@
 package main
 
 import (
+	"flag"
 	"net/http"
 
 	"github.com/gin-contrib/cors"
@@ -36,7 +37,9 @@ import (
 
 func main() {
 	// read and init configuration
-	configuration.Init()
+	ConfigFilePtr := flag.String("c", "/opt/icaro/sun-api/conf.json", "Path to configuration file")
+	flag.Parse()
+	configuration.Init(ConfigFilePtr)
 
 	// init crons
 	crons.Init()
