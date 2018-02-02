@@ -106,7 +106,8 @@
         </div>
       </div>
     </div>
-    <div class="modal fade" :id="'ACChangePasswordModal'+obj.id" tabindex="-1" role="dialog" aria-labelledby="ACChangePassModalLabel" aria-hidden="true">
+    <div class="modal fade" :id="'ACChangePasswordModal'+obj.id" tabindex="-1" role="dialog" aria-labelledby="ACChangePassModalLabel"
+      aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -142,7 +143,8 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-default" data-dismiss="modal">{{ $t("cancel") }}</button>
-              <button :disabled="(newPassword != confirmPassword) || (confirmPassword.length == 0) || (newPassword.length == 0)" type="submit" class="btn btn-primary">{{ $t("update") }}</button>
+              <button :disabled="(newPassword != confirmPassword) || (confirmPassword.length == 0) || (newPassword.length == 0)" type="submit"
+                class="btn btn-primary">{{ $t("update") }}</button>
             </div>
           </form>
         </div>

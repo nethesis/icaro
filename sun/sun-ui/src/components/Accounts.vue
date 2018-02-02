@@ -1,7 +1,8 @@
 <template>
   <div>
     <h2>{{ msg }}</h2>
-    <button v-if="rows.length > 0"  v-on:click="initNewAccount()" data-toggle="modal" data-target="#ACcreateModal" class="btn btn-primary btn-lg create-account"> {{ $t('account.create_new') }} </button>
+    <button v-if="rows.length > 0" v-on:click="initNewAccount()" data-toggle="modal" data-target="#ACcreateModal" class="btn btn-primary btn-lg create-account">
+      {{ $t('account.create_new') }} </button>
     <div v-if="isLoading" class="spinner spinner-lg"></div>
     <vue-good-table v-if="!isLoading" :perPage="25" :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'username', type: 'asc'}"
       :globalSearch="true" :paginate="true" styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText"
@@ -16,7 +17,7 @@
         <td>
           <strong>{{ props.row.type }}</strong>
         </td>
-	<td class="fancy">{{ props.row.created }}</td>
+        <td class="fancy">{{ props.row.created }}</td>
         <td>
           <account-action details="false" :obj="props.row" :update="getAll"></account-action>
         </td>
@@ -87,18 +88,19 @@
               <div class="form-group">
                 <label class="col-sm-4 control-label" for="textInput2-modal-markup"></label>
                 <div class="col-sm-8">
-                  <span v-bind:class="[newPassword == confirmPassword ? 'pass-confirm-ok' : 'pass-confirm-err', '']"></span>
+                  <span v-bind:class="[newPassword == confirmPassword && newPassword.length > 0 ? 'pass-confirm-ok' : 'pass-confirm-err', '']"></span>
                 </div>
               </div>
               <div v-if="errors.create" class="alert alert-danger alert-dismissable">
                 <span class="pficon pficon-error-circle-o"></span>
-                <strong>{{ $t("account.create_error_title") }}</strong>. 
+                <strong>{{ $t("account.create_error_title") }}</strong>.
                 <span>{{ errors.status != 409 ? $t("account.create_error_sub") : $t("account.duplicate_error") }}.</span>
               </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-default" data-dismiss="modal">{{ $t("cancel") }}</button>
-              <button :disabled="(newPassword != confirmPassword) || (confirmPassword.length == 0) || (newPassword.length == 0)" type="submit" class="btn btn-primary">{{ $t("create") }}</button>
+              <button :disabled="(newPassword != confirmPassword) || (confirmPassword.length == 0) || (newPassword.length == 0)" type="submit"
+                class="btn btn-primary">{{ $t("create") }}</button>
             </div>
           </form>
         </div>
@@ -133,7 +135,7 @@
         name: '',
         email: '',
         type: '',
-        password: '' 
+        password: ''
       }
 
       var errors = {
@@ -146,7 +148,7 @@
 
       return {
         msg: 'Managers',
-	isLoading: true,
+        isLoading: true,
         accountType: this.get("loggedUser").account_type,
         columns: [{
             label: this.$i18n.t('account.username'),
@@ -193,14 +195,14 @@
     },
     methods: {
       initNewAccount() {
-          this.newObj.uuid = this.generateUUID();
+        this.newObj.uuid = this.generateUUID();
       },
       generateUUID() {
         var d = new Date().getTime();
-        var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-          var r = (d + Math.random()*16)%16 | 0;
-          d = Math.floor(d/16);
-          return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+        var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+          var r = (d + Math.random() * 16) % 16 | 0;
+          d = Math.floor(d / 16);
+          return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
         });
         return uuid;
       },
@@ -235,5 +237,18 @@
     margin-right: 35px;
   }
 
-</style>
+  .pass-confirm-err {
+    height: 5px;
+    background: #cc0000;
+    width: 100px;
+    display: block;
+  }
 
+  .pass-confirm-ok {
+    height: 5px;
+    background: #3f9c35;
+    width: 100px;
+    display: block;
+  }
+
+</style>

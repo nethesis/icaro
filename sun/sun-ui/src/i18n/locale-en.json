@@ -72,16 +72,15 @@
       "warning_delete_title": "Be careful",
       "warning_delete_sub": "Are you sure?"
     },
-    "account":
-    {
-      "uuid" : "Uinque ID",
+    "account": {
+      "uuid": "Uinque ID",
       "username": "Username",
       "change_password": "Change password",
       "name": "Name",
       "email": "Email",
       "created": "Created",
       "create_title": "Create new manager",
-      "create_new": "Create manager",
+      "create_new": "Create Manager",
       "type": "Type",
       "new_password": "New password",
       "confirm_password": "Confirm password",

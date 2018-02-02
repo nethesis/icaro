@@ -23,8 +23,8 @@
       <div class="col-xs-12 col-sm-6 col-md-3">
         <div class="card-pf card-pf-accented card-pf-aggregate-status">
           <h2 class="card-pf-title">
-              <span class="fa pficon-users"></span>
-              {{ $t("dashboard.accounts") }}
+            <span class="fa pficon-users"></span>
+            {{ $t("dashboard.accounts") }}
           </h2>
           <div class="card-pf-body">
             <p class="card-pf-aggregate-status-notifications">
@@ -90,8 +90,10 @@
 
     }
   }
+
 </script>
 
 <style scoped>
+
 
 </style>
