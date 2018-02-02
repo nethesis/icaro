@@ -92,8 +92,14 @@
       "warning_delete_sub": "Are you sure?",
       "type_desk": "Desk",
       "type_customer": "Customer",
+      "type_reseller": "Reseller",
+      "hotspot": "Hotspot",
       "change_password_error_title": "Change password error",
-      "change_password_error_sub": "Something went wrong on changing password"
+      "change_password_error_sub": "Something went wrong on changing password",
+      "create_error_title": "Create error",
+      "duplicate_error": "Duplicate manager. Please choose a different username or UUID.",
+      "create_error_sub": "An error occurred during manager creation."
+
     },
     "change_password": "Change password",
     "cancel": "Cancel",

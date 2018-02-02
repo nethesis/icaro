@@ -67,9 +67,20 @@
               <div class="form-group">
                 <label class="col-sm-4 control-label" for="ACtextInput2-modal-markup">{{ $t("account.type") }}</label>
                 <div class="col-sm-8">
-                  <select v-model="newObj.type" class="form-control">
-                    <option value="customer">{{ $t("account.type_customer") }}</option>
+                  <select v-model="newObj.type" class="bootstrap-select">
+                    <option value="customer" selected>{{ $t("account.type_customer") }}</option>
                     <option value="desk">{{ $t("account.type_desk") }}</option>
+                    <option v-if="accountType == 'admin'" value="reseller">{{ $t("account.type_reseller") }}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group" v-if="(newObj.type == 'customer' || newObj.type == 'desk')">
+                <label class="col-sm-4 control-label" for="ACtextInput2-modal-markup">{{ $t("account.hotspot") }}</label>
+                <div class="col-sm-8">
+                  <select v-model="newObj.hotspot_id" class="bootstrap-select">
+                    <option v-for="hotspot in hotspots" v-bind:value="hotspot.id">
+                     {{ hotspot.name }}
+                    </option>
                   </select>
                 </div>
               </div>
@@ -99,8 +110,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-default" data-dismiss="modal">{{ $t("cancel") }}</button>
-              <button :disabled="(newPassword != confirmPassword) || (confirmPassword.length == 0) || (newPassword.length == 0)" type="submit"
-                class="btn btn-primary">{{ $t("create") }}</button>
+              <button :disabled="(newPassword != confirmPassword) || (confirmPassword.length == 0) || (newPassword.length == 0) || (!newObj.hotspot_id && newObj.type != 'reseller')" type="submit" class="btn btn-primary">{{ $t("create") }}</button>
             </div>
           </form>
         </div>
@@ -127,7 +137,8 @@
     },
     data() {
       // get account list
-      this.getAll()
+      this.getAll();
+      this.getAllHotspots();
 
       var newObj = {
         uuid: '',
@@ -135,7 +146,8 @@
         name: '',
         email: '',
         type: '',
-        password: ''
+        password: '',
+        hotspot_id: ''
       }
 
       var errors = {
@@ -186,6 +198,7 @@
           },
         ],
         rows: [],
+        hotspots: [],
         tableLangsTexts: this.tableLangs(),
         newObj: newObj,
         newPassword: newPassword,
@@ -195,7 +208,20 @@
     },
     methods: {
       initNewAccount() {
-        this.newObj.uuid = this.generateUUID();
+          this.newObj.uuid = this.generateUUID();
+          this.newObj.password= this.generatePassword();
+          this.newPassword= this.newObj.password;
+          this.confirmPassword= this.newObj.password;
+          this.newObj.type = this.accountType == "admin" ? "reseller" : "customer";
+      },
+      generatePassword() {
+        var length = 8,
+        charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+        retVal = "";
+        for (var i = 0, n = charset.length; i < length; ++i) {
+          retVal += charset.charAt(Math.floor(Math.random() * n));
+         }
+         return retVal;
       },
       execCreate(obj) {
         this.accountCreate(obj, success => {
@@ -207,6 +233,15 @@
           console.log(error);
         })
       },
+      getAllHotspots() {
+        this.hotspotGetAll(success => {
+          this.hotspots = success.body
+          this.isLoading = false;
+        }, error => {
+          console.log(error)
+        })
+      },
+
       getAll() {
         this.accountGetAll(success => {
           this.rows = success.body
