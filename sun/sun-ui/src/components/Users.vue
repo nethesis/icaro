@@ -23,9 +23,9 @@
         </td>
         <td class="fancy">
           <div>
-            <strong>{{ $t('user.valid_from') }}</strong>: {{ props.row.valid_from }}</div>
+            <strong>{{ $t('user.from') }}</strong>: {{ props.row.valid_from }}</div>
           <div>
-            <strong>{{ $t('user.valid_until') }}</strong>: {{ props.row.valid_until }}</div>
+            <strong>{{ $t('user.until') }}</strong>: {{ props.row.valid_until }}</div>
         </td>
         <td>
           <user-action details="false" :obj="props.row" :update="getAll"></user-action>
