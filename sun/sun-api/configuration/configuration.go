@@ -36,8 +36,6 @@ type Configuration struct {
 	DbUser            string            `json:"db_user"`
 	DbName            string            `json:"db_name"`
 	DbPassword        string            `json:"db_password"`
-	CaptivePath       string            `json:"captive_path"`
-	CaptivePublicPath string            `json:"captive_public_path"`
 	AuthSocial        models.AuthSocial `json:"auth_social"`
 	PageLimit         string            `json:"page_limit"`
 	TokenExpiresDays  int               `json:"token_expires_days"`
