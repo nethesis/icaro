@@ -154,7 +154,11 @@ func DeleteHotspot(c *gin.Context) {
 	hotspotId := c.Param("hotspot_id")
 
 	db := database.Database()
-	db.Where("id = ? AND account_id = ?", hotspotId, accountId).First(&hotspot)
+	if accountId == 1 {
+		db.Where("id = ?", hotspotId).First(&hotspot)
+	} else {
+		db.Where("id = ? AND account_id = ?", hotspotId, accountId).First(&hotspot)
+	}
 
 	if hotspot.Id == 0 {
 		db.Close()

@@ -56,6 +56,7 @@
               </div>
             </div>
             <div class="modal-footer">
+              <span v-if="currentObj.onAction" class="spinner spinner-sm spinner-inline modal-spinner"></span>
               <button type="button" class="btn btn-default" data-dismiss="modal">{{ $t("cancel") }}</button>
               <button type="submit" class="btn btn-primary">{{ $t("update") }}</button>
             </div>
@@ -84,6 +85,7 @@
               </div>
             </div>
             <div class="modal-footer">
+              <span v-if="currentObj.onAction" class="spinner spinner-sm spinner-inline modal-spinner"></span>
               <button type="button" class="btn btn-default" data-dismiss="modal">{{ $t("cancel") }}</button>
               <button type="submit" class="btn btn-danger">{{ $t("delete") }}</button>
             </div>
@@ -117,21 +119,27 @@
         this.currentObj = Object.assign({}, obj);
       },
       modifyHotspot(obj) {
+        this.currentObj.onAction = true
         this.hotspotModify(obj.id, {
           description: obj.description
         }, success => {
+          this.currentObj.onAction = false
           $('#HSmodifyModal' + obj.id).modal('toggle');
           this.update()
         }, error => {
+          this.currentObj.onAction = false
           this.errors.update = true
           console.log(error.body.message);
         })
       },
       deleteHotspot(obj) {
+        this.currentObj.onAction = true
         this.hotspotDelete(obj.id, success => {
+          this.currentObj.onAction = false
           $('#HSdeleteModal' + obj.id).modal('toggle');
           this.update()
         }, error => {
+          this.currentObj.onAction = false
           this.errors.delete = true
           console.log(error.body.message);
         })

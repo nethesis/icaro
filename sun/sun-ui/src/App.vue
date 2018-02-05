@@ -69,7 +69,7 @@
           </button>
           <a href="/" class="navbar-brand">
             <img class="navbar-brand-icon" src="./assets/logo.png" alt="" />
-            <p class="navbar-brand-name">Icaro Hotspot Manager</p>
+            <p class="navbar-brand-name">Icaro Hotspot Manager</p> {{getCurrentPath()}}
           </a>
         </div>
         <nav class="collapse navbar-collapse">
@@ -117,29 +117,33 @@
       <div class="nav-pf-vertical nav-pf-vertical-with-sub-menus nav-pf-persistent-secondary">
         <ul class="list-group">
 
-          <li v-bind:class="[currentPath == '/' ? 'active' : '', 'list-group-item']">
+          <li v-bind:class="[getCurrentPath('') ? 'active' : '', 'list-group-item']">
             <a href="#/">
               <span class="fa fa-dashboard"></span>
               <span class="list-group-item-value">{{ $t('menu.dashboard') }}</span>
             </a>
           </li>
-          <li v-bind:class="[currentPath == '/hotspots' ? 'active' : '', 'list-group-item']" v-if="(user.info.type == 'admin') || (user.info.type == 'reseller')">
+          <li v-bind:class="[getCurrentPath('hotspots') ? 'active' : '', 'list-group-item']" v-if="(user.info.type == 'admin') || (user.info.type == 'reseller')">
             <a href="#/hotspots">
               <span class="fa fa-wifi"></span>
               <span class="list-group-item-value">{{ $t('menu.hotspots') }}</span>
             </a>
           </li>
-          <li v-bind:class="[currentPath == '/users' ? 'active' : '', 'list-group-item']">
+          <li v-bind:class="[getCurrentPath('users') ? 'active' : '', 'list-group-item']">
             <a href="#/users">
               <span class="fa fa-users"></span>
               <span class="list-group-item-value">{{ $t("menu.users") }}</span>
 
             </a>
           </li>
+          <!-- <li v-bind:class="[getCurrentPath('reports') ? 'active' : '', 'list-group-item']">
+            <a href="#/reports">
+              <span class="fa fa-list" data-toggle="tooltip" title="Adipscing"></span>
+              <span class="list-group-item-value">Report</span>
+            </a>
+          </li> -->
 
-          <li></li>
-
-          <li v-bind:class="[currentPath == '/accounts' ? 'active' : '', 'list-group-item']" v-if="(user.info.type == 'admin') || (user.info.type == 'reseller')">
+          <li v-bind:class="[getCurrentPath('accounts') ? 'active' : '', 'list-group-item']" v-if="(user.info.type == 'admin') || (user.info.type == 'reseller')">
             <a href="#/accounts">
               <span class="fa pficon-users"></span>
               <span class="list-group-item-value">{{ $t("menu.accounts") }}</span>
@@ -271,9 +275,6 @@
         info: {}
       }
 
-      // get current path to highlight menu item
-      var currentPath = this.$route.path
-
       var errors = {
         username: false,
         password: false,
@@ -298,12 +299,32 @@
         username: '',
         password: '',
         user: user,
-        currentPath: currentPath,
         isLogged: isLogged,
         errors: errors
       }
     },
     methods: {
+      getCurrentPath(route) {
+        return this.$route.path.split('/')[1] === route
+      },
+      getLoginIcon() {
+        var icon = 'fa fa-user'
+        switch (this.user.info.type) {
+          case 'admin':
+            icon = 'fa fa-graduation-cap'
+            break;
+          case 'reseller':
+            icon = 'fa fa-user'
+            break;
+          case 'customer':
+            icon = 'fa fa-briefcase'
+            break;
+          case 'desk':
+            icon = 'fa fa-coffee'
+            break;
+        }
+        return icon
+      },
       getInfo(id, callback) {
         this.execGetInfo(id, success => {
           callback(success.body)
@@ -383,4 +404,6 @@
 </script>
 
 <style src="./styles/main.css">
+
+
 </style>

@@ -14,22 +14,22 @@
             </h2>
           </div>
           <div v-if="!info.isLoading" class="card-pf-body">
-            <p>
+            <div class="list-details">
               <dt>{{ $t("hotspot.owner") }}</dt>
               <dd>{{info.data.account_id}}</dd>
-            </p>
-            <p>
+            </div>
+            <div class="list-details">
               <dt>{{ $t("hotspot.name") }}</dt>
               <dd>{{info.data.name}}</dd>
-            </p>
-            <p>
+            </div>
+            <div class="list-details">
               <dt>{{ $t("hotspot.description") }}</dt>
               <dd>{{info.data.description}}</dd>
-            </p>
-            <p>
+            </div>
+            <div class="list-details">
               <dt>{{ $t("hotspot.created") }}</dt>
               <dd>{{info.data.created}}</dd>
-            </p>
+            </div>
           </div>
           <div v-if="!info.isLoading" class="card-pf-footer">
             <div class="dropdown card-pf-time-frame-filter">
@@ -55,6 +55,7 @@
             </h2>
           </div>
         </div>
+        <div class="divider"></div>
         <div class="card-pf card-pf-accented">
           <div class="card-pf-heading">
             <h2 class="card-pf-title">
@@ -67,6 +68,7 @@
             </h2>
           </div>
         </div>
+        <div class="divider"></div>
         <div class="card-pf card-pf-accented">
           <div class="card-pf-heading">
             <h2 class="card-pf-title">
@@ -153,7 +155,9 @@
 
   export default {
     name: 'HotspotDetails',
-    mixins: [HotspotService, PreferenceService, AccountService, UnitService, UserService, DeviceService, SessionService, StorageService],
+    mixins: [HotspotService, PreferenceService, AccountService, UnitService, UserService, DeviceService, SessionService,
+      StorageService
+    ],
     components: {
       hotspotAction: HotspotAction
     },

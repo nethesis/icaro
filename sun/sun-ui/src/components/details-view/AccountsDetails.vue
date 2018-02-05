@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>Manager:
+    <h2>Manager
       <strong class="soft">{{ info.data.username }}</strong>
     </h2>
 
@@ -15,22 +15,22 @@
             </h2>
           </div>
           <div v-if="!info.isLoading" class="card-pf-body">
-            <p>
+            <div v-if="info.data.hotspot_id" class="list-details">
               <dt>{{ $t("account.hotspot") }}</dt>
-              <dd><a :href="'#/hotspots/' + info.data.hotspot_id">{{info.data.hotspot_id}}</a></dd>
-            </p>
-            <p>
+              <dd><a :href="'#/hotspots/' + info.data.hotspot_id">{{info.data.hotspot_name}}</a></dd>
+            </div>
+            <div class="list-details">
               <dt>{{ $t("account.email") }}</dt>
               <dd>{{info.data.email}}</dd>
-            </p>
-            <p>
+            </div>
+            <div class="list-details">
               <dt>{{ $t("account.uuid") }}</dt>
               <dd>{{info.data.uuid}}</dd>
-            </p>
-            <p>
+            </div>
+            <div class="list-details">
               <dt>{{ $t("account.created") }}</dt>
               <dd>{{info.data.created}}</dd>
-            </p>
+            </div>
           </div>
           <div v-if="!info.isLoading" class="card-pf-footer">
             <div class="dropdown card-pf-time-frame-filter">
@@ -80,6 +80,7 @@
           this.info.data = success.body
           this.info.isLoading = false
         }, error => {
+          this.info.isLoading = false
           console.log(error.body)
         })
       },

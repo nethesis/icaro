@@ -83,6 +83,7 @@
               </div>
             </div>
             <div class="modal-footer">
+              <span v-if="currentObj.onAction" class="spinner spinner-sm spinner-inline modal-spinner"></span>
               <button type="button" class="btn btn-default" data-dismiss="modal">{{ $t("cancel") }}</button>
               <button type="submit" class="btn btn-primary">{{ $t("update") }}</button>
             </div>
@@ -111,6 +112,7 @@
               </div>
             </div>
             <div class="modal-footer">
+              <span v-if="currentObj.onAction" class="spinner spinner-sm spinner-inline modal-spinner"></span>
               <button type="button" class="btn btn-default" data-dismiss="modal">{{ $t("cancel") }}</button>
               <button type="submit" class="btn btn-danger">{{ $t("delete") }}</button>
             </div>
@@ -156,6 +158,7 @@
         this.currentObj = Object.assign({}, obj);
       },
       modifyUser(obj) {
+        this.currentObj.onAction = true
         this.userModify(obj.id, {
           name: obj.name,
           email: obj.email,
@@ -164,18 +167,23 @@
           valid_from: new Date(obj.valid_from).toISOString(),
           valid_until: new Date(obj.valid_until).toISOString(),
         }, success => {
+          this.currentObj.onAction = false
           $('#UsmodifyModal' + obj.id).modal('toggle');
           this.update()
         }, error => {
+          this.currentObj.onAction = false
           this.errors.update = true
           console.log(error.body.message);
         })
       },
       deleteUser(obj) {
+        this.currentObj.onAction = true
         this.userDelete(obj.id, success => {
+          this.currentObj.onAction = false
           $('#UsdeleteModal' + obj.id).modal('toggle');
           this.update()
         }, error => {
+          this.currentObj.onAction = false
           this.errors.delete = true
           console.log(error.body.message);
         })

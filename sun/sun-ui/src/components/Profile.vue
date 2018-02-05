@@ -11,22 +11,22 @@
             </h2>
           </div>
           <div class="card-pf-body">
-            <p>
+            <div class="list-details">
               <dt>{{ $t("profile.username") }}</dt>
               <dd>{{user.info.username}}</dd>
-            </p>
-            <p>
+            </div>
+            <div class="list-details">
               <dt>{{ $t("profile.name") }}</dt>
               <dd>{{user.info.name}}</dd>
-            </p>
-            <p>
+            </div>
+            <div class="list-details">
               <dt>{{ $t("profile.email") }}</dt>
               <dd>{{user.info.email}}</dd>
-            </p>
-            <p>
+            </div>
+            <div class="list-details">
               <dt>{{ $t("profile.type") }}</dt>
               <dd>{{user.info.type}}</dd>
-            </p>
+            </div>
           </div>
           <div class="card-pf-footer">
             <div class="dropdown card-pf-time-frame-filter">
@@ -125,20 +125,10 @@
       }
     }
   }
+
 </script>
 
-<style scoped>
-  .pass-confirm-err {
-    height: 5px;
-    background: #cc0000;
-    width: 100px;
-    display: block;
-  }
+<style>
 
-  .pass-confirm-ok {
-    height: 5px;
-    background: #3f9c35;
-    width: 100px;
-    display: block;
-  }
+
 </style>

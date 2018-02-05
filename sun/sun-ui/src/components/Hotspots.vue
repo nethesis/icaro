@@ -69,6 +69,7 @@
               </div>
             </div>
             <div class="modal-footer">
+              <span v-if="newObj.onAction" class="spinner spinner-sm spinner-inline modal-spinner"></span>
               <button type="button" class="btn btn-default" data-dismiss="modal">{{ $t("cancel") }}</button>
               <button type="submit" class="btn btn-primary">{{ $t("create") }}</button>
             </div>
@@ -150,10 +151,13 @@
         })
       },
       createHotspot() {
+        this.newObj.onAction = true
         this.hotspotCreate(this.newObj, success => {
+          this.newObj.onAction = false
           $('#HScreateModal').modal('toggle');
           this.getAll()
         }, error => {
+          this.newObj.onAction = false
           this.errors.create = true
           console.log(error.body.message);
         })

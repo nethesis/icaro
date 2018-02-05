@@ -71,6 +71,7 @@
               </div>
             </div>
             <div class="modal-footer">
+              <span v-if="currentObj.onAction" class="spinner spinner-sm spinner-inline modal-spinner"></span>
               <button type="button" class="btn btn-default" data-dismiss="modal">{{ $t("cancel") }}</button>
               <button type="submit" class="btn btn-primary">{{ $t("update") }}</button>
             </div>
@@ -99,6 +100,7 @@
               </div>
             </div>
             <div class="modal-footer">
+              <span v-if="currentObj.onAction" class="spinner spinner-sm spinner-inline modal-spinner"></span>
               <button type="button" class="btn btn-default" data-dismiss="modal">{{ $t("cancel") }}</button>
               <button type="submit" class="btn btn-danger">{{ $t("delete") }}</button>
             </div>
@@ -142,9 +144,11 @@
               </div>
             </div>
             <div class="modal-footer">
+              <span v-if="currentObj.onAction" class="spinner spinner-sm spinner-inline modal-spinner"></span>
               <button type="button" class="btn btn-default" data-dismiss="modal">{{ $t("cancel") }}</button>
               <button :disabled="(newPassword != confirmPassword) || (confirmPassword.length == 0) || (newPassword.length == 0)" type="submit"
                 class="btn btn-primary">{{ $t("update") }}</button>
+
             </div>
           </form>
         </div>
@@ -161,14 +165,11 @@
     mixins: [AccountService, StorageService],
     data() {
       var currentObj = {}
-      var errors = {
-        update: false,
-        delete: false
-      }
-
       var newPassword, confirmPassword = ''
 
       var errors = {
+        update: false,
+        delete: false,
         password: false
       }
 
@@ -185,31 +186,40 @@
         this.currentObj = Object.assign({}, obj);
       },
       modifyAccount(obj) {
+        this.currentObj.onAction = true
         this.accountModify(obj.id, {
           name: obj.name,
           email: obj.email,
           type: obj.type
         }, success => {
+          this.currentObj.onAction = false
           $('#ACModifyModal' + obj.id).modal('toggle');
           this.update()
         }, error => {
+          this.currentObj.onAction = false
           this.errors.update = true
           console.log(error.body.message);
         })
       },
       deleteAccount(obj) {
+        this.currentObj.onAction = true
         this.accountDelete(obj.id, success => {
+          this.currentObj.onAction = false
           $('#ACDeleteModal' + obj.id).modal('toggle');
           this.update()
         }, error => {
+          this.currentObj.onAction = false
           this.errors.delete = true
           console.log(error.body.message);
         })
       },
       changePassword(obj) {
+        this.currentObj.onAction = true
         this.accountChangePassword(obj.id, this.newPassword, success => {
+          this.currentObj.onAction = false
           $('#ACChangePasswordModal' + obj.id).modal('toggle');
         }, error => {
+          this.currentObj.onAction = false
           this.errors.password = true
           console.log(error.body.message);
         })
