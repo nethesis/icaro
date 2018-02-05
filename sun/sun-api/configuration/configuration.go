@@ -25,6 +25,7 @@ package configuration
 import (
 	"encoding/json"
 	"fmt"
+	"strconv"
 	"os"
 
 	"github.com/nethesis/icaro/sun/sun-api/models"
@@ -122,5 +123,21 @@ func Init(ConfigFilePtr *string) {
 	}
 	if os.Getenv("SMS_NUMBER") != "" {
 		Config.Endpoints.Sms.Number = os.Getenv("SMS_NUMBER")
+	}
+
+	if os.Getenv("EMAIL_FORM") != "" {
+		Config.Endpoints.Email.From = os.Getenv("EMAIL_FROM")
+	}
+	if os.Getenv("EMAIL_SMTP_HOST") != "" {
+		Config.Endpoints.Email.SMTPHost = os.Getenv("EMAIL_SMTP_HOST")
+	}
+	if os.Getenv("EMAIL_SMTP_PORT") != "" {
+		Config.Endpoints.Email.SMTPPort, _ = strconv.Atoi(os.Getenv("EMAIL_SMTP_PORT"))
+	}
+	if os.Getenv("EMAIL_SMTP_USER") != "" {
+		Config.Endpoints.Email.SMTPUser = os.Getenv("EMAIL_SMTP_USER")
+	}
+	if os.Getenv("EMAIL_SMTP_PASSWORD") != "" {
+		Config.Endpoints.Email.SMTPPassword = os.Getenv("EMAIL_SMTP_PASSWORD")
 	}
 }
