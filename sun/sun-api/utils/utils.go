@@ -92,6 +92,11 @@ func RefreshToken(token string) {
 
 func ExtractHotspotIds(accountId int, admin bool) []int {
 	var hotspots []models.Hotspot
+	account := GetAccountById(accountId)
+
+	if account.Type == "customer" || account.Type == "desk" {
+		accountId = account.CreatorId
+	}
 
 	db := database.Database()
 	if admin {
@@ -108,6 +113,15 @@ func ExtractHotspotIds(accountId int, admin bool) []int {
 	}
 
 	return result
+}
+
+func GetAccountById(id int) models.Account {
+	var account models.Account
+	db := database.Database()
+	db.Where("id = ?", id).First(&account)
+	db.Close()
+
+	return account
 }
 
 func GetHotspotByName(name string) models.Hotspot {
