@@ -76,4 +76,41 @@ func Init(ConfigFilePtr *string) {
 	if os.Getenv("DB_NAME") != "" {
 		Config.DbName = os.Getenv("DB_NAME")
 	}
+
+	if os.Getenv("FACEBOOK_CLIENT_ID") != "" {
+		Config.AuthSocial.Facebook.ClientId = os.Getenv("FACEBOOK_CLIENT_ID")
+	}
+	if os.Getenv("FACEBOOK_CLIENT_SECRET") != "" {
+		Config.AuthSocial.Facebook.ClientSecret = os.Getenv("FACEBOOK_CLIENT_SECRET")
+	}
+	if os.Getenv("FACEBOOK_REDIRECT_URL") != "" {
+		Config.AuthSocial.Facebook.RedirectURI = os.Getenv("FACEBOOK_REDIRECT_URL")
+	}
+	if os.Getenv("GOOGLE_CLIENT_ID") != "" {
+		Config.AuthSocial.Google.ClientId = os.Getenv("GOOGLE_CLIENT_ID")
+	}
+	if os.Getenv("GOOGLE_CLIENT_SECRET") != "" {
+		Config.AuthSocial.Google.ClientSecret = os.Getenv("GOOGLE_CLIENT_SECRET")
+	}
+	if os.Getenv("GOOGLE_CLIENT_REDIRECT_URL") != "" {
+		Config.AuthSocial.Google.RedirectURI = os.Getenv("GOOGLE_REDIRECT_URL")
+	}
+	if os.Getenv("LINKEDIN_CLIENT_ID") != "" {
+		Config.AuthSocial.LinkedIn.ClientId = os.Getenv("LINKEDIN_CLIENT_ID")
+	}
+	if os.Getenv("LINKEDIN_CLIENT_SECRET") != "" {
+		Config.AuthSocial.LinkedIn.ClientSecret = os.Getenv("LINKEDIN_CLIENT_SECRET")
+	}
+	if os.Getenv("LINKEDIN_REDIRECT_URL") != "" {
+		Config.AuthSocial.LinkedIn.RedirectURI = os.Getenv("LINKEDIN_REDIRECT_URL")
+	}
+	if os.Getenv("INSTAGRAM_CLIENT_ID") != "" {
+		Config.AuthSocial.Instagram.ClientId = os.Getenv("INSTAGRAM_CLIENT_ID")
+	}
+	if os.Getenv("INSTAGRAM_CLIENT_SECRET") != "" {
+		Config.AuthSocial.Instagram.ClientSecret = os.Getenv("INSTAGRAM_CLIENT_SECRET")
+	}
+	if os.Getenv("INSTAGRAM_REDIRECT_URL") != "" {
+		Config.AuthSocial.Instagram.RedirectURI = os.Getenv("INSTAGRAM_REDIRECT_URL")
+	}
 }
