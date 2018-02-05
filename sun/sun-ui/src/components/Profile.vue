@@ -8,6 +8,7 @@
           <div class="card-pf-heading">
             <h2 class="card-pf-title">
               {{ $t("profile.info") }}
+              <div :class="[getLoginIcon(user.info.type), 'right']" data-toggle="tooltip" data-placement="left" :title="$t(user.info.type)"></div>
             </h2>
           </div>
           <div class="card-pf-body">
@@ -69,7 +70,7 @@
               <div class="form-group">
                 <label class="col-sm-4 control-label" for="textInput2-modal-markup"></label>
                 <div class="col-sm-8">
-                  <span v-bind:class="[newPassword == confirmPassword ? 'pass-confirm-ok' : 'pass-confirm-err', '']"></span>
+                  <span v-bind:class="[newPassword == confirmPassword && newPassword.length > 0 ? 'pass-confirm-ok' : 'pass-confirm-err', '']"></span>
                 </div>
               </div>
               <div v-if="errors.password" class="alert alert-danger alert-dismissable">
@@ -78,8 +79,9 @@
               </div>
             </div>
             <div class="modal-footer">
+              <span v-if="onAction" class="spinner spinner-sm spinner-inline modal-spinner"></span>
               <button type="button" class="btn btn-default" data-dismiss="modal">{{ $t("cancel") }}</button>
-              <button :disabled="newPassword != confirmPassword" type="submit" class="btn btn-primary">{{ $t("update") }}</button>
+              <button :disabled="(newPassword != confirmPassword) || newPassword.length == 0" type="submit" class="btn btn-primary">{{ $t("update") }}</button>
             </div>
           </form>
         </div>
@@ -91,34 +93,36 @@
 <script>
   import LoginService from '../services/login';
   import StorageService from '../services/storage';
+  import UtilService from '../services/util';
 
   export default {
     name: 'Profile',
-    mixins: [LoginService, StorageService],
+    mixins: [LoginService, StorageService, UtilService],
     data() {
       var user = {
         login: this.get('loggedUser') || null,
-        info: this.$parent.user.info
-      }
-      var newPassword, confirmPassword = ''
-
-      var errors = {
-        password: false
+        info: this.$parent.user.info,
       }
 
       return {
         msg: 'Profile',
         user: user,
-        newPassword: newPassword,
-        confirmPassword: confirmPassword,
-        errors: errors
+        newPassword: '',
+        confirmPassword: '',
+        errors: {
+          password: false
+        },
+        onAction: false
       }
     },
     methods: {
       changePassword() {
+        this.onAction = true
         this.execChangePassword(this.newPassword, this.user.login.id, success => {
+          this.onAction = false
           $('#changePassModal').modal('toggle');
         }, error => {
+          this.onAction = false
           this.errors.password = true
           console.log(error.body.message);
         })

@@ -149,6 +149,10 @@ a {
   font-size: 14px !important;
 }
 
+.table>thead th.sorting:hover {
+  cursor: pointer;
+}
+
 .table>tbody tr {
   background-color: white;
   height: 47px;

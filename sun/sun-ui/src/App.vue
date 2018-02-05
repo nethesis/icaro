@@ -103,7 +103,7 @@
                   <a target="blank" href="https://github.com/nethesis/icaro">{{ $t("help") }}</a>
                 </li>
                 <li>
-                  <a href="#" data-toggle="modal" data-target="#about-modal">{{ $t("about") }}</a>
+                  <a href="#" data-toggle="modal" data-target="#about-modal">{{ $t("menu.about") }}</a>
                 </li>
               </ul>
             </li>

@@ -15,13 +15,12 @@ import UtilService from "../services/util"
 Vue.use(Router)
 
 const router = new Router({
-  routes: [
-    {
+  routes: [{
       path: '/',
       name: 'Dashboard',
       component: Dashboard,
       meta: {
-          roles: ['customer', 'reseller', 'desk', 'admin']
+        roles: ['customer', 'reseller', 'desk', 'admin']
       },
     },
     {
@@ -29,7 +28,7 @@ const router = new Router({
       name: 'Hotspots',
       component: Hotspots,
       meta: {
-          roles: ['admin', 'reseller']
+        roles: ['admin', 'reseller']
       },
     },
     {
@@ -37,7 +36,7 @@ const router = new Router({
       name: 'HotspotsDetails',
       component: HotspotsDetails,
       meta: {
-          roles: ['admin', 'reseller']
+        roles: ['admin', 'reseller']
       },
     },
     {
@@ -45,7 +44,7 @@ const router = new Router({
       name: 'Users',
       component: Users,
       meta: {
-          roles: ['customer', 'reseller', 'desk', 'admin']
+        roles: ['customer', 'reseller', 'desk', 'admin']
       },
     },
     {
@@ -53,7 +52,7 @@ const router = new Router({
       name: 'Reports',
       component: Reports,
       meta: {
-          roles: ['customer', 'reseller', 'admin']
+        roles: ['customer', 'reseller', 'admin']
       },
     },
     {
@@ -61,7 +60,7 @@ const router = new Router({
       name: 'Accounts',
       component: Accounts,
       meta: {
-          roles: ['admin', 'reseller']
+        roles: ['admin', 'reseller']
       },
     },
     {
@@ -69,7 +68,7 @@ const router = new Router({
       name: 'AccountsDetails',
       component: AccountsDetails,
       meta: {
-          roles: ['admin', 'reseller']
+        roles: ['admin', 'reseller']
       },
     },
     {
@@ -77,13 +76,13 @@ const router = new Router({
       name: 'Profile',
       component: Profile,
       meta: {
-          roles: ['customer', 'reseller', 'desk', 'admin']
+        roles: ['customer', 'reseller', 'desk', 'admin']
       },
     },
   ]
 })
 
-router.beforeEach (( to, from, next ) => {
+router.beforeEach((to, from, next) => {
 
   var user = JSON.parse(localStorage.getItem("loggedUser"))
   if (to.meta.roles && to.meta.roles.indexOf(user.account_type >= 0)) {

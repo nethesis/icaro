@@ -10,7 +10,7 @@
       :ofText="tableLangsTexts.ofText">
       <template slot="table-row" slot-scope="props">
         <td>
-           <a :href="'#/accounts/'+ props.row.id">
+          <a :href="'#/accounts/'+ props.row.id">
             <strong>{{ props.row.username }}</strong>
           </a>
         </td>
@@ -18,6 +18,7 @@
         <td class="fancy">{{ props.row.email || '-' }}</td>
         <td>
           <span :class="getLoginIcon(props.row.type)" data-toggle="tooltip" data-placement="left" :title="$t(props.row.type)"></span>
+          {{$t(props.row.type)}}
         </td>
         <td class="fancy">{{ props.row.created }}</td>
         <td>
@@ -81,7 +82,7 @@
                 <div class="col-sm-8">
                   <select v-model="newObj.hotspot_id" class="form-control">
                     <option v-for="hotspot in hotspots" v-bind:key="hotspot.id" v-bind:value="hotspot.id">
-                     {{ hotspot.name }}
+                      {{ hotspot.name }}
                     </option>
                   </select>
                 </div>
@@ -113,7 +114,8 @@
             <div class="modal-footer">
               <span v-if="newObj.onAction" class="spinner spinner-sm spinner-inline modal-spinner"></span>
               <button type="button" class="btn btn-default" data-dismiss="modal">{{ $t("cancel") }}</button>
-              <button :disabled="(newPassword != confirmPassword) || (confirmPassword.length == 0) || (newPassword.length == 0) || (!newObj.hotspot_id && newObj.type != 'reseller')" type="submit" class="btn btn-primary">{{ $t("create") }}</button>
+              <button :disabled="(newPassword != confirmPassword) || (confirmPassword.length == 0) || (newPassword.length == 0) || (!newObj.hotspot_id && newObj.type != 'reseller')"
+                type="submit" class="btn btn-primary">{{ $t("create") }}</button>
             </div>
           </form>
         </div>
@@ -211,11 +213,15 @@
     },
     methods: {
       initNewAccount() {
-          this.newObj.uuid = this.generateUUID();
-          this.newObj.password= this.generatePassword();
-          this.newPassword= this.newObj.password;
-          this.confirmPassword= this.newObj.password;
-          this.newObj.type = this.accountType == "admin" ? "reseller" : "customer";
+        this.newObj.uuid = this.generateUUID();
+        this.newObj.password = this.generatePassword();
+        this.newPassword = this.newObj.password;
+        this.confirmPassword = this.newObj.password;
+        this.newObj.type = this.accountType == "admin" ? "reseller" : "customer";
+        this.newObj.username = ""
+        this.newObj.name = ""
+        this.newObj.email = ""
+        this.newObj.hotspot_id = ""
       },
       createAccount(obj) {
         this.newObj.onAction = true
@@ -261,4 +267,5 @@
     margin-top: -52px;
     margin-right: 35px;
   }
+
 </style>

@@ -10,14 +10,17 @@
           <div class="card-pf-heading">
             <h2 class="card-pf-title">
               {{info.data.name}}
-              <div v-if="!info.isLoading" :class="[getLoginIcon(info.data.type), 'right']"  data-toggle="tooltip" data-placement="left" :title="$t(info.data.type)"></div>
+              <div v-if="!info.isLoading" :class="[getLoginIcon(info.data.type), 'right']" data-toggle="tooltip" data-placement="left"
+                :title="$t(info.data.type)"></div>
               <div v-if="info.isLoading" class="spinner spinner-sm right"></div>
             </h2>
           </div>
           <div v-if="!info.isLoading" class="card-pf-body">
             <div v-if="info.data.hotspot_id" class="list-details">
               <dt>{{ $t("account.hotspot") }}</dt>
-              <dd><a :href="'#/hotspots/' + info.data.hotspot_id">{{info.data.hotspot_name}}</a></dd>
+              <dd>
+                <a :href="'#/hotspots/' + info.data.hotspot_id">{{info.data.hotspot_name}}</a>
+              </dd>
             </div>
             <div class="list-details">
               <dt>{{ $t("account.email") }}</dt>
@@ -57,7 +60,7 @@
     name: 'AccountsDetails',
     mixins: [AccountService, StorageService, UtilService],
     components: {
-       accountAction: AccountAction
+      accountAction: AccountAction
     },
     data() {
       // get account info
@@ -72,7 +75,7 @@
     },
     // enable tooltips after rendering
     updated: function () {
-        $('[data-toggle="tooltip"]').tooltip()
+      $('[data-toggle="tooltip"]').tooltip()
     },
     methods: {
       getInfo() {
@@ -88,4 +91,3 @@
   }
 
 </script>
-

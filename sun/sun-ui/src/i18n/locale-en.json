@@ -41,7 +41,7 @@
       "delete_error_title": "Delete error",
       "delete_error_sub": "Something went wrong on deleting hotspot",
       "warning_delete_title": "Be careful",
-      "warning_delete_sub": "Deleting an hotspot deletes also all users, units and associated info",
+      "warning_delete_sub": "Deleting an hotspot deletes also all users, units and associated sessions info",
       "create_error_title": "Creation error",
       "create_error_sub": "Something went wrong on creating hotspot",
       "create_new": "Create Hotspot",
@@ -102,14 +102,17 @@
 
     },
     "menu": {
-      "dashboard" : "Dashboard",
+      "dashboard": "Dashboard",
       "users": "Users",
       "accounts": "Managers",
       "hotspots": "Hotspots",
       "help": "Help",
-      "profile": "Profile"
+      "profile": "Profile",
+      "about": "About",
+      "logout": "Logout"
     },
     "help": "Help",
+    "admin": "Admin",
     "customer": "Customer",
     "reseller": "Reseller",
     "users": "Users",

@@ -154,6 +154,8 @@
         this.newObj.onAction = true
         this.hotspotCreate(this.newObj, success => {
           this.newObj.onAction = false
+          this.newObj.name = ""
+          this.newObj.description = ""
           $('#HScreateModal').modal('toggle');
           this.getAll()
         }, error => {

@@ -35,6 +35,6 @@ new Vue({
   router,
   i18n,
   render: (h) => h(App),
-  api_host: 'hstest.neth.eu',
+  api_host: window.location.host,
   currentLocale: langConf.locale
 })
