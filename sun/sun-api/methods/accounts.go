@@ -31,7 +31,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-
 	"github.com/nethesis/icaro/sun/sun-api/database"
 	"github.com/nethesis/icaro/sun/sun-api/models"
 	"github.com/nethesis/icaro/sun/sun-api/utils"
@@ -145,7 +144,7 @@ func UpdateAccount(c *gin.Context) {
 }
 
 func GetAccounts(c *gin.Context) {
-	var accounts []models.Account
+	var accounts []models.AccountJSON
 	creatorId := c.MustGet("token").(models.AccessToken).AccountId
 
 	page := c.Query("page")
@@ -154,10 +153,11 @@ func GetAccounts(c *gin.Context) {
 	offsets := utils.OffsetCalc(page, limit)
 
 	db := database.Database()
+	db.LogMode(true)
 	if creatorId == 1 {
-		db.Offset(offsets[0]).Limit(offsets[1]).Find(&accounts)
+		db.Select("accounts.*, hotspots.id as hotspot_id, hotspots.name as hotspot_name").Joins("LEFT JOIN accounts_hotspots on accounts_hotspots.account_id = accounts.id LEFT JOIN hotspots on accounts_hotspots.hotspot_id = hotspots.id").Offset(offsets[0]).Limit(offsets[1]).Find(&accounts)
 	} else {
-		db.Where("creator_id = ?", creatorId).Offset(offsets[0]).Limit(offsets[1]).Find(&accounts)
+		db.Select("accounts.*, hotspots.id as hotspot_id, hotspots.name as hotspot_name").Joins("LEFT JOIN accounts_hotspots on accounts_hotspots.account_id = accounts.id LEFT JOIN hotspots on accounts_hotspots.hotspot_id = hotspots.id").Where("creator_id = ?", creatorId).Offset(offsets[0]).Limit(offsets[1]).Find(&accounts)
 	}
 	db.Close()
 
@@ -170,7 +170,7 @@ func GetAccounts(c *gin.Context) {
 }
 
 func GetAccount(c *gin.Context) {
-	var account models.Account
+	var account models.AccountJSON
 	creatorId := c.MustGet("token").(models.AccessToken).AccountId
 
 	accountId := c.Param("account_id")
@@ -183,12 +183,12 @@ func GetAccount(c *gin.Context) {
 
 	// check if the user is me or not
 	if accountIdInt == creatorId {
-		db.Where("id = ?", accountId).First(&account)
+		db.Select("accounts.*, hotspots.id as hotspot_id, hotspots.name as hotspot_name").Joins("LEFT JOIN accounts_hotspots on accounts_hotspots.account_id = accounts.id LEFT JOIN hotspots on accounts_hotspots.hotspot_id = hotspots.id").Where("accounts.id = ?", accountId).First(&account)
 	} else {
 		if creatorId == 1 {
-			db.Where("id = ?", accountId).First(&account)
+			db.Select("accounts.*, hotspots.id as hotspot_id, hotspots.name as hotspot_name").Joins("LEFT JOIN accounts_hotspots on accounts_hotspots.account_id = accounts.id LEFT JOIN hotspots on accounts_hotspots.hotspot_id = hotspots.id").Where("accounts.id = ?", accountId).First(&account)
 		} else {
-			db.Where("id = ? AND creator_id = ?", accountId, creatorId).First(&account)
+			db.Select("accounts.*, hotspots.id as hotspot_id, hotspots.name as hotspot_name").Joins("LEFT JOIN accounts_hotspots on accounts_hotspots.account_id = accounts.id LEFT JOIN hotspots on accounts_hotspots.hotspot_id = hotspots.id").Where("accounts.id = ? AND creator_id = ?", accountId, creatorId).First(&account)
 		}
 	}
 

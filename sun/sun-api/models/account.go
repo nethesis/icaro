@@ -37,11 +37,19 @@ type Account struct {
 }
 
 type AccountJSON struct {
-	HotspotId int    `json:"hotspot_id"`
-	Uuid      string `json:"uuid"`
-	Type      string `json:"type"`
-	Name      string `json:"name"`
-	Username  string `json:"username"`
-	Password  string `json:"password"`
-	Email     string `json:"email"`
+	Id          int       `json:"id"`
+	CreatorId   int       `json:"creator_id"`
+	Uuid        string    `json:"uuid"`
+	Type        string    `json:"type"`
+	Name        string    `json:"name"`
+	Username    string    `json:"username"`
+	Password    string    `json:"password"`
+	Email       string    `json:"email"`
+	Created     time.Time `json:"created"`
+	HotspotId   int       `json:"hotspot_id"`
+	HotspotName string    `json:"hotspot_name"`
+}
+
+func (AccountJSON) TableName() string {
+	return "accounts"
 }

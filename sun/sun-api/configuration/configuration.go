@@ -31,17 +31,16 @@ import (
 )
 
 type Configuration struct {
-	DbHost            string            `json:"db_host"`
-	DbPort            string            `json:"db_port"`
-	DbUser            string            `json:"db_user"`
-	DbName            string            `json:"db_name"`
-	DbPassword        string            `json:"db_password"`
-	AuthSocial        models.AuthSocial `json:"auth_social"`
-	PageLimit         string            `json:"page_limit"`
-	TokenExpiresDays  int               `json:"token_expires_days"`
-	RouteBlocked      models.AuthMaps   `json:"route_blocked"`
-	Endpoints         models.Endpoints  `json:"endpoints"`
-	Cors              struct {
+	DbHost           string            `json:"db_host"`
+	DbPort           string            `json:"db_port"`
+	DbUser           string            `json:"db_user"`
+	DbName           string            `json:"db_name"`
+	DbPassword       string            `json:"db_password"`
+	AuthSocial       models.AuthSocial `json:"auth_social"`
+	TokenExpiresDays int               `json:"token_expires_days"`
+	RouteBlocked     models.AuthMaps   `json:"route_blocked"`
+	Endpoints        models.Endpoints  `json:"endpoints"`
+	Cors             struct {
 		Headers []string `json:"headers"`
 		Origins []string `json:"origins"`
 		Methods []string `json:"methods"`
