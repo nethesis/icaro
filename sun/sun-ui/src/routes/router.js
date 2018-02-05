@@ -4,6 +4,7 @@ import Router from 'vue-router'
 import Dashboard from '../components/Dashboard.vue'
 import Hotspots from '../components/Hotspots.vue'
 import HotspotsDetails from '../components/details-view/HotspotsDetails.vue'
+import AccountsDetails from '../components/details-view/AccountsDetails.vue'
 import Users from '../components/Users.vue'
 import Reports from '../components/Reports.vue'
 import Accounts from '../components/Accounts.vue'
@@ -43,6 +44,11 @@ export default new Router({
       path: '/accounts',
       name: 'Accounts',
       component: Accounts
+    },
+    {
+      path: '/accounts/:id',
+      name: 'AccountsDetails',
+      component: AccountsDetails
     },
     {
       path: '/preferences',

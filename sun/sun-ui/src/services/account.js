@@ -7,7 +7,7 @@ var AccountService = {
         }
       }).then(success, error);
     },
-    accountGet(id) {
+    accountGet(id, success, error) {
       this.$http.get('https://' + this.$root.$options.api_host + '/api/accounts/' + id, {
         headers: {
           'Token': this.get('loggedUser') && this.get('loggedUser').token || ''
