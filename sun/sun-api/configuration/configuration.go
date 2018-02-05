@@ -113,4 +113,14 @@ func Init(ConfigFilePtr *string) {
 	if os.Getenv("INSTAGRAM_REDIRECT_URL") != "" {
 		Config.AuthSocial.Instagram.RedirectURI = os.Getenv("INSTAGRAM_REDIRECT_URL")
 	}
+
+	if os.Getenv("SMS_ACCOUNT_SID") != "" {
+		Config.Endpoints.Sms.AccountSid = os.Getenv("SMS_ACCOUNT_SID")
+	}
+	if os.Getenv("SMS_AUTH_TOKEN") != "" {
+			Config.Endpoints.Sms.AuthToken = os.Getenv("SMS_AUTH_TOKEN")
+	}
+	if os.Getenv("SMS_NUMBER") != "" {
+		Config.Endpoints.Sms.Number = os.Getenv("SMS_NUMBER")
+	}
 }
