@@ -56,7 +56,7 @@ func CreateVoucher(c *gin.Context) {
 	hotspotVoucher.HotspotId = json.HotspotId
 
 	// check hotspot ownership
-	if utils.Contains(utils.ExtractHotspotIds(accountId), json.HotspotId) {
+	if utils.Contains(utils.ExtractHotspotIds(accountId, (accountId == 1)), json.HotspotId) {
 		db := database.Database()
 		db.Save(&hotspotVoucher)
 		db.Close()
@@ -81,7 +81,7 @@ func GetVouchers(c *gin.Context) {
 	offsets := utils.OffsetCalc(page, limit)
 
 	db := database.Database()
-	db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId)).Offset(offsets[0]).Limit(offsets[1]).Find(&hotspotVouchers)
+	db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1))).Offset(offsets[0]).Limit(offsets[1]).Find(&hotspotVouchers)
 	db.Close()
 
 	if len(hotspotVouchers) <= 0 {
@@ -99,7 +99,7 @@ func DeleteVoucher(c *gin.Context) {
 	voucherId := c.Param("voucher_id")
 
 	db := database.Database()
-	db.Where("id = ? AND hotspot_id in (?)", voucherId, utils.ExtractHotspotIds(accountId)).First(&hotspotVoucher)
+	db.Where("id = ? AND hotspot_id in (?)", voucherId, utils.ExtractHotspotIds(accountId, (accountId == 1))).First(&hotspotVoucher)
 
 	if hotspotVoucher.Id == 0 {
 		db.Close()

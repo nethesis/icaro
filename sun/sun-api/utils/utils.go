@@ -90,11 +90,15 @@ func RefreshToken(token string) {
 	db.Close()
 }
 
-func ExtractHotspotIds(accountId int) []int {
+func ExtractHotspotIds(accountId int, admin bool) []int {
 	var hotspots []models.Hotspot
 
 	db := database.Database()
-	db.Select("id").Where("account_id = ?", accountId).Find(&hotspots)
+	if admin {
+		db.Select("id").Find(&hotspots)
+	} else {
+		db.Select("id").Where("account_id = ?", accountId).Find(&hotspots)
+	}
 	db.Close()
 
 	result := []int{}

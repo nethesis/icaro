@@ -106,7 +106,11 @@ func UpdateAccount(c *gin.Context) {
 	if accountIdInt == creatorId {
 		db.Where("id = ?", accountId).First(&account)
 	} else {
-		db.Where("id = ? AND creator_id = ?", accountId, creatorId).First(&account)
+		if creatorId == 1 {
+			db.Where("id = ?", accountId).First(&account)
+		} else {
+			db.Where("id = ? AND creator_id = ?", accountId, creatorId).First(&account)
+		}
 	}
 
 	if account.Id == 0 {
@@ -181,7 +185,11 @@ func GetAccount(c *gin.Context) {
 	if accountIdInt == creatorId {
 		db.Where("id = ?", accountId).First(&account)
 	} else {
-		db.Where("id = ? AND creator_id = ?", accountId, creatorId).First(&account)
+		if creatorId == 1 {
+			db.Where("id = ?", accountId).First(&account)
+		} else {
+			db.Where("id = ? AND creator_id = ?", accountId, creatorId).First(&account)
+		}
 	}
 
 	db.Close()
@@ -200,7 +208,11 @@ func DeleteAccount(c *gin.Context) {
 	accountId := c.Param("account_id")
 
 	db := database.Database()
-	db.Where("id = ? AND creator_id = ?", accountId, creatorId).First(&account)
+	if creatorId == 1 {
+		db.Where("id = ?", accountId).First(&account)
+	} else {
+		db.Where("id = ? AND creator_id = ?", accountId, creatorId).First(&account)
+	}
 
 	if account.Id == 0 {
 		db.Close()

@@ -67,7 +67,7 @@ func UpdateUser(c *gin.Context) {
 	}
 
 	// check hotspot ownership
-	if utils.Contains(utils.ExtractHotspotIds(accountId), user.HotspotId) {
+	if utils.Contains(utils.ExtractHotspotIds(accountId, (accountId == 1)), user.HotspotId) {
 		if len(json.Name) > 0 {
 			user.Name = json.Name
 		}
@@ -109,7 +109,7 @@ func GetUsers(c *gin.Context) {
 	offsets := utils.OffsetCalc(page, limit)
 
 	db := database.Database()
-	db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId)).Offset(offsets[0]).Limit(offsets[1]).Find(&users)
+	db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1))).Offset(offsets[0]).Limit(offsets[1]).Find(&users)
 	db.Close()
 
 	if len(users) <= 0 {
@@ -127,7 +127,7 @@ func GetUser(c *gin.Context) {
 	userId := c.Param("user_id")
 
 	db := database.Database()
-	db.Where("id = ? AND hotspot_id in (?)", userId, utils.ExtractHotspotIds(accountId)).First(&user)
+	db.Where("id = ? AND hotspot_id in (?)", userId, utils.ExtractHotspotIds(accountId, (accountId == 1))).First(&user)
 	db.Close()
 
 	if user.Id == 0 {
@@ -145,7 +145,7 @@ func DeleteUser(c *gin.Context) {
 	userId := c.Param("user_id")
 
 	db := database.Database()
-	db.Where("id = ? AND hotspot_id in (?)", userId, utils.ExtractHotspotIds(accountId)).First(&user)
+	db.Where("id = ? AND hotspot_id in (?)", userId, utils.ExtractHotspotIds(accountId, (accountId == 1))).First(&user)
 
 	if user.Id == 0 {
 		db.Close()

@@ -60,7 +60,7 @@ func CreateUnit(c *gin.Context) {
 	}
 
 	// check hotspot ownership
-	if utils.Contains(utils.ExtractHotspotIds(accountId), hotspot.Id) {
+	if utils.Contains(utils.ExtractHotspotIds(accountId, (accountId == 1)), hotspot.Id) {
 		db := database.Database()
 		db.Save(&unit)
 		db.Close()
@@ -85,7 +85,7 @@ func GetUnits(c *gin.Context) {
 	offsets := utils.OffsetCalc(page, limit)
 
 	db := database.Database()
-	db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId)).Offset(offsets[0]).Limit(offsets[1]).Find(&units)
+	db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1))).Offset(offsets[0]).Limit(offsets[1]).Find(&units)
 	db.Close()
 
 	if len(units) <= 0 {
@@ -103,7 +103,7 @@ func GetUnit(c *gin.Context) {
 	unitId := c.Param("unit_id")
 
 	db := database.Database()
-	db.Where("id = ? AND hotspot_id in (?)", unitId, utils.ExtractHotspotIds(accountId)).First(&unit)
+	db.Where("id = ? AND hotspot_id in (?)", unitId, utils.ExtractHotspotIds(accountId, (accountId == 1))).First(&unit)
 	db.Close()
 
 	if unit.Id == 0 {
@@ -121,7 +121,7 @@ func DeleteUnit(c *gin.Context) {
 	unitId := c.Param("unit_id")
 
 	db := database.Database()
-	db.Where("id = ? AND hotspot_id in (?)", unitId, utils.ExtractHotspotIds(accountId)).First(&unit)
+	db.Where("id = ? AND hotspot_id in (?)", unitId, utils.ExtractHotspotIds(accountId, (accountId == 1))).First(&unit)
 
 	if unit.Id == 0 {
 		db.Close()

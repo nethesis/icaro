@@ -45,7 +45,11 @@ func UpdateAccountPrefs(c *gin.Context) {
 	}
 
 	db := database.Database()
-	db.Where("`key` = ? AND account_id = ?", json.Key, accountId).First(&accountPref)
+	if accountId == 1 {
+		db.Where("`key` = ?", json.Key).First(&accountPref)
+	} else {
+		db.Where("`key` = ? AND account_id = ?", json.Key, accountId).First(&accountPref)
+	}
 
 	if accountPref.Id == 0 {
 		db.Close()
@@ -96,7 +100,7 @@ func UpdateHotspotPrefs(c *gin.Context) {
 	}
 
 	// check hotspot ownership
-	if utils.Contains(utils.ExtractHotspotIds(accountId), hotspotIdInt) {
+	if utils.Contains(utils.ExtractHotspotIds(accountId, (accountId == 1)), hotspotIdInt) {
 		db := database.Database()
 		db.Where("`key` = ? AND hotspot_id = ?", json.Key, hotspotIdInt).First(&hsPref)
 
@@ -119,10 +123,16 @@ func UpdateHotspotPrefs(c *gin.Context) {
 
 func GetHotspotPrefs(c *gin.Context) {
 	var preferences []models.HotspotPreference
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
+
 	hotspotId := c.Param("hotspot_id")
 
 	db := database.Database()
-	db.Where("hotspot_id = ?", hotspotId).Find(&preferences)
+	if accountId == 1 {
+		db.Where("hotspot_id = ?", hotspotId).Find(&preferences)
+	} else {
+		db.Where("hotspot_id = ? AND account_id", hotspotId, accountId).Find(&preferences)
+	}
 	db.Close()
 
 	if len(preferences) <= 0 {

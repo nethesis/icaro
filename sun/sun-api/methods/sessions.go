@@ -43,7 +43,7 @@ func GetSessions(c *gin.Context) {
 	offsets := utils.OffsetCalc(page, limit)
 
 	db := database.Database()
-	db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId)).Offset(offsets[0]).Limit(offsets[1]).Find(&sessions)
+	db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1))).Offset(offsets[0]).Limit(offsets[1]).Find(&sessions)
 	db.Close()
 
 	if len(sessions) <= 0 {
@@ -56,10 +56,12 @@ func GetSessions(c *gin.Context) {
 
 func GetSession(c *gin.Context) {
 	var session models.Session
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
+
 	sessionId := c.Param("session_id")
 
 	db := database.Database()
-	db.Where("id = ?", sessionId).First(&session)
+	db.Where("id = ? AND hotspot_id in (?)", sessionId, utils.ExtractHotspotIds(accountId, (accountId == 1))).First(&session)
 	db.Close()
 
 	if session.Id == 0 {

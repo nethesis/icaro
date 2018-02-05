@@ -76,7 +76,12 @@ func UpdateHotspot(c *gin.Context) {
 	}
 
 	db := database.Database()
-	db.Where("id = ? AND account_id = ?", hotspotId, accountId).First(&hotspot)
+
+	if accountId == 1 {
+		db.Where("id = ?", hotspotId).First(&hotspot)
+	} else {
+		db.Where("id = ? AND account_id = ?", hotspotId, accountId).First(&hotspot)
+	}
 
 	if hotspot.Id == 0 {
 		db.Close()
@@ -105,11 +110,19 @@ func GetHotspots(c *gin.Context) {
 		offsets := utils.OffsetCalc(page, limit)
 
 		db := database.Database()
-		db.Where("account_id = ?", accountId).Offset(offsets[0]).Limit(offsets[1]).Find(&hotspots)
+		if accountId == 1 {
+			db.Offset(offsets[0]).Limit(offsets[1]).Find(&hotspots)
+		} else {
+			db.Where("account_id = ?", accountId).Offset(offsets[0]).Limit(offsets[1]).Find(&hotspots)
+		}
 		db.Close()
 	} else {
 		db := database.Database()
-		db.Where("account_id = ?", accountId).Find(&hotspots)
+		if accountId == 1 {
+			db.Find(&hotspots)
+		} else {
+			db.Where("account_id = ?", accountId).Find(&hotspots)
+		}
 		db.Close()
 	}
 
@@ -128,7 +141,12 @@ func GetHotspot(c *gin.Context) {
 	hotspotId := c.Param("hotspot_id")
 
 	db := database.Database()
-	db.Where("id = ? AND account_id = ?", hotspotId, accountId).First(&hotspot)
+	if accountId == 1 {
+		db.Where("id = ?", hotspotId).First(&hotspot)
+	} else {
+		db.Where("id = ? AND account_id = ?", hotspotId, accountId).First(&hotspot)
+
+	}
 	db.Close()
 
 	if hotspot.Id == 0 {
