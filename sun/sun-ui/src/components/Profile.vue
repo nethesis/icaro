@@ -26,7 +26,7 @@
             </div>
             <div class="list-details">
               <dt>{{ $t("profile.type") }}</dt>
-              <dd>{{user.info.type}}</dd>
+              <dd>{{$t(user.info.type)}}</dd>
             </div>
           </div>
           <div class="card-pf-footer">

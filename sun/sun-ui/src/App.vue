@@ -69,7 +69,7 @@
           </button>
           <a href="/" class="navbar-brand">
             <img class="navbar-brand-icon" src="./assets/logo.png" alt="" />
-            <p class="navbar-brand-name">Icaro Hotspot Manager</p> {{getCurrentPath()}}
+            <p class="navbar-brand-name">Icaro Hotspot Manager</p>
           </a>
         </div>
         <nav class="collapse navbar-collapse">
