@@ -153,7 +153,6 @@ func GetAccounts(c *gin.Context) {
 	offsets := utils.OffsetCalc(page, limit)
 
 	db := database.Database()
-	db.LogMode(true)
 	if creatorId == 1 {
 		db.Select("accounts.*, hotspots.id as hotspot_id, hotspots.name as hotspot_name").Joins("LEFT JOIN accounts_hotspots on accounts_hotspots.account_id = accounts.id LEFT JOIN hotspots on accounts_hotspots.hotspot_id = hotspots.id").Offset(offsets[0]).Limit(offsets[1]).Find(&accounts)
 	} else {
