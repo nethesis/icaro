@@ -26,7 +26,7 @@ twilio_number:
 email_smtp_host:
     "EmailSMTPHost"
 email_smtp_port:
-    "EmailSMTPPort"
+    "25"
 email_smtp_user:
     "EmailSMTPUser"
 email_smtp_password:
