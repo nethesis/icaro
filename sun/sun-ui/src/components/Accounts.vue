@@ -67,7 +67,7 @@
               <div class="form-group">
                 <label class="col-sm-4 control-label" for="ACtextInput2-modal-markup">{{ $t("account.type") }}</label>
                 <div class="col-sm-8">
-                  <select v-model="newObj.type" class="bootstrap-select">
+                  <select v-model="newObj.type" class="form-control">
                     <option value="customer">{{ $t("account.type_customer") }}</option>
                     <option value="desk">{{ $t("account.type_desk") }}</option>
                   </select>
