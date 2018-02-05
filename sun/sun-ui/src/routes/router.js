@@ -85,7 +85,7 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
 
   var user = JSON.parse(localStorage.getItem("loggedUser"))
-  if (to.meta.roles && to.meta.roles.indexOf(user.account_type >= 0)) {
+  if (user && to.meta.roles && to.meta.roles.indexOf(user.account_type >= 0)) {
     next()
   } else {
     next(false)
