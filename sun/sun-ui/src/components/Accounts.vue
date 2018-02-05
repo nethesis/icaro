@@ -15,7 +15,7 @@
         <td class="fancy">{{ props.row.name }}</td>
         <td class="fancy">{{ props.row.email || '-' }}</td>
         <td>
-          <strong>{{ props.row.type }}</strong>
+          <span :class="getLoginIcon(props.row.type)" data-toggle="tooltip" data-placement="left" :title="$t(props.row.type)"></span>
         </td>
         <td class="fancy">{{ props.row.created }}</td>
         <td>
@@ -236,6 +236,7 @@
       getAllHotspots() {
         this.hotspotGetAll(success => {
           this.hotspots = success.body
+          $('[data-toggle="tooltip"]').tooltip()
           this.isLoading = false;
         }, error => {
           console.log(error)

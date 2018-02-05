@@ -10,6 +10,7 @@
           <div class="card-pf-heading">
             <h2 class="card-pf-title">
               {{info.data.name}}
+              <div v-if="!info.isLoading" :class="[getLoginIcon(info.data.type), 'right']"  data-toggle="tooltip" data-placement="left" :title="$t(info.data.type)"></div>
               <div v-if="info.isLoading" class="spinner spinner-sm right"></div>
             </h2>
           </div>
@@ -49,12 +50,12 @@
 <script>
   import AccountService from '../../services/account';
   import StorageService from '../../services/storage';
-
+  import UtilService from '../../services/util';
   import AccountAction from '../../directives/AccountAction.vue';
 
   export default {
     name: 'AccountsDetails',
-    mixins: [AccountService, StorageService],
+    mixins: [AccountService, StorageService, UtilService],
     components: {
        accountAction: AccountAction
     },
@@ -68,6 +69,10 @@
           data: {}
         },
       }
+    },
+    // enable tooltips after rendering
+    updated: function () {
+        $('[data-toggle="tooltip"]').tooltip()
     },
     methods: {
       getInfo() {

@@ -101,6 +101,9 @@
       "create_error_sub": "An error occurred during manager creation."
 
     },
+    "customer": "Customer",
+    "reseller": "Reseller",
+    "desk": "Desk",
     "change_password": "Change password",
     "cancel": "Cancel",
     "save": "Save",
