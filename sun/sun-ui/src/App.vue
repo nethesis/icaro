@@ -86,7 +86,7 @@
               </a>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
                 <li>
-                  <a href="#/profile">{{ $t("dashboard.profile") }}</a>
+                  <a href="#/profile">{{ $t("menu.profile") }}</a>
                 </li>
                 <li>
                   <a v-on:click="doLogout()" href="#">Logout</a>
@@ -95,15 +95,15 @@
             </li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle nav-item-iconic" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                <span :title="$t('dashboard.help')" class="fa pficon-help"></span>
+                <span :title="$t('help')" class="fa pficon-help"></span>
                 <span class="caret"></span>
               </a>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                 <li>
-                  <a target="blank" href="https://github.com/nethesis/icaro">{{ $t("dashboard.help") }}</a>
+                  <a target="blank" href="https://github.com/nethesis/icaro">{{ $t("help") }}</a>
                 </li>
                 <li>
-                  <a href="#" data-toggle="modal" data-target="#about-modal">{{ $t("dashboard.about") }}</a>
+                  <a href="#" data-toggle="modal" data-target="#about-modal">{{ $t("about") }}</a>
                 </li>
               </ul>
             </li>
@@ -119,46 +119,33 @@
 
           <li v-bind:class="[currentPath == '/' ? 'active' : '', 'list-group-item']">
             <a href="#/">
-              <span class="fa fa-dashboard" data-toggle="tooltip" title="Dashboard"></span>
-              <span class="list-group-item-value">Dashboard</span>
+              <span class="fa fa-dashboard"></span>
+              <span class="list-group-item-value">{{ $t('menu.dashboard') }}</span>
             </a>
           </li>
-          <li v-bind:class="[currentPath == '/hotspots' ? 'active' : '', 'list-group-item']">
+          <li v-bind:class="[currentPath == '/hotspots' ? 'active' : '', 'list-group-item']" v-if="(user.info.type == 'admin') || (user.info.type == 'reseller')">
             <a href="#/hotspots">
-              <span class="fa fa-wifi" data-toggle="tooltip" title="Dolor"></span>
-              <span class="list-group-item-value">Hotspots</span>
-
+              <span class="fa fa-wifi"></span>
+              <span class="list-group-item-value">{{ $t('menu.hotspots') }}</span>
             </a>
           </li>
           <li v-bind:class="[currentPath == '/users' ? 'active' : '', 'list-group-item']">
             <a href="#/users">
-              <span class="fa fa-users" data-toggle="tooltip" title="Dolor"></span>
-              <span class="list-group-item-value">{{ $t("dashboard.users") }}</span>
+              <span class="fa fa-users"></span>
+              <span class="list-group-item-value">{{ $t("menu.users") }}</span>
 
             </a>
           </li>
-          <!-- <li v-bind:class="[currentPath == '/reports' ? 'active' : '', 'list-group-item']">
-            <a href="#/reports">
-              <span class="fa fa-list" data-toggle="tooltip" title="Adipscing"></span>
-              <span class="list-group-item-value">Report</span>
-            </a>
-          </li> -->
 
           <li></li>
 
-          <li v-bind:class="[currentPath == '/accounts' ? 'active' : '', 'list-group-item']">
+          <li v-bind:class="[currentPath == '/accounts' ? 'active' : '', 'list-group-item']" v-if="(user.info.type == 'admin') || (user.info.type == 'reseller')">
             <a href="#/accounts">
-              <span class="fa pficon-users" data-toggle="tooltip" title="Dolor"></span>
-              <span class="list-group-item-value">{{ $t("dashboard.accounts") }}</span>
+              <span class="fa pficon-users"></span>
+              <span class="list-group-item-value">{{ $t("menu.accounts") }}</span>
 
             </a>
           </li>
-          <!-- <li v-bind:class="[currentPath == '/preferences' ? 'active' : '', 'list-group-item']">
-            <a href="#/preferences">
-              <span class="fa fa-gear" data-toggle="tooltip" title="Lorem"></span>
-              <span class="list-group-item-value">{{ $t("dashboard.preferences") }}</span>
-            </a>
-          </li> -->
 
           <li class="list-group-item secondary-nav-item-pf mobile-nav-item-pf visible-xs-block" data-target="#user-secondary">
             <a href="#">
@@ -174,13 +161,13 @@
               <ul class="list-group">
                 <li class="list-group-item">
                   <a href="#/profile">
-                    <span class="list-group-item-value">{{ $t("dashboard.profile") }}</span>
+                    <span class="list-group-item-value">{{ $t("menu.profile") }}</span>
                   </a>
                 </li>
 
                 <li class="list-group-item">
                   <a v-on:click="doLogout()" href="#">
-                    <span class="list-group-item-value">Logout</span>
+                    <span class="list-group-item-value">{{ $t("menu.logout") }}</span>
                   </a>
                 </li>
               </ul>
@@ -189,17 +176,17 @@
           <li class="list-group-item secondary-nav-item-pf mobile-nav-item-pf visible-xs-block" data-target="#help-secondary">
             <a href="#">
               <span class="pficon pficon-help" data-toggle="tooltip" title="" data-original-title="Help"></span>
-              <span class="list-group-item-value">{{ $t("dashboard.help") }}</span>
+              <span class="list-group-item-value">{{ $t("menu.help") }}</span>
             </a>
             <div id="help-secondary" class="nav-pf-secondary-nav">
               <div class="nav-item-pf-header">
                 <a href="#" class="secondary-collapse-toggle-pf" data-toggle="collapse-secondary-nav"></a>
-                <span>{{ $t("dashboard.help") }}</span>
+                <span>{{ $t("help") }}</span>
               </div>
               <ul class="list-group">
                 <li class="list-group-item">
                   <a target="blank" href="https://github.com/nethesis/icaro">
-                    <span class="list-group-item-value">{{ $t("dashboard.help") }}</span>
+                    <span class="list-group-item-value">{{ $t("menu.help") }}</span>
                   </a>
                 </li>
               </ul>

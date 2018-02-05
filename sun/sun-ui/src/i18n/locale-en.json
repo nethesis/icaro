@@ -101,8 +101,19 @@
       "create_error_sub": "An error occurred during manager creation."
 
     },
+    "menu": {
+      "dashboard" : "Dashboard",
+      "users": "Users",
+      "accounts": "Managers",
+      "hotspots": "Hotspots",
+      "help": "Help",
+      "profile": "Profile"
+    },
+    "help": "Help",
     "customer": "Customer",
     "reseller": "Reseller",
+    "users": "Users",
+    "hotspots": "Hotspots",
     "desk": "Desk",
     "change_password": "Change password",
     "cancel": "Cancel",

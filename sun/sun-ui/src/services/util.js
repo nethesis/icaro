@@ -35,8 +35,7 @@ var UtilService = {
             break;
         }
         return icon
-      },
-
+    },
   }
 };
 export default UtilService;
