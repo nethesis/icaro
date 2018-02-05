@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>{{ msg }}</h2>
-    <button v-if="rows.length > 0" v-on:click="initNewAccount()" data-toggle="modal" data-target="#ACcreateModal" class="btn btn-primary btn-lg create-account">
+    <button v-on:click="initNewAccount()" data-toggle="modal" data-target="#ACcreateModal" class="btn btn-primary btn-lg create-account">
       {{ $t('account.create_new') }} </button>
     <div v-if="isLoading" class="spinner spinner-lg"></div>
     <vue-good-table v-if="!isLoading" :perPage="25" :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'username', type: 'asc'}"
