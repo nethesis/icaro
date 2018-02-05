@@ -79,7 +79,7 @@
               <a href="#" class="dropdown-toggle nav-item-iconic" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                 <p class="login-main-name">{{ user.info.name }}</p>
                 <p class="login-main-type">
-                  <span v-bind:class="[getLoginIcon(), 'login-main-icon']"></span>
+                  <span v-bind:class="[getLoginIcon(user.info.type), 'login-main-icon']"></span>
                   {{ user.info.type }}
                   <span class="caret"></span>
                 </p>
@@ -268,13 +268,14 @@
 <script>
   import LoginService from './services/login';
   import StorageService from './services/storage';
+  import UtilService from './services/util';
   import {
     setTimeout
   } from 'timers';
 
   export default {
     name: 'app',
-    mixins: [LoginService, StorageService],
+    mixins: [LoginService, StorageService, UtilService],
     data() {
       // is logged
       var isLogged = false
@@ -316,24 +317,6 @@
       }
     },
     methods: {
-      getLoginIcon() {
-        var icon = 'fa fa-user'
-        switch (this.user.info.type) {
-          case 'admin':
-            icon = 'fa fa-graduation-cap'
-            break;
-          case 'reseller':
-            icon = 'fa fa-user'
-            break;
-          case 'customer':
-            icon = 'fa fa-briefcase'
-            break;
-          case 'desk':
-            icon = 'fa fa-coffee'
-            break;
-        }
-        return icon
-      },
       getInfo(id, callback) {
         this.execGetInfo(id, success => {
           callback(success.body)

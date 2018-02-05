@@ -18,6 +18,25 @@ var UtilService = {
       });
       return uuid;
     },
+    getLoginIcon(userType) {
+        var icon = 'fa fa-user'
+        switch (userType) {
+          case 'admin':
+            icon = 'fa fa-graduation-cap'
+            break;
+          case 'reseller':
+            icon = 'fa fa-user'
+            break;
+          case 'customer':
+            icon = 'fa fa-briefcase'
+            break;
+          case 'desk':
+            icon = 'fa fa-coffee'
+            break;
+        }
+        return icon
+      },
+
   }
 };
 export default UtilService;
