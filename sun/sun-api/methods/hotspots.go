@@ -50,8 +50,6 @@ func CreateHotspot(c *gin.Context) {
 		Created:     time.Now().UTC(),
 	}
 
-	// TODO: init hotspot preferences to database
-
 	db := database.Database()
 	db.Save(&hotspot)
 	db.Close()
@@ -59,6 +57,9 @@ func CreateHotspot(c *gin.Context) {
 	if hotspot.Id == 0 {
 		c.JSON(http.StatusConflict, gin.H{"id": hotspot.Id, "status": "hotspot already exists"})
 	} else {
+		// initialize hotspot preferences
+		utils.SetDefaultHotspotPreferences(hotspot.Id)
+
 		c.JSON(http.StatusCreated, gin.H{"id": hotspot.Id, "status": "success"})
 	}
 }

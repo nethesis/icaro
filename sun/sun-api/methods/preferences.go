@@ -128,11 +128,16 @@ func GetHotspotPrefs(c *gin.Context) {
 
 	hotspotId := c.Param("hotspot_id")
 
+	hotspotIdInt, err := strconv.Atoi(hotspotId)
+	if err != nil {
+		hotspotIdInt = 0
+	}
+
 	db := database.Database()
 	if accountId == 1 {
 		db.Where("hotspot_id = ?", hotspotId).Find(&preferences)
 	} else {
-		db.Where("hotspot_id = ? AND account_id", hotspotId, accountId).Find(&preferences)
+		db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt)).Find(&preferences)
 	}
 	db.Close()
 

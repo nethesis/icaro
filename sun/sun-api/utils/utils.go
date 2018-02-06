@@ -32,6 +32,39 @@ import (
 	"github.com/nethesis/icaro/sun/sun-api/models"
 )
 
+var hotspot_preferences = map[string]string{
+	"voucher_expiration_days": "1",
+	"user_expiration_days":    "30",
+	"temp_session_duration":   "300",
+	"captive_title":           "This is a title",
+	"captive_logo":            "",
+	"captive_subtitle":        "This is a subtitle",
+	"captive_banner":          "",
+	"captive_description":     "This is a description",
+	"facebook_login":          "true",
+	"google_login":            "true",
+	"linkedin_login":          "true",
+	"sms_login":               "true",
+	"email_login":             "true",
+	"voucher_login":           "true",
+}
+
+func SetDefaultHotspotPreferences(hotspotId int) {
+	db := database.Database()
+
+	// iterate all default hotspot preferences
+	for k, v := range hotspot_preferences {
+		hsPreferences := models.HotspotPreference{
+			HotspotId: hotspotId,
+			Key:       k,
+			Value:     v,
+		}
+		db.Save(&hsPreferences)
+	}
+
+	db.Close()
+}
+
 func OffsetCalc(page string, limit string) [2]int {
 	var resLimit = 0
 	var resOffset = 0
