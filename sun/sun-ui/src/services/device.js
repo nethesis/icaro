@@ -1,7 +1,7 @@
 var DeviceService = {
   methods: {
-    deviceGetAll(success, error) {
-      this.$http.get('https://' + this.$root.$options.api_host + '/api/devices', {
+    deviceGetAll(hotspotId, success, error) {
+      this.$http.get('https://' + this.$root.$options.api_host + '/api/devices' + (hotspotId && hotspotId != 0 ? '?hotspot=' + hotspotId : ''), {
         headers: {
           'Token': this.get('loggedUser') && this.get('loggedUser').token || ''
         }

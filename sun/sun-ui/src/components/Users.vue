@@ -2,6 +2,17 @@
   <div>
     <h2>{{ msg }}</h2>
     <div v-if="isLoading" class="spinner spinner-lg"></div>
+    <div class="form-group select-search">
+      <label class="col-sm-2 control-label" for="textInput-markup">Hotspot</label>
+      <div class="col-sm-4">
+        <select v-on:change="getAll()" v-model="hotspotSearchId" class="form-control">
+          <option value="0">-</option>
+          <option v-for="hotspot in hotspots" v-bind:key="hotspot.id" v-bind:value="hotspot.id">
+            {{ hotspot.name }}
+          </option>
+        </select>
+      </div>
+    </div>
     <vue-good-table v-if="!isLoading" :perPage="25" :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'username', type: 'asc'}"
       :globalSearch="true" :paginate="true" styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText"
       :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
@@ -38,19 +49,21 @@
 <script>
   import UserService from '../services/user';
   import StorageService from '../services/storage';
+  import HotspotService from '../services/hotspot';
   import UtilService from '../services/util';
 
   import UserAction from '../directives/UserAction.vue';
 
   export default {
     name: 'Users',
-    mixins: [UserService, StorageService, UtilService],
+    mixins: [UserService, StorageService, UtilService, HotspotService],
     components: {
       userAction: UserAction
     },
     data() {
       // get user list
       this.getAll()
+      this.getAllHotspots();
 
       return {
         msg: 'Users',
@@ -93,12 +106,23 @@
           },
         ],
         rows: [],
-        tableLangsTexts: this.tableLangs()
+        tableLangsTexts: this.tableLangs(),
+        hotspots: [],
+        hotspotSearchId: 0
       }
     },
     methods: {
+      getAllHotspots() {
+        this.hotspotGetAll(success => {
+          this.hotspots = success.body
+          $('[data-toggle="tooltip"]').tooltip()
+          this.isLoading = false;
+        }, error => {
+          console.log(error)
+        })
+      },
       getAll() {
-        this.userGetAll(success => {
+        this.userGetAll(this.hotspotSearchId, success => {
           this.rows = success.body
           this.isLoading = false
         }, error => {

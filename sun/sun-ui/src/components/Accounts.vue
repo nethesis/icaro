@@ -4,6 +4,17 @@
     <button v-on:click="initNewAccount()" data-toggle="modal" data-target="#ACcreateModal" class="btn btn-primary btn-lg create-account">
       {{ $t('account.create_new') }} </button>
     <div v-if="isLoading" class="spinner spinner-lg"></div>
+    <div class="form-group select-search">
+      <label class="col-sm-2 control-label" for="textInput-markup">Hotspot</label>
+      <div class="col-sm-4">
+        <select v-on:change="getAll()" v-model="hotspotSearchId" class="form-control">
+          <option value="0">-</option>
+          <option v-for="hotspot in hotspots" v-bind:key="hotspot.id" v-bind:value="hotspot.id">
+            {{ hotspot.name }}
+          </option>
+        </select>
+      </div>
+    </div>
     <vue-good-table v-if="!isLoading" :perPage="25" :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'username', type: 'asc'}"
       :globalSearch="true" :paginate="true" styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText"
       :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
@@ -208,7 +219,8 @@
         newObj: newObj,
         newPassword: newPassword,
         confirmPassword: confirmPassword,
-        errors: errors
+        errors: errors,
+        hotspotSearchId: 0
       }
     },
     methods: {
@@ -246,9 +258,8 @@
           console.log(error)
         })
       },
-
       getAll() {
-        this.accountGetAll(success => {
+        this.accountGetAll(this.hotspotSearchId, success => {
           this.rows = success.body
           this.isLoading = false;
         }, error => {

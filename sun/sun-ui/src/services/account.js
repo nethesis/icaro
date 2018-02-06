@@ -1,7 +1,7 @@
 var AccountService = {
   methods: {
-    accountGetAll(success, error) {
-      this.$http.get('https://' + this.$root.$options.api_host + '/api/accounts', {
+    accountGetAll(hotspotId, success, error) {
+      this.$http.get('https://' + this.$root.$options.api_host + '/api/accounts' + (hotspotId && hotspotId != 0 ? '?hotspot=' + hotspotId : ''), {
         headers: {
           'Token': this.get('loggedUser') && this.get('loggedUser').token || ''
         }

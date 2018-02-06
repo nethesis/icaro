@@ -1,7 +1,7 @@
 var UserService = {
   methods: {
-    userGetAll(success, error) {
-      this.$http.get('https://' + this.$root.$options.api_host + '/api/users', {
+    userGetAll(hotspotId, success, error) {
+      this.$http.get('https://' + this.$root.$options.api_host + '/api/users' + (hotspotId && hotspotId != 0 ? '?hotspot=' + hotspotId : ''), {
         headers: {
           'Token': this.get('loggedUser') && this.get('loggedUser').token || ''
         }
