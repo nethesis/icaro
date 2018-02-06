@@ -121,7 +121,7 @@
               <div v-for="pref in preferences.data" :key="pref.key" class="form-group">
                 <label class="col-sm-4 control-label" for="textInput-markup">{{pref.key}}</label>
                 <div class="col-sm-6">
-                  <input required v-model="pref.value" :type="getInputType(pref.value)" id="textInput-markup" class="form-control">
+                  <input v-model="pref.value" :type="getInputType(pref.value)" id="textInput-markup" class="form-control">
                 </div>
               </div>
             </div>
@@ -253,6 +253,15 @@
       },
       getPreferences() {
         this.hsPrefGet(this.$route.params.id, success => {
+          for (var p in success.body) {
+            var pref = success.body[p]
+            if (pref.value === "true") {
+              pref.value = true
+            }
+            if (pref.value === "false") {
+              pref.value = false
+            }
+          }
           this.preferences.data = success.body
           this.preferences.isLoading = false
         }, error => {
@@ -266,6 +275,9 @@
         for (var i in this.preferences.data) {
           var pref = this.preferences.data[i]
           promises.push(new Promise((resolve, reject) => {
+            if (typeof pref.value == "boolean") {
+              pref.value = pref.value.toString()
+            }
             this.hsPrefModify(this.$route.params.id, pref, success => {
               resolve(success)
             }, error => {
@@ -278,6 +290,7 @@
         var context = this;
         Promise.all(promises).then(function (response) {
           context.preferences.isLoading = false
+          context.getPreferences()
         })
       }
     }

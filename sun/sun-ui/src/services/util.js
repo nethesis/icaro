@@ -67,7 +67,7 @@ var UtilService = {
       return retVal;
     },
     getInputType(value) {
-      if (value === "true" || value === "false") {
+      if (value === true || value === "true" || value === "false" || value === false) {
         return 'checkbox'
       } else {
         return 'text'
