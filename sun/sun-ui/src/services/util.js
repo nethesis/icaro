@@ -18,9 +18,9 @@ var UtilService = {
       });
       return uuid;
     },
-    getLoginIcon(userType) {
+    getLoginIcon(accountType) {
       var icon = 'fa fa-user'
-      switch (userType) {
+      switch (accountType) {
         case 'admin':
           icon = 'fa fa-graduation-cap'
           break;
@@ -32,6 +32,27 @@ var UtilService = {
           break;
         case 'desk':
           icon = 'fa fa-coffee'
+          break;
+      }
+      return icon
+    },
+    getUserTypeIcon(userType) {
+      var icon = 'fa fa-user'
+      switch (userType) {
+        case 'facebook':
+          icon = 'fa fa-facebook'
+          break;
+        case 'google':
+          icon = 'fa fa-google'
+          break;
+        case 'linkedin':
+          icon = 'fa fa-linkedin'
+          break;
+        case 'email':
+          icon = 'fa fa-envelope'
+          break;
+        case 'mobile-alt':
+          icon = 'fa fa-envelope'
           break;
       }
       return icon

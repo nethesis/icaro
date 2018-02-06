@@ -5,6 +5,7 @@ import Dashboard from '../components/Dashboard.vue'
 import Hotspots from '../components/Hotspots.vue'
 import HotspotsDetails from '../components/details-view/HotspotsDetails.vue'
 import AccountsDetails from '../components/details-view/AccountsDetails.vue'
+import SessionsDetails from '../components/details-view/SessionsDetails.vue'
 import Users from '../components/Users.vue'
 import Reports from '../components/Reports.vue'
 import Accounts from '../components/Accounts.vue'
@@ -51,6 +52,14 @@ const router = new Router({
       path: '/reports',
       name: 'Reports',
       component: Reports,
+      meta: {
+        roles: ['customer', 'reseller', 'admin']
+      },
+    },
+    {
+      path: '/sessions/:id',
+      name: 'SessionsDetails',
+      component: SessionsDetails,
       meta: {
         roles: ['customer', 'reseller', 'admin']
       },

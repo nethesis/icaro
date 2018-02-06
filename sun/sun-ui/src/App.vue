@@ -136,12 +136,12 @@
 
             </a>
           </li>
-          <!-- <li v-bind:class="[getCurrentPath('reports') ? 'active' : '', 'list-group-item']">
+          <li v-bind:class="[getCurrentPath('reports') ? 'active' : '', 'list-group-item']" v-if="(user.info.type == 'admin') || (user.info.type == 'reseller') ||  (user.info.type == 'customer')">
             <a href="#/reports">
               <span class="fa fa-list" data-toggle="tooltip" title="Adipscing"></span>
               <span class="list-group-item-value">Report</span>
             </a>
-          </li> -->
+          </li>
 
           <li v-bind:class="[getCurrentPath('accounts') ? 'active' : '', 'list-group-item']" v-if="(user.info.type == 'admin') || (user.info.type == 'reseller')">
             <a href="#/accounts">
