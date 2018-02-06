@@ -102,6 +102,27 @@ func main() {
 			sessions.GET("/:session_id", methods.GetSession)
 		}
 
+		stats := api.Group("/stats")
+		{
+			hotspotsStats := stats.Group("/hotspots")
+			hotspotsStats.GET("/total", methods.StatsHotspotTotal)
+
+			unitsStats := stats.Group("/units")
+			unitsStats.GET("/total", methods.StatsUnitTotal)
+
+			accountsStats := stats.Group("/accounts")
+			accountsStats.GET("/total", methods.StatsAccountTotal)
+
+			usersStats := stats.Group("/users")
+			usersStats.GET("/total", methods.StatsUserTotal)
+
+			devicesStats := stats.Group("/devices")
+			devicesStats.GET("/total", methods.StatsDeviceTotal)
+
+			sessionsStats := stats.Group("/sessions")
+			sessionsStats.GET("/total", methods.StatsSessionTotal)
+		}
+
 		units := api.Group("/units")
 		{
 			units.GET("", methods.GetUnits)

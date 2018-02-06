@@ -165,3 +165,13 @@ func DeleteUser(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }
+
+func StatsUserTotal(c *gin.Context) {
+	var count int
+
+	db := database.Database()
+	db.Table("users").Count(&count)
+	db.Close()
+
+	c.JSON(http.StatusOK, gin.H{"total": count})
+}

@@ -78,3 +78,13 @@ func GetSession(c *gin.Context) {
 
 	c.JSON(http.StatusOK, session)
 }
+
+func StatsSessionTotal(c *gin.Context) {
+	var count int
+
+	db := database.Database()
+	db.Table("sessions").Count(&count)
+	db.Close()
+
+	c.JSON(http.StatusOK, gin.H{"total": count})
+}

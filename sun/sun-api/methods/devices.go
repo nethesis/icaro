@@ -78,3 +78,13 @@ func GetDevice(c *gin.Context) {
 
 	c.JSON(http.StatusOK, device)
 }
+
+func StatsDeviceTotal(c *gin.Context) {
+	var count int
+
+	db := database.Database()
+	db.Table("devices").Count(&count)
+	db.Close()
+
+	c.JSON(http.StatusOK, gin.H{"total": count})
+}
