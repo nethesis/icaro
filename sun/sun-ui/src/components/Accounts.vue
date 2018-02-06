@@ -54,7 +54,7 @@
           </div>
           <form class="form-horizontal" role="form" v-on:submit.prevent="createAccount(newObj)">
             <div class="modal-body">
-              <div class="form-group">
+              <div class="form-group" v-show="isAdmin">
                 <label class="col-sm-4 control-label" for="accuuid">{{ $t("account.uuid") }}</label>
                 <div class="col-sm-8">
                   <input required v-model="newObj.uuid" type="text" id="accuuid" class="form-control" :placeholder="$t('account.uuid')">
@@ -220,6 +220,7 @@
         newPassword: newPassword,
         confirmPassword: confirmPassword,
         errors: errors,
+        isAdmin: this.get("loggedUser").account_type == "admin",
         hotspotSearchId: 0
       }
     },
