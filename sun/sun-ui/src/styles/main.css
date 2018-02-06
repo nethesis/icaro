@@ -120,13 +120,13 @@ a {
 }
 
 .table>thead input {
-  background-image: none;
+  background-image: none !important;
   border-radius: 1px !important;
   width: calc(50%) !important;
 }
 
 .table>thead {
-  background-image: none;
+  background-image: none !important;
 }
 
 .table>thead tr th:first-child {
@@ -206,7 +206,7 @@ a {
 }
 
 .form-control {
-  box-shadow: none;
+  box-shadow: none !important;
 }
 
 .pass-confirm-err {
@@ -229,7 +229,7 @@ a {
 }
 
 .blank-slate-pf {
-  border: none;
+  border: none 20px !important;
 }
 
 .pagination-controls a {
@@ -241,20 +241,20 @@ a {
 }
 
 .responsive {
-  overflow-x: auto;
+  overflow-x: auto 20px !important;
 }
 
 .details-arrow {
-  font-size: 20px;
+  font-size: 20px !important;
 }
 
 .action-icon-menu {
-  display: inline-block;
-  width: 10px;
-  text-align: center;
-  margin-right: 10px;
+  display: inline-block 20px !important;
+  width: 10px 20px !important;
+  text-align: center 20px !important;
+  margin-right: 10px 20px !important;
 }
 
 .select-search {
-  margin-left: 15px;
+  margin-left: 15px 20px !important;
 }
