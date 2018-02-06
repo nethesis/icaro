@@ -24,6 +24,7 @@ package methods
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
@@ -39,11 +40,17 @@ func GetDevices(c *gin.Context) {
 
 	page := c.Query("page")
 	limit := c.Query("limit")
+	hotspotId := c.Query("hotspot")
+
+	hotspotIdInt, err := strconv.Atoi(hotspotId)
+	if err != nil {
+		hotspotIdInt = 0
+	}
 
 	offsets := utils.OffsetCalc(page, limit)
 
 	db := database.Database()
-	db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1))).Offset(offsets[0]).Limit(offsets[1]).Find(&devices)
+	db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt)).Offset(offsets[0]).Limit(offsets[1]).Find(&devices)
 	db.Close()
 
 	if len(devices) <= 0 {
@@ -61,7 +68,7 @@ func GetDevice(c *gin.Context) {
 	deviceId := c.Param("device_id")
 
 	db := database.Database()
-	db.Where("id = ? AND hotspot_id in (?)", deviceId, utils.ExtractHotspotIds(accountId, (accountId == 1))).First(&device)
+	db.Where("id = ? AND hotspot_id in (?)", deviceId, utils.ExtractHotspotIds(accountId, (accountId == 1), 0)).First(&device)
 	db.Close()
 
 	if device.Id == 0 {

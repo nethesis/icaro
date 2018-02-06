@@ -24,6 +24,7 @@ package methods
 
 import (
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -67,7 +68,7 @@ func UpdateUser(c *gin.Context) {
 	}
 
 	// check hotspot ownership
-	if utils.Contains(utils.ExtractHotspotIds(accountId, (accountId == 1)), user.HotspotId) {
+	if utils.Contains(utils.ExtractHotspotIds(accountId, (accountId == 1), 0), user.HotspotId) {
 		if len(json.Name) > 0 {
 			user.Name = json.Name
 		}
@@ -105,11 +106,17 @@ func GetUsers(c *gin.Context) {
 
 	page := c.Query("page")
 	limit := c.Query("limit")
+	hotspotId := c.Query("hotspot")
+
+	hotspotIdInt, err := strconv.Atoi(hotspotId)
+	if err != nil {
+		hotspotIdInt = 0
+	}
 
 	offsets := utils.OffsetCalc(page, limit)
 
 	db := database.Database()
-	db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1))).Offset(offsets[0]).Limit(offsets[1]).Find(&users)
+	db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt)).Offset(offsets[0]).Limit(offsets[1]).Find(&users)
 	db.Close()
 
 	if len(users) <= 0 {
@@ -127,7 +134,7 @@ func GetUser(c *gin.Context) {
 	userId := c.Param("user_id")
 
 	db := database.Database()
-	db.Where("id = ? AND hotspot_id in (?)", userId, utils.ExtractHotspotIds(accountId, (accountId == 1))).First(&user)
+	db.Where("id = ? AND hotspot_id in (?)", userId, utils.ExtractHotspotIds(accountId, (accountId == 1), 0)).First(&user)
 	db.Close()
 
 	if user.Id == 0 {
@@ -145,7 +152,7 @@ func DeleteUser(c *gin.Context) {
 	userId := c.Param("user_id")
 
 	db := database.Database()
-	db.Where("id = ? AND hotspot_id in (?)", userId, utils.ExtractHotspotIds(accountId, (accountId == 1))).First(&user)
+	db.Where("id = ? AND hotspot_id in (?)", userId, utils.ExtractHotspotIds(accountId, (accountId == 1), 0)).First(&user)
 
 	if user.Id == 0 {
 		db.Close()

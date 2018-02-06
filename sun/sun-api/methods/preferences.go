@@ -97,10 +97,11 @@ func UpdateHotspotPrefs(c *gin.Context) {
 	hotspotIdInt, err := strconv.Atoi(hotspotId)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "Hotspot id error", "error": err.Error()})
+		return
 	}
 
 	// check hotspot ownership
-	if utils.Contains(utils.ExtractHotspotIds(accountId, (accountId == 1)), hotspotIdInt) {
+	if utils.Contains(utils.ExtractHotspotIds(accountId, (accountId == 1), 0), hotspotIdInt) {
 		db := database.Database()
 		db.Where("`key` = ? AND hotspot_id = ?", json.Key, hotspotIdInt).First(&hsPref)
 

@@ -149,14 +149,15 @@ func GetAccounts(c *gin.Context) {
 
 	page := c.Query("page")
 	limit := c.Query("limit")
+	hotspotId := c.Query("hotspot")
 
 	offsets := utils.OffsetCalc(page, limit)
 
 	db := database.Database()
 	if creatorId == 1 {
-		db.Select("accounts.*, hotspots.id as hotspot_id, hotspots.name as hotspot_name").Joins("LEFT JOIN accounts_hotspots on accounts_hotspots.account_id = accounts.id LEFT JOIN hotspots on accounts_hotspots.hotspot_id = hotspots.id").Offset(offsets[0]).Limit(offsets[1]).Find(&accounts)
+		db.Select("accounts.*, hotspots.id as hotspot_id, hotspots.name as hotspot_name").Joins("LEFT JOIN accounts_hotspots on accounts_hotspots.account_id = accounts.id LEFT JOIN hotspots on accounts_hotspots.hotspot_id = hotspots.id").Where("hotspots.id = ?", hotspotId).Offset(offsets[0]).Limit(offsets[1]).Find(&accounts)
 	} else {
-		db.Select("accounts.*, hotspots.id as hotspot_id, hotspots.name as hotspot_name").Joins("LEFT JOIN accounts_hotspots on accounts_hotspots.account_id = accounts.id LEFT JOIN hotspots on accounts_hotspots.hotspot_id = hotspots.id").Where("creator_id = ?", creatorId).Offset(offsets[0]).Limit(offsets[1]).Find(&accounts)
+		db.Select("accounts.*, hotspots.id as hotspot_id, hotspots.name as hotspot_name").Joins("LEFT JOIN accounts_hotspots on accounts_hotspots.account_id = accounts.id LEFT JOIN hotspots on accounts_hotspots.hotspot_id = hotspots.id").Where("creator_id = ? AND hotspots.id = ?", creatorId, hotspotId).Offset(offsets[0]).Limit(offsets[1]).Find(&accounts)
 	}
 	db.Close()
 
@@ -176,6 +177,7 @@ func GetAccount(c *gin.Context) {
 	accountIdInt, err := strconv.Atoi(accountId)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "Request fields malformed", "error": err.Error()})
+		return
 	}
 
 	db := database.Database()

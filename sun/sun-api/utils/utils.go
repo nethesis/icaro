@@ -90,7 +90,7 @@ func RefreshToken(token string) {
 	db.Close()
 }
 
-func ExtractHotspotIds(accountId int, admin bool) []int {
+func ExtractHotspotIds(accountId int, admin bool, hotspotId int) []int {
 	var hotspots []models.Hotspot
 	account := GetAccountById(accountId)
 
@@ -100,9 +100,17 @@ func ExtractHotspotIds(accountId int, admin bool) []int {
 
 	db := database.Database()
 	if admin {
-		db.Select("id").Find(&hotspots)
+		if hotspotId != 0 {
+			db.Select("id").Where("id = ?", hotspotId).Find(&hotspots)
+		} else {
+			db.Select("id").Find(&hotspots)
+		}
 	} else {
-		db.Select("id").Where("account_id = ?", accountId).Find(&hotspots)
+		if hotspotId != 0 {
+			db.Select("id").Where("account_id = ? AND id = ?", accountId, hotspotId).Find(&hotspots)
+		} else {
+			db.Select("id").Where("account_id = ?", accountId).Find(&hotspots)
+		}
 	}
 	db.Close()
 
