@@ -214,35 +214,35 @@
         })
       },
       getTotals() {
-        this.accountGetAll(success => {
+        this.accountGetAll(this.$route.params.id, success => {
           this.totals.accounts.count = success.body.length
           this.totals.accounts.isLoading = false
         }, error => {
           console.log(error.body)
           this.totals.accounts.isLoading = false
         })
-        this.unitGetAll(success => {
+        this.unitGetAll(this.$route.params.id, success => {
           this.totals.units.count = success.body.length
           this.totals.units.isLoading = false
         }, error => {
           console.log(error.body)
           this.totals.units.isLoading = false
         })
-        this.userGetAll(success => {
+        this.userGetAll(this.$route.params.id, success => {
           this.totals.users.count = success.body.length
           this.totals.users.isLoading = false
         }, error => {
           console.log(error.body)
           this.totals.users.isLoading = false
         })
-        this.deviceGetAll(success => {
+        this.deviceGetAll(this.$route.params.id, success => {
           this.totals.devices.count = success.body.length
           this.totals.devices.isLoading = false
         }, error => {
           console.log(error.body)
           this.totals.devices.isLoading = false
         })
-        this.sessionGetAll(success => {
+        this.sessionGetAll(this.$route.params.id, success => {
           this.totals.sessions.count = success.body.length
           this.totals.sessions.isLoading = false
         }, error => {
