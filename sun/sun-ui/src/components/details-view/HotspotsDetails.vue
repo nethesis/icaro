@@ -84,7 +84,7 @@
         <div class="card-pf card-pf-accented">
           <div class="card-pf-heading">
             <h2 class="card-pf-title">
-              <span class="pficon pficon-screen card-info-title"></span>
+              <span class="pficon fa-mobile card-info-title"></span>
               {{ $t("dashboard.devices") }}
               <span v-if="!totals.devices.isLoading" class="right">
                 <strong class="soft">{{ totals.devices.count}}</strong>
@@ -121,7 +121,7 @@
               <div v-for="pref in preferences.data" :key="pref.key" class="form-group">
                 <label class="col-sm-4 control-label" for="textInput-markup">{{pref.key}}</label>
                 <div class="col-sm-6">
-                  <input required v-model="pref.value" type="text" id="textInput-markup" class="form-control">
+                  <input required v-model="pref.value" :type="getInputType(pref.value)" id="textInput-markup" class="form-control">
                 </div>
               </div>
             </div>
@@ -150,13 +150,14 @@
   import DeviceService from '../../services/device';
   import SessionService from '../../services/session';
   import StorageService from '../../services/storage';
+  import UtilService from '../../services/util';
 
   import HotspotAction from '../../directives/HotspotAction.vue';
 
   export default {
     name: 'HotspotDetails',
     mixins: [HotspotService, PreferenceService, AccountService, UnitService, UserService, DeviceService, SessionService,
-      StorageService
+      StorageService, UtilService
     ],
     components: {
       hotspotAction: HotspotAction

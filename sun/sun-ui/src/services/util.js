@@ -66,6 +66,13 @@ var UtilService = {
       }
       return retVal;
     },
+    getInputType(value) {
+      if (value === "true" || value === "false") {
+        return 'checkbox'
+      } else {
+        return 'text'
+      }
+    }
   }
 };
 export default UtilService;

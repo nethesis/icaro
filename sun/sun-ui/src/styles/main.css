@@ -205,6 +205,10 @@ a {
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(0, 136, 206, .6) !important;
 }
 
+.form-control {
+  box-shadow: none;
+}
+
 .pass-confirm-err {
   height: 5px;
   background: #cc0000;

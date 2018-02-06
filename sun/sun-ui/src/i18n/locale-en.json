@@ -73,7 +73,7 @@
       "warning_delete_sub": "Are you sure?"
     },
     "account": {
-      "uuid": "Uinque ID",
+      "uuid": "Unique ID",
       "username": "Username",
       "change_password": "Change password",
       "name": "Name",
@@ -102,8 +102,8 @@
 
     },
     "session": {
-        "bytes_up": "Uploaded data",
-        "bytes_down": "Downloaded data",
+        "bytes_up": "Data ▲",
+        "bytes_down": "Data ▼",
         "duration": "Duration",
         "device": "Device",
         "auth_time": "Authentication",
@@ -112,7 +112,7 @@
         "stop_time": "End time",
         "hotspot": "Hotspot",
         "hotspot_name" :"Hotspot",
-        "hotspot_description": "Descriptio",
+        "hotspot_description": "Description",
         "unit": "Unit",
         "unit_uuid": "UUID",
         "mac_address": "MAC address",
