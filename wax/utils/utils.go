@@ -253,7 +253,7 @@ func SendSMSCode(number string, code string) int {
 	msgData := url.Values{}
 	msgData.Set("To", number)
 	msgData.Set("From", configuration.Config.Endpoints.Sms.Number)
-	msgData.Set("Body", "Icaro - SMS Login code: "+code) // TODO: get message from hotspot preferences
+	msgData.Set("Body", GetHotspotPreferencesByKey(unit.HotspotId, "sms_login_message")+" "+code)
 	msgDataReader := *strings.NewReader(msgData.Encode())
 
 	// create HTTP request client

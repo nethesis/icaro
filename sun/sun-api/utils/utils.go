@@ -47,6 +47,7 @@ var hotspot_preferences = map[string]string{
 	"sms_login":               "true",
 	"email_login":             "true",
 	"voucher_login":           "true",
+	"sms_login_message":       "SMS Login code:",
 }
 
 func SetDefaultHotspotPreferences(hotspotId int) {
