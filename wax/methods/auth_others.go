@@ -50,11 +50,14 @@ func SMSAuth(c *gin.Context) {
 	// check if user exists
 	user := utils.GetUserByUsername(number)
 	if user.Id == 0 {
+		// get unit
+		unit := utils.GetUnitByUuid(uuid)
+
 		// generate code
 		code := utils.GenerateCode(6)
 
 		// send sms with code
-		status := utils.SendSMSCode(number, code)
+		status := utils.SendSMSCode(number, code, unit)
 
 		// check response
 		if status != 201 {
@@ -63,7 +66,6 @@ func SMSAuth(c *gin.Context) {
 		}
 
 		// create user
-		unit := utils.GetUnitByUuid(uuid)
 		days := utils.GetHotspotPreferencesByKey(unit.HotspotId, "user_expiration_days")
 		daysInt, _ := strconv.Atoi(days.Value)
 		newUser := models.User{
@@ -95,11 +97,14 @@ func SMSAuth(c *gin.Context) {
 
 		// check if is reset
 		if reset == "true" {
+			// get unit
+			unit := utils.GetUnitByUuid(uuid)
+
 			// generate code
 			code := utils.GenerateCode(6)
 
 			// send sms with code
-			status := utils.SendSMSCode(number, code)
+			status := utils.SendSMSCode(number, code, unit)
 			// check response
 			if status != 201 {
 				c.JSON(http.StatusBadRequest, gin.H{"error": "authorization code not send"})

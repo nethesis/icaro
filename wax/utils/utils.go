@@ -243,7 +243,7 @@ func GenerateCode(max int) string {
 	return string(b)
 }
 
-func SendSMSCode(number string, code string) int {
+func SendSMSCode(number string, code string, unit models.Unit) int {
 	// retrieve account info and token
 	accountSid := configuration.Config.Endpoints.Sms.AccountSid
 	authToken := configuration.Config.Endpoints.Sms.AuthToken
@@ -253,7 +253,7 @@ func SendSMSCode(number string, code string) int {
 	msgData := url.Values{}
 	msgData.Set("To", number)
 	msgData.Set("From", configuration.Config.Endpoints.Sms.Number)
-	msgData.Set("Body", GetHotspotPreferencesByKey(unit.HotspotId, "sms_login_message")+" "+code)
+	msgData.Set("Body", GetHotspotPreferencesByKey(unit.HotspotId, "sms_login_message").Value+" "+code)
 	msgDataReader := *strings.NewReader(msgData.Encode())
 
 	// create HTTP request client
