@@ -239,7 +239,7 @@
       },
       createAccount(obj) {
         this.newObj.onAction = true
-        this.newObj.password = this.newObj.newPassword
+        obj.password = this.newPassword
         this.accountCreate(obj, success => {
           this.newObj.onAction = false
           $('#ACcreateModal').modal('toggle');
