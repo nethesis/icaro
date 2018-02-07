@@ -67,7 +67,7 @@ case "$OPT" in
                 \"hotspot\": \"$HS_ID\"
             }")
         # check if everything is ok
-        if [ $? -eq 0 ] && [ "$RESP" == "409" -o "$RESP" == "200" ] ; then
+        if [ $? -eq 0 ] && [ "$RESP" == "409" -o "$RESP" == "201" ] ; then
             if [ "$ID" == "0" ]; then
                 echo "Unit already added"
                 exit 0
