@@ -43,6 +43,7 @@ install -D -m644 dedalo/walled_gardens/facebook.conf %{buildroot}/opt/icaro/deda
 install -D -m644 dedalo/walled_gardens/google.conf %{buildroot}/opt/icaro/dedalo/walled_gardens/google.conf
 install -D -m644 dedalo/walled_gardens/linkedin.conf %{buildroot}/opt/icaro/dedalo/walled_gardens/linkedin.conf
 mkdir -p %{buildroot}/opt/icaro/dedalo/wwww
+touch %{buildroot}/opt/icaro/dedalo/local.conf
 
 %files
 /usr/lib/systemd/system/dedalo.service
@@ -58,6 +59,7 @@ mkdir -p %{buildroot}/opt/icaro/dedalo/wwww
 %config /opt/icaro/dedalo/walled_gardens/facebook.conf
 %config /opt/icaro/dedalo/walled_gardens/google.conf
 %config /opt/icaro/dedalo/walled_gardens/linkedin.conf
+%config /opt/icaro/dedalo/local.conf
 %doc dedalo/README.md
 
 
