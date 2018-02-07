@@ -29,7 +29,7 @@
           </a>
         </td>
         <td class="fancy">{{ props.row.description }}</td>
-        <td class="fancy">{{ props.row.created }}</td>
+        <td class="fancy">{{ props.row.created | formatDate }}</td>
         <td>
           <hotspot-action details="true" :obj="props.row" :update="getAll"></hotspot-action>
         </td>

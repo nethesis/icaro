@@ -47,7 +47,7 @@
               <div class="form-group">
                 <label class="col-sm-4 control-label" for="textInput2-modal-markup">{{ $t("user.email") }}</label>
                 <div class="col-sm-8">
-                  <input required v-model="currentObj.email" type="text" id="textInput2-modal-markup" class="form-control" :placeholder="$t('user.email')">
+                  <input v-model="currentObj.email" type="text" id="textInput2-modal-markup" class="form-control" :placeholder="$t('user.email')">
                 </div>
               </div>
 

@@ -28,20 +28,16 @@
               <dd>{{info.data.duration | secondsInHour}}</dd>
             </div>
             <div class="list-details">
-              <dt>{{ $t("session.auth_time") }}</dt>
-              <dd>{{info.data.auth_time}}</dd>
-            </div>
-            <div class="list-details">
               <dt>{{ $t("session.start_time") }}</dt>
-              <dd>{{info.data.start_time}}</dd>
+              <dd>{{info.data.start_time | formatDate}}</dd>
             </div>
             <div class="list-details">
               <dt>{{ $t("session.stop_time") }}</dt>
-              <dd>{{info.data.stop_time}}</dd>
+              <dd>{{info.data.stop_time | formatDate}}</dd>
             </div>
             <div class="list-details">
               <dt>{{ $t("session.update_time") }}</dt>
-              <dd>{{info.data.update_time}}</dd>
+              <dd>{{info.data.update_time | formatDate}}</dd>
             </div>
           </div>
         </div>
@@ -103,7 +99,7 @@
               </div>
               <div class="list-details">
                 <dt>{{ $t("session.created") }}</dt>
-                <dd>{{info.user.created || ""}}</dd>
+                <dd>{{info.user.created  || ""  | formatDate}}</dd>
               </div>
             </div>
           </div>
@@ -123,7 +119,7 @@
               </div>
               <div class="list-details">
                 <dt>{{ $t("session.created") }}</dt>
-                <dd>{{info.device.created || ""}}</dd>
+                <dd>{{info.device.created || "" | formatDate}}</dd>
               </div>
             </div>
           </div>

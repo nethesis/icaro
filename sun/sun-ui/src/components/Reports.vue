@@ -21,10 +21,9 @@
         <td class="fancy">{{ props.row.bytes_up | byteFormat}}</td>
         <td class="fancy">{{ props.row.bytes_down | byteFormat }}</td>
         <td class="fancy">{{ props.row.duration | secondsInHour }}</td>
-        <td class="fancy">{{ props.row.auth_time }}</td>
-        <td class="fancy">{{ props.row.start_time }}</td>
-        <td class="fancy">{{ props.row.stop_time }}</td>
-        <td class="fancy">{{ props.row.update_time }}</td>
+        <td class="fancy">{{ props.row.start_time | formatDate }}</td>
+        <td class="fancy">{{ props.row.stop_time | formatDate }}</td>
+        <td class="fancy">{{ props.row.update_time | formatDate }}</td>
         <td>
           <a :href="'#/sessions/'+ props.row.id">
             <span class="fa fa-angle-right details-arrow"></span>
@@ -44,20 +43,6 @@
   export default {
     name: 'Reports',
     mixins: [SessionService, StorageService, UtilService, HotspotService],
-    filters: {
-      byteFormat: require('vue-filters-kit/filters/byteFormatter'),
-      secondsInHour: function (value) {
-        let hours = parseInt(Math.floor(value / 3600));
-        let minutes = parseInt(Math.floor((value - (hours * 3600)) / 60));
-        let seconds = parseInt((value - ((hours * 3600) + (minutes * 60))) % 60);
-
-        let dHours = (hours > 9 ? hours : '0' + hours);
-        let dMins = (minutes > 9 ? minutes : '0' + minutes);
-        let dSecs = (seconds > 9 ? seconds : '0' + seconds);
-
-        return dHours + "h " + dMins + "m " + dSecs + "s";
-      }
-    },
     data() {
       // get session list
       this.getAll()
@@ -69,19 +54,17 @@
         columns: [{
             label: this.$i18n.t('session.bytes_up'),
             field: 'bytes_up',
+            type: 'number',
             filterable: true,
           }, {
             label: this.$i18n.t('session.bytes_down'),
             field: 'bytes_down',
+            type: 'number',
             filterable: true,
           }, {
             label: this.$i18n.t('session.duration'),
             field: 'duration',
-            filterable: true,
-          },
-          {
-            label: this.$i18n.t('session.auth_time'),
-            field: 'auth_time',
+            type: 'number',
             filterable: true,
           },
           {

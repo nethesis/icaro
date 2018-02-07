@@ -32,7 +32,7 @@
             </div>
             <div class="list-details">
               <dt>{{ $t("account.created") }}</dt>
-              <dd>{{info.data.created}}</dd>
+              <dd>{{info.data.created | formatDate}}</dd>
             </div>
           </div>
           <div v-if="!info.isLoading" class="card-pf-footer">

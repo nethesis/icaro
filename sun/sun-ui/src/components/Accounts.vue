@@ -31,7 +31,7 @@
           <span :class="getLoginIcon(props.row.type)" data-toggle="tooltip" data-placement="left" :title="$t(props.row.type)"></span>
           {{$t(props.row.type)}}
         </td>
-        <td class="fancy">{{ props.row.created }}</td>
+        <td class="fancy">{{ props.row.created | formatDate }}</td>
         <td>
           <account-action details="false" :obj="props.row" :update="getAll"></account-action>
         </td>

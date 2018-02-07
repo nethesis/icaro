@@ -229,7 +229,7 @@ a {
 }
 
 .blank-slate-pf {
-  border: none 20px !important;
+  border: none !important;
 }
 
 .pagination-controls a {
@@ -241,7 +241,7 @@ a {
 }
 
 .responsive {
-  overflow-x: auto 20px !important;
+  overflow-x: auto !important;
 }
 
 .details-arrow {
@@ -249,14 +249,14 @@ a {
 }
 
 .action-icon-menu {
-  display: inline-block 20px !important;
-  width: 10px 20px !important;
-  text-align: center 20px !important;
-  margin-right: 10px 20px !important;
+  display: inline-block !important;
+  width: 10px !important;
+  text-align: center !important;
+  margin-right: 10px !important;
 }
 
 .select-search {
-  margin-left: 15px 20px !important;
+  margin-left: 15px !important;
 }
 
 .red {
