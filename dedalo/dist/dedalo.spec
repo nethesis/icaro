@@ -48,10 +48,8 @@ touch %{buildroot}/opt/icaro/dedalo/local.conf
 %files
 /usr/lib/systemd/system/dedalo.service
 %{_bindir}/dedalo
-/opt/icaro/dedalo
-/opt/icaro/dedalo/template
+%dir /opt/icaro/
 /opt/icaro/dedalo/template/engine
-/opt/icaro/dedalo/walled_gardens
 /opt/icaro/dedalo/wwww
 %config(noreplace) /opt/icaro/dedalo/config
 %config /opt/icaro/dedalo/template/chilli.conf.tpl
