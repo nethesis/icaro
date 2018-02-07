@@ -258,3 +258,7 @@ a {
 .select-search {
   margin-left: 15px 20px !important;
 }
+
+.red {
+  color: #cc0000;
+}

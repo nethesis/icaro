@@ -174,9 +174,15 @@ func DeleteHotspot(c *gin.Context) {
 }
 
 func StatsHotspotTotal(c *gin.Context) {
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
 	var count int
 
 	db := database.Database()
+	if accountId == 1 {
+		db.Table("hotspots").Count(&count)
+	} else {
+		db.Table("hotspots").Where("account_id = ?", accountId).Count(&count)
+	}
 	db.Table("hotspots").Count(&count)
 	db.Close()
 

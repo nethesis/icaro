@@ -240,11 +240,28 @@ func DeleteAccount(c *gin.Context) {
 }
 
 func StatsAccountTotal(c *gin.Context) {
+	creatorId := c.MustGet("token").(models.AccessToken).AccountId
 	var count int
 
 	db := database.Database()
-	db.Table("accounts").Count(&count)
+	db.Table("accounts").Where("creator_id = ?", creatorId).Count(&count)
 	db.Close()
 
 	c.JSON(http.StatusOK, gin.H{"total": count})
+}
+
+func StatsSMSTotal(c *gin.Context) {
+	var accountSMS models.AccountSmsCount
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
+
+	db := database.Database()
+	db.Where("account_id = ?", accountId).First(&accountSMS)
+	db.Close()
+
+	if accountSMS.Id == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"message": "No sms account found!"})
+		return
+	}
+
+	c.JSON(http.StatusOK, accountSMS)
 }

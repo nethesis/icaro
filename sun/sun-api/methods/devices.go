@@ -80,10 +80,11 @@ func GetDevice(c *gin.Context) {
 }
 
 func StatsDeviceTotal(c *gin.Context) {
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
 	var count int
 
 	db := database.Database()
-	db.Table("devices").Count(&count)
+	db.Table("devices").Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), 0)).Count(&count)
 	db.Close()
 
 	c.JSON(http.StatusOK, gin.H{"total": count})

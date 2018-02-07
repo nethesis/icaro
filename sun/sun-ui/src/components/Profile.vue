@@ -35,12 +35,28 @@
             </div>
             <p>
               <a href="#" class="card-pf-link-with-icon">
-
               </a>
             </p>
           </div>
         </div>
-
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-6">
+        <div class="card-pf card-pf-accented">
+          <div class="card-pf-heading">
+            <h2 class="card-pf-title">
+              <span class="fa fa-commenting card-info-title"></span>
+              {{ $t("profile.sms") }}
+              <span v-if="!totals.sms.isLoading && totals.sms.isAvailable" class="right">
+                <span :class="totals.sms.data.sms_count > totals.sms.data.sms_max_count ? 'red' : ''">{{ totals.sms.data.sms_count }}</span> /
+                <strong class="soft">{{ totals.sms.data.sms_max_count }}</strong>
+              </span>
+              <span v-if="!totals.sms.isAvailable" class="right">
+                -
+              </span>
+              <div v-if="totals.sms.isLoading" class="spinner spinner-sm right"></div>
+            </h2>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -94,28 +110,49 @@
   import LoginService from '../services/login';
   import StorageService from '../services/storage';
   import UtilService from '../services/util';
+  import StatsService from '../services/stats';
 
   export default {
     name: 'Profile',
-    mixins: [LoginService, StorageService, UtilService],
+    mixins: [LoginService, StorageService, UtilService, StatsService],
     data() {
-      var user = {
-        login: this.get('loggedUser') || null,
-        info: this.$parent.user.info,
-      }
+      // get infos
+      this.getSMSTotal()
 
       return {
         msg: 'Profile',
-        user: user,
+        user: {
+          login: this.get('loggedUser') || null,
+          info: this.$parent.user.info,
+        },
         newPassword: '',
         confirmPassword: '',
         errors: {
           password: false
         },
-        onAction: false
+        onAction: false,
+        totals: {
+          sms: {
+            isLoading: false,
+            data: {
+            },
+            isAvailable: false
+          }
+        }
       }
     },
     methods: {
+      getSMSTotal() {
+        this.statsSMSTotal(success => {
+          this.totals.sms.data = success.body
+          this.totals.sms.isLoading = false
+          this.totals.sms.isAvailable = true
+        }, error => {
+          console.log(error.body)
+          this.totals.sms.isLoading = false
+          this.totals.sms.isAvailable = false
+        })
+      },
       changePassword() {
         this.onAction = true
         this.execChangePassword(this.newPassword, this.user.login.id, success => {

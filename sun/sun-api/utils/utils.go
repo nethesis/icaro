@@ -29,32 +29,15 @@ import (
 
 	"github.com/nethesis/icaro/sun/sun-api/configuration"
 	"github.com/nethesis/icaro/sun/sun-api/database"
+	"github.com/nethesis/icaro/sun/sun-api/defaults"
 	"github.com/nethesis/icaro/sun/sun-api/models"
 )
-
-var hotspot_preferences = map[string]string{
-	"voucher_expiration_days": "1",
-	"user_expiration_days":    "30",
-	"temp_session_duration":   "300",
-	"captive_title":           "This is a title",
-	"captive_logo":            "",
-	"captive_subtitle":        "This is a subtitle",
-	"captive_banner":          "",
-	"captive_description":     "This is a description",
-	"facebook_login":          "true",
-	"google_login":            "true",
-	"linkedin_login":          "true",
-	"sms_login":               "true",
-	"email_login":             "true",
-	"voucher_login":           "true",
-	"sms_login_message":       "SMS Login code:",
-}
 
 func SetDefaultHotspotPreferences(hotspotId int) {
 	db := database.Database()
 
 	// iterate all default hotspot preferences
-	for k, v := range hotspot_preferences {
+	for k, v := range defaults.HotspotPreferences {
 		hsPreferences := models.HotspotPreference{
 			HotspotId: hotspotId,
 			Key:       k,

@@ -42,6 +42,13 @@ var StatsService = {
           }
         }).then(success, error);
       },
+      statsSMSTotal(success, error) {
+        this.$http.get('https://' + this.$root.$options.api_host + '/api/stats/sms/total', {
+          headers: {
+            'Token': this.get('loggedUser') && this.get('loggedUser').token || ''
+          }
+        }).then(success, error);
+      },
     }
   };
   export default StatsService;

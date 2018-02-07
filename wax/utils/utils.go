@@ -36,6 +36,7 @@ import (
 
 	"github.com/nethesis/icaro/sun/sun-api/configuration"
 	"github.com/nethesis/icaro/sun/sun-api/database"
+	"github.com/nethesis/icaro/sun/sun-api/defaults"
 	"github.com/nethesis/icaro/sun/sun-api/models"
 )
 
@@ -142,6 +143,15 @@ func DeleteUserSession(userId int, sessionKey string) bool {
 	return true
 }
 
+func GetAccountSMSByAccountId(accountId int) models.AccountSmsCount {
+	var accountSMS models.AccountSmsCount
+	db := database.Database()
+	db.Where("account_id = ?", accountId).First(&accountSMS)
+	db.Close()
+
+	return accountSMS
+}
+
 func GetSessionByKeyAndUnitId(key string, unitId int) models.Session {
 	var session models.Session
 	db := database.Database()
@@ -244,28 +254,52 @@ func GenerateCode(max int) string {
 }
 
 func SendSMSCode(number string, code string, unit models.Unit) int {
-	// retrieve account info and token
-	accountSid := configuration.Config.Endpoints.Sms.AccountSid
-	authToken := configuration.Config.Endpoints.Sms.AuthToken
-	urlAPI := "https://api.twilio.com/2010-04-01/Accounts/" + accountSid + "/Messages.json"
+	// get account sms count
+	db := database.Database()
+	hotspot := GetHotspotById(unit.HotspotId)
+	accountSMS := GetAccountSMSByAccountId(hotspot.AccountId)
 
-	// compose message data
-	msgData := url.Values{}
-	msgData.Set("To", number)
-	msgData.Set("From", configuration.Config.Endpoints.Sms.Number)
-	msgData.Set("Body", GetHotspotPreferencesByKey(unit.HotspotId, "sms_login_message").Value+" "+code)
-	msgDataReader := *strings.NewReader(msgData.Encode())
+	// check if exists an account for sms
+	if accountSMS.Id == 0 {
+		accountSMS.AccountId = hotspot.AccountId
+		accountSMS.SmsMaxCount = defaults.SMSMaxCount
+	}
 
-	// create HTTP request client
-	client := &http.Client{}
-	req, _ := http.NewRequest("POST", urlAPI, &msgDataReader)
-	req.SetBasicAuth(accountSid, authToken)
-	req.Header.Add("Accept", "application/json")
-	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+	if accountSMS.SmsCount <= accountSMS.SmsMaxCount {
+		// retrieve account info and token
+		accountSid := configuration.Config.Endpoints.Sms.AccountSid
+		authToken := configuration.Config.Endpoints.Sms.AuthToken
+		urlAPI := "https://api.twilio.com/2010-04-01/Accounts/" + accountSid + "/Messages.json"
 
-	// make HTTP POST request
-	resp, _ := client.Do(req)
-	return resp.StatusCode
+		// compose message data
+		msgData := url.Values{}
+		msgData.Set("To", number)
+		msgData.Set("From", configuration.Config.Endpoints.Sms.Number)
+		msgData.Set("Body", GetHotspotPreferencesByKey(unit.HotspotId, "sms_login_message").Value+" "+code)
+		msgDataReader := *strings.NewReader(msgData.Encode())
+
+		// create HTTP request client
+		client := &http.Client{}
+		req, _ := http.NewRequest("POST", urlAPI, &msgDataReader)
+		req.SetBasicAuth(accountSid, authToken)
+		req.Header.Add("Accept", "application/json")
+		req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+
+		// make HTTP POST request
+		resp, _ := client.Do(req)
+
+		// update sms accounting table
+		if resp.StatusCode == 201 {
+			accountSMS.SmsCount = accountSMS.SmsCount + 1
+			db.Save(&accountSMS)
+		}
+
+		return resp.StatusCode
+
+	} else {
+		return 500
+	}
+
 }
 
 func SendEmailCode(email string, code string) bool {

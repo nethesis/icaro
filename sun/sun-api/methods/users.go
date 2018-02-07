@@ -167,10 +167,11 @@ func DeleteUser(c *gin.Context) {
 }
 
 func StatsUserTotal(c *gin.Context) {
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
 	var count int
 
 	db := database.Database()
-	db.Table("users").Count(&count)
+	db.Table("users").Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), 0)).Count(&count)
 	db.Close()
 
 	c.JSON(http.StatusOK, gin.H{"total": count})

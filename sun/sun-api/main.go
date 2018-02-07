@@ -121,6 +121,9 @@ func main() {
 
 			sessionsStats := stats.Group("/sessions")
 			sessionsStats.GET("/total", methods.StatsSessionTotal)
+
+			smsStats := stats.Group("/sms")
+			smsStats.GET("/total", methods.StatsSMSTotal)
 		}
 
 		units := api.Group("/units")
