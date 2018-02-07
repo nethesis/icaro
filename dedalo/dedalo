@@ -52,7 +52,7 @@ case "$OPT" in
                 --data "{
                     \"username\": \"$USERNAME\",
                     \"password\": \"$PASSWORD\"
-                }" | jq -r '.token')
+                }" | grep -Po '\"token\":.*?[^\\](,)*\"' | awk -F':' '{print $2}'| tr -d \")
         fi
         # create a new unit using /units API
         RESP=$(curl -o /dev/null -w "%{http_code}" -s --request POST \

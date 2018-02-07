@@ -9,7 +9,7 @@ Source0: https://github.com/nethesis/icaro/archive/master.tar.gz
 
 %{?systemd_requires}
 BuildRequires: systemd
-Requires: coova-chilli jq
+Requires: coova-chilli
 
 %description
 Dedalo is the Network Access Controller, runs on the firewall and intercepts all guest connections.
