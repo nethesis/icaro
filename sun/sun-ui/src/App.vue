@@ -123,6 +123,9 @@
               <span class="list-group-item-value">{{ $t('menu.dashboard') }}</span>
             </a>
           </li>
+
+          <li></li>
+
           <li v-bind:class="[getCurrentPath('hotspots') ? 'active' : '', 'list-group-item']" v-if="(user.info.type == 'admin') || (user.info.type == 'reseller')">
             <a href="#/hotspots">
               <span class="fa fa-wifi"></span>
@@ -142,6 +145,8 @@
               <span class="list-group-item-value">Report</span>
             </a>
           </li>
+
+          <li></li>
 
           <li v-bind:class="[getCurrentPath('accounts') ? 'active' : '', 'list-group-item']" v-if="(user.info.type == 'admin') || (user.info.type == 'reseller')">
             <a href="#/accounts">
