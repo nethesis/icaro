@@ -163,7 +163,7 @@
         email: '',
         type: '',
         password: '',
-        hotspot_id: ''
+        hotspot_id: 0
       }
 
       var errors = {
@@ -235,7 +235,7 @@
         this.newObj.username = ""
         this.newObj.name = ""
         this.newObj.email = ""
-        this.newObj.hotspot_id = ""
+        this.newObj.hotspot_id = 0
       },
       createAccount(obj) {
         this.newObj.onAction = true
