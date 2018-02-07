@@ -1,5 +1,5 @@
 Name: dedalo
-Version: 0.0.1
+Version: 0.0.2
 Release: 1%{?dist}
 Summary: Network Access Controller, runs on the firewall and intercepts all guest connections
 
@@ -62,6 +62,9 @@ mkdir -p %{buildroot}/opt/icaro/dedalo/wwww
 
 
 %changelog
+* Wed Feb 07 2018 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 0.0.2
+- Use http codes in dedalo register command
+
 * Tue Jan 16 2018 Edoardo Spadoni <edoardo.spadoni@nethesis.it> - 0.0.1
 - First public release
 
