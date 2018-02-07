@@ -1,5 +1,5 @@
 Name: dedalo
-Version: 0.0.2
+Version: 0.0.3
 Release: 1%{?dist}
 Summary: Network Access Controller, runs on the firewall and intercepts all guest connections
 
@@ -62,6 +62,10 @@ touch %{buildroot}/opt/icaro/dedalo/walled_gardens/local.conf
 
 
 %changelog
+* Wed Feb 07 2018 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 0.0.3
+- Add local config files
+- Get rid of jq dependency
+
 * Wed Feb 07 2018 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 0.0.2
 - Use http codes in dedalo register command
 
