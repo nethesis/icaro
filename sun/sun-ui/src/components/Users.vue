@@ -84,7 +84,7 @@
           },
           {
             label: this.$i18n.t('user.type'),
-            field: 'type',
+            field: 'account_type',
             filterable: true,
           },
           {
