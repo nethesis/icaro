@@ -52,7 +52,7 @@ case "$OPT" in
                 --data "{
                     \"username\": \"$USERNAME\",
                     \"password\": \"$PASSWORD\"
-                }" | jq -r '.token')
+                }" | grep -Po '\"token\":.*?[^\\](,)*\"' | awk -F':' '{print $2}'| tr -d \")
         fi
         # create a new unit using /units API
         RESP=$(curl -o /dev/null -w "%{http_code}" -s --request POST \
@@ -67,7 +67,7 @@ case "$OPT" in
                 \"hotspot\": \"$HS_ID\"
             }")
         # check if everything is ok
-        if [ $? -eq 0 ] && [ "$RESP" == "409" -o "$RESP" == "200" ] ; then
+        if [ $? -eq 0 ] && [ "$RESP" == "409" -o "$RESP" == "201" ] ; then
             if [ "$ID" == "0" ]; then
                 echo "Unit already added"
                 exit 0
