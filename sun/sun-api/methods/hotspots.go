@@ -183,7 +183,6 @@ func StatsHotspotTotal(c *gin.Context) {
 	} else {
 		db.Table("hotspots").Where("account_id = ?", accountId).Count(&count)
 	}
-	db.Table("hotspots").Count(&count)
 	db.Close()
 
 	c.JSON(http.StatusOK, gin.H{"total": count})
