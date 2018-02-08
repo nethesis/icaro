@@ -146,7 +146,7 @@ func main() {
 
 		vouchers := api.Group("/vouchers")
 		{
-			vouchers.GET("", methods.GetVouchers)
+			vouchers.GET("/:hotspot_id", methods.GetVouchers)
 			vouchers.POST("", methods.CreateVoucher)
 			vouchers.DELETE("/:voucher_id", methods.DeleteVoucher)
 		}

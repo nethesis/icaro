@@ -13,7 +13,8 @@ a {
   text-decoration: none !important;
 }
 
-input[type=checkbox], input[type=radio].form-control {
+input[type=checkbox],
+input[type=radio].form-control {
   height: 15px;
 }
 
@@ -211,6 +212,11 @@ input[type=checkbox], input[type=radio].form-control {
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(0, 136, 206, .6) !important;
 }
 
+.table td[data-v-d89f00e8],
+.table th[data-v-d89f00e8]:not(.line-numbers) {
+  text-align: left;
+}
+
 .form-control {
   box-shadow: none !important;
 }
@@ -272,31 +278,46 @@ input[type=checkbox], input[type=radio].form-control {
 a {
   color: #26a9a3;
 }
+
 .navbar-pf-vertical {
   border-top: 2px solid #26a9a3 !important;
 }
+
 .nav-pf-vertical .list-group-item.active>a:before {
   background: #26a9a3 !important;
 }
-.nav-pf-vertical .list-group-item.active>a .fa, .nav-pf-vertical .list-group-item.active>a .glyphicon, .nav-pf-vertical .list-group-item.active>a .pficon, .nav-pf-vertical .list-group-item:hover>a .fa, .nav-pf-vertical .list-group-item:hover>a .glyphicon, .nav-pf-vertical .list-group-item:hover>a .pficon {
+
+.nav-pf-vertical .list-group-item.active>a .fa,
+.nav-pf-vertical .list-group-item.active>a .glyphicon,
+.nav-pf-vertical .list-group-item.active>a .pficon,
+.nav-pf-vertical .list-group-item:hover>a .fa,
+.nav-pf-vertical .list-group-item:hover>a .glyphicon,
+.nav-pf-vertical .list-group-item:hover>a .pficon {
   color: #26a9a3 !important;
 }
+
 .card-pf.card-pf-accented {
   border-top-color: #26a9a3 !important;
 }
+
 .btn-primary {
   background-color: #007a87 !important;
-  background-image: linear-gradient(to bottom,#26a9a3 0,#007a87 100%) !important;
+  background-image: linear-gradient(to bottom, #26a9a3 0, #007a87 100%) !important;
 }
 
 .unsplash {
   background: rgba(0, 0, 0, 0.35);
-  color:white;
-  text-decoration:none;
-  padding:4px 6px;
-  font-size:10px;
-  font-weight:bold;
-  line-height:1.2;
-  display:inline-block;
-  border-radius:3px;
+  color: white;
+  text-decoration: none;
+  padding: 4px 6px;
+  font-size: 10px;
+  font-weight: bold;
+  line-height: 1.2;
+  display: inline-block;
+  border-radius: 3px;
+}
+
+.login-pref-option {
+  font-size: 20px;
+  margin-left: 10px;
 }

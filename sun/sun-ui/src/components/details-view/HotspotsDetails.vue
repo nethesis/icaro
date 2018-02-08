@@ -165,7 +165,9 @@
           <form class="form-horizontal" role="form" v-on:submit.prevent="updatePreferences(preferences.data)">
             <div v-if="!preferences.isLoading" class="card-pf-body">
               <div v-for="pref in preferences.data" :key="pref.key" class="form-group">
-                <label class="col-sm-4 control-label" for="textInput-markup">{{pref.key}}</label>
+                <label class="col-sm-4 control-label" for="textInput-markup">{{$t(pref.key)}}
+                  <span :class="[getPrefIcon(pref.key)]"></span>
+                </label>
                 <div class="col-sm-6">
                   <input v-model="pref.value" :type="getInputType(pref.value)" id="textInput-markup" class="form-control">
                 </div>
@@ -276,6 +278,9 @@
       }
     },
     methods: {
+      getPrefIcon(pref) {
+        return this.getPrefTypeIcon(pref)
+      },
       createVoucher() {
         this.vouchers.isLoading = true
         this.hotspotCreateVoucher({
@@ -301,7 +306,7 @@
         })
       },
       getVouchers() {
-        this.hotspotGetVouchers(success => {
+        this.hotspotGetVouchers(this.$route.params.id, success => {
           this.vouchers.data = success.body
           this.vouchers.isLoading = false
         }, error => {

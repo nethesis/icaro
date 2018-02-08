@@ -35,8 +35,8 @@ var HotspotService = {
         }
       }).then(success, error);
     },
-    hotspotGetVouchers(success, error) {
-      this.$http.get('https://' + this.$root.$options.api_host + '/api/vouchers', {
+    hotspotGetVouchers(hotspotId, success, error) {
+      this.$http.get('https://' + this.$root.$options.api_host + '/api/vouchers/' + hotspotId, {
         headers: {
           'Token': this.get('loggedUser') && this.get('loggedUser').token || ''
         }

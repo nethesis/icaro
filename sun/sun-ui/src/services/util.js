@@ -51,8 +51,32 @@ var UtilService = {
         case 'email':
           icon = 'fa fa-envelope'
           break;
-        case 'mobile-alt':
-          icon = 'fa fa-envelope'
+        case 'sms':
+          icon = 'fa fa-commenting'
+          break;
+      }
+      return icon
+    },
+    getPrefTypeIcon(prefType) {
+      var icon = ''
+      switch (prefType) {
+        case 'facebook_login':
+          icon = 'fa fa-facebook-square login-pref-option'
+          break;
+        case 'google_login':
+          icon = 'fa fa-google-plus-square login-pref-option'
+          break;
+        case 'linkedin_login':
+          icon = 'fa fa-linkedin-square login-pref-option'
+          break;
+        case 'email_login':
+          icon = 'fa fa-envelope-square login-pref-option'
+          break;
+        case 'sms_login':
+          icon = 'fa fa-commenting login-pref-option'
+          break;
+        case 'voucher_login':
+          icon = 'fa fa-wpforms login-pref-option'
           break;
       }
       return icon
@@ -84,7 +108,7 @@ var UtilService = {
         return 'checkbox'
       } else if (+value) {
         return 'number'
-      }else {
+      } else {
         return 'text'
       }
     }

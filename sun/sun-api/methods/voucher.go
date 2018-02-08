@@ -77,7 +77,7 @@ func GetVouchers(c *gin.Context) {
 
 	page := c.Query("page")
 	limit := c.Query("limit")
-	hotspotId := c.Query("hotspot")
+	hotspotId := c.Param("hotspot_id")
 
 	hotspotIdInt, err := strconv.Atoi(hotspotId)
 	if err != nil {
