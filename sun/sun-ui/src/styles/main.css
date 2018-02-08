@@ -19,7 +19,7 @@ input[type=checkbox], input[type=radio].form-control {
 
 .not-logged {
   background: linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.75)), url('../assets/background.jpg');
-  background-size: 100%;
+  background-repeat: round;
 }
 
 .logged {
