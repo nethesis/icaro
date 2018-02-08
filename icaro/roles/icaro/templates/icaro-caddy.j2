@@ -5,10 +5,10 @@ https://{{ machine_hostname }} {
   tls {{ admin_email }}
 }
 
-http://{{ machine_hostname }} {
+http://{{ machine_hostname }}/wings {
   root /opt/icaro/wings
   rewrite {
-    regexp .*
+    if {path} not_starts_with /wings/static/
     to {path} /
   }
 }

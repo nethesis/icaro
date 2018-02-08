@@ -1,6 +1,6 @@
 HS_INTERFACE="interface_eth"
 HS_NETWORK="network_addr/netmask"
-HS_SPLASH_PAGE_URL="http://host[:port]"
+HS_SPLASH_PAGE_URL="http://host[:port]/wings"
 HS_AAA_URL="http[s]://host[:port]/wax/aaa"
 HS_API_URL="http[s]://host[:port]/api"
 HS_ID="hotspot-id"
