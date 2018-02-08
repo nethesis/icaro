@@ -2,7 +2,7 @@
   <div>
     <h2>{{ msg }}</h2>
     <div v-if="isLoading" class="spinner spinner-lg"></div>
-    <button v-if="rows.length > 0 && !isLoading" data-toggle="modal" data-target="#HScreateModal" class="btn btn-primary btn-lg create-hotspot">
+    <button v-if="rows.length > 0 && !isLoading && !isAdmin" data-toggle="modal" data-target="#HScreateModal" class="btn btn-primary btn-lg create-hotspot">
       {{ $t('hotspot.create_new') }} </button>
     <div v-if="rows.length == 0 && !isLoading" class="blank-slate-pf " id="">
       <div class="blank-slate-pf-icon">
@@ -137,7 +137,8 @@
         rows: [],
         tableLangsTexts: this.tableLangs(),
         newObj: newObj,
-        errors: errors
+        errors: errors,
+        isAdmin: this.get("loggedUser").account_type == "admin",
       }
     },
     methods: {

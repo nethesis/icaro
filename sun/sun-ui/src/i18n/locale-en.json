@@ -34,6 +34,7 @@
       "sms": "SMS sent"
     },
     "hotspot": {
+      "hotspot": "Hotspot",
       "name": "Name",
       "description": "Description",
       "created": "Created",
