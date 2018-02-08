@@ -98,6 +98,12 @@ func main() {
 			sessions.GET("/:session_id", methods.GetSession)
 		}
 
+		histories := api.Group("/histories")
+		{
+			histories.GET("", methods.GetSessionsHistory)
+			histories.GET("/:history_id", methods.GetSessionHistory)
+		}
+
 		stats := api.Group("/stats")
 		{
 			hotspotsStats := stats.Group("/hotspots")

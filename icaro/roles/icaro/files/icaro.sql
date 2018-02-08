@@ -185,6 +185,24 @@ CREATE TABLE `sessions` (
   FOREIGN KEY (`user_id`) REFERENCES users(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   PRIMARY KEY(`id`)
 );
+
+CREATE TABLE `session_histories` (
+  `id` serial,
+  `session_id` bigint unsigned NOT NULL,
+  `unit_id` bigint unsigned NOT NULL,
+  `hotspot_id` bigint unsigned NOT NULL,
+  `device_id` bigint unsigned NOT NULL,
+  `user_id` bigint unsigned NOT NULL,
+  `bytes_up` bigint unsigned,
+  `bytes_down` bigint unsigned,
+  `duration` bigint unsigned,
+  `auth_time` datetime,
+  `start_time` datetime,
+  `update_time` datetime,
+  `stop_time` datetime,
+  `session_key` varchar(200),
+  PRIMARY KEY(`id`)
+);
 /* -------------------- */
 
 /* EXTRAS */

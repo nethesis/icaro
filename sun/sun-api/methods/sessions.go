@@ -61,6 +61,33 @@ func GetSessions(c *gin.Context) {
 	c.JSON(http.StatusOK, sessions)
 }
 
+func GetSessionsHistory(c *gin.Context) {
+	var sessions []models.SessionHistory
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
+
+	page := c.Query("page")
+	limit := c.Query("limit")
+	hotspotId := c.Query("hotspot")
+
+	hotspotIdInt, err := strconv.Atoi(hotspotId)
+	if err != nil {
+		hotspotIdInt = 0
+	}
+
+	offsets := utils.OffsetCalc(page, limit)
+
+	db := database.Database()
+	db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt)).Offset(offsets[0]).Limit(offsets[1]).Find(&sessions)
+	db.Close()
+
+	if len(sessions) <= 0 {
+		c.JSON(http.StatusNotFound, gin.H{"message": "No session histories found!"})
+		return
+	}
+
+	c.JSON(http.StatusOK, sessions)
+}
+
 func GetSession(c *gin.Context) {
 	var session models.Session
 	accountId := c.MustGet("token").(models.AccessToken).AccountId
@@ -73,6 +100,24 @@ func GetSession(c *gin.Context) {
 
 	if session.Id == 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No session found!"})
+		return
+	}
+
+	c.JSON(http.StatusOK, session)
+}
+
+func GetSessionHistory(c *gin.Context) {
+	var session models.Session
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
+
+	historyId := c.Param("history_id")
+
+	db := database.Database()
+	db.Where("id = ? AND hotspot_id in (?)", historyId, utils.ExtractHotspotIds(accountId, (accountId == 1), 0)).First(&session)
+	db.Close()
+
+	if session.Id == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"message": "No session history found!"})
 		return
 	}
 
