@@ -50,7 +50,12 @@
       "no_hotspot_found_sub": "Click on the button below to add a new hotspot",
       "info": "Information",
       "owner": "Owner",
-      "preferences": "Preferences"
+      "preferences": "Preferences",
+      "vouchers": "Vouchers",
+      "create_voucher": "Create Voucher",
+      "delete_voucher": "Delete",
+      "code": "Code",
+      "expires": "Expires"
     },
     "user": {
       "username": "Username",

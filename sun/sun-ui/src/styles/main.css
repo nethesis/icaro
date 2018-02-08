@@ -13,6 +13,10 @@ a {
   text-decoration: none !important;
 }
 
+input[type=checkbox], input[type=radio].form-control {
+  height: 15px;
+}
+
 .not-logged {
   background: linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.75)), url('../assets/background.jpg');
   background-size: 100%;

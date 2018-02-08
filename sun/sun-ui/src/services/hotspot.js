@@ -35,6 +35,27 @@ var HotspotService = {
         }
       }).then(success, error);
     },
+    hotspotGetVouchers(success, error) {
+      this.$http.get('https://' + this.$root.$options.api_host + '/api/vouchers', {
+        headers: {
+          'Token': this.get('loggedUser') && this.get('loggedUser').token || ''
+        }
+      }).then(success, error);
+    },
+    hotspotCreateVoucher(body, success, error) {
+      this.$http.post('https://' + this.$root.$options.api_host + '/api/vouchers', body, {
+        headers: {
+          'Token': this.get('loggedUser') && this.get('loggedUser').token || ''
+        }
+      }).then(success, error);
+    },
+    hotspotVoucherDelete(id, success, error) {
+      this.$http.delete('https://' + this.$root.$options.api_host + '/api/vouchers/' + id, {
+        headers: {
+          'Token': this.get('loggedUser') && this.get('loggedUser').token || ''
+        }
+      }).then(success, error);
+    },
   }
 };
 export default HotspotService;

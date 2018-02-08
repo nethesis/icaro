@@ -66,10 +66,25 @@ var UtilService = {
       }
       return retVal;
     },
+    generateVoucher() {
+      var length = 4,
+        charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+        retVal = "";
+      for (var i = 0, n = charset.length; i < length; ++i) {
+        retVal += charset.charAt(Math.floor(Math.random() * n));
+      }
+      retVal += '-'
+      for (var i = 0, n = charset.length; i < length; ++i) {
+        retVal += charset.charAt(Math.floor(Math.random() * n));
+      }
+      return retVal;
+    },
     getInputType(value) {
       if (value === true || value === "true" || value === "false" || value === false) {
         return 'checkbox'
-      } else {
+      } else if (+value) {
+        return 'number'
+      }else {
         return 'text'
       }
     }

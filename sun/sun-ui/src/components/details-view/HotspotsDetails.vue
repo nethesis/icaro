@@ -5,6 +5,81 @@
     </h2>
 
     <div class="row row-cards-pf">
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
+        <div class="card-pf card-pf-accented">
+          <div class="card-pf-heading">
+            <h2 class="card-pf-title">
+              <span class="pficon pficon-users card-info-title"></span>
+              {{ $t("dashboard.accounts") }}
+              <span v-if="!totals.accounts.isLoading" class="right">
+                <strong class="soft">{{ totals.accounts.count}}</strong>
+              </span>
+              <div v-if="totals.accounts.isLoading" class="spinner spinner-sm right"></div>
+            </h2>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
+        <div class="card-pf card-pf-accented">
+          <div class="card-pf-heading">
+            <h2 class="card-pf-title">
+              <span class="pficon pficon-connected card-info-title"></span>
+              {{ $t("dashboard.units") }}
+              <span v-if="!totals.units.isLoading" class="right">
+                <strong class="soft">{{ totals.units.count}}</strong>
+              </span>
+              <div v-if="totals.units.isLoading" class="spinner spinner-sm right"></div>
+            </h2>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2">
+        <div class="card-pf card-pf-accented">
+          <div class="card-pf-heading">
+            <h2 class="card-pf-title">
+              <span class="fa fa-users card-info-title"></span>
+              {{ $t("dashboard.users") }}
+              <span v-if="!totals.users.isLoading" class="right">
+                <strong class="soft">{{ totals.users.count}}</strong>
+              </span>
+              <div v-if="totals.users.isLoading" class="spinner spinner-sm right"></div>
+            </h2>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2">
+        <div class="card-pf card-pf-accented">
+          <div class="card-pf-heading">
+            <h2 class="card-pf-title">
+              <span class="pficon fa-mobile card-info-title"></span>
+              {{ $t("dashboard.devices") }}
+              <span v-if="!totals.devices.isLoading" class="right">
+                <strong class="soft">{{ totals.devices.count}}</strong>
+              </span>
+              <div v-if="totals.devices.isLoading" class="spinner spinner-sm right"></div>
+            </h2>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2">
+        <div class="card-pf card-pf-accented">
+          <div class="card-pf-heading">
+            <h2 class="card-pf-title">
+              <span class="fa fa-list card-info-title"></span>
+              {{ $t("dashboard.sessions") }}
+              <span v-if="!totals.sessions.isLoading" class="right">
+                <strong class="soft">{{ totals.sessions.count}}</strong>
+              </span>
+              <div v-if="totals.sessions.isLoading" class="spinner spinner-sm right"></div>
+            </h2>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-6">
+      </div>
+    </div>
+
+    <div class="row row-cards-pf">
       <div class="col-xs-12 col-sm-12 col-md-6">
         <div class="card-pf card-pf-accented">
           <div class="card-pf-heading">
@@ -46,67 +121,38 @@
         <div class="card-pf card-pf-accented">
           <div class="card-pf-heading">
             <h2 class="card-pf-title">
-              <span class="pficon pficon-users card-info-title"></span>
-              {{ $t("dashboard.accounts") }}
-              <span v-if="!totals.accounts.isLoading" class="right">
-                <strong class="soft">{{ totals.accounts.count}}</strong>
-              </span>
-              <div v-if="totals.accounts.isLoading" class="spinner spinner-sm right"></div>
+              {{ $t("hotspot.vouchers") }}
+              <div v-if="vouchers.isLoading" class="spinner spinner-sm right"></div>
             </h2>
           </div>
-        </div>
-        <div class="divider"></div>
-        <div class="card-pf card-pf-accented">
-          <div class="card-pf-heading">
-            <h2 class="card-pf-title">
-              <span class="pficon pficon-connected card-info-title"></span>
-              {{ $t("dashboard.units") }}
-              <span v-if="!totals.units.isLoading" class="right">
-                <strong class="soft">{{ totals.units.count}}</strong>
-              </span>
-              <div v-if="totals.units.isLoading" class="spinner spinner-sm right"></div>
-            </h2>
+          <div v-if="!vouchers.isLoading" class="card-pf-body">
+            <vue-good-table :perPage="5" :paginate="true" :columns="columns" :rows="vouchers.data" :lineNumbers="false" :defaultSortBy="{field: 'expires', type: 'asc'}"
+              styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText" :rowsPerPageText="tableLangsTexts.rowsPerPageText"
+              :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder" :ofText="tableLangsTexts.ofText">
+              <template slot="table-row" slot-scope="props">
+                <td class="fancy">
+                  <strong>{{ props.row.code }}</strong>
+                </td>
+                <td class="fancy">{{ props.row.expires | formatDate }}</td>
+                <td>
+                  <button v-on:click="deleteVoucher(props.row.id)" class="btn btn-danger" type="button">{{ $t("hotspot.delete_voucher") }}</button>
+                </td>
+              </template>
+            </vue-good-table>
           </div>
-        </div>
-        <div class="divider"></div>
-        <div class="card-pf card-pf-accented">
-          <div class="card-pf-heading">
-            <h2 class="card-pf-title">
-              <span class="fa fa-users card-info-title"></span>
-              {{ $t("dashboard.users") }}
-              <span v-if="!totals.users.isLoading" class="right">
-                <strong class="soft">{{ totals.users.count}}</strong>
-              </span>
-              <div v-if="totals.users.isLoading" class="spinner spinner-sm right"></div>
-            </h2>
-          </div>
-        </div>
-        <div class="card-pf card-pf-accented">
-          <div class="card-pf-heading">
-            <h2 class="card-pf-title">
-              <span class="pficon fa-mobile card-info-title"></span>
-              {{ $t("dashboard.devices") }}
-              <span v-if="!totals.devices.isLoading" class="right">
-                <strong class="soft">{{ totals.devices.count}}</strong>
-              </span>
-              <div v-if="totals.devices.isLoading" class="spinner spinner-sm right"></div>
-            </h2>
-          </div>
-        </div>
-        <div class="card-pf card-pf-accented">
-          <div class="card-pf-heading">
-            <h2 class="card-pf-title">
-              <span class="fa fa-list card-info-title"></span>
-              {{ $t("dashboard.sessions") }}
-              <span v-if="!totals.sessions.isLoading" class="right">
-                <strong class="soft">{{ totals.sessions.count}}</strong>
-              </span>
-              <div v-if="totals.sessions.isLoading" class="spinner spinner-sm right"></div>
-            </h2>
+          <div v-if="!vouchers.isLoading" class="card-pf-footer">
+            <div class="dropdown card-pf-time-frame-filter">
+              <button v-on:click="createVoucher()" class="btn btn-primary" type="button">{{ $t("hotspot.create_voucher") }}</button>
+            </div>
+            <p>
+              <a href="#" class="card-pf-link-with-icon">
+              </a>
+            </p>
           </div>
         </div>
       </div>
     </div>
+
     <div class="row row-cards-pf">
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <div class="card-pf card-pf-accented">
@@ -172,10 +218,17 @@
       // get preferences
       this.getPreferences()
 
+      // get vouchers
+      this.getVouchers()
+
       return {
         info: {
           isLoading: true,
           data: {}
+        },
+        vouchers: {
+          isLoading: true,
+          data: []
         },
         preferences: {
           isLoading: true,
@@ -202,10 +255,61 @@
             isLoading: true,
             count: 0
           }
-        }
+        },
+        columns: [{
+            label: this.$i18n.t('hotspot.code'),
+            field: 'code',
+            filterable: false,
+            sortable: false,
+          }, {
+            label: this.$i18n.t('hotspot.expires'),
+            field: 'expires',
+            filterable: false,
+          },
+          {
+            label: '',
+            field: '',
+            sortable: false
+          },
+        ],
+        tableLangsTexts: this.tableLangs(),
       }
     },
     methods: {
+      createVoucher() {
+        this.vouchers.isLoading = true
+        this.hotspotCreateVoucher({
+          hotspot_id: parseInt(this.$route.params.id),
+          code: this.generateVoucher(),
+        }, success => {
+          this.vouchers.isLoading = false
+          this.getVouchers()
+        }, error => {
+          console.log(error.body)
+          this.vouchers.isLoading = false
+        })
+      },
+      deleteVoucher(id) {
+        this.vouchers.isLoading = true
+        this.hotspotVoucherDelete(id, success => {
+          this.vouchers.isLoading = false
+          this.getVouchers()
+        }, error => {
+          console.log(error.body)
+          this.vouchers.isLoading = false
+          this.getVouchers()
+        })
+      },
+      getVouchers() {
+        this.hotspotGetVouchers(success => {
+          this.vouchers.data = success.body
+          this.vouchers.isLoading = false
+        }, error => {
+          console.log(error.body)
+          this.vouchers.data = []
+          this.vouchers.isLoading = false
+        })
+      },
       getInfo() {
         this.hotspotGet(this.$route.params.id, success => {
           this.info.data = success.body
