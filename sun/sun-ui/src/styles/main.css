@@ -145,7 +145,7 @@ a {
   color: #464646 !important;
   border: none !important;
   background: #f5f5f5 !important;
-  border-bottom: 2px solid #39a5dd !important;
+  border-bottom: 2px solid #26a9a3 !important;
   font-size: 14px !important;
 }
 
@@ -261,4 +261,24 @@ a {
 
 .red {
   color: #cc0000;
+}
+
+a {
+  color: #26a9a3;
+}
+.navbar-pf-vertical {
+  border-top: 2px solid #26a9a3 !important;
+}
+.nav-pf-vertical .list-group-item.active>a:before {
+  background: #26a9a3 !important;
+}
+.nav-pf-vertical .list-group-item.active>a .fa, .nav-pf-vertical .list-group-item.active>a .glyphicon, .nav-pf-vertical .list-group-item.active>a .pficon, .nav-pf-vertical .list-group-item:hover>a .fa, .nav-pf-vertical .list-group-item:hover>a .glyphicon, .nav-pf-vertical .list-group-item:hover>a .pficon {
+  color: #26a9a3 !important;
+}
+.card-pf.card-pf-accented {
+  border-top-color: #26a9a3 !important;
+}
+.btn-primary {
+  background-color: #007a87 !important;
+  background-image: linear-gradient(to bottom,#26a9a3 0,#007a87 100%) !important;
 }
