@@ -30,7 +30,6 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/nethesis/icaro/sun/sun-api/configuration"
-	"github.com/nethesis/icaro/sun/sun-api/crons"
 	"github.com/nethesis/icaro/sun/sun-api/methods"
 	"github.com/nethesis/icaro/sun/sun-api/middleware"
 )
@@ -40,9 +39,6 @@ func main() {
 	ConfigFilePtr := flag.String("c", "/opt/icaro/sun-api/conf.json", "Path to configuration file")
 	flag.Parse()
 	configuration.Init(ConfigFilePtr)
-
-	// init crons
-	crons.Init()
 
 	// init routers
 	router := gin.Default()
