@@ -40,7 +40,7 @@
           </div>
         </div>
       </div>
-      <div class="col-xs-12 col-sm-12 col-md-6">
+      <div v-if="totals.sms.isAvailable" class="col-xs-12 col-sm-12 col-md-6">
         <div class="card-pf card-pf-accented">
           <div class="card-pf-heading">
             <h2 class="card-pf-title">
@@ -49,9 +49,6 @@
               <span v-if="!totals.sms.isLoading && totals.sms.isAvailable" class="right">
                 <span :class="totals.sms.data.sms_count > totals.sms.data.sms_max_count ? 'red' : ''">{{ totals.sms.data.sms_count }}</span> /
                 <strong class="soft">{{ totals.sms.data.sms_max_count }}</strong>
-              </span>
-              <span v-if="!totals.sms.isAvailable" class="right">
-                -
               </span>
               <div v-if="totals.sms.isLoading" class="spinner spinner-sm right"></div>
             </h2>

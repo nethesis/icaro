@@ -110,7 +110,8 @@ func GoogleAuth(c *gin.Context) {
 		// create user session check
 		utils.CreateUserSession(newUser.Id, sessionId)
 
-		// TODO: create marketing info with user infos and birthday
+		// create marketing info with user infos
+		utils.CreateUserMarketing(newUser.Id, glUserDetail, "google")
 	} else {
 		// update user info
 		days := utils.GetHotspotPreferencesByKey(user.HotspotId, "user_expiration_days")
@@ -222,7 +223,8 @@ func FacebookAuth(c *gin.Context) {
 		// create user session check
 		utils.CreateUserSession(newUser.Id, sessionId)
 
-		// TODO: create marketing info with user likes and birthday
+		// create marketing info with user infos
+		utils.CreateUserMarketing(newUser.Id, fbUserDetail, "facebook")
 	} else {
 		// update user info
 		days := utils.GetHotspotPreferencesByKey(user.HotspotId, "user_expiration_days")
@@ -276,7 +278,7 @@ func LinkedInAuth(c *gin.Context) {
 	}
 
 	// extract user info
-	urlAPI := "https://api.linkedin.com/v1/people/~:(id,first-name,last-name,email-address)?format=json"
+	urlAPI := "https://api.linkedin.com/v1/people/~:(id,first-name,last-name,email-address,headline,current-share,num-connections,location,positions)?format=json"
 
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", urlAPI, nil)
@@ -327,7 +329,8 @@ func LinkedInAuth(c *gin.Context) {
 		// create user session check
 		utils.CreateUserSession(newUser.Id, sessionId)
 
-		// TODO: create marketing info with user infos and birthday
+		// create marketing info with user infos
+		utils.CreateUserMarketing(newUser.Id, liUserDetail, "linkedin")
 	} else {
 		// update user info
 		days := utils.GetHotspotPreferencesByKey(user.HotspotId, "user_expiration_days")

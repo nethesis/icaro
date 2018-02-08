@@ -70,7 +70,7 @@ func SMSAuth(c *gin.Context) {
 		daysInt, _ := strconv.Atoi(days.Value)
 		newUser := models.User{
 			HotspotId:   unit.HotspotId,
-			Name:        number, // TODO: how we can get the name?
+			Name:        number,
 			Username:    number,
 			Password:    code,
 			Email:       "",
@@ -156,7 +156,7 @@ func EmailAuth(c *gin.Context) {
 		daysInt, _ := strconv.Atoi(days.Value)
 		newUser := models.User{
 			HotspotId:   unit.HotspotId,
-			Name:        email, // TODO: how we can get the name?
+			Name:        email,
 			Username:    email,
 			Password:    code,
 			Email:       email,

@@ -25,6 +25,7 @@ package utils
 import (
 	"crypto/md5"
 	"crypto/rand"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -78,6 +79,23 @@ func CreateUserSession(userId int, sessionKey string) {
 	db := database.Database()
 	db.Save(&userSession)
 	db.Close()
+}
+
+func CreateUserMarketing(userId int, data interface{}, accountType string) {
+	serialization, _ := json.Marshal(data)
+
+	userMarketing := models.UserMarketing{
+		UserId:      userId,
+		AccountType: accountType,
+		Data:        string(serialization),
+		Created:     time.Now().UTC(),
+	}
+
+	// save user marketing
+	db := database.Database()
+	db.Save(&userMarketing)
+	db.Close()
+
 }
 
 func CheckUserSession(userId int, sessionKey string) bool {

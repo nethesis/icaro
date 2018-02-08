@@ -98,7 +98,32 @@ type GoogleUserDetail struct {
 
 type LinkedInUserDetail struct {
 	Id        string `json:"id"`
-	FirstName string `json:"firstName"`
-	LastName  string `json:"lastName"`
 	Email     string `json:"emailAddress"`
+	FirstName string `json:"firstName"`
+	Headline  string `json:"headline"`
+	LastName  string `json:"lastName"`
+	Location  struct {
+		Country struct {
+			Code string `json:"code"`
+		} `json:"country"`
+		Name string `json:"name"`
+	} `json:"location"`
+	NumConnections int `json:"numConnections"`
+	Positions      struct {
+		Total  int `json:"_total"`
+		Values []struct {
+			Company struct {
+				ID       int    `json:"id"`
+				Industry string `json:"industry"`
+				Name     string `json:"name"`
+				Size     string `json:"size"`
+				Type     string `json:"type"`
+			} `json:"company"`
+			ID        int  `json:"id"`
+			IsCurrent bool `json:"isCurrent"`
+			Location  struct {
+			} `json:"location"`
+			Title string `json:"title"`
+		} `json:"values"`
+	} `json:"positions"`
 }

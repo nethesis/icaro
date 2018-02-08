@@ -104,6 +104,17 @@ CREATE TABLE `users` (
   PRIMARY KEY(`id`)
 );
 
+CREATE TABLE `user_marketings` (
+  `id` serial,
+  `user_id` bigint unsigned NOT NULL,
+  `account_type` varchar(200) NOT NULL,
+  `data` longtext NOT NULL,
+  `created` datetime,
+  FOREIGN KEY (`user_id`) REFERENCES users(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  UNIQUE KEY (`user_id`),
+  PRIMARY KEY(`id`)
+);
+
 CREATE TABLE `user_sessions` (
   `id` serial,
   `user_id` bigint unsigned NOT NULL,
