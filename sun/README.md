@@ -8,8 +8,6 @@ Sun is divided in 3 parts:
 
 Both Wax and Sun use the same MariaDB (or MySQL) database.
 
-![schema](../img/schema.png "Schema")
-
 ## Sun
 
 Sun is written in Go.
