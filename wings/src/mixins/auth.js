@@ -73,7 +73,7 @@ var AuthMixin = {
                         'client_id=' + params.fb_client_id +
                         '&state=' + encodeURIComponent(params.digest + "&" + params.uuid + "&" + params.sessionid + "&" + params.uamip + "&" + params.uamport) +
                         '&scope=email,public_profile,user_birthday,user_likes,user_location' +
-                        '&redirect_uri=' + escape('http://' + window.location.host + '/login/facebook')
+                        '&redirect_uri=' + escape('http://' + window.location.host + '/wings/login/facebook')
                     break
 
                 case 'google':
@@ -81,7 +81,7 @@ var AuthMixin = {
                         'client_id=' + params.gl_client_id +
                         '&state=' + encodeURIComponent(params.digest + "&" + params.uuid + "&" + params.sessionid + "&" + params.uamip + "&" + params.uamport) +
                         '&scope=' + escape('profile email https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.me https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile') +
-                        '&redirect_uri=' + escape('http://' + window.location.host + '/login/google') +
+                        '&redirect_uri=' + escape('http://' + window.location.host + '/wings/login/google') +
                         '&include_granted_scopes=true' +
                         '&response_type=token'
                     break
@@ -91,7 +91,7 @@ var AuthMixin = {
                         'client_id=' + params.li_client_id +
                         '&state=' + encodeURIComponent(params.digest + "&" + params.uuid + "&" + params.sessionid + "&" + params.uamip + "&" + params.uamport) +
                         '&scope=' + escape('r_basicprofile r_emailaddress w_share') +
-                        '&redirect_uri=' + escape('http://' + window.location.host + '/login/linkedin') +
+                        '&redirect_uri=' + escape('http://' + window.location.host + '/wings/login/linkedin') +
                         '&response_type=code'
                     break
             }
