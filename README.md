@@ -6,18 +6,12 @@
 
 **"Easy and simple HotSpot for small and medium hotels"**
 
-Design documentation:
+See [official documentation](https://nethesis.github.io/icaro)
 
-- [Introduction](docs/intro.md)
-- [Hotspot manager](docs/manager.md)
-- [Mockups](https://nethservice.nethesis.it/nextcloud/index.php/s/V8qmUUEXUk1rEie)
 
-Techincal documentation:
+External links:
 
 - [API](https://documenter.getpostman.com/view/3364668/icaro/7LjC4mU)
-- [Software components](docs/components.md)
-
-See also the [wiki](https://github.com/nethesis/icaro/wiki) for temporary documentation.
 
 
 ***Note***
