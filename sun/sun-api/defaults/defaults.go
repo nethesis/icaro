@@ -38,7 +38,7 @@ var HotspotPreferences = map[string]string{
 	"sms_login":               "true",
 	"email_login":             "true",
 	"voucher_login":           "true",
-	"sms_login_message":       "SMS Login code:",
+	"sms_login_message":       "Your Icaro SMS login code:",
 }
 
 var SMSMaxCount = 500

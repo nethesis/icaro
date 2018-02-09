@@ -171,6 +171,9 @@
                 <div class="col-sm-6">
                   <input v-model="pref.value" :type="getInputType(pref.value)" id="textInput-markup" class="form-control">
                 </div>
+                <div class="col-sm-2" v-if="pref.key == 'captive_banner' || pref.key == 'captive_logo'">
+                  <a href="" class="btn btn-default" data-placement="top" data-toggle="popover" data-html="true" v-bind:data-content="getPrevieHTML(pref.value)">Preview</a>
+                </div>
               </div>
             </div>
             <div v-if="!preferences.isLoading" class="card-pf-footer">
@@ -278,6 +281,9 @@
       }
     },
     methods: {
+      getPrevieHTML(value) {
+        return '<img src="' + value + '"></img>'
+      },
       getPrefIcon(pref) {
         return this.getPrefTypeIcon(pref)
       },
@@ -370,6 +376,14 @@
             if (pref.value === "false") {
               pref.value = false
             }
+
+            // init popups
+            setTimeout(function () {
+              $('[data-toggle=popover]').popovers()
+                .on('hidden.bs.popover', function (e) {
+                  $(e.target).data('bs.popover').inState.click = false;
+                });
+            }, 0)
           }
           this.preferences.data = success.body
           this.preferences.isLoading = false

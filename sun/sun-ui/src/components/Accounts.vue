@@ -266,6 +266,8 @@
           this.isLoading = false;
         }, error => {
           console.log(error)
+          this.rows = []
+          this.isLoading = false;
         })
       },
 

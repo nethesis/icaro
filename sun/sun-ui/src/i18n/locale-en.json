@@ -165,15 +165,17 @@
     "captive_subtitle": "Captive Portal subtitle",
     "captive_title": "Captive Portal title",
     "captive_description": "Captive Portal description",
-    "captive_banner": "Captive Portal banner",
-    "captive_logo": "Captive Portal logo",
+    "captive_banner": "Captive Portal banner (base64 image)",
+    "captive_logo": "Captive Portal logo (base64 image)",
+    "captive_redir": "Captive Portal redirect",
     "voucher_expiration_days": "Voucher expiration (days)",
     "sms_login_message": "SMS Login message",
-    "sms_login": "Login with SMS",
-    "email_login": "Login with Email",
-    "facebook_login": "Login with Facebook",
-    "google_login": "Login with Google",
-    "linkedin_login": "Login with Linkedin",
-    "voucher_login": "Login with Voucher"
+    "sms_login": "Captive Portal login with SMS",
+    "email_login": "Captive Portal login with Email",
+    "facebook_login": "Captive Portal login with Facebook",
+    "google_login": "Captive Portal login with Google",
+    "linkedin_login": "Captive Portal login with Linkedin",
+    "voucher_login": "Captive Portal login with Voucher",
+    "temp_session_duration": "Temporary session duration (seconds)"
   }
 }

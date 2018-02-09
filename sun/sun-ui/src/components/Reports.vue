@@ -112,6 +112,7 @@
           this.isLoading = false
         }, error => {
           this.isLoading = false
+          this.rows = []
           console.log(error)
         })
       }
