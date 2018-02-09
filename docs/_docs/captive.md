@@ -45,7 +45,7 @@ Login type after the voucher check:
       * Like Gate not mandatory with timeout option (avoid to put like if you waiting for N seconds)
       * FB Checkin
     * Google
-    * Instagram (**Not yet implemented**)
+    * Instagram
     * Linkedin
     * Twitter (**Not yet implemented**)
 
