@@ -2,8 +2,8 @@
     "db_host":"localhost",
     "db_port":"3306",
     "db_name":"icaro",
-    "db_user": "root",
-    "db_password": "{{ icaro.db_root_password }}",
+    "db_user": "{{ icaro.sun_api.db_username }}",
+    "db_password": "{{ icaro.sun_api.db_password }}",
     "token_expires_days": 1,
     "cors": {
         "origins": ["https://{{ machine_hostname }}"],

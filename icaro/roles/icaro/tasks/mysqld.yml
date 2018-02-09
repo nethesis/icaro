@@ -31,6 +31,13 @@
     state: import
     target: /tmp/icaro.sql
 
+- name: Create Sun-Api's user
+  mysql_user:
+    name: "{{ icaro.sun_api.db_username }}"
+    password: "{{ icaro.sun_api.db_password }}"
+    priv: "icaro.*:INSERT,SELECT,UPDATE,DELETE"
+    state: present
+
 - stat:
     path: /root/.my.cnf
   register: mariadb_pass

@@ -4,6 +4,9 @@ icaro:
   url: "https://github.com/nethesis/icaro"
   version: "autobuild"
   db_root_password: "YourMariaDBPassWordHere"
+  sun_api:
+    db_username: "sun-api"
+    db_password: "Sun-ApiMariaDBPassWordHere"
 
 machine_hostname:
     "example.com"
