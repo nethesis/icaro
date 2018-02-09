@@ -5,6 +5,13 @@ https://{{ machine_hostname }} {
   tls {{ admin_email }}
 }
 
+http://hstest.neth.eu {
+  redir {
+    if {path} not_starts_with /wings
+    / https://{host}{uri}/
+  }
+}
+
 http://{{ machine_hostname }}/wings {
   root /opt/icaro/wings
   rewrite {
