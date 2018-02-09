@@ -7,6 +7,9 @@ icaro:
   sun_api:
     db_username: "sun-api"
     db_password: "Sun-ApiMariaDBPassWordHere"
+  wax:
+    db_username: "wax"
+    db_password: "WaxMariaDBPassWordHere"
 
 machine_hostname:
     "example.com"
