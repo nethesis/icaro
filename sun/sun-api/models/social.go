@@ -29,9 +29,10 @@ type Social struct {
 }
 
 type AuthSocial struct {
-	Facebook Social `json:"facebook"`
-	Google   Social `json:"google"`
-	LinkedIn Social `json:"linkedin"`
+	Facebook  Social `json:"facebook"`
+	Google    Social `json:"google"`
+	LinkedIn  Social `json:"linkedin"`
+	Instagram Social `json:"instagram"`
 }
 
 type FacebookRespToken struct {
@@ -51,6 +52,16 @@ type GoogleRespToken struct {
 type LinkedInRespToken struct {
 	AccessToken string `json:"access_token"`
 	ExpiresIn   int    `json:"expires_in"`
+}
+
+type InstagramRespToken struct {
+	AccessToken string `json:"access_token"`
+	User        struct {
+		Id             string `json:"id"`
+		Username       string `json:"username"`
+		FullName       string `json:"full_name"`
+		ProfilePicture string `json:"profile_picture"`
+	} `json:"user"`
 }
 
 type FacebookInspectToken struct {
@@ -126,4 +137,21 @@ type LinkedInUserDetail struct {
 			Title string `json:"title"`
 		} `json:"values"`
 	} `json:"positions"`
+}
+
+type InstagramUserDetail struct {
+	Data struct {
+		Id             string `json:"id"`
+		Username       string `json:"username"`
+		FullName       string `json:"full_name"`
+		ProfilePicture string `json:"profile_picture"`
+		Bio            string `json:"bio"`
+		Website        string `json:"website"`
+		IsBusiness     bool   `json:"is_business"`
+		Counts         struct {
+			Media      int `json:"media"`
+			Follows    int `json:"follows"`
+			FollowedBy int `json:"followed_by"`
+		} `json:"counts"`
+	} `json:"data"`
 }

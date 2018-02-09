@@ -347,3 +347,101 @@ func LinkedInAuth(c *gin.Context) {
 	// response to client
 	c.JSON(http.StatusOK, gin.H{"user_id": liUserDetail.Id})
 }
+
+func InstagramAuth(c *gin.Context) {
+	code := c.Param("code")
+	uuid := c.Query("uuid")
+	sessionId := c.Query("sessionid")
+
+	clientId := configuration.Config.AuthSocial.Instagram.ClientId
+	clientSecret := configuration.Config.AuthSocial.Instagram.ClientSecret
+	redirectURI := configuration.Config.AuthSocial.Instagram.RedirectURI
+
+	// retrieve access token
+	urlEndpoint := "https://api.instagram.com/oauth/access_token"
+
+	form := url.Values{
+		"grant_type":    {"authorization_code"},
+		"code":          {code},
+		"redirect_uri":  {redirectURI},
+		"client_id":     {clientId},
+		"client_secret": {clientSecret},
+	}
+	bodyByte := bytes.NewBufferString(form.Encode())
+
+	resp, err := http.Post(urlEndpoint, "application/x-www-form-urlencoded", bodyByte)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+
+	var inRespToken models.InstagramRespToken
+	err = json.Unmarshal(body, &inRespToken)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	// extract user info
+	urlAPI := "https://api.instagram.com/v1/users/self/?access_token=" + inRespToken.AccessToken
+
+	resp, err = http.Get(urlAPI)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	defer resp.Body.Close()
+	body, err = ioutil.ReadAll(resp.Body)
+
+	var inUserDetail models.InstagramUserDetail
+	err = json.Unmarshal(body, &inUserDetail)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	if inUserDetail.Data.Id == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "access token is invalid"})
+		return
+	}
+
+	// check if user exists
+	user := utils.GetUserByUsername(inUserDetail.Data.Id)
+	if user.Id == 0 {
+		// create user
+		unit := utils.GetUnitByUuid(uuid)
+		days := utils.GetHotspotPreferencesByKey(unit.HotspotId, "user_expiration_days")
+		daysInt, _ := strconv.Atoi(days.Value)
+		newUser := models.User{
+			HotspotId:   unit.HotspotId,
+			Name:        inUserDetail.Data.FullName,
+			Username:    inUserDetail.Data.Id,
+			Password:    "",
+			Email:       inUserDetail.Data.Username,
+			AccountType: "instagram",
+			KbpsDown:    0,
+			KbpsUp:      0,
+			ValidFrom:   time.Now().UTC(),
+			ValidUntil:  time.Now().UTC().AddDate(0, 0, daysInt),
+		}
+		newUser.Id = methods.CreateUser(newUser)
+
+		// create user session check
+		utils.CreateUserSession(newUser.Id, sessionId)
+
+		// create marketing info with user infos
+		utils.CreateUserMarketing(newUser.Id, inUserDetail.Data, "instagram")
+	} else {
+		// update user info
+		days := utils.GetHotspotPreferencesByKey(user.HotspotId, "user_expiration_days")
+		daysInt, _ := strconv.Atoi(days.Value)
+		user.ValidUntil = time.Now().UTC().AddDate(0, 0, daysInt)
+		db := database.Database()
+		db.Save(&user)
+		db.Close()
+
+		// create user session check
+		utils.CreateUserSession(user.Id, sessionId)
+	}
+
+	// response to client
+	c.JSON(http.StatusOK, gin.H{"user_id": inUserDetail.Data.Id})
+}

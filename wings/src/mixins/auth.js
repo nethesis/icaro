@@ -94,6 +94,15 @@ var AuthMixin = {
                         '&redirect_uri=' + escape('http://' + window.location.host + '/wings/login/linkedin') +
                         '&response_type=code'
                     break
+
+                case 'instagram':
+                    url = 'https://api.instagram.com/oauth/authorize/?' +
+                        'client_id=' + params.in_client_id +
+                        '&state=' + encodeURIComponent(params.digest + "&" + params.uuid + "&" + params.sessionid + "&" + params.uamip + "&" + params.uamport) +
+                        '&scope=' + escape('basic') +
+                        '&redirect_uri=' + escape('http://' + window.location.host + '/wings/login/instagram') +
+                        '&response_type=code'
+                    break
             }
             return url
         },

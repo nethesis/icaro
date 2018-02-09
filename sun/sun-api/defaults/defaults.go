@@ -35,6 +35,7 @@ var HotspotPreferences = map[string]string{
 	"facebook_login":          "true",
 	"google_login":            "true",
 	"linkedin_login":          "true",
+	"instagram_login":         "true",
 	"sms_login":               "true",
 	"email_login":             "true",
 	"voucher_login":           "true",

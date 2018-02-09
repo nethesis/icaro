@@ -29,6 +29,12 @@
                         Facebook
                     </router-link>
                 </div>
+                <div v-if="hotspot.preferences.instagram_login == 'true'" class="item">
+                    <router-link to="/login/instagram" class="ui instagram button big fluid">
+                        <i class="instagram icon"></i>
+                        Instagram
+                    </router-link>
+                </div>
                 <div v-if="hotspot.preferences.google_login == 'true'" class="item">
                     <router-link to="/login/google" class="ui google plus button big fluid">
                         <i class="google plus icon"></i>
