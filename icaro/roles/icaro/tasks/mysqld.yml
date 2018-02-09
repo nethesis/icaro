@@ -40,8 +40,8 @@
     mysql_secure_installation <<EOF
 
     y
-    {{ mariadb_root_password }}
-    {{ mariadb_root_password }}
+    {{ icaro.db_root_password }}
+    {{ icaro.db_root_password }}
     y
     y
     y

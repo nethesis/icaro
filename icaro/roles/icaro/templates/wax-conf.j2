@@ -3,7 +3,7 @@
     "db_port":"3306",
     "db_name":"icaro",
     "db_user": "root",
-    "db_password": "{{ mariadb_root_password }}",
+    "db_password": "{{ icaro.db_root_password }}",
     "token_expires_days": 1,
     "cors": {
         "origins": ["https://{{ machine_hostname }}"],

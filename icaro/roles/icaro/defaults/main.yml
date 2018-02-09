@@ -3,13 +3,12 @@
 icaro:
   url: "https://github.com/nethesis/icaro"
   version: "autobuild"
+  db_root_password: "YourMariaDBPassWordHere"
 
 machine_hostname:
     "example.com"
 admin_email:
     "admin@example.com"
-mariadb_root_password:
-    "YourMariaDBPassWordHere"
 facebook_client_id:
     "FacebookClientID"
 facebook_client_secret:
