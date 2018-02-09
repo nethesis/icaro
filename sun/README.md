@@ -7,13 +7,3 @@ Sun is divided in 3 parts:
 - Sun Tasks: Golang applications to terminated sessions and cleanup invalid tokens
 
 Both Wax and Sun use the same MariaDB (or MySQL) database.
-
-## Sun
-
-Sun is written in Go.
-
-Used tools:
-
-- Web framework: https://github.com/gin-gonic/gin
-- ORM: https://github.com/jinzhu/gorm
-
