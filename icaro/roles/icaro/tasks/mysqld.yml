@@ -38,6 +38,13 @@
     priv: "icaro.*:INSERT,SELECT,UPDATE,DELETE"
     state: present
 
+- name: Create Wax's user
+  mysql_user:
+    name: "{{ icaro.wax.db_username }}"
+    password: "{{ icaro.wax.db_password }}"
+    priv: "icaro.*:INSERT,SELECT,UPDATE,DELETE"
+    state: present
+
 - stat:
     path: /root/.my.cnf
   register: mariadb_pass
