@@ -65,3 +65,63 @@ For the SMS login process Icaro use Twilio as SMS sender, register your app here
 }
 
 ```
+
+## Envirioment Variables
+
+You can also configure some properties via environment variables, if present **the values in the environment variable take the precedence** over the ones declared in files.
+
+### Common variables
+
+This variables are common to all backends:
+
+* `DB_HOST` Mysql or Mariadb hostname/address
+* `DB_PORT` Port where database instance is listening
+* `DB_USER` User to use for connection to database instance
+* `DB_PASSWORD` Password of the user used for database instance connection
+* `DB_NAME` Name of database used by Icaro's backends (default: icaro)
+
+### Wax & Sun-Api variables
+
+* `CORS_ORIGINS` List of space separated origins allowed to perform cross-site requests (see more [here](https://www.w3.org/TR/cors/#access-control-allow-origin-response-header))
+
+### Wax specific variables
+
+#### Social
+
+##### Facebook
+
+* `FACEBOOK_CLIENT_ID` Facebook Oauth2 Client ID
+* `FACEBOOK_CLIENT_SECRET` Facebook Oauth2 Client Secret
+* `FACEBOOK_REDIRECT_URL` Facebook Redirect URL
+
+##### Google+
+
+* `GOOGLE_CLIENT_ID` Google+ Oauth2 Client ID
+* `GOOGLE_CLIENT_SECRET` Google+ Oauth2 Client Secret
+* `GOOGLE_CLIENT_REDIRECT_URL` Google+ Oauth2 Redirect URL
+
+##### LinkedIn
+
+* `LINKEDIN_CLIENT_ID` LinkedIn Oauth2 Client ID
+* `LINKEDIN_CLIENT_SECRET` LinkedIn Oauth2 Client Secret
+* `LINKEDIN_REDIRECT_URL` LinkedIn Oauth2 Redirect URL
+
+##### Instagram
+
+* `INSTAGRAM_CLIENT_ID` Instagram Oauth2 Client ID
+* `INSTAGRAM_CLIENT_SECRET` Instagram Oauth2 Client Secret
+* `INSTAGRAM_REDIRECT_URL` Instagram Oauth2 Redirect URL
+
+#### Email & SMS
+
+##### Email
+* `EMAIL_FORM` Email from address
+* `EMAIL_SMTP_HOST` SMTP server address/hostanme
+* `EMAIL_SMTP_PORT` Port where the SMTP server is listening
+* `EMAIL_SMTP_USER` User to use for connection to SMTP server
+* `EMAIL_SMTP_PASSWORD` Password of the user used for SMTP server connection
+
+##### SMS
+* `SMS_ACCOUNT_SID` Twilio account SID
+* `SMS_AUTH_TOKEN` Twilio auth token
+* `SMS_NUMBER` Twilio send number
