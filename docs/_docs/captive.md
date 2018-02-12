@@ -25,6 +25,7 @@ Example of customizabile login page:
 
 
 ### Login Methods and type of Accounts
+For more details, see [Login configuration](/icaro/docs/configuration/) page, to properly configure each logins option.
 
 #### Login Methods
 
@@ -39,11 +40,11 @@ Voucher (used for security/payment) can be:
 Login type after the voucher check:
 
   * Email
-  * SMS   
+  * SMS
   * Social (only if voucher are not payed)
     * Facebook
-      * Like Gate not mandatory with timeout option (avoid to put like if you waiting for N seconds)
-      * FB Checkin
+      * Like Gate not mandatory with timeout option (avoid to put like if you waiting for N seconds) (**Not yet implemented**)
+      * FB Checkin (**Not yet implemented**)
     * Google
     * Instagram
     * Linkedin
@@ -67,10 +68,12 @@ credentials on any hotel belonging to the chain.
 
 The system should track to which unity a single account is connected.
 
+##### Email auth
+When user requests an Email authentication, Dedalo open a temporary session of N minutes (5 minutes default) the make possible receive the email with the authentication code.
+
 ##### SMS service
 
 The system should be functional only with one or two SMS providers (eg. [Twilio](https://www.twilio.com/)) to avoid configuration by the user.
-Nethesis reseller could by prepaid packages of SMS from Nethesis shop.
 
 Also WhatsApp Business has been released, it could be an alternative way to make login without pay SMS
 Drawback: WA should be permitted without authentication, will they make login to the Hotspot?

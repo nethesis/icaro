@@ -21,17 +21,17 @@ There is also a special `admin` user who has the ability to create/modify/delete
 
 ### Reseller
 
-The vendor which installs the physical firewall and creates an Hotspot entity; he can create users for his own Hotspot instances. 
+The vendor which installs the physical firewall and creates an Hotspot entity; he can create users for his own Hotspot instances.
 This is the only profile that can access creation API.
 The Reseller can see everything on the Hotspot Manager, he makes the first configuration of the Hotspot, choosing the best options for the specific customer.
 
-**Every technical or potentially dangerous configuration must be performed only by the reseller.**  
+**Every technical or potentially dangerous configuration must be performed only by the reseller.**
 
 The reseller can access the Hotppot Manager and create login credentials for other profiles.
 Every Hotspot can have only 2 different profiles/accounts.
 
 The reseller accounts can be created only from admin user.
- 
+
 ### Customer
 
 The owner of the hotel or the local person responsible for the service, he doesn't have technical skills but he needs to do some tasks:
@@ -68,10 +68,11 @@ List of the views with the associated profile: **R**eseller, **C**ustomer, **D**
 
 (**Not yet implemented**)
 
-Every Nethesis reseller that can access Nethesis portal should make access with the same reseller credentials to the Hostpot Manager,
-to see and manage all the reseller's Hotspot instances.
+To integrate resellers authentication, sharing the same credentials from another platform that already has the profiles credentials, Icaro must integrate an API to include resellers without adding one by one using a brand new API, using a master key auth mode.
 
-Thus Hotspot Manager should support OAuth authentication and Nethesis portal should become a OAuth provider.
+Scenario
+
+A company has an internal platform that already has customers or resellers and they login with their credentials in that portal. The company wants to enable the login of that resellers also in their Icaro instance and to make this possibile Icaro must include an API to integrate the resellers easily and programmatically.
 
 ## The Dashboard
 
@@ -107,7 +108,7 @@ Data obtained from Social profiles
 2. Age
 3. Nationality
 4. Interests
- 
+
 ### Questionnaires
 
 (**Not yet implemented**)

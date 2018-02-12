@@ -55,7 +55,7 @@ You can destroy the droplet using:
 vagrant destroy
 ```
 
-The machine can be rebuilt using (all data will be lost): 
+The machine can be rebuilt using (all data will be lost):
 ```
 vagrant rebuild
 ```

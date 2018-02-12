@@ -46,12 +46,6 @@ A responsive web page which is accessed by the customer using a smartphone or a 
 A real server (Physical or Virtual) with associated to an Hotspot instance.
 It can be a [NethServer](https://www.nethserver.org) or another any supported platform.
 
-### Nethesis portal
-
-Web portal located at [my.nethesis.it](https://my.nethesis.it) accessible only by Nethesis resellers.
-
-**Note**: you don't need access to Nethesis portal to use or install your own Icaro instance.
-
 
 ## Abstract workflow
 
@@ -60,11 +54,8 @@ A reseller who wants to sell the Hotspot service to a customer, usually does the
 1. Installs a new firewall inside the hotel and configures the local CoovaChilli instance connected to the WiFi network.
 
 2. Creates a new Hotspot instance accessing Hotspot Manager (eg. https://myhotspot.nethesis.it) or using the APIs.
-   Nethesis resellers should be able to do it by accessing Nethesis portal and enter the "Applications" -> "Hotspot" page.
 
-3. Associates one or more server (unities) to the newly created Hotspot instance accessing Hotspot Manager (or using APIs.
-   Nethesis resellers should be able to do it by selecting existing servers from Nethesis portal.
-   The Nethesis portal should display all servers not associated to any other Hotspot (the list could be filtered by customer)
+3. Associates one or more server (unities) to the newly created Hotspot instance accessing Hotspot Manager (or using APIs).
 
 4. Enter the Hotspot Manager with personal cerdentials and  creates Customer and Desk users for the Hotspot instance
 
