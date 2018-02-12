@@ -5,7 +5,7 @@ https://{{ machine_hostname }} {
   tls {{ admin_email }}
 }
 
-http://hstest.neth.eu {
+http://{{ machine_hostname }} {
   redir {
     if {path} not_starts_with /wings
     / https://{host}{uri}/
