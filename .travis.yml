@@ -11,6 +11,13 @@ matrix:
 
     - language: go
       env:
+        - NAME=sun-tasks
+        - DEPLOY_FILES=sun/sun-tasks/sun-tasks
+      script:
+        - cd $TRAVIS_BUILD_DIR/sun/sun-tasks && go build
+
+    - language: go
+      env:
         - NAME=wax
         - DEPLOY_FILES=wax/wax
       script:
@@ -77,7 +84,7 @@ before_deploy:
   - mv $DEPLOY_FILES $TRAVIS_BUILD_DIR/deploy_files/
   - if test -z "$TRAVIS_TAG"; then  git tag -f autobuild; export TRAVIS_TAG=autobuild; else true; fi
   - export ICARO_BUILD_DATE=$(echo Last autobuild $(date "+%c"))
- 
+
 deploy:
   - provider: releases
     api_key: ${GITHUB_TOKEN}
