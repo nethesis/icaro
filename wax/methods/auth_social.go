@@ -415,7 +415,7 @@ func InstagramAuth(c *gin.Context) {
 			Name:        inUserDetail.Data.FullName,
 			Username:    inUserDetail.Data.Id,
 			Password:    "",
-			Email:       inUserDetail.Data.Username,
+			Email:       "",
 			AccountType: "instagram",
 			KbpsDown:    0,
 			KbpsUp:      0,
