@@ -25,6 +25,7 @@ package configuration
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 	"strconv"
 	"os"
 
@@ -76,6 +77,10 @@ func Init(ConfigFilePtr *string) {
 	}
 	if os.Getenv("DB_NAME") != "" {
 		Config.DbName = os.Getenv("DB_NAME")
+	}
+
+	if os.Getenv("CORS_ORIGINS") != "" {
+		Config.Cors.Origins = strings.Split(os.Getenv("CORS_ORIGINS"), " ")
 	}
 
 	if os.Getenv("FACEBOOK_CLIENT_ID") != "" {
