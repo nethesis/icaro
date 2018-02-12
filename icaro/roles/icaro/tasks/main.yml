@@ -5,6 +5,8 @@
   become: true
 - import_tasks: sun-ui.yml
   become: true
+- import_tasks: sun-tasks.yml
+  become: true
 - import_tasks: wax.yml
   become: true
 - import_tasks: wings.yml

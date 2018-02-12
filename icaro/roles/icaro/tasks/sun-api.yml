@@ -22,7 +22,7 @@
     src: usr/lib/systemd/system/sun-api.service
     dest: /usr/lib/systemd/system/sun-api.service
 
-- name: Enable sun-ui service
+- name: Enable sun-api service
   systemd:
     name: sun-api
     daemon_reload: yes

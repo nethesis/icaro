@@ -1,0 +1,11 @@
+[Unit]
+Description=Exec tasks immediatly or in a background jobs
+After=network.target
+
+[Service]
+Type=simple
+PrivateTmp=true
+ExecStart=/opt/icaro/sun-tasks/sun-tasks -a %i -w
+
+[Install]
+WantedBy=multi-user.target

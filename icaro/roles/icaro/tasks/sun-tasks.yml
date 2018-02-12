@@ -1,0 +1,30 @@
+---
+- name: Create Sun-tasks working directory
+  file:
+    path: /opt/icaro/sun-tasks/
+    state: directory
+    recurse: yes
+
+- name: Download and install Sun-tasks executable
+  get_url:
+    url: "{{ icaro.url }}/releases/download/{{ icaro.version }}/sun-tasks"
+    force: true
+    dest: /opt/icaro/sun-tasks/sun-tasks
+    mode: 0755
+
+- name: Copy Sun-tasks sytemd unit
+  copy:
+    src: usr/lib/systemd/system/sun-tasks@.service
+    dest: /usr/lib/systemd/system/sun-tasks@.service
+
+- name: Enable sun-tasks clean-tokens service
+  systemd:
+    name: sun-tasks@clean-tokens
+    daemon_reload: yes
+    enabled: yes
+
+- name: Enable sun-tasks store-sessions service
+  systemd:
+    name: sun-tasks@store-sessions
+    daemon_reload: yes
+    enabled: yes
