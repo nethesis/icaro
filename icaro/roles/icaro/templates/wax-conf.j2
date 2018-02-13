@@ -12,33 +12,49 @@
     },
     "auth_social": {
         "facebook": {
+{% if icaro.wax.facebook_client_id is defined and icaro.wax.facebook_client_secret is defined %}
             "client_id": "{{ icaro.wax.facebook_client_id }}",
             "client_secret": "{{ icaro.wax.facebook_client_secret }}",
             "redirect_uri": "http://{{ machine_hostname }}/wings/login/facebook"
+{% endif %}
         },
         "linkedin": {
+{% if icaro.wax.linkedin_client_id is defined and icaro.wax.linkedin_client_secret is defined %}
             "client_id": "{{ icaro.wax.linkedin_client_id }}",
             "client_secret": "{{ icaro.wax.linkedin_client_secret }}",
             "redirect_uri": "http://{{ machine_hostname }}/wings/login/linkedin"
+{% endif %}
         },
         "instagram": {
+{% if icaro.wax.instagram_client_id is defined and icaro.wax.instagram_client_secret is defined %}
             "client_id": "{{ icaro.wax.instagram_client_id }}",
             "client_secret": "{{ icaro.wax.instagram_client_secret }}",
             "redirect_uri": "http://{{ machine_hostname }}/wings/login/instagram"
+{% endif %}
         }
     },
     "endpoints": {
         "sms": {
+{% if icaro.wax.twilio_account_sid is defined and
+icaro.wax.twilio_auth_token is defined and
+icaro.wax.twilio_number is defined %}
             "account_sid": "{{ icaro.wax.twilio_account_sid }}",
             "auth_token": "{{ icaro.wax.twilio_auth_token }}",
             "number": "{{ icaro.wax.twilio_number }}"
+{% endif %}
         },
         "email": {
+{% if admin_email is defined and
+icaro.wax.email_smtp_host is defined and
+icaro.wax.email_smtp_port is defined and
+icaro.wax.email_smtp_user is defined and
+icaro.wax.email_smtp_password is defined %}
             "from": "{{ admin_email }}",
             "smtp_host": "{{ icaro.wax.email_smtp_host }}",
             "smtp_port": {{ icaro.wax.email_smtp_port }},
             "smtp_user": "{{ icaro.wax.email_smtp_user }}",
             "smtp_password": "{{ icaro.wax.email_smtp_password }}"
+{% endif %}
         }
     }
 }
