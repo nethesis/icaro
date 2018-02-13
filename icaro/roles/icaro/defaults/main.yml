@@ -1,5 +1,8 @@
 ---
 
+machine_hostname: "example.com"
+admin_email: "admin@example.com"
+
 icaro:
   url: "https://github.com/nethesis/icaro"
   version: "autobuild"
@@ -10,34 +13,16 @@ icaro:
   wax:
     db_username: "wax"
     db_password: "WaxMariaDBPassWordHere"
-
-machine_hostname:
-    "example.com"
-admin_email:
-    "admin@example.com"
-facebook_client_id:
-    "FacebookClientID"
-facebook_client_secret:
-    "FacebookClientSecret"
-linkedin_client_id:
-    "LinkedInClientID"
-linkedin_client_secret:
-    "LinkedInClientSecret"
-instagram_client_id:
-    "InstagramClientID"
-instagram_client_secret:
-    "InstagramClientSecret"
-twilio_account_sid:
-    "TwilioAccountSID"
-twilio_auth_token:
-    "TwilioAuthToken"
-twilio_number:
-    "TwilioNumber"
-email_smtp_host:
-    "EmailSMTPHost"
-email_smtp_port:
-    "25"
-email_smtp_user:
-    "EmailSMTPUser"
-email_smtp_password:
-    "EmailSMTPPassword"
+    facebook_client_id: "FacebookClientID"
+    facebook_client_secret: "FacebookClientSecret"
+    linkedin_client_id: "LinkedInClientID"
+    linkedin_client_secret: "LinkedInClientSecret"
+    instagram_client_id: "InstagramClientID"
+    instagram_client_secret: "InstagramClientSecret"
+    twilio_account_sid: "TwilioAccountSID"
+    twilio_auth_token: "TwilioAuthToken"
+    twilio_number: "TwilioNumber"
+    email_smtp_host: "EmailSMTPHost"
+    email_smtp_port: "25"
+    email_smtp_user: "EmailSMTPUser"
+    email_smtp_password: "EmailSMTPPassword"

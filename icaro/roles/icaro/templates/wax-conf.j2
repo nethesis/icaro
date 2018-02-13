@@ -12,33 +12,33 @@
     },
     "auth_social": {
         "facebook": {
-            "client_id": "{{ facebook_client_id }}",
-            "client_secret": "{{ facebook_client_secret }}",
+            "client_id": "{{ icaro.wax.facebook_client_id }}",
+            "client_secret": "{{ icaro.wax.facebook_client_secret }}",
             "redirect_uri": "http://{{ machine_hostname }}/wings/login/facebook"
         },
         "linkedin": {
-            "client_id": "{{ linkedin_client_id }}",
-            "client_secret": "{{ linkedin_client_secret }}",
+            "client_id": "{{ icaro.wax.linkedin_client_id }}",
+            "client_secret": "{{ icaro.wax.linkedin_client_secret }}",
             "redirect_uri": "http://{{ machine_hostname }}/wings/login/linkedin"
         },
         "instagram": {
-            "client_id": "{{ instagram_client_id }}",
-            "client_secret": "{{ instagram_client_secret }}",
+            "client_id": "{{ icaro.wax.instagram_client_id }}",
+            "client_secret": "{{ icaro.wax.instagram_client_secret }}",
             "redirect_uri": "http://{{ machine_hostname }}/wings/login/instagram"
         }
     },
     "endpoints": {
         "sms": {
-            "account_sid": "{{ twilio_account_sid }}",
-            "auth_token": "{{ twilio_auth_token }}",
-            "number": "{{ twilio_number }}"
+            "account_sid": "{{ icaro.wax.twilio_account_sid }}",
+            "auth_token": "{{ icaro.wax.twilio_auth_token }}",
+            "number": "{{ icaro.wax.twilio_number }}"
         },
         "email": {
             "from": "{{ admin_email }}",
-            "smtp_host": "{{ email_smtp_host }}",
-            "smtp_port": {{ email_smtp_port }},
-            "smtp_user": "{{ email_smtp_user }}",
-            "smtp_password": "{{ email_smtp_password }}"
+            "smtp_host": "{{ icaro.wax.email_smtp_host }}",
+            "smtp_port": {{ icaro.wax.email_smtp_port }},
+            "smtp_user": "{{ icaro.wax.email_smtp_user }}",
+            "smtp_password": "{{ icaro.wax.email_smtp_password }}"
         }
     }
 }
