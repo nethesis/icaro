@@ -2,13 +2,13 @@ import CryptoJS from 'crypto-js'
 
 var AuthMixin = {
     methods: {
-        getPreferences(params, callback) {
+        getPreferences(params, success, error) {
             var host = window.location.host
             this.$http.get("https://" + host + '/wax/preferences' +
                 '?digest=' + params.digest +
                 '&uuid=' + params.uuid +
                 '&sessionid=' + params.sessionid
-            ).then(callback);
+            ).then(success, error);
         },
         extractParams() {
             var code = this.$route.query.code || null

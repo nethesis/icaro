@@ -26,9 +26,10 @@
         this.$root.$options.hotspot.socials = success.body.socials
         this.hotspot.name = success.body.hotspot_name
         this.hotspot.preferences = success.body.preferences
-        $("body").css("background-color", success.body.preferences.captive_7_background);
+        $("body").css("background-color", success.body.preferences.captive_7_background || '#2a87be');
       }, error => {
         console.error(error)
+        $("body").css("background-color", '#2a87be');
       })
       return {
         hotspot: {
