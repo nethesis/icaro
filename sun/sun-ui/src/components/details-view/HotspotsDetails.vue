@@ -562,15 +562,21 @@
       },
       printAllVoucher() {
         var doc = new jsPDF("portrait", "mm", "a4");
+        var pageHeight = doc.internal.pageSize.height;
+
         for (var v in this.vouchers.data) {
           var voucher = this.vouchers.data[v]
+          if (parseInt(v) != 0 && parseInt(v) % 11 == 0) {
+            doc.addPage();
+          }
+
           doc.setFontSize(22);
           doc.text(20, 18, '-'.repeat(20))
           doc.setFontSize(15);
-          doc.text(20, (v + 1) * (2.5) + 20, this.$i18n.t('hotspot.voucher_code'));
+          doc.text(20, (((v%11) + 1) * (2.5) + 20)+(22.5*(v%11)), this.$i18n.t('hotspot.voucher_code'));
           doc.setFontSize(22);
-          doc.text(20, (v + 1) * (2.5) + 30, voucher.code);
-          doc.text(20, (v + 1) * (2.5) + 38, '-'.repeat(20))
+          doc.text(20, (((v%11) + 1) * (2.5) + 30)+(22.5*(v%11)), voucher.code);
+          doc.text(20, (((v%11) + 1) * (2.5) + 38)+(22.5*(v%11)), '-'.repeat(20))
         }
         doc.autoPrint();
         window.open(doc.output('bloburl'), '_blank');
