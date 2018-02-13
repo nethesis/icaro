@@ -1,3 +1,8 @@
+---
+title: Network
+permalink: /docs/network/
+---
+
 ## Hotspot Configuration 
 
 * You must have at least one free interface that will be used **only for hotspot purposes**, the interface can be **physical or logical (VLAN)**
