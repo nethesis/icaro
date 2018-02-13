@@ -67,7 +67,7 @@ CREATE TABLE `hotspot_preferences` (
   `id` serial,
   `hotspot_id` bigint unsigned NOT NULL,
   `key` varchar(250) NOT NULL,
-  `value` varchar(16384) NOT NULL,
+  `value` varchar(65536) NOT NULL,
   FOREIGN KEY (`hotspot_id`) REFERENCES hotspots(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   UNIQUE KEY (`hotspot_id`, `key`),
   PRIMARY KEY(`id`)

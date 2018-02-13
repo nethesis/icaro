@@ -32,6 +32,7 @@ var HotspotPreferences = map[string]string{
 	"captive_banner":          "",
 	"captive_description":     "This is a description",
 	"captive_redir":           "https://nethesis.github.io/icaro",
+	"captive_background":      "#2a87be",
 	"facebook_login":          "true",
 	"google_login":            "true",
 	"linkedin_login":          "true",

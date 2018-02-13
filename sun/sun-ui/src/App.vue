@@ -129,10 +129,10 @@
 
           <li></li>
 
-          <li v-bind:class="[getCurrentPath('hotspots') ? 'active' : '', 'list-group-item']" v-if="(user.info.type == 'admin') || (user.info.type == 'reseller')">
-            <a href="#/hotspots">
+          <li v-bind:class="[getCurrentPath('hotspots') ? 'active' : '', 'list-group-item']">
+            <a :href="user.info.type == 'admin' || user.info.type == 'reseller' ? '#/hotspots' : '#/hotspots/'+user.info.hotspot_id">
               <span class="fa fa-wifi"></span>
-              <span class="list-group-item-value">{{ $t('menu.hotspots') }}</span>
+              <span class="list-group-item-value">{{ user.info.type == 'admin' || user.info.type == 'reseller' ? $t('menu.hotspots') : $t('menu.hotspot') }}</span>
             </a>
           </li>
           <li v-bind:class="[getCurrentPath('users') ? 'active' : '', 'list-group-item']">

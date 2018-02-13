@@ -37,7 +37,7 @@ const router = new Router({
       name: 'HotspotsDetails',
       component: HotspotsDetails,
       meta: {
-        roles: ['admin', 'reseller']
+        roles: ['admin', 'reseller', 'customer', 'desk']
       },
     },
     {
@@ -94,7 +94,7 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
 
   var user = JSON.parse(localStorage.getItem("loggedUser"))
-  if (user && to.meta.roles && to.meta.roles.indexOf(user.account_type >= 0)) {
+  if (user && to.meta.roles && to.meta.roles.indexOf(user.account_type) >= 0) {
     next()
   } else {
     next(false)

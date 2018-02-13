@@ -56,7 +56,9 @@
       "create_voucher": "Create Voucher",
       "delete_voucher": "Delete",
       "code": "Code",
-      "expires": "Expires"
+      "expires": "Expires",
+      "preferences_captive": "Preferences Captive",
+      "captive_preview": "Anteprima"
     },
     "user": {
       "username": "Username",
@@ -134,6 +136,7 @@
       "users": "Users",
       "accounts": "Managers",
       "hotspots": "Hotspots",
+      "hotspot": "Hotspot",
       "help": "Help",
       "profile": "Profile",
       "about": "About",
@@ -165,9 +168,10 @@
     "captive_subtitle": "Captive Portal subtitle",
     "captive_title": "Captive Portal title",
     "captive_description": "Captive Portal description",
-    "captive_banner": "Captive Portal banner (base64 image)",
-    "captive_logo": "Captive Portal logo (base64 image)",
+    "captive_banner": "Captive Portal banner",
+    "captive_logo": "Captive Portal logo",
     "captive_redir": "Captive Portal redirect",
+    "captive_background": "Captive Portal background",
     "voucher_expiration_days": "Voucher expiration (days)",
     "sms_login_message": "SMS Login message",
     "sms_login": "Captive Portal login with SMS",
@@ -177,6 +181,12 @@
     "google_login": "Captive Portal login with Google",
     "linkedin_login": "Captive Portal login with Linkedin",
     "voucher_login": "Captive Portal login with Voucher",
-    "temp_session_duration": "Temporary session duration (seconds)"
+    "temp_session_duration": "Temporary session duration (seconds)",
+    "start_navigate": "Start Navigate",
+    "upload_change": "Change",
+    "upload_remove": "Remove",
+    "upload_drag": "Click or Drag",
+    "upload_file_not_supported": "File not supported",
+    "upload_file_exceed": "File limit exceed (max 60kb)"
   }
 }

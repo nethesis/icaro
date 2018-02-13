@@ -9,6 +9,15 @@ var UtilService = {
         globalSearchPlaceholder: this.$i18n.t('search'),
       }
     },
+    uploadImageLangs() {
+      return {
+        drag: '<h1>' + this.$i18n.t('upload_drag') + '</h1>',
+        change: this.$i18n.t('upload_change'),
+        remove: this.$i18n.t('upload_remove'),
+        fileType: this.$i18n.t('upload_file_not_supported'),
+        fileSize: this.$i18n.t('upload_file_exceed'),
+      }
+    },
     generateUUID() {
       var d = new Date().getTime();
       var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
@@ -106,14 +115,49 @@ var UtilService = {
       }
       return retVal;
     },
-    getInputType(value) {
-      if (value === true || value === "true" || value === "false" || value === false) {
-        return 'checkbox'
-      } else if (+value) {
-        return 'number'
-      } else {
-        return 'text'
+    getInputType(key, value) {
+      var type = 'text'
+      switch (key) {
+        case 'facebook_login':
+        case 'instagram_login':
+        case 'google_login':
+        case 'linkedin_login':
+        case 'email_login':
+        case 'sms_login':
+        case 'voucher_login':
+          type = 'checkbox'
+          break;
+        case 'temp_session_duration':
+        case 'user_expiration_days':
+        case 'voucher_expiration_days':
+          type = 'number'
+          break;
+        case 'captive_redir':
+          type = 'url'
+          break;
       }
+      return type
+    },
+    urltoFile(dataURI, name) {
+      var byteString;
+      if (dataURI.split(',')[0].indexOf('base64') >= 0)
+        byteString = atob(dataURI.split(',')[1]);
+      else
+        byteString = unescape(dataURI.split(',')[1]);
+
+      // separate out the mime component
+      var mimeString = dataURI && dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+      // write the bytes of the string to a typed array
+      var ia = new Uint8Array(byteString.length);
+      for (var i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+      }
+
+      var blob = new Blob([ia], {
+        type: mimeString
+      });
+      return new File([blob], name);
     }
   }
 };
