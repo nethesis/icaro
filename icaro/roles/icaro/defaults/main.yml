@@ -19,10 +19,6 @@ facebook_client_id:
     "FacebookClientID"
 facebook_client_secret:
     "FacebookClientSecret"
-google_client_id:
-    "GoogleClientID"
-google_client_secret:
-    "GoogleClientSecret"
 linkedin_client_id:
     "LinkedInClientID"
 linkedin_client_secret:

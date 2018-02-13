@@ -13,7 +13,6 @@ The configuration file is `/opt/icaro/wax/conf.json` and the parameters to confi
 ## Social
 For the social logins, each platforms as its application registration process, here the links to create new apps for:
 - **Facebook**: [create new app](https://developers.facebook.com/apps)
-- **Google+**: [create new app](https://console.cloud.google.com/home/dashboard)
 - **LinkedIn**: [create new app](https://www.linkedin.com/developer/apps)
 - **Instagram**: [create new app](https://www.instagram.com/developer/)
 
@@ -24,11 +23,6 @@ After the registration insert your variables inside the file `/opt/icaro/wax/con
 		"client_id": "fb_client_id",
 		"client_secret": "fb_client_secret",
 		"redirect_uri": "http://<icaro_instance>/wings/login/facebook"
-	},
-	"google": {
-		"client_id": "gl_client_id",
-		"client_secret": "gl_client_secret",
-		"redirect_uri": "http://<icaro_instance>/wings/login/google"
 	},
 	"linkedin": {
 		"client_id": "li_client_id",
@@ -93,12 +87,6 @@ This variables are common to all backends:
 * `FACEBOOK_CLIENT_ID` Facebook Oauth2 Client ID
 * `FACEBOOK_CLIENT_SECRET` Facebook Oauth2 Client Secret
 * `FACEBOOK_REDIRECT_URL` Facebook Redirect URL
-
-##### Google+
-
-* `GOOGLE_CLIENT_ID` Google+ Oauth2 Client ID
-* `GOOGLE_CLIENT_SECRET` Google+ Oauth2 Client Secret
-* `GOOGLE_CLIENT_REDIRECT_URL` Google+ Oauth2 Redirect URL
 
 ##### LinkedIn
 
