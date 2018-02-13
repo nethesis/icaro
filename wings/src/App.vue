@@ -1,8 +1,8 @@
 <template>
   <div id="app" class="ui container">
     <div class="ui center aligned">
-      <h2>{{hotspot.preferences.captive_title}}</h2>
-      <img :src="hotspot.preferences.captive_logo" class="ui centered image tiny">
+      <h2>{{hotspot.preferences.captive_2_title}}</h2>
+      <img :src="hotspot.preferences.captive_3_logo" class="ui centered image tiny">
     </div>
     <div class="ui segments route-container">
       <router-view class="ui segment"></router-view>
@@ -26,7 +26,7 @@
         this.$root.$options.hotspot.socials = success.body.socials
         this.hotspot.name = success.body.hotspot_name
         this.hotspot.preferences = success.body.preferences
-        $("body").css("background-color", success.body.preferences.captive_background);
+        $("body").css("background-color", success.body.preferences.captive_7_background);
       }, error => {
         console.error(error)
       })

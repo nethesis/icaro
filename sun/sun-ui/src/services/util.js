@@ -132,7 +132,7 @@ var UtilService = {
         case 'voucher_expiration_days':
           type = 'number'
           break;
-        case 'captive_redir':
+        case 'captive_1_redir':
           type = 'url'
           break;
       }

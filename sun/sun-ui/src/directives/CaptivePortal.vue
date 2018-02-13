@@ -1,21 +1,20 @@
 <template>
   <div id="captive-preview" class="ui container">
     <div class="ui center aligned">
-      <h2>{{extractValue('captive_title')}}</h2>
-      <img :src="extractValue('captive_logo')" class="ui centered image tiny">
+      <h2>{{extractValue('captive_2_title')}}</h2>
+      <img :src="extractValue('captive_3_logo')" class="ui centered image tiny">
     </div>
     <div class="ui segments route-container">
       <div class="ui segment">
         <div>
           <div>
-            <h3>{{extractValue('captive_subtitle')}}</h3>
-            <img class="ui centered small image" :src="extractValue('captive_banner')">
-            <p>
-              {{extractValue('captive_description')}}
+            <h3>{{extractValue('captive_4_subtitle')}}</h3>
+            <img class="ui centered small image" :src="extractValue('captive_5_banner')">
+            <p v-html="extractValue('captive_6_description')">
             </p>
             <div class="ui divider"></div>
             <router-link to='/login' class="big ui green button">
-              {{ $t("start_navigate") }}
+              {{ $t("hotspot.start_navigate") }}
             </router-link>
           </div>
         </div>

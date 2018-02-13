@@ -137,7 +137,7 @@
                         setTimeout(function () {
                             // open redir url
                             window.location.replace(this.$root.$options.hotspot.preferences
-                                .captive_redir)
+                                .captive_1_redir)
                         }.bind(this), 2500)
                     } else {
                         this.authorized = false

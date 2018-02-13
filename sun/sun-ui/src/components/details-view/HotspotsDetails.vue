@@ -164,14 +164,11 @@
           <form class="form-horizontal" role="form" v-on:submit.prevent="updatePreferences(preferences.global)">
             <div v-if="!preferences.isLoading" class="card-pf-body">
               <div v-for="pref in preferences.global" :key="pref.key" class="form-group">
-                <label class="col-sm-4 control-label" for="textInput-markup">{{$t(pref.key)}}
+                <label class="col-sm-4 control-label" for="textInput-markup">{{$t('hotspot.'+pref.key)}}
                   <span :class="[getPrefIcon(pref.key)]"></span>
                 </label>
                 <div class="col-sm-6">
                   <input v-model="pref.value" :type="getInputType(pref.key, pref.value)" id="textInput-markup" class="form-control">
-                </div>
-                <div class="col-sm-2" v-if="pref.key == 'captive_banner' || pref.key == 'captive_logo'">
-                  <a href="" class="btn btn-default" data-placement="top" data-toggle="popover" data-html="true" v-bind:data-content="getPrevieHTML(pref.value)">Preview</a>
                 </div>
               </div>
             </div>
@@ -201,36 +198,37 @@
           <form class="form-horizontal" role="form" v-on:submit.prevent="updatePreferencesCaptive(preferences.captive)">
             <div class="card-pf-body">
               <div v-for="pref in preferences.captive" :key="pref.key" :class="[pref.onError ? 'has-error' : '', 'form-group']">
-                <label class="col-sm-4 control-label" for="textInput-markup">{{$t(pref.key)}}
+                <label class="col-sm-4 control-label" for="textInput-markup">{{$t('hotspot.'+pref.key)}}
                   <span :class="[getPrefIcon(pref.key)]"></span>
                 </label>
                 <div class="col-sm-6">
-                  <picture-input v-if="pref.key == 'captive_logo' || pref.key == 'captive_banner'" :ref="'prefInput-'+pref.key" :prefill="urltoFile(pref.value, pref.key)"
+                  <picture-input v-if="pref.key == 'captive_3_logo' || pref.key == 'captive_5_banner'" :ref="'prefInput-'+pref.key" :prefill="urltoFile(pref.value, pref.key)"
                     :alertOnError="false" @change="onChanged(pref)" :width="100" :height="100" accept="image/jpeg, image/png"
                     :crop="false" :zIndex="1000" :customStrings="uploadLangstexts" removeButtonClass="btn btn-danger" buttonClass="btn btn-default">
 
                   </picture-input>
                   <span v-if="pref.onError" class="help-block">{{$t('upload_file_exceed')}}</span>
 
-                  <textarea v-if="pref.key == 'captive_description'" v-model="pref.value">
-                  </textarea>
+                  <vue-editor :editorToolbar="customToolbar" v-if="pref.key == 'captive_6_description'" v-model="pref.value"></vue-editor>
 
-                  <sketch-picker @input="onUpdate(pref.value)" class="absolute-center" v-if="pref.key == 'captive_background'" v-model="pref.value"
+                  <sketch-picker @input="onUpdate(pref.value)" class="absolute-center" v-if="pref.key == 'captive_7_background'" v-model="pref.value"
                   />
 
-                  <input v-if="pref.key != 'captive_description' && pref.key != 'captive_logo' && pref.key != 'captive_banner' && pref.key != 'captive_background'"
+                  <input v-if="pref.key != 'captive_6_description' && pref.key != 'captive_3_logo' && pref.key != 'captive_5_banner' && pref.key != 'captive_7_background'"
                     v-model="pref.value" :type="getInputType(pref.key, pref.value)" class="form-control">
                 </div>
               </div>
               <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-8">
+                <label class="col-sm-4 control-label" for="textInput-markup">
+                  {{$t('hotspot.captive_preview')}}
+                </label>
+                <div class="col-sm-6">
                   <div v-if="preferences.isLoading" class="captive-preview">
                     <div class="spinner spinner-lg absolute-center"></div>
                   </div>
-                  <captive-portal :obj="preferences.captive"></captive-portal>
+                  <captive-portal v-if="!preferences.isLoading" :obj="preferences.captive"></captive-portal>
                 </div>
               </div>
-
             </div>
             <div v-if="!preferences.isLoading" class="card-pf-footer">
               <div class="dropdown card-pf-time-frame-filter">
@@ -265,6 +263,12 @@
   import {
     Sketch
   } from 'vue-color'
+  import {
+    VueEditor
+  } from 'vue2-editor'
+  import {
+    setTimeout
+  } from 'timers';
 
   export default {
     name: 'HotspotDetails',
@@ -275,7 +279,8 @@
       hotspotAction: HotspotAction,
       PictureInput,
       'sketch-picker': Sketch,
-      captivePortal: CaptivePortal
+      captivePortal: CaptivePortal,
+      VueEditor
     },
     data() {
       // get hotspot info
@@ -345,6 +350,10 @@
         tableLangsTexts: this.tableLangs(),
         uploadLangstexts: this.uploadImageLangs(),
         user: this.get("loggedUser"),
+        customToolbar: [
+          ['bold', 'italic', 'underline'],
+          ['image', 'code-block']
+        ]
       }
     },
     methods: {
@@ -437,6 +446,7 @@
         this.hsPrefGet(this.$route.params.id, success => {
           var globalPref = []
           var captivePref = []
+          var backgroundColor = ''
 
           for (var p in success.body) {
             var pref = success.body[p]
@@ -453,8 +463,8 @@
               this.preferences.vouchersAvailable = false
             }
 
-            if (pref.key == 'captive_background') {
-              $('#captive-preview').css('background-color', pref.value);
+            if (pref.key == 'captive_7_background') {
+              backgroundColor = pref.value
             }
 
             if (pref.key.startsWith('captive')) {
@@ -463,9 +473,13 @@
               globalPref.push(pref)
             }
           }
+
           this.preferences.global = globalPref
           this.preferences.captive = captivePref
           this.preferences.isLoading = false
+          setTimeout(function () {
+            $('#captive-preview').css('background-color', backgroundColor);
+          }, 0)
         }, error => {
           console.log(error.body)
         })
@@ -505,7 +519,7 @@
             if (typeof pref.value == "boolean") {
               pref.value = pref.value.toString()
             }
-            if (pref.key == 'captive_background') {
+            if (pref.key == 'captive_7_background') {
               pref.value = pref.value.hex || pref.value
             }
             this.hsPrefModify(this.$route.params.id, pref, success => {
@@ -534,7 +548,6 @@
         this.$forceUpdate()
       },
       onUpdate(value) {
-        console.log("asd", value.hex)
         $('#captive-preview').css('background-color', value.hex);
       },
     }

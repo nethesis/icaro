@@ -3,10 +3,10 @@
     <div v-if="!hotspot.onError">
       <div v-if="!hotspot.loaded" class="ui active centered inline text loader">{{ $t("splash.retrieve_info") }}...</div>
       <div v-if="hotspot.loaded">
-        <h3>{{hotspot.preferences.captive_subtitle}}</h3>
-        <img class="ui centered small image" :src="hotspot.preferences.captive_banner">
-        <p>
-          {{hotspot.preferences.captive_description}}
+        <h3>{{hotspot.preferences.captive_4_subtitle}}</h3>
+        <img class="ui centered small image" :src="hotspot.preferences.captive_5_banner">
+        <p v-html="hotspot.preferences.captive_6_description">
+
         </p>
         <div class="ui divider"></div>
         <router-link to='/login' class="big ui green button">
