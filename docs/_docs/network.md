@@ -1,12 +1,12 @@
-### Hotspot Configuration 
+## Hotspot Configuration 
 
 * You must have at least one free interface that will be used **only for hotspot purposes**, the interface can be **physical or logical (VLAN)**
-* Configure the Hotspot service specifiyng the correct interface
+* Configure the Hotspot service specifying the correct interface
 * Define a private network for the Hotspot (the clients will receive IP addresses belonging to this network)
 * Connect all the Access Points to the interface 
 
 
-### Access Points Configuration
+## Access Points Configuration
 
 * Access Point should only allow the traffic between clients and the hotspot service, they must behave like dumb network switches
 * Configure APs with open access to everybody without authentication, disable DHCP server on every APs because the DHCP service must be performed by the hotspot service
