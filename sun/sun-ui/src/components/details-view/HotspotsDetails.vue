@@ -134,7 +134,12 @@
                 </td>
                 <td class="fancy">{{ props.row.expires | formatDate }}</td>
                 <td>
-                  <button v-on:click="deleteVoucher(props.row.id)" class="btn btn-danger" type="button">{{ $t("hotspot.delete_voucher") }}</button>
+                  <button v-on:click="printVoucher(props.row.code)" class="btn btn-primary" type="button">
+                    <span class="fa fa-print"></span>
+                  </button>
+                  <button v-on:click="deleteVoucher(props.row.id)" class="btn btn-danger" type="button">
+                    <span class="fa fa-remove"></span>
+                  </button>
                 </td>
               </template>
             </vue-good-table>
@@ -142,6 +147,10 @@
           <div v-if="!vouchers.isLoading" class="card-pf-footer">
             <div class="dropdown card-pf-time-frame-filter">
               <button v-on:click="createVoucher()" class="btn btn-primary" type="button">{{ $t("hotspot.create_voucher") }}</button>
+              <button v-on:click="printAllVoucher()" class="btn btn-default" type="button">
+                <span class="fa fa-print"></span>
+                {{ $t("hotspot.print_all_voucher") }}
+              </button>
             </div>
             <p>
               <a href="#" class="card-pf-link-with-icon">
@@ -257,6 +266,7 @@
   import StorageService from '../../services/storage';
   import UtilService from '../../services/util';
 
+  import jsPDF from 'jspdf'
   import CaptivePortal from '../../directives/CaptivePortal.vue'
   import HotspotAction from '../../directives/HotspotAction.vue';
   import PictureInput from 'vue-picture-input'
@@ -536,6 +546,34 @@
           context.preferences.isLoading = false
           context.getPreferences()
         })
+      },
+      printVoucher(voucher) {
+        var v = 0
+        var doc = new jsPDF("portrait", "mm", "a4");
+        doc.setFontSize(22);
+        doc.text(20, 18, '-'.repeat(20))
+        doc.setFontSize(15);
+        doc.text(20, (v + 1) * (2.5) + 20, this.$i18n.t('hotspot.voucher_code'));
+        doc.setFontSize(22);
+        doc.text(20, (v + 1) * (2.5) + 30, voucher);
+        doc.text(20, (v + 1) * (2.5) + 38, '-'.repeat(20))
+        doc.autoPrint();
+        window.open(doc.output('bloburl'), '_blank');
+      },
+      printAllVoucher() {
+        var doc = new jsPDF("portrait", "mm", "a4");
+        for (var v in this.vouchers.data) {
+          var voucher = this.vouchers.data[v]
+          doc.setFontSize(22);
+          doc.text(20, 18, '-'.repeat(20))
+          doc.setFontSize(15);
+          doc.text(20, (v + 1) * (2.5) + 20, this.$i18n.t('hotspot.voucher_code'));
+          doc.setFontSize(22);
+          doc.text(20, (v + 1) * (2.5) + 30, voucher.code);
+          doc.text(20, (v + 1) * (2.5) + 38, '-'.repeat(20))
+        }
+        doc.autoPrint();
+        window.open(doc.output('bloburl'), '_blank');
       },
       onChanged(pref) {
         if (this.$refs['prefInput-' + pref.key][0].image.length > 65536) {
