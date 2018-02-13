@@ -56,3 +56,26 @@ USE_UPDOWN_SCRIPTS=true
     Secret:     Nethesis,1234
     MAC:        00-0D-B9-41-7C-F8
   ```
+
+## First setup
+
+1. Change `/opt/icaro/dedalo/config` with yours configurations setting, you can generate a UUID using:
+  ```shell
+      # uuidgen
+  ```
+2. Register your unit to the Hotspot Manager:
+  ```shell
+      # dedalo register -u sun-username -p sun-password
+  ```
+3. Apply your configuration changes and regenerate CoovaChilli config:
+  ```shell
+      # dedalo config
+  ```
+4. Restart dedalo instance:
+  ```shell
+      # dedalo restart
+  ```
+5. Check dedalo status:
+  ```shell
+      # dedalo status
+  ```
