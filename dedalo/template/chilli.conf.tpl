@@ -23,7 +23,6 @@ uamdomain       "${HS_AAA_HOST}"
 
 include /opt/icaro/dedalo/walled_gardens/local.conf
 include /opt/icaro/dedalo/walled_gardens/facebook.conf
-include /opt/icaro/dedalo/walled_gardens/google.conf
 include /opt/icaro/dedalo/walled_gardens/linkedin.conf
 
 ${USE_UPDOWN_SCRIPTS:+"ipup=/opt/icaro/dedalo/up.sh"}

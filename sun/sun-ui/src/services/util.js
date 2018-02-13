@@ -51,9 +51,6 @@ var UtilService = {
         case 'facebook':
           icon = 'fa fa-facebook'
           break;
-        case 'google':
-          icon = 'fa fa-google'
-          break;
         case 'linkedin':
           icon = 'fa fa-linkedin'
           break;
@@ -74,9 +71,6 @@ var UtilService = {
           break;
         case 'instagram_login':
           icon = 'fa fa-instagram login-pref-option'
-          break;
-        case 'google_login':
-          icon = 'fa fa-google-plus-square login-pref-option'
           break;
         case 'linkedin_login':
           icon = 'fa fa-linkedin-square login-pref-option'
@@ -120,7 +114,6 @@ var UtilService = {
       switch (key) {
         case 'facebook_login':
         case 'instagram_login':
-        case 'google_login':
         case 'linkedin_login':
         case 'email_login':
         case 'sms_login':

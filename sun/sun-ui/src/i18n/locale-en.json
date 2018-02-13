@@ -75,7 +75,6 @@
       "email_login": "Captive Portal login with Email",
       "facebook_login": "Captive Portal login with Facebook",
       "instagram_login": "Captive Portal login with Instagram",
-      "google_login": "Captive Portal login with Google",
       "linkedin_login": "Captive Portal login with Linkedin",
       "voucher_login": "Captive Portal login with Voucher",
       "temp_session_duration": "Temporary session duration (seconds)",

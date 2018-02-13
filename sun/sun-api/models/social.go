@@ -30,7 +30,6 @@ type Social struct {
 
 type AuthSocial struct {
 	Facebook  Social `json:"facebook"`
-	Google    Social `json:"google"`
 	LinkedIn  Social `json:"linkedin"`
 	Instagram Social `json:"instagram"`
 }
@@ -39,14 +38,6 @@ type FacebookRespToken struct {
 	AccessToken string `json:"access_token"`
 	TokenType   string `json:"token_type"`
 	ExpiresIn   int    `json:"expires_in"`
-}
-
-type GoogleRespToken struct {
-	Aud       string `json:"aud"`
-	UserId    string `json:"user_id"`
-	Scope     string `json:"scope"`
-	ExpiresIn string `json:"expires_in"`
-	Email     string `json:"email"`
 }
 
 type LinkedInRespToken struct {
@@ -90,21 +81,6 @@ type FacebookUserDetail struct {
 			CreatedTime string `json:"created_time"`
 		} `json:"data"`
 	} `json:"likes"`
-}
-
-type GoogleUserDetail struct {
-	Birthday string `json:"birthday"`
-	Emails   []struct {
-		Value string `json:"value"`
-		Type  string `json:"type"`
-	} `json:"emails"`
-	ObjectType  string `json:"objectType"`
-	Id          string `json:"id"`
-	DisplayName string `json:"displayName"`
-	Language    string `json:"language"`
-	AgeRange    struct {
-		Min int `json:"min"`
-	} `json:"ageRange"`
 }
 
 type LinkedInUserDetail struct {

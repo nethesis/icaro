@@ -35,7 +35,6 @@ var HotspotPreferences = map[string]string{
 	"captive_6_description":   "This is a description",
 	"captive_7_background":    "#2a87be",
 	"facebook_login":          "true",
-	"google_login":            "true",
 	"linkedin_login":          "true",
 	"instagram_login":         "true",
 	"sms_login":               "true",
