@@ -77,4 +77,4 @@
   }
 
 </style>
-<style scoped src="./../styles/semantic.min.css"></style>
+<style scoped src="semantic-ui-offline/semantic.min.css"></style>
