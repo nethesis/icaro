@@ -31,3 +31,16 @@ type Hotspot struct {
 	Description string    `db:"description" json:"description"`
 	Created     time.Time `db:"created" json:"created"`
 }
+
+type HotspotJSON struct {
+	Id          int       `db:"id" json:"id"`
+	AccountId   int       `db:"account_id" json:"account_id"`
+	Name        string    `db:"name" json:"name"`
+	Description string    `db:"description" json:"description"`
+	Created     time.Time `db:"created" json:"created"`
+	AccountName string    `db:"account_name" json:"account_name"`
+}
+
+func (HotspotJSON) TableName() string {
+	return "hotspots"
+}

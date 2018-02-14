@@ -126,17 +126,16 @@ func GetHotspots(c *gin.Context) {
 }
 
 func GetHotspot(c *gin.Context) {
-	var hotspot models.Hotspot
+	var hotspot models.HotspotJSON
 	accountId := c.MustGet("token").(models.AccessToken).AccountId
 
 	hotspotId := c.Param("hotspot_id")
 
 	db := database.Database()
 	if accountId == 1 {
-		db.Where("id = ?", hotspotId).First(&hotspot)
+		db.Select("hotspots.*, accounts.name as account_name").Where("hotspots.id = ?", hotspotId).Joins("JOIN accounts on accounts.id = hotspots.id").First(&hotspot)
 	} else {
-		db.Where("id = ? AND account_id = ?", hotspotId, accountId).First(&hotspot)
-
+		db.Select("hotspots.*, accounts.name as account_name").Where("hotspots.id = ? AND account_id = ?", hotspotId, accountId).Joins("JOIN accounts on accounts.id = hotspots.id").First(&hotspot)
 	}
 	db.Close()
 
