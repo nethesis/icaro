@@ -38,6 +38,14 @@ input[type=radio].form-control {
   top: -100px !important;
 }
 
+.nav-pf-vertical {
+  width: 185px !important;
+}
+
+.layout-pf.layout-pf-fixed .container-pf-nav-pf-vertical {
+  margin-left: 185px !important;
+}
+
 .has-error .checkbox,
 .has-error .checkbox-inline,
 .has-error .control-label,
