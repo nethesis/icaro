@@ -22,6 +22,7 @@ icaro:
     twilio_account_sid: "TwilioAccountSID"
     twilio_auth_token: "TwilioAuthToken"
     twilio_number: "TwilioNumber"
+    email_from: "admin@example.com"
     email_smtp_host: "EmailSMTPHost"
     email_smtp_port: "25"
     email_smtp_user: "EmailSMTPUser"
