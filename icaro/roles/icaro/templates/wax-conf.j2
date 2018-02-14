@@ -44,12 +44,12 @@ icaro.wax.twilio_number is defined %}
 {% endif %}
         },
         "email": {
-{% if admin_email is defined and
+{% if icaro.wax.email_from is defined and
 icaro.wax.email_smtp_host is defined and
 icaro.wax.email_smtp_port is defined and
 icaro.wax.email_smtp_user is defined and
 icaro.wax.email_smtp_password is defined %}
-            "from": "{{ admin_email }}",
+            "from": "{{ icaro.wax.email_from }}",
             "smtp_host": "{{ icaro.wax.email_smtp_host }}",
             "smtp_port": {{ icaro.wax.email_smtp_port }},
             "smtp_user": "{{ icaro.wax.email_smtp_user }}",
