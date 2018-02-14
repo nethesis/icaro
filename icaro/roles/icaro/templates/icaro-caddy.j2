@@ -3,7 +3,6 @@ https://{{ machine_hostname }} {
   gzip
   proxy /api localhost:8080
   proxy /wax localhost:8181
-  tls {{ admin_email }}
 }
 
 http://{{ machine_hostname }} {
