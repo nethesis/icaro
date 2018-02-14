@@ -28,9 +28,9 @@
         </td>
         <td class="fancy">
           <div>
-            <strong>{{ $t('user.kbps_down') }}</strong>: {{ props.row.kbps_down }}</div>
+            <strong>{{ $t('user.kbps_down') }}</strong>: {{ props.row.kbps_down || '-' }}</div>
           <div>
-            <strong>{{ $t('user.kbps_up') }}</strong>: {{ props.row.kbps_up }}</div>
+            <strong>{{ $t('user.kbps_up') }}</strong>: {{ props.row.kbps_up || '-' }}</div>
         </td>
         <td class="fancy">
           <div>
@@ -88,7 +88,7 @@
             filterable: true,
           },
           {
-            label: this.$i18n.t('user.bandwidth'),
+            label: this.$i18n.t('user.bandwidth_limit'),
             field: 'bandwidth',
             filterable: true,
             sortable: false

@@ -43,6 +43,7 @@
                     this.$parent.hotspot.name = success.body.hotspot_name
                     this.$parent.hotspot.preferences = success.body.preferences
                     this.$root.$options.hotspot.preferences = success.body.preferences
+                    $("body").css("background-color", success.body.preferences.captive_7_background || '#2a87be');
                 }, error => {
                     this.authorized = false
                     console.error(error)

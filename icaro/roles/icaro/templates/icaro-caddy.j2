@@ -1,5 +1,6 @@
 https://{{ machine_hostname }} {
   root /opt/icaro/sun-ui
+  gzip
   proxy /api localhost:8080
   proxy /wax localhost:8181
   tls {{ admin_email }}
@@ -14,6 +15,7 @@ http://{{ machine_hostname }} {
 
 http://{{ machine_hostname }}/wings {
   root /opt/icaro/wings
+  gzip
   rewrite {
     if {path} not_starts_with /wings/static/
     to {path} /
