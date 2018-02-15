@@ -31,6 +31,10 @@ If you prefere to use another cloud provider, edit ``Vagrantfile`` accordingly.
    ```
    dnf install vagrant-digitalocean
    ```
+   On Ubuntu 17.10
+   ```
+   apt-get install vagrant-digitalocean
+   ```
 
 2. Replace ``YOUR TOKEN`` with your DO token inside the ``Vagrantfile``
 
