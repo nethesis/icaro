@@ -16,7 +16,7 @@ git clone https://github.com/nethesis/icaro.git
 
 Then enter the provisioning directory:
 ```
-cd icaro
+cd deploy
 ```
 
 ## Provisioning with Vagrant and Ansible
