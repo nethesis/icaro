@@ -35,21 +35,33 @@ If you prefere to use another cloud provider, edit ``Vagrantfile`` accordingly.
    ```
    apt-get install vagrant-digitalocean
    ```
+2. Install ansible (>= 2.4)
 
-2. Replace ``YOUR TOKEN`` with your DO token inside the ``Vagrantfile``
+   On Fedora 27:
+   ```
+   dnf install ansible
+   ```
+   On Ubuntu 17.10:
+   ```
+   apt-get install python-pip
+   pip install ansible
+   ```
+   add ``$HOME/.local/bin/`` to your ``$PATH``.
 
-3. Make sure to upload an SSH key to yuor DO account, then replace ``YOUR KEY NAME``
+3. Replace ``YOUR TOKEN`` with your DO token inside the ``Vagrantfile``
+
+4. Make sure to upload an SSH key to yuor DO account, then replace ``YOUR KEY NAME``
    with you SSH key name inside the ``Vagrantfile``
 
-4. Modify ``icaro/roles/icaro/defaults/main.yml`` file by replacing all variables.
+5. Modify ``icaro/roles/icaro/defaults/main.yml`` file by replacing all variables.
    Make sure to customize at least ``machine_hostname``.
 
-5. Create the ``Icaro`` droplet:
+6. Create the ``Icaro`` droplet:
    ```
    vagrant up --provider=digital_ocean
    ```
 
-6. At the end, reboot the droplet:
+7. At the end, reboot the droplet:
    ```
    vagrant reload
    ```
