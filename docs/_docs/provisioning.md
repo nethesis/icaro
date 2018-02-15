@@ -39,11 +39,11 @@ If you prefere to use another cloud provider, edit ``Vagrantfile`` accordingly.
 
    On Fedora 27:
    ```
-   dnf install ansible
+   sudo dnf install ansible
    ```
    On Ubuntu 17.10:
    ```
-   apt-get install python-pip
+   sudo apt-get install python-pip
    pip install ansible
    ```
    add ``$HOME/.local/bin/`` to your ``$PATH``.
