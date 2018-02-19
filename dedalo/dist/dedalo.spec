@@ -1,5 +1,5 @@
 Name: dedalo
-Version: 0.0.4
+Version: 0.0.5
 Release: 1%{?dist}
 Summary: Network Access Controller, runs on the firewall and intercepts all guest connections
 
@@ -63,6 +63,9 @@ touch %{buildroot}/opt/icaro/dedalo/walled_gardens/local.conf
 
 
 %changelog
+* Mon Feb 19 2018 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 0.0.5
+- Add missing temporary.chi in rpm spec
+
 * Wed Feb 14 2018 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 0.0.4
 - Required coova-chilli-dedalo
 
