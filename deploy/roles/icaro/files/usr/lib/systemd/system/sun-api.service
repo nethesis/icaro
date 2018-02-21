@@ -5,6 +5,7 @@ After=network.target
 [Service]
 Type=simple
 User=root
+EnvironmentFile=-/opt/icaro/sun-api/conf.env
 WorkingDirectory=/opt/icaro/sun-api/
 Environment=GIN_MODE=release
 ExecStart=/opt/icaro/sun-api/sun-api
