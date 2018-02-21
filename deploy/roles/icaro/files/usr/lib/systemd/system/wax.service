@@ -5,6 +5,7 @@ After=network.target
 [Service]
 Type=simple
 User=root
+EnvironmentFile=-/opt/icaro/wax/conf.env
 WorkingDirectory=/opt/icaro/wax/
 Environment=GIN_MODE=release
 ExecStart=/opt/icaro/wax/wax

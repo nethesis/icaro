@@ -5,6 +5,7 @@ After=network.target
 [Service]
 Type=simple
 PrivateTmp=true
+EnvironmentFile=-/opt/icaro/sun-api/conf.env
 ExecStart=/opt/icaro/sun-tasks/sun-tasks -a %i -w
 
 [Install]
