@@ -1,10 +1,8 @@
 ---
-
-machine_hostname: "example.com"
-
 icaro:
   url: "https://github.com/nethesis/icaro"
   version: "autobuild"
+  hostname: "example.com"
   db_root_password: "YourMariaDBPassWordHere"
   sun_api:
     db_hostname: "localhost"

@@ -6,7 +6,7 @@
     "db_password": "{{ icaro.wax.db_password }}",
     "token_expires_days": 1,
     "cors": {
-        "origins": ["http://{{ machine_hostname }}"],
+        "origins": ["http://{{ icaro.hostname }}"],
         "headers": ["Token", "Content-Type"],
         "methods": ["GET", "PUT", "POST", "DELETE"]
     },
@@ -15,21 +15,21 @@
 {% if icaro.wax.facebook_client_id is defined and icaro.wax.facebook_client_secret is defined %}
             "client_id": "{{ icaro.wax.facebook_client_id }}",
             "client_secret": "{{ icaro.wax.facebook_client_secret }}",
-            "redirect_uri": "http://{{ machine_hostname }}/wings/login/facebook"
+            "redirect_uri": "http://{{ icaro.hostname }}/wings/login/facebook"
 {% endif %}
         },
         "linkedin": {
 {% if icaro.wax.linkedin_client_id is defined and icaro.wax.linkedin_client_secret is defined %}
             "client_id": "{{ icaro.wax.linkedin_client_id }}",
             "client_secret": "{{ icaro.wax.linkedin_client_secret }}",
-            "redirect_uri": "http://{{ machine_hostname }}/wings/login/linkedin"
+            "redirect_uri": "http://{{ icaro.hostname }}/wings/login/linkedin"
 {% endif %}
         },
         "instagram": {
 {% if icaro.wax.instagram_client_id is defined and icaro.wax.instagram_client_secret is defined %}
             "client_id": "{{ icaro.wax.instagram_client_id }}",
             "client_secret": "{{ icaro.wax.instagram_client_secret }}",
-            "redirect_uri": "http://{{ machine_hostname }}/wings/login/instagram"
+            "redirect_uri": "http://{{ icaro.hostname }}/wings/login/instagram"
 {% endif %}
         }
     },

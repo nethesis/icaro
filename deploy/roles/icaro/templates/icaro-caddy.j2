@@ -1,18 +1,18 @@
-https://{{ machine_hostname }} {
+https://{{ icaro.hostname }} {
   root /opt/icaro/sun-ui
   gzip
   proxy /api localhost:8080
   proxy /wax localhost:8181
 }
 
-http://{{ machine_hostname }} {
+http://{{ icaro.hostname }} {
   redir {
     if {path} not_starts_with /wings
     / https://{host}{uri}/
   }
 }
 
-http://{{ machine_hostname }}/wings {
+http://{{ icaro.hostname }}/wings {
   root /opt/icaro/wings
   gzip
   rewrite {

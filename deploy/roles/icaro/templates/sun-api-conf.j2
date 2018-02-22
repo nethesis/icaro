@@ -6,7 +6,7 @@
     "db_password": "{{ icaro.sun_api.db_password }}",
     "token_expires_days": 1,
     "cors": {
-        "origins": ["https://{{ machine_hostname }}"],
+        "origins": ["https://{{ icaro.hostname }}"],
         "headers": ["Token", "Content-Type"],
         "methods": ["GET", "PUT", "POST", "DELETE"]
     },
