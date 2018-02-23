@@ -1,0 +1,6 @@
+---
+- import_tasks: sun-api.yml
+  become: true
+- import_tasks: sun-tasks.yml
+  become: true
+
