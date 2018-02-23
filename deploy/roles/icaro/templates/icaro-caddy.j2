@@ -3,6 +3,9 @@ https://{{ icaro.hostname }} {
   gzip
   proxy /api localhost:8080
   proxy /wax localhost:8181
+{% if icaro.tls_self_signed is defined and icaro.tls_self_signed == true %}
+  tls self_signed
+{% endif %}
 }
 
 http://{{ icaro.hostname }} {
