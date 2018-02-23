@@ -1,5 +1,9 @@
 ---
 - hosts: icaro
-
   roles:
     - role: icaro
+
+- hosts: icarodb
+  roles:
+    - role: icarodb
+      become: true
