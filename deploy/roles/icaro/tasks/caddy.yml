@@ -11,6 +11,11 @@
     name: caddy
     state: present
 
+- name: Copy Caddy envfile
+  template:
+    src: icaro-caddy-envfile.j2
+    dest: /etc/caddy/envfile
+
 - name: Copy Caddy configs
   template:
     src: icaro-caddy.j2
