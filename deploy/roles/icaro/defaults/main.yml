@@ -7,9 +7,11 @@ icaro:
   version: "autobuild"
   db_root_password: "YourMariaDBPassWordHere"
   sun_api:
+    db_hostname: "localhost"
     db_username: "sun-api"
     db_password: "Sun-ApiMariaDBPassWordHere"
   wax:
+    db_hostname: "localhost"
     db_username: "wax"
     db_password: "WaxMariaDBPassWordHere"
     facebook_client_id: "FacebookClientID"
