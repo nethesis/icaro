@@ -3,6 +3,11 @@
   roles:
     - role: icaro
 
+- hosts: sun
+  roles:
+    - role: sun
+      become: true
+
 - hosts: icarodb
   roles:
     - role: icarodb

@@ -30,6 +30,7 @@ Vagrant.configure("2") do |config|
     ansible.playbook = "playbook.yml"
     ansible.groups = {
       "icaro" => ["icaro"],
+      "sun" => ["icaro"],
       "icarodb" => ["icaro"]
     }
   end
