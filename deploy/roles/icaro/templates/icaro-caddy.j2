@@ -1,8 +1,8 @@
 https://{$ICARO_HOSTNAME} {
   root /opt/icaro/sun-ui
   gzip
-  proxy /api localhost:8080
-  proxy /wax localhost:8181
+  proxy /api {$SUN_API_ORIGIN}
+  proxy /wax {$WAX_ORIGIN}
 {% if icaro.tls_self_signed is defined and icaro.tls_self_signed == true %}
   tls self_signed
 {% endif %}
