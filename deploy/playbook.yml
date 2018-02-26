@@ -3,6 +3,11 @@
   roles:
     - role: icaro
 
+- hosts: wax
+  roles:
+    - role: wax
+      become: true
+
 - hosts: sun
   roles:
     - role: sun
