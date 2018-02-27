@@ -1,6 +1,6 @@
 [Unit]
 Description=Exec tasks immediatly or in a background jobs
-After=network.target
+After=network.target cloud-init.service
 
 [Service]
 Type=simple
