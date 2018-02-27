@@ -27,6 +27,16 @@
     capability: cap_net_bind_service=+ep
     state: present
 
+- name: Make caddy start after cloud-init (create dir)
+  file:
+    name: /etc/systemd/system/caddy.service.d
+    state: directory
+
+- name: Make caddy start after cloud-init (copy file)
+  copy:
+    src: etc/systemd/system/caddy.service.d/override.conf
+    dest: /etc/systemd/system/caddy.service.d/override.conf
+
 - name: Enable Caddy server
   service:
     name: caddy
