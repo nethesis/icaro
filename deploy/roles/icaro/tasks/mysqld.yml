@@ -36,6 +36,7 @@
     name: "{{ icaro.sun_api.db_username }}"
     password: "{{ icaro.sun_api.db_password }}"
     priv: "icaro.*:INSERT,SELECT,UPDATE,DELETE"
+    host: "%"
     state: present
 
 - name: Create Wax's user
@@ -43,6 +44,7 @@
     name: "{{ icaro.wax.db_username }}"
     password: "{{ icaro.wax.db_password }}"
     priv: "icaro.*:INSERT,SELECT,UPDATE,DELETE"
+    host: "%"
     state: present
 
 - stat:
