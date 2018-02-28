@@ -1,0 +1,51 @@
+{
+  "variables": {
+    "base_image": "centos-7-x64",
+    "region": "ams3"
+  },
+  "builders": [
+    {
+      "name": "icaro",
+      "type": "digitalocean",
+      "image": "{{user `base_image`}}",
+      "region": "{{user `region`}}",
+      "size": "s-1vcpu-1gb",
+      "ssh_username": "root",
+      "snapshot_name": "icaro-{{timestamp}}"
+    },
+    {
+      "name": "sun",
+      "type": "digitalocean",
+      "image": "{{user `base_image`}}",
+      "region": "{{user `region`}}",
+      "size": "s-1vcpu-1gb",
+      "ssh_username": "root",
+      "snapshot_name": "sun-{{timestamp}}"
+    },
+    {
+      "name": "wax",
+      "type": "digitalocean",
+      "image": "{{user `base_image`}}",
+      "region": "{{user `region`}}",
+      "size": "s-1vcpu-1gb",
+      "ssh_username": "root",
+      "snapshot_name": "wax-{{timestamp}}"
+    },
+    {
+      "name": "icarodb",
+      "type": "digitalocean",
+      "image": "{{user `base_image`}}",
+      "region": "{{user `region`}}",
+      "size": "s-1vcpu-1gb",
+      "ssh_username": "root",
+      "snapshot_name": "icarodb-{{timestamp}}"
+    }],
+
+    "provisioners": [{
+        "ansible_env_vars": ["ANSIBLE_HASH_BEHAVIOUR=merge"],
+        "type": "ansible",
+        "playbook_file": "ansible/playbook.yml",
+	"extra_arguments": ["--extra-vars", "{\"icaro\":{\"tls_self_signed\" : false}}"],
+	"host_alias": "{{build_name}}"
+    }]
+}
