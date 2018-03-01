@@ -1,5 +1,6 @@
 {
   "variables": {
+    "icaro_url": "https://github.com/nethesis/icaro/",
     "icaro_version": "autobuild",
     "base_image": "centos-7-x64",
     "region": "ams3"
@@ -47,7 +48,8 @@
         "type": "ansible",
         "playbook_file": "ansible/playbook.yml",
 	"extra_arguments": ["--extra-vars", "{\"icaro\":{\"tls_self_signed\" : false}}",
-          "--extra-vars", "{\"icaro\":{\"version\":\"{{user `icaro_version`}}\"}}"],
+          "--extra-vars", "{\"icaro\":{\"version\":\"{{user `icaro_version`}}\"}}",
+          "--extra-vars", "{\"icaro\":{\"url\" : \"{{user `icaro_url`}}\"}}"],
 	"host_alias": "{{build_name}}",
 	"groups": ["icaro_nodes"]
     },
