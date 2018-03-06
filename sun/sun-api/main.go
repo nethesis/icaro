@@ -50,6 +50,9 @@ func main() {
 	corsConf.AllowMethods = configuration.Config.Cors.Methods
 	router.Use(cors.New(corsConf))
 
+	health := router.Group("/health")
+	health.GET("/check", methods.HealthCheck)
+
 	api := router.Group("/api")
 
 	api.POST("/login", methods.Login)
