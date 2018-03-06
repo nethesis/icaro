@@ -43,6 +43,9 @@ func DefineAPI(router *gin.Engine) {
 	corsConf.AllowMethods = configuration.Config.Cors.Methods
 	router.Use(cors.New(corsConf))
 
+	health := router.Group("/health")
+	health.GET("/check", methods.HealthCheck)
+
 	wax := router.Group("/wax")
 
 	wax.Use(middleware.WaxWall)
