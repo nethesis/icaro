@@ -6,6 +6,7 @@ https://{$ICARO_HOSTNAME} {
 {% if icaro.tls_self_signed is defined and icaro.tls_self_signed == true %}
   tls self_signed
 {% endif %}
+  log / stdout {combined}
 }
 
 http://{$ICARO_HOSTNAME} {
@@ -22,4 +23,5 @@ http://{$ICARO_HOSTNAME}/wings {
     if {path} not_starts_with /wings/static/
     to {path} /
   }
+  log / stdout {combined}
 }
