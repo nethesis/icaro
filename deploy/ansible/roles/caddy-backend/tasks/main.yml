@@ -1,0 +1,38 @@
+---
+- name: Install EPEL repository (epel-release)
+  yum:
+    name: epel-release
+    state: present
+    enablerepo: extras
+  when: ansible_distribution == "CentOS" and (ansible_distribution_major_version == "6" or ansible_distribution_major_version == "7")
+
+- name: Install Caddy HTTP/2 web server
+  yum:
+    name: caddy
+    state: present
+
+- name: Copy Caddy configs
+  copy:
+    src:  etc/caddy/conf.d/icaro.conf
+    dest:  /etc/caddy/conf.d/icaro.conf
+
+- name: Grant caddy to bind on low ports
+  capabilities:
+    path: /usr/bin/caddy
+    capability: cap_net_bind_service=+ep
+    state: present
+
+- name: Make caddy start after cloud-init (create dir)
+  file:
+    name: /etc/systemd/system/caddy.service.d
+    state: directory
+
+- name: Make caddy start after cloud-init (copy file)
+  copy:
+    src: etc/systemd/system/caddy.service.d/override.conf
+    dest: /etc/systemd/system/caddy.service.d/override.conf
+
+- name: Enable Caddy server
+  service:
+    name: caddy
+    enabled: yes
