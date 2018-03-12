@@ -48,5 +48,11 @@
 	"extra_arguments": ["--extra-vars", "{\"icaro\":{\"tls_self_signed\" : false}}"],
 	"host_alias": "{{build_name}}",
 	"groups": ["icaro_nodes"]
+    },
+    {
+        "type": "ansible",
+        "playbook_file": "ansible/playbook.yml",
+	"host_alias": "backends",
+	"only": ["sun", "wax"]
     }]
 }
