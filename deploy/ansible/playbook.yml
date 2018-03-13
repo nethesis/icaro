@@ -14,3 +14,7 @@
 - hosts: icarodb
   roles:
     - role: icarodb
+
+- hosts: icaro_nodes
+  roles:
+    - role: papertrail

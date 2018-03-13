@@ -1,0 +1,15 @@
+- name: Install Nmap's Netcat replacement
+  yum:
+    name: nmap-ncat
+    state: present
+
+- name: Copy Papertrail sytemd unit
+  copy:
+    src: usr/lib/systemd/system/papertrail.service
+    dest: /usr/lib/systemd/system/papertrail.service
+
+- name: Enable papertrail service
+  systemd:
+    name: papertrail
+    daemon_reload: yes
+    enabled: yes
