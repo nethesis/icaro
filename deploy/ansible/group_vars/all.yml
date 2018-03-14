@@ -6,7 +6,7 @@ icaro:
   tls_self_signed: true
   db_root_password: "YourMariaDBPassWordHere"
   sun_api_origin: "http://localhost:8080"
-  wax_origin: "http://localhost:8081"
+  wax_origin: "http://localhost:8181"
   sun_api:
     db_hostname: "localhost"
     db_username: "sun-api"
