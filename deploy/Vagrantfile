@@ -23,7 +23,7 @@ Vagrant.configure("2") do |config|
     provider.ssh_key_name = 'YOUR KEY NAME'
     provider.image = 'centos-7-x64'
     provider.region = 'lon1'
-    provider.size = '1gb'
+    provider.size = 's-1vcpu-1gb'
   end
 
   config.vm.provision "ansible" do |ansible|
