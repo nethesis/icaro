@@ -5,6 +5,7 @@ After=network.target cloud-init.service
 [Service]
 Type=simple
 User=root
+Environment=PORT=8081
 EnvironmentFile=-/opt/icaro/wax/conf.env
 WorkingDirectory=/opt/icaro/wax/
 Environment=GIN_MODE=release
