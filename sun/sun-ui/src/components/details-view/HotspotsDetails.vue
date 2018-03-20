@@ -23,11 +23,13 @@
         <div class="card-pf card-pf-accented">
           <div class="card-pf-heading">
             <h2 class="card-pf-title">
+              <router-link class="card-link" :to="unitLink">
                 <span class="pficon pficon-connected card-info-title"></span>
                 {{ $t("dashboard.units") }}
                 <span v-if="!totals.units.isLoading" class="right">
                   <strong class="soft">{{ totals.units.count}}</strong>
                 </span>
+              </router-link>
               <div v-if="totals.units.isLoading" class="spinner spinner-sm right"></div>
             </h2>
           </div>
@@ -367,10 +369,16 @@
         customToolbar: [
           ['bold', 'italic', 'underline'],
           ['image', 'code-block']
-        ],
+        ],      
         userLink:{
           name:'Users',
           params:{
+            hotspotId: this.$route.params.id
+          }
+        },
+        unitLink:{
+          name: 'Units',
+          params: {
             hotspotId: this.$route.params.id
           }
         }
