@@ -41,6 +41,10 @@ func GetSessions(c *gin.Context) {
 	page := c.Query("page")
 	limit := c.Query("limit")
 	hotspotId := c.Query("hotspot")
+	userId := c.Query("user")
+	unitId := c.Query("unit")
+	from := c.Query("from")
+	to := c.Query("to")
 
 	hotspotIdInt, err := strconv.Atoi(hotspotId)
 	if err != nil {
@@ -50,7 +54,25 @@ func GetSessions(c *gin.Context) {
 	offsets := utils.OffsetCalc(page, limit)
 
 	db := database.Database()
-	db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt)).Offset(offsets[0]).Limit(offsets[1]).Find(&sessions)
+	chain := db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt))
+
+	if len(userId) > 0 {
+		chain = chain.Where("user_id = ?", userId)
+	}
+
+	if len(unitId) > 0 {
+		chain = chain.Where("unit_id = ?", unitId)
+	}
+
+	if len(from) > 0 {
+		chain = chain.Where("start_time >= ?", from)
+	}
+
+	if len(to) > 0 {
+		chain = chain.Where("start_time <= ?", to)
+	}
+
+	chain.Offset(offsets[0]).Limit(offsets[1]).Find(&sessions)
 	db.Close()
 
 	if len(sessions) <= 0 {
@@ -68,6 +90,10 @@ func GetSessionsHistory(c *gin.Context) {
 	page := c.Query("page")
 	limit := c.Query("limit")
 	hotspotId := c.Query("hotspot")
+	userId := c.Query("user")
+	unitId := c.Query("unit")
+	from := c.Query("from")
+	to := c.Query("to")
 
 	hotspotIdInt, err := strconv.Atoi(hotspotId)
 	if err != nil {
@@ -77,7 +103,25 @@ func GetSessionsHistory(c *gin.Context) {
 	offsets := utils.OffsetCalc(page, limit)
 
 	db := database.Database()
-	db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt)).Offset(offsets[0]).Limit(offsets[1]).Find(&sessions)
+	chain := db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt))
+
+	if len(userId) > 0 {
+		chain = chain.Where("user_id = ?", userId)
+	}
+
+	if len(unitId) > 0 {
+		chain = chain.Where("unit_id = ?", unitId)
+	}
+
+	if len(from) > 0 {
+		chain = chain.Where("start_time >= ?", from)
+	}
+
+	if len(to) > 0 {
+		chain = chain.Where("start_time <= ?", to)
+	}
+
+	chain.Offset(offsets[0]).Limit(offsets[1]).Find(&sessions)
 	db.Close()
 
 	if len(sessions) <= 0 {

@@ -131,8 +131,8 @@
 
     },
     "session": {
-      "bytes_up": "Data ▲",
-      "bytes_down": "Data ▼",
+      "bytes_up": "Data ⬆",
+      "bytes_down": "Data ⬇",
       "duration": "Duration",
       "device": "Device",
       "auth_time": "Authentication",
@@ -149,7 +149,10 @@
       "user": "User",
       "user_name": "Name",
       "user_type": "Type",
-      "created": "Created"
+      "created": "Created",
+      "clear_filters": "Clear filters",
+      "from": "From",
+      "to": "To"
     },
     "menu": {
       "dashboard": "Dashboard",

@@ -446,7 +446,7 @@
           console.log(error.body)
           this.totals.devices.isLoading = false
         })
-        this.sessionGetAll(this.$route.params.id, success => {
+        this.sessionGetAll(this.$route.params.id, null, null, null, null, success => {
           this.totals.sessions.count = success.body.length
           this.totals.sessions.isLoading = false
         }, error => {

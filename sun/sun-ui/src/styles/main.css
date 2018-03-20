@@ -342,3 +342,7 @@ a {
   bottom: 0;
   right: 0;
 }
+
+.link {
+  cursor: pointer;
+}
