@@ -151,6 +151,43 @@ var UtilService = {
         type: mimeString
       });
       return new File([blob], name);
+    },
+    createCSV(columns, rows) {
+      var cs = []
+      for (var c in columns) {
+        if (columns[c].field !== '')
+          cs.push(columns[c].label)
+      }
+
+      var rs = []
+      for (var r in rows) {
+        var row = []
+        for (var c in columns) {
+          if (columns[c].field !== '')
+            row.push(rows[r][columns[c].field])
+        }
+        rs.push(row)
+      }
+
+      return {
+        cols: cs,
+        rows: rs
+      }
+    },
+    downloadCSV(columns, rows, name) {
+      var header = '"' + columns.join('","') + '"' + '\r\n';
+      var body = '';
+      for (var r in rows) {
+        body += '"' + rows[r].join('","') + '"' + '\r\n';
+      }
+      var finalCSV = 'data:text/csv;charset=utf-8,' + header + body;
+      var encodedUri = encodeURI(finalCSV);
+      var link = document.createElement('a');
+      link.setAttribute('href', encodedUri);
+      var now = new Date();
+      var date = now.getFullYear() + '_' + (now.getMonth() + 1) + '_' + now.getDate();
+      link.setAttribute('download', name + date + '.csv');
+      link.click();
     }
   }
 };

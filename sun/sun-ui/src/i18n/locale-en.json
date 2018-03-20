@@ -152,7 +152,9 @@
       "created": "Created",
       "clear_filters": "Clear filters",
       "from": "From",
-      "to": "To"
+      "to": "To",
+      "ip_address": "IP Address",
+      "export_csv": "Export CSV"
     },
     "menu": {
       "dashboard": "Dashboard",
