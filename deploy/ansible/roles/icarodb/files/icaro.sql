@@ -205,6 +205,38 @@ CREATE TABLE `session_histories` (
   `session_key` varchar(200),
   PRIMARY KEY(`id`)
 );
+
+/* -------------------- */
+
+/* SUBSCRIPTIONS */
+CREATE TABLE subscription_plans (
+    id serial not null primary key,
+    code varchar(1024) not null,
+    name varchar(1024) not null,
+    description varchar(1024) not null,
+    price decimal(5,2),
+    period integer default null,
+    included_sms integer not null,
+    max_units integer not null,
+    advanced_report boolean default false,
+    wings_customization boolean default false,
+    social_analytics boolean default false
+);
+
+INSERT INTO subscription_plans VALUES (1, 'free', 'Free', 'Free limited plan', 0.00, 365, 0, 1, false, false, false);
+INSERT INTO subscription_plans VALUES (2, 'basic', 'Basic', 'Basic plan', 0.00, 365, 500, 1, true, false, false);
+INSERT INTO subscription_plans VALUES (3, 'standard', 'Standard', 'Standard lan', 0.00, 365, 1000, 10, true, true, false);
+INSERT INTO subscription_plans VALUES (4, 'premium', 'Premium', 'Premium plan', 0.00, 365, 2000, 100, true, true, true);
+
+CREATE TABLE subscriptions (
+    id serial not null primary key,
+    account_id bigint unsigned not null references accounts(id),
+    subscription_plan_id bigint not null references subscription_plans(id),
+    valid_from timestamp null,
+    valid_until timestamp null,
+    created timestamp default current_timestamp
+);
+
 /* -------------------- */
 
 /* EXTRAS */
