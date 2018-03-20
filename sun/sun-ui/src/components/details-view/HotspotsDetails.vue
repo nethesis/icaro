@@ -23,11 +23,11 @@
         <div class="card-pf card-pf-accented">
           <div class="card-pf-heading">
             <h2 class="card-pf-title">
-              <span class="pficon pficon-connected card-info-title"></span>
-              {{ $t("dashboard.units") }}
-              <span v-if="!totals.units.isLoading" class="right">
-                <strong class="soft">{{ totals.units.count}}</strong>
-              </span>
+                <span class="pficon pficon-connected card-info-title"></span>
+                {{ $t("dashboard.units") }}
+                <span v-if="!totals.units.isLoading" class="right">
+                  <strong class="soft">{{ totals.units.count}}</strong>
+                </span>
               <div v-if="totals.units.isLoading" class="spinner spinner-sm right"></div>
             </h2>
           </div>
@@ -37,11 +37,13 @@
         <div class="card-pf card-pf-accented">
           <div class="card-pf-heading">
             <h2 class="card-pf-title">
-              <span class="fa fa-users card-info-title"></span>
-              {{ $t("dashboard.users") }}
-              <span v-if="!totals.users.isLoading" class="right">
-                <strong class="soft">{{ totals.users.count}}</strong>
-              </span>
+              <router-link class="card-link" :to="userLink">
+                <span class="fa fa-users card-info-title"></span>
+                {{ $t("dashboard.users") }}
+                <span v-if="!totals.users.isLoading" class="right">
+                  <strong class="soft">{{ totals.users.count}}</strong>
+                </span>
+              </router-link>
               <div v-if="totals.users.isLoading" class="spinner spinner-sm right"></div>
             </h2>
           </div>
@@ -258,7 +260,7 @@
 </template>
 
 <script>
-  import HotspotService from '../../services/hotspot';
+ import HotspotService from '../../services/hotspot';
   import PreferenceService from '../../services/preference';
   import AccountService from '../../services/account';
   import UnitService from '../../services/unit';
@@ -365,7 +367,13 @@
         customToolbar: [
           ['bold', 'italic', 'underline'],
           ['image', 'code-block']
-        ]
+        ],
+        userLink:{
+          name:'Users',
+          params:{
+            hotspotId: this.$route.params.id
+          }
+        }
       }
     },
     methods: {
@@ -468,7 +476,7 @@
             if (pref.value === "false") {
               pref.value = false
             }
-
+            
             if (pref.key == 'voucher_login' && pref.value) {
               this.preferences.vouchersAvailable = true
             } else {
@@ -485,7 +493,7 @@
               globalPref.push(pref)
             }
           }
-
+          
           this.preferences.global = globalPref
           this.preferences.captive = captivePref
           this.preferences.isLoading = false
@@ -541,7 +549,7 @@
             })
           }))
         }
-
+        
         // exec promises
         var context = this;
         Promise.all(promises).then(function (response) {
@@ -602,10 +610,17 @@
 </script>
 
 <style scoped>
-  textarea {
-    width: 100%;
-    min-height: 180px;
-    resize: vertical;
-  }
+textarea {
+  width: 100%;
+  min-height: 180px;
+  resize: vertical;
+}
+
+.card-link{
+  color: black;
+}
+.card-link:hover{
+  color: #26a9a3;
+}
 
 </style>
