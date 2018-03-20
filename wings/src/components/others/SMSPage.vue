@@ -3,6 +3,18 @@
         <div v-if="!dedaloRequested">
             <div v-if="!codeRequested" class="inline field" v-bind:class="{ error: errors.badInput }">
                 <label>{{ $t("sms.number") }}</label>
+                <div class="ui floating dropdown labeled search icon button">
+                    <i class="flag icon"></i>
+                    <span class="text">{{$t('sms.select_state')}}</span>
+                    <div class="menu">
+                        <div @click="setPrefix(c.dial_code)" v-for="c in countries" v-bind:key="c.code" class="item">
+                            <div class="item">
+                                <i :class="[c.code.toLowerCase(), 'flag']"></i>
+                                {{c.name}} ({{c.dial_code}})
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="ui big left icon input">
                     <input v-model="authSMS" type="tel" :placeholder="$t('sms.insert_number')">
                     <i class="talk icon"></i>
@@ -27,12 +39,13 @@
                     </div>
                 </div>
             </div>
-            <button v-on:click="getCode(true)" v-if="authReset && resetDone != 'true'" class="ui red button auth-code-cont">
-                {{ $t("sms.reset_code") }}
-            </button>
             <div class="ui divider"></div>
             <button v-on:click="execLogin()" :disabled="isDisabled()" class="big ui green button">
                 {{ $t("sms.start_navigate") }}
+            </button>
+            <div v-if="authReset && resetDone != 'true'" class="ui divider"></div>
+            <button v-on:click="getCode(true)" v-if="authReset && resetDone != 'true'" class="ui red button">
+                {{ $t("sms.reset_code") }}
             </button>
         </div>
         <div v-if="dedaloRequested">
@@ -67,6 +80,10 @@
     export default {
         name: 'SMSPage',
         mixins: [AuthMixin],
+        mounted() {
+            $('.ui.dropdown')
+                .dropdown();
+        },
         data() {
             var authorized = false
             var codeRequested = false
@@ -82,6 +99,7 @@
                 authorized: authorized,
                 codeRequested: codeRequested,
                 dedaloRequested: dedaloRequested,
+                authPrefix: '',
                 authSMS: '',
                 authCode: '',
                 authReset: authReset,
@@ -91,23 +109,27 @@
                     badCode: badCode,
                     dedaloError: dedaloError,
                     badInput: badInput
-                }
+                },
+                countries: require('./../../i18n/countries.json')
             }
         },
         methods: {
             isDisabled() {
                 return this.authSMS.length == 0 || this.authCode.length == 0
             },
+            setPrefix(prefix) {
+                this.authPrefix = prefix
+            },
             getCode(reset) {
                 this.errors.badNumber = false
-                if (!this.authSMS.startsWith('+')) {
+                if (!(this.authPrefix + this.authSMS).startsWith('+')) {
                     this.errors.badInput = true
                     return
                 }
                 var params = this.extractParams()
 
                 // make request to wax
-                var url = this.createWaxURL(this.authSMS, params, 'sms', reset)
+                var url = this.createWaxURL(this.authPrefix + this.authSMS, params, 'sms', reset)
 
                 // get user id
                 this.$http.get(url).then(responseAuth => {

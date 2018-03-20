@@ -584,7 +584,7 @@
         window.open(doc.output('bloburl'), '_blank');
       },
       onChanged(pref) {
-        if (this.$refs['prefInput-' + pref.key][0].image.length > 65536) {
+        if (this.$refs['prefInput-' + pref.key][0].image.length > 655360) {
           pref.onError = true
           this.$refs['prefInput-' + pref.key][0].image = pref.value
         } else {

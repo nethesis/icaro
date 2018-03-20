@@ -76,5 +76,9 @@
     font-size: 15px;
   }
 
+  .ui.small.image {
+    width: 450px !important;
+  }
+
 </style>
 <style scoped src="semantic-ui-offline/semantic.min.css"></style>
