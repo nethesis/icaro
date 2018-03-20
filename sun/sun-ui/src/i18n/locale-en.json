@@ -129,7 +129,14 @@
       "create_error_title": "Create error",
       "duplicate_error": "Duplicate manager. Please choose a different username or UUID.",
       "create_error_sub": "An error occurred during manager creation."
-
+    },
+    "unit": {
+      "unit": "Unit",
+      "mac_address": "Mac Address",
+      "description": "Description",
+      "uuid": "Unique ID",
+      "hotspot_name": "Hotspot",
+      "hotspot_description": "Description"
     },
     "session": {
       "bytes_up": "Data ⬆",
@@ -164,6 +171,7 @@
       "accounts": "Managers",
       "hotspots": "Hotspots",
       "hotspot": "Hotspot",
+      "units": "Units",
       "sessions": "Sessions",
       "help": "Help",
       "profile": "Profile",
