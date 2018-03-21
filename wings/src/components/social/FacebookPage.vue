@@ -43,7 +43,8 @@
                     this.$parent.hotspot.name = success.body.hotspot_name
                     this.$parent.hotspot.preferences = success.body.preferences
                     this.$root.$options.hotspot.preferences = success.body.preferences
-                    $("body").css("background-color", success.body.preferences.captive_7_background || '#2a87be');
+                    $("body").css("background-color", success.body.preferences.captive_7_background ||
+                        '#2a87be');
                 }, error => {
                     this.authorized = false
                     console.error(error)
@@ -64,8 +65,16 @@
                             this.dedaloError = false
                             setTimeout(function () {
                                 // open redir url
-                                window.location.replace(this.$root.$options.hotspot.preferences
-                                    .captive_1_redir)
+                                if (this.$root.$options.hotspot.preferences
+                                    .facebook_login_page && this.$root.$options.hotspot.preferences
+                                    .facebook_login_page.length > 0) {
+                                    window.location.replace(this.$root.$options.hotspot.preferences
+                                        .facebook_login_page)
+                                } else {
+                                    window.location.replace(this.$root.$options.hotspot.preferences
+                                        .captive_1_redir)
+                                }
+
                             }.bind(this), 2500)
                         } else {
                             this.authorized = false

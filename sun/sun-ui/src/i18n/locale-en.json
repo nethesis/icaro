@@ -73,6 +73,7 @@
       "sms_login": "Captive Portal login with SMS",
       "email_login": "Captive Portal login with Email",
       "facebook_login": "Captive Portal login with Facebook",
+      "facebook_login_page": "Captive Portal Facebook like page",
       "instagram_login": "Captive Portal login with Instagram",
       "linkedin_login": "Captive Portal login with Linkedin",
       "voucher_login": "Captive Portal login with Voucher",
