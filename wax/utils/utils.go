@@ -260,6 +260,18 @@ func GetUserByUsername(username string) models.User {
 	return user
 }
 
+func HotspotHasValidSubscription(hotspotId int) bool {
+	var hotspot models.Hotspot
+	var subscription models.Subscription
+	db := database.Database()
+	db.Set("gorm:auto_preload", true)
+	db.Preload("Account").Where("id = ?", hotspotId).First(&hotspot)
+	db.Preload("SubscriptionPlan").Where("account_id = ?", hotspot.Account.Id).First(&subscription);
+	db.Close()
+
+	return subscription.ValidFrom.Before(time.Now().UTC()) && subscription.ValidUntil.After(time.Now().UTC())
+}
+
 func GetVoucherByCode(code string, hotspotId int) models.HotspotVoucher {
 	var hotspotVoucher models.HotspotVoucher
 	db := database.Database()

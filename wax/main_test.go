@@ -28,6 +28,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"time"
 	"strings"
 	"testing"
 
@@ -36,6 +37,8 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/nethesis/icaro/sun/sun-api/configuration"
+	"github.com/nethesis/icaro/sun/sun-api/models"
+	"github.com/nethesis/icaro/sun/sun-api/database"
 	"github.com/nethesis/icaro/wax/utils"
 )
 
@@ -117,6 +120,35 @@ func TestLoginStage(t *testing.T) {
 			assert.Equal(t, http.StatusOK, f.Code)
 		})
 }
+
+func TestFailLoginForExpiredReseller(t *testing.T) {
+	var account models.Account
+	var subscription models.Subscription
+        f, r, uri := startupEnv("/wax/aaa", "stage=login&nasid=HSTest&ap=00-00-00-00-00-00&user=firstuser&chap_pass=9221f7e65679b0f49435707286920228&chap_chal=challange&sessionid=1234")
+
+        f.GET(uri).
+                Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
+                        assert.Equal(t, http.StatusOK, f.Code)
+                })
+
+	db := database.Database()
+	db.Where("username = ?", "firstuser").First(&account)
+	db.Where("account_id = ?", account.Id).First(&subscription);
+	oldDate := subscription.ValidUntil
+	subscription.ValidUntil = time.Date(2000, 1, 1, 0, 0, 0, 0, time.UTC)
+	db.Save(&subscription)
+
+        f.GET(uri).
+                Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
+                        assert.Equal(t, http.StatusForbidden, f.Code)
+                })
+
+	subscription.ValidUntil = oldDate
+	db.Save(&subscription)
+
+	db.Close()
+}
+
 
 func TestInvalidStage(t *testing.T) {
 	f, r, uri := startupEnv("/wax/aaa", "stage=BAD&nasid=HSTest&ap=00-00-00-00-00-00")
