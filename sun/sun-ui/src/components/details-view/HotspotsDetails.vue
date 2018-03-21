@@ -148,7 +148,7 @@
           </div>
           <div v-if="!vouchers.isLoading" class="card-pf-footer">
             <div class="dropdown card-pf-time-frame-filter">
-              <button v-on:click="createVoucher()" class="btn btn-primary" type="button">{{ $t("hotspot.create_voucher") }}</button>
+              <button data-toggle="modal" data-target="#voucherModal" class="btn btn-primary" type="button">{{ $t("hotspot.create_voucher") }}</button>
               <button v-on:click="printAllVoucher()" class="btn btn-default" type="button">
                 <span class="fa fa-print"></span>
                 {{ $t("hotspot.print_all_voucher") }}
@@ -254,6 +254,34 @@
         </div>
       </div>
     </div>
+
+    <div class="modal fade" id="voucherModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              <span class="pficon pficon-close"></span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel">{{$t('hotspot.voucher_creation')}}</h4>
+          </div>
+          <div class="modal-body">
+            <form class="form-horizontal">
+              <div class="form-group">
+                <label class="col-sm-5 control-label" for="textInput-modal-markup">{{$t('hotspot.voucher_creation_count')}}</label>
+                <div class="col-sm-7">
+                  <input v-model="vouchersCount" type="text" id="textInput-modal-markup" class="form-control">
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button v-on:click="createVoucher()" type="button" class="btn btn-primary">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -316,6 +344,7 @@
           isLoading: true,
           data: []
         },
+        vouchersCount: 1,
         preferences: {
           isLoading: true,
           global: {},
@@ -377,15 +406,29 @@
       },
       createVoucher() {
         this.vouchers.isLoading = true
-        this.hotspotCreateVoucher({
-          hotspot_id: parseInt(this.$route.params.id),
-          code: this.generateVoucher(),
-        }, success => {
-          this.vouchers.isLoading = false
-          this.getVouchers()
-        }, error => {
-          console.log(error.body)
-          this.vouchers.isLoading = false
+
+        var promises = []
+        var context = this
+        for (var i = 0; i < this.vouchersCount; i++) {
+          promises.push(new Promise(function (resolve, reject) {
+            context.hotspotCreateVoucher({
+              hotspot_id: parseInt(context.$route.params.id),
+              code: context.generateVoucher(),
+            }, success => {
+              resolve()
+            }, error => {
+              console.log(error.body)
+              reject()
+            })
+          }))
+        }
+        Promise.all(promises).then(function () {
+          context.vouchers.isLoading = false
+          context.getVouchers()
+          $('#voucherModal').modal('hide')
+        }).catch(function (err) {
+          console.error(err)
+          context.vouchers.isLoading = false
         })
       },
       deleteVoucher(id) {

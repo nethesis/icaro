@@ -77,7 +77,9 @@
       "linkedin_login": "Captive Portal login with Linkedin",
       "voucher_login": "Captive Portal login with Voucher",
       "temp_session_duration": "Temporary session duration (seconds)",
-      "start_navigate": "Start Navigate"
+      "start_navigate": "Start Navigate",
+      "voucher_creation": "Vouchers creation",
+      "voucher_creation_count": "Vouchers number"
     },
     "user": {
       "username": "Username",
