@@ -36,6 +36,7 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/nethesis/icaro/sun/sun-api/configuration"
+	"github.com/nethesis/icaro/wax/utils"
 )
 
 func startupEnv(endpoint string, query string) (*gofight.RequestConfig, *gin.Engine, string) {
@@ -61,7 +62,10 @@ func destroyEnv() {
 
 func calculateUri(endpoint string, query string) string {
 	md := calculateMd(endpoint + "?" + query)
-	return endpoint + "?" + query + "&md=" + md
+	testUuid := "1234-uuid-aaaa"
+	unit := utils.GetUnitByUuid(testUuid)
+	digest := utils.CalcUnitDigest(unit)
+	return endpoint + "?" + query + "&md=" + md + "&digest=" + digest + "&uuid=" + testUuid + "&sessionid=3"
 }
 
 func calculateMd(query string) string {
@@ -76,7 +80,8 @@ func calculateMd(query string) string {
 
 func TestMain(m *testing.M) {
 	// read and init configuration
-	configuration.Init()
+	c := "config.json"
+	configuration.Init(&c)
 
 	// run tester
 	os.Exit(m.Run())
@@ -105,11 +110,10 @@ func TestRegisterStage(t *testing.T) {
 }
 
 func TestLoginStage(t *testing.T) {
-	f, r, uri := startupEnv("/wax/aaa", "stage=login&nasid=HSTest&ap=00-00-00-00-00-00")
+	f, r, uri := startupEnv("/wax/aaa", "stage=login&nasid=HSTest&ap=00-00-00-00-00-00&user=firstuser&chap_pass=9221f7e65679b0f49435707286920228&chap_chal=challange&sessionid=1234")
 
 	f.GET(uri).
 		Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
-			//assert.Equal(t, "login", f.Body.String())
 			assert.Equal(t, http.StatusOK, f.Code)
 		})
 }
