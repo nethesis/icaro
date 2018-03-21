@@ -135,17 +135,17 @@
               <span class="list-group-item-value">{{ user.info.type == 'admin' || user.info.type == 'reseller' ? $t('menu.hotspots') : $t('menu.hotspot') }}</span>
             </a>
           </li>
+          <li v-bind:class="[getCurrentPath('units') ? 'active' : '', 'list-group-item']" v-if="(user.info.type == 'admin') || (user.info.type == 'reseller') ||  (user.info.type == 'customer')">
+            <a href="#/units">
+              <span class="fa pficon-connected" data-toggle="tooltip" title="Adipscing"></span>
+              <span class="list-group-item-value">{{ $t("menu.units") }}</span>
+            </a>
+          </li>
           <li v-bind:class="[getCurrentPath('users') ? 'active' : '', 'list-group-item']">
             <a href="#/users">
               <span class="fa fa-users"></span>
               <span class="list-group-item-value">{{ $t("menu.users") }}</span>
 
-            </a>
-          </li>
-           <li v-bind:class="[getCurrentPath('units') ? 'active' : '', 'list-group-item']" v-if="(user.info.type == 'admin') || (user.info.type == 'reseller') ||  (user.info.type == 'customer')">
-            <a href="#/units">
-              <span class="fa pficon-connected" data-toggle="tooltip" title="Adipscing"></span>
-              <span class="list-group-item-value">{{ $t("menu.units") }}</span>
             </a>
           </li>
           <li v-bind:class="[getCurrentPath('sessions') ? 'active' : '', 'list-group-item']" v-if="(user.info.type == 'admin') || (user.info.type == 'reseller') ||  (user.info.type == 'customer')">
