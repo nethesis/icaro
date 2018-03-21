@@ -27,6 +27,8 @@ import (
 	"os"
 	"testing"
 	"encoding/json"
+	"time"
+	"fmt"
 
 	"github.com/appleboy/gofight"
 	"github.com/gin-gonic/gin"
@@ -34,6 +36,7 @@ import (
 
 	"github.com/nethesis/icaro/sun/sun-api/configuration"
 	"github.com/nethesis/icaro/sun/sun-api/models"
+	"github.com/nethesis/icaro/sun/sun-api/database"
 )
 
 
@@ -46,10 +49,15 @@ type LoginResponse struct {
 	Subscription models.Subscription `json:"subscription"`
 }
 
+type CreationResponse struct {
+	Id      int `json:"id"`
+	Status string `json:"status"`
+}
+
 func startupEnv() (*gofight.RequestConfig, *gin.Engine) {
 	// set test mode to test suite
 	fight := gofight.New()
-	fight.SetDebug(true)
+	fight.SetDebug(false)
 
 	// set test mode to gin
 	gin.SetMode(gin.TestMode)
@@ -62,7 +70,26 @@ func startupEnv() (*gofight.RequestConfig, *gin.Engine) {
 	return fight, router
 }
 
-func destroyEnv() {
+
+func getToken(f *gofight.RequestConfig, r *gin.Engine) string {
+	var lr LoginResponse
+	var token string
+
+	f.POST("/api/login").
+		SetJSON(gofight.D{
+			"username" : "firstuser",
+			"password" : "password",
+		}).
+		Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
+			err := json.Unmarshal([]byte(f.Body.String()), &lr);
+			if err == nil {
+				token = lr.Token
+			} else {
+				fmt.Println(err)
+			}
+		})
+
+	return token
 }
 
 
@@ -102,4 +129,35 @@ func TestLogin(t *testing.T) {
 		})
 }
 
+
+func TestUnitRegistration(t *testing.T) {
+	f, r := startupEnv()
+	var unit models.Unit
+	var cr CreationResponse
+
+	token := getToken(f, r)
+
+	f.POST("/api/units").
+		SetHeader(gofight.H{
+			"Token": token,
+		}).
+		SetJSON(gofight.D{
+			"mac_address" : "43-C2-41-98-85-08",
+			"description" : "My test unit",
+			"uuid" : fmt.Sprintf("%d",time.Now().Nanosecond()),
+			"secret" : "mysecret",
+			"hotspot": "HSTest",
+		}).
+		Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
+			err := json.Unmarshal([]byte(f.Body.String()), &cr);
+			assert.Equal(t, nil, err)
+			unit.Id = cr.Id
+			assert.Equal(t, http.StatusCreated, f.Code)
+		})
+
+	// Cleanup
+	db := database.Database()
+	db.Delete(&unit)
+	db.Close()
+}
 
