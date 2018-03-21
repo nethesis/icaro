@@ -8,7 +8,7 @@
       <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu1">
         <li v-if="details == 'true'" role="presentation">
           <a role="menuitem" tabindex="-1" :href="'#/hotspots/'+ obj.id">
-            <span class="fa-info action-icon-menu"></span>
+            <span class="fa fa-info action-icon-menu"></span>
             {{ $t('details') }}
           </a>
         </li>
