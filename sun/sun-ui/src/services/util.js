@@ -97,13 +97,9 @@ var UtilService = {
       return retVal;
     },
     generateVoucher() {
-      var length = 4,
-        charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+      var length = 8,
+        charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toLowerCase(),
         retVal = "";
-      for (var i = 0, n = charset.length; i < length; ++i) {
-        retVal += charset.charAt(Math.floor(Math.random() * n));
-      }
-      retVal += '-'
       for (var i = 0, n = charset.length; i < length; ++i) {
         retVal += charset.charAt(Math.floor(Math.random() * n));
       }

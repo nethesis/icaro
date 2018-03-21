@@ -18,9 +18,6 @@
       :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
       :ofText="tableLangsTexts.ofText">
       <template slot="table-row" slot-scope="props">
-        <td>
-          <strong>{{ props.row.username }}</strong>
-        </td>
         <td class="fancy">{{ props.row.name }}</td>
         <td class="fancy">{{ props.row.email || '-' }}</td>
         <td>
@@ -69,10 +66,6 @@
         msg: 'Users',
         isLoading: true,
         columns: [{
-            label: this.$i18n.t('user.username'),
-            field: 'username',
-            filterable: true,
-          }, {
             label: this.$i18n.t('user.name'),
             field: 'name',
             filterable: true,
