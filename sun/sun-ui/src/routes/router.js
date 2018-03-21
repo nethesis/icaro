@@ -6,10 +6,12 @@ import Hotspots from '../components/Hotspots.vue'
 import HotspotsDetails from '../components/details-view/HotspotsDetails.vue'
 import AccountsDetails from '../components/details-view/AccountsDetails.vue'
 import SessionsDetails from '../components/details-view/SessionsDetails.vue'
+import UnitsDetails from "../components/details-view/UnitsDetail.vue";
 import Users from '../components/Users.vue'
 import Sessions from '../components/Sessions.vue'
 import Accounts from '../components/Accounts.vue'
 import Profile from '../components/Profile.vue'
+import Units from '../components/Units.vue'
 import StorageService from "../services/storage"
 import UtilService from "../services/util"
 
@@ -52,6 +54,38 @@ const router = new Router({
       path: '/sessions',
       name: 'Sessions',
       component: Sessions,
+      meta: {
+        roles: ['customer', 'reseller', 'admin']
+      },
+    },
+    {
+      path: '/units',
+      name: 'Units',
+      component: Units,
+      meta: {
+        roles: ['customer', 'reseller', 'admin']
+      },
+    },
+    {
+      path:'/units/:id',
+      name:'UnitsDetails',
+      component: UnitsDetails,
+      meta: {
+        roles: ['customer', 'reseller', 'admin']
+      },
+    },
+    {
+      path: '/units',
+      name: 'Units',
+      component: Units,
+      meta: {
+        roles: ['customer', 'reseller', 'admin']
+      },
+    },
+    {
+      path:'/units/:id',
+      name:'UnitsDetails',
+      component: UnitsDetails,
       meta: {
         roles: ['customer', 'reseller', 'admin']
       },
