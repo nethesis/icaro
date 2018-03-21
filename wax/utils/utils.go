@@ -294,8 +294,9 @@ func SendSMSCode(number string, code string, unit models.Unit, auth string) int 
 		msgData.Set("To", number)
 		msgData.Set("From", configuration.Config.Endpoints.Sms.Number)
 		msgData.Set("Body", "SMS login code: "+code+
-			"\n\nLink: "+configuration.Config.Endpoints.Sms.Link+
-			"?"+auth+"&code="+code+"&num="+number)
+			"\n\nLogin Link: "+configuration.Config.Endpoints.Sms.Link+
+			"?"+auth+"&code="+code+"&num="+number+
+			"\n\nLogout Link: http://logout")
 		msgDataReader := *strings.NewReader(msgData.Encode())
 
 		// create HTTP request client
@@ -331,8 +332,9 @@ func SendEmailCode(email string, code string, unit models.Unit, auth string) boo
 	m.SetHeader("To", email)
 	m.SetHeader("Subject", "Wi-Fi: "+hotspot.Description)
 	m.SetBody("text/plain", "Email login code: "+code+
-		"\n\nLink: "+configuration.Config.Endpoints.Email.Link+
-		"?"+auth+"&code="+code+"&email="+email)
+		"\n\nLogin Link: "+configuration.Config.Endpoints.Email.Link+
+		"?"+auth+"&code="+code+"&email="+email+
+		"\n\nLogout Link: http://logout")
 
 	d := gomail.NewDialer(
 		configuration.Config.Endpoints.Email.SMTPHost,
