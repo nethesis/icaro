@@ -4,7 +4,7 @@
     <button v-on:click="initNewAccount()" data-toggle="modal" data-target="#ACcreateModal" class="btn btn-primary btn-lg create-account">
       {{ $t('account.create_new') }} </button>
     <div v-if="isLoading" class="spinner spinner-lg"></div>
-    <div v-if="(user.account_type == 'admin') || (user.account_type == 'reseller')" class="form-group select-search">
+    <div v-if="(user.account_type == 'admin') || (user.account_type == 'reseller') && !isLoading" class="form-group select-search">
       <label class="col-sm-2 control-label" for="textInput-markup">Hotspot</label>
       <div class="col-sm-4">
         <select v-on:change="getAll()" v-model="hotspotSearchId" class="form-control">

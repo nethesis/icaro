@@ -138,20 +138,25 @@ func EmailAuth(c *gin.Context) {
 	// check if user exists
 	user := utils.GetUserByUsername(email)
 	if user.Id == 0 {
+		// get unit
+		unit := utils.GetUnitByUuid(uuid)
+
+		// get hotspot
+		hotspot := utils.GetHotspotById(unit.HotspotId)
+
 		// generate code
 		code := utils.GenerateCode(6)
 
 		// send email with code
-		status := utils.SendEmailCode(email, code)
+		status := utils.SendEmailCode(email, code, hotspot.Description)
 
 		// check response
 		if !status {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "authorization code not send"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "authorization code not sent"})
 			return
 		}
 
 		// create user
-		unit := utils.GetUnitByUuid(uuid)
 		days := utils.GetHotspotPreferencesByKey(unit.HotspotId, "user_expiration_days")
 		daysInt, _ := strconv.Atoi(days.Value)
 		newUser := models.User{

@@ -8,7 +8,7 @@ import AccountsDetails from '../components/details-view/AccountsDetails.vue'
 import SessionsDetails from '../components/details-view/SessionsDetails.vue'
 import UnitsDetails from "../components/details-view/UnitsDetail.vue";
 import Users from '../components/Users.vue'
-import Reports from '../components/Reports.vue'
+import Sessions from '../components/Sessions.vue'
 import Accounts from '../components/Accounts.vue'
 import Profile from '../components/Profile.vue'
 import Units from '../components/Units.vue'
@@ -51,9 +51,9 @@ const router = new Router({
       },
     },
     {
-      path: '/reports',
-      name: 'Reports',
-      component: Reports,
+      path: '/sessions',
+      name: 'Sessions',
+      component: Sessions,
       meta: {
         roles: ['customer', 'reseller', 'admin']
       },

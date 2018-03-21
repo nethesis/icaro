@@ -462,7 +462,7 @@
           console.log(error.body)
           this.totals.devices.isLoading = false
         })
-        this.sessionGetAll(this.$route.params.id, success => {
+        this.sessionGetAll(this.$route.params.id, null, null, null, null, success => {
           this.totals.sessions.count = success.body.length
           this.totals.sessions.isLoading = false
         }, error => {
@@ -600,7 +600,7 @@
         window.open(doc.output('bloburl'), '_blank');
       },
       onChanged(pref) {
-        if (this.$refs['prefInput-' + pref.key][0].image.length > 65536) {
+        if (this.$refs['prefInput-' + pref.key][0].image.length > 655360) {
           pref.onError = true
           this.$refs['prefInput-' + pref.key][0].image = pref.value
         } else {

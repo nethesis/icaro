@@ -26,7 +26,7 @@
             "insert_your_code": "Insert your code",
             "code": "Code",
             "get_code": "Request Code",
-            "reset_code": "Reset Code",
+            "reset_code": "Request new Code",
             "start_navigate": "Start Navigate",
             "error_code": "Error sending verification code",
             "error_code_sub": "Something went wrong on sending code (check your email)",
@@ -42,7 +42,7 @@
             "insert_your_code": "Insert your code",
             "code": "Code",
             "get_code": "Request Code",
-            "reset_code": "Reset Code",
+            "reset_code": "Request new Code",
             "start_navigate": "Start Navigate",
             "error_code": "Error sending verification code",
             "error_code_sub": "Something went wrong on sending code (use international prefix for your number or check you don't have reach the max sending SMS number)",
@@ -50,7 +50,8 @@
             "auth_success": "You are successfully authenticated",
             "auth_success_sub": "In a few seconds you will be redirected",
             "auth_error": "Error on authentication",
-            "auth_error_sub": "Something went wrong on authentication process"
+            "auth_error_sub": "Something went wrong on authentication process",
+            "select_state": "Select state"
         }
     }
 }

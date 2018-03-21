@@ -92,4 +92,8 @@
   .ui.segments {
     color: #5a5a5a !important;
   }
+
+  .ui.small.image {
+    width: 450px !important;
+  }
 </style>

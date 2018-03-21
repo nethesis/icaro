@@ -293,7 +293,7 @@ func SendSMSCode(number string, code string, unit models.Unit) int {
 		msgData := url.Values{}
 		msgData.Set("To", number)
 		msgData.Set("From", configuration.Config.Endpoints.Sms.Number)
-		msgData.Set("Body", GetHotspotPreferencesByKey(unit.HotspotId, "sms_login_message").Value+" "+code)
+		msgData.Set("Body", "SMS login code: "+code)
 		msgDataReader := *strings.NewReader(msgData.Encode())
 
 		// create HTTP request client
@@ -320,13 +320,13 @@ func SendSMSCode(number string, code string, unit models.Unit) int {
 
 }
 
-func SendEmailCode(email string, code string) bool {
+func SendEmailCode(email string, code string, description string) bool {
 	status := true
 	m := gomail.NewMessage()
 	m.SetHeader("From", configuration.Config.Endpoints.Email.From)
 	m.SetHeader("To", email)
-	m.SetHeader("Subject", "Icaro")
-	m.SetBody("text/html", "Email Login code: "+code)
+	m.SetHeader("Subject", "Wi-Fi: "+description)
+	m.SetBody("text/html", "Email login code: "+code)
 
 	d := gomail.NewDialer(
 		configuration.Config.Endpoints.Email.SMTPHost,

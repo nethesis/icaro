@@ -18,6 +18,10 @@ input[type=radio].form-control {
   height: 15px;
 }
 
+input {
+  padding-left: 5px;
+}
+
 .not-logged {
   background: linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.75)), url('../assets/background.jpg');
   background-repeat: round;
@@ -341,4 +345,15 @@ a {
   left: 0;
   bottom: 0;
   right: 0;
+}
+
+.link {
+  cursor: pointer;
+}
+
+.export-btn {
+  position: absolute;
+  right: 25px;
+  top: 28px;
+  z-index: 1;
 }

@@ -86,5 +86,5 @@ func main() {
 	// define API
 	DefineAPI(router)
 
-	router.Run(":8181")
+	router.Run()
 }

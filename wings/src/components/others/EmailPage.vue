@@ -27,12 +27,13 @@
                     </div>
                 </div>
             </div>
-            <button v-on:click="getCode(true)" v-if="authReset && resetDone != 'true'" class="ui red button auth-code-cont">
-                {{ $t("email.reset_code") }}
-            </button>
             <div class="ui divider"></div>
             <button v-on:click="execLogin()" :disabled="isDisabled()" class="big ui green button">
                 {{ $t("email.start_navigate") }}
+            </button>
+            <div v-if="authReset && resetDone != 'true'" class="ui divider"></div>
+            <button v-on:click="getCode(true)" v-if="authReset && resetDone != 'true'" class="ui red button">
+                {{ $t("email.reset_code") }}
             </button>
         </div>
         <div v-if="dedaloRequested">

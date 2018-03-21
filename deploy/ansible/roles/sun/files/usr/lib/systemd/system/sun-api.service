@@ -5,6 +5,7 @@ After=network.target cloud-init.service
 [Service]
 Type=simple
 User=root
+Environment=PORT=8080
 EnvironmentFile=-/opt/icaro/sun-api/conf.env
 WorkingDirectory=/opt/icaro/sun-api/
 Environment=GIN_MODE=release

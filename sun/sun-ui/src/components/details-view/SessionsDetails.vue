@@ -94,8 +94,12 @@
             </div>
             <div class="card-pf-body">
               <div class="list-details">
+                <dt>{{ $t("session.username") }}</dt>
+                <dd>{{ info.user.username || "" }}</dd>
+              </div>
+              <div class="list-details">
                 <dt>{{ $t("session.user_name") }}</dt>
-                <dd>{{ info.user.name || "" }} {{ "(" + info.user.username + ")" || ""}}</dd>
+                <dd>{{ info.user.name || "" }}</dd>
               </div>
               <div class="list-details">
                 <dt>{{ $t("session.created") }}</dt>
@@ -113,6 +117,10 @@
               </h2>
             </div>
             <div class="card-pf-body">
+              <div class="list-details">
+                <dt>{{ $t("session.ip_address") }}</dt>
+                <dd>{{info.device.ip_address || ""}}</dd>
+              </div>
               <div class="list-details">
                 <dt>{{ $t("session.mac_address") }}</dt>
                 <dd>{{info.device.mac_address || ""}}</dd>

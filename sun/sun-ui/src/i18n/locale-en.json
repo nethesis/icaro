@@ -70,7 +70,6 @@
       "captive_6_description": "Captive Portal description",
       "captive_7_background": "Captive Portal background",
       "voucher_expiration_days": "Voucher expiration (days)",
-      "sms_login_message": "SMS Login message",
       "sms_login": "Captive Portal login with SMS",
       "email_login": "Captive Portal login with Email",
       "facebook_login": "Captive Portal login with Facebook",
@@ -86,8 +85,8 @@
       "email": "Email",
       "type": "Type",
       "bandwidth_limit": "Bandwidth Limit",
-      "kbps_down": "Kbps ▼",
-      "kbps_up": "Kbps ▲",
+      "kbps_down": "Kbps ⬇",
+      "kbps_up": "Kbps ⬆",
       "valid": "Valid",
       "from": "From",
       "until": "Until",
@@ -138,8 +137,8 @@
       "hotspot_description": "Description"
     },
     "session": {
-      "bytes_up": "Data ▲",
-      "bytes_down": "Data ▼",
+      "bytes_up": "Data ⬆",
+      "bytes_down": "Data ⬇",
       "duration": "Duration",
       "device": "Device",
       "auth_time": "Authentication",
@@ -154,9 +153,15 @@
       "mac_address": "MAC address",
       "unit_name": "Name",
       "user": "User",
+      "username": "Username",
       "user_name": "Name",
       "user_type": "Type",
-      "created": "Created"
+      "created": "Created",
+      "clear_filters": "Clear filters",
+      "from": "From",
+      "to": "To",
+      "ip_address": "IP Address",
+      "export_csv": "Export CSV"
     },
     "menu": {
       "dashboard": "Dashboard",

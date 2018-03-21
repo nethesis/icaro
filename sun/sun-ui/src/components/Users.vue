@@ -2,7 +2,7 @@
   <div>
     <h2>{{ msg }}</h2>
     <div v-if="isLoading" class="spinner spinner-lg"></div>
-    <div v-if="(user.account_type == 'admin') || (user.account_type == 'reseller')" class="form-group select-search">
+    <div v-if="(user.account_type == 'admin') || (user.account_type == 'reseller') && !isLoading" class="form-group select-search">
       <label class="col-sm-2 control-label" for="textInput-markup">Hotspot</label>
       <div class="col-sm-4">
         <select v-on:change="getAll()" v-model="hotspotSearchId" class="form-control">
@@ -18,9 +18,6 @@
       :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
       :ofText="tableLangsTexts.ofText">
       <template slot="table-row" slot-scope="props">
-        <td>
-          <strong>{{ props.row.username }}</strong>
-        </td>
         <td class="fancy">{{ props.row.name }}</td>
         <td class="fancy">{{ props.row.email || '-' }}</td>
         <td>
@@ -69,10 +66,6 @@
         msg: 'Users',
         isLoading: true,
         columns: [{
-            label: this.$i18n.t('user.username'),
-            field: 'username',
-            filterable: true,
-          }, {
             label: this.$i18n.t('user.name'),
             field: 'name',
             filterable: true,
