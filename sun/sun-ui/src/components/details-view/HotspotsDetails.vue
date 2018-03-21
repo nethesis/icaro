@@ -600,7 +600,7 @@
             })
           }))
         }
-
+        
         // exec promises
         var context = this;
         Promise.all(promises).then(function (response) {

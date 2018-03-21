@@ -75,6 +75,22 @@ const router = new Router({
       },
     },
     {
+      path: '/units',
+      name: 'Units',
+      component: Units,
+      meta: {
+        roles: ['customer', 'reseller', 'admin']
+      },
+    },
+    {
+      path:'/units/:id',
+      name:'UnitsDetails',
+      component: UnitsDetails,
+      meta: {
+        roles: ['customer', 'reseller', 'admin']
+      },
+    },
+    {
       path: '/sessions/:id',
       name: 'SessionsDetails',
       component: SessionsDetails,
