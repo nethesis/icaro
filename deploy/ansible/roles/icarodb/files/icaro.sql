@@ -184,6 +184,7 @@ CREATE TABLE `sessions` (
   FOREIGN KEY (`hotspot_id`) REFERENCES hotspots(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   FOREIGN KEY (`device_id`) REFERENCES devices(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   FOREIGN KEY (`user_id`) REFERENCES users(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  UNIQUE KEY `session_key` (`session_key`),
   PRIMARY KEY(`id`)
 );
 
