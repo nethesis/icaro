@@ -398,7 +398,7 @@
         customToolbar: [
           ['bold', 'italic', 'underline'],
           ['image', 'code-block']
-        ],      
+        ],
         userLink:{
           name:'Users',
           params:{
@@ -527,7 +527,7 @@
             if (pref.value === "false") {
               pref.value = false
             }
-            
+
             if (pref.key == 'voucher_login' && pref.value) {
               this.preferences.vouchersAvailable = true
             } else {
@@ -544,7 +544,7 @@
               globalPref.push(pref)
             }
           }
-          
+
           this.preferences.global = globalPref
           this.preferences.captive = captivePref
           this.preferences.isLoading = false
@@ -572,7 +572,7 @@
             })
           }))
         }
-        
+
         // exec promises
         var context = this;
         Promise.all(promises).then(function (response) {
@@ -600,7 +600,7 @@
             })
           }))
         }
-        
+
         // exec promises
         var context = this;
         Promise.all(promises).then(function (response) {

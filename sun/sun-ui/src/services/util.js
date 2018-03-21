@@ -69,6 +69,9 @@ var UtilService = {
         case 'facebook_login':
           icon = 'fa fa-facebook-square login-pref-option'
           break;
+        case 'facebook_login_page':
+          icon = 'fa fa-thumbs-up login-pref-option'
+          break;
         case 'instagram_login':
           icon = 'fa fa-instagram login-pref-option'
           break;
