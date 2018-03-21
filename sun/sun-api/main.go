@@ -34,15 +34,7 @@ import (
 	"github.com/nethesis/icaro/sun/sun-api/middleware"
 )
 
-func main() {
-	// read and init configuration
-	ConfigFilePtr := flag.String("c", "/opt/icaro/sun-api/conf.json", "Path to configuration file")
-	flag.Parse()
-	configuration.Init(ConfigFilePtr)
-
-	// init routers
-	router := gin.Default()
-
+func DefineAPI(router *gin.Engine) {
 	// cors
 	corsConf := cors.DefaultConfig()
 	corsConf.AllowOrigins = configuration.Config.Cors.Origins
@@ -159,6 +151,19 @@ func main() {
 	router.NoRoute(func(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{"message": "API not found"})
 	})
+}
+
+func main() {
+	// read and init configuration
+	ConfigFilePtr := flag.String("c", "/opt/icaro/sun-api/conf.json", "Path to configuration file")
+	flag.Parse()
+	configuration.Init(ConfigFilePtr)
+
+	// init routers
+	router := gin.Default()
+
+	// define API
+	DefineAPI(router)
 
 	router.Run()
 
