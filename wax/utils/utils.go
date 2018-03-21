@@ -271,7 +271,7 @@ func GenerateCode(max int) string {
 	return string(b)
 }
 
-func SendSMSCode(number string, code string, unit models.Unit) int {
+func SendSMSCode(number string, code string, unit models.Unit, auth string) int {
 	// get account sms count
 	db := database.Database()
 	hotspot := GetHotspotById(unit.HotspotId)
@@ -293,7 +293,9 @@ func SendSMSCode(number string, code string, unit models.Unit) int {
 		msgData := url.Values{}
 		msgData.Set("To", number)
 		msgData.Set("From", configuration.Config.Endpoints.Sms.Number)
-		msgData.Set("Body", "SMS login code: "+code)
+		msgData.Set("Body", "SMS login code: "+code+
+			"\n\nLink: "+configuration.Config.Endpoints.Sms.Link+
+			"?"+auth+"&code="+code+"&num="+number)
 		msgDataReader := *strings.NewReader(msgData.Encode())
 
 		// create HTTP request client
@@ -320,13 +322,17 @@ func SendSMSCode(number string, code string, unit models.Unit) int {
 
 }
 
-func SendEmailCode(email string, code string, description string) bool {
+func SendEmailCode(email string, code string, unit models.Unit, auth string) bool {
+	hotspot := GetHotspotById(unit.HotspotId)
+
 	status := true
 	m := gomail.NewMessage()
 	m.SetHeader("From", configuration.Config.Endpoints.Email.From)
 	m.SetHeader("To", email)
-	m.SetHeader("Subject", "Wi-Fi: "+description)
-	m.SetBody("text/html", "Email login code: "+code)
+	m.SetHeader("Subject", "Wi-Fi: "+hotspot.Description)
+	m.SetBody("text/plain", "Email login code: "+code+
+		"\n\nLink: "+configuration.Config.Endpoints.Email.Link+
+		"?"+auth+"&code="+code+"&email="+email)
 
 	d := gomail.NewDialer(
 		configuration.Config.Endpoints.Email.SMTPHost,

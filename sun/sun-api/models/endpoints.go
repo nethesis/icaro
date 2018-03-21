@@ -27,6 +27,7 @@ type Endpoints struct {
 		AccountSid string `json:"account_sid"`
 		AuthToken  string `json:"auth_token"`
 		Number     string `json:"number"`
+		Link       string `json:"link"`
 	} `json:"sms"`
 	Email struct {
 		From         string `json:"from"`
@@ -34,5 +35,6 @@ type Endpoints struct {
 		SMTPPort     int    `json:"smtp_port"`
 		SMTPUser     string `json:"smtp_user"`
 		SMTPPassword string `json:"smtp_password"`
+		Link         string `json:"link"`
 	} `json:"email"`
 }

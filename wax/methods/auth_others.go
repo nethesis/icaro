@@ -38,6 +38,7 @@ import (
 
 func SMSAuth(c *gin.Context) {
 	number := c.Param("number")
+	digest := c.Query("digest")
 	uuid := c.Query("uuid")
 	sessionId := c.Query("sessionid")
 	reset := c.Query("reset")
@@ -57,7 +58,7 @@ func SMSAuth(c *gin.Context) {
 		code := utils.GenerateCode(6)
 
 		// send sms with code
-		status := utils.SendSMSCode(number, code, unit)
+		status := utils.SendSMSCode(number, code, unit, "digest="+digest+"&uuid="+uuid+"&sessionid="+sessionId)
 
 		// check response
 		if status != 201 {
@@ -104,7 +105,7 @@ func SMSAuth(c *gin.Context) {
 			code := utils.GenerateCode(6)
 
 			// send sms with code
-			status := utils.SendSMSCode(number, code, unit)
+			status := utils.SendSMSCode(number, code, unit, "digest="+digest+"&uuid="+uuid+"&sessionid="+sessionId)
 			// check response
 			if status != 201 {
 				c.JSON(http.StatusBadRequest, gin.H{"error": "authorization code not send"})
@@ -126,6 +127,7 @@ func SMSAuth(c *gin.Context) {
 
 func EmailAuth(c *gin.Context) {
 	email := c.Param("email")
+	digest := c.Query("digest")
 	uuid := c.Query("uuid")
 	sessionId := c.Query("sessionid")
 	reset := c.Query("reset")
@@ -141,14 +143,11 @@ func EmailAuth(c *gin.Context) {
 		// get unit
 		unit := utils.GetUnitByUuid(uuid)
 
-		// get hotspot
-		hotspot := utils.GetHotspotById(unit.HotspotId)
-
 		// generate code
 		code := utils.GenerateCode(6)
 
 		// send email with code
-		status := utils.SendEmailCode(email, code, hotspot.Description)
+		status := utils.SendEmailCode(email, code, unit, "digest="+digest+"&uuid="+uuid+"&sessionid="+sessionId)
 
 		// check response
 		if !status {
@@ -188,11 +187,14 @@ func EmailAuth(c *gin.Context) {
 
 		// check if is reset
 		if reset == "true" {
+			// get unit
+			unit := utils.GetUnitByUuid(uuid)
+
 			// generate code
 			code := utils.GenerateCode(6)
 
 			// send email with code
-			status := utils.SendEmailCode(email, code)
+			status := utils.SendEmailCode(email, code, unit, "digest="+digest+"&uuid="+uuid+"&sessionid="+sessionId)
 
 			// check response
 			if !status {

@@ -69,29 +69,19 @@
         name: 'EmailPage',
         mixins: [AuthMixin],
         data() {
-            var authorized = false
-            var codeRequested = false
-            var dedaloRequested = false
-            var dedaloError = false
-            var badMail = false
-            var badCode = false
-            var badInput = false
-            var authReset = false
-            var resetDone = false
-
             return {
-                authorized: authorized,
-                codeRequested: codeRequested,
-                dedaloRequested: dedaloRequested,
-                authEmail: '',
-                authCode: '',
-                authReset: authReset,
-                resetDone: resetDone,
+                authorized: false,
+                codeRequested: this.$route.query.code || false,
+                dedaloRequested: false,
+                authEmail: this.$route.query.email || '',
+                authCode: this.$route.query.code || '',
+                authReset: this.$route.query.code || false,
+                resetDone: false,
                 errors: {
-                    badMail: badMail,
-                    badCode: badCode,
-                    dedaloError: dedaloError,
-                    badInput: badInput
+                    badMail: false,
+                    badCode: false,
+                    dedaloError: false,
+                    badInput: false
                 }
             }
         },

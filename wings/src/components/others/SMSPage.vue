@@ -85,30 +85,20 @@
                 .dropdown();
         },
         data() {
-            var authorized = false
-            var codeRequested = false
-            var dedaloRequested = false
-            var dedaloError = false
-            var badNumber = false
-            var badCode = false
-            var badInput = false
-            var authReset = false
-            var resetDone = false
-
             return {
-                authorized: authorized,
-                codeRequested: codeRequested,
-                dedaloRequested: dedaloRequested,
+                authorized: false,
+                codeRequested: this.$route.query.code || false,
+                dedaloRequested: false,
                 authPrefix: '',
-                authSMS: '',
-                authCode: '',
-                authReset: authReset,
-                resetDone: resetDone,
+                authSMS: this.$route.query.num || '',
+                authCode: this.$route.query.code || '',
+                authReset: this.$route.query.code || false,
+                resetDone: false,
                 errors: {
-                    badNumber: badNumber,
-                    badCode: badCode,
-                    dedaloError: dedaloError,
-                    badInput: badInput
+                    badNumber: false,
+                    badCode: false,
+                    dedaloError: false,
+                    badInput: false
                 },
                 countries: require('./../../i18n/countries.json')
             }
@@ -150,7 +140,7 @@
 
                 // exec dedalo login
                 this.doDedaloLogin({
-                    id: this.authSMS,
+                    id: this.authPrefix + this.authSMS,
                     password: this.authCode || ''
                 }, responseDedalo => {
                     if (responseDedalo.body.clientState == 1) {
