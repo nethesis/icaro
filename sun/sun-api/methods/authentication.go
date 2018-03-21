@@ -40,6 +40,7 @@ import (
 
 func Login(c *gin.Context) {
 	var account models.Account
+	var subscription models.Subscription
 
 	var json models.Login
 	if err := c.BindJSON(&json); err != nil {
@@ -52,9 +53,9 @@ func Login(c *gin.Context) {
 
 	db := database.Database()
 	db.Where("username = ?", username).First(&account)
+	defer db.Close()
 
 	if account.Id == 0 {
-		db.Close()
 		c.JSON(http.StatusUnauthorized, gin.H{"message": "No username found!"})
 		return
 	} else {
@@ -80,7 +81,8 @@ func Login(c *gin.Context) {
 			}
 
 			db.Save(&accessToken)
-			db.Close()
+
+			db.Preload("SubscriptionPlan").Where("account_id = ?", account.Id).First(&subscription);
 
 			c.JSON(http.StatusCreated, gin.H{
 				"account_type": account.Type,
@@ -88,10 +90,10 @@ func Login(c *gin.Context) {
 				"token":        token,
 				"expires":      expires.String(),
 				"id":           account.Id,
+				"subscription": subscription,
 			})
 
 		} else {
-			db.Close()
 			c.JSON(http.StatusUnauthorized, gin.H{"message": "Password is invalid"})
 		}
 	}
