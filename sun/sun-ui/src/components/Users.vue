@@ -105,6 +105,12 @@
         user: this.get('loggedUser') || null,
       }
     },
+    mounted() {
+      if (this.$route.params.hotspotId!==undefined) {
+        this.hotspotSearchId = this.$route.params.hotspotId;
+        this.getAll();
+      }
+    },
     methods: {
       getAllHotspots() {
         this.hotspotGetAll(success => {
