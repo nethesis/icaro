@@ -11,7 +11,7 @@ During the provisioning phase of your instance, or in a second step, you must ed
 The configuration file is `/opt/icaro/wax/conf.json` and the parameters to configure are:
 
 ## Disclaimers
-Terms of use disclaimers are visualized before the user choose the login method. To add your disclaimers modify the `/opt/icaro/wax/conf.json` in the `disclaimers`.
+Terms of use disclaimers are visualized before the user chooses the login method. To add your disclaimers modify the `/opt/icaro/wax/conf.json` in the `disclaimers`.
 ```json
 "disclaimers": {
     "terms_of_use": "This is a disclaimer test\n\n - chapter 1\n - chapter 2"
