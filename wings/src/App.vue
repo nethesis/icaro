@@ -22,6 +22,7 @@
         uuid: this.$root.$options.hotspot.uuid,
         sessionid: this.$root.$options.hotspot.sessionid,
       }, success => {
+        this.$root.$options.hotspot.disclaimers = success.body.disclaimers
         this.$root.$options.hotspot.preferences = success.body.preferences
         this.$root.$options.hotspot.socials = success.body.socials
         this.hotspot.name = success.body.hotspot_name

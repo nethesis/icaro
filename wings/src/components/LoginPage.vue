@@ -24,37 +24,37 @@
             <h3>{{ $t("login.choose_login") }}</h3>
             <div class="ui relaxed list">
                 <div v-if="hotspot.preferences.facebook_login == 'true'" class="item">
-                    <router-link to="/login/facebook" class="ui facebook button big fluid">
+                    <div @click="changeRoute('/login/facebook')" class="ui facebook button big fluid">
                         <i class="facebook icon"></i>
                         Facebook
-                    </router-link>
+                    </div>
                 </div>
                 <div v-if="hotspot.preferences.instagram_login == 'true'" class="item">
-                    <router-link to="/login/instagram" class="ui instagram button big fluid">
+                    <div @click="changeRoute('/login/instagram')" class="ui instagram button big fluid">
                         <i class="instagram icon"></i>
                         Instagram
-                    </router-link>
+                    </div>
                 </div>
                 <div v-if="hotspot.preferences.linkedin_login == 'true'" class="item">
-                    <router-link to="/login/linkedin" class="ui linkedin button big fluid">
+                    <div @click="changeRoute('/login/linkedin')" class="ui linkedin button big fluid">
                         <i class="linkedin icon"></i>
                         LinkedIn
-                    </router-link>
+                    </div>
                 </div>
             </div>
             <div class="ui divider"></div>
             <div class="ui relaxed list">
                 <div v-if="hotspot.preferences.sms_login == 'true'" class="item">
-                    <router-link to="/login/sms" class="ui button green big fluid">
+                    <div @click="changeRoute('/login/sms')" class="ui button green big fluid">
                         <i class="talk icon"></i>
                         SMS
-                    </router-link>
+                    </div>
                 </div>
                 <div v-if="hotspot.preferences.email_login == 'true'" class="item">
-                    <router-link to="/login/email" class="ui button yellow big fluid">
+                    <div @click="changeRoute('/login/email')" class="ui button yellow big fluid">
                         <i class="mail icon"></i>
                         Email
-                    </router-link>
+                    </div>
                 </div>
             </div>
         </div>
@@ -88,6 +88,12 @@
             }
         },
         methods: {
+            changeRoute(path) {
+                localStorage.setItem('loginDest', path)
+                this.$router.push({
+                    path: 'login/disclaimer'
+                })
+            },
             validateCode() {
                 this.badCode = false
                 if (this.authCode.length == 0) {

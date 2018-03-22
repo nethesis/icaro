@@ -47,6 +47,9 @@ type Configuration struct {
 		Origins []string `json:"origins"`
 		Methods []string `json:"methods"`
 	} `json:"cors"`
+	Disclaimers struct {
+		TermsOfUse string `json:"terms_of_use"`
+	} `json:"disclaimers"`
 }
 
 var Config = Configuration{}

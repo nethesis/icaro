@@ -26,7 +26,10 @@ type WingsPrefs struct {
 	HotspotId   int               `json:"hotspot_id"`
 	HotspotName string            `json:"hotspot_name"`
 	Preferences map[string]string `json:"preferences"`
-	Socials     struct {
+	Disclaimers struct {
+		TermsOfUse string `json:"terms_of_use"`
+	} `json:"disclaimers"`
+	Socials struct {
 		FacebookClientId  string `json:"facebook_client_id"`
 		LinkedInClientId  string `json:"linkedin_client_id"`
 		InstagramClientId string `json:"instagram_client_id"`

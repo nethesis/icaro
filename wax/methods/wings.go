@@ -60,5 +60,8 @@ func GetWingsPrefs(c *gin.Context) {
 	wingsPrefs.Socials.LinkedInClientId = configuration.Config.AuthSocial.LinkedIn.ClientId
 	wingsPrefs.Socials.InstagramClientId = configuration.Config.AuthSocial.Instagram.ClientId
 
+	// disclaimers
+	wingsPrefs.Disclaimers.TermsOfUse = configuration.Config.Disclaimers.TermsOfUse
+
 	c.JSON(http.StatusOK, wingsPrefs)
 }

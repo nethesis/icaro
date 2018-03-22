@@ -12,7 +12,10 @@
             "validate_code": "Validate Code",
             "error_voucher_code": "Error validating voucher code",
             "error_voucher_code_sub": "It seems that your voucher code is not correct",
-            "choose_login": "Choose your Login"
+            "choose_login": "Choose your Login",
+            "decline": "Decline",
+            "accept": "Accept",
+            "disclaimer": "Terms of Use"
         },
         "social": {
             "auth_progress": "Authorization in progress",
