@@ -30,7 +30,7 @@
         <select v-on:change="getAll()" v-model="hotspotUnitId" class="form-control">
           <option value="0">-</option>
           <option v-for="unit in units" v-bind:key="unit.id" v-bind:value="unit.id">
-            {{ unit.description }}
+            {{ unit.name }} - {{ unit.description }}
           </option>
         </select>
       </div>
@@ -257,6 +257,7 @@
         this.set('sessions_unit_id', 0)
         this.set('sessions_date_from', new Date(Date.now() - 12096e5).toISOString())
         this.set('sessions_date_to', new Date().toISOString())
+        this.getAll()
       },
       exportCSV() {
         var newRows = JSON.parse(JSON.stringify(this.rows))
