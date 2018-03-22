@@ -2,7 +2,7 @@
     <div class="ui segment form">
         <h3>{{ $t("login.disclaimer") }}</h3>
         <div class="inline field">
-            <textarea class="text-center" v-model="hotspot.disclaimers.terms_of_use"></textarea>
+            <textarea readonly class="text-center" v-model="hotspot.disclaimers.terms_of_use"></textarea>
         </div>
         <button v-on:click="decline()" class="ui big button red">{{ $t("login.decline") }}</button>
         <button v-on:click="accept()" class="ui big button green">{{ $t("login.accept") }}</button>
@@ -40,5 +40,9 @@
 <style scoped>
     .text-center {
         text-align: center;
+    }
+
+    textarea {
+        min-height: 300px !important;
     }
 </style>
