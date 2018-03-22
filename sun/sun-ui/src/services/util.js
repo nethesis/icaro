@@ -87,6 +87,12 @@ var UtilService = {
         case 'voucher_login':
           icon = 'fa fa-wpforms login-pref-option'
           break;
+        case 'CoovaChilli-Bandwidth-Max-Down':
+          icon = 'fa fa-arrow-circle-down login-pref-option'
+          break;
+        case 'CoovaChilli-Bandwidth-Max-Up':
+          icon = 'fa fa-arrow-circle-up login-pref-option'
+          break;
       }
       return icon
     },
@@ -122,6 +128,8 @@ var UtilService = {
         case 'temp_session_duration':
         case 'user_expiration_days':
         case 'voucher_expiration_days':
+        case 'CoovaChilli-Bandwidth-Max-Down':
+        case 'CoovaChilli-Bandwidth-Max-Up':
           type = 'number'
           break;
         case 'captive_1_redir':
