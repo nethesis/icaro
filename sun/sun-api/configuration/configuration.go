@@ -33,11 +33,13 @@ import (
 )
 
 type Configuration struct {
-	DbHost           string            `json:"db_host"`
-	DbPort           string            `json:"db_port"`
-	DbUser           string            `json:"db_user"`
-	DbName           string            `json:"db_name"`
-	DbPassword       string            `json:"db_password"`
+	Database struct {
+		Host           string            `json:"host"`
+		Port           string            `json:"port"`
+		User           string            `json:"user"`
+		Name           string            `json:"name"`
+		Password       string            `json:"password"`
+	} `json:"database"`
 	AuthSocial       models.AuthSocial `json:"auth_social"`
 	TokenExpiresDays int               `json:"token_expires_days"`
 	RouteBlocked     models.AuthMaps   `json:"route_blocked"`
@@ -68,19 +70,19 @@ func Init(ConfigFilePtr *string) {
 	}
 
 	if os.Getenv("DB_USER") != "" {
-		Config.DbUser = os.Getenv("DB_USER")
+		Config.Database.User = os.Getenv("DB_USER")
 	}
 	if os.Getenv("DB_PASSWORD") != "" {
-		Config.DbPassword = os.Getenv("DB_PASSWORD")
+		Config.Database.Password = os.Getenv("DB_PASSWORD")
 	}
 	if os.Getenv("DB_HOST") != "" {
-		Config.DbHost = os.Getenv("DB_HOST")
+		Config.Database.Host = os.Getenv("DB_HOST")
 	}
 	if os.Getenv("DB_PORT") != "" {
-		Config.DbPort = os.Getenv("DB_PORT")
+		Config.Database.Port = os.Getenv("DB_PORT")
 	}
 	if os.Getenv("DB_NAME") != "" {
-		Config.DbName = os.Getenv("DB_NAME")
+		Config.Database.Name = os.Getenv("DB_NAME")
 	}
 
 	if os.Getenv("CORS_ORIGINS") != "" {

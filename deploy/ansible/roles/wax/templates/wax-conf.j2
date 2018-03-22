@@ -1,9 +1,11 @@
 {
-    "db_host":"{{ icaro.wax.db_hostname }}",
-    "db_port":"3306",
-    "db_name":"icaro",
-    "db_user": "{{ icaro.wax.db_username }}",
-    "db_password": "{{ icaro.wax.db_password }}",
+    "database": {
+        "host":"{{ icaro.wax.db_hostname }}",
+        "port":"3306",
+        "name":"icaro",
+        "user": "{{ icaro.wax.db_username }}",
+        "password": "{{ icaro.wax.db_password }}"
+    },
     "token_expires_days": 1,
     "cors": {
         "origins": ["http://{{ icaro.hostname }}"],

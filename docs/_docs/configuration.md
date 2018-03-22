@@ -19,7 +19,19 @@ Wings component using Wax as backend supports many type of authentication, socia
 
 During the provisioning phase of your instance, or in a second step, you must edit the Wax configuration file to get all logins available.
 
-The configuration file is `/opt/icaro/wax/conf.json` and the parameters to configure are:
+The configuration file is `/opt/icaro/wax/conf.json` and the parameters to configure are the following.
+
+## Database
+Wax and Sun database configuration is saved inside the file `/opt/icaro/wax/conf.json` in the `database` part.
+```json
+"database": {
+    "host":"localhost",
+    "port":"3306",
+    "name":"icaro",
+    "user": "sun-api",
+    "password": "Sun-ApiMariaDBPassWordHere"
+}
+```
 
 ## Disclaimers
 Terms of use and marketing disclaimers are visualized before the user chooses the login method. To add your disclaimers modify the `/opt/icaro/wax/conf.json` in the `disclaimers`.
