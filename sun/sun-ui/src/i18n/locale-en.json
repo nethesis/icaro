@@ -80,7 +80,9 @@
       "temp_session_duration": "Temporary session duration (seconds)",
       "start_navigate": "Start Navigate",
       "voucher_creation": "Vouchers creation",
-      "voucher_creation_count": "Vouchers number"
+      "voucher_creation_count": "Vouchers number",
+      "CoovaChilli-Bandwidth-Max-Down": "Bandwidth Max Down (Kbps)",
+      "CoovaChilli-Bandwidth-Max-Up": "Bandwidth Max Up (Kbps)"
     },
     "user": {
       "username": "Username",
