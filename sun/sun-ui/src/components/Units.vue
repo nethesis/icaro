@@ -21,7 +21,9 @@
         <td>
           <strong>{{ props.row.mac_address }}</strong>
         </td>
-        <td class="fancy">{{ props.row.name }}</td>
+        <td class="fancy">
+          <a :href="'#/units/'+ props.row.id">{{ props.row.name }}</a>
+        </td>
         <td class="fancy">{{ props.row.description }}</td>
         <td class="fancy">{{ props.row.uuid || '-' }}</td>
         <td>
