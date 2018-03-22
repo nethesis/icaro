@@ -26,6 +26,7 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -143,9 +144,18 @@ func updateSession(sessionId string, unitMacAddress string, bytesDown string, by
 func Counters(c *gin.Context, parameters url.Values) {
 	status := parameters.Get("status")
 
+	var username string
+
 	switch status {
 	case "start":
-		Ack(c, startSession(c.Query("user"), c.Query("mac"), c.Query("ip"), c.Query("sessionid"), c.Query("nasid"), c.Query("ap")))
+		if strings.Compare(c.Query("user"), c.Query("mac")) == 0 {
+			//autologin
+			_, user := utils.GetUserByMacAddressAndunitMacAddress(c.Query("mac"), c.Query("ap"))
+			username = user.Username
+		} else {
+			username = c.Query("user")
+		}
+		Ack(c, startSession(username, c.Query("mac"), c.Query("ip"), c.Query("sessionid"), c.Query("nasid"), c.Query("ap")))
 	case "stop":
 		Ack(c, stopSession(c.Query("sessionid"), c.Query("ap"), c.Query("bytes_down"), c.Query("bytes_up"), c.Query("duration")))
 	case "update":
