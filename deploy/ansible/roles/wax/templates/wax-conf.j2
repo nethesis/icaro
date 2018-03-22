@@ -40,7 +40,8 @@ icaro.wax.twilio_auth_token is defined and
 icaro.wax.twilio_number is defined %}
             "account_sid": "{{ icaro.wax.twilio_account_sid }}",
             "auth_token": "{{ icaro.wax.twilio_auth_token }}",
-            "number": "{{ icaro.wax.twilio_number }}"
+            "number": "{{ icaro.wax.twilio_number }}",
+            "link": "http://{{ icaro.hostname }}/wings/login/sms"
 {% endif %}
         },
         "email": {
@@ -53,7 +54,8 @@ icaro.wax.email_smtp_password is defined %}
             "smtp_host": "{{ icaro.wax.email_smtp_host }}",
             "smtp_port": {{ icaro.wax.email_smtp_port }},
             "smtp_user": "{{ icaro.wax.email_smtp_user }}",
-            "smtp_password": "{{ icaro.wax.email_smtp_password }}"
+            "smtp_password": "{{ icaro.wax.email_smtp_password }}",
+            "link": "http://{{ icaro.hostname }}/wings/login/email"
 {% endif %}
         }
     }
