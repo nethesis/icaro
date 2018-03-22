@@ -21,6 +21,7 @@
         <td>
           <strong>{{ props.row.mac_address }}</strong>
         </td>
+        <td class="fancy">{{ props.row.name }}</td>
         <td class="fancy">{{ props.row.description }}</td>
         <td class="fancy">{{ props.row.uuid || '-' }}</td>
         <td>
@@ -59,6 +60,11 @@
         columns: [{
             label: this.$i18n.t("unit.mac_address"),
             field: "mac_address",
+            filterable: true
+          },
+          {
+            label: this.$i18n.t("unit.name"),
+            field: "name",
             filterable: true
           },
           {

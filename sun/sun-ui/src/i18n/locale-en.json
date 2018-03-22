@@ -135,6 +135,7 @@
       "unit": "Unit",
       "mac_address": "Mac Address",
       "description": "Description",
+      "name": "Name",
       "uuid": "Unique ID",
       "hotspot_name": "Hotspot",
       "hotspot_description": "Description"

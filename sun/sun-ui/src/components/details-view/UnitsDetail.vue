@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>{{ $t('unit.unit') }}
-      <strong class="soft">{{ info.unit.uuid }}</strong>
+      <strong class="soft">{{ info.unit.name }} - {{info.unit.description}}</strong>
     </h2>
 
       <div class="row row-cards-pf">
@@ -17,6 +17,10 @@
                 <div class="list-details">
                     <dt>{{ $t("unit.uuid") }}</dt>
                     <dd>{{info.unit.uuid || ""}}</dd>
+                </div>
+                <div class="list-details">
+                    <dt>{{ $t("unit.name") }}</dt>
+                    <dd>{{info.unit.name || ""}}</dd>
                 </div>
                 <div class="list-details">
                     <dt>{{ $t("unit.description") }}</dt>
@@ -57,7 +61,7 @@
   import HotspotService from '../../services/hotspot';
   import UtilService from '../../services/util';
   import StorageService from '../../services/storage';
-    
+
 
 export default {
   name: 'UnitsDetails',

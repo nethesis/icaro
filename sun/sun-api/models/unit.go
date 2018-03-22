@@ -28,6 +28,7 @@ type Unit struct {
 	Id          int       `db:"id" json:"id"`
 	HotspotId   int       `db:"hotspot_id" json:"hotspot_id"`
 	MacAddress  string    `db:"mac_address" json:"mac_address"`
+	Name        string    `db:"name" json:"name"`
 	Description string    `db:"description" json:"description"`
 	Uuid        string    `db:"uuid" json:"uuid"`
 	Secret      string    `db:"secret" json:"secret"`
@@ -37,6 +38,7 @@ type Unit struct {
 type UnitJSON struct {
 	Hotspot     string `json:"hotspot"`
 	MacAddress  string `json:"mac_address"`
+	Name        string `json:"name"`
 	Description string `json:"description"`
 	Uuid        string `json:"uuid"`
 	Secret      string `json:"secret"`

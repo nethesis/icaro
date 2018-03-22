@@ -154,6 +154,7 @@ CREATE TABLE `units` (
   `id` serial,
   `hotspot_id` bigint unsigned NOT NULL,
   `mac_address` varchar(200) NOT NULL,
+  `name` varchar(200),
   `description` varchar(200),
   `uuid` varchar(200) NOT NULL,
   `secret` varchar(200) NOT NULL,

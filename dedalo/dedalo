@@ -61,7 +61,8 @@ case "$OPT" in
             --header "Token: $TOKEN" \
             --data "{
                 \"mac_address\": \"$MAC_ADDRESS\",
-                \"description\": \"$HS_UNIT_NAME\",
+                \"name\": \"$HS_UNIT_NAME\",
+                \"description\": \"$HS_UNIT_DESC\",
                 \"uuid\": \"$HS_UUID\",
                 \"secret\": \"$HS_SECRET\",
                 \"hotspot\": \"$HS_ID\"
@@ -94,11 +95,12 @@ case "$OPT" in
     ;;
     info)
         echo "Dedalo: Network Access Controller"
-        echo -e "  HotSpot ID:\t$HS_ID"
-        echo -e "  Unit Name:\t$HS_UNIT_NAME"
-        echo -e "  Unit UUID:\t$HS_UUID"
-        echo -e "  Unit Secret:\t$HS_SECRET"
-        echo -e "  Unit MAC:\t$MAC_ADDRESS"
+        echo -e "  HotSpot ID:\t\t$HS_ID"
+        echo -e "  Unit Name:\t\t$HS_UNIT_NAME"
+        echo -e "  Unit Description:\t$HS_UNIT_DESC"
+        echo -e "  Unit UUID:\t\t$HS_UUID"
+        echo -e "  Unit Secret:\t\t$HS_SECRET"
+        echo -e "  Unit MAC:\t\t$MAC_ADDRESS"
     ;;
     *)
         echo "Usage: $0 { query | config | register | start | stop | restart | status | info }"

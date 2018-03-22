@@ -54,6 +54,7 @@ func CreateUnit(c *gin.Context) {
 	unit := models.Unit{
 		HotspotId:   hotspot.Id,
 		MacAddress:  json.MacAddress,
+		Name:        json.Name,
 		Description: json.Description,
 		Uuid:        json.Uuid,
 		Secret:      json.Secret,
