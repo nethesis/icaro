@@ -123,6 +123,7 @@ var UtilService = {
         case 'email_login':
         case 'sms_login':
         case 'voucher_login':
+        case 'auto_login':
           type = 'checkbox'
           break;
         case 'temp_session_duration':
