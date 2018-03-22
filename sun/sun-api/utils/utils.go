@@ -158,6 +158,22 @@ func GetHotspotByName(name string) models.Hotspot {
 	return hotspot
 }
 
+func HotspotIsOverQuota(hotspotId int) bool {
+	var hotspot models.Hotspot
+	var subscription models.Subscription
+	var count int
+	db := database.Database()
+	db.Set("gorm:auto_preload", true)
+	db.Preload("Account").Where("id = ?", hotspotId).First(&hotspot)
+	db.Preload("SubscriptionPlan").Where("account_id = ?", hotspot.Account.Id).First(&subscription);
+
+	query := fmt.Sprintf("SELECT COUNT(units.id) as count FROM units JOIN hotspots on units.hotspot_id = hotspots.id WHERE hotspots.account_id = %d", hotspot.Account.Id)
+	db.Raw(query).Count(&count)
+	db.Close()
+
+	return count >= subscription.SubscriptionPlan.MaxUnits
+}
+
 func Contains(intSlice []int, searchInt int) bool {
 	for _, value := range intSlice {
 		if value == searchInt {

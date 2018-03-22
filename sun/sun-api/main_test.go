@@ -129,10 +129,8 @@ func TestLogin(t *testing.T) {
 		})
 }
 
-
 func TestUnitRegistration(t *testing.T) {
 	f, r := startupEnv()
-	var unit models.Unit
 	var cr CreationResponse
 
 	token := getToken(f, r)
@@ -151,13 +149,61 @@ func TestUnitRegistration(t *testing.T) {
 		Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
 			err := json.Unmarshal([]byte(f.Body.String()), &cr);
 			assert.Equal(t, nil, err)
-			unit.Id = cr.Id
 			assert.Equal(t, http.StatusCreated, f.Code)
 		})
 
 	// Cleanup
 	db := database.Database()
-	db.Delete(&unit)
+	db.Delete(models.Unit{}, "id > 1")
 	db.Close()
 }
 
+func TestUnitRegistrationLimit(t *testing.T) {
+	max := 10
+	var cr CreationResponse
+	f, r := startupEnv()
+	token := getToken(f, r)
+
+	db := database.Database()
+	// create max-1 units because the first one already exists
+	for i :=0; i < max-1; i++ {
+		f.POST("/api/units").
+			SetHeader(gofight.H{
+				"Token": token,
+			}).
+			SetJSON(gofight.D{
+				"mac_address" : "42-C2-41-98-85-08",
+				"description" : fmt.Sprintf("My test unit %d", i),
+				"uuid" : fmt.Sprintf("uuid-test-%d",i),
+				"secret" : fmt.Sprintf("mysecret%d",i),
+				"hotspot": "HSTest",
+			}).
+			Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
+				err := json.Unmarshal([]byte(f.Body.String()), &cr);
+				assert.Equal(t, nil, err)
+				assert.Equal(t, http.StatusCreated, f.Code)
+			})
+	}
+
+	// this one must fail
+	f.POST("/api/units").
+		SetHeader(gofight.H{
+			"Token": token,
+		}).
+		SetJSON(gofight.D{
+			"mac_address" : "44-C2-41-98-85-08",
+			"description" : fmt.Sprintf("My test unit %d", max),
+			"uuid" : fmt.Sprintf("uuid-test-%d", max),
+			"secret" : fmt.Sprintf("mysecret%d", max),
+			"hotspot": "HSTest",
+		}).
+		Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
+			err := json.Unmarshal([]byte(f.Body.String()), &cr);
+			assert.Equal(t, nil, err)
+			assert.Equal(t, http.StatusForbidden, f.Code)
+		})
+
+	// cleanup
+	db.Delete(models.Unit{}, "id > 1")
+	db.Close()
+}
