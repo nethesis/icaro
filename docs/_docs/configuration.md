@@ -92,6 +92,19 @@ For the SMS login process Icaro use Twilio as SMS sender, register your app here
 
 ```
 
+## Captive portal defaults
+The captive portal can be customized for each Hotspot, but if the user doesn't have the rights, you can set captive portal default options under the the `captive_portal` section:
+```JSON
+"captive_portal": {
+    "redirect": "https://nethesis.github.io/icaro",
+    "title": "Icaro",
+    "subtitle": "The Open Source Hotspot",
+    "description": "Free as in freedom",
+    "logo": "logo.png",
+    "banner": "banner.png"
+}
+```
+
 ## Envirioment Variables
 
 You can also configure some properties via environment variables, if present **the values in the environment variable take the precedence** over the ones declared in files.

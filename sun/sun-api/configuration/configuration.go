@@ -23,8 +23,10 @@
 package configuration
 
 import (
+	b64 "encoding/base64"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"strconv"
 	"strings"
@@ -34,11 +36,11 @@ import (
 
 type Configuration struct {
 	Database struct {
-		Host           string            `json:"host"`
-		Port           string            `json:"port"`
-		User           string            `json:"user"`
-		Name           string            `json:"name"`
-		Password       string            `json:"password"`
+		Host     string `json:"host"`
+		Port     string `json:"port"`
+		User     string `json:"user"`
+		Name     string `json:"name"`
+		Password string `json:"password"`
 	} `json:"database"`
 	AuthSocial       models.AuthSocial `json:"auth_social"`
 	TokenExpiresDays int               `json:"token_expires_days"`
@@ -53,6 +55,17 @@ type Configuration struct {
 		TermsOfUse   string `json:"terms_of_use"`
 		MarketingUse string `json:"marketing_use"`
 	} `json:"disclaimers"`
+	CaptivePortal struct {
+		Redirect       string `json:"redirect"`
+		Title          string `json:"title"`
+		Subtitle       string `json:"subtitle"`
+		Description    string `json:"description"`
+		Background     string `json:"background"`
+		Logo           string `json:"logo"`   // Logo file name
+		Banner         string `json:"banner"` // Banner file name
+		LogoContents   string `json:"-"`      // base64 content of Logo
+		BannerContents string `json:"-"`      //base64 content of Banner
+	} `json:"captive_portal"`
 }
 
 var Config = Configuration{}
@@ -142,4 +155,41 @@ func Init(ConfigFilePtr *string) {
 	if os.Getenv("EMAIL_SMTP_PASSWORD") != "" {
 		Config.Endpoints.Email.SMTPPassword = os.Getenv("EMAIL_SMTP_PASSWORD")
 	}
+
+	if os.Getenv("CAPTIVE_REDIRECT") != "" {
+		Config.CaptivePortal.Redirect = os.Getenv("CAPTIVE_REDIRECT")
+	}
+	if os.Getenv("CAPTIVE_TITLE") != "" {
+		Config.CaptivePortal.Title = os.Getenv("CAPTIVE_TITLE")
+	}
+	if os.Getenv("CAPTIVE_SUBTITLE") != "" {
+		Config.CaptivePortal.Subtitle = os.Getenv("CAPTIVE_SUBTITLE")
+	}
+	if os.Getenv("CAPTIVE_BACKGROUND") != "" {
+		Config.CaptivePortal.Background = os.Getenv("CAPTIVE_BACKGROUND")
+	}
+	if os.Getenv("CAPTIVE_DESCRIPTION") != "" {
+		Config.CaptivePortal.Description = os.Getenv("CAPTIVE_DESCRIPTION")
+	}
+	if os.Getenv("CAPTIVE_LOGO") != "" {
+		Config.CaptivePortal.Logo = os.Getenv("CAPTIVE_LOGO")
+	}
+	if os.Getenv("CAPTIVE_BANNER") != "" {
+		Config.CaptivePortal.Banner = os.Getenv("CAPTIVE_BANNER")
+	}
+
+	Config.CaptivePortal.LogoContents = ""
+	if _, err := os.Stat(Config.CaptivePortal.Logo); err == nil {
+		if data, errRead := ioutil.ReadFile(Config.CaptivePortal.Logo); errRead == nil {
+			Config.CaptivePortal.LogoContents = b64.StdEncoding.EncodeToString([]byte(data))
+		}
+	}
+
+	Config.CaptivePortal.BannerContents = ""
+	if _, err := os.Stat(Config.CaptivePortal.Banner); err == nil {
+		if data, errRead := ioutil.ReadFile(Config.CaptivePortal.Banner); errRead == nil {
+			Config.CaptivePortal.BannerContents = b64.StdEncoding.EncodeToString([]byte(data))
+		}
+	}
+
 }
