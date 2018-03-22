@@ -24,12 +24,14 @@ package methods
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 
 	"github.com/nethesis/icaro/sun/sun-api/database"
 	"github.com/nethesis/icaro/sun/sun-api/models"
+	"github.com/nethesis/icaro/wax/utils"
 )
 
 func Reply(c *gin.Context, httpCode int, message string) {
@@ -56,6 +58,21 @@ func isHotspot(hotspotName string) bool {
 	return (hotspot.Id != 0)
 }
 
+func isAutoLoginEnabled(hotspotId int) bool {
+	var hotspot_pref models.HotspotPreference
+	isEnabled := false
+
+	db := database.Database()
+	db.Where("hotspot_id = ? and `key` = ?", hotspotId, "auto_login").First(&hotspot_pref)
+	db.Close()
+
+	if hotspot_pref.Id != 0 {
+		isEnabled, _ = strconv.ParseBool(hotspot_pref.Value)
+	}
+
+	return isEnabled
+}
+
 func Dispatch(c *gin.Context) {
 	stage := c.Query("stage")
 	hotspotName := c.Query("nasid")
@@ -78,12 +95,31 @@ func Dispatch(c *gin.Context) {
 
 	switch stage {
 	case "login":
-		unitMacAddress := c.Query("ap")
-		user := c.Query("user")
-		chapPass := c.Query("chap_pass")
-		chapChal := c.Query("chap_chal")
-		sessionId := c.Query("sessionid")
-		Login(c, unitMacAddress, user, chapPass, chapChal, sessionId)
+		service := c.Query("service")
+		switch service {
+		case "framed":
+			unit := utils.GetUnitByMacAddress(c.Query("ap"))
+			if isAutoLoginEnabled(unit.HotspotId) {
+				unitMacAddress := c.Query("ap")
+				user := c.Query("user")
+				userMac := c.Query("mac")
+				sessionId := c.Query("sessionid")
+				autoLogin(c, unitMacAddress, user, userMac, sessionId)
+			} else {
+				c.String(http.StatusForbidden, "Autologin disabled")
+			}
+
+		case "login":
+			unitMacAddress := c.Query("ap")
+			user := c.Query("user")
+			chapPass := c.Query("chap_pass")
+			chapChal := c.Query("chap_chal")
+			sessionId := c.Query("sessionid")
+			Login(c, unitMacAddress, user, chapPass, chapChal, sessionId)
+
+		default:
+			c.String(http.StatusNotFound, "Invalid login service: '%s'", service)
+		}
 
 	case "counters":
 		parameters := c.Request.URL.Query()

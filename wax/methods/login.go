@@ -48,6 +48,34 @@ func AuthReject(c *gin.Context, description string) {
 	c.Abort()
 }
 
+func autoLogin(c *gin.Context, unitMacAddress string, username string, userMac string, sessionId string) {
+	isValid, user := utils.GetUserByMacAddressAndunitMacAddress(userMac, unitMacAddress)
+	if !isValid {
+		AuthReject(c, "user account not found")
+		return
+	}
+
+	// check if user account is not expired
+	if user.ValidUntil.Before(time.Now().UTC()) {
+		AuthReject(c, "user account is expired")
+		return
+	}
+
+	// extract preferences
+	unit := utils.GetUnitByMacAddress(unitMacAddress)
+	prefs := utils.GetHotspotPreferencesByKeys(
+		unit.HotspotId,
+		[]string{"Idle-Timeout", "Acct-Session-Time", "Session-Timeout", "CoovaChilli-Bandwidth-Max-Up", "CoovaChilli-Bandwidth-Max-Down"},
+	)
+	var outPrefs bytes.Buffer
+	for _, pref := range prefs {
+		outPrefs.WriteString(fmt.Sprintf("%s:%s\n", pref.Key, pref.Value))
+	}
+
+	// response to dedalo
+	AuthAccept(c, outPrefs.String())
+}
+
 func Login(c *gin.Context, unitMacAddress string, username string, chapPass string, chapChal string, sessionId string) {
 	// check if unit exists
 	unit := utils.GetUnitByMacAddress(unitMacAddress)

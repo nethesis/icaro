@@ -188,6 +188,15 @@ func GetDeviceByMacAddress(mac string) models.Device {
 	return unit
 }
 
+func GetDeviceByHotspotidAndMacAddress(hotspot_id int, mac string) models.Device {
+	var device models.Device
+	db := database.Database()
+	db.Where("hotspot_id = ? and mac_address = ?", hotspot_id, mac).First(&device)
+	db.Close()
+
+	return device
+}
+
 func GetUnitByMacAddress(mac string) models.Unit {
 	var unit models.Unit
 	db := database.Database()
@@ -222,6 +231,15 @@ func GetHotspotById(id int) models.Hotspot {
 	db.Close()
 
 	return hotspot
+}
+
+func GetUserById(id int) models.User {
+	var user models.User
+	db := database.Database()
+	db.Where("id = ?", id).First(&user)
+	db.Close()
+
+	return user
 }
 
 func GetUserByUsername(username string) models.User {
@@ -358,4 +376,26 @@ func Contains(intSlice []int, searchInt int) bool {
 		}
 	}
 	return false
+}
+
+func GetUserByMacAddressAndunitMacAddress(mac string, unitMacAddress string) (bool, models.User) {
+
+	var user models.User
+
+	unit := GetUnitByMacAddress(unitMacAddress)
+	if unit.Id <= 0 {
+		return false, user
+	}
+
+	device := GetDeviceByHotspotidAndMacAddress(unit.HotspotId, mac)
+	if device.Id < 0 {
+		return false, user
+	}
+
+	user = GetUserById(device.UserId)
+	if user.Id < 0 {
+		return false, user
+	}
+
+	return true, user
 }
