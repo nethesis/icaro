@@ -13,18 +13,18 @@
         </select>
       </div>
     </div>
-    <vue-good-table v-if="!isLoading" :perPage="25" :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'mac_address', type: 'asc'}"
+    <vue-good-table v-if="!isLoading" :perPage="25" :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'name', type: 'asc'}"
       :globalSearch="true" :paginate="true" styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText"
       :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
       :ofText="tableLangsTexts.ofText">
       <template slot="table-row" slot-scope="props">
+        <td class="fancy">
+          <a :href="'#/units/'+ props.row.id">{{ props.row.name || '-' }}</a>
+        </td>
+        <td class="fancy">{{ props.row.description }}</td>
         <td>
           <strong>{{ props.row.mac_address }}</strong>
         </td>
-        <td class="fancy">
-          <a :href="'#/units/'+ props.row.id">{{ props.row.name }}</a>
-        </td>
-        <td class="fancy">{{ props.row.description }}</td>
         <td class="fancy">{{ props.row.uuid || '-' }}</td>
         <td>
           <unit-action details="true" :obj="props.row" :update="getAll"></unit-action>
@@ -60,11 +60,6 @@
         msg: "Units",
         isLoading: true,
         columns: [{
-            label: this.$i18n.t("unit.mac_address"),
-            field: "mac_address",
-            filterable: true
-          },
-          {
             label: this.$i18n.t("unit.name"),
             field: "name",
             filterable: true
@@ -72,6 +67,11 @@
           {
             label: this.$i18n.t("unit.description"),
             field: "description",
+            filterable: true
+          },
+          {
+            label: this.$i18n.t("unit.mac_address"),
+            field: "mac_address",
             filterable: true
           },
           {

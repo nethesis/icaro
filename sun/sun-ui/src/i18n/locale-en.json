@@ -135,7 +135,7 @@
     },
     "unit": {
       "unit": "Unit",
-      "mac_address": "Mac Address",
+      "mac_address": "MAC Address",
       "description": "Description",
       "name": "Name",
       "uuid": "Unique ID",
