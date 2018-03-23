@@ -31,6 +31,7 @@
           <span :class="getLoginIcon(props.row.type)" data-toggle="tooltip" data-placement="left" :title="$t(props.row.type)"></span>
           {{$t(props.row.type)}}
         </td>
+        <td v-if="(user.account_type == 'admin')" class="fancy">{{ props.row.subscription_plan_name || '-' }}</td>
         <td class="fancy">{{ props.row.created | formatDate }}</td>
         <td>
           <account-action details="false" :obj="props.row" :update="getAll"></account-action>
@@ -196,6 +197,12 @@
             label: this.$i18n.t('account.type'),
             field: 'type',
             filterable: true,
+          },
+          {
+            label: this.$i18n.t('account.subscription_plan_name'),
+            field: 'type',
+            filterable: true,
+            hidden: this.get("loggedUser").account_type != "admin" ? true : false,
           },
           {
             label: this.$i18n.t('account.created'),
