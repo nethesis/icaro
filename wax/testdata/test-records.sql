@@ -8,4 +8,4 @@ insert into hotspot_preferences values (null,1,"Acct-Session-Time","60");
 insert into hotspot_preferences values (null,1,"Session-Timeout","61");
 insert into hotspot_preferences values (null,1,"CoovaChilli-Bandwidth-Max-Up","100000");
 insert into hotspot_preferences values (null,1,"CoovaChilli-Bandwidth-Max-Down","100001");
-insert into subscriptions values (default, 2, 3, now(), date_add(now(), interval 365 day), "valid", default);
+insert into subscriptions values (default, 2, 3, now(), date_add(now(), interval 365 day),  default);
