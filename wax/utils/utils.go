@@ -82,17 +82,26 @@ func CreateUserSession(userId int, sessionKey string) {
 }
 
 func CreateUserMarketing(userId int, data interface{}, accountType string) {
+	var userMarketing models.UserMarketing
 	serialization, _ := json.Marshal(data)
 
-	userMarketing := models.UserMarketing{
-		UserId:      userId,
-		AccountType: accountType,
-		Data:        string(serialization),
-		Created:     time.Now().UTC(),
+	db := database.Database()
+	db.Where("user_id = ?", userId).First(&userMarketing)
+
+	// create or update info
+	if userMarketing.Id == 0 {
+		userMarketing = models.UserMarketing{
+			UserId:      userId,
+			AccountType: accountType,
+			Data:        string(serialization),
+			Created:     time.Now().UTC(),
+		}
+	} else {
+		userMarketing.AccountType = accountType
+		userMarketing.Data = string(serialization)
 	}
 
 	// save user marketing
-	db := database.Database()
 	db.Save(&userMarketing)
 	db.Close()
 

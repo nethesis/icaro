@@ -180,10 +180,10 @@ CREATE TABLE `sessions` (
   `update_time` datetime,
   `stop_time` datetime,
   `session_key` varchar(200),
-  FOREIGN KEY (`unit_id`) REFERENCES units(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
-  FOREIGN KEY (`hotspot_id`) REFERENCES hotspots(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
-  FOREIGN KEY (`device_id`) REFERENCES devices(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
-  FOREIGN KEY (`user_id`) REFERENCES users(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  FOREIGN KEY (`unit_id`) REFERENCES units(`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  FOREIGN KEY (`hotspot_id`) REFERENCES hotspots(`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  FOREIGN KEY (`device_id`) REFERENCES devices(`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  FOREIGN KEY (`user_id`) REFERENCES users(`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   UNIQUE KEY `session_key` (`session_key`),
   PRIMARY KEY(`id`)
 );

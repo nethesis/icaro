@@ -121,7 +121,7 @@ func SMSAuth(c *gin.Context) {
 		db.Close()
 
 		// response to client
-		c.JSON(http.StatusOK, gin.H{"user_id": number, "exists": true, "reset": reset})
+		c.JSON(http.StatusOK, gin.H{"user_id": number, "exists": true, "reset": reset, "user_db_id": user.Id})
 	}
 }
 
@@ -211,7 +211,7 @@ func EmailAuth(c *gin.Context) {
 		db.Close()
 
 		// response to client
-		c.JSON(http.StatusOK, gin.H{"user_id": email, "exists": true, "reset": reset})
+		c.JSON(http.StatusOK, gin.H{"user_id": email, "exists": true, "reset": reset, "user_db_id": user.Id})
 	}
 }
 

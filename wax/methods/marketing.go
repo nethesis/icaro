@@ -20,19 +20,34 @@
  * author: Edoardo Spadoni <edoardo.spadoni@nethesis.it>
  */
 
-package models
+package methods
 
-type WingsPrefs struct {
-	HotspotId   int               `json:"hotspot_id"`
-	HotspotName string            `json:"hotspot_name"`
-	Preferences map[string]string `json:"preferences"`
-	Disclaimers struct {
-		TermsOfUse   string `json:"terms_of_use"`
-		MarketingUse string `json:"marketing_use"`
-	} `json:"disclaimers"`
-	Socials struct {
-		FacebookClientId  string `json:"facebook_client_id"`
-		LinkedInClientId  string `json:"linkedin_client_id"`
-		InstagramClientId string `json:"instagram_client_id"`
-	} `json:"socials"`
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
+
+	"github.com/nethesis/icaro/sun/sun-api/database"
+	"github.com/nethesis/icaro/sun/sun-api/models"
+)
+
+func DeleteMarketing(c *gin.Context) {
+	var userMarketing models.UserMarketing
+
+	userId := c.Param("user_id")
+
+	db := database.Database()
+	db.Where("user_id = ?", userId).First(&userMarketing)
+
+	if userMarketing.Id == 0 {
+		db.Close()
+		c.JSON(http.StatusNotFound, gin.H{"message": "No user found!"})
+		return
+	}
+
+	db.Delete(&userMarketing)
+	db.Close()
+
+	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }

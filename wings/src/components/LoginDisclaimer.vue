@@ -1,6 +1,6 @@
 <template>
     <div class="ui segment form">
-        <h3>{{ $t("login.disclaimer") }}</h3>
+        <h3>{{ $t("login.disclaimer_use") }}</h3>
         <div class="inline field">
             <textarea readonly class="text-center" v-model="hotspot.disclaimers.terms_of_use"></textarea>
         </div>

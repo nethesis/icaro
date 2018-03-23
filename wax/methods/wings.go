@@ -62,6 +62,7 @@ func GetWingsPrefs(c *gin.Context) {
 
 	// disclaimers
 	wingsPrefs.Disclaimers.TermsOfUse = configuration.Config.Disclaimers.TermsOfUse
+	wingsPrefs.Disclaimers.MarketingUse = configuration.Config.Disclaimers.MarketingUse
 
 	c.JSON(http.StatusOK, wingsPrefs)
 }

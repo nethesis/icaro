@@ -48,7 +48,8 @@ type Configuration struct {
 		Methods []string `json:"methods"`
 	} `json:"cors"`
 	Disclaimers struct {
-		TermsOfUse string `json:"terms_of_use"`
+		TermsOfUse   string `json:"terms_of_use"`
+		MarketingUse string `json:"marketing_use"`
 	} `json:"disclaimers"`
 }
 

@@ -15,12 +15,13 @@
             "choose_login": "Choose your Login",
             "decline": "Decline",
             "accept": "Accept",
-            "disclaimer": "Terms of Use"
+            "disclaimer_use": "Terms of Use",
+            "disclaimer_marketing": "Marketing info"
         },
         "social": {
             "auth_progress": "Authorization in progress",
             "auth_success": "You are successfully authenticated",
-            "auth_success_sub": "In a few seconds you will be redirected",
+            "auth_success_sub": "Read the marketing disclaimer and in a few seconds you will be redirected",
             "auth_error": "Error on authentication",
             "auth_error_sub": "Something went wrong on authentication process"
         },

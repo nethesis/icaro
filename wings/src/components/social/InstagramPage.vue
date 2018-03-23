@@ -19,6 +19,14 @@
                 <p>{{ $t("social.auth_error_sub") }}</p>
             </div>
         </div>
+        <div v-if="authorized">
+            <h3>{{ $t("login.disclaimer_marketing") }}</h3>
+            <div class="inline field">
+                <textarea readonly class="text-center" v-model="hotspot.disclaimers.marketing_use"></textarea>
+            </div>
+            <button v-on:click="deleteInfo()" class="ui big button red">{{ $t("login.decline") }}</button>
+            <button v-on:click="accept()" class="ui big button green">{{ $t("login.accept") }}</button>
+        </div>
     </div>
 </template>
 
@@ -41,9 +49,13 @@
                 // extract wings preferences
                 this.getPreferences(this.parseState(params.state), success => {
                     this.$parent.hotspot.name = success.body.hotspot_name
+                    this.$parent.hotspot.disclaimers = success.body.disclaimers
                     this.$parent.hotspot.preferences = success.body.preferences
+                    this.$root.$options.hotspot.disclaimers = success.body.disclaimers
                     this.$root.$options.hotspot.preferences = success.body.preferences
-                    $("body").css("background-color", success.body.preferences.captive_7_background || '#2a87be');
+                    this.hotspot.disclaimers = success.body.disclaimers
+                    $("body").css("background-color", success.body.preferences.captive_7_background ||
+                        '#2a87be');
                 }, error => {
                     this.authorized = false
                     console.error(error)
@@ -54,6 +66,7 @@
 
                 // get user id
                 this.$http.get(url).then(responseAuth => {
+                    this.userId = responseAuth.body.user_db_id
                     // exec dedalo login
                     this.doDedaloLogin({
                         id: responseAuth.body.user_id,
@@ -62,11 +75,6 @@
                         if (responseDedalo.body.clientState == 1) {
                             this.authorized = true
                             this.dedaloError = false
-                            setTimeout(function () {
-                                // open redir url
-                                window.location.replace(this.$root.$options.hotspot.preferences
-                                    .captive_1_redir)
-                            }.bind(this), 2500)
                         } else {
                             this.authorized = false
                             this.dedaloError = true
@@ -91,7 +99,27 @@
             }
             return {
                 authorized: authorized,
-                dedaloError: dedaloError
+                dedaloError: dedaloError,
+                hotspot: {
+                    disclaimers: this.$root.$options.hotspot.disclaimers
+                },
+                userId: 0
+            }
+        },
+        methods: {
+            deleteInfo() {
+                // extract code and state
+                var params = this.extractParams()
+                this.deleteMarketingInfo(this.userId, this.parseState(params.state), function (success) {
+                    this.accept()
+                }, function (error) {
+                    console.error(error)
+                })
+            },
+            accept() {
+                // open redir url
+                window.location.replace(this.$root.$options.hotspot.preferences
+                    .captive_1_redir)
             }
         }
     }
@@ -116,5 +144,13 @@
 
     a {
         color: #42b983;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    textarea {
+        min-height: 300px !important;
     }
 </style>

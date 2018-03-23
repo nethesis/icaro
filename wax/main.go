@@ -66,6 +66,9 @@ func DefineAPI(router *gin.Engine) {
 
 		// handle wings preferences
 		wax.GET("/preferences", methods.GetWingsPrefs)
+
+		// handle marketings
+		wax.DELETE("/marketings/:user_id", methods.DeleteMarketing)
 	}
 
 	// handle missing endpoint

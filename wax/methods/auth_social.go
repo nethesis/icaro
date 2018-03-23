@@ -149,10 +149,13 @@ func FacebookAuth(c *gin.Context) {
 
 		// create user session check
 		utils.CreateUserSession(user.Id, sessionId)
+
+		// create marketing info with user infos
+		utils.CreateUserMarketing(user.Id, fbUserDetail, "facebook")
 	}
 
 	// response to client
-	c.JSON(http.StatusOK, gin.H{"user_id": fbInspectToken.Data.UserId})
+	c.JSON(http.StatusOK, gin.H{"user_id": fbInspectToken.Data.UserId, "user_db_id": user.Id})
 
 }
 
@@ -255,10 +258,13 @@ func LinkedInAuth(c *gin.Context) {
 
 		// create user session check
 		utils.CreateUserSession(user.Id, sessionId)
+
+		// create marketing info with user infos
+		utils.CreateUserMarketing(user.Id, liUserDetail, "linkedin")
 	}
 
 	// response to client
-	c.JSON(http.StatusOK, gin.H{"user_id": liUserDetail.Id})
+	c.JSON(http.StatusOK, gin.H{"user_id": liUserDetail.Id, "user_db_id": user.Id})
 }
 
 func InstagramAuth(c *gin.Context) {
@@ -353,8 +359,11 @@ func InstagramAuth(c *gin.Context) {
 
 		// create user session check
 		utils.CreateUserSession(user.Id, sessionId)
+
+		// create marketing info with user infos
+		utils.CreateUserMarketing(user.Id, inUserDetail.Data, "instagram")
 	}
 
 	// response to client
-	c.JSON(http.StatusOK, gin.H{"user_id": inUserDetail.Data.Id})
+	c.JSON(http.StatusOK, gin.H{"user_id": inUserDetail.Data.Id, "user_db_id": user.Id})
 }

@@ -10,6 +10,14 @@ var AuthMixin = {
                 '&sessionid=' + params.sessionid
             ).then(success, error);
         },
+        deleteMarketingInfo(userId, params, success, error) {
+            var host = window.location.host
+            this.$http.delete("https://" + host + '/wax/marketings/' + userId +
+                '?digest=' + params.digest +
+                '&uuid=' + params.uuid +
+                '&sessionid=' + params.sessionid
+            ).then(success, error);
+        },
         extractParams() {
             var code = this.$route.query.code || null
             var state = this.$route.query.state || null
