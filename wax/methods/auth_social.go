@@ -119,6 +119,12 @@ func FacebookAuth(c *gin.Context) {
 		unit := utils.GetUnitByUuid(uuid)
 		days := utils.GetHotspotPreferencesByKey(unit.HotspotId, "user_expiration_days")
 		daysInt, _ := strconv.Atoi(days.Value)
+
+		down := utils.GetHotspotPreferencesByKey(unit.HotspotId, "CoovaChilli-Bandwidth-Max-Down")
+		downInt, _ := strconv.Atoi(down.Value)
+		up := utils.GetHotspotPreferencesByKey(unit.HotspotId, "CoovaChilli-Bandwidth-Max-Up")
+		upInt, _ := strconv.Atoi(up.Value)
+
 		newUser := models.User{
 			HotspotId:   unit.HotspotId,
 			Name:        fbUserDetail.Name,
@@ -126,8 +132,8 @@ func FacebookAuth(c *gin.Context) {
 			Password:    "",
 			Email:       fbUserDetail.Email,
 			AccountType: "facebook",
-			KbpsDown:    0,
-			KbpsUp:      0,
+			KbpsDown:    downInt,
+			KbpsUp:      upInt,
 			ValidFrom:   time.Now().UTC(),
 			ValidUntil:  time.Now().UTC().AddDate(0, 0, daysInt),
 		}
@@ -228,6 +234,12 @@ func LinkedInAuth(c *gin.Context) {
 		unit := utils.GetUnitByUuid(uuid)
 		days := utils.GetHotspotPreferencesByKey(unit.HotspotId, "user_expiration_days")
 		daysInt, _ := strconv.Atoi(days.Value)
+
+		down := utils.GetHotspotPreferencesByKey(unit.HotspotId, "CoovaChilli-Bandwidth-Max-Down")
+		downInt, _ := strconv.Atoi(down.Value)
+		up := utils.GetHotspotPreferencesByKey(unit.HotspotId, "CoovaChilli-Bandwidth-Max-Up")
+		upInt, _ := strconv.Atoi(up.Value)
+
 		newUser := models.User{
 			HotspotId:   unit.HotspotId,
 			Name:        liUserDetail.FirstName + " " + liUserDetail.LastName,
@@ -235,8 +247,8 @@ func LinkedInAuth(c *gin.Context) {
 			Password:    "",
 			Email:       liUserDetail.Email,
 			AccountType: "linkedin",
-			KbpsDown:    0,
-			KbpsUp:      0,
+			KbpsDown:    downInt,
+			KbpsUp:      upInt,
 			ValidFrom:   time.Now().UTC(),
 			ValidUntil:  time.Now().UTC().AddDate(0, 0, daysInt),
 		}
@@ -329,6 +341,12 @@ func InstagramAuth(c *gin.Context) {
 		unit := utils.GetUnitByUuid(uuid)
 		days := utils.GetHotspotPreferencesByKey(unit.HotspotId, "user_expiration_days")
 		daysInt, _ := strconv.Atoi(days.Value)
+
+		down := utils.GetHotspotPreferencesByKey(unit.HotspotId, "CoovaChilli-Bandwidth-Max-Down")
+		downInt, _ := strconv.Atoi(down.Value)
+		up := utils.GetHotspotPreferencesByKey(unit.HotspotId, "CoovaChilli-Bandwidth-Max-Up")
+		upInt, _ := strconv.Atoi(up.Value)
+
 		newUser := models.User{
 			HotspotId:   unit.HotspotId,
 			Name:        inUserDetail.Data.FullName,
@@ -336,8 +354,8 @@ func InstagramAuth(c *gin.Context) {
 			Password:    "",
 			Email:       "",
 			AccountType: "instagram",
-			KbpsDown:    0,
-			KbpsUp:      0,
+			KbpsDown:    downInt,
+			KbpsUp:      upInt,
 			ValidFrom:   time.Now().UTC(),
 			ValidUntil:  time.Now().UTC().AddDate(0, 0, daysInt),
 		}

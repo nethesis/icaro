@@ -158,6 +158,6 @@
     }
 
     textarea {
-        min-height: 300px !important;
+        min-height: 150px !important;
     }
 </style>

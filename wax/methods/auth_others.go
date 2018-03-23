@@ -69,6 +69,12 @@ func SMSAuth(c *gin.Context) {
 		// create user
 		days := utils.GetHotspotPreferencesByKey(unit.HotspotId, "user_expiration_days")
 		daysInt, _ := strconv.Atoi(days.Value)
+
+		down := utils.GetHotspotPreferencesByKey(unit.HotspotId, "CoovaChilli-Bandwidth-Max-Down")
+		downInt, _ := strconv.Atoi(down.Value)
+		up := utils.GetHotspotPreferencesByKey(unit.HotspotId, "CoovaChilli-Bandwidth-Max-Up")
+		upInt, _ := strconv.Atoi(up.Value)
+
 		newUser := models.User{
 			HotspotId:   unit.HotspotId,
 			Name:        number,
@@ -76,8 +82,8 @@ func SMSAuth(c *gin.Context) {
 			Password:    code,
 			Email:       "",
 			AccountType: "sms",
-			KbpsDown:    0,
-			KbpsUp:      0,
+			KbpsDown:    downInt,
+			KbpsUp:      upInt,
 			ValidFrom:   time.Now().UTC(),
 			ValidUntil:  time.Now().UTC().AddDate(0, 0, daysInt),
 		}
@@ -158,6 +164,12 @@ func EmailAuth(c *gin.Context) {
 		// create user
 		days := utils.GetHotspotPreferencesByKey(unit.HotspotId, "user_expiration_days")
 		daysInt, _ := strconv.Atoi(days.Value)
+
+		down := utils.GetHotspotPreferencesByKey(unit.HotspotId, "CoovaChilli-Bandwidth-Max-Down")
+		downInt, _ := strconv.Atoi(down.Value)
+		up := utils.GetHotspotPreferencesByKey(unit.HotspotId, "CoovaChilli-Bandwidth-Max-Up")
+		upInt, _ := strconv.Atoi(up.Value)
+
 		newUser := models.User{
 			HotspotId:   unit.HotspotId,
 			Name:        email,
@@ -165,8 +177,8 @@ func EmailAuth(c *gin.Context) {
 			Password:    code,
 			Email:       email,
 			AccountType: "email",
-			KbpsDown:    0,
-			KbpsUp:      0,
+			KbpsDown:    downInt,
+			KbpsUp:      upInt,
 			ValidFrom:   time.Now().UTC(),
 			ValidUntil:  time.Now().UTC().AddDate(0, 0, daysInt),
 		}
