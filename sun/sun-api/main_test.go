@@ -204,7 +204,7 @@ func TestResellerAccountCreation(t *testing.T) {
 
 			assert.WithinDuration(t, time.Now().UTC(), sub.Created, 10*time.Second)
 			assert.WithinDuration(t, time.Now().UTC(), sub.ValidFrom, 10*time.Second)
-			assert.WithinDuration(t, time.Now().UTC().AddDate(0, 0, 365), sub.ValidUntil, 10*time.Second)
+			assert.WithinDuration(t, time.Now().UTC().AddDate(0, 0, 3650), sub.ValidUntil, (10 * time.Second))
 
 			assert.Equal(t, asms.SmsMaxCount, subPlan.IncludedSMS)
 			assert.Equal(t, 0, asms.SmsCount)
