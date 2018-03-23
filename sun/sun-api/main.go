@@ -145,6 +145,11 @@ func DefineAPI(router *gin.Engine) {
 			vouchers.POST("", methods.CreateVoucher)
 			vouchers.DELETE("/:voucher_id", methods.DeleteVoucher)
 		}
+
+		subscriptionsPlans := api.Group("/subscription_plans")
+		{
+			subscriptionsPlans.GET("/", methods.GetSubscriptionPlans)
+		}
 	}
 
 	// handle missing endpoint
