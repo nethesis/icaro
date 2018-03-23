@@ -90,6 +90,8 @@ func UpdateUser(c *gin.Context) {
 			user.ValidUntil = json.ValidUntil
 		}
 
+		user.AutoLogin = json.AutoLogin
+
 		db.Save(&user)
 		db.Close()
 

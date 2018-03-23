@@ -125,6 +125,9 @@ func FacebookAuth(c *gin.Context) {
 		up := utils.GetHotspotPreferencesByKey(unit.HotspotId, "CoovaChilli-Bandwidth-Max-Up")
 		upInt, _ := strconv.Atoi(up.Value)
 
+		autoLogin := utils.GetHotspotPreferencesByKey(unit.HotspotId, "auto_login")
+		autoLoginBool, _ := strconv.ParseBool(autoLogin.Value)
+
 		newUser := models.User{
 			HotspotId:   unit.HotspotId,
 			Name:        fbUserDetail.Name,
@@ -134,6 +137,7 @@ func FacebookAuth(c *gin.Context) {
 			AccountType: "facebook",
 			KbpsDown:    downInt,
 			KbpsUp:      upInt,
+			AutoLogin:   autoLoginBool,
 			ValidFrom:   time.Now().UTC(),
 			ValidUntil:  time.Now().UTC().AddDate(0, 0, daysInt),
 		}
@@ -240,6 +244,9 @@ func LinkedInAuth(c *gin.Context) {
 		up := utils.GetHotspotPreferencesByKey(unit.HotspotId, "CoovaChilli-Bandwidth-Max-Up")
 		upInt, _ := strconv.Atoi(up.Value)
 
+		autoLogin := utils.GetHotspotPreferencesByKey(unit.HotspotId, "auto_login")
+		autoLoginBool, _ := strconv.ParseBool(autoLogin.Value)
+
 		newUser := models.User{
 			HotspotId:   unit.HotspotId,
 			Name:        liUserDetail.FirstName + " " + liUserDetail.LastName,
@@ -249,6 +256,7 @@ func LinkedInAuth(c *gin.Context) {
 			AccountType: "linkedin",
 			KbpsDown:    downInt,
 			KbpsUp:      upInt,
+			AutoLogin:   autoLoginBool,
 			ValidFrom:   time.Now().UTC(),
 			ValidUntil:  time.Now().UTC().AddDate(0, 0, daysInt),
 		}
@@ -347,6 +355,9 @@ func InstagramAuth(c *gin.Context) {
 		up := utils.GetHotspotPreferencesByKey(unit.HotspotId, "CoovaChilli-Bandwidth-Max-Up")
 		upInt, _ := strconv.Atoi(up.Value)
 
+		autoLogin := utils.GetHotspotPreferencesByKey(unit.HotspotId, "auto_login")
+		autoLoginBool, _ := strconv.ParseBool(autoLogin.Value)
+
 		newUser := models.User{
 			HotspotId:   unit.HotspotId,
 			Name:        inUserDetail.Data.FullName,
@@ -356,6 +367,7 @@ func InstagramAuth(c *gin.Context) {
 			AccountType: "instagram",
 			KbpsDown:    downInt,
 			KbpsUp:      upInt,
+			AutoLogin:   autoLoginBool,
 			ValidFrom:   time.Now().UTC(),
 			ValidUntil:  time.Now().UTC().AddDate(0, 0, daysInt),
 		}
