@@ -211,9 +211,9 @@ CREATE TABLE `session_histories` (
 /* SUBSCRIPTIONS */
 CREATE TABLE subscription_plans (
     id serial not null primary key,
-    code varchar(1024) not null,
-    name varchar(1024) not null,
-    description varchar(1024) not null,
+    code varchar(200) not null,
+    name varchar(200) not null,
+    description varchar(200) not null,
     price decimal(5,2),
     period integer default null,
     included_sms integer not null,
