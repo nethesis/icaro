@@ -34,6 +34,7 @@ type User struct {
 	AccountType string    `db:"account_type" json:"account_type"`
 	KbpsDown    int       `db:"kbps_down" json:"kbps_down"`
 	KbpsUp      int       `db:"kbps_up" json:"kbps_up"`
+	AutoLogin   bool      `db:"auto_login" json:"auto_login"`
 	ValidFrom   time.Time `db:"valid_from" json:"valid_from"`
 	ValidUntil  time.Time `db:"valid_until" json:"valid_until"`
 	Created     time.Time `db:"created" json:"created"`

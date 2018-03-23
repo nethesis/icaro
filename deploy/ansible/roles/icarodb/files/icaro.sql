@@ -93,6 +93,7 @@ CREATE TABLE `users` (
   `account_type` varchar(200) NOT NULL,
   `kbps_down` integer unsigned,
   `kbps_up` integer unsigned,
+  `auto_login` tinyint NOT NULL,
   `valid_from` datetime,
   `valid_until` datetime,
   `created` datetime,

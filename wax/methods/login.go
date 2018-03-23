@@ -26,13 +26,10 @@ import (
 	"bytes"
 	"fmt"
 	"net/http"
-	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/nethesis/icaro/sun/sun-api/database"
-	"github.com/nethesis/icaro/sun/sun-api/models"
 	"github.com/nethesis/icaro/wax/utils"
 )
 
@@ -51,25 +48,15 @@ func AuthReject(c *gin.Context, description string) {
 	c.Abort()
 }
 
-func isAutoLoginEnabled(hotspotId int) bool {
-	var hotspot_pref models.HotspotPreference
-	isEnabled := false
-
-	db := database.Database()
-	db.Where("hotspot_id = ? and `key` = ?", hotspotId, "auto_login").First(&hotspot_pref)
-	db.Close()
-
-	if hotspot_pref.Id != 0 {
-		isEnabled, _ = strconv.ParseBool(hotspot_pref.Value)
-	}
-
-	return isEnabled
-}
-
 func autoLogin(c *gin.Context, unitMacAddress string, username string, userMac string, sessionId string) {
 	isValid, user := utils.GetUserByMacAddressAndunitMacAddress(userMac, unitMacAddress)
 	if !isValid {
 		AuthReject(c, "user account not found")
+		return
+	}
+
+	if !user.AutoLogin {
+		AuthReject(c, "auto login not permitted")
 		return
 	}
 
@@ -150,16 +137,12 @@ func Logins(c *gin.Context) {
 	service := c.Query("service")
 	switch service {
 	case "framed":
-		unit := utils.GetUnitByMacAddress(c.Query("ap"))
-		if isAutoLoginEnabled(unit.HotspotId) {
-			unitMacAddress := c.Query("ap")
-			user := c.Query("user")
-			userMac := c.Query("mac")
-			sessionId := c.Query("sessionid")
-			autoLogin(c, unitMacAddress, user, userMac, sessionId)
-		} else {
-			c.String(http.StatusForbidden, "Autologin disabled")
-		}
+		unitMacAddress := c.Query("ap")
+		user := c.Query("user")
+		userMac := c.Query("mac")
+		sessionId := c.Query("sessionid")
+		autoLogin(c, unitMacAddress, user, userMac, sessionId)
+		c.String(http.StatusForbidden, "Autologin disabled")
 
 	case "login":
 		unitMacAddress := c.Query("ap")
