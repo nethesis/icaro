@@ -1,0 +1,61 @@
+{
+    "it": {
+        "splash": {
+            "retrieve_info": "Retrieve info",
+            "start_navigate": "Start Navigate",
+            "main_error": "Some params are missing. Can't we go ahead",
+            "main_error_sub": "Something gone wrong opening the page"
+        },
+        "login": {
+            "voucher_title": "Voucher code",
+            "insert_voucher": "Insert voucher code",
+            "validate_code": "Validate Code",
+            "error_voucher_code": "Error validating voucher code",
+            "error_voucher_code_sub": "It seems that your voucher code is not correct",
+            "choose_login": "Choose your Login",
+            "decline": "Decline",
+            "accept": "Accept",
+            "disclaimer_use": "Terms of Use",
+            "disclaimer_marketing": "Marketing info"
+        },
+        "social": {
+            "auth_progress": "Authorization in progress",
+            "auth_success": "You are successfully authenticated",
+            "auth_success_sub": "Read the marketing disclaimer and in a few seconds you will be redirected",
+            "auth_error": "Error on authentication",
+            "auth_error_sub": "Something went wrong on authentication process"
+        },
+        "email": {
+            "insert_email": "Insert your email",
+            "insert_your_code": "Insert your code",
+            "code": "Code",
+            "get_code": "Request Code",
+            "reset_code": "Request new Code",
+            "start_navigate": "Start Navigate",
+            "error_code": "Error sending verification code",
+            "error_code_sub": "Something went wrong on sending code (check your email)",
+            "auth_progress": "Authorization in progress",
+            "auth_success": "You are successfully authenticated",
+            "auth_success_sub": "In a few seconds you will be redirected",
+            "auth_error": "Error on authentication",
+            "auth_error_sub": "Something went wrong on authentication process"
+        },
+        "sms": {
+            "number": "Number",
+            "insert_number": "Insert your number",
+            "insert_your_code": "Insert your code",
+            "code": "Code",
+            "get_code": "Request Code",
+            "reset_code": "Request new Code",
+            "start_navigate": "Start Navigate",
+            "error_code": "Error sending verification code",
+            "error_code_sub": "Something went wrong on sending code (use international prefix for your number or check you don't have reach the max sending SMS number)",
+            "auth_progress": "Authorization in progress",
+            "auth_success": "You are successfully authenticated",
+            "auth_success_sub": "In a few seconds you will be redirected",
+            "auth_error": "Error on authentication",
+            "auth_error_sub": "Something went wrong on authentication process",
+            "select_state": "Select state"
+        }
+    }
+}
