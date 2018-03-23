@@ -37,17 +37,18 @@ type Account struct {
 }
 
 type AccountJSON struct {
-	Id          int       `json:"id"`
-	CreatorId   int       `json:"creator_id"`
-	Uuid        string    `json:"uuid"`
-	Type        string    `json:"type"`
-	Name        string    `json:"name"`
-	Username    string    `json:"username"`
-	Password    string    `json:"password"`
-	Email       string    `json:"email"`
-	Created     time.Time `json:"created"`
-	HotspotId   int       `json:"hotspot_id"`
-	HotspotName string    `json:"hotspot_name"`
+	Id                 int       `json:"id"`
+	CreatorId          int       `json:"creator_id"`
+	Uuid               string    `json:"uuid"`
+	Type               string    `json:"type"`
+	Name               string    `json:"name"`
+	Username           string    `json:"username"`
+	Password           string    `json:"password"`
+	Email              string    `json:"email"`
+	Created            time.Time `json:"created"`
+	HotspotId          int       `json:"hotspot_id"`
+	HotspotName        string    `json:"hotspot_name"`
+	SubscriptionPlanId int       `json:"subscription_plan_id"`
 }
 
 func (AccountJSON) TableName() string {

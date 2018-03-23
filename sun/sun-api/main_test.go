@@ -68,14 +68,22 @@ func startupEnv() (*gofight.RequestConfig, *gin.Engine) {
 	return fight, router
 }
 
-func getToken(f *gofight.RequestConfig, r *gin.Engine) string {
+func getAdminToken(f *gofight.RequestConfig, r *gin.Engine) string {
+	return getToken(f, r, "admin", "admin")
+}
+
+func getResellerToken(f *gofight.RequestConfig, r *gin.Engine) string {
+	return getToken(f, r, "firstuser", "password")
+}
+
+func getToken(f *gofight.RequestConfig, r *gin.Engine, user string, password string) string {
 	var lr LoginResponse
 	var token string
 
 	f.POST("/api/login").
 		SetJSON(gofight.D{
-			"username": "firstuser",
-			"password": "password",
+			"username": user,
+			"password": password,
 		}).
 		Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
 			err := json.Unmarshal([]byte(f.Body.String()), &lr)
@@ -131,7 +139,7 @@ func TestHotspotCreation(t *testing.T) {
 	f, r := startupEnv()
 	var cr CreationResponse
 
-	token := getToken(f, r)
+	token := getResellerToken(f, r)
 
 	f.POST("/api/hotspots").
 		SetHeader(gofight.H{
@@ -155,13 +163,67 @@ func TestHotspotCreation(t *testing.T) {
 	db.Close()
 }
 
+/** Account **/
+
+func TestResellerAccountCreation(t *testing.T) {
+	f, r := startupEnv()
+	var cr CreationResponse
+	var subPlan models.SubscriptionPlan
+	var sub models.Subscription
+	var hs models.Hotspot
+	var account models.Account
+	var asms models.AccountSmsCount
+
+	token := getAdminToken(f, r)
+
+	db := database.Database()
+	db.Where("id = 4").First(&subPlan)
+	db.Where("id = 1").First(&hs)
+
+	f.POST("/api/accounts").
+		SetHeader(gofight.H{
+			"Token": token,
+		}).
+		SetJSON(gofight.D{
+			"uuid":                 fmt.Sprintf("123reseller%d", time.Now().Nanosecond()),
+			"type":                 "reseller",
+			"name":                 "Test reseller",
+			"username":             fmt.Sprintf("reseller%d", time.Now().Nanosecond()),
+			"password":             "testpassword",
+			"email":                "testreseller@nethserver.org",
+			"subscription_plan_id": subPlan.ID,
+		}).
+		Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
+			err := json.Unmarshal([]byte(f.Body.String()), &cr)
+			assert.Equal(t, nil, err)
+			assert.Equal(t, http.StatusCreated, f.Code)
+
+			db.Where("id = ?", cr.Id).First(&account)
+			db.Where("account_id = ?", account.Id).Find(&asms)
+			db.Where("account_id = ?", account.Id).Find(&sub)
+
+			assert.WithinDuration(t, time.Now().UTC(), sub.Created, 10*time.Second)
+			assert.WithinDuration(t, time.Now().UTC(), sub.ValidFrom, 10*time.Second)
+			assert.WithinDuration(t, time.Now().UTC().AddDate(0, 0, 365), sub.ValidUntil, 10*time.Second)
+
+			assert.Equal(t, asms.SmsMaxCount, subPlan.IncludedSMS)
+			assert.Equal(t, 0, asms.SmsCount)
+		})
+
+	// Cleanup
+	db.Delete(&account)
+	db.Delete(&asms)
+	db.Delete(&sub)
+	db.Close()
+}
+
 /** Units **/
 
 func TestUnitRegistration(t *testing.T) {
 	f, r := startupEnv()
 	var cr CreationResponse
 
-	token := getToken(f, r)
+	token := getResellerToken(f, r)
 
 	f.POST("/api/units").
 		SetHeader(gofight.H{
@@ -190,7 +252,7 @@ func TestUnitRegistrationLimit(t *testing.T) {
 	max := 10
 	var cr CreationResponse
 	f, r := startupEnv()
-	token := getToken(f, r)
+	token := getResellerToken(f, r)
 
 	db := database.Database()
 	// create max-1 units because the first one already exists

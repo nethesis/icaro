@@ -38,10 +38,32 @@ import (
 
 func CreateAccount(c *gin.Context) {
 	creatorId := c.MustGet("token").(models.AccessToken).AccountId
+	role := c.MustGet("token").(models.AccessToken).Role
+
+	var subscriptionPlan models.SubscriptionPlan
+	var accountSMS models.AccountSmsCount
 
 	var json models.AccountJSON
 	if err := c.BindJSON(&json); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "Request fields malformed", "error": err.Error()})
+		return
+	}
+
+	// Valid account types are: reseller, desk, customer
+	if json.Type != "reseller" && json.Type != "desk" && json.Type != "customer" {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Unsupported account type"})
+		return
+	}
+
+	// Only admin and reseller can create new users
+	if role == "desk" || role == "customer" {
+		c.JSON(http.StatusUnauthorized, gin.H{"message": "Permission denied"})
+		return
+	}
+
+	// reseller can create only customer and desk accounts
+	if role == "reseller" && json.Type != "desk" && json.Type != "customer" {
+		c.JSON(http.StatusUnauthorized, gin.H{"message": "Permission denied"})
 		return
 	}
 
@@ -60,6 +82,7 @@ func CreateAccount(c *gin.Context) {
 		Created:   time.Now().UTC(),
 	}
 
+	// create account record
 	db := database.Database()
 	db.Save(&account)
 
@@ -69,9 +92,26 @@ func CreateAccount(c *gin.Context) {
 			HotspotId: json.HotspotId,
 		}
 		db.Save(&accountHotspot)
-	}
+	} else if json.Type == "reseller" {
+		// retrieve subscription plain
 
-	// TODO: init account preferences to database
+		db.Where("id = ?", json.SubscriptionPlanId).First(&subscriptionPlan)
+
+		// create new subscription
+		subscription := models.Subscription{
+			AccountID:          account.Id,
+			SubscriptionPlanID: json.SubscriptionPlanId,
+			ValidFrom:          time.Now().UTC(),
+			ValidUntil:         time.Now().UTC().AddDate(0, 0, subscriptionPlan.Period),
+			Created:            time.Now().UTC(),
+		}
+		db.Save(&subscription)
+
+		// create SMS accounting
+		accountSMS.AccountId = account.Id
+		accountSMS.SmsMaxCount = subscriptionPlan.IncludedSMS
+		db.Save(&accountSMS)
+	}
 
 	db.Close()
 
