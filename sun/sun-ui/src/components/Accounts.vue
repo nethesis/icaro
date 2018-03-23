@@ -61,6 +61,16 @@
                   <input required v-model="newObj.uuid" type="text" id="accuuid" class="form-control" :placeholder="$t('account.uuid')">
                 </div>
               </div>
+              <div class="form-group" v-if="isAdmin">
+                <label class="col-sm-4 control-label" for="accuuid">{{ $t("account.subscription_plan_name") }}</label>
+                <div class="col-sm-8">
+                  <select v-model="newObj.subscription_plan_id" class="form-control">
+                    <option v-for="plan in plans" v-bind:key="plan.id" v-bind:value="plan.id">
+                      {{ plan.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
               <div class="form-group">
                 <label class="col-sm-4 control-label" for="accusername">{{ $t("account.username") }}</label>
                 <div class="col-sm-8">
@@ -142,13 +152,14 @@
   import AccountService from '../services/account';
   import StorageService from '../services/storage';
   import HotspotService from '../services/hotspot';
+  import SubscriptionService from '../services/subscription';
   import UtilService from '../services/util';
 
   import AccountAction from '../directives/AccountAction.vue';
 
   export default {
     name: 'Accounts',
-    mixins: [AccountService, StorageService, UtilService, HotspotService],
+    mixins: [AccountService, StorageService, UtilService, HotspotService, SubscriptionService],
     components: {
       accountAction: AccountAction
     },
@@ -156,6 +167,7 @@
       // get account list
       this.getAll();
       this.getAllHotspots();
+      this.getAllSubscriptionPlans();
 
       var newObj = {
         uuid: '',
@@ -164,7 +176,8 @@
         email: '',
         type: '',
         password: '',
-        hotspot_id: 0
+        hotspot_id: 0,
+        subscription_plan_id: 0
       }
 
       var errors = {
@@ -222,6 +235,7 @@
         ],
         rows: [],
         hotspots: [],
+        plans: [],
         tableLangsTexts: this.tableLangs(),
         newObj: newObj,
         newPassword: newPassword,
@@ -243,6 +257,7 @@
         this.newObj.name = ""
         this.newObj.email = ""
         this.newObj.hotspot_id = 0
+        this.newObj.subscription_plan_id = 0
       },
       createAccount(obj) {
         this.newObj.onAction = true
@@ -261,6 +276,15 @@
       getAllHotspots() {
         this.hotspotGetAll(success => {
           this.hotspots = success.body
+          $('[data-toggle="tooltip"]').tooltip()
+          this.isLoading = false;
+        }, error => {
+          console.log(error)
+        })
+      },
+      getAllSubscriptionPlans() {
+        this.subscriptionPlansGetAll(success => {
+          this.plans = success.body
           $('[data-toggle="tooltip"]').tooltip()
           this.isLoading = false;
         }, error => {
