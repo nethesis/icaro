@@ -194,26 +194,36 @@ func GetAccounts(c *gin.Context) {
 	offsets := utils.OffsetCalc(page, limit)
 
 	db := database.Database()
+	selectQuery := "accounts.*, hotspots.id as hotspot_id, hotspots.name as hotspot_name"
+	joinQuery := "LEFT JOIN accounts_hotspots on accounts_hotspots.account_id = accounts.id LEFT JOIN hotspots on accounts_hotspots.hotspot_id = hotspots.id"
 	if creatorId == 1 {
+		// Queries for admin user
 		if hotspotId != "" {
-			db.Select("accounts.*, hotspots.id as hotspot_id, hotspots.name as hotspot_name").Joins("LEFT JOIN accounts_hotspots on accounts_hotspots.account_id = accounts.id LEFT JOIN hotspots on accounts_hotspots.hotspot_id = hotspots.id").Where("hotspots.id = ?", hotspotId).Offset(offsets[0]).Limit(offsets[1]).Find(&accounts)
+			db.Select(selectQuery).Joins(joinQuery).Where("hotspots.id = ?", hotspotId).Offset(offsets[0]).Limit(offsets[1]).Find(&accounts)
 		} else {
-			db.Select("accounts.*, hotspots.id as hotspot_id, hotspots.name as hotspot_name").Joins("LEFT JOIN accounts_hotspots on accounts_hotspots.account_id = accounts.id LEFT JOIN hotspots on accounts_hotspots.hotspot_id = hotspots.id").Offset(offsets[0]).Limit(offsets[1]).Find(&accounts)
+			db.Select(selectQuery).Joins(joinQuery).Offset(offsets[0]).Limit(offsets[1]).Find(&accounts)
 		}
 	} else {
 		if hotspotId != "" {
-			db.Select("accounts.*, hotspots.id as hotspot_id, hotspots.name as hotspot_name").Joins("LEFT JOIN accounts_hotspots on accounts_hotspots.account_id = accounts.id LEFT JOIN hotspots on accounts_hotspots.hotspot_id = hotspots.id").Where("creator_id = ? AND hotspots.id = ?", creatorId, hotspotId).Offset(offsets[0]).Limit(offsets[1]).Find(&accounts)
+			db.Select(selectQuery).Joins(joinQuery).Where("creator_id = ? AND hotspots.id = ?", creatorId, hotspotId).Offset(offsets[0]).Limit(offsets[1]).Find(&accounts)
 		} else {
-			db.Select("accounts.*, hotspots.id as hotspot_id, hotspots.name as hotspot_name").Joins("LEFT JOIN accounts_hotspots on accounts_hotspots.account_id = accounts.id LEFT JOIN hotspots on accounts_hotspots.hotspot_id = hotspots.id").Where("creator_id = ?", creatorId).Offset(offsets[0]).Limit(offsets[1]).Find(&accounts)
+			db.Select(selectQuery).Joins(joinQuery).Where("creator_id = ?", creatorId).Offset(offsets[0]).Limit(offsets[1]).Find(&accounts)
 		}
 	}
-	db.Close()
+	defer db.Close()
 
 	if len(accounts) <= 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No accounts found!"})
 		return
 	}
 
+	db.Set("gorm:auto_preload", true)
+	for i, account := range accounts {
+		var subscription models.Subscription
+		db.Preload("SubscriptionPlan").Where("account_id = ?", account.Id).First(&subscription)
+		accounts[i].SubscriptionPlanId = subscription.SubscriptionPlanID
+		accounts[i].SubscriptionPlanName = subscription.SubscriptionPlan.Name
+	}
 	c.JSON(http.StatusOK, accounts)
 }
 
