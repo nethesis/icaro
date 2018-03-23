@@ -232,6 +232,7 @@ func TestUnitRegistration(t *testing.T) {
 		SetJSON(gofight.D{
 			"mac_address": "43-C2-41-98-85-08",
 			"description": "My test unit",
+			"name":        "MyTestUnit",
 			"uuid":        fmt.Sprintf("%d", time.Now().Nanosecond()),
 			"secret":      "mysecret",
 			"hotspot":     "HSTest",
@@ -264,6 +265,7 @@ func TestUnitRegistrationLimit(t *testing.T) {
 			SetJSON(gofight.D{
 				"mac_address": "42-C2-41-98-85-08",
 				"description": fmt.Sprintf("My test unit %d", i),
+				"name":        "MyTestUnit",
 				"uuid":        fmt.Sprintf("uuid-test-%d", i),
 				"secret":      fmt.Sprintf("mysecret%d", i),
 				"hotspot":     "HSTest",
