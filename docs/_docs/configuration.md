@@ -3,6 +3,17 @@ title: "Configuration"
 permalink: /docs/configuration/
 ---
 
+# Sun UI
+To configure the front-end part aka Sun-UI, you can edit the file in `static/config/config.js` and choose your app name. Copy also the logos and background in the `static` folder.
+
+The configuration file it's easy to edit
+```js
+const CONFIG = {
+  APP_NAME: '<YOUR_APP_NAME>',
+}
+
+```
+
 # Wings & Wax
 Wings component using Wax as backend supports many type of authentication, social or not. To make this fully functional you must configure some params for each type of authentication.
 
