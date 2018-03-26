@@ -77,7 +77,7 @@
         class="col-xs-12 col-sm-6 col-md-3">
         <div class="card-pf card-pf-accented card-pf-aggregate-status">
           <h2 class="card-pf-title">
-            <span class="fa fa-mobile"></span>
+            <span class="fa fa-laptop"></span>
             {{ $t("dashboard.devices") }}
           </h2>
           <div class="card-pf-body">

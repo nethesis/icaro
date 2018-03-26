@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>Hotspot
-      <strong class="soft">{{ info.data.name }}</strong>
+      <strong class="soft">{{ info.data.name }} - {{info.data.description}}</strong>
     </h2>
 
     <div class="row row-cards-pf">
@@ -55,7 +55,7 @@
         <div class="card-pf card-pf-accented">
           <div class="card-pf-heading">
             <h2 class="card-pf-title">
-              <span class="pficon fa-mobile card-info-title"></span>
+              <span class="fa fa-laptop card-info-title"></span>
               {{ $t("dashboard.devices") }}
               <span v-if="!totals.devices.isLoading" class="right">
                 <strong class="soft">{{ totals.devices.count}}</strong>
@@ -83,46 +83,7 @@
       </div>
     </div>
     <div class="row row-cards-pf">
-      <div v-if="user.account_type == 'admin' || user.account_type == 'reseller'" class="col-xs-12 col-sm-12 col-md-6">
-        <div class="card-pf card-pf-accented">
-          <div class="card-pf-heading">
-            <h2 class="card-pf-title">
-              {{ $t("hotspot.info") }}
-              <div v-if="info.isLoading" class="spinner spinner-sm right"></div>
-            </h2>
-          </div>
-          <div v-if="!info.isLoading" class="card-pf-body">
-            <div class="list-details">
-              <dt>{{ $t("hotspot.owner") }}</dt>
-              <dd>
-                <a :href="'#/accounts/' + info.data.account_id">{{info.data.account_name}}</a>
-              </dd>
-            </div>
-            <div class="list-details">
-              <dt>{{ $t("hotspot.name") }}</dt>
-              <dd>{{info.data.name}}</dd>
-            </div>
-            <div class="list-details">
-              <dt>{{ $t("hotspot.description") }}</dt>
-              <dd>{{info.data.description}}</dd>
-            </div>
-            <div class="list-details">
-              <dt>{{ $t("hotspot.created") }}</dt>
-              <dd>{{info.data.created | formatDate}}</dd>
-            </div>
-          </div>
-          <div v-if="!info.isLoading" class="card-pf-footer">
-            <div class="dropdown card-pf-time-frame-filter">
-              <hotspot-action details="false" :obj="info.data" :update="getInfo"></hotspot-action>
-            </div>
-            <p>
-              <a href="#" class="card-pf-link-with-icon">
-              </a>
-            </p>
-          </div>
-        </div>
-      </div>
-      <div v-if="preferences.vouchersAvailable" :class="['col-xs-12 col-sm-12', user.account_type == 'admin' || user.account_type == 'reseller' ? 'col-md-6' : 'col-md-12']">
+      <div v-if="preferences.vouchersAvailable" :class="['col-xs-12 col-sm-12', user.account_type == 'admin' || user.account_type == 'reseller' ? 'col-md-12' : 'col-md-12']">
         <div class="card-pf card-pf-accented">
           <div class="card-pf-heading">
             <h2 class="card-pf-title">
@@ -255,6 +216,45 @@
               </p>
             </div>
           </form>
+        </div>
+      </div>
+      <div v-if="user.account_type == 'admin' || user.account_type == 'reseller'" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="card-pf card-pf-accented">
+          <div class="card-pf-heading">
+            <h2 class="card-pf-title">
+              {{ $t("hotspot.info") }}
+              <div v-if="info.isLoading" class="spinner spinner-sm right"></div>
+            </h2>
+          </div>
+          <div v-if="!info.isLoading" class="card-pf-body">
+            <div class="list-details">
+              <dt>{{ $t("hotspot.owner") }}</dt>
+              <dd>
+                <a :href="'#/accounts/' + info.data.account_id">{{info.data.account_name}}</a>
+              </dd>
+            </div>
+            <div class="list-details">
+              <dt>{{ $t("hotspot.name") }}</dt>
+              <dd>{{info.data.name}}</dd>
+            </div>
+            <div class="list-details">
+              <dt>{{ $t("hotspot.description") }}</dt>
+              <dd>{{info.data.description}}</dd>
+            </div>
+            <div class="list-details">
+              <dt>{{ $t("hotspot.created") }}</dt>
+              <dd>{{info.data.created | formatDate}}</dd>
+            </div>
+          </div>
+          <div v-if="!info.isLoading" class="card-pf-footer">
+            <div class="dropdown card-pf-time-frame-filter">
+              <hotspot-action details="false" :obj="info.data" :update="getInfo"></hotspot-action>
+            </div>
+            <p>
+              <a href="#" class="card-pf-link-with-icon">
+              </a>
+            </p>
+          </div>
         </div>
       </div>
     </div>

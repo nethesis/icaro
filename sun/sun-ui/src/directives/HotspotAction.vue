@@ -138,6 +138,9 @@
           this.currentObj.onAction = false
           $('#HSdeleteModal' + obj.id).modal('toggle');
           this.update()
+          this.$router.push({
+            path: '/hotspots'
+          })
         }, error => {
           this.currentObj.onAction = false
           this.errors.delete = true

@@ -113,7 +113,7 @@
             <div class="card-pf-heading">
               <h2 class="card-pf-title">{{ $t('session.device') }}
                 <div v-if="info.device.isLoading" class="spinner spinner-sm right"></div>
-                <div v-if="!info.device.isLoading" class="fa fa-mobile right"></div>
+                <div v-if="!info.device.isLoading" class="fa fa-laptop right"></div>
               </h2>
             </div>
             <div class="card-pf-body">
