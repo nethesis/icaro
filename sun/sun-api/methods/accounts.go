@@ -42,6 +42,7 @@ func CreateAccount(c *gin.Context) {
 
 	var subscriptionPlan models.SubscriptionPlan
 	var accountSMS models.AccountSmsCount
+	var hotspot models.Hotspot
 
 	var json models.AccountJSON
 	if err := c.BindJSON(&json); err != nil {
@@ -92,6 +93,13 @@ func CreateAccount(c *gin.Context) {
 			HotspotId: json.HotspotId,
 		}
 		db.Save(&accountHotspot)
+
+		// force creator from hotspot account_id
+		if creatorId == 1 {
+			db.Where("id = ?", json.HotspotId).First(&hotspot)
+			account.CreatorId = hotspot.AccountId
+			db.Save(&account)
+		}
 	} else if json.Type == "reseller" {
 		// retrieve subscription plain
 
