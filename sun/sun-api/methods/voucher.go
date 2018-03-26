@@ -33,7 +33,6 @@ import (
 	"github.com/nethesis/icaro/sun/sun-api/database"
 	"github.com/nethesis/icaro/sun/sun-api/models"
 	"github.com/nethesis/icaro/sun/sun-api/utils"
-	waxUtils "github.com/nethesis/icaro/wax/utils"
 )
 
 func CreateVoucher(c *gin.Context) {
@@ -45,12 +44,9 @@ func CreateVoucher(c *gin.Context) {
 		return
 	}
 
-	days := waxUtils.GetHotspotPreferencesByKey(json.HotspotId, "voucher_expiration_days")
-	daysInt, _ := strconv.Atoi(days.Value)
-
 	hotspotVoucher := models.HotspotVoucher{
 		Code:    json.Code,
-		Expires: time.Now().UTC().AddDate(0, 0, daysInt),
+		Expires: time.Time{},
 	}
 
 	hotspotVoucher.HotspotId = json.HotspotId
@@ -87,7 +83,7 @@ func GetVouchers(c *gin.Context) {
 	offsets := utils.OffsetCalc(page, limit)
 
 	db := database.Database()
-	db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt)).Offset(offsets[0]).Limit(offsets[1]).Find(&hotspotVouchers)
+	db.Where("hotspot_id in (?) AND (expires >= now() OR expires = \"0000-00-00 00:00:00\")", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt)).Offset(offsets[0]).Limit(offsets[1]).Find(&hotspotVouchers)
 	db.Close()
 
 	if len(hotspotVouchers) <= 0 {
