@@ -169,8 +169,8 @@
         this.userModify(obj.id, {
           name: obj.name,
           email: obj.email,
-          kbps_down: obj.kbps_down,
-          kbps_up: obj.kbps_up,
+          kbps_down: parseInt(obj.kbps_down),
+          kbps_up: parseInt(obj.kbps_up),
           auto_login: obj.auto_login || false,
           valid_from: new Date(obj.valid_from).toISOString(),
           valid_until: new Date(obj.valid_until).toISOString(),
