@@ -395,7 +395,7 @@
         tableLangsTexts: this.tableLangs(),
         uploadLangstexts: this.uploadImageLangs(),
         user: this.get("loggedUser"),
-        displayCaptivePortalOptions: this.get("loggedUser").subscription.subscription_plan.wings_customization || this.get("loggedUser").account_type == "admin",
+        displayCaptivePortalOptions: this.get("loggedUser") && this.get("loggedUser").subscription && this.get("loggedUser").subscription.subscription_plan && this.get("loggedUser").subscription.subscription_plan.wings_customization || this.get("loggedUser").account_type == "admin",
         customToolbar: [
           ['bold', 'italic', 'underline'],
           ['image', 'code-block']
