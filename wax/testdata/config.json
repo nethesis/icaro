@@ -1,0 +1,85 @@
+{
+    "database": {
+        "host":"localhost",
+        "port":"3306",
+        "name":"icaro",
+        "user": "testuser",
+        "password": "testpassword"
+    },
+    "token_expires_days": 20,
+    "captive_portal": {
+        "redirect": "https://www.nethesis.it",
+        "title": "Icaro",
+        "subtitle": "The Open Source Hotspot",
+        "description": "Free as in freedom",
+        "logo": "logo.png",
+        "banner": "banner.png"
+    },
+    "cors": {
+        "origins": ["https://localhost:8080", "http://localhost:8082"],
+        "headers": ["Token", "Content-Type", "Authorization"],
+        "methods": ["GET", "PUT", "POST", "DELETE"]
+    },
+    "route_blocked": {
+    "admin": [{}],
+    "customer": [{
+        "verb": "POST",
+        "endpoint": "/api/accounts"
+    }, {
+        "verb": "PUT",
+        "endpoint": "/api/accounts/[0-9]+"
+    }, {
+        "verb": "DELETE",
+        "endpoint": "/api/accounts/[0-9]+"
+    }, {
+        "verb": "POST",
+        "endpoint": "/api/hotspots"
+    }, {
+        "verb": "PUT",
+        "endpoint": "/api/hotspots/[0-9]+"
+    }, {
+        "verb": "DELETE",
+        "endpoint": "/api/hotspots/[0-9]+"
+    }, {
+        "verb": "POST",
+        "endpoint": "/api/units/"
+    }, {
+        "verb": "DELETE",
+        "endpoint": "/api/units/[0-9]+"
+    }, {
+        "verb": "POST",
+        "endpoint": "/api/users"
+    }],
+    "desk": [{
+        "verb": "POST",
+        "endpoint": "/api/accounts"
+    }, {
+        "verb": "PUT",
+        "endpoint": "/api/accounts/[0-9]+"
+    }, {
+        "verb": "DELETE",
+        "endpoint": "/api/accounts/[0-9]+"
+    }, {
+        "verb": "POST",
+        "endpoint": "/api/hotspots"
+    }, {
+        "verb": "PUT",
+        "endpoint": "/api/hotspots/[0-9]+"
+    }, {
+        "verb": "DELETE",
+        "endpoint": "/api/hotspots/[0-9]+"
+    },{
+        "verb": "POST",
+        "endpoint": "/api/preferences/hotspots"
+    }, {
+        "verb": "POST",
+        "endpoint": "/api/units/"
+    }, {
+        "verb": "DELETE",
+        "endpoint": "/api/units/[0-9]+"
+    }, {
+        "verb": "POST",
+        "endpoint": "/api/users"
+    }]
+    }
+}
