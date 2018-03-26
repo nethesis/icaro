@@ -70,12 +70,16 @@ func autoLogin(c *gin.Context, unitMacAddress string, username string, userMac s
 	unit := utils.GetUnitByMacAddress(unitMacAddress)
 	prefs := utils.GetHotspotPreferencesByKeys(
 		unit.HotspotId,
-		[]string{"Idle-Timeout", "Acct-Session-Time", "Session-Timeout", "CoovaChilli-Bandwidth-Max-Up", "CoovaChilli-Bandwidth-Max-Down"},
+		[]string{"Idle-Timeout", "Acct-Session-Time", "Session-Timeout"},
 	)
+
 	var outPrefs bytes.Buffer
 	for _, pref := range prefs {
 		outPrefs.WriteString(fmt.Sprintf("%s:%s\n", pref.Key, pref.Value))
 	}
+
+	outPrefs.WriteString(fmt.Sprintf("%s:%d\n", "CoovaChilli-Bandwidth-Max-Up", user.KbpsUp))
+	outPrefs.WriteString(fmt.Sprintf("%s:%d\n", "CoovaChilli-Bandwidth-Max-Down", user.KbpsDown))
 
 	// response to dedalo
 	AuthAccept(c, outPrefs.String())
@@ -120,12 +124,15 @@ func Login(c *gin.Context, unitMacAddress string, username string, chapPass stri
 	// extract preferences
 	prefs := utils.GetHotspotPreferencesByKeys(
 		unit.HotspotId,
-		[]string{"Idle-Timeout", "Acct-Session-Time", "Session-Timeout", "CoovaChilli-Bandwidth-Max-Up", "CoovaChilli-Bandwidth-Max-Down"},
+		[]string{"Idle-Timeout", "Acct-Session-Time", "Session-Timeout"},
 	)
 	var outPrefs bytes.Buffer
 	for _, pref := range prefs {
 		outPrefs.WriteString(fmt.Sprintf("%s:%s\n", pref.Key, pref.Value))
 	}
+
+	outPrefs.WriteString(fmt.Sprintf("%s:%d\n", "CoovaChilli-Bandwidth-Max-Up", user.KbpsUp))
+	outPrefs.WriteString(fmt.Sprintf("%s:%d\n", "CoovaChilli-Bandwidth-Max-Down", user.KbpsDown))
 
 	// response to dedalo
 	AuthAccept(c, outPrefs.String())
