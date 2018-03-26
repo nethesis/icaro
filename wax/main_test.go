@@ -30,12 +30,16 @@ import (
 	"os"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/appleboy/gofight"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/nethesis/icaro/sun/sun-api/configuration"
+	"github.com/nethesis/icaro/sun/sun-api/database"
+	"github.com/nethesis/icaro/sun/sun-api/models"
+	"github.com/nethesis/icaro/wax/utils"
 )
 
 func startupEnv(endpoint string, query string) (*gofight.RequestConfig, *gin.Engine, string) {
@@ -61,7 +65,10 @@ func destroyEnv() {
 
 func calculateUri(endpoint string, query string) string {
 	md := calculateMd(endpoint + "?" + query)
-	return endpoint + "?" + query + "&md=" + md
+	testUuid := "1234-uuid-aaaa"
+	unit := utils.GetUnitByUuid(testUuid)
+	digest := utils.CalcUnitDigest(unit)
+	return endpoint + "?" + query + "&md=" + md + "&digest=" + digest + "&uuid=" + testUuid + "&sessionid=3"
 }
 
 func calculateMd(query string) string {
@@ -76,7 +83,8 @@ func calculateMd(query string) string {
 
 func TestMain(m *testing.M) {
 	// read and init configuration
-	configuration.Init()
+	c := "config.json"
+	configuration.Init(&c)
 
 	// run tester
 	os.Exit(m.Run())
@@ -105,13 +113,40 @@ func TestRegisterStage(t *testing.T) {
 }
 
 func TestLoginStage(t *testing.T) {
-	f, r, uri := startupEnv("/wax/aaa", "stage=login&nasid=HSTest&ap=00-00-00-00-00-00")
+	f, r, uri := startupEnv("/wax/aaa", "stage=login&service=login&nasid=HSTest&ap=00-00-00-00-00-00&user=firstuser&chap_pass=9221f7e65679b0f49435707286920228&chap_chal=challange&sessionid=1234")
 
 	f.GET(uri).
 		Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
-			//assert.Equal(t, "login", f.Body.String())
 			assert.Equal(t, http.StatusOK, f.Code)
 		})
+}
+
+func TestFailLoginForExpiredReseller(t *testing.T) {
+	var account models.Account
+	var subscription models.Subscription
+	f, r, uri := startupEnv("/wax/aaa", "stage=login&service=login&nasid=HSTest&ap=00-00-00-00-00-00&user=firstuser&chap_pass=9221f7e65679b0f49435707286920228&chap_chal=challange&sessionid=1234")
+
+	f.GET(uri).
+		Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
+			assert.Equal(t, http.StatusOK, f.Code)
+		})
+
+	db := database.Database()
+	db.Where("username = ?", "firstuser").First(&account)
+	db.Where("account_id = ?", account.Id).First(&subscription)
+	oldDate := subscription.ValidUntil
+	subscription.ValidUntil = time.Date(2000, 1, 1, 0, 0, 0, 0, time.UTC)
+	db.Save(&subscription)
+
+	f.GET(uri).
+		Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
+			assert.Equal(t, http.StatusForbidden, f.Code)
+		})
+
+	subscription.ValidUntil = oldDate
+	db.Save(&subscription)
+
+	db.Close()
 }
 
 func TestInvalidStage(t *testing.T) {

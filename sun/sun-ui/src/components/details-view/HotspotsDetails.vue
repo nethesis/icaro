@@ -162,7 +162,7 @@
       </div>
     </div>
 
-    <div class="row row-cards-pf">
+    <div v-if="displayCaptivePortalOptions" class="row row-cards-pf">
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <div class="card-pf card-pf-accented">
           <div class="card-pf-heading">
@@ -395,6 +395,7 @@
         tableLangsTexts: this.tableLangs(),
         uploadLangstexts: this.uploadImageLangs(),
         user: this.get("loggedUser"),
+        displayCaptivePortalOptions: this.get("loggedUser").subscription.subscription_plan.wings_customization || this.get("loggedUser").account_type == "admin",
         customToolbar: [
           ['bold', 'italic', 'underline'],
           ['image', 'code-block']

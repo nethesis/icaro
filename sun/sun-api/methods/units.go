@@ -51,6 +51,12 @@ func CreateUnit(c *gin.Context) {
 		return
 	}
 
+	// check if hotspot belongs to a reseller with a plan which is over quota
+	if utils.HotspotIsOverQuota(hotspot.Id) {
+		c.JSON(http.StatusForbidden, gin.H{"message": "Units over quota"})
+		return
+	}
+
 	unit := models.Unit{
 		HotspotId:   hotspot.Id,
 		MacAddress:  json.MacAddress,

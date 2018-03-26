@@ -1,9 +1,11 @@
 {
-    "db_host":"{{ icaro.sun_api.db_hostname }}",
-    "db_port":"3306",
-    "db_name":"icaro",
-    "db_user": "{{ icaro.sun_api.db_username }}",
-    "db_password": "{{ icaro.sun_api.db_password }}",
+    "database": {
+        "host":"{{ icaro.sun_api.db_hostname }}",
+        "port":"3306",
+        "name":"icaro",
+        "user": "{{ icaro.sun_api.db_username }}",
+        "password": "{{ icaro.sun_api.db_password }}"
+    },
     "token_expires_days": 1,
     "cors": {
         "origins": ["https://{{ icaro.hostname }}"],

@@ -17,23 +17,31 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Icaro.  If not, see COPYING.
  *
- * author: Edoardo Spadoni <edoardo.spadoni@nethesis.it>
  */
 
-package database
+package methods
 
 import (
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"net/http"
 
-	"github.com/nethesis/icaro/sun/sun-api/configuration"
+	"github.com/nethesis/icaro/sun/sun-api/database"
+	"github.com/nethesis/icaro/sun/sun-api/models"
+
+	"github.com/gin-gonic/gin"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
-func Database() *gorm.DB {
-	uri := configuration.Config.Database.User + ":" + configuration.Config.Database.Password + "@tcp(" + configuration.Config.Database.Host + ":" + configuration.Config.Database.Port + ")/" + configuration.Config.Database.Name
-	db, err := gorm.Open("mysql", uri+"?charset=utf8&parseTime=True")
-	if err != nil {
-		panic(err.Error())
+func GetSubscriptionPlans(c *gin.Context) {
+	var subscriptionPlans []models.SubscriptionPlan
+
+	db := database.Database()
+	db.Find(&subscriptionPlans)
+	db.Close()
+
+	if len(subscriptionPlans) <= 0 {
+		c.JSON(http.StatusNotFound, gin.H{"message": "No subscription plans found!"})
+		return
 	}
-	return db
+
+	c.JSON(http.StatusOK, subscriptionPlans)
 }

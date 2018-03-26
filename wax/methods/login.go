@@ -121,6 +121,12 @@ func Login(c *gin.Context, unitMacAddress string, username string, chapPass stri
 		return
 	}
 
+	// check if hotspot belongs to a reseller with a valid plan
+	if ! utils.HotspotHasValidSubscription(user.HotspotId) {
+		AuthReject(c, "reseller account is expired")
+		return
+	}
+
 	// extract preferences
 	prefs := utils.GetHotspotPreferencesByKeys(
 		unit.HotspotId,

@@ -46,6 +46,15 @@ func SetDefaultHotspotPreferences(hotspotId int) {
 		db.Save(&hsPreferences)
 	}
 
+	// set captive portal defaults from configuration
+	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "captive_1_redir", Value: configuration.Config.CaptivePortal.Redirect})
+	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "captive_2_title", Value: configuration.Config.CaptivePortal.Title})
+	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "captive_3_logo", Value: configuration.Config.CaptivePortal.LogoContents})
+	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "captive_4_subtitle", Value: configuration.Config.CaptivePortal.Subtitle})
+	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "captive_5_banner", Value: configuration.Config.CaptivePortal.BannerContents})
+	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "captive_6_description", Value: configuration.Config.CaptivePortal.Description})
+	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "captive_7_background", Value: configuration.Config.CaptivePortal.Background})
+
 	db.Close()
 }
 
@@ -156,6 +165,33 @@ func GetHotspotByName(name string) models.Hotspot {
 	db.Close()
 
 	return hotspot
+}
+
+func HotspotIsOverQuota(hotspotId int) bool {
+	var hotspot models.Hotspot
+	var subscription models.Subscription
+	var count int
+	db := database.Database()
+	db.Set("gorm:auto_preload", true)
+	db.Preload("Account").Where("id = ?", hotspotId).First(&hotspot)
+	db.Preload("SubscriptionPlan").Where("account_id = ?", hotspot.Account.Id).First(&subscription)
+
+	query := fmt.Sprintf("SELECT COUNT(units.id) as count FROM units JOIN hotspots on units.hotspot_id = hotspots.id WHERE hotspots.account_id = %d", hotspot.Account.Id)
+	db.Raw(query).Count(&count)
+	db.Close()
+
+	return count >= subscription.SubscriptionPlan.MaxUnits
+}
+
+func CanChangeCaptivePortalOptions(accountId int) bool {
+	var subscription models.Subscription
+
+	db := database.Database()
+	db.Set("gorm:auto_preload", true)
+	db.Preload("SubscriptionPlan").Where("account_id = ?", accountId).First(&subscription)
+	db.Close()
+
+	return subscription.SubscriptionPlan.WingsCustomization
 }
 
 func Contains(intSlice []int, searchInt int) bool {

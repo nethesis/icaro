@@ -30,6 +30,8 @@ type Hotspot struct {
 	Name        string    `db:"name" json:"name"`
 	Description string    `db:"description" json:"description"`
 	Created     time.Time `db:"created" json:"created"`
+
+	Account     Account    `gorm:"PRELOAD:false json:"account"`
 }
 
 type HotspotJSON struct {
