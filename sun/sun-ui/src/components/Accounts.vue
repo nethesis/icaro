@@ -61,16 +61,6 @@
                   <input required v-model="newObj.uuid" type="text" id="accuuid" class="form-control" :placeholder="$t('account.uuid')">
                 </div>
               </div>
-              <div class="form-group" v-if="isAdmin">
-                <label class="col-sm-4 control-label" for="accuuid">{{ $t("account.subscription_plan_name") }}</label>
-                <div class="col-sm-8">
-                  <select v-model="newObj.subscription_plan_id" class="form-control">
-                    <option v-for="plan in plans" v-bind:key="plan.id" v-bind:value="plan.id">
-                      {{ plan.name }}
-                    </option>
-                  </select>
-                </div>
-              </div>
               <div class="form-group">
                 <label class="col-sm-4 control-label" for="accusername">{{ $t("account.username") }}</label>
                 <div class="col-sm-8">
@@ -96,6 +86,16 @@
                     <option value="customer" selected>{{ $t("account.type_customer") }}</option>
                     <option value="desk">{{ $t("account.type_desk") }}</option>
                     <option v-if="accountType == 'admin'" value="reseller">{{ $t("account.type_reseller") }}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group" v-if="(isAdmin && newObj.type == 'reseller')">
+                <label class="col-sm-4 control-label" for="accuuid">{{ $t("account.subscription_plan_name") }}</label>
+                <div class="col-sm-8">
+                  <select v-model="newObj.subscription_plan_id" class="form-control">
+                    <option v-for="plan in plans" v-bind:key="plan.id" v-bind:value="plan.id">
+                      {{ plan.name }}
+                    </option>
                   </select>
                 </div>
               </div>
