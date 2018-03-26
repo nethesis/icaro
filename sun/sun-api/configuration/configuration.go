@@ -27,6 +27,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"net/http"
 	"os"
 	"strconv"
 	"strings"
@@ -181,14 +182,16 @@ func Init(ConfigFilePtr *string) {
 	Config.CaptivePortal.LogoContents = ""
 	if _, err := os.Stat(Config.CaptivePortal.Logo); err == nil {
 		if data, errRead := ioutil.ReadFile(Config.CaptivePortal.Logo); errRead == nil {
-			Config.CaptivePortal.LogoContents = b64.StdEncoding.EncodeToString([]byte(data))
+			mimeType := http.DetectContentType(data)
+			Config.CaptivePortal.LogoContents = "data:" + mimeType + ";base64," + b64.StdEncoding.EncodeToString([]byte(data))
 		}
 	}
 
 	Config.CaptivePortal.BannerContents = ""
 	if _, err := os.Stat(Config.CaptivePortal.Banner); err == nil {
 		if data, errRead := ioutil.ReadFile(Config.CaptivePortal.Banner); errRead == nil {
-			Config.CaptivePortal.BannerContents = b64.StdEncoding.EncodeToString([]byte(data))
+			mimeType := http.DetectContentType(data)
+			Config.CaptivePortal.BannerContents = "data:" + mimeType + ";base64," + b64.StdEncoding.EncodeToString([]byte(data))
 		}
 	}
 
