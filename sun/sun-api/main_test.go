@@ -106,7 +106,28 @@ func TestMain(m *testing.M) {
 	os.Exit(m.Run())
 }
 
-/** Login **/
+/** Initialization **/
+
+func TestAdminLogin(t *testing.T) {
+	var lr LoginResponse
+	f, r := startupEnv()
+
+	f.POST("/api/login").
+		SetJSON(gofight.D{
+			"username": "firstuser",
+			"password": "password",
+		}).
+		Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
+			err := json.Unmarshal([]byte(f.Body.String()), &lr)
+			assert.Equal(t, nil, err)
+			assert.NotEqual(t, "", lr.Token)
+			assert.NotEqual(t, "", lr.Expires)
+			assert.Equal(t, "reseller", lr.AccountType)
+			assert.Equal(t, "success", lr.Status)
+			assert.Equal(t, "application/json; charset=utf-8", f.HeaderMap.Get("Content-Type"))
+			assert.Equal(t, http.StatusCreated, f.Code)
+		})
+}
 
 func TestLogin(t *testing.T) {
 	var lr LoginResponse

@@ -82,7 +82,9 @@ func Login(c *gin.Context) {
 
 			db.Save(&accessToken)
 
-			db.Preload("SubscriptionPlan").Where("account_id = ?", account.Id).First(&subscription);
+			db.Set("gorm:auto_preload", true)
+			db.Preload("SubscriptionPlan").Where("account_id = ?", account.Id).First(&subscription)
+			subscription.Expired = subscription.ValidUntil.Before(time.Now().UTC())
 
 			c.JSON(http.StatusCreated, gin.H{
 				"account_type": account.Type,

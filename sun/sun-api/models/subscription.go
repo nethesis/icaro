@@ -49,4 +49,9 @@ type Subscription struct {
 
 	SubscriptionPlanID int              `db:"subscription_plan_id" json:"-"`
 	SubscriptionPlan   SubscriptionPlan `json:"subscription_plan"`
+	Expired            bool             `sql:"-" json:"expired"`
+}
+
+func (s Subscription) IsExpired() bool {
+	return s.ValidUntil.Before(time.Now().UTC())
 }

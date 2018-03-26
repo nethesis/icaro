@@ -177,6 +177,8 @@ func UpdateAccount(c *gin.Context) {
 		account.Type = json.Type
 	}
 
+	// NOTE: Subscription plan change is not supported
+
 	db.Save(&account)
 	db.Close()
 
@@ -221,14 +223,15 @@ func GetAccounts(c *gin.Context) {
 	for i, account := range accounts {
 		var subscription models.Subscription
 		db.Preload("SubscriptionPlan").Where("account_id = ?", account.Id).First(&subscription)
-		accounts[i].SubscriptionPlanId = subscription.SubscriptionPlanID
-		accounts[i].SubscriptionPlanName = subscription.SubscriptionPlan.Name
+		accounts[i].Subscription = subscription
+		accounts[i].Subscription.Expired = subscription.IsExpired()
 	}
 	c.JSON(http.StatusOK, accounts)
 }
 
 func GetAccount(c *gin.Context) {
 	var account models.AccountJSON
+	var subscription models.Subscription
 	creatorId := c.MustGet("token").(models.AccessToken).AccountId
 
 	accountId := c.Param("account_id")
@@ -251,12 +254,16 @@ func GetAccount(c *gin.Context) {
 		}
 	}
 
-	db.Close()
+	defer db.Close()
 
 	if account.Id == 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No account found!"})
 		return
 	}
+
+	db.Preload("SubscriptionPlan").Where("account_id = ?", account.Id).First(&subscription)
+	account.Subscription = subscription
+	account.Subscription.Expired = subscription.IsExpired()
 
 	c.JSON(http.StatusOK, account)
 }
