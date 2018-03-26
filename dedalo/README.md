@@ -20,6 +20,7 @@ Available options:
 - ``HS_UUID``: a unique unit idenifier, usually a UUID, eg ``161fre6d-8578-4247-b4a2-c40dced94bdd``
 - ``HS_SECRET``: a shared secret between this unit and Icaro installation, eg: ``My$uperS3cret``
 - ``HS_ALLOW_ORIGIN``: hosts allowed to execute CORS requests to Dedalo, usually it corresponds to ``HS_SPLASH_PAGE_URL``, eg: ``http://icaro.mydomain.com``
+- ``HS_DNS1`` and ``HS_DNS2``: primary and secondary dns servers, if not sets, will be used the default servers (OpenDNS).
 - '`USE_UPDOWN_SCRIPTS`: flag for enable/disable use of dedalo's ipup and ipdown scripts.
 
 ### Example
