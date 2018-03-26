@@ -164,7 +164,13 @@
               <span class="list-group-item-value">{{ $t("menu.sessions") }}</span>
             </a>
           </li>
-
+          
+          <li v-bind:class="[getCurrentPath('sessions') ? 'active' : '', 'list-group-item']" v-if="(user.info.type == 'admin') || (user.info.type == 'reseller') ||  (user.info.type == 'customer')">
+            <a href="#/reports">
+              <span class="fa fa-area-chart" data-toggle="tooltip" title="Adipscing"></span>
+              <span class="list-group-item-value">{{ $t("menu.reports") }}</span>
+            </a>
+          </li>
           <li></li>
 
           <li v-bind:class="[getCurrentPath('accounts') ? 'active' : '', 'list-group-item']" v-if="(user.info.type == 'admin') || (user.info.type == 'reseller')">

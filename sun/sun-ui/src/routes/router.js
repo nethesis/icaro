@@ -12,6 +12,7 @@ import Sessions from '../components/Sessions.vue'
 import Accounts from '../components/Accounts.vue'
 import Profile from '../components/Profile.vue'
 import Units from '../components/Units.vue'
+import Reports from '../components/Reports.vue'
 import StorageService from "../services/storage"
 import UtilService from "../services/util"
 
@@ -122,6 +123,14 @@ const router = new Router({
         roles: ['customer', 'reseller', 'desk', 'admin']
       },
     },
+    {
+      path: '/reports',
+      name: 'Reports',
+      component: Reports,
+      meta: {
+        roles: ['customer', 'reseller', 'desk', 'admin']
+      },
+    }
   ]
 })
 
