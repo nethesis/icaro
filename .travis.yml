@@ -78,6 +78,15 @@ matrix:
         - docker cp makerpms:/srv/makerpms/rpmbuild/RPMS/x86_64/ RPMS
         - rsync  --exclude "dedalo-debuginfo-*"  RPMS/* dedalo.rpm
 
+services:
+  - mysql
+
+before_install:
+  - mysql -e "CREATE DATABASE icaro"
+  - mysql icaro < $TRAVIS_BUILD_DIR/deploy/ansible/roles/icarodb/files/icaro.sql
+  - mysql icaro < $TRAVIS_BUILD_DIR/wax/testdata/test-grant.sql
+  - mysql icaro < $TRAVIS_BUILD_DIR/wax/testdata/test-records.sql
+
 before_deploy:
   - mkdir $TRAVIS_BUILD_DIR/deploy_files
   - cd $TRAVIS_BUILD_DIR
