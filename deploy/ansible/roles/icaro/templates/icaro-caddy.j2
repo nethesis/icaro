@@ -9,6 +9,11 @@ https://{$ICARO_HOSTNAME} {
   log / stdout {combined}
 }
 
+https://{$ICARO_HOSTNAME}/privacy {
+  root /opt/icaro/privacy
+}
+
+
 http://{$ICARO_HOSTNAME} {
   redir {
     if {path} not_starts_with /wings

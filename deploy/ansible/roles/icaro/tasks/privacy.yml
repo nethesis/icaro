@@ -1,0 +1,11 @@
+---
+- name: Create privacy root directory
+  file:
+    path: /opt/icaro/privacy/
+    state: directory
+    recurse: yes
+
+- name: Copy privacy file
+  template:
+    src: privacy-gdpr.j2
+    dest:  /opt/icaro/privacy/index.html
