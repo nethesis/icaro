@@ -183,6 +183,17 @@ func HotspotIsOverQuota(hotspotId int) bool {
 	return count >= subscription.SubscriptionPlan.MaxUnits
 }
 
+func CanChangeCaptivePortalOptions(accountId int) bool {
+	var subscription models.Subscription
+
+	db := database.Database()
+	db.Set("gorm:auto_preload", true)
+	db.Preload("SubscriptionPlan").Where("account_id = ?", accountId).First(&subscription)
+	db.Close()
+
+	return subscription.SubscriptionPlan.WingsCustomization
+}
+
 func Contains(intSlice []int, searchInt int) bool {
 	for _, value := range intSlice {
 		if value == searchInt {

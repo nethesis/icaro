@@ -320,3 +320,101 @@ func TestUnitRegistrationLimit(t *testing.T) {
 	db.Delete(models.Unit{}, "id > 1")
 	db.Close()
 }
+
+/** Preferences **/
+
+func TestFailingCaptiveConfiguration(t *testing.T) {
+	f, r := startupEnv()
+	var cr CreationResponse
+	var sub models.Subscription
+	var hs models.Hotspot
+	var account models.Account
+	var asms models.AccountSmsCount
+
+	var subPlan models.SubscriptionPlan
+
+	token := getAdminToken(f, r)
+	db := database.Database()
+	db.Where("id = 1").First(&subPlan)
+
+	// Create reseller with free plan
+	f.POST("/api/accounts").
+		SetHeader(gofight.H{
+			"Token": token,
+		}).
+		SetJSON(gofight.D{
+			"uuid":                 fmt.Sprintf("123reseller%d", time.Now().Nanosecond()),
+			"type":                 "reseller",
+			"name":                 "Test reseller",
+			"username":             "restestcaptive",
+			"password":             "restestcaptive",
+			"email":                "testreseller@nethserver.org",
+			"subscription_plan_id": subPlan.ID,
+		}).
+		Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
+			err := json.Unmarshal([]byte(f.Body.String()), &cr)
+			assert.Equal(t, nil, err)
+			assert.Equal(t, http.StatusCreated, f.Code)
+
+			db.Where("id = ?", cr.Id).First(&account)
+			db.Where("account_id = ?", account.Id).Find(&asms)
+			db.Where("account_id = ?", account.Id).Find(&sub)
+
+		})
+
+	// login with created reseller
+	token = getToken(f, r, "restestcaptive", "restestcaptive")
+
+	f.POST("/api/hotspots").
+		SetHeader(gofight.H{
+			"Token": token,
+		}).
+		SetJSON(gofight.D{
+			"name":        "MyTestHotspot",
+			"description": "Generated from go test",
+		}).
+		Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
+			err := json.Unmarshal([]byte(f.Body.String()), &cr)
+			assert.Equal(t, nil, err)
+			assert.Equal(t, http.StatusCreated, f.Code)
+
+			db.Where("id = ?", cr.Id).First(&hs)
+
+		})
+
+	f.PUT(fmt.Sprintf("/api/preferences/hotspots/%d", hs.Id)).
+		SetHeader(gofight.H{
+			"Token": token,
+		}).
+		SetJSON(gofight.D{
+			"hotspot_id": hs.Id,
+			"key":        "email_login",
+			"value":      "true",
+		}).
+		Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
+			err := json.Unmarshal([]byte(f.Body.String()), &cr)
+			assert.Equal(t, nil, err)
+			assert.Equal(t, http.StatusOK, f.Code)
+		})
+
+	f.PUT(fmt.Sprintf("/api/preferences/hotspots/%d", hs.Id)).
+		SetHeader(gofight.H{
+			"Token": token,
+		}).
+		SetJSON(gofight.D{
+			"key":   "captive_2_title",
+			"value": "t123",
+		}).
+		Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
+			err := json.Unmarshal([]byte(f.Body.String()), &cr)
+			assert.Equal(t, nil, err)
+			assert.Equal(t, http.StatusUnauthorized, f.Code)
+		})
+
+	// Cleanup
+	db.Delete(&account)
+	db.Delete(&asms)
+	db.Delete(&sub)
+	db.Delete(&hs)
+	db.Close()
+}

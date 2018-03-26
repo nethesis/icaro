@@ -25,6 +25,7 @@ package methods
 import (
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
@@ -104,17 +105,24 @@ func UpdateHotspotPrefs(c *gin.Context) {
 	if utils.Contains(utils.ExtractHotspotIds(accountId, (accountId == 1), 0), hotspotIdInt) {
 		db := database.Database()
 		db.Where("`key` = ? AND hotspot_id = ?", json.Key, hotspotIdInt).First(&hsPref)
+		defer db.Close()
 
 		if hsPref.Id == 0 {
-			db.Close()
 			c.JSON(http.StatusNotFound, gin.H{"message": "No preference found!"})
 			return
+		}
+
+		// enforce authorization on captive portal configuration
+		if strings.Index(json.Key, "captive") == 0 {
+			if !utils.CanChangeCaptivePortalOptions(accountId) {
+				c.JSON(http.StatusUnauthorized, gin.H{"message": "Can't update captive portal preference"})
+				return
+			}
 		}
 
 		hsPref.Value = json.Value
 
 		db.Save(&hsPref)
-		db.Close()
 
 		c.JSON(http.StatusOK, gin.H{"status": "success"})
 	} else {
