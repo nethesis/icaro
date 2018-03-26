@@ -2,8 +2,8 @@
     <div class="ui segment form">
         <div v-if="!dedaloRequested">
             <div v-if="!codeRequested" class="inline field" v-bind:class="{ error: errors.badInput }">
-                <label>{{ $t("sms.number") }}</label>
-                <div class="ui floating dropdown labeled search icon button">
+                <label>{{ $t("sms.prefix") }}</label>
+                <div class="ui fluid pointing dropdown labeled search icon button select-state">
                     <i class="flag icon"></i>
                     <span class="text">{{$t('sms.select_state')}}</span>
                     <div class="menu">
@@ -190,5 +190,12 @@
     .auth-code-cont {
         margin-top: 15px !important;
         margin: 0;
+    }
+
+    .select-state {
+        max-width: 270px;
+        margin: 0 auto;
+        margin-bottom: 1em;
+        margin-top: 0.25em;
     }
 </style>

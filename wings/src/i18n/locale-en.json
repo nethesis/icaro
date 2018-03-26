@@ -55,7 +55,8 @@
             "auth_success_sub": "In a few seconds you will be redirected",
             "auth_error": "Error on authentication",
             "auth_error_sub": "Something went wrong on authentication process",
-            "select_state": "Select state"
+            "select_state": "Select state",
+            "prefix": "Prefix"
         }
     }
 }
