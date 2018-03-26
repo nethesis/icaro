@@ -65,6 +65,13 @@
               </div>
 
               <div class="form-group">
+                <label class="col-sm-4 control-label" for="textInput2-modal-markup">{{ $t("user.auto_login") }}</label>
+                <div class="col-sm-8">
+                  <input v-model="currentObj.auto_login" type="checkbox" id="textInput2-modal-markup" class="form-control" :placeholder="$t('user.auto_login')">
+                </div>
+              </div>
+
+              <div class="form-group">
                 <label class="col-sm-4 control-label" for="textInput2-modal-markup">{{ $t("user.valid_from") }}</label>
                 <div class="col-sm-8">
                   <date-picker v-model="currentObj.valid_from" :config="dateConfig"></date-picker>
@@ -164,6 +171,7 @@
           email: obj.email,
           kbps_down: obj.kbps_down,
           kbps_up: obj.kbps_up,
+          auto_login: obj.auto_login || false,
           valid_from: new Date(obj.valid_from).toISOString(),
           valid_until: new Date(obj.valid_until).toISOString(),
         }, success => {

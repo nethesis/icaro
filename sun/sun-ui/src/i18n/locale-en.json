@@ -104,7 +104,8 @@
       "delete_error_title": "Delete error",
       "delete_error_sub": "Something went wrong on deleting user",
       "warning_delete_title": "Be careful",
-      "warning_delete_sub": "Are you sure?"
+      "warning_delete_sub": "Are you sure?",
+      "auto_login": "Auto login"
     },
     "account": {
       "uuid": "Unique ID",

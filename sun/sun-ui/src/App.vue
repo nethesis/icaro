@@ -4,13 +4,13 @@
     <div v-if="!isLogged" class="login-pf">
       <div>
         <span id="badge">
-          <img src="./assets/logo-light.png" alt=" logo" />
+          <img src="/static/logo-light.png" alt=" logo" />
         </span>
         <div class="container">
           <div class="row">
             <div class="col-sm-12 col-brand">
               <div id="brand">
-                <h1>Icaro Hotspot Manager</h1>
+                <h1>{{appName}}</h1>
               </div>
             </div>
             <!--/.col-*-->
@@ -45,15 +45,25 @@
             <!--/.col-*-->
             <div class="col-sm-5 col-md-6 col-lg-7 details">
               <p>
-                <strong>{{ $t("login.welcome") }} Icaro Hotspot Manager</strong>
+                <strong>{{ $t("login.welcome") }} {{appName}}</strong>
               </p>
             </div>
             <!--/.col-*-->
           </div>
           <!--/.row-->
-         <div class="right">
-           <a class="unsplash" href="https://unsplash.com/@mojoblogs?utm_medium=referral&amp;utm_campaign=photographer-credit&amp;utm_content=creditBadge" target="_blank" rel="noopener noreferrer" title="Download free do whatever you want high-resolution photos from Zara Walker"><span style="display:inline-block;padding:2px 3px;"><svg xmlns="http://www.w3.org/2000/svg" style="height:12px;width:auto;position:relative;vertical-align:middle;top:-1px;fill:white;" viewBox="0 0 32 32"><title>unsplash-logo</title><path d="M20.8 18.1c0 2.7-2.2 4.8-4.8 4.8s-4.8-2.1-4.8-4.8c0-2.7 2.2-4.8 4.8-4.8 2.7.1 4.8 2.2 4.8 4.8zm11.2-7.4v14.9c0 2.3-1.9 4.3-4.3 4.3h-23.4c-2.4 0-4.3-1.9-4.3-4.3v-15c0-2.3 1.9-4.3 4.3-4.3h3.7l.8-2.3c.4-1.1 1.7-2 2.9-2h8.6c1.2 0 2.5.9 2.9 2l.8 2.4h3.7c2.4 0 4.3 1.9 4.3 4.3zm-8.6 7.5c0-4.1-3.3-7.5-7.5-7.5-4.1 0-7.5 3.4-7.5 7.5s3.3 7.5 7.5 7.5c4.2-.1 7.5-3.4 7.5-7.5z"></path></svg></span><span style="display:inline-block;padding:2px 3px;">Zara Walker</span></a>
-        </div>
+          <div class="right">
+            <a class="unsplash" href="https://unsplash.com/@mojoblogs?utm_medium=referral&amp;utm_campaign=photographer-credit&amp;utm_content=creditBadge"
+              target="_blank" rel="noopener noreferrer" title="Download free do whatever you want high-resolution photos from Zara Walker">
+              <span style="display:inline-block;padding:2px 3px;">
+                <svg xmlns="http://www.w3.org/2000/svg" style="height:12px;width:auto;position:relative;vertical-align:middle;top:-1px;fill:white;"
+                  viewBox="0 0 32 32">
+                  <title>unsplash-logo</title>
+                  <path d="M20.8 18.1c0 2.7-2.2 4.8-4.8 4.8s-4.8-2.1-4.8-4.8c0-2.7 2.2-4.8 4.8-4.8 2.7.1 4.8 2.2 4.8 4.8zm11.2-7.4v14.9c0 2.3-1.9 4.3-4.3 4.3h-23.4c-2.4 0-4.3-1.9-4.3-4.3v-15c0-2.3 1.9-4.3 4.3-4.3h3.7l.8-2.3c.4-1.1 1.7-2 2.9-2h8.6c1.2 0 2.5.9 2.9 2l.8 2.4h3.7c2.4 0 4.3 1.9 4.3 4.3zm-8.6 7.5c0-4.1-3.3-7.5-7.5-7.5-4.1 0-7.5 3.4-7.5 7.5s3.3 7.5 7.5 7.5c4.2-.1 7.5-3.4 7.5-7.5z"></path>
+                </svg>
+              </span>
+              <span style="display:inline-block;padding:2px 3px;">Zara Walker</span>
+            </a>
+          </div>
         </div>
         <!--/.container-->
       </div>
@@ -71,8 +81,8 @@
             <span class="icon-bar"></span>
           </button>
           <a href="/" class="navbar-brand">
-            <img class="navbar-brand-icon" src="./assets/logo-light.png" alt="" />
-            <p class="navbar-brand-name">Icaro Hotspot Manager</p>
+            <img class="navbar-brand-icon" src="/static/logo-light.png" alt="" />
+            <p class="navbar-brand-name">{{appName}}</p>
           </a>
         </div>
         <nav class="collapse navbar-collapse">
@@ -234,7 +244,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <h1>Icaro Hotspot Manager</h1>
+            <h1>{{appName}}</h1>
             <div class="product-versions-pf">
               <ul class="list-unstyled">
                 <li>
@@ -257,11 +267,16 @@
                   <strong>Dedalo</strong>
                   <a target="blank" href="https://github.com/nethesis/icaro/tree/master/dedalo">GitHub</a>
                 </li>
+                <li class="space-line"></li>
+                <li>
+                  <strong>Privacy</strong>
+                  <a target="blank" href="/privacy">Link</a>
+                </li>
               </ul>
             </div>
           </div>
           <div class="modal-footer">
-            <img class="about-logo" src="./assets/logo-light.png" alt="Patternfly Symbol">
+            <img class="about-logo" src="/static/logo-light.png" alt="Patternfly Symbol">
           </div>
         </div>
       </div>
@@ -281,6 +296,9 @@
   export default {
     name: 'app',
     mixins: [LoginService, StorageService, UtilService],
+    created() {
+      document.title = CONFIG.APP_NAME
+    },
     data() {
       // is logged
       var isLogged = false
@@ -314,7 +332,8 @@
         password: '',
         user: user,
         isLogged: isLogged,
-        errors: errors
+        errors: errors,
+        appName: CONFIG.APP_NAME
       }
     },
     methods: {
@@ -418,6 +437,5 @@
 </script>
 
 <style src="./styles/main.css">
-
 
 </style>
