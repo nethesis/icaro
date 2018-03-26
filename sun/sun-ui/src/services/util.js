@@ -7,6 +7,7 @@ var UtilService = {
         ofText: this.$i18n.t('of'),
         rowsPerPageText: this.$i18n.t('rows_per_page'),
         globalSearchPlaceholder: this.$i18n.t('search'),
+        allText:  this.$i18n.t('all')
       }
     },
     uploadImageLangs() {

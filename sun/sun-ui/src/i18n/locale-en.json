@@ -105,7 +105,8 @@
       "delete_error_sub": "Something went wrong on deleting user",
       "warning_delete_title": "Be careful",
       "warning_delete_sub": "Are you sure?",
-      "auto_login": "Auto login"
+      "auto_login": "Auto login",
+      "show_expired": "Show expired"
     },
     "account": {
       "uuid": "Unique ID",
@@ -200,6 +201,7 @@
     "next": "Next",
     "prev": "Prev",
     "of": "of",
+    "all": "All",
     "search": "Search",
     "rows_per_page": "Rows per page",
     "action": "Action",

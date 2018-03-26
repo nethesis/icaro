@@ -361,3 +361,7 @@ a {
 .space-line {
   height: 15px !important;
 }
+
+.disabled {
+  color: #b1b1b1 !important;
+}
