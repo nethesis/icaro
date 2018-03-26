@@ -13,7 +13,7 @@
         </select>
       </div>
     </div>
-    <vue-good-table v-if="!isLoading" :perPage="25" :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'name', type: 'asc'}"
+    <vue-good-table v-if="!isLoading" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]" :perPage="hotspotPerPage" :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'name', type: 'asc'}"
       :globalSearch="true" :paginate="true" styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText"
       :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
       :ofText="tableLangsTexts.ofText">
@@ -94,6 +94,7 @@
         tableLangsTexts: this.tableLangs(),
         hotspots: [],
         hotspotSearchId: 0,
+        hotspotPerPage: this.get('units_per_page') || 25,
         user: this.get("loggedUser") || null
       };
     },
@@ -104,6 +105,9 @@
       }
     },
     methods: {
+      handlePerPage(evt) {
+        this.set('units_per_page', evt.currentPerPage)
+      },
       getAllHotspots() {
         this.hotspotGetAll(
           success => {

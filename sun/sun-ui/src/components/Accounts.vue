@@ -15,7 +15,7 @@
         </select>
       </div>
     </div>
-    <vue-good-table v-if="!isLoading" :perPage="25" :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'username', type: 'asc'}"
+    <vue-good-table v-if="!isLoading" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]" :perPage="hotspotPerPage" :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'username', type: 'asc'}"
       :globalSearch="true" :paginate="true" styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText"
       :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
       :ofText="tableLangsTexts.ofText">
@@ -222,10 +222,14 @@
         errors: errors,
         isAdmin: this.get("loggedUser").account_type == "admin",
         hotspotSearchId: 0,
+        hotspotPerPage: this.get('accounts_per_page') || 25,
         user: this.get('loggedUser') || null,
       }
     },
     methods: {
+      handlePerPage(evt) {
+        this.set('accounts_per_page', evt.currentPerPage)
+      },
       initNewAccount() {
         this.newObj.uuid = this.generateUUID();
         this.newObj.password = this.generatePassword();

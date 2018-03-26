@@ -19,7 +19,7 @@
         <input @click="toggleExpire()" v-model="hotspotShowExpired" type="checkbox" id="textInput2-modal-markup" class="form-control">
       </div>
     </div>
-    <vue-good-table v-if="!isLoading" :perPage="25" :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'username', type: 'asc'}"
+    <vue-good-table v-if="!isLoading" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]" :perPage="hotspotPerPage" :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'username', type: 'asc'}"
       :globalSearch="true" :paginate="true" styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText"
       :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
       :ofText="tableLangsTexts.ofText">
@@ -109,6 +109,7 @@
         hotspots: [],
         hotspotSearchId: 0,
         hotspotShowExpired: this.get('users_show_expired') || false,
+        hotspotPerPage: this.get('users_per_page') || 25,
         user: this.get('loggedUser') || null,
       }
     },
@@ -119,6 +120,9 @@
       }
     },
     methods: {
+      handlePerPage(evt) {
+        this.set('users_per_page', evt.currentPerPage)
+      },
       isExpired(date) {
         return new Date().toISOString() > date
       },

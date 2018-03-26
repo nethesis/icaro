@@ -18,7 +18,7 @@
         <button data-toggle="modal" data-target="#HScreateModal" class="btn btn-primary btn-lg"> {{ $t('hotspot.create_new') }} </button>
       </div>
     </div>
-    <vue-good-table v-if="rows.length > 0 && !isLoading" :perPage="25" :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'name', type: 'asc'}"
+    <vue-good-table v-if="rows.length > 0 && !isLoading" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]" :perPage="hotspotPerPage" :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'name', type: 'asc'}"
       :globalSearch="true" :paginate="true" styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText"
       :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
       :ofText="tableLangsTexts.ofText">
@@ -138,10 +138,14 @@
         tableLangsTexts: this.tableLangs(),
         newObj: newObj,
         errors: errors,
+        hotspotPerPage: this.get('hotspots_per_page') || 25,
         isAdmin: this.get("loggedUser").account_type == "admin",
       }
     },
     methods: {
+      handlePerPage(evt) {
+        this.set('hotspots_per_page', evt.currentPerPage)
+      },
       getAll() {
         this.hotspotGetAll(success => {
           this.rows = success.body

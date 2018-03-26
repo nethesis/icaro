@@ -57,7 +57,7 @@
         <button @click="exportCSV()" class="btn btn-primary export-btn">{{$t('session.export_csv')}}</button>
       </div>
     </div>
-    <vue-good-table v-if="!isLoading" :perPage="25" :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'duration', type: 'asc'}"
+    <vue-good-table v-if="!isLoading" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]" :perPage="hotspotPerPage" :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'duration', type: 'asc'}"
       :globalSearch="true" :globalSearchFn="searchFn" :paginate="true" styleClass="table" :nextText="tableLangsTexts.nextText"
       :prevText="tableLangsTexts.prevText" :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
       :ofText="tableLangsTexts.ofText">
@@ -160,12 +160,16 @@
         hotspotUnitId: this.get('sessions_unit_id') || 0,
         hotspotDateFrom: this.get('sessions_date_from') || new Date(Date.now() - 12096e5).toISOString(),
         hotspotDateTo: this.get('sessions_date_to') || new Date().toISOString(),
+        hotspotPerPage: this.get('sessions_per_page') || 25,
         user: this.get('loggedUser') || null,
         users: [],
         units: []
       }
     },
     methods: {
+      handlePerPage(evt) {
+        this.set('sessions_per_page', evt.currentPerPage)
+      },
       searchFn(row, col, cellValue, searchTerm) {
         var value = cellValue.toString().toLowerCase()
         if (col.field == 'unit_id') {
