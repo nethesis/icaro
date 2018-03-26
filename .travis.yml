@@ -88,10 +88,10 @@ services:
   - mysql
 
 before_install:
-  - mysql -e "CREATE DATABASE icaro"
-  - mysql icaro < $TRAVIS_BUILD_DIR/deploy/ansible/roles/icarodb/files/icaro.sql
-  - mysql icaro < $TRAVIS_BUILD_DIR/wax/testdata/test-grant.sql
-  - mysql icaro < $TRAVIS_BUILD_DIR/wax/testdata/test-records.sql
+  - sh -c "if [ ! -z '$TRAVIS_GO_VERSION' ]; then mysql -e 'CREATE DATABASE icaro'; fi"
+  - sh -c "if [ ! -z '$TRAVIS_GO_VERSION' ]; then mysql icaro < $TRAVIS_BUILD_DIR/deploy/ansible/roles/icarodb/files/icaro.sql; fi"
+  - sh -c "if [ ! -z '$TRAVIS_GO_VERSION' ]; then mysql icaro < $TRAVIS_BUILD_DIR/wax/testdata/test-grant.sql; fi"
+  - sh -c "if [ ! -z '$TRAVIS_GO_VERSION' ]; then mysql icaro < $TRAVIS_BUILD_DIR/wax/testdata/test-records.sql; fi"
 
 before_deploy:
   - mkdir $TRAVIS_BUILD_DIR/deploy_files
