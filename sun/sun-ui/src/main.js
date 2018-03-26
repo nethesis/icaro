@@ -43,7 +43,7 @@ new Vue({
   i18n,
   render: (h) => h(App),
   api_host: window.location.host,
-  api_scheme: 'https://',
+  api_scheme: window.location.protocol,
   currentLocale: langConf.locale,
   moment: moment
 })
