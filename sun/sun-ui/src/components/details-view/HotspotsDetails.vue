@@ -105,7 +105,14 @@
                 <td class="fancy">
                   <strong>{{ props.row.code }}</strong>
                 </td>
-                <td class="fancy">{{ props.row.expires | formatDate }}</td>
+                <td class="fancy"><span :class="['pficon', props.row.auto_login ? 'pficon-ok' : 'pficon-error-circle-o']"></span></td>
+                <td class="fancy">
+                  <div>
+                    <strong>{{ $t('user.kbps_down') }}</strong>: {{ props.row.bandwidth_down || '-' }}</div>
+                  <div>
+                    <strong>{{ $t('user.kbps_up') }}</strong>: {{ props.row.bandwidth_up || '-' }}</div>
+                </td>
+                <td class="fancy">{{ props.row.duration }} ({{$t('hotspot.days')}})</td>
                 <td>
                   <button v-on:click="printVoucher(props.row.code)" class="btn btn-primary" type="button">
                     <span class="fa fa-print"></span>
@@ -282,6 +289,31 @@
                   <input v-model="vouchersCount" type="text" id="textInput-modal-markup" class="form-control">
                 </div>
               </div>
+
+              <div class="form-group">
+                <label class="col-sm-5 control-label" for="textInput-modal-markup">{{$t('hotspot.auto_login')}}</label>
+                <div class="col-sm-7">
+                  <input v-model="newVoucher.auto_login" type="checkbox" id="textInput-modal-markup" class="form-control">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-5 control-label" for="textInput-modal-markup">{{$t('hotspot.bandwidth_down')}}</label>
+                <div class="col-sm-7">
+                  <input v-model="newVoucher.bandwidth_down" type="number" id="textInput-modal-markup" class="form-control">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-5 control-label" for="textInput-modal-markup">{{$t('hotspot.bandwidth_up')}}</label>
+                <div class="col-sm-7">
+                  <input v-model="newVoucher.bandwidth_up" type="number" id="textInput-modal-markup" class="form-control">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-5 control-label" for="textInput-modal-markup">{{$t('hotspot.duration')}} ({{$t('hotspot.days')}})</label>
+                <div class="col-sm-7">
+                  <input v-model="newVoucher.duration" type="number" id="textInput-modal-markup" class="form-control">
+                </div>
+              </div>
             </form>
           </div>
           <div class="modal-footer">
@@ -296,7 +328,7 @@
 </template>
 
 <script>
- import HotspotService from '../../services/hotspot';
+  import HotspotService from '../../services/hotspot';
   import PreferenceService from '../../services/preference';
   import AccountService from '../../services/account';
   import UnitService from '../../services/unit';
@@ -355,6 +387,12 @@
           data: []
         },
         vouchersCount: 1,
+        newVoucher: {
+          auto_login: true,
+          bandwidth_down: 0,
+          bandwidth_up: 0,
+          duration: 7
+        },
         preferences: {
           isLoading: true,
           global: {},
@@ -388,8 +426,16 @@
             filterable: false,
             sortable: false,
           }, {
-            label: this.$i18n.t('hotspot.expires'),
-            field: 'expires',
+            label: this.$i18n.t('hotspot.auto_login'),
+            field: 'auto_login',
+            filterable: false,
+          }, {
+            label: this.$i18n.t('hotspot.bandwidth_limit'),
+            field: 'bandwidth',
+            filterable: false,
+          }, {
+            label: this.$i18n.t('hotspot.duration'),
+            field: 'duration',
             filterable: false,
           },
           {
@@ -401,36 +447,38 @@
         tableLangsTexts: this.tableLangs(),
         uploadLangstexts: this.uploadImageLangs(),
         user: this.get("loggedUser"),
-        displayCaptivePortalOptions: this.get("loggedUser") && this.get("loggedUser").subscription && this.get("loggedUser").subscription.subscription_plan && this.get("loggedUser").subscription.subscription_plan.wings_customization || this.get("loggedUser").account_type == "admin",
+        displayCaptivePortalOptions: this.get("loggedUser") && this.get("loggedUser").subscription && this.get(
+            "loggedUser").subscription.subscription_plan && this.get("loggedUser").subscription.subscription_plan.wings_customization ||
+          this.get("loggedUser").account_type == "admin",
         customToolbar: [
           ['bold', 'italic', 'underline'],
           ['image', 'code-block']
         ],
-        userLink:{
-          name:'Users',
-          params:{
+        userLink: {
+          name: 'Users',
+          params: {
             hotspotId: this.$route.params.id
           }
         },
-        unitLink:{
+        unitLink: {
           name: 'Units',
           params: {
             hotspotId: this.$route.params.id
           }
         },
-        sessionLink:{
+        sessionLink: {
           name: 'Sessions',
           params: {
             hotspotId: this.$route.params.id
           }
         },
-        accountLink:{
+        accountLink: {
           name: 'Accounts',
           params: {
             hotspotId: this.$route.params.id
           }
         },
-        deviceLink:{
+        deviceLink: {
           name: 'Devices',
           params: {
             hotspotId: this.$route.params.id
@@ -455,6 +503,10 @@
             context.hotspotCreateVoucher({
               hotspot_id: parseInt(context.$route.params.id),
               code: context.generateVoucher(),
+              auto_login: context.newVoucher.auto_login,
+              bandwidth_down: parseInt(context.newVoucher.bandwidth_down),
+              bandwidth_up: parseInt(context.newVoucher.bandwidth_up),
+              duration: parseInt(context.newVoucher.duration),
             }, success => {
               resolve()
             }, error => {
@@ -523,7 +575,7 @@
           console.log(error.body)
           this.totals.users.isLoading = false
         })
-        this.deviceGetAll(this.$route.params.id, success => {
+        this.deviceGetAll(this.$route.params.id, "", success => {
           this.totals.devices.count = success.body.length
           this.totals.devices.isLoading = false
         }, error => {
@@ -686,10 +738,10 @@
 </script>
 
 <style scoped>
-textarea {
-  width: 100%;
-  min-height: 180px;
-  resize: vertical;
-}
+  textarea {
+    width: 100%;
+    min-height: 180px;
+    resize: vertical;
+  }
 
 </style>

@@ -46,6 +46,7 @@ func FacebookAuth(c *gin.Context) {
 	code := c.Param("code")
 	uuid := c.Query("uuid")
 	sessionId := c.Query("sessionid")
+	voucherCode := c.Query("voucher_code")
 
 	clientId := configuration.Config.AuthSocial.Facebook.ClientId
 	clientSecret := configuration.Config.AuthSocial.Facebook.ClientSecret
@@ -128,6 +129,21 @@ func FacebookAuth(c *gin.Context) {
 		autoLogin := utils.GetHotspotPreferencesByKey(unit.HotspotId, "auto_login")
 		autoLoginBool, _ := strconv.ParseBool(autoLogin.Value)
 
+		// retrieve voucher
+		if len(voucherCode) > 0 {
+			voucher := utils.GetVoucherByCode(voucherCode, unit.HotspotId)
+
+			daysInt = voucher.Duration
+			downInt = voucher.BandwidthDown
+			upInt = voucher.BandwidthUp
+			autoLoginBool = voucher.AutoLogin
+
+			// delete voucher
+			db := database.Database()
+			db.Delete(&voucher)
+			db.Close()
+		}
+
 		newUser := models.User{
 			HotspotId:   unit.HotspotId,
 			Name:        fbUserDetail.Name,
@@ -173,6 +189,7 @@ func LinkedInAuth(c *gin.Context) {
 	code := c.Param("code")
 	uuid := c.Query("uuid")
 	sessionId := c.Query("sessionid")
+	voucherCode := c.Query("voucher_code")
 
 	clientId := configuration.Config.AuthSocial.LinkedIn.ClientId
 	clientSecret := configuration.Config.AuthSocial.LinkedIn.ClientSecret
@@ -247,6 +264,21 @@ func LinkedInAuth(c *gin.Context) {
 		autoLogin := utils.GetHotspotPreferencesByKey(unit.HotspotId, "auto_login")
 		autoLoginBool, _ := strconv.ParseBool(autoLogin.Value)
 
+		// retrieve voucher
+		if len(voucherCode) > 0 {
+			voucher := utils.GetVoucherByCode(voucherCode, unit.HotspotId)
+
+			daysInt = voucher.Duration
+			downInt = voucher.BandwidthDown
+			upInt = voucher.BandwidthUp
+			autoLoginBool = voucher.AutoLogin
+
+			// delete voucher
+			db := database.Database()
+			db.Delete(&voucher)
+			db.Close()
+		}
+
 		newUser := models.User{
 			HotspotId:   unit.HotspotId,
 			Name:        liUserDetail.FirstName + " " + liUserDetail.LastName,
@@ -291,6 +323,7 @@ func InstagramAuth(c *gin.Context) {
 	code := c.Param("code")
 	uuid := c.Query("uuid")
 	sessionId := c.Query("sessionid")
+	voucherCode := c.Query("voucher_code")
 
 	clientId := configuration.Config.AuthSocial.Instagram.ClientId
 	clientSecret := configuration.Config.AuthSocial.Instagram.ClientSecret
@@ -357,6 +390,21 @@ func InstagramAuth(c *gin.Context) {
 
 		autoLogin := utils.GetHotspotPreferencesByKey(unit.HotspotId, "auto_login")
 		autoLoginBool, _ := strconv.ParseBool(autoLogin.Value)
+
+		// retrieve voucher
+		if len(voucherCode) > 0 {
+			voucher := utils.GetVoucherByCode(voucherCode, unit.HotspotId)
+
+			daysInt = voucher.Duration
+			downInt = voucher.BandwidthDown
+			upInt = voucher.BandwidthUp
+			autoLoginBool = voucher.AutoLogin
+
+			// delete voucher
+			db := database.Database()
+			db.Delete(&voucher)
+			db.Close()
+		}
 
 		newUser := models.User{
 			HotspotId:   unit.HotspotId,

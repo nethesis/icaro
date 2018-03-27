@@ -108,6 +108,7 @@
                 // get user id
                 this.$http.get(url).then(responseAuth => {
                     this.voucherValidated = true
+                    localStorage.setItem('voucher_code', responseAuth.body.code)
                 }, error => {
                     this.voucherValidated = false
                     this.badCode = true

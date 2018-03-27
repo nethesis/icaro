@@ -49,6 +49,7 @@ func SMSAuth(c *gin.Context) {
 	uuid := c.Query("uuid")
 	sessionId := c.Query("sessionid")
 	reset := c.Query("reset")
+	voucherCode := c.Query("voucher_code")
 
 	if number == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "number is required"})
@@ -84,6 +85,21 @@ func SMSAuth(c *gin.Context) {
 
 		autoLogin := utils.GetHotspotPreferencesByKey(unit.HotspotId, "auto_login")
 		autoLoginBool, _ := strconv.ParseBool(autoLogin.Value)
+
+		// retrieve voucher
+		if len(voucherCode) > 0 {
+			voucher := utils.GetVoucherByCode(voucherCode, unit.HotspotId)
+
+			daysInt = voucher.Duration
+			downInt = voucher.BandwidthDown
+			upInt = voucher.BandwidthUp
+			autoLoginBool = voucher.AutoLogin
+
+			// delete voucher
+			db := database.Database()
+			db.Delete(&voucher)
+			db.Close()
+		}
 
 		newUser := models.User{
 			HotspotId:   unit.HotspotId,
@@ -152,6 +168,7 @@ func EmailAuth(c *gin.Context) {
 	uuid := c.Query("uuid")
 	sessionId := c.Query("sessionid")
 	reset := c.Query("reset")
+	voucherCode := c.Query("voucher_code")
 
 	if email == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "email is required"})
@@ -187,6 +204,21 @@ func EmailAuth(c *gin.Context) {
 
 		autoLogin := utils.GetHotspotPreferencesByKey(unit.HotspotId, "auto_login")
 		autoLoginBool, _ := strconv.ParseBool(autoLogin.Value)
+
+		// retrieve voucher
+		if len(voucherCode) > 0 {
+			voucher := utils.GetVoucherByCode(voucherCode, unit.HotspotId)
+
+			daysInt = voucher.Duration
+			downInt = voucher.BandwidthDown
+			upInt = voucher.BandwidthUp
+			autoLoginBool = voucher.AutoLogin
+
+			// delete voucher
+			db := database.Database()
+			db.Delete(&voucher)
+			db.Close()
+		}
 
 		newUser := models.User{
 			HotspotId:   unit.HotspotId,
@@ -264,22 +296,7 @@ func VoucherAuth(c *gin.Context) {
 	if voucher.Id == 0 {
 		c.JSON(http.StatusUnauthorized, gin.H{"message": "Voucher is invalid"})
 	} else {
-		if !voucher.Expires.IsZero() && voucher.Expires.Before(time.Now().UTC()) {
-			c.JSON(http.StatusOK, gin.H{"message": "Voucher is expired"})
-		} else {
-			// read hotspot preferences
-			days := utils.GetHotspotPreferencesByKey(unit.HotspotId, "voucher_expiration_days")
-			daysInt, _ := strconv.Atoi(days.Value)
-
-			// update voucher expiration
-			voucher.Expires = time.Now().UTC().AddDate(0, 0, daysInt)
-
-			db := database.Database()
-			db.Save(&voucher)
-			db.Close()
-
-			c.JSON(http.StatusOK, gin.H{"message": "Voucher is valid"})
-		}
+		c.JSON(http.StatusOK, gin.H{"message": "Voucher is valid", "code": voucher.Code})
 	}
 
 }

@@ -73,11 +73,19 @@ CREATE TABLE `hotspot_preferences` (
   PRIMARY KEY(`id`)
 );
 
+	AutoLogin     bool      `db:"auto_login" json:"auto_login"`
+	BandwidthUp   int       `db:"bandwidth_up" json:"bandwidth_up"`
+	BandwidthDown int       `db:"bandwidth_down" json:"bandwidth_down"`
+	Duration      time.Time `db:"duration" json:"duration"`
+
 CREATE TABLE `hotspot_vouchers` (
   `id` serial,
   `hotspot_id` bigint unsigned NOT NULL,
   `code` varchar(250) NOT NULL,
-  `expires` datetime NOT NULL,
+  `auto_login` tinyint NOT NULL,
+  `bandwidth_up` integer unsigned,
+  `bandwidth_down` integer unsigned,
+  `duration` integer unsigned,
   FOREIGN KEY (`hotspot_id`) REFERENCES hotspots(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   UNIQUE KEY (`hotspot_id`, `code`),
   PRIMARY KEY(`id`)

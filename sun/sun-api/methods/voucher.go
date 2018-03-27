@@ -25,7 +25,6 @@ package methods
 import (
 	"net/http"
 	"strconv"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
@@ -45,8 +44,11 @@ func CreateVoucher(c *gin.Context) {
 	}
 
 	hotspotVoucher := models.HotspotVoucher{
-		Code:    json.Code,
-		Expires: time.Time{},
+		Code:          json.Code,
+		AutoLogin:     json.AutoLogin,
+		BandwidthUp:   json.BandwidthUp,
+		BandwidthDown: json.BandwidthDown,
+		Duration:      json.Duration,
 	}
 
 	hotspotVoucher.HotspotId = json.HotspotId
