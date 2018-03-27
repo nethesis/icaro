@@ -36,6 +36,13 @@ import (
 	"github.com/nethesis/icaro/sun/sun-api/models"
 )
 
+type smsMarketingData struct {
+	Number string `json:"number"`
+}
+type emailMarketingData struct {
+	Email string `json:"email"`
+}
+
 func SMSAuth(c *gin.Context) {
 	number := c.Param("number")
 	digest := c.Query("digest")
@@ -93,7 +100,8 @@ func SMSAuth(c *gin.Context) {
 		}
 		newUser.Id = methods.CreateUser(newUser)
 
-		// TODO: create marketing info with user infos and birthday
+		// create marketing info with user infos
+		utils.CreateUserMarketing(newUser.Id, smsMarketingData{Number: number}, "sms")
 
 		// response to client
 		c.JSON(http.StatusOK, gin.H{"user_id": number})
@@ -105,6 +113,9 @@ func SMSAuth(c *gin.Context) {
 
 		// create user session check
 		utils.CreateUserSession(user.Id, sessionId)
+
+		// create marketing info with user infos
+		utils.CreateUserMarketing(user.Id, smsMarketingData{Number: number}, "sms")
 
 		// check if is reset
 		if reset == "true" {
@@ -192,7 +203,8 @@ func EmailAuth(c *gin.Context) {
 		}
 		newUser.Id = methods.CreateUser(newUser)
 
-		// TODO: create marketing info with user infos and birthday
+		// create marketing info with user infos
+		utils.CreateUserMarketing(newUser.Id, emailMarketingData{Email: email}, "email")
 
 		// response to client
 		c.JSON(http.StatusOK, gin.H{"user_id": email})
@@ -204,6 +216,9 @@ func EmailAuth(c *gin.Context) {
 
 		// create user session check
 		utils.CreateUserSession(user.Id, sessionId)
+
+		// create marketing info with user infos
+		utils.CreateUserMarketing(user.Id, emailMarketingData{Email: email}, "email")
 
 		// check if is reset
 		if reset == "true" {

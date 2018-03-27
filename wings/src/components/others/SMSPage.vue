@@ -68,6 +68,14 @@
                     <p>{{ $t("sms.auth_error_sub") }}</p>
                 </div>
             </div>
+            <div v-if="authorized">
+                <h3>{{ $t("login.disclaimer_marketing") }}</h3>
+                <div class="inline field">
+                    <textarea readonly class="text-center" v-model="hotspot.disclaimers.marketing_use"></textarea>
+                </div>
+                <button v-on:click="deleteInfo()" class="ui big button red">{{ $t("login.decline") }}</button>
+                <button v-on:click="accept()" class="ui big button green">{{ $t("login.accept") }}</button>
+            </div>
         </div>
     </div>
 </template>
@@ -100,7 +108,10 @@
                     dedaloError: false,
                     badInput: false
                 },
-                countries: require('./../../i18n/countries.json')
+                countries: require('./../../i18n/countries.json'),
+                hotspot: {
+                    disclaimers: this.$root.$options.hotspot.disclaimers
+                },
             }
         },
         methods: {
@@ -126,6 +137,7 @@
                     this.codeRequested = true
                     this.authReset = responseAuth.body.exists
                     this.resetDone = responseAuth.body.reset
+                    this.userId = responseAuth.body.user_db_id
                 }, error => {
                     this.codeRequested = false
                     this.errors.badNumber = true
@@ -146,11 +158,6 @@
                     if (responseDedalo.body.clientState == 1) {
                         this.authorized = true
                         this.errors.dedaloError = false
-                        setTimeout(function () {
-                            // open redir url
-                            window.location.replace(this.$root.$options.hotspot.preferences
-                                .captive_1_redir)
-                        }.bind(this), 2500)
                     } else {
                         this.authorized = false
                         this.errors.dedaloError = true
@@ -161,6 +168,20 @@
                     this.errors.dedaloError = true
                     console.error(error)
                 })
+            },
+            deleteInfo() {
+                // extract code and state
+                var params = this.extractParams()
+                this.deleteMarketingInfo(this.userId, params, function (success) {
+                    this.accept()
+                }, function (error) {
+                    console.error(error)
+                })
+            },
+            accept() {
+                // open redir url
+                window.location.replace(this.$root.$options.hotspot.preferences
+                    .captive_1_redir)
             }
         }
     }
