@@ -81,8 +81,8 @@ matrix:
           --volume $PWD:/srv/makerpms/src:ro ${DOCKER_IMAGE} makerpms-travis -s *.spec
       after_success:
         - docker commit makerpms nethserver/build
-        - docker cp makerpms:/srv/makerpms/rpmbuild/RPMS/x86_64/ RPMS
-        - rsync  --exclude "dedalo-debuginfo-*"  RPMS/* dedalo.rpm
+        - docker cp makerpms:/srv/makerpms/rpmbuild/RPMS/noarch/ RPMS
+        - cp RPMS/* dedalo.rpm
 
 services:
   - mysql

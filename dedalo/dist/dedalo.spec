@@ -9,6 +9,7 @@ Source0: https://github.com/nethesis/icaro/archive/master.tar.gz
 
 %{?systemd_requires}
 BuildRequires: systemd
+BuildArch: noarch
 Requires: coova-chilli-dedalo
 
 %description
