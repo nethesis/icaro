@@ -1,61 +1,62 @@
 {
     "it": {
         "splash": {
-            "retrieve_info": "Retrieve info",
-            "start_navigate": "Start Navigate",
-            "main_error": "Some params are missing. Can't we go ahead",
-            "main_error_sub": "Something gone wrong opening the page"
+            "retrieve_info": "Recupero le informazioni",
+            "start_navigate": "Inizia a Navigare",
+            "main_error": "Alcuni parametri mancanti.Impossibile procedere-",
+            "main_error_sub": "Errori durante l'apertura della pagina"
         },
         "login": {
-            "voucher_title": "Voucher code",
-            "insert_voucher": "Insert voucher code",
-            "validate_code": "Validate Code",
-            "error_voucher_code": "Error validating voucher code",
-            "error_voucher_code_sub": "It seems that your voucher code is not correct",
-            "choose_login": "Choose your Login",
-            "decline": "Decline",
-            "accept": "Accept",
-            "disclaimer_use": "Terms of Use",
-            "disclaimer_marketing": "Marketing info"
+            "voucher_title": "Codice Voucher",
+            "insert_voucher": "Inserisci codice Voucher",
+            "validate_code": "Convalida Codice",
+            "error_voucher_code": "Errore durante la convalida del codice",
+            "error_voucher_code_sub": "Codice Voucher non corretto, prova a digitarlo nuovamente.",
+            "choose_login": "Scegli il login che preferisci",
+            "decline": "Rifiuta",
+            "accept": "Accetta",
+            "disclaimer_use": "Condizioni di Utilizzo",
+            "disclaimer_marketing": "Informazioni Privacy"
         },
         "social": {
-            "auth_progress": "Authorization in progress",
-            "auth_success": "You are successfully authenticated",
-            "auth_success_sub": "Read the marketing disclaimer and in a few seconds you will be redirected",
-            "auth_error": "Error on authentication",
-            "auth_error_sub": "Something went wrong on authentication process"
+            "auth_progress": "Autorizzazione in corso",
+            "auth_success": "Ti sei autenticato con successo",
+            "auth_success_sub": "Dopo aver visualizzato le informazioni privacy potrai navigare",
+            "auth_error": "Errore di autenticazione",
+            "auth_error_sub": "Si è verificato un errore durante l'autenticazione"
         },
         "email": {
-            "insert_email": "Insert your email",
-            "insert_your_code": "Insert your code",
-            "code": "Code",
-            "get_code": "Request Code",
-            "reset_code": "Request new Code",
-            "start_navigate": "Start Navigate",
-            "error_code": "Error sending verification code",
-            "error_code_sub": "Something went wrong on sending code (check your email)",
-            "auth_progress": "Authorization in progress",
-            "auth_success": "You are successfully authenticated",
-            "auth_success_sub": "In a few seconds you will be redirected",
-            "auth_error": "Error on authentication",
-            "auth_error_sub": "Something went wrong on authentication process"
+            "insert_email": "Inserisci la tua email",
+            "insert_your_code": "Inserisci il tuo codice",
+            "code": "Codice",
+            "get_code": "Richiedi Codice",
+            "reset_code": "Forza l'invio di un nuovo Codice",
+            "start_navigate": "Inizia a Navigare",
+            "error_code": "Errore nell'invio del codice di verifica",
+            "error_code_sub": "Problemi nell'invio della email, ricontrolla il tuo indirizzo",
+            "auth_progress": "Autorizzazione in corso",
+            "auth_success": "Ti sei autenticato con successo",
+            "auth_success_sub": "Dopo aver visualizzato le informazioni privacy potrai navigare",
+            "auth_error": "Errore di autenticazione",
+            "auth_error_sub": "Si è verificato un errore durante l'autenticazione"
         },
         "sms": {
-            "number": "Number",
-            "insert_number": "Insert your number",
-            "insert_your_code": "Insert your code",
-            "code": "Code",
-            "get_code": "Request Code",
-            "reset_code": "Request new Code",
-            "start_navigate": "Start Navigate",
-            "error_code": "Error sending verification code",
-            "error_code_sub": "Something went wrong on sending code (use international prefix for your number or check you don't have reach the max sending SMS number)",
-            "auth_progress": "Authorization in progress",
-            "auth_success": "You are successfully authenticated",
-            "auth_success_sub": "In a few seconds you will be redirected",
-            "auth_error": "Error on authentication",
-            "auth_error_sub": "Something went wrong on authentication process",
-            "select_state": "Select state"
+            "number": "Numero telefonico",
+            "insert_number": "Inserisci il tuo numero telefonico",
+            "insert_your_code": "Inserisci il tuo codice",
+            "code": "Codice",
+            "get_code": "Richiedi Codice",
+            "reset_code": "Forza l'invio di un nuovo Codice",
+            "start_navigate": "Inizia a Navigare",
+            "error_code": "Errore nell'invio del codice di verifica",
+            "error_code_sub": "Problemi nell'invio dell' SMS, ricordati di selezionare correttamente il tuo prefisso internazionale con il sistema a bandierine)",
+            "auth_progress": "Autorizzazione in corso",
+            "auth_success": "Ti sei autenticato con successo",
+            "auth_success_sub": "Dopo aver visualizzato le informazioni privacy potrai navigare",
+            "auth_error": "Errore di autenticazione",
+            "auth_error_sub": "Si è verificato un errore durante l'autenticazione"
+            "select_state": "Seleziona Stato"
         }
     }
 }
+
