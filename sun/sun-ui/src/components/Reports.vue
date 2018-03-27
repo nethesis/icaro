@@ -15,8 +15,8 @@
     </div>
     <br>
     <div v-if="(user.account_type == 'admin') || (user.account_type == 'reseller')" class="row select-search">
-       <label class="col-sm-2 control-label" for="textInput-markup">
-        <p>{{dataPoints.from.format('DD MMM')}}</p> - <p>{{dataPoints.to.format('DD MMM')}}</p>
+       <label class="col-sm-2 control-label" for="textInput-markup" id="lbl-date-range">
+        <p>{{dataPoints.from.format('DD MMM YYYY')}}</p> - <p>{{dataPoints.to.format('DD MMM YYYY')}}</p>
       </label>
       <div class="col-sm-4">
        <select v-on:change="getSessionsByDate()" class="form-control" v-model="dateRangeSearchId">
@@ -31,7 +31,7 @@
     <div v-if="isChartLoading" class="spinner spinner-lg"></div>
     <div v-if="!isChartLoading">
       <div class="panel-heading">
-          <h1 class="panel-title">Statistics</h1>
+          <h1 class="panel-title">{{ $t('report.statistic') }}</h1>
       </div>
       <div class="panel-body">
         <vue-chart type="line" :options="options" :data="chartData"></vue-chart>
@@ -42,7 +42,7 @@
 <script>
 import UnitService from "../services/unit";
 import StorageService from "../services/storage";
-import SessionService from '../services/session'
+import HistoryService from '../services/history'
 import UserService from '../services/user'
 import HotspotService from "../services/hotspot";
 
@@ -54,31 +54,31 @@ export default {
   components: {
     VueChart,
   },
-    mixins: [SessionService, StorageService, UserService, HotspotService],
+    mixins: [HistoryService, StorageService, UserService, HotspotService],
   data() {
-    this.getAllHotspots();    
+    this.getAllHotspots();
     return {
       range: null,
       sessionToShow: [],
       newUsersToShow: [],
       isLoading: true,
       isChartLoading: true,
-      msg: "Reports",
+      msg: this.$i18n.t('report.reports'),
       dataPoints: {
         to: moment().subtract(7, 'day').startOf('day'),
         from: moment().startOf("day"),
       },
       dateRangs: [
         {
-          display: "Last 7 days",
+          display: this.$i18n.t('report.last_7_days'),
           value: 1
         },
         {
-          display: "Last 15 days",
+          display: this.$i18n.t('report.last_15_days'),
           value: 2
         },
         {
-          display: "Last Month",
+          display: this.$i18n.t('report.last_month'),
           value: 3
         }
       ],
@@ -89,12 +89,12 @@ export default {
         labels: [],
         datasets: [
           {
-            label: "Sessions",
+            label: this.$i18n.t('report.session'),
             data: [],
             backgroundColor:'#e6e6ff'
           },
            {
-            label: "New Users",
+            label: this.$i18n.t('report.new_user'),
             data: [],
             backgroundColor:'#cceeff'
           }
@@ -145,52 +145,50 @@ export default {
 
       switch (this.dateRangeSearchId) {
         case 1:
-        this.range = moment1.range(moment().subtract(7, 'day').startOf('day').toDate(), moment().startOf("day").toDate());
-        this.dataPoints.from = moment().subtract(7, 'day').startOf('day');
-        this.dataPoints.to = moment().startOf("day");
+        this.range = moment1.range(moment().subtract(8, 'day').startOf('day').toDate(), moment().subtract(1, 'day').endOf("day").toDate());
+        this.dataPoints.from = moment().subtract(8, 'day').startOf('day');
+        this.dataPoints.to = moment().subtract(1, 'day').endOf("day");
           break;
         case 2:
-        this.range = moment1.range(moment().subtract(15, 'day').startOf('day').toDate(), moment().endOf("day").toDate());
+        this.range = moment1.range(moment().subtract(15, 'day').startOf('day').toDate(), moment().subtract(1, 'day').endOf("day"));
          this.dataPoints.from = moment().subtract(15, 'day').startOf('day');
-        this.dataPoints.to =  moment().endOf("day");
+        this.dataPoints.to =  moment().subtract(1, 'day').endOf("day");
           break;
         case 3:
-        this.range = moment1.range(moment().subtract(4, 'week').startOf('week').toDate(), moment().endOf('day').toDate());
+        this.range = moment1.range(moment().subtract(4, 'week').startOf('week').toDate(), moment().subtract(1, 'day').endOf("day"));
         this.dataPoints.from = moment().subtract(4, 'week').startOf('week');
-        this.dataPoints.to =  moment().endOf('day');
+        this.dataPoints.to =  moment().subtract(1, 'day').endOf("day");
         default:
           break;
       }
       let selectedRange = Array.from(this.range.by('day'));
 
       this.validDate = selectedRange.map(function(item){
-        return item.toISOString();
+        return item.format('YYYY-MM-DD');
       })
 
       let valueToDisplay = selectedRange.map(function(item){
-        return item.format('dd, MMM DD');
+        return item.format('DD MMM YYYY');
       })
       this.chartData.labels = valueToDisplay;
       this.getSession();
-      this.getNewUsers();
     },
     // Get All Session between date range
     getSession() {
-      this.sessionGetAll(
+      this.historiesGetAll(
           this.hotspotSearchId,
           "",
           "",
-          this.dataPoints.to.toISOString(),
           this.dataPoints.from.toISOString(),
+          this.dataPoints.to.toISOString(),
           success => {
             this.sessions = success.body;
-            this.isLoading = false;
-            this.implementSessionInChart(this.sessions);
+            this.getNewUsers()
           },
           error => {
             this.isLoading = false;
-            this.isChartLoading = false;
-            this.sessions = this.rows;
+            this.sessions = [];
+            this.getNewUsers()
             console.log(error);
           }
         );
@@ -199,11 +197,13 @@ export default {
     getNewUsers() {
       this.userGetAll(this.hotspotSearchId, success => {
           this.newUsers = success.body;
-          this.implementUsersInChart(this.newUsers);
+          this.implementDataInChart();
+          this.isChartLoading = false;
         }, error => {
           this.isLoading = false
-          this.isChartLoading = false;
+          this.isChartLoading = false
           this.newUsers = []
+          this.implementDataInChart();
           console.log(error)
         })
     },
@@ -219,34 +219,35 @@ export default {
         }
       );
     },
-    // Implement Session between date range in Chart
-    implementSessionInChart(data) {
+    // Implement Session and newUser between date range in Chart
+    implementDataInChart() {
       this.validDate.forEach(element => {
-        this.sessionToShow = data.map(function(item){
-          return item.start_time.includes(element.substring(0, element.indexOf('T')));
+        this.sessionToShow = this.sessions.map(function(item){
+          return item.start_time.substring(0,10) === element;
         }).filter(function(item) {
               return item == true;
         }).length;
       this.chartData.datasets[0].data.push(this.sessionToShow);
       });
-    },
-    // Implement Users between date range in Chart
-    implementUsersInChart(data) {
+
       this.validDate.forEach(element => {
-        this.newUsersToShow = data.map(function(item){
-          return item.valid_from.includes(element.substring(0, element.indexOf('T')));
-        }).filter(function(item) {
-              return item == true;
-        }).length;
-      this.chartData.datasets[1].data.push(this.newUsersToShow);
-      });
-      this.isChartLoading = false;
-    }
+          this.newUsersToShow = this.newUsers.map(function(item){
+            return item.valid_from.substring(0,10) === element;
+          }).filter(function(item) {
+                return item == true;
+          }).length;
+        this.chartData.datasets[1].data.push(this.newUsersToShow);
+        });
+    },
   }
 };
 </script>
   <style scoped>
   .control-label p {
     display: inline;
+    
+  }
+  #lbl-date-range{
+    padding-right: 8px;
   }
 </style>
