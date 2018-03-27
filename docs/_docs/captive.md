@@ -19,10 +19,6 @@ Example of landing page:
 
 ![Captive portal](../img/captive.png "Schema")
 
-Example of customizabile login page:
-
-![Captive portal](../img/captive_custom.png "Schema")
-
 
 ### Login Methods and type of Accounts
 For more details, see [Login configuration](/icaro/docs/configuration/) page, to properly configure each logins option.
