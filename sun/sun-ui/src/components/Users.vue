@@ -64,12 +64,8 @@
       userAction: UserAction
     },
     data() {
-      // get user list
-      this.getAll()
-      this.getAllHotspots();
-
       return {
-        msg: 'Users',
+        msg: this.$i18n.t("menu.users"),
         isLoading: true,
         columns: [{
             label: this.$i18n.t('user.name'),
@@ -116,8 +112,10 @@
     mounted() {
       if (this.$route.params.hotspotId!==undefined) {
         this.hotspotSearchId = this.$route.params.hotspotId;
-        this.getAll();
       }
+      // get user list
+      this.getAll()
+      this.getAllHotspots();
     },
     methods: {
       handlePerPage(evt) {

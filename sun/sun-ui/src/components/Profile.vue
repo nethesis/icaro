@@ -117,7 +117,7 @@
       this.getSMSTotal()
 
       return {
-        msg: 'Profile',
+        msg: this.$i18n.t("menu.profile"),
         user: {
           login: this.get('loggedUser') || null,
           info: this.$parent.user.info,

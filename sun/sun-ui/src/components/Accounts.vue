@@ -15,10 +15,10 @@
         </select>
       </div>
     </div>
-    <vue-good-table v-if="!isLoading" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]" :perPage="hotspotPerPage" :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'username', type: 'asc'}"
-      :globalSearch="true" :paginate="true" styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText"
-      :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
-      :ofText="tableLangsTexts.ofText">
+    <vue-good-table v-if="!isLoading" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]" :perPage="hotspotPerPage"
+      :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'username', type: 'asc'}" :globalSearch="true"
+      :paginate="true" styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText" :rowsPerPageText="tableLangsTexts.rowsPerPageText"
+      :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder" :ofText="tableLangsTexts.ofText">
       <template slot="table-row" slot-scope="props">
         <td>
           <a :href="'#/accounts/'+ props.row.id">
@@ -164,11 +164,6 @@
       accountAction: AccountAction
     },
     data() {
-      // get account list
-      this.getAll();
-      this.getAllHotspots();
-      this.getAllSubscriptionPlans();
-
       var newObj = {
         uuid: '',
         username: '',
@@ -189,7 +184,7 @@
 
 
       return {
-        msg: 'Managers',
+        msg: this.$i18n.t("menu.accounts"),
         isLoading: true,
         accountType: this.get("loggedUser").account_type,
         columns: [{
@@ -246,6 +241,15 @@
         hotspotPerPage: this.get('accounts_per_page') || 25,
         user: this.get('loggedUser') || null,
       }
+    },
+    mounted() {
+      if (this.$route.params.hotspotId !== undefined) {
+        this.hotspotSearchId = this.$route.params.hotspotId;
+      }
+      // get account list
+      this.getAll();
+      this.getAllHotspots();
+      this.getAllSubscriptionPlans();
     },
     methods: {
       handlePerPage(evt) {

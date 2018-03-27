@@ -54,9 +54,8 @@
             "auth_success": "Ti sei autenticato con successo",
             "auth_success_sub": "Dopo aver visualizzato le informazioni privacy potrai navigare",
             "auth_error": "Errore di autenticazione",
-            "auth_error_sub": "Si è verificato un errore durante l'autenticazione"
+            "auth_error_sub": "Si è verificato un errore durante l'autenticazione",
             "select_state": "Seleziona Stato"
         }
     }
 }
-

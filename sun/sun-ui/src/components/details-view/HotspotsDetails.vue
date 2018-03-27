@@ -9,11 +9,13 @@
         <div class="card-pf card-pf-accented">
           <div class="card-pf-heading">
             <h2 class="card-pf-title">
-              <span class="pficon pficon-users card-info-title"></span>
-              {{ $t("dashboard.accounts") }}
-              <span v-if="!totals.accounts.isLoading" class="right">
-                <strong class="soft">{{ totals.accounts.count}}</strong>
-              </span>
+              <router-link class="card-link" :to="accountLink">
+                <span class="pficon pficon-users card-info-title"></span>
+                {{ $t("dashboard.accounts") }}
+                <span v-if="!totals.accounts.isLoading" class="right">
+                  <strong class="soft">{{ totals.accounts.count}}</strong>
+                </span>
+              </router-link>
               <div v-if="totals.accounts.isLoading" class="spinner spinner-sm right"></div>
             </h2>
           </div>
@@ -55,11 +57,13 @@
         <div class="card-pf card-pf-accented">
           <div class="card-pf-heading">
             <h2 class="card-pf-title">
-              <span class="fa fa-laptop card-info-title"></span>
-              {{ $t("dashboard.devices") }}
-              <span v-if="!totals.devices.isLoading" class="right">
-                <strong class="soft">{{ totals.devices.count}}</strong>
-              </span>
+              <router-link class="card-link" :to="deviceLink">
+                <span class="fa fa-laptop card-info-title"></span>
+                {{ $t("dashboard.devices") }}
+                <span v-if="!totals.devices.isLoading" class="right">
+                  <strong class="soft">{{ totals.devices.count}}</strong>
+                </span>
+              </router-link>
               <div v-if="totals.devices.isLoading" class="spinner spinner-sm right"></div>
             </h2>
           </div>
@@ -69,11 +73,13 @@
         <div class="card-pf card-pf-accented">
           <div class="card-pf-heading">
             <h2 class="card-pf-title">
-              <span class="fa fa-list card-info-title"></span>
-              {{ $t("dashboard.sessions") }}
-              <span v-if="!totals.sessions.isLoading" class="right">
-                <strong class="soft">{{ totals.sessions.count}}</strong>
-              </span>
+              <router-link class="card-link" :to="sessionLink">
+                <span class="fa fa-list card-info-title"></span>
+                {{ $t("dashboard.sessions") }}
+                <span v-if="!totals.sessions.isLoading" class="right">
+                  <strong class="soft">{{ totals.sessions.count}}</strong>
+                </span>
+              </router-link>
               <div v-if="totals.sessions.isLoading" class="spinner spinner-sm right"></div>
             </h2>
           </div>
@@ -408,6 +414,24 @@
         },
         unitLink:{
           name: 'Units',
+          params: {
+            hotspotId: this.$route.params.id
+          }
+        },
+        sessionLink:{
+          name: 'Sessions',
+          params: {
+            hotspotId: this.$route.params.id
+          }
+        },
+        accountLink:{
+          name: 'Accounts',
+          params: {
+            hotspotId: this.$route.params.id
+          }
+        },
+        deviceLink:{
+          name: 'Devices',
           params: {
             hotspotId: this.$route.params.id
           }

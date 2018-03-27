@@ -13,6 +13,7 @@ import Accounts from '../components/Accounts.vue'
 import Profile from '../components/Profile.vue'
 import Units from '../components/Units.vue'
 import Reports from '../components/Reports.vue'
+import Devices from '../components/Devices.vue'
 import StorageService from "../services/storage"
 import UtilService from "../services/util"
 
@@ -68,8 +69,16 @@ const router = new Router({
       },
     },
     {
-      path:'/units/:id',
-      name:'UnitsDetails',
+      path: '/devices',
+      name: 'Devices',
+      component: Devices,
+      meta: {
+        roles: ['customer', 'reseller', 'admin']
+      },
+    },
+    {
+      path: '/units/:id',
+      name: 'UnitsDetails',
       component: UnitsDetails,
       meta: {
         roles: ['customer', 'reseller', 'admin']
@@ -84,8 +93,8 @@ const router = new Router({
       },
     },
     {
-      path:'/units/:id',
-      name:'UnitsDetails',
+      path: '/units/:id',
+      name: 'UnitsDetails',
       component: UnitsDetails,
       meta: {
         roles: ['customer', 'reseller', 'admin']

@@ -158,6 +158,13 @@
 
             </a>
           </li>
+          <li v-bind:class="[getCurrentPath('devices') ? 'active' : '', 'list-group-item']">
+            <a href="#/devices">
+              <span class="fa fa-laptop"></span>
+              <span class="list-group-item-value">{{ $t("menu.devices") }}</span>
+
+            </a>
+          </li>
           <li v-bind:class="[getCurrentPath('sessions') ? 'active' : '', 'list-group-item']" v-if="(user.info.type == 'admin') || (user.info.type == 'reseller') ||  (user.info.type == 'customer')">
             <a href="#/sessions">
               <span class="fa fa-list" data-toggle="tooltip" title="Adipscing"></span>

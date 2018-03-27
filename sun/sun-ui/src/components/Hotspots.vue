@@ -106,7 +106,7 @@
       }
 
       return {
-        msg: 'Hotspots',
+        msg: this.$i18n.t("menu.hotspots"),
         isLoading: true,
         columns: [{
             label: this.$i18n.t('hotspot.name'),
