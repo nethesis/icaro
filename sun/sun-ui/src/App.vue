@@ -158,7 +158,7 @@
 
             </a>
           </li>
-          <li v-bind:class="[getCurrentPath('devices') ? 'active' : '', 'list-group-item']">
+          <li v-bind:class="[getCurrentPath('devices') ? 'active' : '', 'list-group-item']" v-if="(user.info.type == 'admin') || (user.info.type == 'reseller') ||  (user.info.type == 'customer')">
             <a href="#/devices">
               <span class="fa fa-laptop"></span>
               <span class="list-group-item-value">{{ $t("menu.devices") }}</span>

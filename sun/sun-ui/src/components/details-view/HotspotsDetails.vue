@@ -95,6 +95,7 @@
             <h2 class="card-pf-title">
               {{ $t("hotspot.vouchers") }}
               <div v-if="vouchers.isLoading" class="spinner spinner-sm right"></div>
+              <span @click="getVouchers()" class="fa fa-refresh right link"></span>
             </h2>
           </div>
           <div v-if="!vouchers.isLoading" class="card-pf-body">
@@ -105,7 +106,9 @@
                 <td class="fancy">
                   <strong>{{ props.row.code }}</strong>
                 </td>
-                <td class="fancy"><span :class="['pficon', props.row.auto_login ? 'pficon-ok' : 'pficon-error-circle-o']"></span></td>
+                <td class="fancy">
+                  <span :class="['pficon', props.row.auto_login ? 'pficon-ok' : 'pficon-error-circle-o']"></span>
+                </td>
                 <td class="fancy">
                   <div>
                     <strong>{{ $t('user.kbps_down') }}</strong>: {{ props.row.bandwidth_down || '-' }}</div>

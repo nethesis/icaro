@@ -85,7 +85,7 @@ func GetVouchers(c *gin.Context) {
 	offsets := utils.OffsetCalc(page, limit)
 
 	db := database.Database()
-	db.Where("hotspot_id in (?) AND (expires >= now() OR expires = \"0000-00-00 00:00:00\")", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt)).Offset(offsets[0]).Limit(offsets[1]).Find(&hotspotVouchers)
+	db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt)).Offset(offsets[0]).Limit(offsets[1]).Find(&hotspotVouchers)
 	db.Close()
 
 	if len(hotspotVouchers) <= 0 {
