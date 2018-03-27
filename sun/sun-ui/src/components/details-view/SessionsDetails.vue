@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>Session
+    <h2>{{$t('session.session')}}
       <strong class="soft">{{ info.data.session_key }}</strong>
     </h2>
 

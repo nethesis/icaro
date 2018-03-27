@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>{{ $t("sessions") }}</h2>
+    <h2>{{ msg }}</h2>
     <div v-if="isLoading" class="spinner spinner-lg"></div>
     <div v-if="(user.account_type == 'admin') || (user.account_type == 'reseller') && !isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
       <label v-if="!isLoading" class="col-sm-2 control-label" for="textInput-markup">Hotspot</label>
@@ -57,9 +57,10 @@
         <button @click="exportCSV()" class="btn btn-primary export-btn">{{$t('session.export_csv')}}</button>
       </div>
     </div>
-    <vue-good-table v-if="!isLoading" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]" :perPage="hotspotPerPage" :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'duration', type: 'asc'}"
-      :globalSearch="true" :globalSearchFn="searchFn" :paginate="true" styleClass="table" :nextText="tableLangsTexts.nextText"
-      :prevText="tableLangsTexts.prevText" :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
+    <vue-good-table v-if="!isLoading" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]" :perPage="hotspotPerPage"
+      :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'duration', type: 'asc'}" :globalSearch="true"
+      :globalSearchFn="searchFn" :paginate="true" styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText"
+      :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
       :ofText="tableLangsTexts.ofText">
       <template slot="table-row" slot-scope="props">
         <td class="fancy">
@@ -99,26 +100,21 @@
     components: {
       Datepicker
     },
-    mounted() {
-      // get session list
-      this.getAll()
-      this.getAllHotspots()
-      this.getAllUsers()
-      this.getAllUnits()
-    },
     data() {
       return {
-        msg: 'Reports',
+        msg: this.$i18n.t("menu.sessions"),
         isLoading: true,
         locale: this.$root.$options.currentLocale,
         columns: [{
             label: this.$i18n.t('session.unit'),
             field: 'unit_id',
             filterable: true,
+            sortable: false
           }, {
             label: this.$i18n.t('session.user'),
             field: 'user_id',
             filterable: true,
+            sortable: false
           }, {
             label: this.$i18n.t('session.bytes_up'),
             field: 'bytes_up',
@@ -166,6 +162,17 @@
         units: []
       }
     },
+    mounted() {
+      if (this.$route.params.hotspotId !== undefined) {
+        this.hotspotSearchId = this.$route.params.hotspotId;
+      }
+      // get session list
+      this.getAll()
+      this.getAllHotspots()
+      this.getAllUsers()
+      this.getAllUnits()
+
+    },
     methods: {
       handlePerPage(evt) {
         this.set('sessions_per_page', evt.currentPerPage)
@@ -179,7 +186,7 @@
         if (col.field == 'user_id') {
           value = this.extractUser(cellValue).name.toLowerCase()
         }
-        return value.startsWith(searchTerm.toLowerCase())
+        return value.includes(searchTerm.toLowerCase())
       },
       dateFormatter(date) {
         return this.$root.$options.moment(date).format('DD MMMM YYYY');

@@ -41,6 +41,7 @@ func GetDevices(c *gin.Context) {
 	page := c.Query("page")
 	limit := c.Query("limit")
 	hotspotId := c.Query("hotspot")
+	userId := c.Query("user")
 
 	hotspotIdInt, err := strconv.Atoi(hotspotId)
 	if err != nil {
@@ -50,7 +51,13 @@ func GetDevices(c *gin.Context) {
 	offsets := utils.OffsetCalc(page, limit)
 
 	db := database.Database()
-	db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt)).Offset(offsets[0]).Limit(offsets[1]).Find(&devices)
+	chain := db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt))
+
+	if len(userId) > 0 {
+		chain = chain.Where("user_id = ?", userId)
+	}
+
+	chain.Offset(offsets[0]).Limit(offsets[1]).Find(&devices)
 	db.Close()
 
 	if len(devices) <= 0 {

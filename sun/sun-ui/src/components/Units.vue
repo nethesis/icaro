@@ -53,11 +53,8 @@
       unitAction: UnitAtion
     },
     data() {
-      // get unit list
-      this.getAll();
-      this.getAllHotspots();
       return {
-        msg: "Units",
+        msg: this.$i18n.t("menu.units"),
         isLoading: true,
         columns: [{
             label: this.$i18n.t("unit.name"),
@@ -101,8 +98,10 @@
     mounted() {
       if (this.$route.params.hotspotId !== undefined) {
         this.hotspotSearchId = this.$route.params.hotspotId;
-        this.getAll();
       }
+      // get unit list
+      this.getAll();
+      this.getAllHotspots();
     },
     methods: {
       handlePerPage(evt) {
