@@ -365,3 +365,10 @@ a {
 .disabled {
   color: #b1b1b1 !important;
 }
+
+.card-link{
+  color: black;
+}
+.card-link:hover{
+  color: #26a9a3 !important;
+}

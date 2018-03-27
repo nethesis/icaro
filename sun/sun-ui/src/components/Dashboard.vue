@@ -7,8 +7,8 @@
       <div v-if="(user.account_type == 'admin') || (user.account_type == 'reseller')" class="col-xs-12 col-sm-6 col-md-3">
         <div class="card-pf card-pf-accented card-pf-aggregate-status">
           <h2 class="card-pf-title">
-            <a href="#/accounts" class="fa pficon-users"></a>
-            <a href="#/accounts">{{ $t("dashboard.accounts") }}</a>
+            <a href="#/accounts" class="pficon pficon-users card-link"></a>
+            <a href="#/accounts" class="card-link">{{ $t("dashboard.accounts") }}</a>
           </h2>
           <div class="card-pf-body">
             <p class="card-pf-aggregate-status-notifications">
@@ -24,8 +24,8 @@
       <div v-if="(user.account_type == 'admin') || (user.account_type == 'reseller')" class="col-xs-12 col-sm-6 col-md-3">
         <div class="card-pf card-pf-accented card-pf-aggregate-status">
           <h2 class="card-pf-title">
-            <a href="#/hotspots" class="fa fa-wifi"></a>
-            <a href="#/hotspots">{{ $t("dashboard.hotspots") }}</a>
+            <a href="#/hotspots" class="fa fa-wifi card-link"></a>
+            <a href="#/hotspots" class="card-link">{{ $t("dashboard.hotspots") }}</a>
           </h2>
           <div class="card-pf-body">
             <p class="card-pf-aggregate-status-notifications">
@@ -41,8 +41,8 @@
       <div v-if="(user.account_type == 'admin') || (user.account_type == 'reseller') || (user.account_type == 'customer')" class="col-xs-12 col-sm-6 col-md-3">
         <div class="card-pf card-pf-accented card-pf-aggregate-status">
           <h2 class="card-pf-title">
-            <a href="#/units" class="fa pficon-connected"></a>
-            <a href="#/units">{{ $t("dashboard.units") }}</a>
+            <a href="#/units" class="pficon pficon-connected card-link"></a>
+            <a href="#/units" class="card-link">{{ $t("dashboard.units") }}</a>
           </h2>
           <div class="card-pf-body">
             <p class="card-pf-aggregate-status-notifications">
@@ -59,8 +59,8 @@
         class="col-xs-12 col-sm-6 col-md-3">
         <div class="card-pf card-pf-accented card-pf-aggregate-status">
           <h2 class="card-pf-title">
-            <a href="#/users" class="fa fa-users"></a>
-            <a href="#/users">{{ $t("dashboard.users") }}</a>
+            <a href="#/users" class="fa fa-users card-link"></a>
+            <a href="#/users" class="card-link">{{ $t("dashboard.users") }}</a>
           </h2>
           <div class="card-pf-body">
             <p class="card-pf-aggregate-status-notifications">
@@ -94,8 +94,8 @@
       <div v-if="(user.account_type == 'admin') || (user.account_type == 'reseller') || (user.account_type == 'customer')" class="col-xs-12 col-sm-6 col-md-3">
         <div class="card-pf card-pf-accented card-pf-aggregate-status">
           <h2 class="card-pf-title">
-            <a href="#/sessions" class="fa fa-list"></a>
-            <a href="#/sessions">{{ $t("dashboard.sessions") }}</a>
+            <a href="#/sessions" class="fa fa-list card-link"></a>
+            <a href="#/sessions" class="card-link">{{ $t("dashboard.sessions") }}</a>
           </h2>
           <div class="card-pf-body">
             <p class="card-pf-aggregate-status-notifications">

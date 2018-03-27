@@ -668,11 +668,4 @@ textarea {
   resize: vertical;
 }
 
-.card-link{
-  color: black;
-}
-.card-link:hover{
-  color: #26a9a3;
-}
-
 </style>
