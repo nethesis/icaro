@@ -2,7 +2,7 @@
     "it": {
         "splash": {
             "retrieve_info": "Recupero le informazioni",
-            "start_navigate": "Inizia a Navigare",
+            "start_navigate": "Naviga",
             "main_error": "Alcuni parametri mancanti.Impossibile procedere-",
             "main_error_sub": "Errori durante l'apertura della pagina"
         },
@@ -31,7 +31,7 @@
             "code": "Codice",
             "get_code": "Richiedi Codice",
             "reset_code": "Forza l'invio di un nuovo Codice",
-            "start_navigate": "Inizia a Navigare",
+            "start_navigate": "Naviga",
             "error_code": "Errore nell'invio del codice di verifica",
             "error_code_sub": "Problemi nell'invio della email, ricontrolla il tuo indirizzo",
             "auth_progress": "Autorizzazione in corso",
@@ -47,7 +47,7 @@
             "code": "Codice",
             "get_code": "Richiedi Codice",
             "reset_code": "Forza l'invio di un nuovo Codice",
-            "start_navigate": "Inizia a Navigare",
+            "start_navigate": "Naviga",
             "error_code": "Errore nell'invio del codice di verifica",
             "error_code_sub": "Problemi nell'invio dell' SMS, ricordati di selezionare correttamente il tuo prefisso internazionale con il sistema a bandierine)",
             "auth_progress": "Autorizzazione in corso",
