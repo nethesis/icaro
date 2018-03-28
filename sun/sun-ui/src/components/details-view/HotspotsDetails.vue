@@ -117,7 +117,7 @@
                 </td>
                 <td class="fancy">{{ props.row.duration }} ({{$t('hotspot.days')}})</td>
                 <td>
-                  <button v-on:click="printVoucher(props.row.code)" class="btn btn-primary" type="button">
+                  <button v-on:click="printVoucher(props.row)" class="btn btn-primary" type="button">
                     <span class="fa fa-print"></span>
                   </button>
                   <button v-on:click="deleteVoucher(props.row.id)" class="btn btn-danger" type="button">
@@ -692,12 +692,27 @@
         var v = 0
         var doc = new jsPDF("portrait", "mm", "a4");
         doc.setFontSize(22);
-        doc.text(20, 18, '-'.repeat(20))
+        doc.text(20, 18, '-'.repeat(60))
         doc.setFontSize(15);
+
         doc.text(20, (v + 1) * (2.5) + 20, this.$i18n.t('hotspot.voucher_code'));
+        doc.text(60, (v + 1) * (2.5) + 20, this.$i18n.t('hotspot.bandwidth_limit'));
+        doc.text(120, (v + 1) * (2.5) + 20, this.$i18n.t('hotspot.duration'));
+        doc.text(150, (v + 1) * (2.5) + 20, this.$i18n.t('hotspot.auto_login'));
+
         doc.setFontSize(22);
-        doc.text(20, (v + 1) * (2.5) + 30, voucher);
-        doc.text(20, (v + 1) * (2.5) + 38, '-'.repeat(20))
+        doc.text(20, (v + 1) * (2.5) + 30, voucher.code);
+
+        doc.setFontSize(15);
+        doc.text(60, (v + 1) * (2.5) + 30, 'Down: ' + (voucher.bandwidth_down ? voucher.bandwidth_down : '-') +
+          '   Up: ' + (voucher.bandwidth_up ? voucher.bandwidth_up : '-'));
+        doc.text(120, (v + 1) * (2.5) + 30, voucher.duration.toString() + ' ' + this.$i18n.t('hotspot.days'));
+        doc.text(150, (v + 1) * (2.5) + 30, voucher.auto_login ? this.$i18n.t('hotspot.yes') : this.$i18n.t(
+          'hotspot.no'));
+
+        doc.setFontSize(22);
+        doc.text(20, (v + 1) * (2.5) + 38, '-'.repeat(60))
+
         doc.autoPrint();
         window.open(doc.output('bloburl'), '_blank');
       },
@@ -712,12 +727,26 @@
           }
 
           doc.setFontSize(22);
-          doc.text(20, 18, '-'.repeat(20))
+          doc.text(20, 18, '-'.repeat(60))
           doc.setFontSize(15);
+
           doc.text(20, (((v % 11) + 1) * (2.5) + 20) + (22.5 * (v % 11)), this.$i18n.t('hotspot.voucher_code'));
+          doc.text(60, (((v % 11) + 1) * (2.5) + 20) + (22.5 * (v % 11)), this.$i18n.t('hotspot.bandwidth_limit'));
+          doc.text(120, (((v % 11) + 1) * (2.5) + 20) + (22.5 * (v % 11)), this.$i18n.t('hotspot.duration'));
+          doc.text(150, (((v % 11) + 1) * (2.5) + 20) + (22.5 * (v % 11)), this.$i18n.t('hotspot.auto_login'));
+
           doc.setFontSize(22);
           doc.text(20, (((v % 11) + 1) * (2.5) + 30) + (22.5 * (v % 11)), voucher.code);
-          doc.text(20, (((v % 11) + 1) * (2.5) + 38) + (22.5 * (v % 11)), '-'.repeat(20))
+
+          doc.setFontSize(15);
+          doc.text(60, (((v % 11) + 1) * (2.5) + 30) + (22.5 * (v % 11)), 'Down: ' + (voucher.bandwidth_down ? voucher.bandwidth_down : '-') +
+            '   Up: ' + (voucher.bandwidth_up ? voucher.bandwidth_up : '-'));
+          doc.text(120, (((v % 11) + 1) * (2.5) + 30) + (22.5 * (v % 11)), voucher.duration.toString() + ' ' + this.$i18n.t('hotspot.days'));
+          doc.text(150, (((v % 11) + 1) * (2.5) + 30) + (22.5 * (v % 11)), voucher.auto_login ? this.$i18n.t('hotspot.yes') : this.$i18n.t(
+            'hotspot.no'));
+
+          doc.setFontSize(22);
+          doc.text(20, (((v % 11) + 1) * (2.5) + 38) + (22.5 * (v % 11)), '-'.repeat(60))
         }
         doc.autoPrint();
         window.open(doc.output('bloburl'), '_blank');
