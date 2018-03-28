@@ -188,6 +188,7 @@
       "units": "Units",
       "devices": "Devices",
       "sessions": "Sessions",
+      "reports": "Reports",
       "help": "Help",
       "profile": "Profile",
       "about": "About",
@@ -199,6 +200,15 @@
       "mac_address": "MAC Address",
       "ip_address": "IP Address",
       "created": "Created"
+    },
+    "report": {
+      "reports": "Reports",
+      "statistic": "Statistics",
+      "session": "Sessions",
+      "new_user": "New Users",
+      "last_7_days": "Last 7 Days",
+      "last_15_days": "Last 15 Days",
+      "last_month": "Last Month"
     },
     "sessions": "Sessions",
     "help": "Help",

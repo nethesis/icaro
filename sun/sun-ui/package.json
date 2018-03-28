@@ -11,10 +11,13 @@
   },
   "dependencies": {
     "jspdf": "^1.3.5",
+    "moment": "^2.21.0",
+    "moment-range": "^3.1.1",
     "patternfly": "^3.37.10",
     "semantic-ui-offline": "^2.2.1-3.4",
     "vue": "^2.5.2",
     "vue-bootstrap-datetimepicker": "^4.1.2",
+    "vue-chart-js": "^1.4.1",
     "vue-color": "^2.4.4",
     "vue-good-table": "^1.21.0",
     "vue-i18n": "^7.4.1",
