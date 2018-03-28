@@ -1,10 +1,10 @@
 <template>
   <div>
     <h2>{{msg}}</h2>
-    <div v-if="isLoading" class="spinner spinner-lg"></div>
-    <div v-if="(user.account_type == 'admin') || (user.account_type == 'reseller')" class="row select-search">
-      <label class="col-sm-2 control-label" for="textInput-markup">Hotspot</label>
-      <div class="col-sm-4">
+    <div v-if="isChartLoading" class="spinner spinner-lg"></div>
+    <div v-if="(user.account_type == 'admin') || (user.account_type == 'reseller') && !isChartLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <label v-if="!isChartLoading" class="col-sm-2 control-label" for="textInput-markup">Hotspot</label>
+      <div v-if="!isChartLoading" class="col-sm-4">
         <select v-on:change="getSessionsByDate()" v-model="hotspotSearchId" class="form-control">
           <option value="0">-</option>
           <option v-for="hotspot in hotspots" v-bind:key="hotspot.id" v-bind:value="hotspot.id">
@@ -13,20 +13,17 @@
         </select>
       </div>
     </div>
-    <br>
-    <div v-if="(user.account_type == 'admin') || (user.account_type == 'reseller')" class="row select-search">
-      <label class="col-sm-2 control-label" for="textInput-markup" id="lbl-date-range">
+    <div v-if="(user.account_type == 'admin') || (user.account_type == 'reseller') && !isChartLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <label v-if="!isChartLoading" class="col-sm-2 control-label" for="textInput-markup" id="lbl-date-range">
         <p>{{dataPoints.from.format('DD MMM YYYY')}}</p> -
         <p>{{dataPoints.to.format('DD MMM YYYY')}}</p>
       </label>
-      <div class="col-sm-4">
+      <div v-if="!isChartLoading" class="col-sm-4">
         <select v-on:change="getSessionsByDate()" class="form-control" v-model="dateRangeSearchId">
           <option v-for="dateRang in dateRangs" v-bind:key="dateRang.value" v-bind:value="dateRang.value">{{dateRang.display}}</option>
         </select>
       </div>
     </div>
-    <br>
-    <div v-if="isChartLoading" class="spinner spinner-lg"></div>
     <div v-if="!isChartLoading">
       <div class="panel-heading">
         <h1 class="panel-title">{{ $t('report.statistic') }}</h1>
@@ -61,7 +58,6 @@
         range: null,
         sessionToShow: [],
         newUsersToShow: [],
-        isLoading: true,
         isChartLoading: true,
         msg: this.$i18n.t('report.reports'),
         dataPoints: {
@@ -187,7 +183,6 @@
             this.getNewUsers()
           },
           error => {
-            this.isLoading = false;
             this.sessions = [];
             this.getNewUsers()
             console.log(error);
@@ -201,7 +196,6 @@
           this.implementDataInChart();
           this.isChartLoading = false;
         }, error => {
-          this.isLoading = false
           this.isChartLoading = false
           this.newUsers = []
           this.implementDataInChart();
@@ -213,7 +207,6 @@
           success => {
             this.hotspots = success.body;
             $('[data-toggle="tooltip"]').tooltip();
-            this.isLoading = false;
           },
           error => {
             console.log(error);
