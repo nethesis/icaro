@@ -133,15 +133,17 @@ func FacebookAuth(c *gin.Context) {
 		if len(voucherCode) > 0 {
 			voucher := utils.GetVoucherByCode(voucherCode, unit.HotspotId)
 
-			daysInt = voucher.Duration
-			downInt = voucher.BandwidthDown
-			upInt = voucher.BandwidthUp
-			autoLoginBool = voucher.AutoLogin
+			if voucher.Id > 0 {
+				daysInt = voucher.Duration
+				downInt = voucher.BandwidthDown
+				upInt = voucher.BandwidthUp
+				autoLoginBool = voucher.AutoLogin
 
-			// delete voucher
-			db := database.Database()
-			db.Delete(&voucher)
-			db.Close()
+				// delete voucher
+				db := database.Database()
+				db.Delete(&voucher)
+				db.Close()
+			}
 		}
 
 		newUser := models.User{
@@ -183,15 +185,17 @@ func FacebookAuth(c *gin.Context) {
 		if len(voucherCode) > 0 {
 			voucher := utils.GetVoucherByCode(voucherCode, user.HotspotId)
 
-			user.ValidUntil = time.Now().UTC().AddDate(0, 0, voucher.Duration)
-			user.KbpsDown = voucher.BandwidthDown
-			user.KbpsUp = voucher.BandwidthUp
-			user.AutoLogin = voucher.AutoLogin
+			if voucher.Id > 0 {
+				user.ValidUntil = time.Now().UTC().AddDate(0, 0, voucher.Duration)
+				user.KbpsDown = voucher.BandwidthDown
+				user.KbpsUp = voucher.BandwidthUp
+				user.AutoLogin = voucher.AutoLogin
 
-			// delete voucher
-			db := database.Database()
-			db.Delete(&voucher)
-			db.Close()
+				// delete voucher
+				db := database.Database()
+				db.Delete(&voucher)
+				db.Close()
+			}
 		}
 	}
 
@@ -283,15 +287,17 @@ func LinkedInAuth(c *gin.Context) {
 		if len(voucherCode) > 0 {
 			voucher := utils.GetVoucherByCode(voucherCode, unit.HotspotId)
 
-			daysInt = voucher.Duration
-			downInt = voucher.BandwidthDown
-			upInt = voucher.BandwidthUp
-			autoLoginBool = voucher.AutoLogin
+			if voucher.Id > 0 {
+				daysInt = voucher.Duration
+				downInt = voucher.BandwidthDown
+				upInt = voucher.BandwidthUp
+				autoLoginBool = voucher.AutoLogin
 
-			// delete voucher
-			db := database.Database()
-			db.Delete(&voucher)
-			db.Close()
+				// delete voucher
+				db := database.Database()
+				db.Delete(&voucher)
+				db.Close()
+			}
 		}
 
 		newUser := models.User{
@@ -333,15 +339,17 @@ func LinkedInAuth(c *gin.Context) {
 		if len(voucherCode) > 0 {
 			voucher := utils.GetVoucherByCode(voucherCode, user.HotspotId)
 
-			user.ValidUntil = time.Now().UTC().AddDate(0, 0, voucher.Duration)
-			user.KbpsDown = voucher.BandwidthDown
-			user.KbpsUp = voucher.BandwidthUp
-			user.AutoLogin = voucher.AutoLogin
+			if voucher.Id > 0 {
+				user.ValidUntil = time.Now().UTC().AddDate(0, 0, voucher.Duration)
+				user.KbpsDown = voucher.BandwidthDown
+				user.KbpsUp = voucher.BandwidthUp
+				user.AutoLogin = voucher.AutoLogin
 
-			// delete voucher
-			db := database.Database()
-			db.Delete(&voucher)
-			db.Close()
+				// delete voucher
+				db := database.Database()
+				db.Delete(&voucher)
+				db.Close()
+			}
 		}
 	}
 
@@ -425,15 +433,17 @@ func InstagramAuth(c *gin.Context) {
 		if len(voucherCode) > 0 {
 			voucher := utils.GetVoucherByCode(voucherCode, unit.HotspotId)
 
-			daysInt = voucher.Duration
-			downInt = voucher.BandwidthDown
-			upInt = voucher.BandwidthUp
-			autoLoginBool = voucher.AutoLogin
+			if voucher.Id > 0 {
+				daysInt = voucher.Duration
+				downInt = voucher.BandwidthDown
+				upInt = voucher.BandwidthUp
+				autoLoginBool = voucher.AutoLogin
 
-			// delete voucher
-			db := database.Database()
-			db.Delete(&voucher)
-			db.Close()
+				// delete voucher
+				db := database.Database()
+				db.Delete(&voucher)
+				db.Close()
+			}
 		}
 
 		newUser := models.User{
@@ -475,15 +485,17 @@ func InstagramAuth(c *gin.Context) {
 		if len(voucherCode) > 0 {
 			voucher := utils.GetVoucherByCode(voucherCode, user.HotspotId)
 
-			user.ValidUntil = time.Now().UTC().AddDate(0, 0, voucher.Duration)
-			user.KbpsDown = voucher.BandwidthDown
-			user.KbpsUp = voucher.BandwidthUp
-			user.AutoLogin = voucher.AutoLogin
+			if voucher.Id > 0 {
+				user.ValidUntil = time.Now().UTC().AddDate(0, 0, voucher.Duration)
+				user.KbpsDown = voucher.BandwidthDown
+				user.KbpsUp = voucher.BandwidthUp
+				user.AutoLogin = voucher.AutoLogin
 
-			// delete voucher
-			db := database.Database()
-			db.Delete(&voucher)
-			db.Close()
+				// delete voucher
+				db := database.Database()
+				db.Delete(&voucher)
+				db.Close()
+			}
 		}
 	}
 

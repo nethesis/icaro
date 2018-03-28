@@ -122,7 +122,7 @@ func Login(c *gin.Context, unitMacAddress string, username string, chapPass stri
 	}
 
 	// check if hotspot belongs to a reseller with a valid plan
-	if ! utils.HotspotHasValidSubscription(user.HotspotId) {
+	if !utils.HotspotHasValidSubscription(user.HotspotId) {
 		AuthReject(c, "reseller account is expired")
 		return
 	}
@@ -155,7 +155,6 @@ func Logins(c *gin.Context) {
 		userMac := c.Query("mac")
 		sessionId := c.Query("sessionid")
 		autoLogin(c, unitMacAddress, user, userMac, sessionId)
-		c.String(http.StatusForbidden, "Autologin disabled")
 
 	case "login":
 		unitMacAddress := c.Query("ap")

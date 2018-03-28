@@ -80,15 +80,17 @@ func SMSAuth(c *gin.Context) {
 		if len(voucherCode) > 0 {
 			voucher := utils.GetVoucherByCode(voucherCode, unit.HotspotId)
 
-			daysInt = voucher.Duration
-			downInt = voucher.BandwidthDown
-			upInt = voucher.BandwidthUp
-			autoLoginBool = voucher.AutoLogin
+			if voucher.Id > 0 {
+				daysInt = voucher.Duration
+				downInt = voucher.BandwidthDown
+				upInt = voucher.BandwidthUp
+				autoLoginBool = voucher.AutoLogin
 
-			// delete voucher
-			db := database.Database()
-			db.Delete(&voucher)
-			db.Close()
+				// delete voucher
+				db := database.Database()
+				db.Delete(&voucher)
+				db.Close()
+			}
 		}
 
 		// generate code
@@ -140,15 +142,17 @@ func SMSAuth(c *gin.Context) {
 		if len(voucherCode) > 0 {
 			voucher := utils.GetVoucherByCode(voucherCode, user.HotspotId)
 
-			user.ValidUntil = time.Now().UTC().AddDate(0, 0, voucher.Duration)
-			user.KbpsDown = voucher.BandwidthDown
-			user.KbpsUp = voucher.BandwidthUp
-			user.AutoLogin = voucher.AutoLogin
+			if voucher.Id > 0 {
+				user.ValidUntil = time.Now().UTC().AddDate(0, 0, voucher.Duration)
+				user.KbpsDown = voucher.BandwidthDown
+				user.KbpsUp = voucher.BandwidthUp
+				user.AutoLogin = voucher.AutoLogin
 
-			// delete voucher
-			db := database.Database()
-			db.Delete(&voucher)
-			db.Close()
+				// delete voucher
+				db := database.Database()
+				db.Delete(&voucher)
+				db.Close()
+			}
 		}
 
 		// check if is reset
@@ -219,15 +223,17 @@ func EmailAuth(c *gin.Context) {
 		if len(voucherCode) > 0 {
 			voucher := utils.GetVoucherByCode(voucherCode, unit.HotspotId)
 
-			daysInt = voucher.Duration
-			downInt = voucher.BandwidthDown
-			upInt = voucher.BandwidthUp
-			autoLoginBool = voucher.AutoLogin
+			if voucher.Id > 0 {
+				daysInt = voucher.Duration
+				downInt = voucher.BandwidthDown
+				upInt = voucher.BandwidthUp
+				autoLoginBool = voucher.AutoLogin
 
-			// delete voucher
-			db := database.Database()
-			db.Delete(&voucher)
-			db.Close()
+				// delete voucher
+				db := database.Database()
+				db.Delete(&voucher)
+				db.Close()
+			}
 		}
 
 		// generate code
@@ -279,15 +285,17 @@ func EmailAuth(c *gin.Context) {
 		if len(voucherCode) > 0 {
 			voucher := utils.GetVoucherByCode(voucherCode, user.HotspotId)
 
-			user.ValidUntil = time.Now().UTC().AddDate(0, 0, voucher.Duration)
-			user.KbpsDown = voucher.BandwidthDown
-			user.KbpsUp = voucher.BandwidthUp
-			user.AutoLogin = voucher.AutoLogin
+			if voucher.Id > 0 {
+				user.ValidUntil = time.Now().UTC().AddDate(0, 0, voucher.Duration)
+				user.KbpsDown = voucher.BandwidthDown
+				user.KbpsUp = voucher.BandwidthUp
+				user.AutoLogin = voucher.AutoLogin
 
-			// delete voucher
-			db := database.Database()
-			db.Delete(&voucher)
-			db.Close()
+				// delete voucher
+				db := database.Database()
+				db.Delete(&voucher)
+				db.Close()
+			}
 		}
 
 		// check if is reset

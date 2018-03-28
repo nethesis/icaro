@@ -180,7 +180,8 @@
       "from": "From",
       "to": "To",
       "ip_address": "IP Address",
-      "export_csv": "Export CSV"
+      "export_csv": "Export CSV",
+      "refresh": "Refresh"
     },
     "menu": {
       "dashboard": "Dashboard",
