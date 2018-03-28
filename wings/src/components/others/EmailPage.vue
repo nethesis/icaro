@@ -77,6 +77,16 @@
         name: 'EmailPage',
         mixins: [AuthMixin],
         data() {
+            var params = this.extractParams()
+
+            this.getPreferences(params, success => {
+                this.$parent.hotspot.disclaimers = success.body.disclaimers
+                this.$root.$options.hotspot.disclaimers = success.body.disclaimers
+                this.hotspot.disclaimers = success.body.disclaimers
+            }, error => {
+                console.error(error)
+            })
+
             return {
                 authorized: false,
                 codeRequested: this.$route.query.code || false,
@@ -84,6 +94,7 @@
                 authEmail: this.$route.query.email || '',
                 authCode: this.$route.query.code || '',
                 authReset: this.$route.query.code || false,
+                userId: this.$route.query.user || 0,
                 resetDone: false,
                 errors: {
                     badMail: false,
@@ -175,6 +186,9 @@
                     this.accept()
                 }, function (error) {
                     console.error(error)
+                    if (error.status == 404) {
+                        this.accept()
+                    }
                 })
             },
             accept() {

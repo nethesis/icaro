@@ -54,7 +54,7 @@
               <div class="form-group">
                 <label class="col-sm-4 control-label" for="textInput-modal-markup">{{ $t("hotspot.name") }}</label>
                 <div class="col-sm-8">
-                  <input required v-model="newObj.name" pattern="^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$" type="text" id="textInput-modal-markup" class="form-control" :placeholder="$t('hotspot.name')">
+                  <input required v-model="newObj.name" pattern="^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$" type="text" id="textInput-modal-markup" class="form-control" :placeholder="$t('hotspot.hostname_hotspot')">
                 </div>
               </div>
               <div class="form-group">

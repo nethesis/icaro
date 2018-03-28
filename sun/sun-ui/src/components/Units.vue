@@ -90,7 +90,7 @@
         rows: [],
         tableLangsTexts: this.tableLangs(),
         hotspots: [],
-        hotspotSearchId: 0,
+        hotspotSearchId: this.get('units_hotspot_id') || 0,
         hotspotPerPage: this.get('units_per_page') || 25,
         user: this.get("loggedUser") || null
       };
@@ -120,6 +120,8 @@
         );
       },
       getAll() {
+        this.set('units_hotspot_id', this.hotspotSearchId || this.get('units_hotspot_id') || 0)
+
         this.unitGetAll(
           this.hotspotSearchId,
           success => {

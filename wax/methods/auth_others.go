@@ -49,6 +49,8 @@ func SMSAuth(c *gin.Context) {
 	uuid := c.Query("uuid")
 	sessionId := c.Query("sessionid")
 	reset := c.Query("reset")
+	uamip := c.Query("uamip")
+	uamport := c.Query("uamport")
 	voucherCode := c.Query("voucher_code")
 
 	if number == "" {
@@ -61,18 +63,6 @@ func SMSAuth(c *gin.Context) {
 	if user.Id == 0 {
 		// get unit
 		unit := utils.GetUnitByUuid(uuid)
-
-		// generate code
-		code := utils.GenerateCode(6)
-
-		// send sms with code
-		status := utils.SendSMSCode(number, code, unit, "digest="+digest+"&uuid="+uuid+"&sessionid="+sessionId)
-
-		// check response
-		if status != 201 {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "authorization code not send"})
-			return
-		}
 
 		// create user
 		days := utils.GetHotspotPreferencesByKey(unit.HotspotId, "user_expiration_days")
@@ -101,6 +91,9 @@ func SMSAuth(c *gin.Context) {
 			db.Close()
 		}
 
+		// generate code
+		code := utils.GenerateCode(6)
+
 		newUser := models.User{
 			HotspotId:   unit.HotspotId,
 			Name:        number,
@@ -115,6 +108,16 @@ func SMSAuth(c *gin.Context) {
 			ValidUntil:  time.Now().UTC().AddDate(0, 0, daysInt),
 		}
 		newUser.Id = methods.CreateUser(newUser)
+
+		// send sms with code
+		userIdStr := strconv.Itoa(newUser.Id)
+		status := utils.SendSMSCode(number, code, unit, "digest="+digest+"&uuid="+uuid+"&sessionid="+sessionId+"&uamip="+uamip+"&uamport="+uamport+"&user="+userIdStr)
+
+		// check response
+		if status != 201 {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "authorization code not send"})
+			return
+		}
 
 		// create marketing info with user infos
 		utils.CreateUserMarketing(newUser.Id, smsMarketingData{Number: number}, "sms")
@@ -133,6 +136,21 @@ func SMSAuth(c *gin.Context) {
 		// create marketing info with user infos
 		utils.CreateUserMarketing(user.Id, smsMarketingData{Number: number}, "sms")
 
+		// retrieve voucher
+		if len(voucherCode) > 0 {
+			voucher := utils.GetVoucherByCode(voucherCode, user.HotspotId)
+
+			user.ValidUntil = time.Now().UTC().AddDate(0, 0, voucher.Duration)
+			user.KbpsDown = voucher.BandwidthDown
+			user.KbpsUp = voucher.BandwidthUp
+			user.AutoLogin = voucher.AutoLogin
+
+			// delete voucher
+			db := database.Database()
+			db.Delete(&voucher)
+			db.Close()
+		}
+
 		// check if is reset
 		if reset == "true" {
 			// get unit
@@ -142,7 +160,9 @@ func SMSAuth(c *gin.Context) {
 			code := utils.GenerateCode(6)
 
 			// send sms with code
-			status := utils.SendSMSCode(number, code, unit, "digest="+digest+"&uuid="+uuid+"&sessionid="+sessionId)
+			userIdStr := strconv.Itoa(user.Id)
+			status := utils.SendSMSCode(number, code, unit, "digest="+digest+"&uuid="+uuid+"&sessionid="+sessionId+"&uamip="+uamip+"&uamport="+uamport+"&user="+userIdStr)
+
 			// check response
 			if status != 201 {
 				c.JSON(http.StatusBadRequest, gin.H{"error": "authorization code not send"})
@@ -168,6 +188,8 @@ func EmailAuth(c *gin.Context) {
 	uuid := c.Query("uuid")
 	sessionId := c.Query("sessionid")
 	reset := c.Query("reset")
+	uamip := c.Query("uamip")
+	uamport := c.Query("uamport")
 	voucherCode := c.Query("voucher_code")
 
 	if email == "" {
@@ -180,18 +202,6 @@ func EmailAuth(c *gin.Context) {
 	if user.Id == 0 {
 		// get unit
 		unit := utils.GetUnitByUuid(uuid)
-
-		// generate code
-		code := utils.GenerateCode(6)
-
-		// send email with code
-		status := utils.SendEmailCode(email, code, unit, "digest="+digest+"&uuid="+uuid+"&sessionid="+sessionId)
-
-		// check response
-		if !status {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "authorization code not sent"})
-			return
-		}
 
 		// create user
 		days := utils.GetHotspotPreferencesByKey(unit.HotspotId, "user_expiration_days")
@@ -220,6 +230,9 @@ func EmailAuth(c *gin.Context) {
 			db.Close()
 		}
 
+		// generate code
+		code := utils.GenerateCode(6)
+
 		newUser := models.User{
 			HotspotId:   unit.HotspotId,
 			Name:        email,
@@ -234,6 +247,16 @@ func EmailAuth(c *gin.Context) {
 			ValidUntil:  time.Now().UTC().AddDate(0, 0, daysInt),
 		}
 		newUser.Id = methods.CreateUser(newUser)
+
+		// send email with code
+		userIdStr := strconv.Itoa(newUser.Id)
+		status := utils.SendEmailCode(email, code, unit, "digest="+digest+"&uuid="+uuid+"&sessionid="+sessionId+"&uamip="+uamip+"&uamport="+uamport+"&user="+userIdStr)
+
+		// check response
+		if !status {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "authorization code not sent"})
+			return
+		}
 
 		// create marketing info with user infos
 		utils.CreateUserMarketing(newUser.Id, emailMarketingData{Email: email}, "email")
@@ -252,6 +275,21 @@ func EmailAuth(c *gin.Context) {
 		// create marketing info with user infos
 		utils.CreateUserMarketing(user.Id, emailMarketingData{Email: email}, "email")
 
+		// retrieve voucher
+		if len(voucherCode) > 0 {
+			voucher := utils.GetVoucherByCode(voucherCode, user.HotspotId)
+
+			user.ValidUntil = time.Now().UTC().AddDate(0, 0, voucher.Duration)
+			user.KbpsDown = voucher.BandwidthDown
+			user.KbpsUp = voucher.BandwidthUp
+			user.AutoLogin = voucher.AutoLogin
+
+			// delete voucher
+			db := database.Database()
+			db.Delete(&voucher)
+			db.Close()
+		}
+
 		// check if is reset
 		if reset == "true" {
 			// get unit
@@ -261,7 +299,8 @@ func EmailAuth(c *gin.Context) {
 			code := utils.GenerateCode(6)
 
 			// send email with code
-			status := utils.SendEmailCode(email, code, unit, "digest="+digest+"&uuid="+uuid+"&sessionid="+sessionId)
+			userIdStr := strconv.Itoa(user.Id)
+			status := utils.SendEmailCode(email, code, unit, "digest="+digest+"&uuid="+uuid+"&sessionid="+sessionId+"&uamip="+uamip+"&uamport="+uamport+"&user="+userIdStr)
 
 			// check response
 			if !status {

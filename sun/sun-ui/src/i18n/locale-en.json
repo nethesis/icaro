@@ -34,6 +34,7 @@
       "sms": "SMS sent"
     },
     "hotspot": {
+      "hostname_hotspot": "Only upper and lower case letters, numbers, dots or dash",
       "hotspot": "Hotspot",
       "name": "Name",
       "description": "Description",

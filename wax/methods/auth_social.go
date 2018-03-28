@@ -178,6 +178,21 @@ func FacebookAuth(c *gin.Context) {
 
 		// create marketing info with user infos
 		utils.CreateUserMarketing(user.Id, fbUserDetail, "facebook")
+
+		// retrieve voucher
+		if len(voucherCode) > 0 {
+			voucher := utils.GetVoucherByCode(voucherCode, user.HotspotId)
+
+			user.ValidUntil = time.Now().UTC().AddDate(0, 0, voucher.Duration)
+			user.KbpsDown = voucher.BandwidthDown
+			user.KbpsUp = voucher.BandwidthUp
+			user.AutoLogin = voucher.AutoLogin
+
+			// delete voucher
+			db := database.Database()
+			db.Delete(&voucher)
+			db.Close()
+		}
 	}
 
 	// response to client
@@ -313,6 +328,21 @@ func LinkedInAuth(c *gin.Context) {
 
 		// create marketing info with user infos
 		utils.CreateUserMarketing(user.Id, liUserDetail, "linkedin")
+
+		// retrieve voucher
+		if len(voucherCode) > 0 {
+			voucher := utils.GetVoucherByCode(voucherCode, user.HotspotId)
+
+			user.ValidUntil = time.Now().UTC().AddDate(0, 0, voucher.Duration)
+			user.KbpsDown = voucher.BandwidthDown
+			user.KbpsUp = voucher.BandwidthUp
+			user.AutoLogin = voucher.AutoLogin
+
+			// delete voucher
+			db := database.Database()
+			db.Delete(&voucher)
+			db.Close()
+		}
 	}
 
 	// response to client
@@ -440,6 +470,21 @@ func InstagramAuth(c *gin.Context) {
 
 		// create marketing info with user infos
 		utils.CreateUserMarketing(user.Id, inUserDetail.Data, "instagram")
+
+		// retrieve voucher
+		if len(voucherCode) > 0 {
+			voucher := utils.GetVoucherByCode(voucherCode, user.HotspotId)
+
+			user.ValidUntil = time.Now().UTC().AddDate(0, 0, voucher.Duration)
+			user.KbpsDown = voucher.BandwidthDown
+			user.KbpsUp = voucher.BandwidthUp
+			user.AutoLogin = voucher.AutoLogin
+
+			// delete voucher
+			db := database.Database()
+			db.Delete(&voucher)
+			db.Close()
+		}
 	}
 
 	// response to client

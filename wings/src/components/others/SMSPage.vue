@@ -4,7 +4,7 @@
             <div v-if="!codeRequested" class="inline field" v-bind:class="{ error: errors.badInput }">
                 <label>{{ $t("sms.prefix") }}</label>
                 <div class="ui fluid pointing dropdown labeled search icon button select-state">
-                    <i class="flag icon"></i>
+                    <i class="plus icon"></i>
                     <span class="text">{{$t('sms.select_state')}}</span>
                     <div class="menu">
                         <div @click="setPrefix(c.dial_code)" v-for="c in countries" v-bind:key="c.code" class="item">
@@ -32,7 +32,7 @@
             </div>
             <div v-if="codeRequested">
                 <div class="inline field">
-                    <label>Code</label>
+                    <label>{{$t('sms.code')}}</label>
                     <div class="ui big left icon input">
                         <input v-model="authCode" type="number" :placeholder="$t('sms.insert_your_code')">
                         <i class="braille icon"></i>
@@ -93,6 +93,16 @@
                 .dropdown();
         },
         data() {
+            var params = this.extractParams()
+
+            this.getPreferences(params, success => {
+                this.$parent.hotspot.disclaimers = success.body.disclaimers
+                this.$root.$options.hotspot.disclaimers = success.body.disclaimers
+                this.hotspot.disclaimers = success.body.disclaimers
+            }, error => {
+                console.error(error)
+            })
+
             return {
                 authorized: false,
                 codeRequested: this.$route.query.code || false,
@@ -101,6 +111,7 @@
                 authSMS: this.$route.query.num || '',
                 authCode: this.$route.query.code || '',
                 authReset: this.$route.query.code || false,
+                userId: this.$route.query.user || 0,
                 resetDone: false,
                 errors: {
                     badNumber: false,
@@ -176,6 +187,9 @@
                     this.accept()
                 }, function (error) {
                     console.error(error)
+                    if (error.status == 404) {
+                        this.accept()
+                    }
                 })
             },
             accept() {
@@ -215,8 +229,8 @@
 
     .select-state {
         max-width: 270px;
-        margin: 0 auto;
-        margin-bottom: 1em;
-        margin-top: 0.25em;
+        margin: 0 auto !important;
+        margin-bottom: 1em !important;
+        margin-top: 0.25em !important;
     }
 </style>
