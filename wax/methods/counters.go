@@ -33,6 +33,7 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 
 	"github.com/nethesis/icaro/sun/sun-api/database"
+	"github.com/nethesis/icaro/sun/sun-api/models"
 	"github.com/nethesis/icaro/wax/utils"
 )
 
@@ -143,6 +144,28 @@ func updateSession(sessionId string, unitMacAddress string, bytesDown string, by
 	return 1
 }
 
+func accountingOn(ap string) int {
+
+	var sessions []models.Session
+
+	unit := utils.GetUnitByMacAddress(ap)
+	if unit.Id <= 0 {
+		return 0
+	}
+
+	db := database.Database()
+	db.Where("unit_id = ? and stop_time = 0", unit.Id).Find(&sessions)
+
+	for i, _ := range sessions {
+		sessions[i].StopTime = time.Now().UTC()
+		db.Save(&sessions[i])
+	}
+
+	db.Close()
+
+	return 1
+}
+
 func Counters(c *gin.Context, parameters url.Values) {
 	status := parameters.Get("status")
 
@@ -162,6 +185,8 @@ func Counters(c *gin.Context, parameters url.Values) {
 		Ack(c, stopSession(c.Query("sessionid"), c.Query("ap"), c.Query("bytes_down"), c.Query("bytes_up"), c.Query("duration")))
 	case "update":
 		Ack(c, updateSession(c.Query("sessionid"), c.Query("ap"), c.Query("bytes_down"), c.Query("bytes_up"), c.Query("duration")))
+	case "up":
+		Ack(c, accountingOn(c.Query("ap")))
 	case "":
 		c.String(http.StatusBadRequest, "No status provided")
 	default:
