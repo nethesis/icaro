@@ -7,7 +7,7 @@ var UtilService = {
         ofText: this.$i18n.t('of'),
         rowsPerPageText: this.$i18n.t('rows_per_page'),
         globalSearchPlaceholder: this.$i18n.t('search'),
-        allText:  this.$i18n.t('all')
+        allText: this.$i18n.t('all')
       }
     },
     uploadImageLangs() {
@@ -51,6 +51,9 @@ var UtilService = {
       switch (userType) {
         case 'facebook':
           icon = 'fa fa-facebook'
+          break;
+        case 'instagram':
+          icon = 'fa fa-instagram'
           break;
         case 'linkedin':
           icon = 'fa fa-linkedin'
