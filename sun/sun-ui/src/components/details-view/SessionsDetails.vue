@@ -95,15 +95,15 @@
             <div class="card-pf-body">
               <div class="list-details">
                 <dt>{{ $t("session.username") }}</dt>
-                <dd>{{ info.user.username || "" }}</dd>
+                <dd>{{ info.user.username || info.data.username || "-" }}</dd>
               </div>
               <div class="list-details">
                 <dt>{{ $t("session.user_name") }}</dt>
-                <dd>{{ info.user.name || "" }}</dd>
+                <dd>{{ info.user.name || "-" }}</dd>
               </div>
               <div class="list-details">
                 <dt>{{ $t("session.created") }}</dt>
-                <dd>{{info.user.created  || ""  | formatDate}}</dd>
+                <dd>{{info.user.created  || "-"  | formatDate}}</dd>
               </div>
             </div>
           </div>
@@ -119,15 +119,15 @@
             <div class="card-pf-body">
               <div class="list-details">
                 <dt>{{ $t("session.ip_address") }}</dt>
-                <dd>{{info.device.ip_address || ""}}</dd>
+                <dd>{{info.device.ip_address || "-"}}</dd>
               </div>
               <div class="list-details">
                 <dt>{{ $t("session.mac_address") }}</dt>
-                <dd>{{info.device.mac_address || ""}}</dd>
+                <dd>{{info.device.mac_address || info.data.device_mac || "-"}}</dd>
               </div>
               <div class="list-details">
                 <dt>{{ $t("session.created") }}</dt>
-                <dd>{{info.device.created || "" | formatDate}}</dd>
+                <dd>{{info.device.created || "-" | formatDate}}</dd>
               </div>
             </div>
           </div>

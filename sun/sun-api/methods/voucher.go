@@ -25,7 +25,6 @@ package methods
 import (
 	"net/http"
 	"strconv"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
@@ -45,8 +44,11 @@ func CreateVoucher(c *gin.Context) {
 	}
 
 	hotspotVoucher := models.HotspotVoucher{
-		Code:    json.Code,
-		Expires: time.Time{},
+		Code:          json.Code,
+		AutoLogin:     json.AutoLogin,
+		BandwidthUp:   json.BandwidthUp,
+		BandwidthDown: json.BandwidthDown,
+		Duration:      json.Duration,
 	}
 
 	hotspotVoucher.HotspotId = json.HotspotId
@@ -83,7 +85,7 @@ func GetVouchers(c *gin.Context) {
 	offsets := utils.OffsetCalc(page, limit)
 
 	db := database.Database()
-	db.Where("hotspot_id in (?) AND (expires >= now() OR expires = \"0000-00-00 00:00:00\")", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt)).Offset(offsets[0]).Limit(offsets[1]).Find(&hotspotVouchers)
+	db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt)).Offset(offsets[0]).Limit(offsets[1]).Find(&hotspotVouchers)
 	db.Close()
 
 	if len(hotspotVouchers) <= 0 {

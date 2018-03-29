@@ -53,6 +53,11 @@
       </div>
     </div>
     <div v-if="!isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <div class="col-sm-3">
+        <button class="btn btn-primary" @click="getAll()">{{$t('session.refresh')}}</button>
+      </div>
+    </div>
+    <div v-if="!isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
       <div class="col-sm-12">
         <button @click="exportCSV()" class="btn btn-primary export-btn">{{$t('session.export_csv')}}</button>
       </div>
@@ -64,13 +69,13 @@
       :ofText="tableLangsTexts.ofText">
       <template slot="table-row" slot-scope="props">
         <td class="fancy">
-          <a :href="'#/sessions/'+ props.row.id">{{ extractUnit(props.row.unit_id) && extractUnit(props.row.unit_id).description || '-'}}</a>
+          <a :href="'#/units/'+ props.row.unit_id">{{ extractUnit(props.row.unit_id) && extractUnit(props.row.unit_id).name || '-'}}</a>
         </td>
         <td class="fancy">
-          <a :href="'#/sessions/'+ props.row.id">{{ extractUser(props.row.user_id) && extractUser(props.row.user_id).name || '-'}}</a>
+          <a :href="'#/sessions/'+ props.row.id">{{ props.row.username || '-'}}</a>
         </td>
-        <td class="fancy">{{ props.row.bytes_up | byteFormat}}</td>
-        <td class="fancy">{{ props.row.bytes_down | byteFormat }}</td>
+        <td class="fancy">{{ props.row.bytes_down | byteFormat}}</td>
+        <td class="fancy">{{ props.row.bytes_up | byteFormat }}</td>
         <td class="fancy">{{ props.row.duration | secondsInHour }}</td>
         <td class="fancy">{{ props.row.start_time | formatDate }}</td>
         <td class="fancy">{{ props.row.update_time | formatDate }}</td>
@@ -112,17 +117,17 @@
             sortable: false
           }, {
             label: this.$i18n.t('session.user'),
-            field: 'user_id',
+            field: 'username',
             filterable: true,
             sortable: false
           }, {
-            label: this.$i18n.t('session.bytes_up'),
-            field: 'bytes_up',
+            label: this.$i18n.t('session.bytes_down'),
+            field: 'bytes_down',
             type: 'number',
             filterable: true,
           }, {
-            label: this.$i18n.t('session.bytes_down'),
-            field: 'bytes_down',
+            label: this.$i18n.t('session.bytes_up'),
+            field: 'bytes_up',
             type: 'number',
             filterable: true,
           }, {
@@ -171,7 +176,6 @@
       this.getAllHotspots()
       this.getAllUsers()
       this.getAllUnits()
-
     },
     methods: {
       handlePerPage(evt) {

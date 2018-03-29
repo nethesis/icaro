@@ -73,7 +73,9 @@ func startSession(userName string, deviceMacAddress string, deviceIp string, ses
 	session.UnitId = unit.Id
 	session.HotspotId = unit.HotspotId
 	session.DeviceId = device.Id
+	session.DeviceMAC = device.MacAddress
 	session.UserId = user.Id
+	session.Username = user.Username
 	session.BytesUp = 0
 	session.BytesDown = 0
 	session.StartTime = time.Now().UTC()

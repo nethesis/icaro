@@ -30,7 +30,9 @@ type SessionHistory struct {
 	UnitId     int       `db:"unit_id" json:"unit_id"`
 	HotspotId  int       `db:"hotspot_id" json:"hotspot_id"`
 	DeviceId   int       `db:"device_id" json:"device_id"`
+	DeviceMAC  string    `db:"device_mac" json:"device_mac"`
 	UserId     int       `db:"user_id" json:"user_id"`
+	Username   string    `db:"username" json:"username"`
 	BytesUp    int       `db:"bytes_up" json:"bytes_up"`
 	BytesDown  int       `db:"bytes_down" json:"bytes_down"`
 	Duration   int       `db:"duration" json:"duration"`

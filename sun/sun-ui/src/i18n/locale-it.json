@@ -14,11 +14,11 @@
       "profile": "Profilo",
       "user": "Utente",
       "users": "Utenti",
-      "units": "Units",
+      "units": "Unità",
       "sessions": "Connessioni",
       "devices": "Dispositivi",
       "accounts": "Amministratori",
-      "hotspots": "Hotspots"
+      "hotspots": "Hotspot"
     },
     "profile": {
       "info": "Informazioni",
@@ -78,12 +78,16 @@
       "linkedin_login": "Linkedin Login ",
       "voucher_login": "Login tramite Voucher",
       "temp_session_duration": "Durata sessione temporanea (secondi)",
-      "start_navigate": "Naviga!",
+      "start_navigate": "Naviga",
       "voucher_creation": "Creazione Voucher",
       "voucher_creation_count": "Numero di Voucher",
       "auto_login": "Autologin",
       "CoovaChilli-Bandwidth-Max-Down": "Banda massima in download per utente (Kbps)",
-      "CoovaChilli-Bandwidth-Max-Up": "Banda massima in upload per utente (Kbps)"
+      "CoovaChilli-Bandwidth-Max-Up": "Banda massima in upload per utente (Kbps)",
+      "bandwidth_limit": "Limiti di Banda",
+      "bandwidth_down": "Banda massima in Download (Kbps)",
+      "bandwidth_up": "Banda massima in Upload (Kbps)",
+      "duration": "Durata"
     },
     "user": {
       "username": "Utente",
@@ -104,7 +108,9 @@
       "delete_error_title": "Impossibile eliminare l'utente",
       "delete_error_sub": "Non è stato possibile cancellare l'utente, si prega di riprovare, se il problema persiste contatta l'amministratore.",
       "warning_delete_title": "Fai attenzione",
-      "warning_delete_sub": "Confermi l'eliminazione?"
+      "warning_delete_sub": "Confermi l'eliminazione?",
+      "auto_login": "Autologin",
+      "show_expired": "Mostra scaduti"
     },
     "account": {
       "uuid": "ID",
@@ -132,10 +138,11 @@
       "change_password_error_sub": "Ci sono stati problemi durante il cambio password.",
       "create_error_title": "Errore in fase di creazione",
       "duplicate_error": "È già presente un amministratore con questo nome, scegli un nome o un ID differente.",
-      "create_error_sub": "Non è stato possibile creare l'amministratore."
+      "create_error_sub": "Non è stato possibile creare l'amministratore.",
+      "subscription_plan_name": "Subscription"
     },
     "unit": {
-      "unit": "Unit",
+      "unit": "Unità",
       "mac_address": "MAC Address",
       "description": "Descrizione",
       "name": "Nome",
@@ -155,8 +162,8 @@
       "hotspot": "Hotspot",
       "hotspot_name": "Nome Hotspot",
       "hotspot_description": "Descrizione",
-      "unit": "Unit",
-      "unit_uuid": "ID Unit",
+      "unit": "Unità",
+      "unit_uuid": "ID Unità",
       "mac_address": "MAC address",
       "unit_name": "Nome",
       "user": "Utente",
@@ -174,14 +181,22 @@
       "dashboard": "Dashboard",
       "users": "Utenti",
       "accounts": "Amministratori",
-      "hotspots": "Hotspots",
+      "hotspots": "Hotspot",
       "hotspot": "Hotspot",
-      "units": "Units",
+      "units": "Unità",
+      "devices": "Dispositivi",
       "sessions": "Connessioni",
       "help": "Help",
       "profile": "Profilo",
       "about": "About",
       "logout": "Esci"
+    },
+     "device": {
+      "hotspot": "Hotspot",
+      "user": "Utente",
+      "mac_address": "MAC Address",
+      "ip_address": "Indirizzo IP",
+      "created": "Creato"
     },
     "sessions": "Connessioni",
     "help": "Aiuto",
@@ -189,7 +204,7 @@
     "customer": "Cliente",
     "reseller": "Rivenditore",
     "users": "Utenti",
-    "hotspots": "Hotspots",
+    "hotspots": "Hotspot",
     "desk": "Reception",
     "change_password": "Cambia password",
     "cancel": "Cancella",

@@ -34,6 +34,9 @@
       "sms": "SMS sent"
     },
     "hotspot": {
+      "yes": "Yes",
+      "no": "No",
+      "hostname_hotspot": "Only upper and lower case letters, numbers, dots or dash",
       "hotspot": "Hotspot",
       "name": "Name",
       "description": "Description",
@@ -61,6 +64,7 @@
       "expires": "Expires",
       "preferences_captive": "Preferences Captive",
       "captive_preview": "Preview",
+      "days": "Days",
       "user_expiration_days": "User expiration (days)",
       "captive_1_redir": "Captive Portal redirect",
       "captive_2_title": "Captive Portal title",
@@ -83,7 +87,11 @@
       "voucher_creation_count": "Vouchers number",
       "auto_login": "Auto login",
       "CoovaChilli-Bandwidth-Max-Down": "Bandwidth Max Down (Kbps)",
-      "CoovaChilli-Bandwidth-Max-Up": "Bandwidth Max Up (Kbps)"
+      "CoovaChilli-Bandwidth-Max-Up": "Bandwidth Max Up (Kbps)",
+      "bandwidth_limit": "Bandwidth Limit",
+      "bandwidth_down": "Bandwidth Max Down (Kbps)",
+      "bandwidth_up": "Bandwidth Max Up (Kbps)",
+      "duration": "Duration"
     },
     "user": {
       "username": "Username",
@@ -172,7 +180,8 @@
       "from": "From",
       "to": "To",
       "ip_address": "IP Address",
-      "export_csv": "Export CSV"
+      "export_csv": "Export CSV",
+      "refresh": "Refresh"
     },
     "menu": {
       "dashboard": "Dashboard",
