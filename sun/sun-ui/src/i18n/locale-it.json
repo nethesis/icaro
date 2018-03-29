@@ -34,6 +34,8 @@
       "sms": "SMS inviato"
     },
     "hotspot": {
+      "yes": "Sì",
+      "no": "No",
       "hotspot": "Hotspot",
       "name": "Nome",
       "description": "Descrizione",
@@ -151,6 +153,7 @@
       "hotspot_description": "Descrizione"
     },
     "session": {
+      "session": "Connessione",
       "bytes_up": "Traffico Upload ⬆",
       "bytes_down": "Traffico download ⬇",
       "duration": "Durata",
@@ -175,7 +178,8 @@
       "from": "Da",
       "to": "A",
       "ip_address": "Indirizzo IP",
-      "export_csv": "Esporta in CSV"
+      "export_csv": "Esporta in CSV",
+      "refresh": "Aggiorna"
     },
     "menu": {
       "dashboard": "Dashboard",
@@ -186,6 +190,7 @@
       "units": "Unità",
       "devices": "Dispositivi",
       "sessions": "Connessioni",
+      "reports": "Report",
       "help": "Help",
       "profile": "Profilo",
       "about": "About",
