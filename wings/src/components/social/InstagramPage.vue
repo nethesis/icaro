@@ -114,6 +114,9 @@
                     this.accept()
                 }, function (error) {
                     console.error(error)
+                    if (error.status == 404) {
+                        this.accept()
+                    }
                 })
             },
             accept() {

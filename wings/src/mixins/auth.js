@@ -118,7 +118,7 @@ var AuthMixin = {
                 var response = CryptoJS.MD5(string_to_hash).toString();
 
                 // do dedalo login
-                this.$http.get('http://' + dedaloUrl + '/json/logon?username=' + user.id +
+                this.$http.get('http://' + dedaloUrl + '/json/logon?username=' + encodeURIComponent(user.id) +
                     '&response=' + response).then(callback);
             }, response => {
                 callback(response)

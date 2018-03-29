@@ -219,7 +219,7 @@
 
         // get all sessions
         this.sessionGetAll(this.hotspotSearchId, this.hotspotUserId, this.hotspotUnitId, new Date(this.hotspotDateFrom)
-          .toISOString(), new Date(this.hotspotDateTo).toISOString(), success => {
+          .toISOString().split('T')[0], new Date(this.hotspotDateTo).toISOString().split('T')[0], success => {
             this.rows = success.body
             this.isLoading = false
           }, error => {
