@@ -25,11 +25,11 @@
       </div>
     </div>
     <div v-if="!isChartLoading">
-      <div class="panel-heading">
-        <h1 class="panel-title">{{ $t('report.statistic') }}</h1>
-      </div>
+      <h2>{{ $t('report.statistic') }}</h2>
       <div class="panel-body">
-        <vue-chart type="line" :width="150" :heigth="150" :options="options" :data="chartData"></vue-chart>
+        <div class="row-sm-12">
+          <vue-chart :height="60" type="line" :width="150" :heigth="150" :options="options" :data="chartData"></vue-chart>
+        </div>
         <br>
         <report-statistics 
         :chartLabels="chartData.labels"
@@ -48,7 +48,7 @@
   import UserService from '../services/user'
   import HotspotService from "../services/hotspot";
   import ReportStatistics from '../components/details-view/ReportStatistics'
-
+  
   import VueChart from "vue-chart-js";
   import moment from "moment";
   import {

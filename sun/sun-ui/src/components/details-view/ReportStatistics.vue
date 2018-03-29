@@ -1,13 +1,13 @@
 <template>
     <div class="row">
         <div class="col-sm-10 section-title">
-           <h1>{{ $t('report.total_traffic') }}</h1>
+           <h2>{{ $t('report.total_traffic') }}</h2>
         </div>
         <div class="col-sm-11">
-            <vue-chart type="bar" :options="trafficChartData.options" :data="trafficChartData"></vue-chart>
+            <vue-chart type="bar" :height="100" :options="trafficChartData.options" :data="trafficChartData"></vue-chart>
         </div>
         <div class="col-sm-10 section-title">
-          <h1>{{ $t('report.user_statistics') }}</h1>
+          <h2>{{ $t('report.user_statistics') }}</h2>
         </div>
         <div class="col-sm-12">
           <div class="row">
@@ -20,7 +20,7 @@
           </div>
         </div>
         <div class="col-sm-10 section-title">
-           <h1>{{ $t('report.connections_statistics') }}</h1>
+           <h2>{{ $t('report.connections_statistics') }}</h2>
         </div>
         <div class="col-sm-12">
             <div class="row">
@@ -28,7 +28,7 @@
                 <vue-chart type="bar" class="test_chart" :options="medianSessionChart.options" :data="medianSessionChart"></vue-chart>
               </div>
               <div class="col-sm-6">
-                <vue-chart type="bar"  :options="avgSessionChart.options" :data="avgSessionChart"></vue-chart>
+                <vue-chart type="bar" :options="avgSessionChart.options" :data="avgSessionChart"></vue-chart>
               </div>
             </div>
         </div>
@@ -74,9 +74,16 @@ export default {
           }
         ],
         options: {
+          tooltips: {
+            callbacks: {
+              label: function(item){
+                var i = Math.floor( Math.log(item.yLabel) / Math.log(1024) );
+                return ( item.yLabel / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
+              }
+            },
+          },
           title: {
             display: true,
-            text: 'Mbyte'
           },
           scales: {
             yAxes: {
@@ -102,6 +109,14 @@ export default {
           }
         ],
         options: {
+          tooltips: {
+            callbacks: {
+              label: function(item){
+                var i = Math.floor( Math.log(item.yLabel) / Math.log(1024) );
+                return ( item.yLabel / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
+              }
+            },
+          },
           title: {
             display: true,
             text: this.$i18n.t("report.average_duration_user")
@@ -130,6 +145,14 @@ export default {
           }
         ],
         options: {
+          tooltips: {
+            callbacks: {
+              label: function(item){
+                var i = Math.floor( Math.log(item.yLabel) / Math.log(1024) );
+                return ( item.yLabel / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
+              }
+            },
+          },
           title: {
             display: true,
             text: this.$i18n.t("report.medium_traffic_user")
@@ -158,6 +181,14 @@ export default {
           }
         ],
         options: {
+           tooltips: {
+            callbacks: {
+              label: function(item){
+                var i = Math.floor( Math.log(item.yLabel) / Math.log(1024) );
+                return ( item.yLabel / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
+              }
+            },
+          },
           title: {
             display: true,
             text: this.$i18n.t("report.medium_traffic_connections")
@@ -172,7 +203,7 @@ export default {
         }
       },
       avgSessionChart: {
-        labels: this.chartLabels,
+      labels: this.chartLabels,
        datasets: [
           {
             label: this.$i18n.t("report.upload"),
@@ -186,9 +217,13 @@ export default {
           }
         ],
         options: {
-          title: {
-            display: true,
-            text: this.$i18n.t("report.average_duration_connections")
+          tooltips: {
+            callbacks: {
+              label: function(item){
+                var i = Math.floor( Math.log(item.yLabel) / Math.log(1024) );
+                return ( item.yLabel / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
+              }
+            },
           },
           scales: {
             yAxes: {
@@ -196,7 +231,11 @@ export default {
                 beginAtZero: true
               }
             }
-          }
+          },
+          title: {
+            display: true,
+            text: this.$i18n.t("report.average_duration_connections")
+          },
         }
       }
     };
@@ -231,8 +270,8 @@ export default {
         let kbps_down = 0;
         this.newUsersReport.map(function(user) {
           if (user.valid_from.substring(0, 10) === date) {
-            kbps_up += user.kbps_up/1000;
-            kbps_down += user.kbps_down/1000;
+            kbps_up += user.kbps_up;
+            kbps_down += user.kbps_down;
           } else {
             kbps_up += 0;
             kbps_down += 0;
@@ -249,8 +288,8 @@ export default {
         let kbps_down = [0];
         this.newUsersReport.map(function(user) {
           if (user.valid_from.substring(0, 10) === date) {
-            kbps_up[index] += user.kbps_up/1000;
-            kbps_down[index] += user.kbps_down/1000;
+            kbps_up[index] += user.kbps_up;
+            kbps_down[index] += user.kbps_down;
             kbps_up.push(0);
             kbps_down.push(0);
             index++;
@@ -319,6 +358,6 @@ export default {
 </script>
 <style scoped>
 .section-title {
-  margin: 30px 0px 10px 20px;
+  margin: 30px 0px 10px -15px;
 } 
 </style>
