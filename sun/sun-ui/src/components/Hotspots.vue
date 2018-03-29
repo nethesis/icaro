@@ -18,7 +18,7 @@
         <button data-toggle="modal" data-target="#HScreateModal" class="btn btn-primary btn-lg"> {{ $t('hotspot.create_new') }} </button>
       </div>
     </div>
-    <div v-if="!isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div v-if="rows.length > 0 && !isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
       <div class="col-sm-3">
         <button class="btn btn-primary" @click="getAll()">{{$t('session.refresh')}}</button>
       </div>
