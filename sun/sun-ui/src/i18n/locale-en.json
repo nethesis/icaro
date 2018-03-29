@@ -212,7 +212,16 @@
       "new_user": "New Users",
       "last_7_days": "Last 7 Days",
       "last_15_days": "Last 15 Days",
-      "last_month": "Last Month"
+      "last_month": "Last Month",
+      "upload": "Upload",
+      "download": "Download",
+      "total_traffic": "TOTAL TRAFFIC",
+      "user_statistics": "USER STATISTICS",
+      "connections_statistics": "CONNECTIONS STATISTICS",
+      "medium_traffic_user": "MEDIUM TRAFFIC FOR USER",
+      "average_duration_user": "AVERAGE DURATION FOR USER",
+      "medium_traffic_connections": "MEDIUM TRAFFIC FOR CONNECTIONS",
+      "average_duration_connections": "AVERAGE DURATION FOR CONNECTIONS"
     },
     "sessions": "Sessions",
     "help": "Help",
