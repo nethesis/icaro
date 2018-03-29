@@ -3,15 +3,13 @@
         <div v-if="!dedaloRequested">
             <div v-if="!codeRequested" class="inline field" v-bind:class="{ error: errors.badInput }">
                 <label>{{ $t("sms.prefix") }}</label>
-                <div class="ui fluid pointing dropdown labeled search icon button select-state">
-                    <i class="plus icon"></i>
-                    <span class="text">{{$t('sms.select_state')}}</span>
+                <div class="ui fluid pointing search selection dropdown select-state">
+                    <input type="hidden" name="country">
+                    <i class="dropdown icon"></i>
+                    <div class="default text">{{$t('sms.select_state')}}</div>
                     <div class="menu">
                         <div @click="setPrefix(c.dial_code)" v-for="c in countries" v-bind:key="c.code" class="item">
-                            <div class="item">
-                                <i :class="[c.code.toLowerCase(), 'flag']"></i>
-                                {{c.name}} ({{c.dial_code}})
-                            </div>
+                            <i :class="[c.code.toLowerCase(), 'flag']"></i>{{c.name}} ({{c.dial_code}})
                         </div>
                     </div>
                 </div>
