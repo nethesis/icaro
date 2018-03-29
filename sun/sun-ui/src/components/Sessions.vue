@@ -54,7 +54,7 @@
     </div>
     <div v-if="!isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
       <div class="col-sm-3">
-        <button class="btn btn-primary" @click="getAll()">{{$t('session.refresh')}}</button>
+        <button class="btn btn-primary" @click="getAll(true)">{{$t('session.refresh')}}</button>
       </div>
     </div>
     <div v-if="!isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -204,7 +204,7 @@
           console.log(error)
         })
       },
-      getAll() {
+      getAll(refresh) {
         // save to storage
         this.set('sessions_hotspot_id', this.hotspotSearchId || this.get('sessions_hotspot_id') || 0)
         this.set('sessions_user_id', this.hotspotUserId || this.get('sessions_user_id') || 0)
@@ -217,9 +217,16 @@
         this.getAllUsers()
         this.getAllUnits()
 
+        if (refresh) {
+          var moment = require("patternfly/node_modules/moment/moment.js")
+          if (moment(this.hotspotDateTo).isSame(Date.now(), 'day')) {
+            this.hotspotDateTo = new Date().toISOString()
+          }
+        }
+
         // get all sessions
         this.sessionGetAll(this.hotspotSearchId, this.hotspotUserId, this.hotspotUnitId, new Date(this.hotspotDateFrom)
-          .toISOString().split('T')[0], new Date(this.hotspotDateTo).toISOString().split('T')[0], success => {
+          .toISOString(), new Date(this.hotspotDateTo).toISOString(), success => {
             this.rows = success.body
             this.isLoading = false
           }, error => {
