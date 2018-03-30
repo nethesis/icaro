@@ -1,10 +1,13 @@
 <template>
   <div id="app" class="ui container">
-    <div class="ui center aligned">
+    <div v-show="loading" class="ui active dimmer">
+      <div class="ui loader"></div>
+    </div>
+    <div v-show="!loading" class="ui center aligned">
       <h2>{{hotspot.preferences.captive_2_title}}</h2>
       <img :src="hotspot.preferences.captive_3_logo" class="ui centered image tiny">
     </div>
-    <div class="ui segments route-container">
+    <div v-show="!loading" class="ui segments route-container">
       <router-view class="ui segment"></router-view>
     </div>
   </div>
@@ -28,15 +31,18 @@
         this.hotspot.name = success.body.hotspot_name
         this.hotspot.preferences = success.body.preferences
         $("body").css("background-color", success.body.preferences.captive_7_background || '#2a87be');
+        this.loading = false
       }, error => {
         console.error(error)
-        $("body").css("background-color", '#2a87be');
+        $("body").css("background-color", '#fff');
+        this.loading = false
       })
       return {
         hotspot: {
           name: '',
           preferences: {}
-        }
+        },
+        loading: true
       }
     },
     methods: {
@@ -69,7 +75,7 @@
   }
 
   body {
-    background: #2a87be;
+    background: #444;
   }
 
   img {

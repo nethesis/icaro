@@ -18,6 +18,11 @@
         <button data-toggle="modal" data-target="#HScreateModal" class="btn btn-primary btn-lg"> {{ $t('hotspot.create_new') }} </button>
       </div>
     </div>
+    <div v-if="rows.length > 0 && !isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <div class="col-sm-3">
+        <button class="btn btn-primary" @click="getAll()">{{$t('session.refresh')}}</button>
+      </div>
+    </div>
     <vue-good-table v-if="rows.length > 0 && !isLoading" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]" :perPage="hotspotPerPage" :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'name', type: 'asc'}"
       :globalSearch="true" :paginate="true" styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText"
       :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
@@ -25,18 +30,13 @@
       <template slot="table-row" slot-scope="props">
         <td>
           <a :href="'#/hotspots/'+ props.row.id">
-            <strong>{{ props.row.name }}</strong>
+            {{ props.row.name }}
           </a>
         </td>
         <td class="fancy">{{ props.row.description }}</td>
         <td class="fancy">{{ props.row.created | formatDate }}</td>
         <td>
           <hotspot-action details="true" :obj="props.row" :update="getAll"></hotspot-action>
-        </td>
-        <td>
-          <a :href="'#/hotspots/'+ props.row.id">
-            <span class="fa fa-angle-right details-arrow"></span>
-          </a>
         </td>
       </template>
     </vue-good-table>
@@ -125,11 +125,6 @@
           },
           {
             label: this.$i18n.t('action'),
-            field: '',
-            sortable: false
-          },
-          {
-            label: '',
             field: '',
             sortable: false
           },

@@ -62,7 +62,7 @@ var AuthMixin = {
                 '&reset=' + reset +
                 '&uamip=' + params.uamip +
                 '&uamport=' + params.uamport +
-                (localStorage.getItem('voucher_code') ? ('&voucher_code=' + localStorage.getItem('voucher_code')) : '')
+                (sessionStorage.getItem('voucher_code') ? ('&voucher_code=' + sessionStorage.getItem('voucher_code')) : '')
             return url
         },
         getSocialLoginURL(params, social) {
@@ -118,7 +118,7 @@ var AuthMixin = {
                 var response = CryptoJS.MD5(string_to_hash).toString();
 
                 // do dedalo login
-                this.$http.get('http://' + dedaloUrl + '/json/logon?username=' + user.id +
+                this.$http.get('http://' + dedaloUrl + '/json/logon?username=' + encodeURIComponent(user.id) +
                     '&response=' + response).then(callback);
             }, response => {
                 callback(response)

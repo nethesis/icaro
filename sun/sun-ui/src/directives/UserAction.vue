@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="dropdown">
+    <div class="dropup">
       <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
         {{ $t('action') }}
         <span class="caret"></span>
@@ -105,7 +105,7 @@
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
               <span class="pficon pficon-close"></span>
             </button>
-            <h4 class="modal-title" id="UsdeleteModalLabel">{{ $t("delete") }} {{currentObj.username}}</h4>
+            <h4 class="modal-title" id="UsdeleteModalLabel">{{ $t("delete") }} {{currentObj.name}}</h4>
           </div>
           <form class="form-horizontal" role="form" v-on:submit.prevent="deleteUser(currentObj)">
             <div class="modal-body">

@@ -15,6 +15,11 @@
         </select>
       </div>
     </div>
+    <div v-if="!isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <div class="col-sm-3">
+        <button class="btn btn-primary" @click="getAll()">{{$t('session.refresh')}}</button>
+      </div>
+    </div>
     <vue-good-table v-if="!isLoading" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]" :perPage="hotspotPerPage"
       :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'username', type: 'asc'}" :globalSearch="true"
       :paginate="true" styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText" :rowsPerPageText="tableLangsTexts.rowsPerPageText"
@@ -22,7 +27,7 @@
       <template slot="table-row" slot-scope="props">
         <td>
           <a :href="'#/accounts/'+ props.row.id">
-            <strong>{{ props.row.username }}</strong>
+            {{ props.row.username }}
           </a>
         </td>
         <td class="fancy">{{ props.row.name }}</td>
@@ -35,11 +40,6 @@
         <td class="fancy">{{ props.row.created | formatDate }}</td>
         <td>
           <account-action details="false" :obj="props.row" :update="getAll"></account-action>
-        </td>
-        <td>
-          <a :href="'#/accounts/'+ props.row.id">
-            <span class="fa fa-angle-right details-arrow"></span>
-          </a>
         </td>
       </template>
     </vue-good-table>
@@ -219,11 +219,6 @@
           },
           {
             label: this.$i18n.t('action'),
-            field: '',
-            sortable: false
-          },
-          {
-            label: '',
             field: '',
             sortable: false
           },

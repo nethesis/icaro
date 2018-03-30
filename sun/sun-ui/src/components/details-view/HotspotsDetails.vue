@@ -320,8 +320,8 @@
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button v-on:click="createVoucher()" type="button" class="btn btn-primary">Save</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">{{$t('cancel')}}</button>
+            <button v-on:click="createVoucher()" type="button" class="btn btn-primary">{{$t('save')}}</button>
           </div>
         </div>
       </div>

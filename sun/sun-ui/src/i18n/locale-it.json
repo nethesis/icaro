@@ -12,8 +12,8 @@
       "help": "Aiuto",
       "about": "About",
       "profile": "Profilo",
-      "user": "Utente",
-      "users": "Utenti",
+      "user": "Ospite",
+      "users": "Ospiti",
       "units": "Unità",
       "sessions": "Connessioni",
       "devices": "Dispositivi",
@@ -31,9 +31,11 @@
       "confirm_password": "Conferma password",
       "change_password_error_title": "Cambio password non riuscito",
       "change_password_error_sub": "Ci sono stati problemi durante il cambio password, contatta il tuo amministratore.",
-      "sms": "SMS inviato"
+      "sms": "SMS inviati"
     },
     "hotspot": {
+      "yes": "Sì",
+      "no": "No",
       "hotspot": "Hotspot",
       "name": "Nome",
       "description": "Descrizione",
@@ -43,7 +45,7 @@
       "delete_error_title": "Impossibile eliminare l'hotspot",
       "delete_error_sub": "Non è stato possibile cancellare l'hotspot, si prega di riprovare, se il problema persiste contatta l'amministratore.",
       "warning_delete_title": "Fai attenzione",
-      "warning_delete_sub": "La cancellazione di un hotspot cancella anche tutti gli utenti, le units e le informazioni sulle connessioni.",
+      "warning_delete_sub": "La cancellazione di un hotspot cancella l'elenco degli ospiti, le units e le connessioni.",
       "create_error_title": "Errore durante la creazione",
       "create_error_sub": "Non è stato possibile creare l'hotspot, si prega di riprovare, se il problema persiste contatta l'amministratore.",
       "create_new": "Crea un nuovo Hotspot",
@@ -61,6 +63,7 @@
       "expires": "Scade",
       "preferences_captive": "Preferenze Captive Portal",
       "captive_preview": "Anteprima",
+      "days": "Giorni",
       "user_expiration_days": "Durata account (giorni)",
       "captive_1_redir": "Landing page dopo autenticazione",
       "captive_2_title": "Titolo Captive Portal",
@@ -151,6 +154,7 @@
       "hotspot_description": "Descrizione"
     },
     "session": {
+      "session": "Connessione",
       "bytes_up": "Traffico Upload ⬆",
       "bytes_down": "Traffico download ⬇",
       "duration": "Durata",
@@ -175,7 +179,8 @@
       "from": "Da",
       "to": "A",
       "ip_address": "Indirizzo IP",
-      "export_csv": "Esporta in CSV"
+      "export_csv": "Esporta in CSV",
+      "refresh": "Aggiorna elenco"
     },
     "menu": {
       "dashboard": "Dashboard",
@@ -186,6 +191,7 @@
       "units": "Unità",
       "devices": "Dispositivi",
       "sessions": "Connessioni",
+      "reports": "Report",
       "help": "Help",
       "profile": "Profilo",
       "about": "About",
@@ -207,7 +213,7 @@
     "hotspots": "Hotspot",
     "desk": "Reception",
     "change_password": "Cambia password",
-    "cancel": "Cancella",
+    "cancel": "Annulla",
     "save": "Salva",
     "create": "Crea",
     "update": "Aggiorna",

@@ -13,6 +13,11 @@
         </select>
       </div>
     </div>
+    <div v-if="!isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <div class="col-sm-3">
+        <button class="btn btn-primary" @click="getAll()">{{$t('session.refresh')}}</button>
+      </div>
+    </div>
     <vue-good-table v-if="!isLoading" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]" :perPage="hotspotPerPage" :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'name', type: 'asc'}"
       :globalSearch="true" :paginate="true" styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText"
       :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
@@ -28,11 +33,6 @@
         <td class="fancy">{{ props.row.uuid || '-' }}</td>
         <td>
           <unit-action details="true" :obj="props.row" :update="getAll"></unit-action>
-        </td>
-        <td>
-          <a :href="'#/units/'+ props.row.id">
-            <span class="fa fa-angle-right details-arrow"></span>
-          </a>
         </td>
       </template>
     </vue-good-table>
@@ -78,11 +78,6 @@
           },
           {
             label: this.$i18n.t('action'),
-            field: '',
-            sortable: false
-          },
-          {
-            label: '',
             field: '',
             sortable: false
           },
