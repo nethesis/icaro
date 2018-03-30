@@ -34,11 +34,6 @@
         <td>
           <unit-action details="true" :obj="props.row" :update="getAll"></unit-action>
         </td>
-        <td>
-          <a :href="'#/units/'+ props.row.id">
-            <span class="fa fa-angle-right details-arrow"></span>
-          </a>
-        </td>
       </template>
     </vue-good-table>
   </div>
@@ -83,11 +78,6 @@
           },
           {
             label: this.$i18n.t('action'),
-            field: '',
-            sortable: false
-          },
-          {
-            label: '',
             field: '',
             sortable: false
           },

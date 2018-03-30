@@ -46,7 +46,7 @@
       "delete_error_title": "Delete error",
       "delete_error_sub": "Something went wrong on deleting hotspot",
       "warning_delete_title": "Be careful",
-      "warning_delete_sub": "Deleting an hotspot deletes also all users, units and associated sessions info",
+      "warning_delete_sub": "Deleting an hotspot deletes users, units and sessions",
       "create_error_title": "Creation error",
       "create_error_sub": "Something went wrong on creating hotspot",
       "create_new": "Create Hotspot",

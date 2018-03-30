@@ -113,7 +113,7 @@
               </a>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                 <li>
-                  <a target="blank" href="https://github.com/nethesis/icaro">{{ $t("help") }}</a>
+                  <a target="blank" :href="helpUrl">{{ $t("help") }}</a>
                 </li>
                 <li>
                   <a href="#" data-toggle="modal" data-target="#about-modal">{{ $t("menu.about") }}</a>
@@ -346,7 +346,8 @@
         user: user,
         isLogged: isLogged,
         errors: errors,
-        appName: CONFIG.APP_NAME
+        appName: CONFIG.APP_NAME,
+        helpUrl: CONFIG.HELP_URL
       }
     },
     methods: {

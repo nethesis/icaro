@@ -30,18 +30,13 @@
       <template slot="table-row" slot-scope="props">
         <td>
           <a :href="'#/hotspots/'+ props.row.id">
-            <strong>{{ props.row.name }}</strong>
+            {{ props.row.name }}
           </a>
         </td>
         <td class="fancy">{{ props.row.description }}</td>
         <td class="fancy">{{ props.row.created | formatDate }}</td>
         <td>
           <hotspot-action details="true" :obj="props.row" :update="getAll"></hotspot-action>
-        </td>
-        <td>
-          <a :href="'#/hotspots/'+ props.row.id">
-            <span class="fa fa-angle-right details-arrow"></span>
-          </a>
         </td>
       </template>
     </vue-good-table>
@@ -130,11 +125,6 @@
           },
           {
             label: this.$i18n.t('action'),
-            field: '',
-            sortable: false
-          },
-          {
-            label: '',
             field: '',
             sortable: false
           },

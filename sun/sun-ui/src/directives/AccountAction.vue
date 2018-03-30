@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="dropdown">
+    <div class="dropup">
       <button class="btn btn-default dropdown-toggle" type="button" id="ACdropdownMenu1" data-toggle="dropdown">
         {{ $t('action') }}
         <span class="caret"></span>

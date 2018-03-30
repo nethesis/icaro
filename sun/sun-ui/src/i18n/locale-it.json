@@ -45,7 +45,7 @@
       "delete_error_title": "Impossibile eliminare l'hotspot",
       "delete_error_sub": "Non è stato possibile cancellare l'hotspot, si prega di riprovare, se il problema persiste contatta l'amministratore.",
       "warning_delete_title": "Fai attenzione",
-      "warning_delete_sub": "La cancellazione di un hotspot cancella anche tutti gli utenti, le units e le informazioni sulle connessioni.",
+      "warning_delete_sub": "La cancellazione di un hotspot cancella gli utenti, le units e le connessioni.",
       "create_error_title": "Errore durante la creazione",
       "create_error_sub": "Non è stato possibile creare l'hotspot, si prega di riprovare, se il problema persiste contatta l'amministratore.",
       "create_new": "Crea un nuovo Hotspot",

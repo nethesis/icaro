@@ -27,7 +27,7 @@
       <template slot="table-row" slot-scope="props">
         <td>
           <a :href="'#/accounts/'+ props.row.id">
-            <strong>{{ props.row.username }}</strong>
+            {{ props.row.username }}
           </a>
         </td>
         <td class="fancy">{{ props.row.name }}</td>
@@ -40,11 +40,6 @@
         <td class="fancy">{{ props.row.created | formatDate }}</td>
         <td>
           <account-action details="false" :obj="props.row" :update="getAll"></account-action>
-        </td>
-        <td>
-          <a :href="'#/accounts/'+ props.row.id">
-            <span class="fa fa-angle-right details-arrow"></span>
-          </a>
         </td>
       </template>
     </vue-good-table>
@@ -224,11 +219,6 @@
           },
           {
             label: this.$i18n.t('action'),
-            field: '',
-            sortable: false
-          },
-          {
-            label: '',
             field: '',
             sortable: false
           },
