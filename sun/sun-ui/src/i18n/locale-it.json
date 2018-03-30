@@ -31,7 +31,7 @@
       "confirm_password": "Conferma password",
       "change_password_error_title": "Cambio password non riuscito",
       "change_password_error_sub": "Ci sono stati problemi durante il cambio password, contatta il tuo amministratore.",
-      "sms": "SMS inviato"
+      "sms": "SMS inviati"
     },
     "hotspot": {
       "yes": "Sì",
@@ -63,6 +63,7 @@
       "expires": "Scade",
       "preferences_captive": "Preferenze Captive Portal",
       "captive_preview": "Anteprima",
+      "days": "Giorni",
       "user_expiration_days": "Durata account (giorni)",
       "captive_1_redir": "Landing page dopo autenticazione",
       "captive_2_title": "Titolo Captive Portal",
@@ -179,7 +180,7 @@
       "to": "A",
       "ip_address": "Indirizzo IP",
       "export_csv": "Esporta in CSV",
-      "refresh": "Aggiorna"
+      "refresh": "Aggiorna elenco"
     },
     "menu": {
       "dashboard": "Dashboard",
@@ -212,7 +213,7 @@
     "hotspots": "Hotspot",
     "desk": "Reception",
     "change_password": "Cambia password",
-    "cancel": "Cancella",
+    "cancel": "Annulla",
     "save": "Salva",
     "create": "Crea",
     "update": "Aggiorna",
