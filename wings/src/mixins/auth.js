@@ -62,7 +62,7 @@ var AuthMixin = {
                 '&reset=' + reset +
                 '&uamip=' + params.uamip +
                 '&uamport=' + params.uamport +
-                (localStorage.getItem('voucher_code') ? ('&voucher_code=' + localStorage.getItem('voucher_code')) : '')
+                (sessionStorage.getItem('voucher_code') ? ('&voucher_code=' + sessionStorage.getItem('voucher_code')) : '')
             return url
         },
         getSocialLoginURL(params, social) {
