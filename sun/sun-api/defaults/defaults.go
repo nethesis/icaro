@@ -23,7 +23,6 @@
 package defaults
 
 var HotspotPreferences = map[string]string{
-	"voucher_expiration_days":        "1",
 	"user_expiration_days":           "30",
 	"temp_session_duration":          "300",
 	"facebook_login":                 "true",
