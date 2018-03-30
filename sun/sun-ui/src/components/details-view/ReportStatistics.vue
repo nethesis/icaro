@@ -12,10 +12,10 @@
         <div class="col-sm-12">
           <div class="row">
               <div class="col-sm-6">
-                <vue-chart type="bar"  :options="medianUserChart.options" :data="medianUserChart"></vue-chart>
+                <vue-chart type="bar"  :options="avgTrafficUserChart.options" :data="avgTrafficUserChart"></vue-chart>
               </div>
               <div class="col-sm-6">
-                <vue-chart type="bar"  :options="avgUserChart.options" :data="avgUserChart"></vue-chart>
+                <vue-chart type="bar"  :options="avgDurationUserChart.options" :data="avgDurationUserChart"></vue-chart>
               </div>
           </div>
         </div>
@@ -25,10 +25,10 @@
         <div class="col-sm-12">
             <div class="row">
               <div class="col-sm-6">
-                <vue-chart type="bar" class="test_chart" :options="medianSessionChart.options" :data="medianSessionChart"></vue-chart>
+                <vue-chart type="bar" :options="avgTrafficSessionChart.options" :data="avgTrafficSessionChart"></vue-chart>
               </div>
               <div class="col-sm-6">
-                <vue-chart type="bar" :options="avgSessionChart.options" :data="avgSessionChart"></vue-chart>
+                <vue-chart type="bar" :options="avgDurationSessionChart.options" :data="avgDurationSessionChart"></vue-chart>
               </div>
             </div>
         </div>
@@ -37,7 +37,10 @@
 </template>
 <script>
 import VueChart from "vue-chart-js";
-
+import moment from "moment";
+ import {
+    extendMoment
+  } from 'moment-range';
 export default {
   props: {
     chartLabels: {
@@ -77,8 +80,8 @@ export default {
           tooltips: {
             callbacks: {
               label: function(item){
-                var i = Math.floor( Math.log(item.yLabel) / Math.log(1024) );
-                return ( item.yLabel / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
+                var i = Math.floor( Math.log(item.yLabel * 1e6 ) / Math.log(1024) );
+                return ( item.yLabel * 1e6  / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
               }
             },
           },
@@ -86,22 +89,21 @@ export default {
             display: true,
           },
           scales: {
-            yAxes: {
-              ticks: {
-                beginAtZero: true
-              }
+            yAxes: [{
+              scaleLabel: {
+                display:true,
+                labelString: 'MB'
+              },
+            ticks: {
+              beginAtZero: true
             }
+          }]
           }
         }
       },
-      avgUserChart: {
+      avgDurationUserChart: {
         labels: this.chartLabels,
         datasets: [
-          {
-            label: this.$i18n.t("report.upload"),
-            data: [],
-            backgroundColor: "#579f14"
-          },
           {
             label: this.$i18n.t("report.download"),
             data: [],
@@ -112,8 +114,18 @@ export default {
           tooltips: {
             callbacks: {
               label: function(item){
-                var i = Math.floor( Math.log(item.yLabel) / Math.log(1024) );
-                return ( item.yLabel / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
+                var levels = [
+                        [Math.floor(((item.yLabel * 60 % 31536000) % 86400) / 3600), 'h'],
+                        [Math.floor((((item.yLabel * 60 % 31536000) % 86400) % 3600) / 60), 'm'],
+                        [(((item.yLabel * 60 % 31536000) % 86400) % 3600) % 60, 's'],
+                    ];
+                var returntext = '';
+
+                for (var i = 0, max = levels.length; i < max; i++) {
+                    if ( levels[i][0] === 0 ) continue;
+                    returntext += ' ' + levels[i][0] + ' ' + (levels[i][0] === 1 ? levels[i][1].substr(0, levels[i][1].length-1): levels[i][1]);
+                };
+                return returntext.trim();
               }
             },
           },
@@ -122,15 +134,19 @@ export default {
             text: this.$i18n.t("report.average_duration_user")
           },
           scales: {
-            yAxes: {
+            yAxes: [{
+                scaleLabel: {
+                  display:true,
+                  labelString: this.$i18n.t("report.minutes")
+                },
               ticks: {
                 beginAtZero: true
               }
-            }
+            }]
           }
         }
       },
-      medianUserChart: {
+      avgTrafficUserChart: {
         labels: this.chartLabels,
         datasets: [
           {
@@ -148,8 +164,8 @@ export default {
           tooltips: {
             callbacks: {
               label: function(item){
-                var i = Math.floor( Math.log(item.yLabel) / Math.log(1024) );
-                return ( item.yLabel / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
+                var i = Math.floor( Math.log(item.yLabel * 1e6 ) / Math.log(1024) );
+                return ( item.yLabel * 1e6  / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
               }
             },
           },
@@ -158,15 +174,64 @@ export default {
             text: this.$i18n.t("report.medium_traffic_user")
           },
           scales: {
-            yAxes: {
+            yAxes: [{
+                scaleLabel: {
+                  display:true,
+                  labelString: 'MB'
+                },
               ticks: {
                 beginAtZero: true
               }
-            }
+            }]
           }
         }
       },
-      medianSessionChart: {
+      avgDurationSessionChart: {
+        labels: this.chartLabels,
+       datasets: [
+          {
+            label: this.$i18n.t("report.duration"),
+            data: [],
+            backgroundColor: "#444"
+          }
+        ],
+        options: {
+          tooltips: {
+            callbacks: {
+              label: function(item){
+                var levels = [
+                        [Math.floor(((item.yLabel * 60 % 31536000) % 86400) / 3600), 'h'],
+                        [Math.floor((((item.yLabel * 60 % 31536000) % 86400) % 3600) / 60), 'm'],
+                        [(((item.yLabel * 60 % 31536000) % 86400) % 3600) % 60, 's'],
+                    ];
+                var returntext = '';
+
+                for (var i = 0, max = levels.length; i < max; i++) {
+                    if ( levels[i][0] === 0 ) continue;
+                    returntext += ' ' + levels[i][0] + ' ' + (levels[i][0] === 1 ? levels[i][1].substr(0, levels[i][1].length-1): levels[i][1]);
+                };
+                return returntext.trim();
+              }
+            },
+          },
+          scales: {
+            yAxes: [{
+                scaleLabel: {
+                  display:true,
+                  labelString: this.$i18n.t("report.minutes")
+                },
+              ticks: {
+                beginAtZero: true
+              }
+            }]
+          },
+          title: {
+            display: true,
+            text: this.$i18n.t("report.average_duration_connections")
+          },
+        }
+      },
+      avgTrafficSessionChart: {
         labels: this.chartLabels,
         datasets: [
           {
@@ -184,8 +249,8 @@ export default {
            tooltips: {
             callbacks: {
               label: function(item){
-                var i = Math.floor( Math.log(item.yLabel) / Math.log(1024) );
-                return ( item.yLabel / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
+                var i = Math.floor( Math.log(item.yLabel * 1e6 ) / Math.log(1024) );
+                return ( item.yLabel * 1e6  / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
               }
             },
           },
@@ -194,48 +259,16 @@ export default {
             text: this.$i18n.t("report.medium_traffic_connections")
           },
           scales: {
-            yAxes: {
+            yAxes: [{
+                scaleLabel: {
+                  display:true,
+                  labelString: 'MB'
+                },
               ticks: {
                 beginAtZero: true
               }
-            }
+            }]
           }
-        }
-      },
-      avgSessionChart: {
-      labels: this.chartLabels,
-       datasets: [
-          {
-            label: this.$i18n.t("report.upload"),
-            data: [],
-            backgroundColor: "#579f14"
-          },
-          {
-            label: this.$i18n.t("report.download"),
-            data: [],
-            backgroundColor: "#444"
-          }
-        ],
-        options: {
-          tooltips: {
-            callbacks: {
-              label: function(item){
-                var i = Math.floor( Math.log(item.yLabel) / Math.log(1024) );
-                return ( item.yLabel / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
-              }
-            },
-          },
-          scales: {
-            yAxes: {
-              ticks: {
-                beginAtZero: true
-              }
-            }
-          },
-          title: {
-            display: true,
-            text: this.$i18n.t("report.average_duration_connections")
-          },
         }
       }
     };
@@ -253,25 +286,14 @@ export default {
       }
       return sum / input.length;
     },
-    calculateMEDIUM(input) {
-      let sortedArray = input.sort();
-
-      let half = Math.floor(sortedArray.length / 2);
-
-      if (sortedArray.length % 2) {
-        return sortedArray[half];
-      } else {
-        return (sortedArray[half - 1] + sortedArray[half]) / 2.0;
-      }
-    },
     fillTotalTrafficChart() {
       this.chartDateRange.forEach(date => {
         let kbps_up = 0;
         let kbps_down = 0;
         this.newUsersReport.map(function(user) {
           if (user.valid_from.substring(0, 10) === date) {
-            kbps_up += user.kbps_up;
-            kbps_down += user.kbps_down;
+            kbps_up += user.kbps_up/1e3;
+            kbps_down += user.kbps_down/1e3;
           } else {
             kbps_up += 0;
             kbps_down += 0;
@@ -283,13 +305,54 @@ export default {
     },
     implementUserChart() {
       this.chartDateRange.forEach(date => {
+        let moment_range = extendMoment(moment);
         let index = 0;
         let kbps_up = [0];
         let kbps_down = [0];
+        let duration_array = [0];
+        let all_sessions = this.sessionsReport;
+        let session_counter = 0;
+        let duration = 0;
         this.newUsersReport.map(function(user) {
+            // Check if user is active between dates
+            if (user.valid_from.substring(0, 10) <=date ) {
+              // iterate through session
+              all_sessions.map(function(session) {
+
+                // Check if user has any session
+                  if(session.user_id === user.id){
+                    
+                    // check if user session start is on chart date
+                      if (session.start_time.substring(0, 10) === date) {
+                        
+                        // if user session is on date, check if session has been stopped on that day
+                        if(session.stop_time.substring(0, 10) === date){
+                          duration+= moment.range(moment(session.start_time), moment(session.stop_time)).diff('minutes');
+
+                        // or session has been stopped on next day
+                        }else if(session.stop_time.substring(0, 10) > date){
+                          duration+= moment.range(moment(session.start_time), moment(date).endOf('day')).diff('minutes');
+                        }
+                        duration_array[session_counter] += duration;
+                        duration_array.push(0);
+                        session_counter++;
+
+                        // check if session has started one day before, but has stopped on actual day
+                      }else if(session.stop_time.substring(0, 10) === date && session.start_time.substring(0, 10) <= date){
+                          duration+= moment.range(moment(date).startOf('day'), moment(session.stop_time)).diff('minutes');
+                          duration_array[session_counter] += duration;
+                          duration_array.push(0);
+                          session_counter++;
+                      }else{
+                        duration_array[session_counter] += 0;
+                      }
+                  }
+              })
+            }
+
           if (user.valid_from.substring(0, 10) === date) {
-            kbps_up[index] += user.kbps_up;
-            kbps_down[index] += user.kbps_down;
+            kbps_up[index] += user.kbps_up/1e3;
+            kbps_down[index] += user.kbps_down/1e3;
             kbps_up.push(0);
             kbps_down.push(0);
             index++;
@@ -298,41 +361,52 @@ export default {
             kbps_down[index] += 0;
           }
         });
+
+        if (session_counter >= 1) {
+          duration_array.pop();
+        }
         if (kbps_up.length > 1) {
           kbps_up.pop();
         }
         if (kbps_down.length > 1) {
           kbps_down.pop();
         }
-
-        this.medianUserChart.datasets[0].data.push(
-          this.calculateMEDIUM(kbps_up)
+      
+        this.avgTrafficUserChart.datasets[0].data.push(
+          this.calculateAVG(kbps_up)
         );
-        this.medianUserChart.datasets[1].data.push(
-          this.calculateMEDIUM(kbps_down)
+        this.avgTrafficUserChart.datasets[1].data.push(
+          this.calculateAVG(kbps_down)
         );
 
-        this.avgUserChart.datasets[0].data.push(this.calculateAVG(kbps_up));
-        this.avgUserChart.datasets[1].data.push(this.calculateAVG(kbps_down));
+        this.avgDurationUserChart.datasets[0].data.push(this.calculateAVG(duration_array));
       });
     },
     implementSessionChart() {
       this.chartDateRange.forEach(date => {
         let index = 0;
+        let duration = [0];
         let kbps_up = [0];
         let kbps_down = [0];
         this.sessionsReport.map(function(session) {
+          // Check if session has been started between chart date
           if (session.start_time.substring(0, 10) === date) {
-            kbps_up[index] += session.bytes_up;
-            kbps_down[index] += session.bytes_down;
+            kbps_up[index] += session.bytes_up/100000;
+            kbps_down[index] += session.bytes_down/100000;
+            duration[index] += session.duration;
             kbps_up.push(0);
             kbps_down.push(0);
+            duration.push(0);
             index++;
           } else {
             kbps_up[index] += 0;
             kbps_down[index] += 0;
+            duration[index] += 0;
           }
         });
+        if(duration.length>1){
+          duration.pop();
+        }
         if (kbps_up.length > 1) {
           kbps_up.pop();
         }
@@ -340,17 +414,13 @@ export default {
           kbps_down.pop();
         }
 
-        this.medianSessionChart.datasets[0].data.push(
-          this.calculateMEDIUM(kbps_up)
+        this.avgTrafficSessionChart.datasets[0].data.push(
+          this.calculateAVG(kbps_up)
         );
-        this.medianSessionChart.datasets[1].data.push(
-          this.calculateMEDIUM(kbps_down)
-        );
-
-        this.avgSessionChart.datasets[0].data.push(this.calculateAVG(kbps_up));
-        this.avgSessionChart.datasets[1].data.push(
+        this.avgTrafficSessionChart.datasets[1].data.push(
           this.calculateAVG(kbps_down)
         );
+        this.avgDurationSessionChart.datasets[0].data.push(this.calculateAVG(duration));
       });
     }
   }

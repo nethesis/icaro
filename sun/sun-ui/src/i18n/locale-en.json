@@ -218,10 +218,12 @@
       "total_traffic": "Total traffic",
       "user_statistics": "User statistics",
       "connections_statistics": "Connections statistics",
-      "medium_traffic_user": "Medium traffic for user",
+      "medium_traffic_user": "Average traffic for user",
       "average_duration_user": "Average duration for user",
-      "medium_traffic_connections": "Medium traffic for connections",
-      "average_duration_connections": "Average duration for connections"
+      "medium_traffic_connections": "Average traffic for connections",
+      "average_duration_connections": "Average duration for connections",
+      "duration": "Duration",
+      "minutes": "Minutes"
     },
     "sessions": "Sessions",
     "help": "Help",
