@@ -17,6 +17,12 @@
     dest: /opt/icaro/sun-ui/
     remote_src: yes
 
+- name: Set Sun-ui title
+  lineinfile:
+    path: /opt/icaro/sun-ui/static/config/config.js
+    regexp: "^  APP_NAME: '<YOUR_APP_NAME>',"
+    line: "  APP_NAME: '{{ icaro.sun_ui.title }}',"
+
 - name: Remove temp files
   file:
     path:
