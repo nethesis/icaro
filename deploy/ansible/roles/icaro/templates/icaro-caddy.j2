@@ -11,6 +11,9 @@ https://{$ICARO_HOSTNAME} {
 
 https://{$ICARO_HOSTNAME}/privacy {
   root /opt/icaro/privacy
+{% if icaro.tls_self_signed is defined and icaro.tls_self_signed == true %}
+  tls self_signed
+{% endif %}
 }
 
 
