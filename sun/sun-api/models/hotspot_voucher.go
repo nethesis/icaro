@@ -22,12 +22,15 @@
 
 package models
 
+import "time"
+
 type HotspotVoucher struct {
-	Id            int    `db:"id" json:"id"`
-	HotspotId     int    `db:"hotspot_id" json:"hotspot_id"`
-	Code          string `db:"code" json:"code"`
-	AutoLogin     bool   `db:"auto_login" json:"auto_login"`
-	BandwidthUp   int    `db:"bandwidth_up" json:"bandwidth_up"`
-	BandwidthDown int    `db:"bandwidth_down" json:"bandwidth_down"`
-	Duration      int    `db:"duration" json:"duration"`
+	Id            int       `db:"id" json:"id"`
+	HotspotId     int       `db:"hotspot_id" json:"hotspot_id"`
+	Code          string    `db:"code" json:"code"`
+	AutoLogin     bool      `db:"auto_login" json:"auto_login"`
+	BandwidthUp   int       `db:"bandwidth_up" json:"bandwidth_up"`
+	BandwidthDown int       `db:"bandwidth_down" json:"bandwidth_down"`
+	Duration      int       `db:"duration" json:"duration"`
+	Expires       time.Time `db:"expires" json:"expires"`
 }

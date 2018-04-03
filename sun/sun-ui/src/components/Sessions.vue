@@ -237,7 +237,7 @@
           })
       },
       getAllUsers() {
-        this.userGetAll(this.hotspotSearchId, success => {
+        this.userGetAll(this.hotspotSearchId, null, success => {
           this.users = success.body
         }, error => {
           console.log(error)

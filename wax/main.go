@@ -53,6 +53,9 @@ func DefineAPI(router *gin.Engine) {
 		// handle AAA requests
 		wax.GET("/aaa", methods.Dispatch)
 
+		// handle mac auth
+		wax.GET("/register/mac/:mac", methods.MACAuth)
+
 		// handle voucher control
 		wax.GET("/register/voucher/:code", methods.VoucherAuth)
 

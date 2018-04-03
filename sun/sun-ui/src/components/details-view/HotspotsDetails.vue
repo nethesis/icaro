@@ -116,6 +116,9 @@
                     <strong>{{ $t('user.kbps_up') }}</strong>: {{ props.row.bandwidth_up || '-' }}</div>
                 </td>
                 <td class="fancy">{{ props.row.duration }} ({{$t('hotspot.days')}})</td>
+                <td class="fancy">
+                  <span :class="['fa', checkVoucherUse(props.row.expires) ? 'fa-check green' : 'fa-minus']"></span>
+                </td>
                 <td>
                   <button v-on:click="printVoucher(props.row)" class="btn btn-primary" type="button">
                     <span class="fa fa-print"></span>
@@ -234,6 +237,55 @@
           </form>
         </div>
       </div>
+    </div>
+
+    <div v-if="totals.units.count > 0" class="row row-cards-pf">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="card-pf card-pf-accented">
+          <div class="card-pf-heading">
+            <h2 class="card-pf-title">
+              {{ $t("hotspot.mac_auth") }}
+              <div v-if="macAuth.isLoading" class="spinner spinner-sm right"></div>
+            </h2>
+          </div>
+          <div v-if="!macAuth.isLoading" class="card-pf-body">
+            <vue-good-table :perPage="5" :paginate="true" :columns="columnsMAC" :rows="macAuth.data" :lineNumbers="false" :defaultSortBy="{field: 'name', type: 'asc'}"
+              styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText" :rowsPerPageText="tableLangsTexts.rowsPerPageText"
+              :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder" :ofText="tableLangsTexts.ofText">
+              <template slot="table-row" slot-scope="props">
+                <td class="fancy">
+                  <strong>{{ props.row.name }}</strong>
+                </td>
+                <td class="fancy">{{ props.row.username }}</td>
+                <td class="fancy">
+                  <div>
+                    <strong>{{ $t('user.kbps_down') }}</strong>: {{ props.row.kbps_down || '-' }}</div>
+                  <div>
+                    <strong>{{ $t('user.kbps_up') }}</strong>: {{ props.row.kbps_up || '-' }}</div>
+                </td>
+                <td class="fancy">{{ props.row.created | formatDate}}</td>
+                <td>
+                  <button v-on:click="deleteMacAuth(props.row.id)" class="btn btn-danger" type="button">
+                    <span class="fa fa-remove"></span>
+                  </button>
+                </td>
+              </template>
+            </vue-good-table>
+          </div>
+          <div v-if="!macAuth.isLoading" class="card-pf-footer">
+            <div class="dropdown card-pf-time-frame-filter">
+              <button data-toggle="modal" data-target="#macAuthModal" class="btn btn-primary" type="button">{{ $t("hotspot.new_mac_auth") }}</button>
+            </div>
+            <p>
+              <a href="#" class="card-pf-link-with-icon">
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row row-cards-pf">
       <div v-if="user.account_type == 'admin' || user.account_type == 'reseller'" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <div class="card-pf card-pf-accented">
           <div class="card-pf-heading">
@@ -327,6 +379,63 @@
       </div>
     </div>
 
+    <div class="modal fade" id="macAuthModal" tabindex="-1" role="dialog" aria-labelledby="HScreateModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              <span class="pficon pficon-close"></span>
+            </button>
+            <h4 class="modal-title">{{ $t("hotspot.new_mac_auth") }}</h4>
+          </div>
+          <form class="form-horizontal" role="form" v-on:submit.prevent="createMacAuth()">
+            <div class="modal-body">
+              <div class="form-group">
+                <label class="col-sm-5 control-label" for="ACtextInput2-modal-markup">{{ $t("unit.unit") }}</label>
+                <div class="col-sm-7">
+                  <select v-model="newMACAuth.unit" class="form-control">
+                    <option v-for="u in totals.units.data" v-bind:key="u.id" v-bind:value="u">
+                      {{ u.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-5 control-label" for="textInput-modal-markup">{{ $t("unit.description") }}</label>
+                <div class="col-sm-7">
+                  <input required v-model="newMACAuth.name" type="text" id="textInput-modal-markup" class="form-control" :placeholder="$t('unit.description')">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-5 control-label" for="textInput2-modal-markup">{{ $t("unit.mac_address") }}</label>
+                <div class="col-sm-7">
+                  <input required v-model="newMACAuth.username" pattern="^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})" type="text" id="textInput2-modal-markup"
+                    class="form-control" placeholder="00:11:22:AA:BB:CC">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-5 control-label" for="textInput-modal-markup">{{$t('hotspot.bandwidth_down')}}</label>
+                <div class="col-sm-7">
+                  <input v-model="newMACAuth.kbps_down" type="number" class="form-control">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-5 control-label" for="textInput-modal-markup">{{$t('hotspot.bandwidth_up')}}</label>
+                <div class="col-sm-7">
+                  <input v-model="newMACAuth.kbps_up" type="number" class="form-control">
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <span v-show="newMACAuth.onAction" class="spinner spinner-sm spinner-inline modal-spinner"></span>
+              <button type="button" class="btn btn-default" data-dismiss="modal">{{ $t("cancel") }}</button>
+              <button type="submit" class="btn btn-primary">{{ $t("create") }}</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -380,6 +489,9 @@
       // get vouchers
       this.getVouchers()
 
+      // get mac auths
+      this.getAllMACAuth()
+
       return {
         info: {
           isLoading: true,
@@ -389,12 +501,23 @@
           isLoading: true,
           data: []
         },
+        macAuth: {
+          isLoading: true,
+          data: []
+        },
         vouchersCount: 1,
         newVoucher: {
           auto_login: true,
           bandwidth_down: 0,
           bandwidth_up: 0,
           duration: 7
+        },
+        newMACAuth: {
+          name: '',
+          username: '',
+          kbps_down: 0,
+          kbps_up: 0,
+          onAction: false
         },
         preferences: {
           isLoading: true,
@@ -408,7 +531,8 @@
           },
           units: {
             isLoading: true,
-            count: 0
+            count: 0,
+            data: []
           },
           users: {
             isLoading: true,
@@ -436,10 +560,44 @@
             label: this.$i18n.t('hotspot.bandwidth_limit'),
             field: 'bandwidth',
             filterable: false,
+            sortable: false,
           }, {
             label: this.$i18n.t('hotspot.duration'),
             field: 'duration',
             filterable: false,
+            sortable: false,
+          },
+          {
+            label: this.$i18n.t('hotspot.used'),
+            field: 'expires',
+            filterable: false,
+            sortable: false,
+          },
+          {
+            label: '',
+            field: '',
+            sortable: false
+          },
+        ],
+        columnsMAC: [{
+            label: this.$i18n.t('unit.description'),
+            field: 'name',
+            filterable: false,
+            sortable: false,
+          }, {
+            label: this.$i18n.t('unit.mac_address'),
+            field: 'username',
+            filterable: false,
+          }, {
+            label: this.$i18n.t('hotspot.bandwidth_limit'),
+            field: 'bandwidth',
+            filterable: false,
+            sortable: false,
+          }, {
+            label: this.$i18n.t('hotspot.created'),
+            field: 'created',
+            filterable: false,
+            sortable: false,
           },
           {
             label: '',
@@ -548,6 +706,9 @@
           this.vouchers.isLoading = false
         })
       },
+      checkVoucherUse(value) {
+        return +new Date(value) > 0
+      },
       getInfo() {
         this.hotspotGet(this.$route.params.id, success => {
           this.info.data = success.body
@@ -565,13 +726,14 @@
           this.totals.accounts.isLoading = false
         })
         this.unitGetAll(this.$route.params.id, success => {
+          this.totals.units.data = success.body
           this.totals.units.count = success.body.length
           this.totals.units.isLoading = false
         }, error => {
           console.log(error.body)
           this.totals.units.isLoading = false
         })
-        this.userGetAll(this.$route.params.id, success => {
+        this.userGetAll(this.$route.params.id, null, success => {
           this.totals.users.count = success.body.length
           this.totals.users.isLoading = false
         }, error => {
@@ -739,10 +901,13 @@
           doc.text(20, (((v % 11) + 1) * (2.5) + 30) + (22.5 * (v % 11)), voucher.code);
 
           doc.setFontSize(15);
-          doc.text(60, (((v % 11) + 1) * (2.5) + 30) + (22.5 * (v % 11)), 'Down: ' + (voucher.bandwidth_down ? voucher.bandwidth_down : '-') +
+          doc.text(60, (((v % 11) + 1) * (2.5) + 30) + (22.5 * (v % 11)), 'Down: ' + (voucher.bandwidth_down ? voucher.bandwidth_down :
+              '-') +
             '   Up: ' + (voucher.bandwidth_up ? voucher.bandwidth_up : '-'));
-          doc.text(120, (((v % 11) + 1) * (2.5) + 30) + (22.5 * (v % 11)), voucher.duration.toString() + ' ' + this.$i18n.t('hotspot.days'));
-          doc.text(150, (((v % 11) + 1) * (2.5) + 30) + (22.5 * (v % 11)), voucher.auto_login ? this.$i18n.t('hotspot.yes') : this.$i18n.t(
+          doc.text(120, (((v % 11) + 1) * (2.5) + 30) + (22.5 * (v % 11)), voucher.duration.toString() + ' ' + this.$i18n
+            .t('hotspot.days'));
+          doc.text(150, (((v % 11) + 1) * (2.5) + 30) + (22.5 * (v % 11)), voucher.auto_login ? this.$i18n.t(
+            'hotspot.yes') : this.$i18n.t(
             'hotspot.no'));
 
           doc.setFontSize(22);
@@ -764,6 +929,44 @@
       onUpdate(value) {
         $('#captive-preview').css('background-color', value.hex);
       },
+      getAllMACAuth() {
+        this.userGetAll(this.$route.params.id, 'mac', success => {
+          this.macAuth.data = success.body
+          this.macAuth.isLoading = false
+        }, error => {
+          this.macAuth.isLoading = false
+          this.macAuth.data = []
+          console.log(error)
+        })
+      },
+      createMacAuth() {
+        this.newMACAuth.onAction = true
+        var md5 = require('md5');
+        var digest = md5(this.newMACAuth.unit.secret + this.newMACAuth.unit.uuid)
+        console.log(this.newMACAuth)
+        this.userMACCreate(this.newMACAuth, digest, this.newMACAuth.unit.uuid, success => {
+          $('#macAuthModal').modal('toggle');
+          this.newMACAuth = {
+            name: '',
+            username: '',
+            kbps_down: 0,
+            kbps_up: 0,
+            onAction: false
+          }
+          this.getAllMACAuth()
+          this.newMACAuth.onAction = false
+        }, error => {
+          console.log(error.body);
+          this.newMACAuth.onAction = false
+        })
+      },
+      deleteMacAuth(id) {
+        this.userDelete(id, success => {
+          this.getAllMACAuth()
+        }, error => {
+          console.log(error.body);
+        })
+      }
     }
   }
 

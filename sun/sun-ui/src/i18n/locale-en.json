@@ -91,7 +91,10 @@
       "bandwidth_limit": "Bandwidth Limit",
       "bandwidth_down": "Bandwidth Max Down (Kbps)",
       "bandwidth_up": "Bandwidth Max Up (Kbps)",
-      "duration": "Duration"
+      "duration": "Duration",
+      "mac_auth": "MAC Authentication",
+      "new_mac_auth": "New MAC Auth",
+      "used": "Used"
     },
     "user": {
       "username": "Username",

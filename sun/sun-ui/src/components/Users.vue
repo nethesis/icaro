@@ -156,7 +156,7 @@
       getAll() {
         this.set('users_hotspot_id', this.hotspotSearchId || this.get('users_hotspot_id') || 0)
 
-        this.userGetAll(this.hotspotSearchId, success => {
+        this.userGetAll(this.hotspotSearchId, null, success => {
           this.rows = []
           for (var s in success.body) {
             var res = success.body[s]

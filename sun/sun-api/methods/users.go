@@ -109,6 +109,7 @@ func GetUsers(c *gin.Context) {
 	page := c.Query("page")
 	limit := c.Query("limit")
 	hotspotId := c.Query("hotspot")
+	accountType := c.Query("type")
 
 	hotspotIdInt, err := strconv.Atoi(hotspotId)
 	if err != nil {
@@ -118,7 +119,14 @@ func GetUsers(c *gin.Context) {
 	offsets := utils.OffsetCalc(page, limit)
 
 	db := database.Database()
-	db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt)).Offset(offsets[0]).Limit(offsets[1]).Find(&users)
+	chain := db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt))
+
+	if len(accountType) > 0 {
+		chain = chain.Where("account_type = ?", accountType)
+	}
+
+	chain.Offset(offsets[0]).Limit(offsets[1]).Find(&users)
+	db.Close()
 	db.Close()
 
 	if len(users) <= 0 {

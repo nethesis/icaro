@@ -329,6 +329,63 @@ func EmailAuth(c *gin.Context) {
 	}
 }
 
+func MACAuth(c *gin.Context) {
+	mac := c.Param("mac")
+	name := c.Query("name")
+	kbps_down := c.Query("kbps_down")
+	kbps_up := c.Query("kbps_up")
+	uuid := c.Query("uuid")
+
+	if mac == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "mac is required"})
+		return
+	}
+
+	// check if user exists
+	user := utils.GetUserByUsername(mac)
+	if user.Id == 0 {
+		// get unit
+		unit := utils.GetUnitByUuid(uuid)
+
+		// create user
+		downInt, _ := strconv.Atoi(kbps_down)
+		upInt, _ := strconv.Atoi(kbps_up)
+
+		newUser := models.User{
+			HotspotId:   unit.HotspotId,
+			Name:        name,
+			Username:    mac,
+			Password:    "",
+			Email:       "",
+			AccountType: "mac",
+			KbpsDown:    downInt,
+			KbpsUp:      upInt,
+			AutoLogin:   true,
+			ValidFrom:   time.Now().UTC(),
+			ValidUntil:  time.Now().UTC().AddDate(0, 0, 3650), // ten years
+		}
+		newUser.Id = methods.CreateUser(newUser)
+
+		// create device
+		newDevice := models.Device{
+			HotspotId:  unit.HotspotId,
+			UserId:     newUser.Id,
+			MacAddress: mac,
+			Created:    time.Now().UTC(),
+		}
+
+		db := database.Database()
+		db.Save(&newDevice)
+		db.Close()
+
+		// response to client
+		c.JSON(http.StatusOK, gin.H{"user_id": mac, "device_id": newDevice.Id})
+	} else {
+		// response to client
+		c.JSON(http.StatusConflict, gin.H{"message": "mac already used for this hotspot!"})
+	}
+}
+
 func VoucherAuth(c *gin.Context) {
 	code := c.Param("code")
 	uuid := c.Query("uuid")
@@ -343,7 +400,25 @@ func VoucherAuth(c *gin.Context) {
 	if voucher.Id == 0 {
 		c.JSON(http.StatusUnauthorized, gin.H{"message": "Voucher is invalid"})
 	} else {
-		c.JSON(http.StatusOK, gin.H{"message": "Voucher is valid", "code": voucher.Code})
+		// check if is expired
+		if !voucher.Expires.IsZero() && voucher.Expires.Before(time.Now().UTC()) {
+			// delete voucher
+			db := database.Database()
+			db.Delete(&voucher)
+			db.Close()
+
+			c.JSON(http.StatusUnauthorized, gin.H{"message": "Voucher is expired"})
+		} else {
+			// update epiration date
+			if voucher.Expires.IsZero() {
+				voucher.Expires = time.Now().UTC().AddDate(0, 0, voucher.Duration)
+				db := database.Database()
+				db.Save(&voucher)
+				db.Close()
+			}
+
+			c.JSON(http.StatusOK, gin.H{"message": "Voucher is valid", "code": voucher.Code})
+		}
 	}
 
 }

@@ -191,7 +191,7 @@
       },
       // Get Users
       getNewUsers() {
-        this.userGetAll(this.hotspotSearchId, success => {
+        this.userGetAll(this.hotspotSearchId, null, success => {
           this.newUsers = success.body;
           this.implementDataInChart();
           this.isChartLoading = false;
