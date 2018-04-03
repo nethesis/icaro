@@ -100,6 +100,7 @@ The captive portal can be customized for each Hotspot, but if the user doesn't h
     "title": "Icaro",
     "subtitle": "The Open Source Hotspot",
     "description": "Free as in freedom",
+    "background": "#2a87be",
     "logo": "logo.png",
     "banner": "banner.png"
 }
