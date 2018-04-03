@@ -1,4 +1,23 @@
 ---
+
+- name: Create Icaro static directory
+  file:
+    path: /opt/icaro/static
+    state: directory
+    recurse: yes
+
+- name: Download default logo
+  get_url:
+    url: "{{ icaro.sun_api.captive_portal_logo }}"
+    force: true
+    dest: /opt/icaro/static/logo.png
+
+- name: Download default banner
+  get_url:
+    url: "{{ icaro.sun_api.captive_portal_banner }}"
+    force: true
+    dest: /opt/icaro/static/banner.png
+
 - name: Create Sun-api working directory
   file:
     path: /opt/icaro/sun-api/
