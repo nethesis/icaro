@@ -223,7 +223,8 @@
       "medium_traffic_connections": "Average traffic for connections",
       "average_duration_connections": "Average duration for connections",
       "duration": "Duration",
-      "minutes": "Minutes"
+      "minutes": "Minutes",
+      "seconds": "Seconds"
     },
     "sessions": "Sessions",
     "help": "Help",
