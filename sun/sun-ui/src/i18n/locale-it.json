@@ -184,7 +184,7 @@
     },
     "menu": {
       "dashboard": "Dashboard",
-      "users": "Utenti",
+      "users": "Ospiti",
       "accounts": "Amministratori",
       "hotspots": "Hotspot",
       "hotspot": "Hotspot",
@@ -209,7 +209,7 @@
     "admin": "Admin",
     "customer": "Cliente",
     "reseller": "Rivenditore",
-    "users": "Utenti",
+    "users": "Ospiti",
     "hotspots": "Hotspot",
     "desk": "Reception",
     "change_password": "Cambia password",
