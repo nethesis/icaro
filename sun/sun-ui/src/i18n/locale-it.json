@@ -36,6 +36,7 @@
     "hotspot": {
       "yes": "Sì",
       "no": "No",
+      "hostname_hotspot": "Solo lettere maiuscole, minuscole, numeri, punti o trattini",
       "hotspot": "Hotspot",
       "name": "Nome",
       "description": "Descrizione",
@@ -90,7 +91,10 @@
       "bandwidth_limit": "Limiti di Banda",
       "bandwidth_down": "Banda massima in Download (Kbps)",
       "bandwidth_up": "Banda massima in Upload (Kbps)",
-      "duration": "Durata"
+      "duration": "Durata",
+      "mac_auth": "Autenticazione MAC - Solo per dispositivi che non possono autenticarsi con le modalità standard",
+      "new_mac_auth": "Nuovo dispositivo con autenticazione su indirizzo MAC",
+      "used": "Utilizzato"
     },
     "user": {
       "username": "Utente",
@@ -204,6 +208,15 @@
       "ip_address": "Indirizzo IP",
       "created": "Creato"
     },
+      "report": {
+      "reports": "Report",
+      "statistic": "Statistiche",
+      "session": "Connessioni",
+      "new_user": "Nuove registrazioni",
+      "last_7_days": "Ultimi 7 giorni",
+      "last_15_days": "Ultimi 15 giorni",
+      "last_month": "ultimo mese"
+    },
     "sessions": "Connessioni",
     "help": "Aiuto",
     "admin": "Admin",
@@ -220,6 +233,7 @@
     "next": "Prossimo",
     "prev": "Precedente",
     "of": "di ",
+    "all": "Tutto",
     "search": "Ricerca",
     "rows_per_page": "Righe per pagina",
     "action": "Azione",
