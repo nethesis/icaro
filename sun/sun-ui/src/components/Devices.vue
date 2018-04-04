@@ -196,8 +196,8 @@
       clearFilters() {
         this.hotspotSearchId = 0
         this.hotspotUserId = 0
-        this.set('sessions_hotspot_id', 0)
-        this.set('sessions_user_id', 0)
+        this.set('devices_hotspot_id', 0)
+        this.set('devices_user_id', 0)
         this.getAll()
       },
     }
