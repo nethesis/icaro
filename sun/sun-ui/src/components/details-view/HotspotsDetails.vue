@@ -239,7 +239,7 @@
       </div>
     </div>
 
-    <div v-if="totals.units.count > 0" class="row row-cards-pf">
+    <div v-if="(user.account_type == 'admin' || user.account_type == 'reseller') && totals.units.count > 0" class="row row-cards-pf">
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <div class="card-pf card-pf-accented">
           <div class="card-pf-heading">
