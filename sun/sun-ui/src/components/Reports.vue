@@ -116,8 +116,13 @@
             }],
             yAxes: [{
               ticks: {
+                maxTicksLimit:5,
+                callback: function(item) {
+                    if (item % 1 === 0) {
+                      return item;
+                    }
+                },
                 beginAtZero: true,
-                stepSize: 1,
               },
               gridLines: {
                 display: false,

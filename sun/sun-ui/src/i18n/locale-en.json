@@ -227,7 +227,9 @@
       "average_duration_connections": "Average duration for connections",
       "duration": "Duration",
       "minutes": "Minutes",
-      "seconds": "Seconds"
+      "seconds": "Seconds",
+      "size": "Size",
+      "time": "Time"
     },
     "sessions": "Sessions",
     "help": "Help",

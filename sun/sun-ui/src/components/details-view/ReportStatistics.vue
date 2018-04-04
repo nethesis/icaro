@@ -83,8 +83,8 @@ export default {
                     tooltips: {
                         callbacks: {
                             label: function(item) {
-                                var i = Math.floor(Math.log(item.yLabel * 1e6) / Math.log(1024))
-                                return (item.yLabel * 1e6 / Math.pow(1024, i)).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i]
+                                const prettyBytes = require('pretty-bytes');
+                                return prettyBytes(item.yLabel);
                             }
                         }
                     },
@@ -95,10 +95,15 @@ export default {
                         yAxes: [{
                             scaleLabel: {
                                 display: true,
-                                labelString: 'MB'
+                                labelString: this.$i18n.t('report.size')
                             },
                             ticks: {
-                                beginAtZero: true
+                              maxTicksLimit:5,
+                              callback: function(item) {
+                                const prettyBytes = require('pretty-bytes');
+                                return prettyBytes(item);
+                              },
+                              beginAtZero: true
                             }
                         }]
                     }
@@ -112,6 +117,9 @@ export default {
                     backgroundColor: '#444'
                 }],
                 options: {
+                    legend: { 
+                        display: false 
+                    },
                     tooltips: {
                         callbacks: {
                             label: function(item) {
@@ -135,12 +143,23 @@ export default {
                         yAxes: [{
                             scaleLabel: {
                                 display: true,
-                                labelString: this.$i18n.t('report.seconds')
+                                labelString: this.$i18n.t('report.time')
                             },
                             ticks: {
-                                callback: function(value) {
-                                    if (value % 2 === 0) {
-                                        return value;
+                                maxTicksLimit:5,
+                                callback: function(item) {
+                                    let hours = parseInt(Math.floor(item / 3600))
+                                    let minutes = parseInt(Math.floor((item - hours * 3600) / 60))
+                                    let seconds = parseInt((item - (hours * 3600 + minutes * 60)) % 60)
+
+                                    let dHours = hours > 9 ? hours : '0' + hours
+                                    let dMins = minutes > 9 ? minutes : '0' + minutes
+                                    let dSecs = seconds > 9 ? seconds : '0' + seconds
+
+                                    if(dHours === "00"){
+                                      return  dMins + 'm ';
+                                    }else {
+                                        return dHours + 'h ' + dMins + 'm ';
                                     }
                                 },
                                 beginAtZero: true
@@ -166,8 +185,8 @@ export default {
                     tooltips: {
                         callbacks: {
                             label: function(item) {
-                                var i = Math.floor(Math.log(item.yLabel * 1e6) / Math.log(1024))
-                                return (item.yLabel * 1e6 / Math.pow(1024, i)).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i]
+                                const prettyBytes = require('pretty-bytes');
+                                return prettyBytes(item.yLabel);
                             }
                         }
                     },
@@ -179,10 +198,15 @@ export default {
                         yAxes: [{
                             scaleLabel: {
                                 display: true,
-                                labelString: 'MB'
+                                labelString: this.$i18n.t('report.size')
                             },
-                            ticks: {
-                                beginAtZero: true
+                           ticks: {
+                              maxTicksLimit:5,
+                              callback: function(item) {
+                                const prettyBytes = require('pretty-bytes');
+                                return prettyBytes(item);
+                              },
+                              beginAtZero: true
                             }
                         }]
                     }
@@ -196,6 +220,9 @@ export default {
                     backgroundColor: '#444'
                 }],
                 options: {
+                    legend: { 
+                        display: false 
+                    },
                     tooltips: {
                         callbacks: {
                             label: function(item) {
@@ -215,12 +242,23 @@ export default {
                         yAxes: [{
                             scaleLabel: {
                                 display: true,
-                                labelString: this.$i18n.t('report.seconds')
+                                labelString: this.$i18n.t('report.time')
                             },
                             ticks: {
-                                callback: function(value) {
-                                    if (value % 2 === 0) {
-                                        return value;
+                                maxTicksLimit:5,
+                                callback: function(item) {
+                                    let hours = parseInt(Math.floor(item / 3600))
+                                    let minutes = parseInt(Math.floor((item - hours * 3600) / 60))
+                                    let seconds = parseInt((item - (hours * 3600 + minutes * 60)) % 60)
+
+                                    let dHours = hours > 9 ? hours : '0' + hours
+                                    let dMins = minutes > 9 ? minutes : '0' + minutes
+                                    let dSecs = seconds > 9 ? seconds : '0' + seconds
+
+                                    if(dHours === "00"){
+                                      return  dMins + 'm ';
+                                    }else {
+                                        return dHours + 'h ' + dMins + 'm ';
                                     }
                                 },
                                 beginAtZero: true
@@ -250,8 +288,8 @@ export default {
                     tooltips: {
                         callbacks: {
                             label: function(item) {
-                                var i = Math.floor(Math.log(item.yLabel * 1e6) / Math.log(1024))
-                                return (item.yLabel * 1e6 / Math.pow(1024, i)).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i]
+                                const prettyBytes = require('pretty-bytes');
+                                return prettyBytes(item.yLabel);
                             }
                         }
                     },
@@ -263,10 +301,15 @@ export default {
                         yAxes: [{
                             scaleLabel: {
                                 display: true,
-                                labelString: 'MB'
+                                labelString: this.$i18n.t('report.size')
                             },
                             ticks: {
-                                beginAtZero: true
+                              maxTicksLimit:5,
+                              callback: function(item) {
+                                const prettyBytes = require('pretty-bytes');
+                                return prettyBytes(item);
+                              },
+                              beginAtZero: true
                             }
                         }]
                     }
@@ -293,8 +336,8 @@ export default {
                 let kbps_down = 0
                 this.newUsersReport.map(function(user) {
                     if (user.valid_from.substring(0, 10) === date) {
-                        kbps_up += user.kbps_up / 1e3
-                        kbps_down += user.kbps_down / 1e3
+                        kbps_up += user.kbps_up
+                        kbps_down += user.kbps_down
                     } else {
                         kbps_up += 0
                         kbps_down += 0
@@ -326,18 +369,17 @@ export default {
                                     // if user session is on date, check if session has been stopped on that day
                                     if (session.stop_time.substring(0, 10) === date) {
                                         duration += moment.range(moment(session.start_time), moment(session.stop_time)).diff('seconds')
-                                        console.log('code goed here')
+
                                         // or session has been stopped on next day
                                     } else if (session.stop_time.substring(0, 10) > date) {
                                         duration += moment.range(moment(session.start_time), moment(date).endOf('day')).diff('seconds')
-                                        console.log('code goed here')
                                     }
                                     duration_array[session_counter] += duration
                                     duration_array.push(0)
                                     session_counter++
 
                                     // check if session has started one day before, but has stopped on actual day
-                                } else if (session.stop_time.substring(0, 10) === date && session.start_time.substring(0, 10) <= date) {
+                                } else if (session.stop_time.substring(0, 10) === date && session.start_time.substring(0, 10) < date) {
                                     duration += moment.range(moment(date).startOf('day'), moment(session.stop_time)).diff('seconds')
                                     duration_array[session_counter] += duration
                                     duration_array.push(0)
@@ -350,8 +392,8 @@ export default {
                     }
 
                     if (user.valid_from.substring(0, 10) === date) {
-                        kbps_up[index] += user.kbps_up / 1e3
-                        kbps_down[index] += user.kbps_down / 1e3
+                        kbps_up[index] += user.kbps_up
+                        kbps_down[index] += user.kbps_down
                         kbps_up.push(0)
                         kbps_down.push(0)
                         index++
@@ -361,7 +403,7 @@ export default {
                     }
                 })
 
-                if (session_counter >= 1) {
+                if (duration_array.length > 1) {
                     duration_array.pop()
                 }
                 if (kbps_up.length > 1) {
@@ -386,8 +428,8 @@ export default {
                 this.sessionsReport.map(function(session) {
                     // Check if session has been started between chart date
                     if (session.start_time.substring(0, 10) === date) {
-                        kbps_up[index] += session.bytes_up / 100000
-                        kbps_down[index] += session.bytes_down / 100000
+                        kbps_up[index] += session.bytes_up
+                        kbps_down[index] += session.bytes_down
                         duration[index] += session.duration
                         kbps_up.push(0)
                         kbps_down.push(0)
@@ -413,7 +455,6 @@ export default {
                 this.avgTrafficSessionChart.datasets[1].data.push(this.calculateAVG(kbps_down))
                 this.avgDurationSessionChart.datasets[0].data.push(this.calculateAVG(duration))
             })
-            console.log('THIS.AVGDURATIONSESSIONCHART.DATASETS[0].DATA', this.avgDurationSessionChart.datasets[0].data)
         }
     }
 }
