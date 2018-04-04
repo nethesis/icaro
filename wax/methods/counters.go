@@ -173,14 +173,18 @@ func Counters(c *gin.Context, parameters url.Values) {
 
 	switch status {
 	case "start":
-		if strings.Compare(c.Query("user"), c.Query("mac")) == 0 {
-			//autologin
-			_, user := utils.GetUserByMacAddressAndunitMacAddress(c.Query("mac"), c.Query("ap"))
-			username = user.Username
+		if strings.Compare(c.Query("user"), "temporary") != 0 {
+			if strings.Compare(c.Query("user"), c.Query("mac")) == 0 {
+				//autologin
+				_, user := utils.GetUserByMacAddressAndunitMacAddress(c.Query("mac"), c.Query("ap"))
+				username = user.Username
+			} else {
+				username = c.Query("user")
+			}
+			Ack(c, startSession(username, c.Query("mac"), c.Query("ip"), c.Query("sessionid"), c.Query("nasid"), c.Query("ap")))
 		} else {
-			username = c.Query("user")
+			Ack(c, 1)
 		}
-		Ack(c, startSession(username, c.Query("mac"), c.Query("ip"), c.Query("sessionid"), c.Query("nasid"), c.Query("ap")))
 	case "stop":
 		Ack(c, stopSession(c.Query("sessionid"), c.Query("ap"), c.Query("bytes_down"), c.Query("bytes_up"), c.Query("duration")))
 	case "update":
