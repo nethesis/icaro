@@ -140,6 +140,9 @@ func Init(ConfigFilePtr *string) {
 	if os.Getenv("SMS_NUMBER") != "" {
 		Config.Endpoints.Sms.Number = os.Getenv("SMS_NUMBER")
 	}
+	if os.Getenv("SMS_LOGIN_LINK") != "" {
+		Config.Endpoints.Sms.Link = os.Getenv("SMS_LOGIN_LINK")
+	}
 
 	if os.Getenv("EMAIL_FORM") != "" {
 		Config.Endpoints.Email.From = os.Getenv("EMAIL_FROM")
@@ -155,6 +158,9 @@ func Init(ConfigFilePtr *string) {
 	}
 	if os.Getenv("EMAIL_SMTP_PASSWORD") != "" {
 		Config.Endpoints.Email.SMTPPassword = os.Getenv("EMAIL_SMTP_PASSWORD")
+	}
+	if os.Getenv("EMAIL_LOGIN_LINK") != "" {
+		Config.Endpoints.Email.Link = os.Getenv("EMAIL_LOGIN_LINK")
 	}
 
 	if os.Getenv("CAPTIVE_REDIRECT") != "" {
