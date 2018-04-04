@@ -198,7 +198,7 @@
                 </label>
                 <div class="col-sm-6">
                   <picture-input v-if="pref.key == 'captive_3_logo' || pref.key == 'captive_5_banner'" :ref="'prefInput-'+pref.key" :prefill="urltoFile(pref.value, pref.key)"
-                    :alertOnError="false" @change="onChanged(pref)" :width="100" :height="100" accept="image/jpeg, image/png"
+                    :alertOnError="false" @change="onChanged(pref)" :width="100" :height="100"
                     :crop="false" :zIndex="1000" :customStrings="uploadLangstexts" removeButtonClass="btn btn-danger" buttonClass="btn btn-default">
 
                   </picture-input>
