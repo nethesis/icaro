@@ -52,7 +52,7 @@ then
 
 			http_header 200
 
-			dedalo query authorize mac "$REMOTE_MAC" sessiontimeout "$sessiontimeout" noacct
+			dedalo query authorize mac "$REMOTE_MAC" username "temporary" sessiontimeout "$sessiontimeout"
 
 		else
 			http_header 403
