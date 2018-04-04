@@ -92,8 +92,8 @@
       "bandwidth_down": "Banda massima in Download (Kbps)",
       "bandwidth_up": "Banda massima in Upload (Kbps)",
       "duration": "Durata",
-      "mac_auth": "Autenticazione MAC - Solo per dispositivi che non possono autenticarsi con le modalità standard",
-      "new_mac_auth": "Nuovo dispositivo con autenticazione su indirizzo MAC",
+      "mac_auth": "Autenticazione Indirizzo MAC",
+      "new_mac_auth": "Crea nuova autenticazione",
       "used": "Utilizzato"
     },
     "user": {
