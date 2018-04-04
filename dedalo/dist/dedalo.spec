@@ -1,5 +1,5 @@
 Name: dedalo
-Version: 0.0.6
+Version: 0.1.0
 Release: 1%{?dist}
 Summary: Network Access Controller, runs on the firewall and intercepts all guest connections
 
@@ -64,6 +64,9 @@ touch %{buildroot}/opt/icaro/dedalo/walled_gardens/local.conf
 
 
 %changelog
+* Wed Apr 04 2018 Matteo Valentini <matteo.valentini@nethesis.it> - 0.1.0-1
+  - Enable temporary sessions accounting
+
 * Tue Mar 27 2018 Matteo Valentini <matteo.valentini@nethesis.it> - 0.0.6-1
   - Set rpm BuildArch to noarch
   - Enable macauth (auto login)
