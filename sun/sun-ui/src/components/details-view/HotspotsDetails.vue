@@ -209,7 +209,7 @@
                   <sketch-picker @input="onUpdate(pref.value)" class="absolute-center" v-if="pref.key == 'captive_7_background'" v-model="pref.value"
                   />
 
-                  <input v-if="pref.key != 'captive_6_description' && pref.key != 'captive_3_logo' && pref.key != 'captive_5_banner' && pref.key != 'captive_7_background'"
+                  <input required v-if="pref.key != 'captive_6_description' && pref.key != 'captive_3_logo' && pref.key != 'captive_5_banner' && pref.key != 'captive_7_background'"
                     v-model="pref.value" :type="getInputType(pref.key, pref.value)" class="form-control">
                 </div>
               </div>
