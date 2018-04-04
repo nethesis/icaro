@@ -81,15 +81,10 @@ func SMSAuth(c *gin.Context) {
 			voucher := utils.GetVoucherByCode(voucherCode, unit.HotspotId)
 
 			if voucher.Id > 0 {
-				daysInt = voucher.Duration
+				daysInt = int(voucher.Expires.Sub(time.Now().UTC()).Hours() / 24)
 				downInt = voucher.BandwidthDown
 				upInt = voucher.BandwidthUp
 				autoLoginBool = voucher.AutoLogin
-
-				// delete voucher
-				db := database.Database()
-				db.Delete(&voucher)
-				db.Close()
 			}
 		}
 
@@ -107,7 +102,7 @@ func SMSAuth(c *gin.Context) {
 			KbpsUp:      upInt,
 			AutoLogin:   autoLoginBool,
 			ValidFrom:   time.Now().UTC(),
-			ValidUntil:  time.Now().UTC().AddDate(0, 0, daysInt),
+			ValidUntil:  time.Now().UTC().AddDate(0, 0, daysInt+1),
 		}
 		newUser.Id = methods.CreateUser(newUser)
 
@@ -147,11 +142,6 @@ func SMSAuth(c *gin.Context) {
 				user.KbpsDown = voucher.BandwidthDown
 				user.KbpsUp = voucher.BandwidthUp
 				user.AutoLogin = voucher.AutoLogin
-
-				// delete voucher
-				db := database.Database()
-				db.Delete(&voucher)
-				db.Close()
 			}
 		}
 
@@ -224,15 +214,10 @@ func EmailAuth(c *gin.Context) {
 			voucher := utils.GetVoucherByCode(voucherCode, unit.HotspotId)
 
 			if voucher.Id > 0 {
-				daysInt = voucher.Duration
+				daysInt = int(voucher.Expires.Sub(time.Now().UTC()).Hours() / 24)
 				downInt = voucher.BandwidthDown
 				upInt = voucher.BandwidthUp
 				autoLoginBool = voucher.AutoLogin
-
-				// delete voucher
-				db := database.Database()
-				db.Delete(&voucher)
-				db.Close()
 			}
 		}
 
@@ -250,7 +235,7 @@ func EmailAuth(c *gin.Context) {
 			KbpsUp:      upInt,
 			AutoLogin:   autoLoginBool,
 			ValidFrom:   time.Now().UTC(),
-			ValidUntil:  time.Now().UTC().AddDate(0, 0, daysInt),
+			ValidUntil:  time.Now().UTC().AddDate(0, 0, daysInt+1),
 		}
 		newUser.Id = methods.CreateUser(newUser)
 
@@ -290,11 +275,6 @@ func EmailAuth(c *gin.Context) {
 				user.KbpsDown = voucher.BandwidthDown
 				user.KbpsUp = voucher.BandwidthUp
 				user.AutoLogin = voucher.AutoLogin
-
-				// delete voucher
-				db := database.Database()
-				db.Delete(&voucher)
-				db.Close()
 			}
 		}
 
