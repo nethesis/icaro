@@ -12,6 +12,10 @@
         "headers": ["Token", "Content-Type"],
         "methods": ["GET", "PUT", "POST", "DELETE"]
     },
+    "disclaimers": {
+      "terms_of_use": "{% include icaro.wax.tos_path ignore missing %}",
+      "marketing_use": "{% include icaro.wax.marketing_use_path ignore missing %}"
+    },
     "auth_social": {
         "facebook": {
 {% if icaro.wax.facebook_client_id is defined and icaro.wax.facebook_client_secret is defined %}

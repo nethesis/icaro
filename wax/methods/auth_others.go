@@ -120,7 +120,7 @@ func SMSAuth(c *gin.Context) {
 		utils.CreateUserMarketing(newUser.Id, smsMarketingData{Number: number}, "sms")
 
 		// response to client
-		c.JSON(http.StatusOK, gin.H{"user_id": number})
+		c.JSON(http.StatusOK, gin.H{"user_id": number, "user_db_id": newUser.Id})
 	} else {
 		// update user info
 		days := utils.GetHotspotPreferencesByKey(user.HotspotId, "user_expiration_days")
@@ -253,7 +253,7 @@ func EmailAuth(c *gin.Context) {
 		utils.CreateUserMarketing(newUser.Id, emailMarketingData{Email: email}, "email")
 
 		// response to client
-		c.JSON(http.StatusOK, gin.H{"user_id": email})
+		c.JSON(http.StatusOK, gin.H{"user_id": email, "user_db_id": newUser.Id})
 	} else {
 		// update user info
 		days := utils.GetHotspotPreferencesByKey(user.HotspotId, "user_expiration_days")

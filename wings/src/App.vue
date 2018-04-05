@@ -19,34 +19,42 @@
     name: 'App',
     mixins: [AuthMixin],
     data() {
-      this.validateParams()
-      this.getPreferences({
-        digest: this.$root.$options.hotspot.digest,
-        uuid: this.$root.$options.hotspot.uuid,
-        sessionid: this.$root.$options.hotspot.sessionid,
-      }, success => {
-        this.$root.$options.hotspot.disclaimers = success.body.disclaimers
-        this.$root.$options.hotspot.preferences = success.body.preferences
-        this.$root.$options.hotspot.socials = success.body.socials
-        this.hotspot.name = success.body.hotspot_name
-        this.hotspot.preferences = success.body.preferences
-        $("body").css("background-color", success.body.preferences.captive_7_background || '#2a87be');
-        this.loading = false
-      }, error => {
-        console.error(error)
-        $("body").css("background-color", '#fff');
-        this.loading = false
-      })
+      var loading = true
+      if (this.validateParams()) {
+        this.getPreferences({
+          digest: this.$root.$options.hotspot.digest,
+          uuid: this.$root.$options.hotspot.uuid,
+          sessionid: this.$root.$options.hotspot.sessionid,
+        }, success => {
+          this.$root.$options.hotspot.disclaimers = success.body.disclaimers
+          this.$root.$options.hotspot.preferences = success.body.preferences
+          this.$root.$options.hotspot.socials = success.body.socials
+          this.hotspot.name = success.body.hotspot_name
+          this.hotspot.preferences = success.body.preferences
+          $("body").css("background-color", success.body.preferences.captive_7_background || '#2a87be');
+          this.loading = false
+        }, error => {
+          console.error(error)
+          $("body").css("background-color", '#fff');
+          this.loading = false
+        })
+      } else {
+        if (!this.$route.query.state) {
+          window.location.replace("http://1.0.0.1")
+        }
+        loading = false
+      }
       return {
         hotspot: {
           name: '',
           preferences: {}
         },
-        loading: true
+        loading: loading
       }
     },
     methods: {
       validateParams() {
+        var state = false
         if (Object.keys(this.$route.query).length > 0) {
           if (!this.$route.query.digest) {
             this.$root.$options.hotspot.onError = true
@@ -60,10 +68,12 @@
             this.$root.$options.hotspot.sessionid = this.$route.query.sessionid
             this.$root.$options.hotspot.uamip = this.$route.query.uamip
             this.$root.$options.hotspot.uamport = this.$route.query.uamport
+            state = true
           }
         } else {
           this.$root.$options.hotspot.onError = true
         }
+        return state
       }
     }
   }
