@@ -17,6 +17,13 @@
     dest: /opt/icaro/sun-ui/
     remote_src: yes
 
+- name: Download Sun-ui assets
+  unarchive:
+    src: "{{ icaro.sun_ui.assets_url }}"
+    dest: /opt/icaro/sun-ui/static/
+    remote_src: yes
+  when: icaro.sun_ui.assets_url is defined
+
 - name: Set Sun-ui title
   lineinfile:
     path: /opt/icaro/sun-ui/static/config/config.js
