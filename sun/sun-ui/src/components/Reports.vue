@@ -31,6 +31,10 @@
           <vue-chart :height="60" type="line" :width="150" :heigth="150" :options="options" :data="chartData"></vue-chart>
         </div>
         <br>
+        <actual-report-statistics 
+        :todayConnections="Connections">
+        </actual-report-statistics>
+        
         <report-statistics 
         :chartLabels="chartData.labels"
         :chartDateRange="validDate"
@@ -45,10 +49,12 @@
   import UnitService from "../services/unit";
   import StorageService from "../services/storage";
   import HistoryService from '../services/history'
+  import SessionService from '../services/session'
   import UserService from '../services/user'
   import HotspotService from "../services/hotspot";
   import ReportStatistics from '../components/details-view/ReportStatistics'
-  
+  import ActualReportStatistics from '../components/details-view/ActualReportStatistics'
+
   import VueChart from "vue-chart-js";
   import moment from "moment";
   import {
@@ -58,9 +64,10 @@
     name: "Reports",
     components: {
       VueChart,
-      ReportStatistics
+      ReportStatistics,
+      ActualReportStatistics
     },
-    mixins: [HistoryService, StorageService, UserService, HotspotService],
+    mixins: [HistoryService, StorageService, UserService, HotspotService, SessionService],
     data() {
       this.getAllHotspots();
       return {
@@ -134,6 +141,7 @@
         newUsers: [],
         sessions: [],
         hotspots: [],
+        Connections:[],
         hotspotSearchId: 0,
         user: this.get("loggedUser") || null
       };
@@ -178,7 +186,7 @@
         })
 
         let valueToDisplay = selectedRange.map(function (item) {
-          return item.format('DD MMM YYYY');
+          return item.format('DD MMM');
         })
         this.chartData.labels = valueToDisplay;
         this.getSession();
@@ -207,11 +215,11 @@
         this.userGetAll(this.hotspotSearchId, null, success => {
           this.newUsers = success.body;
           this.implementDataInChart();
-          this.isChartLoading = false;
+          this.getTodayUsersLogin();
         }, error => {
-          this.isChartLoading = false
           this.newUsers = []
           this.implementDataInChart();
+          this.getTodayUsersLogin();
           console.log(error)
         })
       },
@@ -246,6 +254,23 @@
           this.chartData.datasets[1].data.push(this.newUsersToShow);
         });
       },
+         getTodayUsersLogin() {
+            this.sessionGetAll(
+                this.hotspotSearchId,
+                "",
+                "",
+                moment().endOf('day').toISOString(),
+                "",
+                success => {
+                    this.Connections = success.body;
+                    this.isChartLoading = false;
+                }, error => {
+                    this.Connections = [];
+                    this.isChartLoading = false;
+                    console.log(error);
+                })
+        },
+     
     }
   };
 
