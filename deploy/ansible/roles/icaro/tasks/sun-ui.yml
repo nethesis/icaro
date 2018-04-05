@@ -29,6 +29,7 @@
     path: /opt/icaro/sun-ui/static/config/config.js
     regexp: "^  APP_NAME: '<YOUR_APP_NAME>',"
     line: "  APP_NAME: '{{ icaro.sun_ui.title }}',"
+  when: icaro.sun_ui.title is defined
 
 - name: Remove temp files
   file:
