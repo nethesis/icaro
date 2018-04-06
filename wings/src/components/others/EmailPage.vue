@@ -8,7 +8,8 @@
                     <i class="mail icon"></i>
                 </div>
             </div>
-            <button v-if="!codeRequested" v-on:click="getCode()" class="ui big button">{{ $t("email.get_code") }}</button>
+            <button v-if="!codeRequested" v-on:click="getCode()" class="ui big button request-code">{{ $t("email.have_code") }}</button>
+            <button v-if="!codeRequested" v-on:click="getCode(true)" class="ui big button">{{ $t("email.get_code") }}</button>
             <div v-if="errors.badMail" class="ui tiny icon negative message">
                 <i class="remove icon"></i>
                 <div class="content">
@@ -224,5 +225,9 @@
     .auth-code-cont {
         margin-top: 15px !important;
         margin: 0;
+    }
+
+    .request-code {
+        margin-bottom: 10px;
     }
 </style>
