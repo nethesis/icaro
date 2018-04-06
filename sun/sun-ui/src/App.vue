@@ -64,6 +64,7 @@
               <span style="display:inline-block;padding:2px 3px;">Zara Walker</span>
             </a>
           </div>
+          <div>Copyright &copy; {{currentYear()}} {{companyName}}</div>
         </div>
         <!--/.container-->
       </div>
@@ -347,10 +348,14 @@
         isLogged: isLogged,
         errors: errors,
         appName: CONFIG.APP_NAME,
-        helpUrl: CONFIG.HELP_URL
+        helpUrl: CONFIG.HELP_URL,
+        companyName: CONFIG.COMPANY_NAME
       }
     },
     methods: {
+      currentYear() {
+        return new Date().getFullYear()
+      },
       getCurrentPath(route) {
         return this.$route.path.split('/')[1] === route
       },
