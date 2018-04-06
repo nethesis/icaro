@@ -144,7 +144,7 @@ func Init(ConfigFilePtr *string) {
 		Config.Endpoints.Sms.Link = os.Getenv("SMS_LOGIN_LINK")
 	}
 
-	if os.Getenv("EMAIL_FORM") != "" {
+	if os.Getenv("EMAIL_FROM") != "" {
 		Config.Endpoints.Email.From = os.Getenv("EMAIL_FROM")
 	}
 	if os.Getenv("EMAIL_SMTP_HOST") != "" {
