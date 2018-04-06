@@ -1,7 +1,7 @@
 <template>
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 section-title">
-            <h2>{{ $t('report.current_situation') }}</h2>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 page-header">
+            <h1>{{ $t('report.current_situation') }}</h1>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 actual-report-header">
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
@@ -36,7 +36,7 @@
             VueChart
         },
         props: {
-            todayConnections:{
+            todayConnections: {
                 type: Array
             }
         },
@@ -111,7 +111,7 @@
                 const momentRange = extendMoment(moment);
                 this.dateRange.from = moment().startOf("day");
                 this.dateRange.to = moment();
-                console.log("this.dateRange: ", this.dateRange);
+                
                 this.actualStatisticChart.labels = Array.from(
                     momentRange.range(this.dateRange.from, this.dateRange.to).by("hours")
                 ).map(function(date) {
@@ -171,8 +171,9 @@
 </script>
 
 <style scoped>
-    .section-title {
-        margin: 30px 0px 0px -15px;
+    .page-header h1 {
+        margin-top: 50px;
+        font-size: 40px;
     }
     .actual-report-header>div {
         border-top: 1px solid gray;
@@ -185,11 +186,33 @@
         font-size: 40px;
         font-weight: bold;
     }
-    .actual-report-header h3 {
-        font-size: 18px;
-    }
     .actual-report-header>div:nth-child(2) {
         border-left: 1px dashed gray;
         border-right: 1px dashed gray;
+    }
+    .page-header h1{
+        font-size: 40px;
+    }
+    .actual-report-header h3{
+        max-height: 35px;
+        height: 35px;
+    }
+     @media only screen and (min-width: 1025px) {
+        .actual-report-header h3 {
+            font-size: 18px;
+        }
+    }
+    @media only screen and (max-width: 925px) {
+        .actual-report-header h3 {
+            font-size: 15px;
+        }
+    }
+    @media only screen and (max-width: 768px) {
+        .page-header h1 {
+            font-size: 35px;
+        }
+        .actual-report-header h3 {
+            font-size: 13px;
+        }
     }
 </style>

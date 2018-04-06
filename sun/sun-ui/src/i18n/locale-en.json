@@ -236,11 +236,12 @@
       "time": "Time",
       "today_connections": "Today’s connections",
       "today_logins": "Today ’s logins",
-      "current_situation": "Current situation",
+      "current_situation": "Actual situation",
       "connection_logins": "Connections and logins",
       "users_currently_connected": "Users currently connected",
       "total_daily_connections": "Total daily connections",
-      "new_daily_logins": "New daily logins"
+      "new_daily_logins": "New daily logins",
+      "history_situation": "History Situation"
 
       
     },

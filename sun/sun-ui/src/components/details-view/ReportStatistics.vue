@@ -1,5 +1,8 @@
 <template>
     <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 page-header">
+            <h1>{{ $t('report.history_situation') }}</h1>
+        </div>
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 section-title">
@@ -11,29 +14,29 @@
             </div>
             <div class="row average-table">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 first-row">
-                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                         <h3>{{ $t('report.average_duration_connections') }}</h3>
                         <h1>{{ avgDurationConnection }}</h1>
                     </div>
-                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                         <h3>{{ $t('report.medium_traffic_connections_download') }}</h3>
                         <h1>{{ avgDownloadTrafficConnection }}</h1>
                     </div>
-                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                         <h3>{{ $t('report.medium_traffic_connections_upload') }}</h3>
                         <h1>{{ avgUploadTrafficConnection }}</h1>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 second-row">
-                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                         <h3>{{ $t('report.average_duration_user') }}</h3>
                         <h1>{{ avgDurationUser }}</h1>
                     </div>
-                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                         <h3>{{ $t('report.medium_traffic_user_download') }}</h3>
                         <h1>{{ avgDownloadTrafficUser }}</h1>
                     </div>
-                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                         <h3>{{ $t('report.medium_traffic_user_upload') }}</h3>
                         <h1>{{ avgUploadTrafficUser }}</h1>
                     </div>
@@ -72,7 +75,6 @@
 <script>
     import VueChart from 'vue-chart-js'
     import moment from 'moment'
-    import Filters from '../../filters/filters'
     import {
         extendMoment
     } from 'moment-range'
@@ -93,9 +95,6 @@
         },
         components: {
             VueChart
-        },
-        filters: {
-            Filters,
         },
         data() {
             return {
@@ -159,12 +158,18 @@
                                     let hours = parseInt(Math.floor(item.yLabel / 3600))
                                     let minutes = parseInt(Math.floor((item.yLabel - hours * 3600) / 60))
                                     let seconds = parseInt((item.yLabel - (hours * 3600 + minutes * 60)) % 60)
-
+                                    
                                     let dHours = hours > 9 ? hours : '0' + hours
                                     let dMins = minutes > 9 ? minutes : '0' + minutes
                                     let dSecs = seconds > 9 ? seconds : '0' + seconds
-                                    
-                                    return dHours + 'h ' + dMins + 'm ' + dSecs + 's'
+
+                                    if (dHours === "00" && dMins !== "00") {
+                                        return dMins + 'm ' + dSecs + 's'
+                                    } else if (dHours === "00" && dMins === "00") {
+                                        return dSecs + 's'
+                                    } else {
+                                        return dHours + 'h ' + dMins + 'm ' + dSecs + 's'
+                                    }
                                 }
                             }
                         },
@@ -265,7 +270,13 @@
                                     let dMins = minutes > 9 ? minutes : '0' + minutes
                                     let dSecs = seconds > 9 ? seconds : '0' + seconds
 
-                                    return dHours + 'h ' + dMins + 'm ' + dSecs + 's'
+                                    if (dHours === "00" && dMins !== "00") {
+                                        return dMins + 'm ' + dSecs + 's'
+                                    } else if (dHours === "00" && dMins === "00") {
+                                        return dSecs + 's'
+                                    } else {
+                                        return dHours + 'h ' + dMins + 'm ' + dSecs + 's'
+                                    }
                                 }
                             }
                         },
@@ -367,6 +378,21 @@
                     sum += input[i];
                 }
                 return sum / input.length;
+            },
+            secondsToHR(item) {
+                let hours = parseInt(Math.floor(item / 3600))
+                let minutes = parseInt(Math.floor((item - hours * 3600) / 60))
+                let seconds = parseInt((item - (hours * 3600 + minutes * 60)) % 60)
+                let dHours = hours > 9 ? hours : '0' + hours
+                let dMins = minutes > 9 ? minutes : '0' + minutes
+                let dSecs = seconds > 9 ? seconds : '0' + seconds
+                if (dHours === "00" && dMins !== "00") {
+                    return dMins + 'm ' + dSecs + 's'
+                } else if (dHours === "00" && dMins === "00") {
+                    return dSecs + 's'
+                } else {
+                    return dHours + 'h ' + dMins + 'm ' + dSecs + 's'
+                }
             },
             fillTotalTrafficChart() {
                 this.chartDateRange.forEach(date => {
@@ -495,10 +521,10 @@
             },
             implementAvgTable() {
                 const prettyBytes = require('pretty-bytes');
-                this.avgDurationConnection = Filters.secondsInHour(this.calculateAVG(this.avgDurationSessionChart.datasets[0].data));
+                this.avgDurationConnection = this.secondsToHR(this.calculateAVG(this.avgDurationSessionChart.datasets[0].data));
                 this.avgUploadTrafficConnection = prettyBytes(this.calculateAVG(this.avgTrafficSessionChart.datasets[0].data));
                 this.avgDownloadTrafficConnection = prettyBytes(this.calculateAVG(this.avgTrafficSessionChart.datasets[1].data));
-                this.avgDurationUser = Filters.secondsInHour(this.calculateAVG(this.avgDurationUserChart.datasets[0].data));
+                this.avgDurationUser = this.secondsToHR(this.calculateAVG(this.avgDurationUserChart.datasets[0].data));
                 this.avgUploadTrafficUser = prettyBytes(this.calculateAVG(this.avgTrafficUserChart.datasets[0].data));
                 this.avgDownloadTrafficUser = prettyBytes(this.calculateAVG(this.avgTrafficUserChart.datasets[1].data));
             }
@@ -508,12 +534,16 @@
 
 <style scoped>
     .section-title {
-        margin: 30px 0px 10px -15px;
+        margin: 0px 0px 10px -15px;
+    }
+    .page-header h1 {
+        margin-top: 50px;
+        margin-bottom: -10px;
+        font-size: 40px;
     }
     .average-table {
         border-top: 1px solid gray;
         margin: 20px;
-        text-align: center;
     }
     .average-table h1 {
         font-size: 40px;
@@ -522,21 +552,91 @@
     .average-table h3 {
         font-size: 18px;
     }
-    .first-row > div:first-child,
-    .first-row > div:nth-child(2),
-    .second-row > div:first-child,
-    .second-row > div:nth-child(2){
+    .first-row>div:first-child,
+    .first-row>div:nth-child(2),
+    .second-row>div:first-child,
+    .second-row>div:nth-child(2) {
         border-right: 1px dashed gray;
     }
     .second-row {
         border-top: 1px dashed gray;
     }
-    .first-row >div,
-    .second-row >div {
+    .first-row>div,
+    .second-row>div {
         min-height: 135px;
+        text-align: center;
     }
-
-
-
+    .first-row>div h3,
+    .second-row>div h3 {
+        max-height: 40px;
+        height: 40px;
+        font-size: 18px;
+    }
+    @media only screen and (max-width: 1200px) {
+        .first-row>div h3,
+        .second-row>div h3 {
+            font-size: 17px;
+        }
+        .first-row>div h1,
+        .second-row>div h1 {
+            font-size: 32px;
+        }
+    }
+    @media only screen and (max-width: 1030px) {
+        .first-row>div h3,
+        .second-row>div h3 {
+            font-size: 17px;
+        }
+        .first-row>div h1,
+        .second-row>div h1 {
+            font-size: 26px;
+        }
+    }
+    @media only screen and (max-width: 925px) {
+        .first-row>div h3,
+        .second-row>div h3 {
+            font-size: 14px;
+        }
+        .first-row>div h1,
+        .second-row>div h1 {
+            font-size: 20px;
+        }
+        .first-row>div h3,
+        .second-row>div h3 {
+            max-height: 28px;
+            height: 28px;
+        }
+    }
+    @media only screen and (max-width: 768px) {
+        .first-row>div h3,
+        .second-row>div h3 {
+            font-size: 18px;
+        }
+        .first-row>div h1,
+        .second-row>div h1 {
+            font-size: 35px;
+        }
+        .first-row>div:first-child,
+        .first-row>div:nth-child(2),
+        .second-row>div:first- .first-row>div h3,
+        .second-row>div h3 {
+            max-height: 25px;
+            height: 25px;
+        }
+        .first-row>div:first-child,
+        .first-row>div:nth-child(2),
+        .second-row>div:first-child,
+        .second-row>div:nth-child(2) {
+            border-right: 0;
+        } .page-header h1 {
+            font-size: 35px;
+        }
+        .second-row {
+            border-top: 0;
+        }
+        .page-header h1 {
+            font-size: 35px;
+        }
+    }
 
 </style>
