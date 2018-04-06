@@ -380,3 +380,7 @@ a {
 .card-link:hover{
   color: #26a9a3 !important;
 }
+
+.picture-preview {
+  border: 1px solid #bcbcbc !important;
+}

@@ -8,7 +8,7 @@
         <select v-on:change="getAll()" v-model="hotspotSearchId" class="form-control">
           <option value="0">-</option>
           <option v-for="hotspot in hotspots" v-bind:key="hotspot.id" v-bind:value="hotspot.id">
-            {{ hotspot.name }}
+            {{ hotspot.name }} - {{ hotspot.description}}
           </option>
         </select>
       </div>
@@ -172,7 +172,7 @@
         this.hotspotSearchId = this.$route.params.hotspotId;
       }
       // get session list
-      this.getAll()
+      this.getAll(true)
       this.getAllHotspots()
       this.getAllUsers()
       this.getAllUnits()

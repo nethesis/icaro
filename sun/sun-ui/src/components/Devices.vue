@@ -8,7 +8,7 @@
         <select v-on:change="getAll()" v-model="hotspotSearchId" class="form-control">
           <option value="0">-</option>
           <option v-for="hotspot in hotspots" v-bind:key="hotspot.id" v-bind:value="hotspot.id">
-            {{ hotspot.name }}
+            {{ hotspot.name }} - {{ hotspot.description}}
           </option>
         </select>
       </div>
@@ -40,7 +40,8 @@
       :globalSearchFn="searchFn" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder" :ofText="tableLangsTexts.ofText">
       <template slot="table-row" slot-scope="props">
         <td class="fancy">
-          <a :href="'#/hotspots/'+ props.row.hotspot_id">{{ extractHotspot(props.row.hotspot_id) && extractHotspot(props.row.hotspot_id).name || '-' }}</a>
+          <a :href="'#/hotspots/'+ props.row.hotspot_id">{{ extractHotspot(props.row.hotspot_id) && extractHotspot(props.row.hotspot_id).name +' - '+ extractHotspot(props.row.hotspot_id).description
+            || '-' }}</a>
         </td>
         <td class="fancy">
           {{ extractUser(props.row.user_id) && extractUser(props.row.user_id).name || '-' }}
