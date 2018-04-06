@@ -25,18 +25,14 @@
       </div>
     </div>
     <div v-if="!isChartLoading">
-      <h2>{{ $t('report.statistic') }}</h2>
       <div class="panel-body">
-        <div class="row-sm-12">
-          <vue-chart :height="60" type="line" :width="150" :heigth="150" :options="options" :data="chartData"></vue-chart>
-        </div>
-        <br>
         <actual-report-statistics 
         :todayConnections="Connections">
         </actual-report-statistics>
-        
+ 
+        <br>
         <report-statistics 
-        :chartLabels="chartData.labels"
+        :chartLabels="labels"
         :chartDateRange="validDate"
         :newUsersReport="newUsers"
         :sessionsReport="sessions"
@@ -72,8 +68,6 @@
       this.getAllHotspots();
       return {
         range: null,
-        sessionToShow: [],
-        newUsersToShow: [],
         isChartLoading: true,
         msg: this.$i18n.t('report.reports'),
         dataPoints: {
@@ -95,53 +89,11 @@
         ],
         validDate: [],
         dateRangeSearchId: 1,
-        chartData: {
-          labels: [],
-          datasets: [{
-              label: this.$i18n.t('report.session'),
-              data: [],
-              backgroundColor: '#e6e6ff'
-            },
-            {
-              label: this.$i18n.t('report.new_user'),
-              data: [],
-              backgroundColor: '#cceeff'
-            }
-          ],
-        },
-        options: {
-          elements: {
-            line: {
-              tension: 0
-            }
-          },
-          scales: {
-            xAxes: [{
-              gridLines: {
-                zeroLineColor: 'transparent'
-              }
-            }],
-            yAxes: [{
-              ticks: {
-                maxTicksLimit:5,
-                callback: function(item) {
-                    if (item % 1 === 0) {
-                      return item;
-                    }
-                },
-                beginAtZero: true,
-              },
-              gridLines: {
-                display: false,
-                drawBorder: false
-              }
-            }]
-          }
-        },
         newUsers: [],
         sessions: [],
         hotspots: [],
         Connections:[],
+        labels: [],
         hotspotSearchId: 0,
         user: this.get("loggedUser") || null
       };
@@ -153,11 +105,7 @@
       getSessionsByDate() {
         const moment1 = extendMoment(moment);
         this.isChartLoading = true;
-        this.chartData.labels = [];
-        this.chartData.datasets[0].data = [];
-        this.chartData.datasets[1].data = [];
-
-
+        this.labels = [];
         switch (this.dateRangeSearchId) {
           case 1:
             this.range = moment1.range(moment().subtract(8, 'day').startOf('day').toDate(), moment().subtract(1, 'day')
@@ -188,7 +136,7 @@
         let valueToDisplay = selectedRange.map(function (item) {
           return item.format('DD MMM');
         })
-        this.chartData.labels = valueToDisplay;
+        this.labels = valueToDisplay;
         this.getSession();
       },
       // Get All Session between date range
@@ -214,11 +162,9 @@
       getNewUsers() {
         this.userGetAll(this.hotspotSearchId, null, success => {
           this.newUsers = success.body;
-          this.implementDataInChart();
           this.getTodayUsersLogin();
         }, error => {
           this.newUsers = []
-          this.implementDataInChart();
           this.getTodayUsersLogin();
           console.log(error)
         })
@@ -234,27 +180,7 @@
           }
         );
       },
-      // Implement Session and newUser between date range in Chart
-      implementDataInChart() {
-        this.validDate.forEach(element => {
-          this.sessionToShow = this.sessions.map(function (item) {
-            return item.start_time.substring(0, 10) === element;
-          }).filter(function (item) {
-            return item == true;
-          }).length;
-          this.chartData.datasets[0].data.push(this.sessionToShow);
-        });
-
-        this.validDate.forEach(element => {
-          this.newUsersToShow = this.newUsers.map(function (item) {
-            return item.valid_from.substring(0, 10) === element;
-          }).filter(function (item) {
-            return item == true;
-          }).length;
-          this.chartData.datasets[1].data.push(this.newUsersToShow);
-        });
-      },
-         getTodayUsersLogin() {
+      getTodayUsersLogin() {
             this.sessionGetAll(
                 this.hotspotSearchId,
                 "",

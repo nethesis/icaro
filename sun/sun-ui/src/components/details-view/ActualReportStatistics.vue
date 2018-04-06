@@ -173,10 +173,7 @@
 <style scoped>
     .page-header h1 {
         margin-top: 50px;
-        font-size: 40px;
-    }
-    .actual-report-header>div {
-        border-top: 1px solid gray;
+        font-size: 30px;
     }
     .actual-report-header {
         margin: 20px;
@@ -189,9 +186,6 @@
     .actual-report-header>div:nth-child(2) {
         border-left: 1px dashed gray;
         border-right: 1px dashed gray;
-    }
-    .page-header h1{
-        font-size: 40px;
     }
     .actual-report-header h3{
         max-height: 35px;
@@ -208,9 +202,6 @@
         }
     }
     @media only screen and (max-width: 768px) {
-        .page-header h1 {
-            font-size: 35px;
-        }
         .actual-report-header h3 {
             font-size: 13px;
         }

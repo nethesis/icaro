@@ -241,7 +241,8 @@
       "users_currently_connected": "Users currently connected",
       "total_daily_connections": "Total daily connections",
       "new_daily_logins": "New daily logins",
-      "history_situation": "History Situation"
+      "history_situation": "History Situation",
+      "connection_newlogins": "Connections and New guests"
 
       
     },

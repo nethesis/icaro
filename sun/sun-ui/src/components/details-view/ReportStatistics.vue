@@ -6,9 +6,17 @@
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 section-title">
-                    <h2>{{ $t('report.total_traffic') }}</h2>
+                    <h2>{{ $t('report.connection_newlogins') }}</h2>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <vue-chart :height="60" type="line" :width="150" :heigth="150" :options="totalTrafficChart.options" :data="totalTrafficChart"></vue-chart>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 section-title">
+                    <h2>{{ $t('report.total_traffic') }}</h2>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 total-traffic-chart">
                     <vue-chart type="bar" :height="100" :options="trafficChartData.options" :data="trafficChartData"></vue-chart>
                 </div>
             </div>
@@ -158,7 +166,7 @@
                                     let hours = parseInt(Math.floor(item.yLabel / 3600))
                                     let minutes = parseInt(Math.floor((item.yLabel - hours * 3600) / 60))
                                     let seconds = parseInt((item.yLabel - (hours * 3600 + minutes * 60)) % 60)
-                                    
+
                                     let dHours = hours > 9 ? hours : '0' + hours
                                     let dMins = minutes > 9 ? minutes : '0' + minutes
                                     let dSecs = seconds > 9 ? seconds : '0' + seconds
@@ -357,6 +365,51 @@
                         }
                     }
                 },
+                totalTrafficChart: {
+                    labels: this.chartLabels,
+                    datasets: [{
+                            label: this.$i18n.t('report.session'),
+                            data: [],
+                            backgroundColor: '#e6e6ff'
+                        },
+                        {
+                            label: this.$i18n.t('report.new_user'),
+                            data: [],
+                            backgroundColor: '#cceeff'
+                        }
+                    ],
+                    options: {
+                        elements: {
+                            line: {
+                                tension: 0
+                            }
+                        },
+                        scales: {
+                            xAxes: [{
+                                gridLines: {
+                                    zeroLineColor: 'transparent'
+                                }
+                            }],
+                            yAxes: [{
+                                ticks: {
+                                    maxTicksLimit: 5,
+                                    callback: function(item) {
+                                        if (item % 1 === 0) {
+                                            return item;
+                                        }
+                                    },
+                                    beginAtZero: true,
+                                },
+                                gridLines: {
+                                    display: false,
+                                    drawBorder: false
+                                }
+                            }]
+                        }
+                    },
+                },
+                sessionToShow: [],
+                newUsersToShow: [],
                 avgDurationConnection: 0,
                 avgDownloadTrafficConnection: 0,
                 avgUploadTrafficConnection: 0,
@@ -366,6 +419,7 @@
             }
         },
         created() {
+            this.implementDataInChart();
             this.fillTotalTrafficChart()
             this.implementUserChart()
             this.implementSessionChart()
@@ -393,6 +447,25 @@
                 } else {
                     return dHours + 'h ' + dMins + 'm ' + dSecs + 's'
                 }
+            },
+            // Implement Session and newUser between date range in Chart
+            implementDataInChart() {
+                this.chartDateRange.forEach(element => {
+                    this.sessionToShow = this.sessionsReport.map(function(item) {
+                        return item.start_time.substring(0, 10) === element;
+                    }).filter(function(item) {
+                        return item == true;
+                    }).length;
+                    this.totalTrafficChart.datasets[0].data.push(this.sessionToShow);
+                });
+                this.chartDateRange.forEach(element => {
+                    this.newUsersToShow = this.newUsersReport.map(function(item) {
+                        return item.valid_from.substring(0, 10) === element;
+                    }).filter(function(item) {
+                        return item == true;
+                    }).length;
+                    this.totalTrafficChart.datasets[1].data.push(this.newUsersToShow);
+                });
             },
             fillTotalTrafficChart() {
                 this.chartDateRange.forEach(date => {
@@ -466,7 +539,7 @@
                             kbps_down[index] += 0
                         }
                     })
-
+                    
                     if (duration_array.length > 1) {
                         duration_array.pop()
                     }
@@ -476,7 +549,7 @@
                     if (kbps_down.length > 1) {
                         kbps_down.pop()
                     }
-
+                    
                     this.avgTrafficUserChart.datasets[0].data.push(this.calculateAVG(kbps_up))
                     this.avgTrafficUserChart.datasets[1].data.push(this.calculateAVG(kbps_down))
                     this.avgDurationUserChart.datasets[0].data.push(this.calculateAVG(duration_array))
@@ -534,15 +607,18 @@
 
 <style scoped>
     .section-title {
-        margin: 0px 0px 10px -15px;
+        margin: 25px 0px 10px -15px;
+    }
+    
+    .total-traffic-chart {
+        margin-top: -15px;
     }
     .page-header h1 {
         margin-top: 50px;
         margin-bottom: -10px;
-        font-size: 40px;
+        font-size: 30px;
     }
     .average-table {
-        border-top: 1px solid gray;
         margin: 20px;
     }
     .average-table h1 {
@@ -628,15 +704,9 @@
         .second-row>div:first-child,
         .second-row>div:nth-child(2) {
             border-right: 0;
-        } .page-header h1 {
-            font-size: 35px;
         }
         .second-row {
             border-top: 0;
         }
-        .page-header h1 {
-            font-size: 35px;
-        }
     }
-
 </style>
