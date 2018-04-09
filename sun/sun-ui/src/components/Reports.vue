@@ -16,7 +16,7 @@
     </div>
     <div v-if="!isChartLoading">
       <h2 class="graphs-container title-graphs">{{ $t('report.current_situation') }}</h2>
-      <actual-report-statistics class="graphs-container adjust-top" :todayConnections="Connections"></actual-report-statistics>
+      <actual-report-statistics class="graphs-container adjust-top" :todayConnections="connections"></actual-report-statistics>
     </div>
 
     <div v-if="!isChartLoading">
@@ -88,7 +88,7 @@
         newUsers: [],
         sessions: [],
         hotspots: [],
-        Connections: [],
+        connections: [],
         labels: [],
         hotspotSearchId: 0,
         user: this.get("loggedUser") || null
@@ -104,22 +104,22 @@
         this.labels = [];
         switch (this.dateRangeSearchId) {
           case 1:
-            this.range = moment1.range(moment().subtract(8, 'day').startOf('day').toDate(), moment().subtract(1, 'day')
+            this.range = moment1.range(moment().utc().subtract(8, 'day').startOf('day').toDate(), moment().utc().subtract(1, 'day')
               .endOf("day").toDate());
-            this.dataPoints.from = moment().subtract(8, 'day').startOf('day');
-            this.dataPoints.to = moment().subtract(1, 'day').endOf("day");
+            this.dataPoints.from = moment().utc().subtract(8, 'day').startOf('day');
+            this.dataPoints.to = moment().utc().subtract(1, 'day').endOf("day");
             break;
           case 2:
-            this.range = moment1.range(moment().subtract(15, 'day').startOf('day').toDate(), moment().subtract(1, 'day')
+            this.range = moment1.range(moment().utc().subtract(15, 'day').startOf('day').toDate(), moment().utc().subtract(1, 'day')
               .endOf("day"));
-            this.dataPoints.from = moment().subtract(15, 'day').startOf('day');
-            this.dataPoints.to = moment().subtract(1, 'day').endOf("day");
+            this.dataPoints.from = moment().utc().subtract(15, 'day').startOf('day');
+            this.dataPoints.to = moment().utc().subtract(1, 'day').endOf("day");
             break;
           case 3:
-            this.range = moment1.range(moment().subtract(4, 'week').startOf('week').toDate(), moment().subtract(1,
+            this.range = moment1.range(moment().utc().subtract(4, 'week').startOf('week').toDate(), moment().utc().subtract(1,
               'day').endOf("day"));
-            this.dataPoints.from = moment().subtract(4, 'week').startOf('week');
-            this.dataPoints.to = moment().subtract(1, 'day').endOf("day");
+            this.dataPoints.from = moment().utc().subtract(4, 'week').startOf('week');
+            this.dataPoints.to = moment().utc().subtract(1, 'day').endOf("day");
           default:
             break;
         }
@@ -181,13 +181,13 @@
           this.hotspotSearchId,
           "",
           "",
-          moment().endOf('day').toISOString(),
+          moment().utc().startOf('day').toISOString(),
           "",
           success => {
-            this.Connections = success.body;
+            this.connections = success.body;
             this.isChartLoading = false;
           }, error => {
-            this.Connections = [];
+            this.connections = [];
             this.isChartLoading = false;
             console.log(error);
           })
