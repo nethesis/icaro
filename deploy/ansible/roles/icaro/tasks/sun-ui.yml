@@ -22,7 +22,7 @@
     src: "{{ icaro.sun_ui.assets_url }}"
     dest: /opt/icaro/sun-ui/static/
     remote_src: yes
-  when: icaro.sun_ui.assets_url is defined
+  when: icaro.sun_ui is defined and icaro.sun_ui.assets_url is defined
 
 - name: Copy Sun-ui config
   template:
