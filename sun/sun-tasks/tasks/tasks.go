@@ -71,21 +71,23 @@ func storeSessions() {
 		if !s.StopTime.IsZero() {
 			// create session history model
 			sessionHistory := models.SessionHistory{
-				SessionId:  s.Id,
-				UnitId:     s.UnitId,
-				HotspotId:  s.HotspotId,
-				DeviceId:   s.DeviceId,
-				DeviceMAC:  s.DeviceMAC,
-				UserId:     s.UserId,
-				Username:   s.Username,
-				BytesUp:    s.BytesUp,
-				BytesDown:  s.BytesDown,
-				Duration:   s.Duration,
-				AuthTime:   s.AuthTime,
-				StartTime:  s.StartTime,
-				UpdateTime: s.UpdateTime,
-				StopTime:   s.StopTime,
-				SessionKey: s.SessionKey,
+				SessionId:   s.Id,
+				UnitId:      s.UnitId,
+				UnitMac:     s.UnitMac,
+				HotspotId:   s.HotspotId,
+				HotspotDesc: s.HotspotDesc,
+				DeviceId:    s.DeviceId,
+				DeviceMAC:   s.DeviceMAC,
+				UserId:      s.UserId,
+				Username:    s.Username,
+				BytesUp:     s.BytesUp,
+				BytesDown:   s.BytesDown,
+				Duration:    s.Duration,
+				AuthTime:    s.AuthTime,
+				StartTime:   s.StartTime,
+				UpdateTime:  s.UpdateTime,
+				StopTime:    s.StopTime,
+				SessionKey:  s.SessionKey,
 			}
 			// save to session_histories table
 			db.Save(&sessionHistory)

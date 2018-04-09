@@ -201,21 +201,21 @@
       "about": "About",
       "logout": "Esci"
     },
-     "device": {
+    "device": {
       "hotspot": "Hotspot",
       "user": "Utente",
       "mac_address": "MAC Address",
       "ip_address": "Indirizzo IP",
       "created": "Creato"
     },
-      "report": {
+    "report": {
       "reports": "Report",
       "statistic": "Statistiche",
       "session": "Connessioni",
       "new_user": "Nuove registrazioni",
       "last_7_days": "Ultimi 7 giorni",
       "last_15_days": "Ultimi 15 giorni",
-      "last_month": "ultimo mese"
+      "last_month": "ultimo mese",
       "upload": "Upload",
       "download": "Download",
       "total_traffic": "Total traffic",

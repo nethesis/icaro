@@ -284,8 +284,8 @@
       exportCSV() {
         var newRows = JSON.parse(JSON.stringify(this.rows))
         for (var r in newRows) {
-          newRows[r].unit_id = this.extractUnit(newRows[r].unit_id).description
-          newRows[r].user_id = this.extractUser(newRows[r].user_id).name
+          newRows[r].unit_id = this.extractUnit(newRows[r].unit_id) && this.extractUnit(newRows[r].unit_id).description || "-"
+          newRows[r].user_id = this.extractUser(newRows[r].user_id) && this.extractUser(newRows[r].user_id).name || "-"
           newRows[r].bytes_up = this.$options.filters['byteFormat'](newRows[r].bytes_up)
           newRows[r].bytes_down = this.$options.filters['byteFormat'](newRows[r].bytes_down)
           newRows[r].duration = this.$options.filters['secondsInHour'](newRows[r].duration)
