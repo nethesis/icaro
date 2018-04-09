@@ -55,8 +55,8 @@
               label: this.$i18n.t('report.today_logins'),
               data: [],
               fill: false,
-              backgroundColor: "#6fbc45",
-              borderColor: "#6fbc45"
+              backgroundColor: "#00b9e4",
+              borderColor: "#00b9e4"
             },
             {
               label: this.$i18n.t('report.today_connections'),
@@ -64,8 +64,8 @@
               steppedLine: false,
               fill: false,
               showLines: true,
-              backgroundColor: "#40b1dd",
-              borderColor: "#40b1dd"
+              backgroundColor: "#703fec",
+              borderColor: "#703fec"
             }
           ],
           options: {

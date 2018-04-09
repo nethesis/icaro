@@ -105,12 +105,12 @@
           datasets: [{
               label: this.$i18n.t('report.upload'),
               data: [],
-              backgroundColor: '#008ae6'
+              backgroundColor: '#f0ab00'
             },
             {
               label: this.$i18n.t('report.download'),
               data: [],
-              backgroundColor: '#66d9ff'
+              backgroundColor: '#92d400'
             }
           ],
           options: {
@@ -149,7 +149,7 @@
           datasets: [{
             label: this.$i18n.t('report.duration'),
             data: [],
-            backgroundColor: '#444'
+            backgroundColor: '#4d5258'
           }],
           options: {
             legend: {
@@ -212,12 +212,12 @@
           datasets: [{
               label: this.$i18n.t('report.upload'),
               data: [],
-              backgroundColor: '#35a3d7'
+              backgroundColor: '#3f9c35'
             },
             {
               label: this.$i18n.t('report.download'),
               data: [],
-              backgroundColor: '#66b83c'
+              backgroundColor: '#007a87'
             }
           ],
           options: {
@@ -256,7 +256,7 @@
           datasets: [{
             label: this.$i18n.t('report.duration'),
             data: [],
-            backgroundColor: '#444'
+            backgroundColor: '#4d5258'
           }],
           options: {
             legend: {
@@ -321,12 +321,12 @@
           datasets: [{
               label: this.$i18n.t('report.upload'),
               data: [],
-              backgroundColor: '#35a3d7'
+              backgroundColor: '#3f9c35'
             },
             {
               label: this.$i18n.t('report.download'),
               data: [],
-              backgroundColor: '#66b83c'
+              backgroundColor: '#007a87'
             }
           ],
           options: {
@@ -365,18 +365,22 @@
           datasets: [{
               label: this.$i18n.t('report.session'),
               data: [],
-              backgroundColor: '#e6e6ff'
+              backgroundColor: '#a30000',
+              fill: false,
+              borderColor: '#a30000'
             },
             {
               label: this.$i18n.t('report.new_user'),
               data: [],
-              backgroundColor: '#cceeff'
+              backgroundColor: '#ec7a08',
+              fill: false,
+              borderColor: '#ec7a08'
             }
           ],
           options: {
             elements: {
               line: {
-                tension: 0
+                tension: 0,
               }
             },
             title: {

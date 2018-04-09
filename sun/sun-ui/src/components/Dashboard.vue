@@ -4,7 +4,7 @@
 
     <div class="row row-cards-pf">
 
-      <div v-if="(user.account_type == 'admin') || (user.account_type == 'reseller')" class="col-xs-12 col-sm-6 col-md-3">
+      <div v-if="(user.account_type == 'admin') || (user.account_type == 'reseller')" class="col-xs-12 col-sm-6 col-md-3 adjust-height">
         <div class="card-pf card-pf-accented card-pf-aggregate-status">
           <h2 class="card-pf-title">
             <a href="#/accounts" class="pficon pficon-users card-link"></a>
@@ -21,7 +21,7 @@
         </div>
       </div>
 
-      <div v-if="(user.account_type == 'admin') || (user.account_type == 'reseller')" class="col-xs-12 col-sm-6 col-md-3">
+      <div v-if="(user.account_type == 'admin') || (user.account_type == 'reseller')" class="col-xs-12 col-sm-6 col-md-3 adjust-height">
         <div class="card-pf card-pf-accented card-pf-aggregate-status">
           <h2 class="card-pf-title">
             <a href="#/hotspots" class="fa fa-wifi card-link"></a>
@@ -38,7 +38,7 @@
         </div>
       </div>
 
-      <div v-if="(user.account_type == 'admin') || (user.account_type == 'reseller') || (user.account_type == 'customer')" class="col-xs-12 col-sm-6 col-md-3">
+      <div v-if="(user.account_type == 'admin') || (user.account_type == 'reseller') || (user.account_type == 'customer')" class="col-xs-12 col-sm-6 col-md-3 adjust-height">
         <div class="card-pf card-pf-accented card-pf-aggregate-status">
           <h2 class="card-pf-title">
             <a href="#/units" class="pficon pficon-connected card-link"></a>
@@ -56,7 +56,7 @@
       </div>
 
       <div v-if="(user.account_type == 'admin') || (user.account_type == 'reseller') || (user.account_type == 'customer') || (user.account_type == 'desk')"
-        class="col-xs-12 col-sm-6 col-md-3">
+        class="col-xs-12 col-sm-6 col-md-3 adjust-height">
         <div class="card-pf card-pf-accented card-pf-aggregate-status">
           <h2 class="card-pf-title">
             <a href="#/users" class="fa fa-users card-link"></a>
@@ -74,7 +74,7 @@
       </div>
 
       <div v-if="(user.account_type == 'admin') || (user.account_type == 'reseller') || (user.account_type == 'customer') || (user.account_type == 'desk')"
-        class="col-xs-12 col-sm-6 col-md-3">
+        class="col-xs-12 col-sm-6 col-md-3 adjust-height">
         <div class="card-pf card-pf-accented card-pf-aggregate-status">
           <h2 class="card-pf-title">
             <span class="fa fa-laptop"></span>
@@ -91,7 +91,7 @@
         </div>
       </div>
 
-      <div v-if="(user.account_type == 'admin') || (user.account_type == 'reseller') || (user.account_type == 'customer')" class="col-xs-12 col-sm-6 col-md-3">
+      <div v-if="(user.account_type == 'admin') || (user.account_type == 'reseller') || (user.account_type == 'customer')" class="col-xs-12 col-sm-6 col-md-3 adjust-height">
         <div class="card-pf card-pf-accented card-pf-aggregate-status">
           <h2 class="card-pf-title">
             <a href="#/sessions" class="fa fa-list card-link"></a>
@@ -207,6 +207,8 @@
 </script>
 
 <style scoped>
-
+  .adjust-height {
+    max-height: 109px;
+  }
 
 </style>
