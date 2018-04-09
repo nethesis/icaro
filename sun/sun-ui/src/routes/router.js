@@ -137,7 +137,7 @@ const router = new Router({
       name: 'Reports',
       component: Reports,
       meta: {
-        roles: ['customer', 'reseller', 'desk', 'admin']
+        roles: ['admin']
       },
     }
   ]

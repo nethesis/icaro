@@ -2,7 +2,8 @@
   <div>
     <h2>{{msg}}</h2>
     <div v-if="isChartLoading" class="spinner spinner-lg"></div>
-    <div v-if="(user.account_type == 'admin') || (user.account_type == 'reseller') && !isChartLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+    <div v-if="!isChartLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
       <label v-if="!isChartLoading" class="col-sm-2 control-label" for="textInput-markup">Hotspot</label>
       <div v-if="!isChartLoading" class="col-sm-4">
         <select v-on:change="getSessionsByDate()" v-model="hotspotSearchId" class="form-control">
@@ -13,31 +14,26 @@
         </select>
       </div>
     </div>
-    <div v-if="(user.account_type == 'admin') || (user.account_type == 'reseller') && !isChartLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
-      <label v-if="!isChartLoading" class="col-sm-2 control-label" for="textInput-markup" id="lbl-date-range">
-        <p>{{dataPoints.from.format('DD MMM YYYY')}}</p> -
-        <p>{{dataPoints.to.format('DD MMM YYYY')}}</p>
-      </label>
-      <div v-if="!isChartLoading" class="col-sm-4">
-        <select v-on:change="getSessionsByDate()" class="form-control" v-model="dateRangeSearchId">
-          <option v-for="dateRang in dateRangs" v-bind:key="dateRang.value" v-bind:value="dateRang.value">{{dateRang.display}}</option>
-        </select>
-      </div>
-    </div>
     <div v-if="!isChartLoading">
-      <div class="panel-body">
-        <actual-report-statistics 
-        :todayConnections="Connections">
-        </actual-report-statistics>
- 
-        <br>
-        <report-statistics 
-        :chartLabels="labels"
-        :chartDateRange="validDate"
-        :newUsersReport="newUsers"
-        :sessionsReport="sessions"
-        ></report-statistics>
+      <h2 class="graphs-container title-graphs">{{ $t('report.current_situation') }}</h2>
+      <actual-report-statistics class="graphs-container adjust-top" :todayConnections="Connections"></actual-report-statistics>
+    </div>
+
+    <div v-if="!isChartLoading">
+      <h2 class="graphs-container title-graphs">{{ $t('report.history_situation') }}</h2>
+      <div class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <label v-if="!isChartLoading" class="col-sm-2 control-label" for="textInput-markup" id="lbl-date-range">
+          <p>{{dataPoints.from.format('DD MMM YYYY')}}</p> -
+          <p>{{dataPoints.to.format('DD MMM YYYY')}}</p>
+        </label>
+        <div v-if="!isChartLoading" class="col-sm-4">
+          <select v-on:change="getSessionsByDate()" class="form-control" v-model="dateRangeSearchId">
+            <option v-for="dateRang in dateRangs" v-bind:key="dateRang.value" v-bind:value="dateRang.value">{{dateRang.display}}</option>
+          </select>
+        </div>
       </div>
+      <report-statistics class="graphs-container" :chartLabels="labels" :chartDateRange="validDate" :newUsersReport="newUsers"
+        :sessionsReport="sessions"></report-statistics>
     </div>
   </div>
 </template>
@@ -92,7 +88,7 @@
         newUsers: [],
         sessions: [],
         hotspots: [],
-        Connections:[],
+        Connections: [],
         labels: [],
         hotspotSearchId: 0,
         user: this.get("loggedUser") || null
@@ -181,22 +177,21 @@
         );
       },
       getTodayUsersLogin() {
-            this.sessionGetAll(
-                this.hotspotSearchId,
-                "",
-                "",
-                moment().endOf('day').toISOString(),
-                "",
-                success => {
-                    this.Connections = success.body;
-                    this.isChartLoading = false;
-                }, error => {
-                    this.Connections = [];
-                    this.isChartLoading = false;
-                    console.log(error);
-                })
-        },
-     
+        this.sessionGetAll(
+          this.hotspotSearchId,
+          "",
+          "",
+          moment().endOf('day').toISOString(),
+          "",
+          success => {
+            this.Connections = success.body;
+            this.isChartLoading = false;
+          }, error => {
+            this.Connections = [];
+            this.isChartLoading = false;
+            console.log(error);
+          })
+      },
     }
   };
 
@@ -209,6 +204,18 @@
 
   #lbl-date-range {
     padding-right: 8px;
+  }
+
+  .graphs-container {
+    margin: 10px;
+  }
+
+  .title-graphs {
+    margin-top: 60px;
+  }
+
+  .adjust-top {
+    margin-top: -30px;
   }
 
 </style>

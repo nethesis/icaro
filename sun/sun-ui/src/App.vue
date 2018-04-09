@@ -173,12 +173,12 @@
             </a>
           </li>
 
-          <!-- <li v-bind:class="[getCurrentPath('reports') ? 'active' : '', 'list-group-item']" v-if="(user.info.type == 'admin') || (user.info.type == 'reseller') ||  (user.info.type == 'customer')">
+          <li v-bind:class="[getCurrentPath('reports') ? 'active' : '', 'list-group-item']" v-if="(user.info.type == 'admin')">
             <a href="#/reports">
               <span class="fa fa-area-chart" data-toggle="tooltip" title="Adipscing"></span>
               <span class="list-group-item-value">{{ $t("menu.reports") }}</span>
             </a>
-          </li> -->
+          </li>
           <li></li>
 
           <li v-bind:class="[getCurrentPath('accounts') ? 'active' : '', 'list-group-item']" v-if="(user.info.type == 'admin') || (user.info.type == 'reseller')">
