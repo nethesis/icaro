@@ -184,7 +184,9 @@
       "to": "To",
       "ip_address": "IP Address",
       "export_csv": "Export CSV",
-      "refresh": "Refresh"
+      "refresh": "Refresh",
+      "active": "Active",
+      "history": "History"
     },
     "menu": {
       "dashboard": "Dashboard",
