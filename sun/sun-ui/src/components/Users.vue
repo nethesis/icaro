@@ -74,6 +74,10 @@
       userAction: UserAction
     },
     data() {
+      var hsId = this.get('users_hotspot_id') || 0
+      if (this.$parent.user.info.type == 'customer' || this.$parent.user.info.type == 'desk') {
+        hsId = this.$parent.user.info.hotspot_id
+      }
       return {
         msg: this.$i18n.t("menu.users"),
         isLoading: true,
@@ -118,7 +122,7 @@
         rows: [],
         tableLangsTexts: this.tableLangs(),
         hotspots: [],
-        hotspotSearchId: this.get('users_hotspot_id') || 0,
+        hotspotSearchId: hsId,
         hotspotShowExpired: this.get('users_show_expired') || false,
         hotspotPerPage: this.get('users_per_page') || 25,
         user: this.get('loggedUser') || null,

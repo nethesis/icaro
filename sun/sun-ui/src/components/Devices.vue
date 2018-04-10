@@ -71,6 +71,10 @@
       unitAction: UnitAtion
     },
     data() {
+      var hsId = this.get('devices_hotspot_id') || 0
+      if (this.$parent.user.info.type == 'customer' || this.$parent.user.info.type == 'desk') {
+        hsId = this.$parent.user.info.hotspot_id
+      }
       return {
         msg: this.$i18n.t("menu.devices"),
         isLoading: true,
@@ -105,7 +109,7 @@
         rows: [],
         tableLangsTexts: this.tableLangs(),
         hotspots: [],
-        hotspotSearchId: this.get('devices_hotspot_id') || 0,
+        hotspotSearchId: hsId,
         hotspotUserId: this.get('devices_user_id') || 0,
         hotspotPerPage: this.get('devices_per_page') || 25,
         user: this.get("loggedUser") || null,

@@ -1,7 +1,8 @@
 var UnitService = {
   methods: {
     unitGetAll(hotspotId, success, error) {
-      this.$http.get(this.$root.$options.api_scheme + this.$root.$options.api_host + '/api/units' + (hotspotId && hotspotId != 0 ? '?hotspot=' + hotspotId : ''), {
+      this.$http.get(this.$root.$options.api_scheme + this.$root.$options.api_host + '/api/units?' +
+      (hotspotId && hotspotId != 0 ? '&hotspot=' + hotspotId : ''), {
         headers: {
           'Token': this.get('loggedUser') && this.get('loggedUser').token || ''
         }

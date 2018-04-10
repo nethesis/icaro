@@ -18,10 +18,10 @@
         <button class="btn btn-primary" @click="getAll()">{{$t('session.refresh')}}</button>
       </div>
     </div>
-    <vue-good-table v-if="!isLoading" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]" :perPage="hotspotPerPage" :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'name', type: 'asc'}"
-      :globalSearch="true" :paginate="true" styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText"
-      :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
-      :ofText="tableLangsTexts.ofText">
+    <vue-good-table v-if="!isLoading" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]" :perPage="hotspotPerPage"
+      :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'name', type: 'asc'}" :globalSearch="true"
+      :paginate="true" styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText" :rowsPerPageText="tableLangsTexts.rowsPerPageText"
+      :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder" :ofText="tableLangsTexts.ofText">
       <template slot="table-row" slot-scope="props">
         <td class="fancy">
           <a :href="'#/units/'+ props.row.id">{{ props.row.name || '-' }}</a>
@@ -53,6 +53,10 @@
       unitAction: UnitAtion
     },
     data() {
+      var hsId = this.get('units_hotspot_id') || 0
+      if (this.$parent.user.info.type == 'customer' || this.$parent.user.info.type == 'desk') {
+        hsId = this.$parent.user.info.hotspot_id
+      }
       return {
         msg: this.$i18n.t("menu.units"),
         isLoading: true,
@@ -85,7 +89,7 @@
         rows: [],
         tableLangsTexts: this.tableLangs(),
         hotspots: [],
-        hotspotSearchId: this.get('units_hotspot_id') || 0,
+        hotspotSearchId: hsId,
         hotspotPerPage: this.get('units_per_page') || 25,
         user: this.get("loggedUser") || null
       };

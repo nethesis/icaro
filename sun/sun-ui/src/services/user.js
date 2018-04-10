@@ -2,7 +2,7 @@ var UserService = {
   methods: {
     userGetAll(hotspotId, accountType, success, error) {
       this.$http.get(this.$root.$options.api_scheme + this.$root.$options.api_host + '/api/users?' +
-        (hotspotId && hotspotId != 0 ? '?hotspot=' + hotspotId : '') +
+        (hotspotId && hotspotId != 0 ? '&hotspot=' + hotspotId : '') +
         (accountType && accountType.length > 0 ? '&type=' + accountType : ''), {
           headers: {
             'Token': this.get('loggedUser') && this.get('loggedUser').token || ''

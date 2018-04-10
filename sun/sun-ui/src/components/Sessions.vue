@@ -106,6 +106,10 @@
       Datepicker
     },
     data() {
+      var hsId = this.get('sessions_hotspot_id') || 0
+      if (this.$parent.user.info.type == 'customer' || this.$parent.user.info.type == 'desk') {
+        hsId = this.$parent.user.info.hotspot_id
+      }
       return {
         msg: this.$i18n.t("menu.sessions"),
         isLoading: true,
@@ -156,7 +160,7 @@
         rows: [],
         tableLangsTexts: this.tableLangs(),
         hotspots: [],
-        hotspotSearchId: this.get('sessions_hotspot_id') || 0,
+        hotspotSearchId: hsId,
         hotspotUserId: this.get('sessions_user_id') || 0,
         hotspotUnitId: this.get('sessions_unit_id') || 0,
         hotspotDateFrom: this.get('sessions_date_from') || new Date(Date.now() - 12096e5).toISOString(),

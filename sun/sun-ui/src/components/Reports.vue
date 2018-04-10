@@ -84,13 +84,13 @@
           }
         ],
         validDate: [],
-        dateRangeSearchId: 1,
+        dateRangeSearchId: this.get('reports_date_range_id') || 1,
         newUsers: [],
         sessions: [],
         hotspots: [],
         connections: [],
         labels: [],
-        hotspotSearchId: 0,
+        hotspotSearchId: this.get('reports_hotspot_id') || 0,
         user: this.get("loggedUser") || null
       };
     },
@@ -99,6 +99,9 @@
     },
     methods: {
       getSessionsByDate() {
+        this.set('reports_hotspot_id', this.hotspotSearchId || this.get('reports_hotspot_id') || 0)
+        this.set('reports_date_range_id', this.dateRangeSearchId || this.get('reports_date_range_id') || 1)
+
         const moment1 = extendMoment(moment);
         this.isChartLoading = true;
         this.labels = [];

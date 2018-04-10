@@ -182,7 +182,6 @@
       var newPassword = '';
       var confirmPassword = '';
 
-
       return {
         msg: this.$i18n.t("menu.accounts"),
         isLoading: true,
