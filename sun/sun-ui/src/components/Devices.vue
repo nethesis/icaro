@@ -34,6 +34,9 @@
         <button class="btn btn-primary" @click="getAll()">{{$t('session.refresh')}}</button>
       </div>
     </div>
+    <div v-if="!isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <div class="result-list">{{rows.length}} {{rows.length == 1 ? $t('result') : $t('results')}}</div>
+    </div>
     <vue-good-table v-if="!isLoading" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]" :perPage="hotspotPerPage"
       :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'name', type: 'asc'}" :globalSearch="true"
       :paginate="true" styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText" :rowsPerPageText="tableLangsTexts.rowsPerPageText"

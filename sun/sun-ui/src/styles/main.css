@@ -374,13 +374,22 @@ a {
   color: #b1b1b1 !important;
 }
 
-.card-link{
+.card-link {
   color: black;
 }
-.card-link:hover{
+
+.card-link:hover {
   color: #26a9a3 !important;
 }
 
 .picture-preview {
   border: 1px solid #bcbcbc !important;
+}
+
+.result-list {
+  position: absolute;
+  right: 35px;
+  top: 23px;
+  font-size: 20px;
+  z-index: 1;
 }

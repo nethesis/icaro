@@ -274,6 +274,8 @@
     "upload_remove": "Remove",
     "upload_drag": "Click or Drag",
     "upload_file_not_supported": "File not supported",
-    "upload_file_exceed": "File limit exceed (max 60kb)"
+    "upload_file_exceed": "File limit exceed (max 60kb)",
+    "result": "result",
+    "results": "results"
   }
 }

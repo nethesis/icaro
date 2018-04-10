@@ -53,7 +53,7 @@
       </div>
     </div>
     <div v-if="!isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
-      <div class="col-sm-3">
+      <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
         <button class="btn btn-primary" @click="getAll(true)">{{$t('session.refresh')}}</button>
       </div>
     </div>
@@ -73,11 +73,12 @@
         <div class="col-sm-12">
           <button @click="exportCSVActive()" class="btn btn-primary export-btn">{{$t('session.export_csv')}}</button>
         </div>
+        <div class="result-list adjust-results">{{rows_active.length}} {{rows_active.length == 1 ? $t('result') : $t('results')}}</div>
       </div>
-      <vue-good-table v-if="!isLoading && activeTab == 'active'" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]" :perPage="hotspotPerPage"
-        :columns="columns_active" :rows="rows_active" :lineNumbers="false" :defaultSortBy="{field: 'duration', type: 'asc'}" :globalSearch="true"
-        :globalSearchFn="searchFn" :paginate="true" styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText"
-        :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
+      <vue-good-table v-if="!isLoading && activeTab == 'active'" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]"
+        :perPage="hotspotPerPage" :columns="columns_active" :rows="rows_active" :lineNumbers="false" :defaultSortBy="{field: 'duration', type: 'asc'}"
+        :globalSearch="true" :globalSearchFn="searchFn" :paginate="true" styleClass="table" :nextText="tableLangsTexts.nextText"
+        :prevText="tableLangsTexts.prevText" :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
         :ofText="tableLangsTexts.ofText">
         <template slot="table-row" slot-scope="props">
           <td class="fancy">
@@ -104,11 +105,12 @@
         <div class="col-sm-12">
           <button @click="exportCSVHistory()" class="btn btn-primary export-btn">{{$t('session.export_csv')}}</button>
         </div>
+        <div class="result-list adjust-results">{{rows_history.length}} {{rows_history.length == 1 ? $t('result') : $t('results')}}</div>
       </div>
-      <vue-good-table v-if="!isLoading && activeTab == 'history'" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]" :perPage="hotspotPerPage"
-        :columns="columns_history" :rows="rows_history" :lineNumbers="false" :defaultSortBy="{field: 'duration', type: 'asc'}" :globalSearch="true"
-        :globalSearchFn="searchFn" :paginate="true" styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText"
-        :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
+      <vue-good-table v-if="!isLoading && activeTab == 'history'" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]"
+        :perPage="hotspotPerPage" :columns="columns_history" :rows="rows_history" :lineNumbers="false" :defaultSortBy="{field: 'duration', type: 'asc'}"
+        :globalSearch="true" :globalSearchFn="searchFn" :paginate="true" styleClass="table" :nextText="tableLangsTexts.nextText"
+        :prevText="tableLangsTexts.prevText" :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
         :ofText="tableLangsTexts.ofText">
         <template slot="table-row" slot-scope="props">
           <td class="fancy">
@@ -434,6 +436,10 @@
     margin-left: 15px !important;
     margin-right: 15px !important;
     border-bottom: 1px solid #cccccc !important;
+  }
+
+  .adjust-results {
+    right: 135px !important;
   }
 
 </style>
