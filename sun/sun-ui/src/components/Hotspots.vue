@@ -23,7 +23,7 @@
         <button class="btn btn-primary" @click="getAll()">{{$t('session.refresh')}}</button>
       </div>
     </div>
-    <div v-if="!isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div v-if="!isLoading && rows.length > 0" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
       <div class="result-list">{{rows.length}} {{rows.length == 1 ? $t('result') : $t('results')}}</div>
     </div>
     <vue-good-table v-if="rows.length > 0 && !isLoading" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]"
