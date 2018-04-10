@@ -209,6 +209,7 @@
 <style scoped>
   .adjust-height {
     max-height: 109px;
+    min-height: 109px;
   }
 
 </style>
