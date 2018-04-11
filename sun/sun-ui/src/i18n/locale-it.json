@@ -184,7 +184,9 @@
       "to": "A",
       "ip_address": "Indirizzo IP",
       "export_csv": "Esporta in CSV",
-      "refresh": "Aggiorna elenco"
+      "refresh": "Aggiorna elenco",
+      "active": "Oggi",
+      "history": "Storico"
     },
     "menu": {
       "dashboard": "Dashboard",
