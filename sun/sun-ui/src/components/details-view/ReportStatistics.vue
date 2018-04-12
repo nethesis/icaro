@@ -453,6 +453,8 @@
       },
       // Implement Session and newUser between date range in Chart
       implementDataInChart() {
+        let all_sessions = this.sessionsReport;
+        let new_users = 0;
         this.chartDateRange.forEach(element => {
           this.sessionToShow = this.sessionsReport.map(function (item) {
             return item.start_time.substring(0, 10) === element;
@@ -462,37 +464,54 @@
           this.totalTrafficChart.datasets[0].data.push(this.sessionToShow);
         });
         this.chartDateRange.forEach(element => {
-          this.newUsersToShow = this.newUsersReport.map(function (item) {
-            return item.valid_from.substring(0, 10) === element;
-          }).filter(function (item) {
-            return item == true;
-          }).length;
-          this.totalTrafficChart.datasets[1].data.push(this.newUsersToShow);
+          new_users = 0;
+          this.newUsersReport.map(function (user) {
+            all_sessions.map(function(session){
+              if(user.id === session.user_id){
+                if(session.start_time.substring(0, 10) === element)
+                    new_users++;
+              }
+            })
+          });
+          this.totalTrafficChart.datasets[1].data.push(new_users);
         });
       },
       fillTotalTrafficChart() {
         this.chartDateRange.forEach(date => {
-          let kbps_up = 0
-          let kbps_down = 0
-          this.newUsersReport.map(function (user) {
-            if (user.valid_from.substring(0, 10) === date) {
-              kbps_up += user.kbps_up
-              kbps_down += user.kbps_down
+          let bps_up = 0
+          let bps_down = 0
+          this.sessionsReport.map(function (session) {
+            // check if user session start is on chart date
+            if (session.start_time.substring(0, 10) === date) {
+              // if user session is on date, check if session has been stopped on that day
+              if (session.stop_time.substring(0, 10) === date) {
+                bps_up += session.bytes_up
+                bps_down += session.bytes_down
+                // or session has been stopped on next day
+              } else if (session.stop_time.substring(0, 10) > date) {
+                bps_up += session.bytes_up
+                bps_down += session.bytes_down
+              }
+              // check if session has started one day before, but has stopped on actual day
+            } else if (session.stop_time.substring(0, 10) === date && session.start_time.substring(0,
+                10) < date) {
+                bps_up += session.bytes_up
+                bps_down += session.bytes_down
             } else {
-              kbps_up += 0
-              kbps_down += 0
+                bps_up += 0
+                bps_down += 0
             }
-          })
-          this.trafficChartData.datasets[0].data.push(kbps_up)
-          this.trafficChartData.datasets[1].data.push(kbps_down)
+        })
+        this.trafficChartData.datasets[0].data.push(bps_up)
+        this.trafficChartData.datasets[1].data.push(bps_down)
         })
       },
       implementUserChart() {
         this.chartDateRange.forEach(date => {
           let moment_range = extendMoment(moment)
           let index = 0
-          let kbps_up = [0]
-          let kbps_down = [0]
+          let bps_up = [0]
+          let bps_down = [0]
           let duration_array = [0]
           let all_sessions = this.sessionsReport
           let session_counter = 0
@@ -508,14 +527,21 @@
                   if (session.start_time.substring(0, 10) === date) {
                     // if user session is on date, check if session has been stopped on that day
                     if (session.stop_time.substring(0, 10) === date) {
+                      bps_up[session_counter] += session.bytes_up;                      
+                      bps_down[session_counter] += session.bytes_down;                      
                       duration += moment.range(moment(session.start_time), moment(session.stop_time)).diff(
                         'seconds')
-
                       // or session has been stopped on next day
                     } else if (session.stop_time.substring(0, 10) > date) {
+                      bps_up[session_counter] += session.bytes_up;                      
+                      bps_down[session_counter] += session.bytes_down;
+
                       duration += moment.range(moment(session.start_time), moment(date).endOf('day')).diff(
                         'seconds')
                     }
+                    bps_up.push(0);
+                    bps_down.push(0);
+
                     duration_array[session_counter] += duration
                     duration_array.push(0)
                     session_counter++
@@ -525,40 +551,38 @@
                       10) < date) {
                     duration += moment.range(moment(date).startOf('day'), moment(session.stop_time)).diff(
                       'seconds')
+                    bps_up[session_counter] += session.bytes_up;                      
+                    bps_down[session_counter] += session.bytes_down;
+                    
+                    bps_up.push(0);
+                    bps_down.push(0);
+
                     duration_array[session_counter] += duration
                     duration_array.push(0)
                     session_counter++
                   } else {
+                    bps_up[session_counter] += 0;                      
+                    bps_down[session_counter] += 0;
+
                     duration_array[session_counter] += 0
                   }
                 }
               })
-            }
-
-            if (user.valid_from.substring(0, 10) === date) {
-              kbps_up[index] += user.kbps_up
-              kbps_down[index] += user.kbps_down
-              kbps_up.push(0)
-              kbps_down.push(0)
-              index++
-            } else {
-              kbps_up[index] += 0
-              kbps_down[index] += 0
             }
           })
 
           if (duration_array.length > 1) {
             duration_array.pop()
           }
-          if (kbps_up.length > 1) {
-            kbps_up.pop()
+          if (bps_up.length > 1) {
+            bps_up.pop()
           }
-          if (kbps_down.length > 1) {
-            kbps_down.pop()
+          if (bps_down.length > 1) {
+            bps_down.pop()
           }
 
-          this.avgTrafficUserChart.datasets[0].data.push(this.calculateAVG(kbps_up))
-          this.avgTrafficUserChart.datasets[1].data.push(this.calculateAVG(kbps_down))
+          this.avgTrafficUserChart.datasets[0].data.push(this.calculateAVG(bps_up))
+          this.avgTrafficUserChart.datasets[1].data.push(this.calculateAVG(bps_down))
           this.avgDurationUserChart.datasets[0].data.push(this.calculateAVG(duration_array))
         })
       },
