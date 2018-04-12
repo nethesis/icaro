@@ -145,6 +145,7 @@
   import UnitService from '../services/unit';
 
   import Datepicker from 'vuejs-datepicker';
+  import moment from 'moment'
 
   export default {
     name: 'Reports',
@@ -161,6 +162,7 @@
       setTimeout(function () {
         $('#' + activeTab + '-tab-parent').click()
       }, 250)
+
       return {
         msg: this.$i18n.t("menu.sessions"),
         isLoading: true,
@@ -259,8 +261,8 @@
         hotspotSearchId: hsId,
         hotspotUserId: this.get('sessions_user_id') || 0,
         hotspotUnitId: this.get('sessions_unit_id') || 0,
-        hotspotDateFrom: this.get('sessions_date_from') || new Date(Date.now() - 12096e5).toISOString(),
-        hotspotDateTo: this.get('sessions_date_to') || new Date().toISOString(),
+        hotspotDateFrom: this.get('sessions_date_from') || moment(Date.now() - 12096e5).utc().startOf('day').toISOString(),
+        hotspotDateTo: this.get('sessions_date_to') || moment(Date.now()).endOf('day').utc().toISOString(),
         hotspotPerPage: this.get('sessions_per_page') || 25,
         user: this.get('loggedUser') || null,
         users: [],
@@ -297,7 +299,7 @@
         return value.includes(searchTerm.toLowerCase())
       },
       dateFormatter(date) {
-        return this.$root.$options.moment(date).format('DD MMMM YYYY');
+        return moment(date).format('DD MMMM YYYY');
       },
       getAllHotspots() {
         this.hotspotGetAll(success => {
@@ -314,18 +316,16 @@
         this.set('sessions_hotspot_id', this.hotspotSearchId || this.get('sessions_hotspot_id') || 0)
         this.set('sessions_user_id', this.hotspotUserId || this.get('sessions_user_id') || 0)
         this.set('sessions_unit_id', this.hotspotUnitId || this.get('sessions_unit_id') || 0)
-        this.set('sessions_date_from', this.hotspotDateFrom || this.get('sessions_date_from') || new Date(Date.now() -
-          12096e5).toISOString())
-        this.set('sessions_date_to', this.hotspotDateTo || this.get('sessions_date_to') || new Date().toISOString())
+        this.set('sessions_date_from', this.hotspotDateFrom || this.get('sessions_date_from') || moment(Date.now() - 12096e5).utc().startOf('day').toISOString())
+        this.set('sessions_date_to', this.hotspotDateTo || this.get('sessions_date_to') || moment(Date.now()).endOf('day').utc().toISOString())
 
         // preload users and units
         this.getAllUsers()
         this.getAllUnits()
 
         if (refresh) {
-          var moment = require("patternfly/node_modules/moment/moment.js")
-          if (moment(this.hotspotDateTo).isSame(Date.now(), 'day')) {
-            this.hotspotDateTo = new Date().toISOString()
+          if (this.hotspotDateTo === moment().utc().endOf('day').toISOString()) {
+            this.hotspotDateTo = moment(Date.now()).endOf('day').utc().toISOString()
           }
         }
 
@@ -388,13 +388,13 @@
         this.hotspotSearchId = 0
         this.hotspotUserId = 0
         this.hotspotUnitId = 0
-        this.hotspotDateFrom = new Date(Date.now() - 12096e5).toISOString()
-        this.hotspotDateTo = new Date().toISOString()
+        this.hotspotDateFrom = moment(Date.now() - 12096e5).utc().startOf('day').toISOString()
+        this.hotspotDateTo = moment(Date.now()).endOf('day').utc().toISOString()
         this.set('sessions_hotspot_id', 0)
         this.set('sessions_user_id', 0)
         this.set('sessions_unit_id', 0)
-        this.set('sessions_date_from', new Date(Date.now() - 12096e5).toISOString())
-        this.set('sessions_date_to', new Date().toISOString())
+        this.set('sessions_date_from', moment(Date.now() - 12096e5).utc().startOf('day').toISOString())
+        this.set('sessions_date_to', moment(Date.now()).endOf('day').utc().toISOString())
         this.getAll()
       },
       exportCSVActive() {
@@ -439,7 +439,8 @@
   }
 
   .adjust-results {
-    right: 135px !important;
+    right: 45px !important;
+    top: 0px;
   }
 
 </style>
