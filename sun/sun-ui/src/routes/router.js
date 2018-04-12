@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import VueAnalytics from 'vue-analytics'
 
 import Dashboard from '../components/Dashboard.vue'
 import Hotspots from '../components/Hotspots.vue'
@@ -137,7 +138,7 @@ const router = new Router({
       name: 'Reports',
       component: Reports,
       meta: {
-        roles: ['customer', 'reseller', 'desk', 'admin']
+        roles: ['admin']
       },
     }
   ]
@@ -152,6 +153,11 @@ router.beforeEach((to, from, next) => {
     next(false)
   }
 
+})
+
+Vue.use(VueAnalytics, {
+  id: CONFIG.UA_ANALYTICS,
+  router
 })
 
 

@@ -8,7 +8,7 @@
         <select v-on:change="getAll()" v-model="hotspotSearchId" class="form-control">
           <option value="0">-</option>
           <option v-for="hotspot in hotspots" v-bind:key="hotspot.id" v-bind:value="hotspot.id">
-            {{ hotspot.name }}
+            {{ hotspot.name }} - {{ hotspot.description}}
           </option>
         </select>
       </div>
@@ -23,6 +23,9 @@
       <div class="col-sm-3">
         <button class="btn btn-primary" @click="getAll()">{{$t('session.refresh')}}</button>
       </div>
+    </div>
+    <div v-if="!isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <div class="result-list">{{rows.length}} {{rows.length == 1 ? $t('result') : $t('results')}}</div>
     </div>
     <vue-good-table v-if="!isLoading" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]" :perPage="hotspotPerPage"
       :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'username', type: 'asc'}" :globalSearch="true"
@@ -74,6 +77,10 @@
       userAction: UserAction
     },
     data() {
+      var hsId = this.get('users_hotspot_id') || 0
+      if (this.$parent.user.info.type == 'customer' || this.$parent.user.info.type == 'desk') {
+        hsId = this.$parent.user.info.hotspot_id
+      }
       return {
         msg: this.$i18n.t("menu.users"),
         isLoading: true,
@@ -118,7 +125,7 @@
         rows: [],
         tableLangsTexts: this.tableLangs(),
         hotspots: [],
-        hotspotSearchId: this.get('users_hotspot_id') || 0,
+        hotspotSearchId: hsId,
         hotspotShowExpired: this.get('users_show_expired') || false,
         hotspotPerPage: this.get('users_per_page') || 25,
         user: this.get('loggedUser') || null,

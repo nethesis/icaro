@@ -70,9 +70,13 @@ func startSession(userName string, deviceMacAddress string, deviceIp string, ses
 			db.Close()
 		}
 	}
+
+	currentHotspot := utils.GetHotspotById(unit.HotspotId)
 	session := utils.GetSessionByKeyAndUnitId(sessionId, unit.Id)
 	session.UnitId = unit.Id
+	session.UnitMac = unit.MacAddress
 	session.HotspotId = unit.HotspotId
+	session.HotspotDesc = currentHotspot.Name + " - " + currentHotspot.Description
 	session.DeviceId = device.Id
 	session.DeviceMAC = device.MacAddress
 	session.UserId = user.Id

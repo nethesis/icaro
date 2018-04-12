@@ -184,7 +184,9 @@
       "to": "To",
       "ip_address": "IP Address",
       "export_csv": "Export CSV",
-      "refresh": "Refresh"
+      "refresh": "Refresh",
+      "active": "Active",
+      "history": "History"
     },
     "menu": {
       "dashboard": "Dashboard",
@@ -242,9 +244,8 @@
       "total_daily_connections": "Total daily connections",
       "new_daily_logins": "New daily logins",
       "history_situation": "History Situation",
-      "connection_newlogins": "Connections and New guests"
-
-      
+      "connection_newlogins": "Sessions and new guests",
+      "connection_traffic": "Sessions and traffic"
     },
     "sessions": "Sessions",
     "help": "Help",
@@ -273,6 +274,8 @@
     "upload_remove": "Remove",
     "upload_drag": "Click or Drag",
     "upload_file_not_supported": "File not supported",
-    "upload_file_exceed": "File limit exceed (max 60kb)"
+    "upload_file_exceed": "File limit exceed (max 60kb)",
+    "result": "result",
+    "results": "results"
   }
 }

@@ -184,7 +184,9 @@
       "to": "A",
       "ip_address": "Indirizzo IP",
       "export_csv": "Esporta in CSV",
-      "refresh": "Aggiorna elenco"
+      "refresh": "Aggiorna elenco",
+      "active": "Oggi",
+      "history": "Storico"
     },
     "menu": {
       "dashboard": "Dashboard",
@@ -201,21 +203,49 @@
       "about": "About",
       "logout": "Esci"
     },
-     "device": {
+    "device": {
       "hotspot": "Hotspot",
       "user": "Utente",
       "mac_address": "MAC Address",
       "ip_address": "Indirizzo IP",
       "created": "Creato"
     },
-      "report": {
+    "report": {
       "reports": "Report",
       "statistic": "Statistiche",
       "session": "Connessioni",
-      "new_user": "Nuove registrazioni",
+      "new_user": "Registrazioni",
       "last_7_days": "Ultimi 7 giorni",
       "last_15_days": "Ultimi 15 giorni",
-      "last_month": "ultimo mese"
+      "last_month": "Ultimo mese",
+      "upload": "Upload",
+      "download": "Download",
+      "total_traffic": "Traffico Totale",
+      "user_statistics": "Statistiche per Ospite",
+      "connections_statistics": "Statistiche per Connessione",
+      "medium_traffic_user": "Traffico medio per ospite",
+      "medium_traffic_user_download": "Download giornaliero per ospite",
+      "medium_traffic_user_upload": "Upload giornaliero per ospite",
+      "average_duration_user": "Durata media giornaliera per ospite",
+      "medium_traffic_connections": "Traffico medio giornaliero per connessione",
+      "medium_traffic_connections_download": "Download giornaliero per connessione",
+      "medium_traffic_connections_upload": "Upload giornaliero per connessione",
+      "average_duration_connections": "Durata media per connessione",
+      "duration": "Durata",
+      "minutes": "Minuti",
+      "seconds": "Secondi",
+      "size": "Dimensione",
+      "time": "Tempo",
+      "today_connections": "Connessioni",
+      "today_logins": "Nuove registrazioni",
+      "current_situation": "Statistiche giornaliere",
+      "connection_logins": "Connessioni e registrazioni",
+      "users_currently_connected": "Ospiti attualmente connessi",
+      "total_daily_connections": "Connessioni totali",
+      "new_daily_logins": "Registrazioni",
+      "history_situation": "Storico",
+      "connection_newlogins": "Connessioni e registrazioni",
+      "connection_traffic": "Connessioni e Traffico"
     },
     "sessions": "Connessioni",
     "help": "Aiuto",

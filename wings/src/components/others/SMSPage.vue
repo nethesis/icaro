@@ -18,7 +18,8 @@
                     <i class="talk icon"></i>
                 </div>
             </div>
-            <button v-if="!codeRequested" v-on:click="getCode()" class="ui big button">{{ $t("sms.get_code") }}</button>
+            <button v-if="!codeRequested" v-on:click="getCode()" class="ui big button request-code">{{ $t("sms.have_code") }}</button>
+            <button v-if="!codeRequested" v-on:click="getCode(true)" class="ui big button request-code">{{ $t("sms.get_code") }}</button>
             <div v-if="errors.badNumber" class="ui tiny icon negative message">
                 <i class="remove icon"></i>
                 <div class="content">
@@ -230,5 +231,9 @@
         margin: 0 auto !important;
         margin-bottom: 1em !important;
         margin-top: 0.25em !important;
+    }
+
+    .request-code {
+        margin-bottom: 10px !important;
     }
 </style>

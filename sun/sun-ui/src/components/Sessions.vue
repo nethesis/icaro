@@ -8,7 +8,7 @@
         <select v-on:change="getAll()" v-model="hotspotSearchId" class="form-control">
           <option value="0">-</option>
           <option v-for="hotspot in hotspots" v-bind:key="hotspot.id" v-bind:value="hotspot.id">
-            {{ hotspot.name }}
+            {{ hotspot.name }} - {{ hotspot.description}}
           </option>
         </select>
       </div>
@@ -53,39 +53,85 @@
       </div>
     </div>
     <div v-if="!isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
-      <div class="col-sm-3">
+      <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
         <button class="btn btn-primary" @click="getAll(true)">{{$t('session.refresh')}}</button>
       </div>
     </div>
-    <div v-if="!isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
-      <div class="col-sm-12">
-        <button @click="exportCSV()" class="btn btn-primary export-btn">{{$t('session.export_csv')}}</button>
+
+    <ul v-if="!isLoading" class="nav nav-tabs nav-tabs-pf adjust-tabs" id="myTab" role="tablist">
+      <li class="nav-item">
+        <a @click="handleTab('active')" class="nav-link active" id="active-tab-parent" data-toggle="tab" href="#active-tab" role="tab"
+          aria-controls="active" aria-selected="true">{{$t('session.active')}}</a>
+      </li>
+      <li class="nav-item">
+        <a @click="handleTab('history')" class="nav-link" id="history-tab-parent" data-toggle="tab" href="#history-tab" role="tab"
+          aria-controls="history" aria-selected="false">{{$t('session.history')}}</a>
+      </li>
+    </ul>
+    <div class="tab-pane fade" id="active-tab" role="tabpanel" aria-labelledby="active-tab">
+      <div v-if="!isLoading && activeTab == 'active'" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="col-sm-12">
+          <button @click="exportCSVActive()" class="btn btn-primary export-btn">{{$t('session.export_csv')}}</button>
+        </div>
+        <div class="result-list adjust-results">{{rows_active.length}} {{rows_active.length == 1 ? $t('result') : $t('results')}}</div>
       </div>
+      <vue-good-table v-if="!isLoading && activeTab == 'active'" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]"
+        :perPage="hotspotPerPage" :columns="columns_active" :rows="rows_active" :lineNumbers="false" :defaultSortBy="{field: 'duration', type: 'asc'}"
+        :globalSearch="true" :globalSearchFn="searchFn" :paginate="true" styleClass="table" :nextText="tableLangsTexts.nextText"
+        :prevText="tableLangsTexts.prevText" :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
+        :ofText="tableLangsTexts.ofText">
+        <template slot="table-row" slot-scope="props">
+          <td class="fancy">
+            <a :href="'#/units/'+ props.row.unit_id">{{ extractUnit(props.row.unit_id) && extractUnit(props.row.unit_id).name || '-'}}</a>
+          </td>
+          <td class="fancy">
+            <a :href="'#/sessions/'+ props.row.id">{{ props.row.username || '-'}}</a>
+          </td>
+          <td class="fancy">{{ props.row.bytes_down | byteFormat}}</td>
+          <td class="fancy">{{ props.row.bytes_up | byteFormat }}</td>
+          <td class="fancy">{{ props.row.duration | secondsInHour }}</td>
+          <td class="fancy">{{ props.row.start_time | formatDate }}</td>
+          <td class="fancy">{{ props.row.update_time | formatDate }}</td>
+          <td>
+            <a :href="'#/sessions/'+ props.row.id">
+              <span class="fa fa-angle-right details-arrow"></span>
+            </a>
+          </td>
+        </template>
+      </vue-good-table>
     </div>
-    <vue-good-table v-if="!isLoading" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]" :perPage="hotspotPerPage"
-      :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'duration', type: 'asc'}" :globalSearch="true"
-      :globalSearchFn="searchFn" :paginate="true" styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText"
-      :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
-      :ofText="tableLangsTexts.ofText">
-      <template slot="table-row" slot-scope="props">
-        <td class="fancy">
-          <a :href="'#/units/'+ props.row.unit_id">{{ extractUnit(props.row.unit_id) && extractUnit(props.row.unit_id).name || '-'}}</a>
-        </td>
-        <td class="fancy">
-          <a :href="'#/sessions/'+ props.row.id">{{ props.row.username || '-'}}</a>
-        </td>
-        <td class="fancy">{{ props.row.bytes_down | byteFormat}}</td>
-        <td class="fancy">{{ props.row.bytes_up | byteFormat }}</td>
-        <td class="fancy">{{ props.row.duration | secondsInHour }}</td>
-        <td class="fancy">{{ props.row.start_time | formatDate }}</td>
-        <td class="fancy">{{ props.row.update_time | formatDate }}</td>
-        <td>
-          <a :href="'#/sessions/'+ props.row.id">
-            <span class="fa fa-angle-right details-arrow"></span>
-          </a>
-        </td>
-      </template>
-    </vue-good-table>
+    <div class="tab-pane fade" id="history-tab" role="tabpanel" aria-labelledby="history-tab">
+      <div v-if="!isLoading && activeTab == 'history'" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="col-sm-12">
+          <button @click="exportCSVHistory()" class="btn btn-primary export-btn">{{$t('session.export_csv')}}</button>
+        </div>
+        <div class="result-list adjust-results">{{rows_history.length}} {{rows_history.length == 1 ? $t('result') : $t('results')}}</div>
+      </div>
+      <vue-good-table v-if="!isLoading && activeTab == 'history'" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]"
+        :perPage="hotspotPerPage" :columns="columns_history" :rows="rows_history" :lineNumbers="false" :defaultSortBy="{field: 'duration', type: 'asc'}"
+        :globalSearch="true" :globalSearchFn="searchFn" :paginate="true" styleClass="table" :nextText="tableLangsTexts.nextText"
+        :prevText="tableLangsTexts.prevText" :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
+        :ofText="tableLangsTexts.ofText">
+        <template slot="table-row" slot-scope="props">
+          <td class="fancy">
+            <a :href="'#/units/'+ props.row.unit_id">{{ extractUnit(props.row.unit_id) && extractUnit(props.row.unit_id).name || '-'}}</a>
+          </td>
+          <td class="fancy">
+            <a :href="'#/sessions/'+ props.row.id">{{ props.row.username || '-'}}</a>
+          </td>
+          <td class="fancy">{{ props.row.bytes_down | byteFormat}}</td>
+          <td class="fancy">{{ props.row.bytes_up | byteFormat }}</td>
+          <td class="fancy">{{ props.row.duration | secondsInHour }}</td>
+          <td class="fancy">{{ props.row.start_time | formatDate }}</td>
+          <td class="fancy">{{ props.row.stop_time | formatDate }}</td>
+          <td>
+            <a :href="'#/sessions/'+ props.row.id">
+              <span class="fa fa-angle-right details-arrow"></span>
+            </a>
+          </td>
+        </template>
+      </vue-good-table>
+    </div>
   </div>
 </template>
 
@@ -94,23 +140,34 @@
   import UtilService from '../services/util';
   import HotspotService from '../services/hotspot';
   import SessionService from '../services/session';
+  import HistoryService from '../services/history';
   import UserService from '../services/user';
   import UnitService from '../services/unit';
 
   import Datepicker from 'vuejs-datepicker';
+  import moment from 'moment'
 
   export default {
     name: 'Reports',
-    mixins: [SessionService, StorageService, UtilService, HotspotService, UserService, UnitService],
+    mixins: [SessionService, StorageService, UtilService, HotspotService, UserService, UnitService, HistoryService],
     components: {
       Datepicker
     },
     data() {
+      var hsId = this.get('sessions_hotspot_id') || 0
+      if (this.$parent.user.info.type == 'customer' || this.$parent.user.info.type == 'desk') {
+        hsId = this.$parent.user.info.hotspot_id
+      }
+      var activeTab = this.get('sessions_active_tab') || 'active'
+      setTimeout(function () {
+        $('#' + activeTab + '-tab-parent').click()
+      }, 250)
+
       return {
         msg: this.$i18n.t("menu.sessions"),
         isLoading: true,
         locale: this.$root.$options.currentLocale,
-        columns: [{
+        columns_active: [{
             label: this.$i18n.t('session.unit'),
             field: 'unit_id',
             filterable: true,
@@ -153,14 +210,59 @@
             sortable: false
           },
         ],
-        rows: [],
+        columns_history: [{
+            label: this.$i18n.t('session.unit'),
+            field: 'unit_id',
+            filterable: true,
+            sortable: false
+          }, {
+            label: this.$i18n.t('session.user'),
+            field: 'username',
+            filterable: true,
+            sortable: false
+          }, {
+            label: this.$i18n.t('session.bytes_down'),
+            field: 'bytes_down',
+            type: 'number',
+            filterable: true,
+          }, {
+            label: this.$i18n.t('session.bytes_up'),
+            field: 'bytes_up',
+            type: 'number',
+            filterable: true,
+          }, {
+            label: this.$i18n.t('session.duration'),
+            field: 'duration',
+            type: 'number',
+            filterable: true,
+          },
+          {
+            label: this.$i18n.t('session.start_time'),
+            field: 'start_time',
+            filterable: true,
+          },
+          {
+            label: this.$i18n.t('session.stop_time'),
+            field: 'stop_time',
+            filterable: true,
+            sortable: false
+          },
+          {
+            label: '',
+            field: '',
+            sortable: false
+          },
+        ],
+        rows_active: [],
+        rows_history: [],
+        activeTab: activeTab,
         tableLangsTexts: this.tableLangs(),
         hotspots: [],
-        hotspotSearchId: this.get('sessions_hotspot_id') || 0,
+        hotspotSearchId: hsId,
         hotspotUserId: this.get('sessions_user_id') || 0,
         hotspotUnitId: this.get('sessions_unit_id') || 0,
-        hotspotDateFrom: this.get('sessions_date_from') || new Date(Date.now() - 12096e5).toISOString(),
-        hotspotDateTo: this.get('sessions_date_to') || new Date().toISOString(),
+        hotspotDateFrom: this.get('sessions_date_from') || moment(Date.now() - 12096e5).utc().startOf('day').toISOString(),
+        hotspotDateTo: this.get('sessions_date_to') || moment(Date.now()).endOf('day').utc().toISOString(),
         hotspotPerPage: this.get('sessions_per_page') || 25,
         user: this.get('loggedUser') || null,
         users: [],
@@ -172,12 +274,16 @@
         this.hotspotSearchId = this.$route.params.hotspotId;
       }
       // get session list
-      this.getAll()
+      this.getAll(true)
       this.getAllHotspots()
       this.getAllUsers()
       this.getAllUnits()
     },
     methods: {
+      handleTab(tab) {
+        this.activeTab = tab
+        this.getAll()
+      },
       handlePerPage(evt) {
         this.set('sessions_per_page', evt.currentPerPage)
       },
@@ -193,7 +299,7 @@
         return value.includes(searchTerm.toLowerCase())
       },
       dateFormatter(date) {
-        return this.$root.$options.moment(date).format('DD MMMM YYYY');
+        return moment(date).format('DD MMMM YYYY');
       },
       getAllHotspots() {
         this.hotspotGetAll(success => {
@@ -206,35 +312,45 @@
       },
       getAll(refresh) {
         // save to storage
+        this.set('sessions_active_tab', this.activeTab || this.get('sessions_active_tab') || 0)
         this.set('sessions_hotspot_id', this.hotspotSearchId || this.get('sessions_hotspot_id') || 0)
         this.set('sessions_user_id', this.hotspotUserId || this.get('sessions_user_id') || 0)
         this.set('sessions_unit_id', this.hotspotUnitId || this.get('sessions_unit_id') || 0)
-        this.set('sessions_date_from', this.hotspotDateFrom || this.get('sessions_date_from') || new Date(Date.now() -
-          12096e5).toISOString())
-        this.set('sessions_date_to', this.hotspotDateTo || this.get('sessions_date_to') || new Date().toISOString())
+        this.set('sessions_date_from', this.hotspotDateFrom || this.get('sessions_date_from') || moment(Date.now() - 12096e5).utc().startOf('day').toISOString())
+        this.set('sessions_date_to', this.hotspotDateTo || this.get('sessions_date_to') || moment(Date.now()).endOf('day').utc().toISOString())
 
         // preload users and units
         this.getAllUsers()
         this.getAllUnits()
 
         if (refresh) {
-          var moment = require("patternfly/node_modules/moment/moment.js")
-          if (moment(this.hotspotDateTo).isSame(Date.now(), 'day')) {
-            this.hotspotDateTo = new Date().toISOString()
+          if (this.hotspotDateTo === moment().utc().endOf('day').toISOString()) {
+            this.hotspotDateTo = moment(Date.now()).endOf('day').utc().toISOString()
           }
         }
 
         // get all sessions
-        this.sessionGetAll(this.hotspotSearchId, this.hotspotUserId, this.hotspotUnitId, new Date(this.hotspotDateFrom)
-          .toISOString(), new Date(this.hotspotDateTo).toISOString(), success => {
-            this.rows = success.body
-            this.isLoading = false
-          }, error => {
-            this.isLoading = false
-            this.rows = []
-
-            console.log(error)
-          })
+        if (this.activeTab == 'active') {
+          this.sessionGetAll(this.hotspotSearchId, this.hotspotUserId, this.hotspotUnitId, new Date(this.hotspotDateFrom)
+            .toISOString(), new Date(this.hotspotDateTo).toISOString(), success => {
+              this.rows_active = success.body
+              this.isLoading = false
+            }, error => {
+              this.isLoading = false
+              this.rows_active = []
+              console.log(error)
+            })
+        } else {
+          this.historiesGetAll(this.hotspotSearchId, this.hotspotUserId, this.hotspotUnitId, new Date(this.hotspotDateFrom)
+            .toISOString(), new Date(this.hotspotDateTo).toISOString(), success => {
+              this.rows_history = success.body
+              this.isLoading = false
+            }, error => {
+              this.isLoading = false
+              this.rows_history = []
+              console.log(error)
+            })
+        }
       },
       getAllUsers() {
         this.userGetAll(this.hotspotSearchId, null, success => {
@@ -272,30 +388,59 @@
         this.hotspotSearchId = 0
         this.hotspotUserId = 0
         this.hotspotUnitId = 0
-        this.hotspotDateFrom = new Date(Date.now() - 12096e5).toISOString()
-        this.hotspotDateTo = new Date().toISOString()
+        this.hotspotDateFrom = moment(Date.now() - 12096e5).utc().startOf('day').toISOString()
+        this.hotspotDateTo = moment(Date.now()).endOf('day').utc().toISOString()
         this.set('sessions_hotspot_id', 0)
         this.set('sessions_user_id', 0)
         this.set('sessions_unit_id', 0)
-        this.set('sessions_date_from', new Date(Date.now() - 12096e5).toISOString())
-        this.set('sessions_date_to', new Date().toISOString())
+        this.set('sessions_date_from', moment(Date.now() - 12096e5).utc().startOf('day').toISOString())
+        this.set('sessions_date_to', moment(Date.now()).endOf('day').utc().toISOString())
         this.getAll()
       },
-      exportCSV() {
-        var newRows = JSON.parse(JSON.stringify(this.rows))
+      exportCSVActive() {
+        var newRows = JSON.parse(JSON.stringify(this.rows_active))
         for (var r in newRows) {
-          newRows[r].unit_id = this.extractUnit(newRows[r].unit_id).description
-          newRows[r].user_id = this.extractUser(newRows[r].user_id).name
+          newRows[r].unit_id = this.extractUnit(newRows[r].unit_id) && this.extractUnit(newRows[r].unit_id).description ||
+            "-"
+          newRows[r].user_id = this.extractUser(newRows[r].user_id) && this.extractUser(newRows[r].user_id).name || "-"
           newRows[r].bytes_up = this.$options.filters['byteFormat'](newRows[r].bytes_up)
           newRows[r].bytes_down = this.$options.filters['byteFormat'](newRows[r].bytes_down)
           newRows[r].duration = this.$options.filters['secondsInHour'](newRows[r].duration)
           newRows[r].start_time = this.$options.filters['formatDate'](newRows[r].start_time)
           newRows[r].update_time = this.$options.filters['formatDate'](newRows[r].update_time)
         }
-        var csv = this.createCSV(this.columns, newRows)
-        this.downloadCSV(csv.cols, csv.rows, 'sessions')
+        var csv = this.createCSV(this.columns_active, newRows)
+        this.downloadCSV(csv.cols, csv.rows, 'sessions_active')
+      },
+      exportCSVHistory() {
+        var newRows = JSON.parse(JSON.stringify(this.rows_history))
+        for (var r in newRows) {
+          newRows[r].unit_id = this.extractUnit(newRows[r].unit_id) && this.extractUnit(newRows[r].unit_id).description ||
+            "-"
+          newRows[r].user_id = this.extractUser(newRows[r].user_id) && this.extractUser(newRows[r].user_id).name || "-"
+          newRows[r].bytes_up = this.$options.filters['byteFormat'](newRows[r].bytes_up)
+          newRows[r].bytes_down = this.$options.filters['byteFormat'](newRows[r].bytes_down)
+          newRows[r].duration = this.$options.filters['secondsInHour'](newRows[r].duration)
+          newRows[r].start_time = this.$options.filters['formatDate'](newRows[r].start_time)
+          newRows[r].stop_time = this.$options.filters['formatDate'](newRows[r].stop_time)
+        }
+        var csv = this.createCSV(this.columns_history, newRows)
+        this.downloadCSV(csv.cols, csv.rows, 'sessions_history')
       }
     }
   }
 
 </script>
+<style scoped>
+  .adjust-tabs {
+    margin-left: 15px !important;
+    margin-right: 15px !important;
+    border-bottom: 1px solid #cccccc !important;
+  }
+
+  .adjust-results {
+    right: 45px !important;
+    top: 0px;
+  }
+
+</style>

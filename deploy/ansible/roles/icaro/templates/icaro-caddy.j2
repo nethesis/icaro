@@ -3,16 +3,20 @@ https://{$ICARO_HOSTNAME} {
   gzip
   proxy /api {$SUN_API_ORIGIN}
   proxy /wax {$WAX_ORIGIN}
-{% if icaro.tls_self_signed is defined and icaro.tls_self_signed == true %}
+{% if icaro.tls is defined and icaro.tls == "self_signed" %}
   tls self_signed
+{% elif icaro.tls is defined and icaro.tls == "manual" %}
+  tls /opt/icaro/{$ICARO_HOSTNAME}_cert.pem /opt/icaro/{$ICARO_HOSTNAME}_private_key.pem
 {% endif %}
   log / stdout {combined}
 }
 
 https://{$ICARO_HOSTNAME}/privacy {
   root /opt/icaro/privacy
-{% if icaro.tls_self_signed is defined and icaro.tls_self_signed == true %}
+{% if icaro.tls is defined and icaro.tls == "self_signed" %}
   tls self_signed
+{% elif icaro.tls is defined and icaro.tls == "manual" %}
+  tls /opt/icaro/{$ICARO_HOSTNAME}_cert.pem /opt/icaro/{$ICARO_HOSTNAME}_private_key.pem
 {% endif %}
 }
 

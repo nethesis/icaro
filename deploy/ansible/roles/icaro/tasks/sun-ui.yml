@@ -22,14 +22,13 @@
     src: "{{ icaro.sun_ui.assets_url }}"
     dest: /opt/icaro/sun-ui/static/
     remote_src: yes
-  when: icaro.sun_ui.assets_url is defined
+  when: icaro.sun_ui is defined and icaro.sun_ui.assets_url is defined
 
-- name: Set Sun-ui title
-  lineinfile:
-    path: /opt/icaro/sun-ui/static/config/config.js
-    regexp: "^  APP_NAME: '<YOUR_APP_NAME>',"
-    line: "  APP_NAME: '{{ icaro.sun_ui.title }}',"
-  when: icaro.sun_ui.title is defined
+- name: Copy Sun-ui config
+  template:
+    src: sun-ui_config.js.j2
+    dest: /opt/icaro/sun-ui/static/config/config.js
+  when: icaro.sun_ui is defined
 
 - name: Remove temp files
   file:

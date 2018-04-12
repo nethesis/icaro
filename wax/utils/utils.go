@@ -382,6 +382,7 @@ func SendEmailCode(email string, code string, unit models.Unit, auth string) boo
 
 	// send the email
 	if err := d.DialAndSend(m); err != nil {
+		fmt.Println(err)
 		status = false
 	}
 
