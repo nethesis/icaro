@@ -51,9 +51,8 @@ func Login(c *gin.Context) {
 	username := json.Username
 	password := json.Password
 
-	db := database.Database()
+	db := database.Instance()
 	db.Where("username = ?", username).First(&account)
-	defer db.Close()
 
 	if account.Id == 0 {
 		c.JSON(http.StatusUnauthorized, gin.H{"message": "No username found!"})

@@ -53,7 +53,7 @@ func GetSessions(c *gin.Context) {
 
 	offsets := utils.OffsetCalc(page, limit)
 
-	db := database.Database()
+	db := database.Instance()
 	chain := db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt))
 
 	if len(userId) > 0 {
@@ -73,7 +73,6 @@ func GetSessions(c *gin.Context) {
 	}
 
 	chain.Offset(offsets[0]).Limit(offsets[1]).Find(&sessions)
-	db.Close()
 
 	if len(sessions) <= 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No sessions found!"})
@@ -102,7 +101,7 @@ func GetSessionsHistory(c *gin.Context) {
 
 	offsets := utils.OffsetCalc(page, limit)
 
-	db := database.Database()
+	db := database.Instance()
 	chain := db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt))
 
 	if len(userId) > 0 {
@@ -122,7 +121,6 @@ func GetSessionsHistory(c *gin.Context) {
 	}
 
 	chain.Offset(offsets[0]).Limit(offsets[1]).Find(&sessions)
-	db.Close()
 
 	if len(sessions) <= 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No session histories found!"})
@@ -138,9 +136,8 @@ func GetSession(c *gin.Context) {
 
 	sessionId := c.Param("session_id")
 
-	db := database.Database()
+	db := database.Instance()
 	db.Where("id = ? AND hotspot_id in (?)", sessionId, utils.ExtractHotspotIds(accountId, (accountId == 1), 0)).First(&session)
-	db.Close()
 
 	if session.Id == 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No session found!"})
@@ -156,9 +153,8 @@ func GetSessionHistory(c *gin.Context) {
 
 	historyId := c.Param("history_id")
 
-	db := database.Database()
+	db := database.Instance()
 	db.Where("id = ? AND hotspot_id in (?)", historyId, utils.ExtractHotspotIds(accountId, (accountId == 1), 0)).First(&session)
-	db.Close()
 
 	if session.Id == 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No session history found!"})
@@ -172,9 +168,8 @@ func StatsSessionTotal(c *gin.Context) {
 	accountId := c.MustGet("token").(models.AccessToken).AccountId
 	var count int
 
-	db := database.Database()
+	db := database.Instance()
 	db.Table("sessions").Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), 0)).Count(&count)
-	db.Close()
 
 	c.JSON(http.StatusOK, gin.H{"total": count})
 }

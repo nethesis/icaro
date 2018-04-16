@@ -37,17 +37,15 @@ func DeleteMarketing(c *gin.Context) {
 
 	userId := c.Param("user_id")
 
-	db := database.Database()
+	db := database.Instance()
 	db.Where("user_id = ?", userId).First(&userMarketing)
 
 	if userMarketing.Id == 0 {
-		db.Close()
 		c.JSON(http.StatusNotFound, gin.H{"message": "No user found!"})
 		return
 	}
 
 	db.Delete(&userMarketing)
-	db.Close()
 
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }

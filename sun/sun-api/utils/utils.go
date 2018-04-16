@@ -34,7 +34,7 @@ import (
 )
 
 func SetDefaultHotspotPreferences(hotspotId int) {
-	db := database.Database()
+	db := database.Instance()
 
 	// iterate all default hotspot preferences
 	for k, v := range defaults.HotspotPreferences {
@@ -55,7 +55,6 @@ func SetDefaultHotspotPreferences(hotspotId int) {
 	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "captive_6_description", Value: configuration.Config.CaptivePortal.Description})
 	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "captive_7_background", Value: configuration.Config.CaptivePortal.Background})
 
-	db.Close()
 }
 
 func OffsetCalc(page string, limit string) [2]int {
@@ -88,32 +87,29 @@ func OffsetCalc(page string, limit string) [2]int {
 
 func ExtractToken(token string) models.AccessToken {
 	var accessToken models.AccessToken
-	db := database.Database()
+	db := database.Instance()
 	db.Where("token = ?", token).First(&accessToken)
-	db.Close()
 
 	return accessToken
 }
 
 func DeleteToken(token string) {
 	var accessToken models.AccessToken
-	db := database.Database()
+	db := database.Instance()
 	db.Where("token = ?", token).First(&accessToken)
 
 	db.Delete(&accessToken)
-	db.Close()
 }
 
 func RefreshToken(token string) {
 	var accessToken models.AccessToken
-	db := database.Database()
+	db := database.Instance()
 	db.Where("token = ?", token).First(&accessToken)
 
 	// add 1 day to expiration date
 	accessToken.Expires = time.Now().UTC().AddDate(0, 0, configuration.Config.TokenExpiresDays)
 	db.Save(&accessToken)
 
-	db.Close()
 }
 
 func ExtractHotspotIds(accountId int, admin bool, hotspotId int) []int {
@@ -124,7 +120,7 @@ func ExtractHotspotIds(accountId int, admin bool, hotspotId int) []int {
 		accountId = account.CreatorId
 	}
 
-	db := database.Database()
+	db := database.Instance()
 	if admin {
 		if hotspotId != 0 {
 			db.Select("id").Where("id = ?", hotspotId).Find(&hotspots)
@@ -138,7 +134,6 @@ func ExtractHotspotIds(accountId int, admin bool, hotspotId int) []int {
 			db.Select("id").Where("account_id = ?", accountId).Find(&hotspots)
 		}
 	}
-	db.Close()
 
 	result := []int{}
 
@@ -151,18 +146,16 @@ func ExtractHotspotIds(accountId int, admin bool, hotspotId int) []int {
 
 func GetAccountById(id int) models.Account {
 	var account models.Account
-	db := database.Database()
+	db := database.Instance()
 	db.Where("id = ?", id).First(&account)
-	db.Close()
 
 	return account
 }
 
 func GetHotspotByName(name string) models.Hotspot {
 	var hotspot models.Hotspot
-	db := database.Database()
+	db := database.Instance()
 	db.Where("name = ?", name).First(&hotspot)
-	db.Close()
 
 	return hotspot
 }
@@ -171,14 +164,13 @@ func HotspotIsOverQuota(hotspotId int) bool {
 	var hotspot models.Hotspot
 	var subscription models.Subscription
 	var count int
-	db := database.Database()
+	db := database.Instance()
 	db.Set("gorm:auto_preload", true)
 	db.Preload("Account").Where("id = ?", hotspotId).First(&hotspot)
 	db.Preload("SubscriptionPlan").Where("account_id = ?", hotspot.Account.Id).First(&subscription)
 
 	query := fmt.Sprintf("SELECT COUNT(units.id) as count FROM units JOIN hotspots on units.hotspot_id = hotspots.id WHERE hotspots.account_id = %d", hotspot.Account.Id)
 	db.Raw(query).Count(&count)
-	db.Close()
 
 	return count >= subscription.SubscriptionPlan.MaxUnits
 }
@@ -186,10 +178,9 @@ func HotspotIsOverQuota(hotspotId int) bool {
 func CanChangeCaptivePortalOptions(accountId int) bool {
 	var subscription models.Subscription
 
-	db := database.Database()
+	db := database.Instance()
 	db.Set("gorm:auto_preload", true)
 	db.Preload("SubscriptionPlan").Where("account_id = ?", accountId).First(&subscription)
-	db.Close()
 
 	return subscription.SubscriptionPlan.WingsCustomization
 }

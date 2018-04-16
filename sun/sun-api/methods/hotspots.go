@@ -50,9 +50,8 @@ func CreateHotspot(c *gin.Context) {
 		Created:     time.Now().UTC(),
 	}
 
-	db := database.Database()
+	db := database.Instance()
 	db.Save(&hotspot)
-	db.Close()
 
 	if hotspot.Id == 0 {
 		c.JSON(http.StatusConflict, gin.H{"id": hotspot.Id, "status": "hotspot already exists"})
@@ -76,7 +75,7 @@ func UpdateHotspot(c *gin.Context) {
 		return
 	}
 
-	db := database.Database()
+	db := database.Instance()
 
 	if accountId == 1 {
 		db.Where("id = ?", hotspotId).First(&hotspot)
@@ -85,7 +84,6 @@ func UpdateHotspot(c *gin.Context) {
 	}
 
 	if hotspot.Id == 0 {
-		db.Close()
 		c.JSON(http.StatusNotFound, gin.H{"message": "No hotspot found!"})
 		return
 	}
@@ -95,7 +93,6 @@ func UpdateHotspot(c *gin.Context) {
 	}
 
 	db.Save(&hotspot)
-	db.Close()
 
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }
@@ -109,13 +106,12 @@ func GetHotspots(c *gin.Context) {
 
 	offsets := utils.OffsetCalc(page, limit)
 
-	db := database.Database()
+	db := database.Instance()
 	if accountId == 1 {
 		db.Offset(offsets[0]).Limit(offsets[1]).Find(&hotspots)
 	} else {
 		db.Where("account_id = ?", accountId).Offset(offsets[0]).Limit(offsets[1]).Find(&hotspots)
 	}
-	db.Close()
 
 	if len(hotspots) <= 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No hotspots found!"})
@@ -131,13 +127,12 @@ func GetHotspot(c *gin.Context) {
 
 	hotspotId := c.Param("hotspot_id")
 
-	db := database.Database()
+	db := database.Instance()
 	if accountId == 1 {
 		db.Select("hotspots.*, accounts.name as account_name").Where("hotspots.id = ?", hotspotId).Joins("JOIN accounts on accounts.id = hotspots.account_id").First(&hotspot)
 	} else {
 		db.Select("hotspots.*, accounts.name as account_name").Where("hotspots.id = ? AND account_id = ?", hotspotId, accountId).Joins("JOIN accounts on accounts.id = hotspots.account_id").First(&hotspot)
 	}
-	db.Close()
 
 	if hotspot.Id == 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No hotspot found!"})
@@ -153,7 +148,7 @@ func DeleteHotspot(c *gin.Context) {
 
 	hotspotId := c.Param("hotspot_id")
 
-	db := database.Database()
+	db := database.Instance()
 	if accountId == 1 {
 		db.Where("id = ?", hotspotId).First(&hotspot)
 	} else {
@@ -161,13 +156,11 @@ func DeleteHotspot(c *gin.Context) {
 	}
 
 	if hotspot.Id == 0 {
-		db.Close()
 		c.JSON(http.StatusNotFound, gin.H{"message": "No hotspot found!"})
 		return
 	}
 
 	db.Delete(&hotspot)
-	db.Close()
 
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }
@@ -176,13 +169,12 @@ func StatsHotspotTotal(c *gin.Context) {
 	accountId := c.MustGet("token").(models.AccessToken).AccountId
 	var count int
 
-	db := database.Database()
+	db := database.Instance()
 	if accountId == 1 {
 		db.Table("hotspots").Count(&count)
 	} else {
 		db.Table("hotspots").Where("account_id = ?", accountId).Count(&count)
 	}
-	db.Close()
 
 	c.JSON(http.StatusOK, gin.H{"total": count})
 }

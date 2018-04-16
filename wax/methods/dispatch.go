@@ -39,9 +39,8 @@ func Reply(c *gin.Context, httpCode int, message string) {
 func isHotspotUnit(hotspotUnitMac string) bool {
 	var unit models.Unit
 
-	db := database.Database()
+	db := database.Instance()
 	db.Where("mac_address = ?", hotspotUnitMac).First(&unit)
-	db.Close()
 
 	return (unit.Id != 0)
 }
@@ -49,9 +48,8 @@ func isHotspotUnit(hotspotUnitMac string) bool {
 func isHotspot(hotspotName string) bool {
 	var hotspot models.Hotspot
 
-	db := database.Database()
+	db := database.Instance()
 	db.Where("name = ?", hotspotName).First(&hotspot)
-	db.Close()
 
 	return (hotspot.Id != 0)
 }

@@ -179,9 +179,8 @@ func TestHotspotCreation(t *testing.T) {
 		})
 
 	// Cleanup
-	db := database.Database()
+	db := database.Instance()
 	db.Delete(models.Hotspot{Id: cr.Id})
-	db.Close()
 }
 
 /** Account **/
@@ -197,7 +196,7 @@ func TestResellerAccountCreation(t *testing.T) {
 
 	token := getAdminToken(f, r)
 
-	db := database.Database()
+	db := database.Instance()
 	db.Where("id = 4").First(&subPlan)
 	db.Where("id = 1").First(&hs)
 
@@ -235,7 +234,6 @@ func TestResellerAccountCreation(t *testing.T) {
 	db.Delete(&account)
 	db.Delete(&asms)
 	db.Delete(&sub)
-	db.Close()
 }
 
 /** Units **/
@@ -265,9 +263,8 @@ func TestUnitRegistration(t *testing.T) {
 		})
 
 	// Cleanup
-	db := database.Database()
+	db := database.Instance()
 	db.Delete(models.Unit{}, "id > 1")
-	db.Close()
 }
 
 func TestUnitRegistrationLimit(t *testing.T) {
@@ -276,7 +273,7 @@ func TestUnitRegistrationLimit(t *testing.T) {
 	f, r := startupEnv()
 	token := getResellerToken(f, r)
 
-	db := database.Database()
+	db := database.Instance()
 	// create max-1 units because the first one already exists
 	for i := 0; i < max-1; i++ {
 		f.POST("/api/units").
@@ -318,7 +315,6 @@ func TestUnitRegistrationLimit(t *testing.T) {
 
 	// cleanup
 	db.Delete(models.Unit{}, "id > 1")
-	db.Close()
 }
 
 /** Preferences **/
@@ -334,7 +330,7 @@ func TestFailingCaptiveConfiguration(t *testing.T) {
 	var subPlan models.SubscriptionPlan
 
 	token := getAdminToken(f, r)
-	db := database.Database()
+	db := database.Instance()
 	db.Where("id = 1").First(&subPlan)
 
 	// Create reseller with free plan
@@ -416,5 +412,4 @@ func TestFailingCaptiveConfiguration(t *testing.T) {
 	db.Delete(&asms)
 	db.Delete(&sub)
 	db.Delete(&hs)
-	db.Close()
 }

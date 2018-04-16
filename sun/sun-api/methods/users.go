@@ -39,9 +39,8 @@ func CreateUser(user models.User) int {
 	user.Created = time.Now().UTC()
 
 	// save new user
-	db := database.Database()
+	db := database.Instance()
 	db.Save(&user)
-	db.Close()
 
 	return user.Id
 }
@@ -58,11 +57,10 @@ func UpdateUser(c *gin.Context) {
 		return
 	}
 
-	db := database.Database()
+	db := database.Instance()
 	db.Where("id = ?", userId).First(&user)
 
 	if user.Id == 0 {
-		db.Close()
 		c.JSON(http.StatusNotFound, gin.H{"message": "No user found!"})
 		return
 	}
@@ -93,11 +91,9 @@ func UpdateUser(c *gin.Context) {
 		user.AutoLogin = json.AutoLogin
 
 		db.Save(&user)
-		db.Close()
 
 		c.JSON(http.StatusOK, gin.H{"status": "success"})
 	} else {
-		db.Close()
 		c.JSON(http.StatusUnauthorized, gin.H{"message": "This user is not yours"})
 	}
 }
@@ -118,7 +114,7 @@ func GetUsers(c *gin.Context) {
 
 	offsets := utils.OffsetCalc(page, limit)
 
-	db := database.Database()
+	db := database.Instance()
 	chain := db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt))
 
 	if len(accountType) > 0 {
@@ -126,8 +122,6 @@ func GetUsers(c *gin.Context) {
 	}
 
 	chain.Offset(offsets[0]).Limit(offsets[1]).Find(&users)
-	db.Close()
-	db.Close()
 
 	if len(users) <= 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No users found!"})
@@ -143,9 +137,8 @@ func GetUser(c *gin.Context) {
 
 	userId := c.Param("user_id")
 
-	db := database.Database()
+	db := database.Instance()
 	db.Where("id = ? AND hotspot_id in (?)", userId, utils.ExtractHotspotIds(accountId, (accountId == 1), 0)).First(&user)
-	db.Close()
 
 	if user.Id == 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No user found!"})
@@ -161,17 +154,15 @@ func DeleteUser(c *gin.Context) {
 
 	userId := c.Param("user_id")
 
-	db := database.Database()
+	db := database.Instance()
 	db.Where("id = ? AND hotspot_id in (?)", userId, utils.ExtractHotspotIds(accountId, (accountId == 1), 0)).First(&user)
 
 	if user.Id == 0 {
-		db.Close()
 		c.JSON(http.StatusNotFound, gin.H{"message": "No user found!"})
 		return
 	}
 
 	db.Delete(&user)
-	db.Close()
 
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }
@@ -180,9 +171,8 @@ func StatsUserTotal(c *gin.Context) {
 	accountId := c.MustGet("token").(models.AccessToken).AccountId
 	var count int
 
-	db := database.Database()
+	db := database.Instance()
 	db.Table("users").Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), 0)).Count(&count)
-	db.Close()
 
 	c.JSON(http.StatusOK, gin.H{"total": count})
 }

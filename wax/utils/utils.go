@@ -42,27 +42,24 @@ import (
 
 func GetHotspotPreferences(hotspotId int) []models.HotspotPreference {
 	var prefs []models.HotspotPreference
-	db := database.Database()
+	db := database.Instance()
 	db.Where("hotspot_id = ?", hotspotId).Find(&prefs)
-	db.Close()
 
 	return prefs
 }
 
 func GetHotspotPreferencesByKey(hotspotId int, key string) models.HotspotPreference {
 	var pref models.HotspotPreference
-	db := database.Database()
+	db := database.Instance()
 	db.Where("`key` = ? and hotspot_id = ?", key, hotspotId).First(&pref)
-	db.Close()
 
 	return pref
 }
 
 func GetHotspotPreferencesByKeys(hotspotId int, keys []string) []models.HotspotPreference {
 	var prefs []models.HotspotPreference
-	db := database.Database()
+	db := database.Instance()
 	db.Where("`key` in (?) and hotspot_id = ?", keys, hotspotId).Find(&prefs)
-	db.Close()
 
 	return prefs
 }
@@ -75,16 +72,15 @@ func CreateUserSession(userId int, sessionKey string) {
 	}
 
 	// save user session
-	db := database.Database()
+	db := database.Instance()
 	db.Save(&userSession)
-	db.Close()
 }
 
 func CreateUserMarketing(userId int, data interface{}, accountType string) {
 	var userMarketing models.UserMarketing
 	serialization, _ := json.Marshal(data)
 
-	db := database.Database()
+	db := database.Instance()
 	db.Where("user_id = ?", userId).First(&userMarketing)
 
 	// create or update info
@@ -102,7 +98,6 @@ func CreateUserMarketing(userId int, data interface{}, accountType string) {
 
 	// save user marketing
 	db.Save(&userMarketing)
-	db.Close()
 
 }
 
@@ -110,9 +105,8 @@ func CheckUserSession(userId int, sessionKey string) bool {
 	var userSession models.UserSession
 
 	// check if user session exists
-	db := database.Database()
+	db := database.Instance()
 	db.Where("user_id = ? AND session_key = ?", userId, sessionKey).First(&userSession)
-	db.Close()
 
 	if userSession.Id == 0 {
 		return false
@@ -126,9 +120,8 @@ func CheckTempUserSession(userId int, deviceMac string, sessionKey string) bool 
 	var userTempSession models.UserTempSession
 
 	// check if user session exists
-	db := database.Database()
+	db := database.Instance()
 	db.Where("user_id = ? AND device_mac = ? AND session_key = ?", userId, deviceMac, sessionKey).First(&userTempSession)
-	db.Close()
 
 	// if not exists create one
 	if userTempSession.Id == 0 {
@@ -140,9 +133,8 @@ func CheckTempUserSession(userId int, deviceMac string, sessionKey string) bool 
 		}
 
 		// save user temp session
-		db := database.Database()
+		db := database.Instance()
 		db.Save(&userTempSessionNew)
-		db.Close()
 		check = true
 	} else {
 		check = false
@@ -155,106 +147,94 @@ func DeleteUserSession(userId int, sessionKey string) bool {
 	var userSession models.UserSession
 
 	// check if user session exists
-	db := database.Database()
+	db := database.Instance()
 	db.Where("user_id = ? AND session_key = ?", userId, sessionKey).First(&userSession)
 
 	if userSession.Id == 0 {
-		db.Close()
 		return false
 	}
 
 	// delete user session
 	db.Delete(&userSession)
-	db.Close()
 	return true
 }
 
 func GetAccountSMSByAccountId(accountId int) models.AccountSmsCount {
 	var accountSMS models.AccountSmsCount
-	db := database.Database()
+	db := database.Instance()
 	db.Where("account_id = ?", accountId).First(&accountSMS)
-	db.Close()
 
 	return accountSMS
 }
 
 func GetSessionByKeyAndUnitId(key string, unitId int) models.Session {
 	var session models.Session
-	db := database.Database()
+	db := database.Instance()
 	db.Where("session_key = ? and unit_id = ?", key, unitId).First(&session)
-	db.Close()
 
 	return session
 }
 
 func GetDeviceByMacAddress(mac string) models.Device {
 	var unit models.Device
-	db := database.Database()
+	db := database.Instance()
 	db.Where("mac_address = ?", mac).First(&unit)
-	db.Close()
 
 	return unit
 }
 
 func GetDeviceByHotspotidAndMacAddress(hotspot_id int, mac string) models.Device {
 	var device models.Device
-	db := database.Database()
+	db := database.Instance()
 	db.Where("hotspot_id = ? and mac_address = ?", hotspot_id, mac).First(&device)
-	db.Close()
 
 	return device
 }
 
 func GetUnitByMacAddress(mac string) models.Unit {
 	var unit models.Unit
-	db := database.Database()
+	db := database.Instance()
 	db.Where("mac_address = ?", mac).First(&unit)
-	db.Close()
 
 	return unit
 }
 
 func GetUserByNameAndHotspotId(name string, hotspotId int) models.User {
 	var unit models.User
-	db := database.Database()
+	db := database.Instance()
 	db.Where("username = ? and hotspot_id = ?", name, hotspotId).First(&unit)
-	db.Close()
 
 	return unit
 }
 
 func GetUnitByUuid(uuid string) models.Unit {
 	var unit models.Unit
-	db := database.Database()
+	db := database.Instance()
 	db.Where("uuid = ?", uuid).First(&unit)
-	db.Close()
 
 	return unit
 }
 
 func GetHotspotById(id int) models.Hotspot {
 	var hotspot models.Hotspot
-	db := database.Database()
+	db := database.Instance()
 	db.Where("id = ?", id).First(&hotspot)
-	db.Close()
 
 	return hotspot
 }
 
 func GetUserById(id int) models.User {
 	var user models.User
-	db := database.Database()
+	db := database.Instance()
 	db.Where("id = ?", id).First(&user)
-	db.Close()
 
 	return user
 }
 
 func GetUserByUsername(username string) models.User {
 	var user models.User
-	db := database.Database()
+	db := database.Instance()
 	db.Where("username = ?", username).First(&user)
-	db.Close()
 
 	return user
 }
@@ -262,20 +242,18 @@ func GetUserByUsername(username string) models.User {
 func HotspotHasValidSubscription(hotspotId int) bool {
 	var hotspot models.Hotspot
 	var subscription models.Subscription
-	db := database.Database()
+	db := database.Instance()
 	db.Set("gorm:auto_preload", true)
 	db.Preload("Account").Where("id = ?", hotspotId).First(&hotspot)
 	db.Preload("SubscriptionPlan").Where("account_id = ?", hotspot.Account.Id).First(&subscription)
-	db.Close()
 
 	return subscription.ValidFrom.Before(time.Now().UTC()) && subscription.ValidUntil.After(time.Now().UTC())
 }
 
 func GetVoucherByCode(code string, hotspotId int) models.HotspotVoucher {
 	var hotspotVoucher models.HotspotVoucher
-	db := database.Database()
+	db := database.Instance()
 	db.Where("binary code = ? AND hotspot_id = ?", code, hotspotId).First(&hotspotVoucher)
-	db.Close()
 
 	return hotspotVoucher
 }
@@ -311,7 +289,7 @@ func GenerateCode(max int) string {
 
 func SendSMSCode(number string, code string, unit models.Unit, auth string) int {
 	// get account sms count
-	db := database.Database()
+	db := database.Instance()
 	hotspot := GetHotspotById(unit.HotspotId)
 	accountSMS := GetAccountSMSByAccountId(hotspot.AccountId)
 

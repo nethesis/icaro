@@ -167,9 +167,8 @@ func SMSAuth(c *gin.Context) {
 			user.Password = code
 		}
 
-		db := database.Database()
+		db := database.Instance()
 		db.Save(&user)
-		db.Close()
 
 		// response to client
 		c.JSON(http.StatusOK, gin.H{"user_id": number, "exists": true, "reset": reset, "user_db_id": user.Id})
@@ -300,9 +299,8 @@ func EmailAuth(c *gin.Context) {
 			user.Password = code
 		}
 
-		db := database.Database()
+		db := database.Instance()
 		db.Save(&user)
-		db.Close()
 
 		// response to client
 		c.JSON(http.StatusOK, gin.H{"user_id": email, "exists": true, "reset": reset, "user_db_id": user.Id})
@@ -354,9 +352,8 @@ func MACAuth(c *gin.Context) {
 			Created:    time.Now().UTC(),
 		}
 
-		db := database.Database()
+		db := database.Instance()
 		db.Save(&newDevice)
-		db.Close()
 
 		// response to client
 		c.JSON(http.StatusOK, gin.H{"user_id": mac, "device_id": newDevice.Id})
@@ -383,18 +380,16 @@ func VoucherAuth(c *gin.Context) {
 		// check if is expired
 		if !voucher.Expires.IsZero() && voucher.Expires.Before(time.Now().UTC()) {
 			// delete voucher
-			db := database.Database()
+			db := database.Instance()
 			db.Delete(&voucher)
-			db.Close()
 
 			c.JSON(http.StatusUnauthorized, gin.H{"message": "Voucher is expired"})
 		} else {
 			// update epiration date
 			if voucher.Expires.IsZero() {
 				voucher.Expires = time.Now().UTC().AddDate(0, 0, voucher.Duration)
-				db := database.Database()
+				db := database.Instance()
 				db.Save(&voucher)
-				db.Close()
 			}
 
 			c.JSON(http.StatusOK, gin.H{"message": "Voucher is valid", "code": voucher.Code})

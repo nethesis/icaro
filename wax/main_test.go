@@ -131,7 +131,7 @@ func TestFailLoginForExpiredReseller(t *testing.T) {
 			assert.Equal(t, http.StatusOK, f.Code)
 		})
 
-	db := database.Database()
+	db := database.Instance()
 	db.Where("username = ?", "firstuser").First(&account)
 	db.Where("account_id = ?", account.Id).First(&subscription)
 	oldDate := subscription.ValidUntil
@@ -146,7 +146,6 @@ func TestFailLoginForExpiredReseller(t *testing.T) {
 	subscription.ValidUntil = oldDate
 	db.Save(&subscription)
 
-	db.Close()
 }
 
 func TestInvalidStage(t *testing.T) {

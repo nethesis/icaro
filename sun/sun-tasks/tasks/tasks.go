@@ -56,15 +56,14 @@ func Init(action string, worker bool) {
 }
 
 func cleanTokens() {
-	db := database.Database()
+	db := database.Instance()
 	db.Where("expires < ?", time.Now().UTC()).Delete(models.AccessToken{})
-	db.Close()
 }
 
 func storeSessions() {
 	var sessions []models.Session
 
-	db := database.Database()
+	db := database.Instance()
 	db.Find(&sessions)
 
 	for _, s := range sessions {
@@ -97,5 +96,4 @@ func storeSessions() {
 		}
 	}
 
-	db.Close()
 }

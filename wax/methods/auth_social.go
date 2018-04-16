@@ -166,9 +166,8 @@ func FacebookAuth(c *gin.Context) {
 		days := utils.GetHotspotPreferencesByKey(user.HotspotId, "user_expiration_days")
 		daysInt, _ := strconv.Atoi(days.Value)
 		user.ValidUntil = time.Now().UTC().AddDate(0, 0, daysInt)
-		db := database.Database()
+		db := database.Instance()
 		db.Save(&user)
-		db.Close()
 
 		// create user session check
 		utils.CreateUserSession(user.Id, sessionId)
@@ -310,9 +309,8 @@ func LinkedInAuth(c *gin.Context) {
 		days := utils.GetHotspotPreferencesByKey(user.HotspotId, "user_expiration_days")
 		daysInt, _ := strconv.Atoi(days.Value)
 		user.ValidUntil = time.Now().UTC().AddDate(0, 0, daysInt)
-		db := database.Database()
+		db := database.Instance()
 		db.Save(&user)
-		db.Close()
 
 		// create user session check
 		utils.CreateUserSession(user.Id, sessionId)
@@ -446,9 +444,8 @@ func InstagramAuth(c *gin.Context) {
 		days := utils.GetHotspotPreferencesByKey(user.HotspotId, "user_expiration_days")
 		daysInt, _ := strconv.Atoi(days.Value)
 		user.ValidUntil = time.Now().UTC().AddDate(0, 0, daysInt)
-		db := database.Database()
+		db := database.Instance()
 		db.Save(&user)
-		db.Close()
 
 		// create user session check
 		utils.CreateUserSession(user.Id, sessionId)

@@ -60,14 +60,12 @@ func startSession(userName string, deviceMacAddress string, deviceIp string, ses
 		device.Created = time.Now().UTC()
 
 		// save new device
-		db := database.Database()
+		db := database.Instance()
 		db.Save(&device)
-		db.Close()
 	} else {
 		if device.IpAddress != deviceIp {
-			db := database.Database()
+			db := database.Instance()
 			db.Model(&device).Update("IpAddress", deviceIp)
-			db.Close()
 		}
 	}
 
@@ -87,9 +85,8 @@ func startSession(userName string, deviceMacAddress string, deviceIp string, ses
 	session.UpdateTime = time.Now().UTC()
 	session.SessionKey = sessionId
 
-	db := database.Database()
+	db := database.Instance()
 	db.Save(&session)
-	db.Close()
 	return 1
 }
 
@@ -115,9 +112,8 @@ func stopSession(sessionId string, unitMacAddress string, bytesDown string, byte
 		session.BytesUp = bu
 	}
 
-	db := database.Database()
+	db := database.Instance()
 	db.Save(&session)
-	db.Close()
 	return 1
 }
 
@@ -142,9 +138,8 @@ func updateSession(sessionId string, unitMacAddress string, bytesDown string, by
 		session.BytesUp = bu
 	}
 
-	db := database.Database()
+	db := database.Instance()
 	db.Save(&session)
-	db.Close()
 	return 1
 }
 
@@ -157,7 +152,7 @@ func accountingOn(ap string) int {
 		return 0
 	}
 
-	db := database.Database()
+	db := database.Instance()
 	db.Where("unit_id = ? and stop_time = 0", unit.Id).Find(&sessions)
 
 	for i, _ := range sessions {
@@ -165,7 +160,6 @@ func accountingOn(ap string) int {
 		db.Save(&sessions[i])
 	}
 
-	db.Close()
 
 	return 1
 }
