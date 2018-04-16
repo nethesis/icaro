@@ -54,6 +54,9 @@ func startupEnv(endpoint string, query string) (*gofight.RequestConfig, *gin.Eng
 	// define API
 	DefineAPI(router)
 
+        // init database
+        database.Init()
+
 	// calculate URI with correct MD
 	uri := calculateUri(endpoint, query)
 

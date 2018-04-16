@@ -65,6 +65,9 @@ func startupEnv() (*gofight.RequestConfig, *gin.Engine) {
 	// define API
 	DefineAPI(router)
 
+	// init database
+	database.Init()
+
 	return fight, router
 }
 
