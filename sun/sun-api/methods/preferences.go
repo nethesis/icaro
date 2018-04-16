@@ -45,7 +45,7 @@ func UpdateAccountPrefs(c *gin.Context) {
 		return
 	}
 
-	db := database.Database()
+	db := database.Instance()
 	if accountId == 1 {
 		db.Where("`key` = ?", json.Key).First(&accountPref)
 	} else {
@@ -53,7 +53,6 @@ func UpdateAccountPrefs(c *gin.Context) {
 	}
 
 	if accountPref.Id == 0 {
-		db.Close()
 		c.JSON(http.StatusNotFound, gin.H{"message": "No preference found!"})
 		return
 	}
@@ -61,7 +60,6 @@ func UpdateAccountPrefs(c *gin.Context) {
 	accountPref.Value = json.Value
 
 	db.Save(&accountPref)
-	db.Close()
 
 	c.JSON(http.StatusCreated, gin.H{"status": "success"})
 }
@@ -70,9 +68,8 @@ func GetAccountPrefs(c *gin.Context) {
 	var preferences []models.AccountPreference
 	accountId := c.MustGet("token").(models.AccessToken).AccountId
 
-	db := database.Database()
+	db := database.Instance()
 	db.Where("account_id = ?", accountId).Find(&preferences)
-	db.Close()
 
 	if len(preferences) <= 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No preferences found!"})
@@ -103,9 +100,8 @@ func UpdateHotspotPrefs(c *gin.Context) {
 
 	// check hotspot ownership
 	if utils.Contains(utils.ExtractHotspotIds(accountId, (accountId == 1), 0), hotspotIdInt) {
-		db := database.Database()
+		db := database.Instance()
 		db.Where("`key` = ? AND hotspot_id = ?", json.Key, hotspotIdInt).First(&hsPref)
-		defer db.Close()
 
 		if hsPref.Id == 0 {
 			c.JSON(http.StatusNotFound, gin.H{"message": "No preference found!"})
@@ -141,13 +137,12 @@ func GetHotspotPrefs(c *gin.Context) {
 		hotspotIdInt = 0
 	}
 
-	db := database.Database()
+	db := database.Instance()
 	if accountId == 1 {
 		db.Where("hotspot_id = ?", hotspotId).Order("`key` asc").Find(&preferences)
 	} else {
 		db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt)).Order("`key` asc").Find(&preferences)
 	}
-	db.Close()
 
 	if len(preferences) <= 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No preferences found!"})

@@ -55,9 +55,8 @@ func CreateVoucher(c *gin.Context) {
 
 	// check hotspot ownership
 	if utils.Contains(utils.ExtractHotspotIds(accountId, (accountId == 1), 0), json.HotspotId) {
-		db := database.Database()
+		db := database.Instance()
 		db.Save(&hotspotVoucher)
-		db.Close()
 
 		if hotspotVoucher.Id == 0 {
 			c.JSON(http.StatusConflict, gin.H{"id": hotspotVoucher.Id, "status": "voucher already exists"})
@@ -84,9 +83,8 @@ func GetVouchers(c *gin.Context) {
 
 	offsets := utils.OffsetCalc(page, limit)
 
-	db := database.Database()
+	db := database.Instance()
 	db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt)).Offset(offsets[0]).Limit(offsets[1]).Find(&hotspotVouchers)
-	db.Close()
 
 	if len(hotspotVouchers) <= 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No hotspot vouchers found!"})
@@ -102,17 +100,15 @@ func DeleteVoucher(c *gin.Context) {
 
 	voucherId := c.Param("voucher_id")
 
-	db := database.Database()
+	db := database.Instance()
 	db.Where("id = ? AND hotspot_id in (?)", voucherId, utils.ExtractHotspotIds(accountId, (accountId == 1), 0)).First(&hotspotVoucher)
 
 	if hotspotVoucher.Id == 0 {
-		db.Close()
 		c.JSON(http.StatusNotFound, gin.H{"message": "No hotspot voucher found!"})
 		return
 	}
 
 	db.Delete(&hotspotVoucher)
-	db.Close()
 
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }

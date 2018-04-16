@@ -29,9 +29,19 @@ import (
 	"github.com/nethesis/icaro/sun/sun-api/configuration"
 )
 
-func Database() *gorm.DB {
+var db *gorm.DB
+var err error
+
+func Instance() *gorm.DB {
+	if db == nil {
+		Init()
+	}
+	return db
+}
+
+func Init() *gorm.DB {
 	uri := configuration.Config.Database.User + ":" + configuration.Config.Database.Password + "@tcp(" + configuration.Config.Database.Host + ":" + configuration.Config.Database.Port + ")/" + configuration.Config.Database.Name
-	db, err := gorm.Open("mysql", uri+"?charset=utf8&parseTime=True")
+	db, err = gorm.Open("mysql", uri+"?charset=utf8&parseTime=True")
 	if err != nil {
 		panic(err.Error())
 	}

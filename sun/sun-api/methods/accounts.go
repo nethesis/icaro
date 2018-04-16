@@ -84,7 +84,7 @@ func CreateAccount(c *gin.Context) {
 	}
 
 	// create account record
-	db := database.Database()
+	db := database.Instance()
 	db.Save(&account)
 
 	if json.Type == "customer" || json.Type == "desk" {
@@ -121,7 +121,6 @@ func CreateAccount(c *gin.Context) {
 		db.Save(&accountSMS)
 	}
 
-	db.Close()
 
 	if account.Id == 0 {
 		c.JSON(http.StatusConflict, gin.H{"id": account.Id, "status": "account already exists"})
@@ -147,7 +146,7 @@ func UpdateAccount(c *gin.Context) {
 		return
 	}
 
-	db := database.Database()
+	db := database.Instance()
 
 	// check if the user is me or not
 	if accountIdInt == creatorId {
@@ -161,7 +160,6 @@ func UpdateAccount(c *gin.Context) {
 	}
 
 	if account.Id == 0 {
-		db.Close()
 		c.JSON(http.StatusNotFound, gin.H{"message": "No account found!"})
 		return
 	}
@@ -188,7 +186,6 @@ func UpdateAccount(c *gin.Context) {
 	// NOTE: Subscription plan change is not supported
 
 	db.Save(&account)
-	db.Close()
 
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }
@@ -203,7 +200,7 @@ func GetAccounts(c *gin.Context) {
 
 	offsets := utils.OffsetCalc(page, limit)
 
-	db := database.Database()
+	db := database.Instance()
 	selectQuery := "accounts.*, hotspots.id as hotspot_id, hotspots.name as hotspot_name"
 	joinQuery := "LEFT JOIN accounts_hotspots on accounts_hotspots.account_id = accounts.id LEFT JOIN hotspots on accounts_hotspots.hotspot_id = hotspots.id"
 	if creatorId == 1 {
@@ -220,7 +217,6 @@ func GetAccounts(c *gin.Context) {
 			db.Select(selectQuery).Joins(joinQuery).Where("creator_id = ?", creatorId).Offset(offsets[0]).Limit(offsets[1]).Find(&accounts)
 		}
 	}
-	defer db.Close()
 
 	if len(accounts) <= 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No accounts found!"})
@@ -249,7 +245,7 @@ func GetAccount(c *gin.Context) {
 		return
 	}
 
-	db := database.Database()
+	db := database.Instance()
 
 	// check if the user is me or not
 	if accountIdInt == creatorId {
@@ -262,7 +258,6 @@ func GetAccount(c *gin.Context) {
 		}
 	}
 
-	defer db.Close()
 
 	if account.Id == 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No account found!"})
@@ -281,7 +276,7 @@ func DeleteAccount(c *gin.Context) {
 	creatorId := c.MustGet("token").(models.AccessToken).AccountId
 	accountId := c.Param("account_id")
 
-	db := database.Database()
+	db := database.Instance()
 	if creatorId == 1 {
 		db.Where("id = ?", accountId).First(&account)
 	} else {
@@ -289,7 +284,6 @@ func DeleteAccount(c *gin.Context) {
 	}
 
 	if account.Id == 0 {
-		db.Close()
 		c.JSON(http.StatusNotFound, gin.H{"message": "No account found!"})
 		return
 	}
@@ -299,7 +293,6 @@ func DeleteAccount(c *gin.Context) {
 	// delete also all accounts created from deleted account
 	db.Where("creator_id = ?", accountId).Delete(models.Account{})
 
-	db.Close()
 
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }
@@ -308,9 +301,8 @@ func StatsAccountTotal(c *gin.Context) {
 	creatorId := c.MustGet("token").(models.AccessToken).AccountId
 	var count int
 
-	db := database.Database()
+	db := database.Instance()
 	db.Table("accounts").Where("creator_id = ?", creatorId).Count(&count)
-	db.Close()
 
 	c.JSON(http.StatusOK, gin.H{"total": count})
 }
@@ -319,9 +311,8 @@ func StatsSMSTotal(c *gin.Context) {
 	var accountSMS models.AccountSmsCount
 	accountId := c.MustGet("token").(models.AccessToken).AccountId
 
-	db := database.Database()
+	db := database.Instance()
 	db.Where("account_id = ?", accountId).First(&accountSMS)
-	db.Close()
 
 	if accountSMS.Id == 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No sms account found!"})

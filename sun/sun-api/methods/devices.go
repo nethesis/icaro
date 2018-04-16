@@ -50,7 +50,7 @@ func GetDevices(c *gin.Context) {
 
 	offsets := utils.OffsetCalc(page, limit)
 
-	db := database.Database()
+	db := database.Instance()
 	chain := db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt))
 
 	if len(userId) > 0 {
@@ -58,7 +58,6 @@ func GetDevices(c *gin.Context) {
 	}
 
 	chain.Offset(offsets[0]).Limit(offsets[1]).Find(&devices)
-	db.Close()
 
 	if len(devices) <= 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No devices found!"})
@@ -74,9 +73,8 @@ func GetDevice(c *gin.Context) {
 
 	deviceId := c.Param("device_id")
 
-	db := database.Database()
+	db := database.Instance()
 	db.Where("id = ? AND hotspot_id in (?)", deviceId, utils.ExtractHotspotIds(accountId, (accountId == 1), 0)).First(&device)
-	db.Close()
 
 	if device.Id == 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No device found!"})
@@ -90,9 +88,8 @@ func StatsDeviceTotal(c *gin.Context) {
 	accountId := c.MustGet("token").(models.AccessToken).AccountId
 	var count int
 
-	db := database.Database()
+	db := database.Instance()
 	db.Table("devices").Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), 0)).Count(&count)
-	db.Close()
 
 	c.JSON(http.StatusOK, gin.H{"total": count})
 }

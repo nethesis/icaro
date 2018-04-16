@@ -25,6 +25,7 @@ package main
 import (
 	"flag"
 
+	"github.com/nethesis/icaro/sun/sun-api/database"
 	"github.com/nethesis/icaro/sun/sun-api/configuration"
 	"github.com/nethesis/icaro/sun/sun-tasks/tasks"
 )
@@ -43,6 +44,10 @@ func main() {
 
 	// init configuration
 	configuration.Init(ConfigFilePtr)
+
+	// init Database
+	db := database.Init()
+	defer db.Close()
 
 	// init tasks
 	tasks.Init(TaskAction, TaskMode)
