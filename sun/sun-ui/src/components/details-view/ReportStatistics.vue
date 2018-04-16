@@ -412,7 +412,8 @@
           },
         },
         sessionToShow: [],
-        newUsersToShow: [],
+        newUsersSession: [],
+        newUserIdArray: [],
         avgDurationConnection: 0,
         avgDownloadTrafficConnection: 0,
         avgUploadTrafficConnection: 0,
@@ -422,6 +423,7 @@
       }
     },
     created() {
+      this.getNewUserSessions();
       this.implementDataInChart();
       this.fillTotalTrafficChart()
       this.implementUserChart()
@@ -451,9 +453,36 @@
           return dHours + 'h ' + dMins + 'm ' + dSecs + 's'
         }
       },
+      removeDuplicates(myArr, prop) {
+        return myArr.filter((obj, pos, arr) => {
+            return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
+        });
+      },
+      getNewUserSessions(){
+        this.chartDateRange.forEach(date => {
+          let userArray = [];
+            this.sessionsReport.map(function (session){
+              if (session.start_time.substring(0, 10) === date) {
+                userArray.push(session);
+              }
+            })
+          
+            for (let index = 0; index < this.removeDuplicates(userArray, 'user_id').length; index++) {
+              this.newUsersSession.push(this.removeDuplicates(userArray, 'user_id')[index])
+            }
+        });
+
+        let userIdArray = this.sessionsReport.map(function(item){
+          return item.user_id;
+        });
+
+        this.newUserIdArray = userIdArray.filter(function(item, pos) {
+          return userIdArray.indexOf(item) == pos;
+        })
+
+      },
       // Implement Session and newUser between date range in Chart
       implementDataInChart() {
-        let all_sessions = this.sessionsReport;
         let new_users = 0;
         this.chartDateRange.forEach(element => {
           this.sessionToShow = this.sessionsReport.map(function (item) {
@@ -464,16 +493,12 @@
           this.totalTrafficChart.datasets[0].data.push(this.sessionToShow);
         });
         this.chartDateRange.forEach(element => {
-          new_users = 0;
-          this.newUsersReport.map(function (user) {
-            all_sessions.map(function(session){
-              if(user.id === session.user_id){
-                if(session.start_time.substring(0, 10) === element)
-                    new_users++;
-              }
-            })
-          });
-          this.totalTrafficChart.datasets[1].data.push(new_users);
+        new_users = 0;
+        this.newUsersSession.map(function(session){
+            if(session.start_time.substring(0, 10) === element)
+                new_users++;
+        })
+         this.totalTrafficChart.datasets[1].data.push(new_users);
         });
       },
       fillTotalTrafficChart() {
@@ -506,73 +531,117 @@
         this.trafficChartData.datasets[1].data.push(bps_down)
         })
       },
+    
       implementUserChart() {
-        this.chartDateRange.forEach(date => {
-          let moment_range = extendMoment(moment)
-          let index = 0
-          let bps_up = [0]
-          let bps_down = [0]
-          let duration_array = [0]
-          let all_sessions = this.sessionsReport
-          let session_counter = 0
-          let duration = 0
-          this.newUsersReport.map(function (user) {
-            // Check if user is active between dates
-            if (user.valid_from.substring(0, 10) <= date) {
-              // iterate through session
-              all_sessions.map(function (session) {
-                // Check if user has any session
-                if (session.user_id === user.id) {
-                  // check if user session start is on chart date
-                  if (session.start_time.substring(0, 10) === date) {
-                    // if user session is on date, check if session has been stopped on that day
-                    if (session.stop_time.substring(0, 10) === date) {
-                      bps_up[session_counter] += session.bytes_up;                      
-                      bps_down[session_counter] += session.bytes_down;                      
-                      duration += moment.range(moment(session.start_time), moment(session.stop_time)).diff(
-                        'seconds')
-                      // or session has been stopped on next day
-                    } else if (session.stop_time.substring(0, 10) > date) {
-                      bps_up[session_counter] += session.bytes_up;                      
-                      bps_down[session_counter] += session.bytes_down;
-
-                      duration += moment.range(moment(session.start_time), moment(date).endOf('day')).diff(
-                        'seconds')
-                    }
-                    bps_up.push(0);
-                    bps_down.push(0);
-
-                    duration_array[session_counter] += duration
-                    duration_array.push(0)
-                    session_counter++
-
-                    // check if session has started one day before, but has stopped on actual day
-                  } else if (session.stop_time.substring(0, 10) === date && session.start_time.substring(0,
-                      10) < date) {
-                    duration += moment.range(moment(date).startOf('day'), moment(session.stop_time)).diff(
-                      'seconds')
-                    bps_up[session_counter] += session.bytes_up;                      
-                    bps_down[session_counter] += session.bytes_down;
-                    
-                    bps_up.push(0);
-                    bps_down.push(0);
-
-                    duration_array[session_counter] += duration
-                    duration_array.push(0)
-                    session_counter++
+        let newUsers = [];
+        let id = [];
+        let date = [];
+        let isInserted = false;
+        this.sessionsReport.map(function(session) {
+            if (newUsers.length === 0) {
+              newUsers.push(session);
+              id.push(session.user_id);
+              date.push(session.start_time.substring(0, 10)+session.user_id);
+            } else {
+              isInserted = false;
+              newUsers.forEach(user => {
+                if (!isInserted) {
+                  if (
+                    session.user_id === user.user_id &&
+                    user.start_time.substring(0, 10) ===
+                    session.start_time.substring(0, 10)
+                  ) {
+                    user.bytes_up += session.bytes_up;
+                    user.bytes_down += session.bytes_down;
+                    user.duration += session.duration;
+                    isInserted = true;
                   } else {
-                    bps_up[session_counter] += 0;                      
-                    bps_down[session_counter] += 0;
-
-                    duration_array[session_counter] += 0
+                    if (id.includes(session.user_id) === false) {
+                      newUsers.push(session);
+                      id.push(session.user_id);
+                      date.push(session.start_time.substring(0, 10)+session.user_id);
+                      isInserted = true;
+                    } else if (
+                      date.includes(session.start_time.substring(0, 10)+session.user_id) === false
+                    ) {
+                      newUsers.push(session);
+                      date.push(session.start_time.substring(0, 10)+session.user_id);
+                      isInserted = true;
+                    }
                   }
                 }
-              })
+              });
+            }
+        });
+
+
+        this.chartDateRange.forEach(date => {
+          let moment_range = extendMoment(moment);
+          let bpsUpArray = [0];
+          let bpsDownArray = [0];
+          let durationArray = [0];
+          let sessionCounter = 0;
+          newUsers.map(function(session) {
+            if (session.start_time.substring(0, 10) === date) {
+              bpsUpArray[sessionCounter] += session.bytes_up;
+              bpsDownArray[sessionCounter] += session.bytes_down;
+              durationArray[sessionCounter] += session.duration;
+              bpsUpArray.push(0);
+              bpsDownArray.push(0);
+              durationArray.push(0);
+              sessionCounter++;
+            } else {
+              bpsUpArray[sessionCounter] += 0;
+              bpsDownArray[sessionCounter] += 0;
+              durationArray[sessionCounter] += 0;
+            }
+          });
+
+
+          if (durationArray.length > 1) {
+            durationArray.pop();
+          }
+          if (bpsUpArray.length > 1) {
+            bpsUpArray.pop();
+          }
+          if (bpsDownArray.length > 1) {
+            bpsDownArray.pop();
+          }
+          this.avgTrafficUserChart.datasets[0].data.push(
+            this.calculateAVG(bpsUpArray)
+          );
+          this.avgTrafficUserChart.datasets[1].data.push(
+            this.calculateAVG(bpsDownArray)
+          );
+          this.avgDurationUserChart.datasets[0].data.push(
+            this.calculateAVG(durationArray)
+          );
+        });
+      },
+      implementSessionChart() {
+        this.chartDateRange.forEach(date => {
+          let index = 0
+          let duration = [0]
+          let bps_up = [0]
+          let bps_down = [0]
+          this.sessionsReport.map(function (session) {
+            // Check if session has been started between chart date
+            if (session.start_time.substring(0, 10) === date) {
+              bps_up[index] += session.bytes_up
+              bps_down[index] += session.bytes_down
+              duration[index] += session.duration
+              bps_up.push(0)
+              bps_down.push(0)
+              duration.push(0)
+              index++
+            } else {
+              bps_up[index] += 0
+              bps_down[index] += 0
+              duration[index] += 0
             }
           })
-
-          if (duration_array.length > 1) {
-            duration_array.pop()
+          if (duration.length > 1) {
+            duration.pop()
           }
           if (bps_up.length > 1) {
             bps_up.pop()
@@ -580,46 +649,8 @@
           if (bps_down.length > 1) {
             bps_down.pop()
           }
-
-          this.avgTrafficUserChart.datasets[0].data.push(this.calculateAVG(bps_up))
-          this.avgTrafficUserChart.datasets[1].data.push(this.calculateAVG(bps_down))
-          this.avgDurationUserChart.datasets[0].data.push(this.calculateAVG(duration_array))
-        })
-      },
-      implementSessionChart() {
-        this.chartDateRange.forEach(date => {
-          let index = 0
-          let duration = [0]
-          let kbps_up = [0]
-          let kbps_down = [0]
-          this.sessionsReport.map(function (session) {
-            // Check if session has been started between chart date
-            if (session.start_time.substring(0, 10) === date) {
-              kbps_up[index] += session.bytes_up
-              kbps_down[index] += session.bytes_down
-              duration[index] += session.duration
-              kbps_up.push(0)
-              kbps_down.push(0)
-              duration.push(0)
-              index++
-            } else {
-              kbps_up[index] += 0
-              kbps_down[index] += 0
-              duration[index] += 0
-            }
-          })
-          if (duration.length > 1) {
-            duration.pop()
-          }
-          if (kbps_up.length > 1) {
-            kbps_up.pop()
-          }
-          if (kbps_down.length > 1) {
-            kbps_down.pop()
-          }
-
-          this.avgTrafficSessionChart.datasets[0].data.push(this.calculateAVG(kbps_up))
-          this.avgTrafficSessionChart.datasets[1].data.push(this.calculateAVG(kbps_down))
+          this.avgTrafficSessionChart.datasets[0].data.push(this.calculateAVG(bps_up))
+          this.avgTrafficSessionChart.datasets[1].data.push(this.calculateAVG(bps_down))
           this.avgDurationSessionChart.datasets[0].data.push(this.calculateAVG(duration))
         })
       },
