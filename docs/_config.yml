@@ -6,6 +6,7 @@ description: >
 
 baseurl: "/icaro" # the subpath of your site, e.g. /blog/
 url: https://nethesis.github.io/icaro
+api_url: https://documenter.getpostman.com/view/3364668/icaro/7LjC4mU
 git_address: https://github.com/nethesis/icaro
 git_edit_address: https://github.com/nethesis/icaro/docs
 

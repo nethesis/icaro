@@ -11,7 +11,7 @@ Icaro is divided in 4 parts:
 - [Wings](https://github.com/nethesis/icaro/tree/master/wings): captive portal hosted along with Wax, it's static responsive web page for user login. It talks with Wax and Dedalo
 - Sun: Hotspot Manager applications which is dived in 3 parts
   - [Sun UI](https://github.com/nethesis/icaro/tree/master/sun/sun-ui): web interface written in [Vue.js](https://vuejs.org/) respecting [Patternfly](http://www.patternfly.org) design
-  - [Sun API](https://github.com/nethesis/icaro/tree/master/sun/sun-api): [APIs](https://documenter.getpostman.com/view/3364668/icaro/7LjC4mU) used by Sun UI, implemented using [Golang ](https://golang.org/)
+  - [Sun API](https://github.com/nethesis/icaro/tree/master/sun/sun-api): [APIs]({{site.api_url}}) used by Sun UI, implemented using [Golang ](https://golang.org/)
   - [Sun Tasks](https://github.com/nethesis/icaro/tree/master/sun/sun-tasks): Golang applications to terminated sessions and cleanup invalid tokens 
 
 Both Wax and Sun use the same MariaDB (or MySQL) database.
