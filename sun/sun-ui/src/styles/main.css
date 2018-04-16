@@ -303,6 +303,7 @@ a {
 
 .navbar-pf-vertical {
   border-top: 2px solid #26a9a3 !important;
+  background-color: #171717 !important;
 }
 
 .nav-pf-vertical .list-group-item.active>a:before {
