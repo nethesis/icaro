@@ -411,6 +411,7 @@
             }
           },
         },
+        calculatedSession: [],
         sessionToShow: [],
         newUsersSession: [],
         newUserIdArray: [],
@@ -459,6 +460,11 @@
         });
       },
       getNewUserSessions(){
+
+      this.sessionsReport.forEach(element => {
+        this.calculatedSession.push(Object.assign({}, element))
+      });
+
         this.chartDateRange.forEach(date => {
           let userArray = [];
             this.sessionsReport.map(function (session){
@@ -537,7 +543,7 @@
         let id = [];
         let date = [];
         let isInserted = false;
-        this.sessionsReport.map(function(session) {
+        this.calculatedSession.map(function(session) {
             if (newUsers.length === 0) {
               newUsers.push(session);
               id.push(session.user_id);
