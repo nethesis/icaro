@@ -43,10 +43,6 @@ func DefineAPI(router *gin.Engine) {
 	corsConf.AllowMethods = configuration.Config.Cors.Methods
 	router.Use(cors.New(corsConf))
 
-	// init database
-	db := database.Init()
-	defer db.Close()
-
 	health := router.Group("/health")
 	health.GET("/check", methods.HealthCheck)
 
@@ -169,6 +165,10 @@ func main() {
 	flag.Parse()
 	configuration.Init(ConfigFilePtr)
 
+	// init database
+	db := database.Init()
+	defer db.Close()
+
 	// init routers
 	router := gin.Default()
 
@@ -176,5 +176,4 @@ func main() {
 	DefineAPI(router)
 
 	router.Run()
-
 }
