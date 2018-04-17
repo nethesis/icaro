@@ -37,6 +37,16 @@ input {
   }
 }
 
+@media screen and (max-width: 767px) {
+  #badge img {
+    height: 47px !important;
+  }
+  
+  .login-pf #brand {
+    text-align: center;
+  }
+}
+
 .login-pf .container {
   padding-bottom: 20px !important;
 }
