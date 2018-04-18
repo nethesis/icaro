@@ -160,8 +160,8 @@
       }
       var activeTab = this.get('sessions_active_tab') || 'active'
       setTimeout(function () {
-        $('#' + activeTab + '-tab-parent').click()
-      }, 250)
+        window.$('#' + activeTab + '-tab-parent').click()
+      }, 500)
 
       return {
         msg: this.$i18n.t("menu.sessions"),

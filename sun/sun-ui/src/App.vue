@@ -437,7 +437,7 @@
         $('body').addClass('logged')
         $('body').removeClass('not-logged')
         setTimeout(function () {
-          $().setupVerticalNavigation(true);
+          window.$().setupVerticalNavigation(true);
         }, 1000);
         this.showBody()
       },

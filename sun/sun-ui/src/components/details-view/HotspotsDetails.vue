@@ -791,7 +791,7 @@
           this.preferences.captive = captivePref
           this.preferences.isLoading = false
           setTimeout(function () {
-            $('#captive-preview').css('background-color', backgroundColor);
+            window.$('#captive-preview').css('background-color', backgroundColor);
           }, 0)
         }, error => {
           console.log(error.body)
