@@ -44,10 +44,6 @@ func DefineAPI(router *gin.Engine) {
 	corsConf.AllowMethods = configuration.Config.Cors.Methods
 	router.Use(cors.New(corsConf))
 
-	// init Database
-	db := database.Init()
-	defer db.Close()
-
 	health := router.Group("/health")
 	health.GET("/check", methods.HealthCheck)
 
@@ -93,6 +89,10 @@ func main() {
 	ConfigFilePtr := flag.String("c", "/opt/icaro/wax/conf.json", "Path to configuration file")
 	flag.Parse()
 	configuration.Init(ConfigFilePtr)
+
+	// init Database
+	db := database.Init()
+	defer db.Close()
 
 	// init routers
 	router := gin.Default()
