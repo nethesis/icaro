@@ -308,7 +308,7 @@ func TestUnitRegistrationLimit(t *testing.T) {
 			"description": fmt.Sprintf("My test unit %d", max),
 			"uuid":        fmt.Sprintf("uuid-test-%d", max),
 			"secret":      fmt.Sprintf("mysecret%d", max),
-			"hotspot":     "HSTest",
+			"hotspot_id":  "1",
 		}).
 		Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
 			err := json.Unmarshal([]byte(f.Body.String()), &cr)
