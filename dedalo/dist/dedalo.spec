@@ -1,5 +1,5 @@
 Name: dedalo
-Version: 0.1.0
+Version: 0.2.0
 Release: 1%{?dist}
 Summary: Network Access Controller, runs on the firewall and intercepts all guest connections
 
@@ -64,6 +64,9 @@ touch %{buildroot}/opt/icaro/dedalo/walled_gardens/local.conf
 
 
 %changelog
+* Thu Apr 19 2018 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 0.2.0
+- Use hotspot_id during unit registration
+
 * Wed Apr 04 2018 Matteo Valentini <matteo.valentini@nethesis.it> - 0.1.0-1
   - Enable temporary sessions accounting
 
