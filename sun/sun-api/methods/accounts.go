@@ -121,7 +121,6 @@ func CreateAccount(c *gin.Context) {
 		db.Save(&accountSMS)
 	}
 
-
 	if account.Id == 0 {
 		c.JSON(http.StatusConflict, gin.H{"id": account.Id, "status": "account already exists"})
 	} else {
@@ -258,7 +257,6 @@ func GetAccount(c *gin.Context) {
 		}
 	}
 
-
 	if account.Id == 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No account found!"})
 		return
@@ -293,16 +291,20 @@ func DeleteAccount(c *gin.Context) {
 	// delete also all accounts created from deleted account
 	db.Where("creator_id = ?", accountId).Delete(models.Account{})
 
-
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }
 
 func StatsAccountTotal(c *gin.Context) {
-	creatorId := c.MustGet("token").(models.AccessToken).AccountId
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
 	var count int
 
 	db := database.Instance()
-	db.Table("accounts").Where("creator_id = ?", creatorId).Count(&count)
+
+	if accountId == 1 {
+		db.Table("accounts").Count(&count)
+	} else {
+		db.Table("accounts").Where("creator_id = ?", accountId).Count(&count)
+	}
 
 	c.JSON(http.StatusOK, gin.H{"total": count})
 }
