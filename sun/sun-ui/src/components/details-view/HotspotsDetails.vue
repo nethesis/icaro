@@ -436,6 +436,32 @@
       </div>
     </div>
 
+     <div v-if="!info.isLoading" v-for="voucher in vouchers.data" v-bind:key="voucher.id" class="card-pf" id="voucher-coupon">
+            <img class="voucher-logo" src="/static/logo.png" />
+            <h2 class="card-pf-title voucher-name" id="test">
+                {{info.data.name}}
+            </h2>
+            <h3 class="card-pf-title voucher-desc">
+                {{info.data.description}}
+            </h3>
+            <div class="card-pf-body voucher-main">
+                <p>
+                    <strong class="voucher-code">{{voucher.code}}</strong>
+                </p>
+            </div>
+            <div class="card-pf-footer voucher-details">
+                <div class="card-pf-time-frame-filter voucher-valid">
+                    {{ $t("hotspot.valid") }}:
+                    <strong>{{voucher.duration}}</strong> <span> {{ $t("hotspot.days") }} </span>
+                </div>
+                <div class="voucher-download">
+                    <span class="fa fa-arrow-down"></span> Download: <strong>{{voucher.bandwidth_down}} </strong> <span> Kb/s</span>
+                </div>
+                <div class="voucher-upload">
+                    <span class="fa fa-arrow-up"></span> Upload: <strong>{{voucher.bandwidth_up}} </strong> <span>Kb/s</span>
+                </div>
+            </div>
+        </div>
   </div>
 </template>
 
@@ -454,6 +480,7 @@
   import CaptivePortal from '../../directives/CaptivePortal.vue'
   import HotspotAction from '../../directives/HotspotAction.vue';
   import PictureInput from 'vue-picture-input'
+  import arrow from '../../../static/arrows.js';
   import {
     Sketch
   } from 'vue-color'
@@ -851,67 +878,110 @@
         })
       },
       printVoucher(voucher) {
-        var v = 0
+        let index
+        for (let i = 0; i < this.vouchers.data.length; i++) {
+          if(this.vouchers.data[i].id === voucher.id){
+            index = i;
+          }
+        }
+
         var doc = new jsPDF("portrait", "mm", "a4");
-        doc.setFontSize(22);
-        doc.text(20, 18, '-'.repeat(60))
-        doc.setFontSize(15);
-
-        doc.text(20, (v + 1) * (2.5) + 20, this.$i18n.t('hotspot.voucher_code'));
-        doc.text(60, (v + 1) * (2.5) + 20, this.$i18n.t('hotspot.bandwidth_limit'));
-        doc.text(120, (v + 1) * (2.5) + 20, this.$i18n.t('hotspot.duration'));
-        doc.text(150, (v + 1) * (2.5) + 20, this.$i18n.t('hotspot.auto_login'));
-
-        doc.setFontSize(22);
-        doc.text(20, (v + 1) * (2.5) + 30, voucher.code);
-
-        doc.setFontSize(15);
-        doc.text(60, (v + 1) * (2.5) + 30, 'Down: ' + (voucher.bandwidth_down ? voucher.bandwidth_down : '-') +
-          '   Up: ' + (voucher.bandwidth_up ? voucher.bandwidth_up : '-'));
-        doc.text(120, (v + 1) * (2.5) + 30, voucher.duration.toString() + ' ' + this.$i18n.t('hotspot.days'));
-        doc.text(150, (v + 1) * (2.5) + 30, voucher.auto_login ? this.$i18n.t('hotspot.yes') : this.$i18n.t(
-          'hotspot.no'));
-
-        doc.setFontSize(22);
-        doc.text(20, (v + 1) * (2.5) + 38, '-'.repeat(60))
+        var halfWidth = Math.round(doc.internal.pageSize.width / 2);
+        var fifthHeight = Math.round(doc.internal.pageSize.height / 5);
+        
+        doc.setDrawColor(17, 17, 17)
+        doc.line(0, fifthHeight, halfWidth, fifthHeight);
+        doc.line(halfWidth, 0, halfWidth, fifthHeight);
+        doc.addImage(this.preferences.captive[2].value, 2, 2, 20, 20);
+        doc.fromHTML(document.getElementsByClassName('voucher-desc')[index], 50, -3, {
+            width: 55
+        });
+        doc.fromHTML(document.getElementsByClassName('voucher-main')[index], 35, 18);
+        doc.setLineWidth(0.3)
+        doc.setDrawColor(158, 160, 163);
+        doc.line(5,  35, halfWidth - 5, + 35)
+        doc.addImage(arrow.down, 5, 41, 2, 2);
+        doc.fromHTML(document.getElementsByClassName('voucher-download')[index], 8, 38);
+        doc.addImage(arrow.up, 5, 47, 2, 2);
+        doc.fromHTML(document.getElementsByClassName('voucher-upload')[index], 8, 44);
+        doc.fromHTML(document.getElementsByClassName('voucher-valid')[index], 65, 38);
 
         doc.autoPrint();
         window.open(doc.output('bloburl'), '_blank');
+          
       },
       printAllVoucher() {
         var doc = new jsPDF("portrait", "mm", "a4");
-        var pageHeight = doc.internal.pageSize.height;
+        var width = doc.internal.pageSize.width;
+        var height = doc.internal.pageSize.height;
+        var halfWidth = Math.round(width / 2);
+        var fifthHeight = Math.round(height / 5);
+        var pageNumber = (15 % 8 !== 0) ? (Math.floor(15 / 8) + 1) : (15 / 8);
+        var row = 0;
+        var cordinates = {
+            y: 0,
+            x: 0,
+            width: 0,
+            height: 0,
+        }
 
-        for (var v in this.vouchers.data) {
-          var voucher = this.vouchers.data[v]
-          if (parseInt(v) != 0 && parseInt(v) % 11 == 0) {
-            doc.addPage();
+        for (var index = 0; index < this.vouchers.data.length; index++) {
+          if (index % 10 === 0 && index !== 0) {
+              console.log('index: ', index);
+              doc.addPage();
+              row = 0;
+              cordinates = {
+                  y: 0,
+                  x: 0,
+                  width: 0,
+                  height: 0,
+              }
           }
+            doc.setLineWidth(0.3)
+            doc.setDrawColor(17, 17, 17)
+            // Left column
+            if (index % 2 === 0) {
+              doc.addImage(this.preferences.captive[2].value, 2, cordinates.y + 2, 20, 20);
+              doc.fromHTML(document.getElementsByClassName('voucher-desc')[index], 50, cordinates.y + (-3), {
+                  width: 55
+                  
+              });
+              doc.fromHTML(document.getElementsByClassName('voucher-main')[index], 35, cordinates.y + 18);
+              doc.setLineWidth(0.3)
+              doc.setDrawColor(158, 160, 163);
+              doc.line(5, cordinates.y + 35, halfWidth - 5, cordinates.y + 35)
+              doc.addImage(arrow.down, 5, cordinates.y + 41, 2, 2);
+              doc.fromHTML(document.getElementsByClassName('voucher-download')[index], 8, cordinates.y + 38);
+              doc.addImage(arrow.up, 5, cordinates.y + 47, 2, 2);
+              doc.fromHTML(document.getElementsByClassName('voucher-upload')[index], 8, cordinates.y + 44);
+              doc.fromHTML(document.getElementsByClassName('voucher-valid')[index], 65, cordinates.y + 38);
 
-          doc.setFontSize(22);
-          doc.text(20, 18, '-'.repeat(60))
-          doc.setFontSize(15);
-
-          doc.text(20, (((v % 11) + 1) * (2.5) + 20) + (22.5 * (v % 11)), this.$i18n.t('hotspot.voucher_code'));
-          doc.text(60, (((v % 11) + 1) * (2.5) + 20) + (22.5 * (v % 11)), this.$i18n.t('hotspot.bandwidth_limit'));
-          doc.text(120, (((v % 11) + 1) * (2.5) + 20) + (22.5 * (v % 11)), this.$i18n.t('hotspot.duration'));
-          doc.text(150, (((v % 11) + 1) * (2.5) + 20) + (22.5 * (v % 11)), this.$i18n.t('hotspot.auto_login'));
-
-          doc.setFontSize(22);
-          doc.text(20, (((v % 11) + 1) * (2.5) + 30) + (22.5 * (v % 11)), voucher.code);
-
-          doc.setFontSize(15);
-          doc.text(60, (((v % 11) + 1) * (2.5) + 30) + (22.5 * (v % 11)), 'Down: ' + (voucher.bandwidth_down ? voucher.bandwidth_down :
-              '-') +
-            '   Up: ' + (voucher.bandwidth_up ? voucher.bandwidth_up : '-'));
-          doc.text(120, (((v % 11) + 1) * (2.5) + 30) + (22.5 * (v % 11)), voucher.duration.toString() + ' ' + this.$i18n
-            .t('hotspot.days'));
-          doc.text(150, (((v % 11) + 1) * (2.5) + 30) + (22.5 * (v % 11)), voucher.auto_login ? this.$i18n.t(
-            'hotspot.yes') : this.$i18n.t(
-            'hotspot.no'));
-
-          doc.setFontSize(22);
-          doc.text(20, (((v % 11) + 1) * (2.5) + 38) + (22.5 * (v % 11)), '-'.repeat(60))
+              doc.setDrawColor(17, 17, 17)
+              doc.line(0, cordinates.y + fifthHeight, halfWidth, cordinates.y + fifthHeight);
+              doc.line(halfWidth, cordinates.y, halfWidth, cordinates.y + fifthHeight);
+              // Right column
+            } else {
+              cordinates.x = halfWidth;
+              doc.addImage(this.preferences.captive[2].value, cordinates.x + 2, cordinates.y + 2, 20, 20);
+              doc.fromHTML(document.getElementsByClassName('voucher-desc')[index], cordinates.x + 50, cordinates.y + (-3), {
+                  width: 55
+              });
+              doc.fromHTML(document.getElementsByClassName('voucher-main')[index], cordinates.x + 35, cordinates.y + 18);
+              doc.setLineWidth(0.3)
+              doc.setDrawColor(158, 160, 163);
+              doc.line(cordinates.x + 5, cordinates.y + 35, (cordinates.x * 2) - 5, cordinates.y + 35)
+              doc.addImage(arrow.down, cordinates.x + 5, cordinates.y + 41, 2, 2);
+              doc.fromHTML(document.getElementsByClassName('voucher-download')[index], cordinates.x + 8, cordinates.y + 38);
+              doc.addImage(arrow.up, cordinates.x + 5, cordinates.y + 47, 2, 2);
+              doc.fromHTML(document.getElementsByClassName('voucher-upload')[index], cordinates.x + 8, cordinates.y + 44);
+              doc.fromHTML(document.getElementsByClassName('voucher-valid')[index], cordinates.x + 65, cordinates.y + 38);
+              
+              row++;
+              cordinates.width = cordinates.y;
+              cordinates.y = fifthHeight * row;
+              doc.setDrawColor(17, 17, 17)
+              doc.line(halfWidth, cordinates.y, width, cordinates.y);
+            }
         }
         doc.autoPrint();
         window.open(doc.output('bloburl'), '_blank');
@@ -973,10 +1043,54 @@
 </script>
 
 <style scoped>
+
+
   textarea {
     width: 100%;
     min-height: 180px;
     resize: vertical;
+  }
+
+  #voucher-coupon{
+    display: none;
+  }
+  .voucher-logo {
+      height: 25px;
+      margin: 15px;
+      margin-left: -5px;
+  }
+  .voucher-name {
+      position: absolute;
+      top: -8px;
+      left: 90px;
+      max-width: 200px;
+      color: goldenrod;
+      
+  }
+  .voucher-desc {
+      position: absolute;
+      top: 15px;
+      left: 90px;
+      font-size: 18px;
+      color: #757575;
+      max-width: 200px;
+  }
+  .voucher-code {
+      font-size: 30px;
+      margin-top: 5px;
+  }
+  .voucher-valid {
+      font-size: 15px;
+      margin-top: 6px;
+  }
+  .voucher-main {
+      text-align: center;
+      padding-bottom: 10px;
+      margin-top: 15px;
+  }
+  .voucher-details {
+      padding: 10px;
+      background: #fff;
   }
 
 </style>

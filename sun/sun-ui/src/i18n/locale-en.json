@@ -94,7 +94,8 @@
       "duration": "Duration",
       "mac_auth": "MAC Authentication",
       "new_mac_auth": "New MAC Auth",
-      "used": "Used"
+      "used": "Used",
+      "valid": "Valid"
     },
     "user": {
       "username": "Username",
