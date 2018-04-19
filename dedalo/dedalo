@@ -65,7 +65,7 @@ case "$OPT" in
                 \"description\": \"$HS_UNIT_DESC\",
                 \"uuid\": \"$HS_UUID\",
                 \"secret\": \"$HS_SECRET\",
-                \"hotspot\": \"$HS_ID\"
+                \"hotspot_id\": \"$HS_ID\"
             }")
         # check if everything is ok
         if [ $? -eq 0 ] && [ "$RESP" == "409" -o "$RESP" == "201" ] ; then
