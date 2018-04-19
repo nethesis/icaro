@@ -257,7 +257,7 @@ func TestUnitRegistration(t *testing.T) {
 			"name":        "MyTestUnit",
 			"uuid":        fmt.Sprintf("%d", time.Now().Nanosecond()),
 			"secret":      "mysecret",
-			"hotspot":     "HSTest",
+			"hotspot_id":  "1",
 		}).
 		Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
 			err := json.Unmarshal([]byte(f.Body.String()), &cr)
@@ -289,7 +289,7 @@ func TestUnitRegistrationLimit(t *testing.T) {
 				"name":        "MyTestUnit",
 				"uuid":        fmt.Sprintf("uuid-test-%d", i),
 				"secret":      fmt.Sprintf("mysecret%d", i),
-				"hotspot":     "HSTest",
+				"hotspot_id":  "1",
 			}).
 			Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
 				err := json.Unmarshal([]byte(f.Body.String()), &cr)
