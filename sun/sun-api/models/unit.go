@@ -36,7 +36,7 @@ type Unit struct {
 }
 
 type UnitJSON struct {
-	Hotspot     string `json:"hotspot"`
+	HotspotId   string `json:"hotspot_id"`
 	MacAddress  string `json:"mac_address"`
 	Name        string `json:"name"`
 	Description string `json:"description"`

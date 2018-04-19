@@ -152,6 +152,14 @@ func GetAccountById(id int) models.Account {
 	return account
 }
 
+func GetHotspotById(id string) models.Hotspot {
+	var hotspot models.Hotspot
+	db := database.Instance()
+	db.Where("id = ?", id).First(&hotspot)
+
+	return hotspot
+}
+
 func GetHotspotByName(name string) models.Hotspot {
 	var hotspot models.Hotspot
 	db := database.Instance()
