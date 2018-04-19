@@ -900,10 +900,10 @@
         doc.setLineWidth(0.3)
         doc.setDrawColor(158, 160, 163);
         doc.line(5,  35, halfWidth - 5, + 35)
-        doc.addImage(arrow.down, 5, 41, 2, 2);
+        doc.addImage(arrow.down, 4, 43, 3, 3);
         doc.fromHTML(document.getElementsByClassName('voucher-download')[index], 8, 38);
-        doc.addImage(arrow.up, 5, 47, 2, 2);
-        doc.fromHTML(document.getElementsByClassName('voucher-upload')[index], 8, 44);
+        doc.addImage(arrow.up, 4, 51, 3, 3);
+        doc.fromHTML(document.getElementsByClassName('voucher-upload')[index], 8, 46);
         doc.fromHTML(document.getElementsByClassName('voucher-valid')[index], 65, 38);
 
         doc.autoPrint();
@@ -950,10 +950,10 @@
               doc.setLineWidth(0.3)
               doc.setDrawColor(158, 160, 163);
               doc.line(5, cordinates.y + 35, halfWidth - 5, cordinates.y + 35)
-              doc.addImage(arrow.down, 5, cordinates.y + 41, 2, 2);
+              doc.addImage(arrow.down, 4, cordinates.y + 43, 3, 3);
               doc.fromHTML(document.getElementsByClassName('voucher-download')[index], 8, cordinates.y + 38);
-              doc.addImage(arrow.up, 5, cordinates.y + 47, 2, 2);
-              doc.fromHTML(document.getElementsByClassName('voucher-upload')[index], 8, cordinates.y + 44);
+              doc.addImage(arrow.up, 4, cordinates.y + 51, 3, 3);
+              doc.fromHTML(document.getElementsByClassName('voucher-upload')[index], 8, cordinates.y + 46);
               doc.fromHTML(document.getElementsByClassName('voucher-valid')[index], 65, cordinates.y + 38);
 
               doc.setDrawColor(17, 17, 17)
@@ -970,10 +970,10 @@
               doc.setLineWidth(0.3)
               doc.setDrawColor(158, 160, 163);
               doc.line(cordinates.x + 5, cordinates.y + 35, (cordinates.x * 2) - 5, cordinates.y + 35)
-              doc.addImage(arrow.down, cordinates.x + 5, cordinates.y + 41, 2, 2);
+              doc.addImage(arrow.down, cordinates.x + 4, cordinates.y + 43, 3, 3);
               doc.fromHTML(document.getElementsByClassName('voucher-download')[index], cordinates.x + 8, cordinates.y + 38);
-              doc.addImage(arrow.up, cordinates.x + 5, cordinates.y + 47, 2, 2);
-              doc.fromHTML(document.getElementsByClassName('voucher-upload')[index], cordinates.x + 8, cordinates.y + 44);
+              doc.addImage(arrow.up, cordinates.x + 4, cordinates.y + 51, 3, 3);
+              doc.fromHTML(document.getElementsByClassName('voucher-upload')[index], cordinates.x + 8, cordinates.y + 46);
               doc.fromHTML(document.getElementsByClassName('voucher-valid')[index], cordinates.x + 65, cordinates.y + 38);
               
               row++;
@@ -1071,7 +1071,7 @@
       position: absolute;
       top: 15px;
       left: 90px;
-      font-size: 18px;
+      font-size: 21px;
       color: #757575;
       max-width: 200px;
   }
@@ -1080,7 +1080,7 @@
       margin-top: 5px;
   }
   .voucher-valid {
-      font-size: 15px;
+      font-size: 18px;
       margin-top: 6px;
   }
   .voucher-main {
@@ -1092,5 +1092,12 @@
       padding: 10px;
       background: #fff;
   }
+  .voucher-upload {
+      font-size: 18px;
+  }
+  .voucher-download {
+      font-size: 18px;
+  }
+
 
 </style>
