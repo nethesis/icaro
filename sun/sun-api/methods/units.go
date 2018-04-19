@@ -44,7 +44,7 @@ func CreateUnit(c *gin.Context) {
 		return
 	}
 
-	hotspot := utils.GetHotspotByName(json.Hotspot)
+	hotspot := utils.GetHotspotById(json.HotspotId)
 
 	if hotspot.Id == 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No hotspot found!"})
