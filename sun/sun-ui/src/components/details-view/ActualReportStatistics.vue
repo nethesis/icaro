@@ -27,6 +27,7 @@
     extendMoment
   } from "moment-range";
   import UtilService from "../../services/util";
+  import filters from '../../filters/filters'
   export default {
     name: "ActualReport",
     components: {
@@ -40,8 +41,6 @@
     mixins: [UtilService],
     data() {
       return {
-        idsArray: [],
-        newLogins: [],
         userCurrentlyLogin: 0,
         totalDailyConnection: 0,
         newDailyLogins: 0,
@@ -108,7 +107,7 @@
         const momentRange = extendMoment(moment);
         this.dateRange.from = moment().startOf("day");
         this.dateRange.to = moment();
-
+        
         this.actualStatisticChart.labels = Array.from(
           momentRange.range(this.dateRange.from, this.dateRange.to).by("hours")
         ).map(function (date) {
@@ -120,22 +119,37 @@
         });
       },
       implementToChart() {
-        this.todayConnections.forEach(connetion => {
-          if (this.idsArray.indexOf(connetion.user_id) === -1)
-            this.idsArray.push(connetion.user_id);
-        })
-        this.idsArray.forEach(id => {
-          let earlierLogin = "24";
-          let newLogins = [0];
-          this.todayConnections.map(function (connection) {
-            if (id === connection.user_id) {
-              if (connection.start_time.substring(11, 13) < earlierLogin) {
-                earlierLogin = connection.start_time.substring(11, 13);
-                newLogins[0] = connection;
-              }
+        let idsArray = [];
+        let newLoginsArray = [];
+        let sessionToCalculate = [];
+
+        this.todayConnections.forEach(session => {
+          session.start_time = filters.formatDate(session.start_time)
+          session.stop_time = filters.formatDate(session.stop_time)
+          session.update_time = filters.formatDate(session.update_time)
+          sessionToCalculate.push(Object.assign({}, session))
+        });
+        
+        sessionToCalculate.forEach(function(session) {
+          if (idsArray.length === 0) {
+            idsArray.push(session.user_id);
+            newLoginsArray.push(session);
+          } else {
+            if (!idsArray.includes(session.user_id)) {
+              idsArray.push(session.user_id);
+              newLoginsArray.push(session);
+            }else {
+              newLoginsArray.map(function(newLogin) {
+                if(session.user_id===newLogin.user_id){
+                  if (session.start_time.substring(15, 17)<newLogin.start_time.substring(15, 17)) {
+                    newLogin.start_time = session.start_time
+                    newLogin.stop_time = session.stop_time
+                    newLogin.update_time = session.update_time
+                  }
+                }
+              })
             }
-          })
-          this.newLogins.push(newLogins[0]);
+          }
         })
         this.actualStatisticChart.labels.forEach(date => {
           let newLogins = 0;
@@ -143,16 +157,16 @@
           let connections = 0;
           let userConnected = 0;
           // Insert newLogins on chart
-          this.todayConnections.map(function (connection) {
-            if (connection.start_time.substring(11, 13) === date) {
+          this.todayConnections.map(function(connection) {
+            if (connection.start_time.substring(15, 17) === date) {
               connections++;
-              if (connection.stop_time === null) {
+              if (connection.stop_time === '-') {
                 userConnected++;
               }
             }
           });
-          this.newLogins.map(function (connection) {
-            if (connection.start_time.substring(11, 13) === date) {
+          newLoginsArray.map(function(connection) {
+            if (connection.start_time.substring(15, 17) === date) {
               newLogins++;
             }
           })
@@ -165,7 +179,7 @@
       }
     }
   };
-
+  
 </script>
 
 <style scoped>
@@ -213,5 +227,5 @@
       font-size: 13px;
     }
   }
-
+  
 </style>

@@ -647,7 +647,6 @@
         this.avgDurationUser = this.secondsToHR(this.calculateAVG(this.avgDurationUserChart.datasets[0].data));
         this.avgUploadTrafficUser = prettyBytes(this.calculateAVG(this.avgTrafficUserChart.datasets[0].data));
         this.avgDownloadTrafficUser = prettyBytes(this.calculateAVG(this.avgTrafficUserChart.datasets[1].data));
-        console.log('this.avgTrafficUserChart.datasets[1].data: ', this.avgTrafficUserChart.datasets[1].data);
       }
     }
   }
