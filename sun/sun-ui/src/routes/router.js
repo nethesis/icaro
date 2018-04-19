@@ -26,7 +26,7 @@ const router = new Router({
       name: 'Dashboard',
       component: Dashboard,
       meta: {
-        roles: ['customer', 'reseller', 'desk', 'admin']
+        roles: ['admin', 'reseller', 'customer', 'desk']
       },
     },
     {
@@ -50,7 +50,7 @@ const router = new Router({
       name: 'Users',
       component: Users,
       meta: {
-        roles: ['customer', 'reseller', 'desk', 'admin']
+        roles: ['admin', 'reseller', 'customer', 'desk']
       },
     },
     {
@@ -58,7 +58,7 @@ const router = new Router({
       name: 'Sessions',
       component: Sessions,
       meta: {
-        roles: ['customer', 'reseller', 'admin']
+        roles: ['admin', 'reseller', 'customer']
       },
     },
     {
@@ -66,7 +66,7 @@ const router = new Router({
       name: 'Units',
       component: Units,
       meta: {
-        roles: ['customer', 'reseller', 'admin']
+        roles: ['admin', 'reseller', 'customer']
       },
     },
     {
@@ -74,7 +74,7 @@ const router = new Router({
       name: 'Devices',
       component: Devices,
       meta: {
-        roles: ['customer', 'reseller', 'admin']
+        roles: ['admin', 'reseller', 'customer']
       },
     },
     {
@@ -82,7 +82,7 @@ const router = new Router({
       name: 'UnitsDetails',
       component: UnitsDetails,
       meta: {
-        roles: ['customer', 'reseller', 'admin']
+        roles: ['admin', 'reseller', 'customer']
       },
     },
     {
@@ -90,7 +90,7 @@ const router = new Router({
       name: 'Units',
       component: Units,
       meta: {
-        roles: ['customer', 'reseller', 'admin']
+        roles: ['admin', 'reseller', 'customer']
       },
     },
     {
@@ -98,7 +98,7 @@ const router = new Router({
       name: 'UnitsDetails',
       component: UnitsDetails,
       meta: {
-        roles: ['customer', 'reseller', 'admin']
+        roles: ['admin', 'reseller', 'customer']
       },
     },
     {
@@ -106,7 +106,7 @@ const router = new Router({
       name: 'SessionsDetails',
       component: SessionsDetails,
       meta: {
-        roles: ['customer', 'reseller', 'admin']
+        roles: ['admin', 'reseller', 'customer']
       },
     },
     {
@@ -130,7 +130,7 @@ const router = new Router({
       name: 'Profile',
       component: Profile,
       meta: {
-        roles: ['customer', 'reseller', 'desk', 'admin']
+        roles: ['admin', 'reseller', 'customer', 'desk']
       },
     },
     {
@@ -138,7 +138,7 @@ const router = new Router({
       name: 'Reports',
       component: Reports,
       meta: {
-        roles: ['admin']
+        roles: ['admin', 'reseller', 'customer', 'desk']
       },
     }
   ]

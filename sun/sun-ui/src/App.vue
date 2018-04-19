@@ -173,7 +173,7 @@
             </a>
           </li>
 
-          <li v-bind:class="[getCurrentPath('reports') ? 'active' : '', 'list-group-item']" v-if="(user.info.type == 'admin')">
+          <li v-bind:class="[getCurrentPath('reports') ? 'active' : '', 'list-group-item']">
             <a href="#/reports">
               <span class="fa fa-area-chart" data-toggle="tooltip" title="Adipscing"></span>
               <span class="list-group-item-value">{{ $t("menu.reports") }}</span>

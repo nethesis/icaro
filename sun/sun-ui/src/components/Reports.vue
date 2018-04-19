@@ -3,9 +3,9 @@
     <h2>{{msg}}</h2>
     <div v-if="isChartLoading" class="spinner spinner-lg"></div>
 
-    <div v-if="!isChartLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
-      <label v-if="!isChartLoading" class="col-sm-2 control-label" for="textInput-markup">Hotspot</label>
-      <div v-if="!isChartLoading" class="col-sm-4">
+    <div v-if="(user.account_type == 'admin') || (user.account_type == 'reseller') && !isChartLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <label class="col-sm-2 control-label" for="textInput-markup">Hotspot</label>
+      <div class="col-sm-4">
         <select v-on:change="getSessionsByDate()" v-model="hotspotSearchId" class="form-control">
           <option value="0">-</option>
           <option v-for="hotspot in hotspots" v-bind:key="hotspot.id" v-bind:value="hotspot.id">
@@ -15,7 +15,7 @@
       </div>
     </div>
     <div v-if="!isChartLoading">
-      <h2 class="graphs-container title-graphs">{{ $t('report.current_situation') }}</h2>
+      <h2 :class="['graphs-container',(user.account_type == 'admin') || (user.account_type == 'reseller') ? 'title-graphs' : '']">{{ $t('report.current_situation') }}</h2>
       <actual-report-statistics class="graphs-container adjust-top" :todayConnections="connections"></actual-report-statistics>
     </div>
 
@@ -61,7 +61,10 @@
     },
     mixins: [HistoryService, StorageService, UserService, HotspotService, SessionService],
     data() {
-      this.getAllHotspots();
+      var hsId = this.get('reports_hotspot_id') || 0
+      if (this.$parent.user.info.type == 'customer' || this.$parent.user.info.type == 'desk') {
+        hsId = this.$parent.user.info.hotspot_id
+      }
       return {
         range: null,
         isChartLoading: true,
@@ -90,12 +93,16 @@
         hotspots: [],
         connections: [],
         labels: [],
-        hotspotSearchId: this.get('reports_hotspot_id') || 0,
+        hotspotSearchId: hsId,
         user: this.get("loggedUser") || null
       };
     },
     mounted() {
+      if (this.$route.params.hotspotId !== undefined) {
+        this.hotspotSearchId = this.$route.params.hotspotId;
+      }
       this.getSessionsByDate();
+      this.getAllHotspots();
     },
     methods: {
       getSessionsByDate() {
