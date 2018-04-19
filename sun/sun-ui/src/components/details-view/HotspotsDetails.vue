@@ -957,8 +957,15 @@
               doc.fromHTML(document.getElementsByClassName('voucher-valid')[index], 65, cordinates.y + 36);
 
               doc.setDrawColor(17, 17, 17)
-              doc.line(0, cordinates.y + fifthHeight, halfWidth, cordinates.y + fifthHeight);
-              doc.line(halfWidth, cordinates.y, halfWidth, cordinates.y + fifthHeight);
+
+              if(index % 10 === 8){
+                doc.line(halfWidth, cordinates.y, halfWidth, cordinates.y + fifthHeight);
+              }else{
+                doc.line(0, cordinates.y + fifthHeight, halfWidth, cordinates.y + fifthHeight);
+                doc.line(halfWidth, cordinates.y, halfWidth, cordinates.y + fifthHeight);
+              }
+
+              
               // Right column
             } else {
               cordinates.x = halfWidth;
@@ -980,7 +987,10 @@
               cordinates.width = cordinates.y;
               cordinates.y = fifthHeight * row;
               doc.setDrawColor(17, 17, 17)
-              doc.line(halfWidth, cordinates.y, width, cordinates.y);
+
+              if(!(index % 10 === 9)){
+                doc.line(halfWidth, cordinates.y, width, cordinates.y);
+              }
             }
         }
         doc.autoPrint();
