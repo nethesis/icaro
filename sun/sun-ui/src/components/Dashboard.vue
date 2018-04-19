@@ -77,8 +77,8 @@
         class="col-xs-12 col-sm-6 col-md-3 adjust-height">
         <div class="card-pf card-pf-accented card-pf-aggregate-status">
           <h2 class="card-pf-title">
-            <span class="fa fa-laptop"></span>
-            {{ $t("dashboard.devices") }}
+            <a href="#/devices" class="fa fa-laptop card-link"></a>
+            <a href="#/devices" class="card-link">{{ $t("dashboard.devices") }}</a>
           </h2>
           <div class="card-pf-body">
             <p class="card-pf-aggregate-status-notifications">
