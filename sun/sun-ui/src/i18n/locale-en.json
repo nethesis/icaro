@@ -95,7 +95,8 @@
       "mac_auth": "MAC Authentication",
       "new_mac_auth": "New MAC Auth",
       "used": "Used",
-      "valid": "Valid"
+      "valid": "Valid",
+      "unlimited": "Unlimited"
     },
     "user": {
       "username": "Username",

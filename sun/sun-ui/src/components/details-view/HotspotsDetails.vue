@@ -455,10 +455,12 @@
                     <strong>{{voucher.duration}}</strong> <span> {{ $t("hotspot.days") }} </span>
                 </div>
                 <div class="voucher-download">
-                    <span class="fa fa-arrow-down"></span> Download: <strong>{{voucher.bandwidth_down}} </strong> <span> Kb/s</span>
+                    <span class="fa fa-arrow-down"></span> Download: <span v-if="voucher.bandwidth_down === 0"> {{ $t("hotspot.unlimited") }}</span>
+                                                                     <span v-else><strong> {{voucher.bandwidth_down}} </strong>  Kb/s</span>
                 </div>
                 <div class="voucher-upload">
-                    <span class="fa fa-arrow-up"></span> Upload: <strong>{{voucher.bandwidth_up}} </strong> <span>Kb/s</span>
+                    <span class="fa fa-arrow-up"></span> Upload:<span v-if="voucher.bandwidth_up === 0"> {{ $t("hotspot.unlimited") }}</span>  
+                                                                <span v-else><strong> {{voucher.bandwidth_up}} </strong> Kb/s</span>
                 </div>
             </div>
         </div>
@@ -904,7 +906,7 @@
         doc.fromHTML(document.getElementsByClassName('voucher-download')[index], 8, 36);
         doc.addImage(arrow.up, 4, 49, 3, 3);
         doc.fromHTML(document.getElementsByClassName('voucher-upload')[index], 8, 44);
-        doc.fromHTML(document.getElementsByClassName('voucher-valid')[index], 65, 36);
+        doc.fromHTML(document.getElementsByClassName('voucher-valid')[index], 65, 34.5);
 
         doc.autoPrint();
         window.open(doc.output('bloburl'), '_blank');
@@ -927,7 +929,6 @@
 
         for (var index = 0; index < this.vouchers.data.length; index++) {
           if (index % 10 === 0 && index !== 0) {
-              console.log('index: ', index);
               doc.addPage();
               row = 0;
               cordinates = {
@@ -954,7 +955,7 @@
               doc.fromHTML(document.getElementsByClassName('voucher-download')[index], 8, cordinates.y + 36);
               doc.addImage(arrow.up, 4, cordinates.y + 49, 3, 3);
               doc.fromHTML(document.getElementsByClassName('voucher-upload')[index], 8, cordinates.y + 44);
-              doc.fromHTML(document.getElementsByClassName('voucher-valid')[index], 65, cordinates.y + 36);
+              doc.fromHTML(document.getElementsByClassName('voucher-valid')[index], 65, cordinates.y + 34.5);
 
               doc.setDrawColor(17, 17, 17)
 
@@ -981,7 +982,7 @@
               doc.fromHTML(document.getElementsByClassName('voucher-download')[index], cordinates.x + 8, cordinates.y + 36);
               doc.addImage(arrow.up, cordinates.x + 4, cordinates.y + 49, 3, 3);
               doc.fromHTML(document.getElementsByClassName('voucher-upload')[index], cordinates.x + 8, cordinates.y + 44);
-              doc.fromHTML(document.getElementsByClassName('voucher-valid')[index], cordinates.x + 65, cordinates.y + 36);
+              doc.fromHTML(document.getElementsByClassName('voucher-valid')[index], cordinates.x + 65, cordinates.y + 34.5);
               
               row++;
               cordinates.width = cordinates.y;
