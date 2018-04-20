@@ -94,7 +94,9 @@
       "duration": "Durata",
       "mac_auth": "Autenticazione Indirizzo MAC",
       "new_mac_auth": "Crea nuova autenticazione",
-      "used": "Utilizzato"
+      "used": "Utilizzato",
+      "valid": "Validità",
+      "unlimited": "Illimitato"
     },
     "user": {
       "username": "Utente",
