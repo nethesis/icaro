@@ -56,16 +56,10 @@ func isHotspot(hotspotName string) bool {
 
 func Dispatch(c *gin.Context) {
 	stage := c.Query("stage")
-	hotspotName := c.Query("nasid")
 	hotspotUnitMac := c.Query("ap")
 
 	if stage == "" {
 		c.String(http.StatusBadRequest, "No stage provided")
-		return
-	}
-
-	if !isHotspot(hotspotName) {
-		Reply(c, http.StatusNotFound, "Hotspot not found")
 		return
 	}
 
