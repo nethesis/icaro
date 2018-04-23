@@ -283,13 +283,11 @@ export default {
       hotspotUserId: this.get("sessions_user_id") || 0,
       hotspotUnitId: this.get("sessions_unit_id") || 0,
       hotspotDateFrom:
-        this.get("sessions_date_from") ||
         moment(Date.now() - 12096e5)
           .utc()
           .startOf("day")
           .toISOString(),
       hotspotDateTo:
-        this.get("sessions_date_to") ||
         moment(Date.now())
           .endOf("day")
           .utc()
@@ -361,24 +359,6 @@ export default {
       this.set(
         "sessions_unit_id",
         this.hotspotUnitId || this.get("sessions_unit_id") || 0
-      );
-      this.set(
-        "sessions_date_from",
-        this.hotspotDateFrom ||
-          this.get("sessions_date_from") ||
-          moment(Date.now() - 12096e5)
-            .utc()
-            .startOf("day")
-            .toISOString()
-      );
-      this.set(
-        "sessions_date_to",
-        this.hotspotDateTo ||
-          this.get("sessions_date_to") ||
-          moment(Date.now())
-            .endOf("day")
-            .utc()
-            .toISOString()
       );
 
       // preload users and units
@@ -493,20 +473,6 @@ export default {
       this.set("sessions_hotspot_id", 0);
       this.set("sessions_user_id", 0);
       this.set("sessions_unit_id", 0);
-      this.set(
-        "sessions_date_from",
-        moment(Date.now() - 12096e5)
-          .utc()
-          .startOf("day")
-          .toISOString()
-      );
-      this.set(
-        "sessions_date_to",
-        moment(Date.now())
-          .endOf("day")
-          .utc()
-          .toISOString()
-      );
       this.getAll();
     },
     exportCSVActive() {
