@@ -63,126 +63,142 @@
 </template>
 
 <script>
-  import UserService from '../services/user';
-  import StorageService from '../services/storage';
-  import HotspotService from '../services/hotspot';
-  import UtilService from '../services/util';
+import UserService from "../services/user";
+import StorageService from "../services/storage";
+import HotspotService from "../services/hotspot";
+import UtilService from "../services/util";
 
-  import UserAction from '../directives/UserAction.vue';
+import UserAction from "../directives/UserAction.vue";
 
-  export default {
-    name: 'Users',
-    mixins: [UserService, StorageService, UtilService, HotspotService],
-    components: {
-      userAction: UserAction
+export default {
+  name: "Users",
+  mixins: [UserService, StorageService, UtilService, HotspotService],
+  components: {
+    userAction: UserAction
+  },
+  data() {
+    var hsId = this.get("users_hotspot_id") || 0;
+    if (
+      this.$parent.user.info.type == "customer" ||
+      this.$parent.user.info.type == "desk"
+    ) {
+      hsId = this.$parent.user.info.hotspot_id;
+    }
+    return {
+      msg: this.$i18n.t("menu.users"),
+      isLoading: true,
+      columns: [
+        {
+          label: this.$i18n.t("user.name"),
+          field: "name",
+          filterable: true
+        },
+        {
+          label: this.$i18n.t("user.email"),
+          field: "email",
+          filterable: true
+        },
+        {
+          label: this.$i18n.t("user.type"),
+          field: "account_type",
+          filterable: true
+        },
+        {
+          label: this.$i18n.t("user.auto_login"),
+          field: "auto_login",
+          filterable: true
+        },
+        {
+          label: this.$i18n.t("user.bandwidth_limit"),
+          field: "bandwidth",
+          filterable: true,
+          sortable: false
+        },
+        {
+          label: this.$i18n.t("user.valid"),
+          field: "valid",
+          filterable: true,
+          sortable: false
+        },
+        {
+          label: this.$i18n.t("action"),
+          field: "",
+          sortable: false
+        }
+      ],
+      rows: [],
+      tableLangsTexts: this.tableLangs(),
+      hotspots: [],
+      hotspotSearchId: hsId,
+      hotspotShowExpired: this.get("users_show_expired") || false,
+      hotspotPerPage: this.get("users_per_page") || 25,
+      user: this.get("loggedUser") || null
+    };
+  },
+  mounted() {
+    if (this.$route.params.hotspotId !== undefined) {
+      this.hotspotSearchId = this.$route.params.hotspotId;
+    }
+    // get user list
+    this.getAll();
+    this.getAllHotspots();
+  },
+  methods: {
+    handlePerPage(evt) {
+      this.set("users_per_page", evt.currentPerPage);
     },
-    data() {
-      var hsId = this.get('users_hotspot_id') || 0
-      if (this.$parent.user.info.type == 'customer' || this.$parent.user.info.type == 'desk') {
-        hsId = this.$parent.user.info.hotspot_id
-      }
-      return {
-        msg: this.$i18n.t("menu.users"),
-        isLoading: true,
-        columns: [{
-            label: this.$i18n.t('user.name'),
-            field: 'name',
-            filterable: true,
-          },
-          {
-            label: this.$i18n.t('user.email'),
-            field: 'email',
-            filterable: true,
-          },
-          {
-            label: this.$i18n.t('user.type'),
-            field: 'account_type',
-            filterable: true,
-          },
-          {
-            label: this.$i18n.t('user.auto_login'),
-            field: 'auto_login',
-            filterable: true,
-          },
-          {
-            label: this.$i18n.t('user.bandwidth_limit'),
-            field: 'bandwidth',
-            filterable: true,
-            sortable: false
-          },
-          {
-            label: this.$i18n.t('user.valid'),
-            field: 'valid',
-            filterable: true,
-            sortable: false
-          },
-          {
-            label: this.$i18n.t('action'),
-            field: '',
-            sortable: false
-          },
-        ],
-        rows: [],
-        tableLangsTexts: this.tableLangs(),
-        hotspots: [],
-        hotspotSearchId: hsId,
-        hotspotShowExpired: this.get('users_show_expired') || false,
-        hotspotPerPage: this.get('users_per_page') || 25,
-        user: this.get('loggedUser') || null,
-      }
+    isExpired(date) {
+      return new Date().toISOString() > date;
     },
-    mounted() {
-      if (this.$route.params.hotspotId !== undefined) {
-        this.hotspotSearchId = this.$route.params.hotspotId;
-      }
-      // get user list
-      this.getAll()
-      this.getAllHotspots();
-    },
-    methods: {
-      handlePerPage(evt) {
-        this.set('users_per_page', evt.currentPerPage)
-      },
-      isExpired(date) {
-        return new Date().toISOString() > date
-      },
-      getAllHotspots() {
-        this.hotspotGetAll(success => {
-          this.hotspots = success.body
-          $('[data-toggle="tooltip"]').tooltip()
+    getAllHotspots() {
+      this.hotspotGetAll(
+        success => {
+          this.hotspots = success.body;
+          $('[data-toggle="tooltip"]').tooltip();
           this.isLoading = false;
-        }, error => {
-          console.log(error)
-        })
-      },
-      toggleExpire() {
-        this.isLoading = true;
-        this.set('users_show_expired', !this.hotspotShowExpired)
-        this.getAll()
-      },
-      getAll() {
-        this.set('users_hotspot_id', this.hotspotSearchId || this.get('users_hotspot_id') || 0)
+        },
+        error => {
+          console.log(error);
+        }
+      );
+    },
+    toggleExpire() {
+      this.isLoading = true;
+      this.set("users_show_expired", !this.hotspotShowExpired);
+      this.getAll();
+    },
+    getAll() {
+      this.set(
+        "users_hotspot_id",
+        this.hotspotSearchId || this.get("users_hotspot_id") || 0
+      );
 
-        this.userGetAll(this.hotspotSearchId, null, success => {
-          this.rows = []
+      this.userGetAll(
+        this.hotspotSearchId,
+        null,
+        success => {
+          this.rows = [];
           for (var s in success.body) {
-            var res = success.body[s]
+            var res = success.body[s];
 
             if (!this.isExpired(res.valid_until)) {
-              this.rows.push(res)
-            } else if (this.isExpired(res.valid_until) && this.hotspotShowExpired) {
-              this.rows.push(res)
+              this.rows.push(res);
+            } else if (
+              this.isExpired(res.valid_until) &&
+              this.hotspotShowExpired
+            ) {
+              this.rows.push(res);
             }
-
           }
-          this.isLoading = false
-        }, error => {
-          this.isLoading = false
-          this.rows = []
-          console.log(error)
-        })
-      }
+          this.isLoading = false;
+        },
+        error => {
+          this.isLoading = false;
+          this.rows = [];
+          console.log(error);
+        }
+      );
     }
   }
-
+};
 </script>

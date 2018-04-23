@@ -13,8 +13,8 @@ a {
   text-decoration: none !important;
 }
 
-input[type=checkbox],
-input[type=radio].form-control {
+input[type="checkbox"],
+input[type="radio"].form-control {
   height: 15px;
 }
 
@@ -27,7 +27,8 @@ input {
 }
 
 .not-logged {
-  background: linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.75)), url('/static/background.jpg');
+  background: linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.75)),
+    url("/static/background.jpg");
   background-repeat: round;
 }
 
@@ -41,7 +42,7 @@ input {
   #badge img {
     height: 47px !important;
   }
-  
+
   .login-pf #brand {
     text-align: center;
   }
@@ -154,29 +155,29 @@ input {
   padding-right: 20px;
 }
 
-.table>thead input {
+.table > thead input {
   background-image: none !important;
   border-radius: 1px !important;
   width: calc(50%) !important;
 }
 
-.table>thead {
+.table > thead {
   background-image: none !important;
 }
 
-.table>thead tr th:first-child {
+.table > thead tr th:first-child {
   padding-left: 25px !important;
 }
 
-.table>tbody tr td:first-child {
+.table > tbody tr td:first-child {
   padding-left: 25px;
 }
 
-.table-condensed>tbody tr td:first-child {
+.table-condensed > tbody tr td:first-child {
   padding-left: initial;
 }
 
-.table>thead th {
+.table > thead th {
   color: #464646 !important;
   border: none !important;
   background: #f5f5f5 !important;
@@ -184,33 +185,33 @@ input {
   font-size: 14px !important;
 }
 
-.table>thead th.sorting:hover {
+.table > thead th.sorting:hover {
   cursor: pointer;
 }
 
-.table>tbody tr {
+.table > tbody tr {
   background-color: white;
   height: 47px;
 }
 
-.table-condensed>tbody tr {
+.table-condensed > tbody tr {
   height: 30px;
 }
 
-.table-condensed>tr td {
+.table-condensed > tr td {
   height: 30px;
 }
 
-.table>tbody tr:hover {
+.table > tbody tr:hover {
   background-color: #def3ff;
 }
 
-.table>tbody tr td {
+.table > tbody tr td {
   line-height: 31px !important;
   white-space: nowrap;
 }
 
-.table>tbody tr td .modal {
+.table > tbody tr td .modal {
   line-height: initial;
 }
 
@@ -236,8 +237,10 @@ input {
 .table input:focus {
   border-color: #0088ce !important;
   outline: 0 !important;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(0, 136, 206, .6);
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(0, 136, 206, .6) !important;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),
+    0 0 8px rgba(0, 136, 206, 0.6);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),
+    0 0 8px rgba(0, 136, 206, 0.6) !important;
 }
 
 .table td[data-v-d89f00e8],
@@ -316,16 +319,16 @@ a {
   background-color: #171717 !important;
 }
 
-.nav-pf-vertical .list-group-item.active>a:before {
+.nav-pf-vertical .list-group-item.active > a:before {
   background: #26a9a3 !important;
 }
 
-.nav-pf-vertical .list-group-item.active>a .fa,
-.nav-pf-vertical .list-group-item.active>a .glyphicon,
-.nav-pf-vertical .list-group-item.active>a .pficon,
-.nav-pf-vertical .list-group-item:hover>a .fa,
-.nav-pf-vertical .list-group-item:hover>a .glyphicon,
-.nav-pf-vertical .list-group-item:hover>a .pficon {
+.nav-pf-vertical .list-group-item.active > a .fa,
+.nav-pf-vertical .list-group-item.active > a .glyphicon,
+.nav-pf-vertical .list-group-item.active > a .pficon,
+.nav-pf-vertical .list-group-item:hover > a .fa,
+.nav-pf-vertical .list-group-item:hover > a .glyphicon,
+.nav-pf-vertical .list-group-item:hover > a .pficon {
   color: #26a9a3 !important;
 }
 
@@ -335,7 +338,11 @@ a {
 
 .btn-primary {
   background-color: #007a87 !important;
-  background-image: linear-gradient(to bottom, #26a9a3 0, #007a87 100%) !important;
+  background-image: linear-gradient(
+    to bottom,
+    #26a9a3 0,
+    #007a87 100%
+  ) !important;
 }
 
 .unsplash {

@@ -459,7 +459,7 @@
                                                                      <span v-else><strong> {{voucher.bandwidth_down}} </strong>  Kb/s</span>
                 </div>
                 <div class="voucher-upload">
-                    <span class="fa fa-arrow-up"></span> Upload:<span v-if="voucher.bandwidth_up === 0"> {{ $t("hotspot.unlimited") }}</span>  
+                    <span class="fa fa-arrow-up"></span> Upload:<span v-if="voucher.bandwidth_up === 0"> {{ $t("hotspot.unlimited") }}</span>
                                                                 <span v-else><strong> {{voucher.bandwidth_up}} </strong> Kb/s</span>
                 </div>
             </div>
@@ -468,647 +468,825 @@
 </template>
 
 <script>
-  import HotspotService from '../../services/hotspot';
-  import PreferenceService from '../../services/preference';
-  import AccountService from '../../services/account';
-  import UnitService from '../../services/unit';
-  import UserService from '../../services/user';
-  import DeviceService from '../../services/device';
-  import SessionService from '../../services/session';
-  import StorageService from '../../services/storage';
-  import UtilService from '../../services/util';
+import HotspotService from "../../services/hotspot";
+import PreferenceService from "../../services/preference";
+import AccountService from "../../services/account";
+import UnitService from "../../services/unit";
+import UserService from "../../services/user";
+import DeviceService from "../../services/device";
+import SessionService from "../../services/session";
+import StorageService from "../../services/storage";
+import UtilService from "../../services/util";
 
-  import jsPDF from 'jspdf'
-  import CaptivePortal from '../../directives/CaptivePortal.vue'
-  import HotspotAction from '../../directives/HotspotAction.vue';
-  import PictureInput from 'vue-picture-input'
-  import arrow from '../../../static/arrows.js';
-  import {
-    Sketch
-  } from 'vue-color'
-  import {
+import jsPDF from "jspdf";
+import CaptivePortal from "../../directives/CaptivePortal.vue";
+import HotspotAction from "../../directives/HotspotAction.vue";
+import PictureInput from "vue-picture-input";
+import arrow from "../../../static/arrows.js";
+import { Sketch } from "vue-color";
+import { VueEditor } from "vue2-editor";
+import { setTimeout } from "timers";
+
+export default {
+  name: "HotspotDetails",
+  mixins: [
+    HotspotService,
+    PreferenceService,
+    AccountService,
+    UnitService,
+    UserService,
+    DeviceService,
+    SessionService,
+    StorageService,
+    UtilService
+  ],
+  components: {
+    hotspotAction: HotspotAction,
+    PictureInput,
+    "sketch-picker": Sketch,
+    captivePortal: CaptivePortal,
     VueEditor
-  } from 'vue2-editor'
-  import {
-    setTimeout
-  } from 'timers';
+  },
+  data() {
+    // get hotspot info
+    this.getInfo();
 
-  export default {
-    name: 'HotspotDetails',
-    mixins: [HotspotService, PreferenceService, AccountService, UnitService, UserService, DeviceService, SessionService,
-      StorageService, UtilService
-    ],
-    components: {
-      hotspotAction: HotspotAction,
-      PictureInput,
-      'sketch-picker': Sketch,
-      captivePortal: CaptivePortal,
-      VueEditor
-    },
-    data() {
-      // get hotspot info
-      this.getInfo()
+    // get totals
+    this.getTotals();
 
-      // get totals
-      this.getTotals()
+    // get preferences
+    this.getPreferences();
 
-      // get preferences
-      this.getPreferences()
+    // get vouchers
+    this.getVouchers();
 
-      // get vouchers
-      this.getVouchers()
+    // get mac auths
+    this.getAllMACAuth();
 
-      // get mac auths
-      this.getAllMACAuth()
-
-      return {
-        info: {
+    return {
+      info: {
+        isLoading: true,
+        data: {}
+      },
+      vouchers: {
+        isLoading: true,
+        data: []
+      },
+      macAuth: {
+        isLoading: true,
+        data: []
+      },
+      vouchersCount: 1,
+      newVoucher: {
+        auto_login: true,
+        bandwidth_down: 0,
+        bandwidth_up: 0,
+        duration: 7
+      },
+      newMACAuth: {
+        name: "",
+        username: "",
+        kbps_down: 0,
+        kbps_up: 0,
+        onAction: false
+      },
+      preferences: {
+        isLoading: true,
+        global: {},
+        captive: {}
+      },
+      totals: {
+        accounts: {
           isLoading: true,
-          data: {}
+          count: 0
         },
-        vouchers: {
+        units: {
           isLoading: true,
+          count: 0,
           data: []
         },
-        macAuth: {
+        users: {
           isLoading: true,
-          data: []
+          count: 0
         },
-        vouchersCount: 1,
-        newVoucher: {
-          auto_login: true,
-          bandwidth_down: 0,
-          bandwidth_up: 0,
-          duration: 7
-        },
-        newMACAuth: {
-          name: '',
-          username: '',
-          kbps_down: 0,
-          kbps_up: 0,
-          onAction: false
-        },
-        preferences: {
+        devices: {
           isLoading: true,
-          global: {},
-          captive: {}
+          count: 0
         },
-        totals: {
-          accounts: {
-            isLoading: true,
-            count: 0
-          },
-          units: {
-            isLoading: true,
-            count: 0,
-            data: []
-          },
-          users: {
-            isLoading: true,
-            count: 0
-          },
-          devices: {
-            isLoading: true,
-            count: 0
-          },
-          sessions: {
-            isLoading: true,
-            count: 0
-          }
+        sessions: {
+          isLoading: true,
+          count: 0
+        }
+      },
+      columns: [
+        {
+          label: this.$i18n.t("hotspot.code"),
+          field: "code",
+          filterable: false,
+          sortable: false
         },
-        columns: [{
-            label: this.$i18n.t('hotspot.code'),
-            field: 'code',
-            filterable: false,
-            sortable: false,
-          }, {
-            label: this.$i18n.t('hotspot.auto_login'),
-            field: 'auto_login',
-            filterable: false,
-          }, {
-            label: this.$i18n.t('hotspot.bandwidth_limit'),
-            field: 'bandwidth',
-            filterable: false,
-            sortable: false,
-          }, {
-            label: this.$i18n.t('hotspot.duration'),
-            field: 'duration',
-            filterable: false,
-            sortable: false,
-          },
-          {
-            label: this.$i18n.t('hotspot.used'),
-            field: 'expires',
-            filterable: false,
-            sortable: false,
-          },
-          {
-            label: '',
-            field: '',
-            sortable: false
-          },
-        ],
-        columnsMAC: [{
-            label: this.$i18n.t('unit.description'),
-            field: 'name',
-            filterable: false,
-            sortable: false,
-          }, {
-            label: this.$i18n.t('unit.mac_address'),
-            field: 'username',
-            filterable: false,
-          }, {
-            label: this.$i18n.t('hotspot.bandwidth_limit'),
-            field: 'bandwidth',
-            filterable: false,
-            sortable: false,
-          }, {
-            label: this.$i18n.t('hotspot.created'),
-            field: 'created',
-            filterable: false,
-            sortable: false,
-          },
-          {
-            label: '',
-            field: '',
-            sortable: false
-          },
-        ],
-        tableLangsTexts: this.tableLangs(),
-        uploadLangstexts: this.uploadImageLangs(),
-        user: this.get("loggedUser"),
-        displayCaptivePortalOptions: this.get("loggedUser") && this.get("loggedUser").subscription && this.get(
-            "loggedUser").subscription.subscription_plan && this.get("loggedUser").subscription.subscription_plan.wings_customization ||
-          this.get("loggedUser").account_type == "admin",
-        customToolbar: [
-          ['bold', 'italic', 'underline'],
-          ['image', 'code-block']
-        ],
-        userLink: {
-          name: 'Users',
-          params: {
-            hotspotId: this.$route.params.id
-          }
+        {
+          label: this.$i18n.t("hotspot.auto_login"),
+          field: "auto_login",
+          filterable: false
         },
-        unitLink: {
-          name: 'Units',
-          params: {
-            hotspotId: this.$route.params.id
-          }
+        {
+          label: this.$i18n.t("hotspot.bandwidth_limit"),
+          field: "bandwidth",
+          filterable: false,
+          sortable: false
         },
-        sessionLink: {
-          name: 'Sessions',
-          params: {
-            hotspotId: this.$route.params.id
-          }
+        {
+          label: this.$i18n.t("hotspot.duration"),
+          field: "duration",
+          filterable: false,
+          sortable: false
         },
-        accountLink: {
-          name: 'Accounts',
-          params: {
-            hotspotId: this.$route.params.id
-          }
+        {
+          label: this.$i18n.t("hotspot.used"),
+          field: "expires",
+          filterable: false,
+          sortable: false
         },
-        deviceLink: {
-          name: 'Devices',
-          params: {
-            hotspotId: this.$route.params.id
-          }
+        {
+          label: "",
+          field: "",
+          sortable: false
+        }
+      ],
+      columnsMAC: [
+        {
+          label: this.$i18n.t("unit.description"),
+          field: "name",
+          filterable: false,
+          sortable: false
+        },
+        {
+          label: this.$i18n.t("unit.mac_address"),
+          field: "username",
+          filterable: false
+        },
+        {
+          label: this.$i18n.t("hotspot.bandwidth_limit"),
+          field: "bandwidth",
+          filterable: false,
+          sortable: false
+        },
+        {
+          label: this.$i18n.t("hotspot.created"),
+          field: "created",
+          filterable: false,
+          sortable: false
+        },
+        {
+          label: "",
+          field: "",
+          sortable: false
+        }
+      ],
+      tableLangsTexts: this.tableLangs(),
+      uploadLangstexts: this.uploadImageLangs(),
+      user: this.get("loggedUser"),
+      displayCaptivePortalOptions:
+        (this.get("loggedUser") &&
+          this.get("loggedUser").subscription &&
+          this.get("loggedUser").subscription.subscription_plan &&
+          this.get("loggedUser").subscription.subscription_plan
+            .wings_customization) ||
+        this.get("loggedUser").account_type == "admin",
+      customToolbar: [["bold", "italic", "underline"], ["image", "code-block"]],
+      userLink: {
+        name: "Users",
+        params: {
+          hotspotId: this.$route.params.id
+        }
+      },
+      unitLink: {
+        name: "Units",
+        params: {
+          hotspotId: this.$route.params.id
+        }
+      },
+      sessionLink: {
+        name: "Sessions",
+        params: {
+          hotspotId: this.$route.params.id
+        }
+      },
+      accountLink: {
+        name: "Accounts",
+        params: {
+          hotspotId: this.$route.params.id
+        }
+      },
+      deviceLink: {
+        name: "Devices",
+        params: {
+          hotspotId: this.$route.params.id
         }
       }
+    };
+  },
+  methods: {
+    getPrevieHTML(value) {
+      return '<img src="' + value + '"></img>';
     },
-    methods: {
-      getPrevieHTML(value) {
-        return '<img src="' + value + '"></img>'
-      },
-      getPrefIcon(pref) {
-        return this.getPrefTypeIcon(pref)
-      },
-      createVoucher() {
-        this.vouchers.isLoading = true
+    getPrefIcon(pref) {
+      return this.getPrefTypeIcon(pref);
+    },
+    createVoucher() {
+      this.vouchers.isLoading = true;
 
-        var promises = []
-        var context = this
-        for (var i = 0; i < this.vouchersCount; i++) {
-          promises.push(new Promise(function (resolve, reject) {
-            context.hotspotCreateVoucher({
-              hotspot_id: parseInt(context.$route.params.id),
-              code: context.generateVoucher(),
-              auto_login: context.newVoucher.auto_login,
-              bandwidth_down: parseInt(context.newVoucher.bandwidth_down),
-              bandwidth_up: parseInt(context.newVoucher.bandwidth_up),
-              duration: parseInt(context.newVoucher.duration),
-            }, success => {
-              resolve()
-            }, error => {
-              console.log(error.body)
-              reject()
-            })
-          }))
+      var promises = [];
+      var context = this;
+      for (var i = 0; i < this.vouchersCount; i++) {
+        promises.push(
+          new Promise(function(resolve, reject) {
+            context.hotspotCreateVoucher(
+              {
+                hotspot_id: parseInt(context.$route.params.id),
+                code: context.generateVoucher(),
+                auto_login: context.newVoucher.auto_login,
+                bandwidth_down: parseInt(context.newVoucher.bandwidth_down),
+                bandwidth_up: parseInt(context.newVoucher.bandwidth_up),
+                duration: parseInt(context.newVoucher.duration)
+              },
+              success => {
+                resolve();
+              },
+              error => {
+                console.log(error.body);
+                reject();
+              }
+            );
+          })
+        );
+      }
+      Promise.all(promises)
+        .then(function() {
+          context.vouchers.isLoading = false;
+          context.getVouchers();
+          $("#voucherModal").modal("hide");
+        })
+        .catch(function(err) {
+          console.error(err);
+          context.vouchers.isLoading = false;
+        });
+    },
+    deleteVoucher(id) {
+      this.vouchers.isLoading = true;
+      this.hotspotVoucherDelete(
+        id,
+        success => {
+          this.vouchers.isLoading = false;
+          this.getVouchers();
+        },
+        error => {
+          console.log(error.body);
+          this.vouchers.isLoading = false;
+          this.getVouchers();
         }
-        Promise.all(promises).then(function () {
-          context.vouchers.isLoading = false
-          context.getVouchers()
-          $('#voucherModal').modal('hide')
-        }).catch(function (err) {
-          console.error(err)
-          context.vouchers.isLoading = false
-        })
-      },
-      deleteVoucher(id) {
-        this.vouchers.isLoading = true
-        this.hotspotVoucherDelete(id, success => {
-          this.vouchers.isLoading = false
-          this.getVouchers()
-        }, error => {
-          console.log(error.body)
-          this.vouchers.isLoading = false
-          this.getVouchers()
-        })
-      },
-      getVouchers() {
-        this.hotspotGetVouchers(this.$route.params.id, success => {
-          this.vouchers.data = success.body
-          this.vouchers.isLoading = false
-        }, error => {
-          console.log(error.body)
-          this.vouchers.data = []
-          this.vouchers.isLoading = false
-        })
-      },
-      checkVoucherUse(value) {
-        return +new Date(value) > 0
-      },
-      getInfo() {
-        this.hotspotGet(this.$route.params.id, success => {
-          this.info.data = success.body
-          this.info.isLoading = false
-        }, error => {
-          console.log(error.body)
-        })
-      },
-      getTotals() {
-        this.accountGetAll(this.$route.params.id, success => {
-          this.totals.accounts.count = success.body.length
-          this.totals.accounts.isLoading = false
-        }, error => {
-          console.log(error.body)
-          this.totals.accounts.isLoading = false
-        })
-        this.unitGetAll(this.$route.params.id, success => {
-          this.totals.units.data = success.body
-          this.totals.units.count = success.body.length
-          this.totals.units.isLoading = false
-        }, error => {
-          console.log(error.body)
-          this.totals.units.isLoading = false
-        })
-        this.userGetAll(this.$route.params.id, null, success => {
-          this.totals.users.count = success.body.length
-          this.totals.users.isLoading = false
-        }, error => {
-          console.log(error.body)
-          this.totals.users.isLoading = false
-        })
-        this.deviceGetAll(this.$route.params.id, "", success => {
-          this.totals.devices.count = success.body.length
-          this.totals.devices.isLoading = false
-        }, error => {
-          console.log(error.body)
-          this.totals.devices.isLoading = false
-        })
-        this.sessionGetAll(this.$route.params.id, null, null, null, null, success => {
-          this.totals.sessions.count = success.body.length
-          this.totals.sessions.isLoading = false
-        }, error => {
-          console.log(error.body)
-          this.totals.sessions.isLoading = false
-        })
-      },
-      getPreferences() {
-        this.hsPrefGet(this.$route.params.id, success => {
-          var globalPref = []
-          var captivePref = []
-          var backgroundColor = ''
+      );
+    },
+    getVouchers() {
+      this.hotspotGetVouchers(
+        this.$route.params.id,
+        success => {
+          this.vouchers.data = success.body;
+          this.vouchers.isLoading = false;
+        },
+        error => {
+          console.log(error.body);
+          this.vouchers.data = [];
+          this.vouchers.isLoading = false;
+        }
+      );
+    },
+    checkVoucherUse(value) {
+      return +new Date(value) > 0;
+    },
+    getInfo() {
+      this.hotspotGet(
+        this.$route.params.id,
+        success => {
+          this.info.data = success.body;
+          this.info.isLoading = false;
+        },
+        error => {
+          console.log(error.body);
+        }
+      );
+    },
+    getTotals() {
+      this.accountGetAll(
+        this.$route.params.id,
+        success => {
+          this.totals.accounts.count = success.body.length;
+          this.totals.accounts.isLoading = false;
+        },
+        error => {
+          console.log(error.body);
+          this.totals.accounts.isLoading = false;
+        }
+      );
+      this.unitGetAll(
+        this.$route.params.id,
+        success => {
+          this.totals.units.data = success.body;
+          this.totals.units.count = success.body.length;
+          this.totals.units.isLoading = false;
+        },
+        error => {
+          console.log(error.body);
+          this.totals.units.isLoading = false;
+        }
+      );
+      this.userGetAll(
+        this.$route.params.id,
+        null,
+        success => {
+          this.totals.users.count = success.body.length;
+          this.totals.users.isLoading = false;
+        },
+        error => {
+          console.log(error.body);
+          this.totals.users.isLoading = false;
+        }
+      );
+      this.deviceGetAll(
+        this.$route.params.id,
+        "",
+        success => {
+          this.totals.devices.count = success.body.length;
+          this.totals.devices.isLoading = false;
+        },
+        error => {
+          console.log(error.body);
+          this.totals.devices.isLoading = false;
+        }
+      );
+      this.sessionGetAll(
+        this.$route.params.id,
+        null,
+        null,
+        null,
+        null,
+        success => {
+          this.totals.sessions.count = success.body.length;
+          this.totals.sessions.isLoading = false;
+        },
+        error => {
+          console.log(error.body);
+          this.totals.sessions.isLoading = false;
+        }
+      );
+    },
+    getPreferences() {
+      this.hsPrefGet(
+        this.$route.params.id,
+        success => {
+          var globalPref = [];
+          var captivePref = [];
+          var backgroundColor = "";
 
           for (var p in success.body) {
-            var pref = success.body[p]
+            var pref = success.body[p];
             if (pref.value === "true") {
-              pref.value = true
+              pref.value = true;
             }
             if (pref.value === "false") {
-              pref.value = false
+              pref.value = false;
             }
 
-            if (pref.key == 'voucher_login' && pref.value) {
-              this.preferences.vouchersAvailable = true
+            if (pref.key == "voucher_login" && pref.value) {
+              this.preferences.vouchersAvailable = true;
             } else {
-              this.preferences.vouchersAvailable = false
+              this.preferences.vouchersAvailable = false;
             }
 
-            if (pref.key == 'captive_7_background') {
-              backgroundColor = pref.value
+            if (pref.key == "captive_7_background") {
+              backgroundColor = pref.value;
             }
 
-            if (pref.key.startsWith('captive')) {
-              captivePref.push(pref)
+            if (pref.key.startsWith("captive")) {
+              captivePref.push(pref);
             } else {
-              globalPref.push(pref)
+              globalPref.push(pref);
             }
           }
 
-          this.preferences.global = globalPref
-          this.preferences.captive = captivePref
-          this.preferences.isLoading = false
-          setTimeout(function () {
-            window.$('#captive-preview').css('background-color', backgroundColor);
-          }, 0)
-        }, error => {
-          console.log(error.body)
-        })
-      },
-      updatePreferences() {
-        this.preferences.isLoading = true
-        // create promises array
-        var promises = []
-        for (var i in this.preferences.global) {
-          var pref = this.preferences.global[i]
-          promises.push(new Promise((resolve, reject) => {
+          this.preferences.global = globalPref;
+          this.preferences.captive = captivePref;
+          this.preferences.isLoading = false;
+          setTimeout(function() {
+            window
+              .$("#captive-preview")
+              .css("background-color", backgroundColor);
+          }, 0);
+        },
+        error => {
+          console.log(error.body);
+        }
+      );
+    },
+    updatePreferences() {
+      this.preferences.isLoading = true;
+      // create promises array
+      var promises = [];
+      for (var i in this.preferences.global) {
+        var pref = this.preferences.global[i];
+        promises.push(
+          new Promise((resolve, reject) => {
             if (typeof pref.value == "boolean") {
-              pref.value = pref.value.toString()
+              pref.value = pref.value.toString();
             }
-            this.hsPrefModify(this.$route.params.id, pref, success => {
-              resolve(success)
-            }, error => {
-              reject(error)
-            })
-          }))
-        }
+            this.hsPrefModify(
+              this.$route.params.id,
+              pref,
+              success => {
+                resolve(success);
+              },
+              error => {
+                reject(error);
+              }
+            );
+          })
+        );
+      }
 
-        // exec promises
-        var context = this;
-        Promise.all(promises).then(function (response) {
-          context.preferences.isLoading = false
-          context.getPreferences()
-        })
-      },
-      updatePreferencesCaptive() {
-        this.preferences.isLoading = true
-        // create promises array
-        var promises = []
-        for (var i in this.preferences.captive) {
-          var pref = this.preferences.captive[i]
-          promises.push(new Promise((resolve, reject) => {
+      // exec promises
+      var context = this;
+      Promise.all(promises).then(function(response) {
+        context.preferences.isLoading = false;
+        context.getPreferences();
+      });
+    },
+    updatePreferencesCaptive() {
+      this.preferences.isLoading = true;
+      // create promises array
+      var promises = [];
+      for (var i in this.preferences.captive) {
+        var pref = this.preferences.captive[i];
+        promises.push(
+          new Promise((resolve, reject) => {
             if (typeof pref.value == "boolean") {
-              pref.value = pref.value.toString()
+              pref.value = pref.value.toString();
             }
-            if (pref.key == 'captive_7_background') {
-              pref.value = pref.value.hex || pref.value
+            if (pref.key == "captive_7_background") {
+              pref.value = pref.value.hex || pref.value;
             }
-            this.hsPrefModify(this.$route.params.id, pref, success => {
-              resolve(success)
-            }, error => {
-              reject(error)
-            })
-          }))
+            this.hsPrefModify(
+              this.$route.params.id,
+              pref,
+              success => {
+                resolve(success);
+              },
+              error => {
+                reject(error);
+              }
+            );
+          })
+        );
+      }
+
+      // exec promises
+      var context = this;
+      Promise.all(promises).then(function(response) {
+        context.preferences.isLoading = false;
+        context.getPreferences();
+      });
+    },
+    printVoucher(voucher) {
+      let index;
+      for (let i = 0; i < this.vouchers.data.length; i++) {
+        if (this.vouchers.data[i].id === voucher.id) {
+          index = i;
         }
+      }
 
-        // exec promises
-        var context = this;
-        Promise.all(promises).then(function (response) {
-          context.preferences.isLoading = false
-          context.getPreferences()
-        })
-      },
-      printVoucher(voucher) {
-        let index
-        for (let i = 0; i < this.vouchers.data.length; i++) {
-          if(this.vouchers.data[i].id === voucher.id){
-            index = i;
-          }
+      var doc = new jsPDF("portrait", "mm", "a4");
+      var halfWidth = Math.round(doc.internal.pageSize.width / 2);
+      var fifthHeight = Math.round(doc.internal.pageSize.height / 5);
+
+      doc.setDrawColor(17, 17, 17);
+      doc.line(0, fifthHeight, halfWidth, fifthHeight);
+      doc.line(halfWidth, 0, halfWidth, fifthHeight);
+      doc.addImage(this.preferences.captive[2].value, 2, 2, 20, 20);
+      doc.fromHTML(
+        document.getElementsByClassName("voucher-desc")[index],
+        50,
+        -3,
+        {
+          width: 55
         }
+      );
+      doc.fromHTML(
+        document.getElementsByClassName("voucher-main")[index],
+        35,
+        18
+      );
+      doc.setLineWidth(0.3);
+      doc.setDrawColor(158, 160, 163);
+      doc.line(5, 35, halfWidth - 5, +35);
+      doc.addImage(arrow.down, 4, 41, 3, 3);
+      doc.fromHTML(
+        document.getElementsByClassName("voucher-download")[index],
+        8,
+        36
+      );
+      doc.addImage(arrow.up, 4, 49, 3, 3);
+      doc.fromHTML(
+        document.getElementsByClassName("voucher-upload")[index],
+        8,
+        44
+      );
+      doc.fromHTML(
+        document.getElementsByClassName("voucher-valid")[index],
+        65,
+        34.5
+      );
 
-        var doc = new jsPDF("portrait", "mm", "a4");
-        var halfWidth = Math.round(doc.internal.pageSize.width / 2);
-        var fifthHeight = Math.round(doc.internal.pageSize.height / 5);
-        
-        doc.setDrawColor(17, 17, 17)
-        doc.line(0, fifthHeight, halfWidth, fifthHeight);
-        doc.line(halfWidth, 0, halfWidth, fifthHeight);
-        doc.addImage(this.preferences.captive[2].value, 2, 2, 20, 20);
-        doc.fromHTML(document.getElementsByClassName('voucher-desc')[index], 50, -3, {
-            width: 55
-        });
-        doc.fromHTML(document.getElementsByClassName('voucher-main')[index], 35, 18);
-        doc.setLineWidth(0.3)
-        doc.setDrawColor(158, 160, 163);
-        doc.line(5,  35, halfWidth - 5, + 35)
-        doc.addImage(arrow.down, 4, 41, 3, 3);
-        doc.fromHTML(document.getElementsByClassName('voucher-download')[index], 8, 36);
-        doc.addImage(arrow.up, 4, 49, 3, 3);
-        doc.fromHTML(document.getElementsByClassName('voucher-upload')[index], 8, 44);
-        doc.fromHTML(document.getElementsByClassName('voucher-valid')[index], 65, 34.5);
+      doc.autoPrint();
+      window.open(doc.output("bloburl"), "_blank");
+    },
+    printAllVoucher() {
+      var doc = new jsPDF("portrait", "mm", "a4");
+      var width = doc.internal.pageSize.width;
+      var height = doc.internal.pageSize.height;
+      var halfWidth = Math.round(width / 2);
+      var fifthHeight = Math.round(height / 5);
+      var pageNumber = 15 % 8 !== 0 ? Math.floor(15 / 8) + 1 : 15 / 8;
+      var row = 0;
+      var cordinates = {
+        y: 0,
+        x: 0,
+        width: 0,
+        height: 0
+      };
 
-        doc.autoPrint();
-        window.open(doc.output('bloburl'), '_blank');
-          
-      },
-      printAllVoucher() {
-        var doc = new jsPDF("portrait", "mm", "a4");
-        var width = doc.internal.pageSize.width;
-        var height = doc.internal.pageSize.height;
-        var halfWidth = Math.round(width / 2);
-        var fifthHeight = Math.round(height / 5);
-        var pageNumber = (15 % 8 !== 0) ? (Math.floor(15 / 8) + 1) : (15 / 8);
-        var row = 0;
-        var cordinates = {
+      for (var index = 0; index < this.vouchers.data.length; index++) {
+        if (index % 10 === 0 && index !== 0) {
+          doc.addPage();
+          row = 0;
+          cordinates = {
             y: 0,
             x: 0,
             width: 0,
-            height: 0,
+            height: 0
+          };
         }
-
-        for (var index = 0; index < this.vouchers.data.length; index++) {
-          if (index % 10 === 0 && index !== 0) {
-              doc.addPage();
-              row = 0;
-              cordinates = {
-                  y: 0,
-                  x: 0,
-                  width: 0,
-                  height: 0,
-              }
-          }
-            doc.setLineWidth(0.3)
-            doc.setDrawColor(17, 17, 17)
-            // Left column
-            if (index % 2 === 0) {
-              doc.addImage(this.preferences.captive[2].value, 2, cordinates.y + 2, 20, 20);
-              doc.fromHTML(document.getElementsByClassName('voucher-desc')[index], 50, cordinates.y + (-3), {
-                  width: 55
-                  
-              });
-              doc.fromHTML(document.getElementsByClassName('voucher-main')[index], 35, cordinates.y + 18);
-              doc.setLineWidth(0.3)
-              doc.setDrawColor(158, 160, 163);
-              doc.line(5, cordinates.y + 35, halfWidth - 5, cordinates.y + 35)
-              doc.addImage(arrow.down, 4, cordinates.y + 41, 3, 3);
-              doc.fromHTML(document.getElementsByClassName('voucher-download')[index], 8, cordinates.y + 36);
-              doc.addImage(arrow.up, 4, cordinates.y + 49, 3, 3);
-              doc.fromHTML(document.getElementsByClassName('voucher-upload')[index], 8, cordinates.y + 44);
-              doc.fromHTML(document.getElementsByClassName('voucher-valid')[index], 65, cordinates.y + 34.5);
-
-              doc.setDrawColor(17, 17, 17)
-
-              if(index % 10 === 8){
-                doc.line(halfWidth, cordinates.y, halfWidth, cordinates.y + fifthHeight);
-              }else{
-                doc.line(0, cordinates.y + fifthHeight, halfWidth, cordinates.y + fifthHeight);
-                doc.line(halfWidth, cordinates.y, halfWidth, cordinates.y + fifthHeight);
-              }
-
-              
-              // Right column
-            } else {
-              cordinates.x = halfWidth;
-              doc.addImage(this.preferences.captive[2].value, cordinates.x + 2, cordinates.y + 2, 20, 20);
-              doc.fromHTML(document.getElementsByClassName('voucher-desc')[index], cordinates.x + 50, cordinates.y + (-3), {
-                  width: 55
-              });
-              doc.fromHTML(document.getElementsByClassName('voucher-main')[index], cordinates.x + 35, cordinates.y + 18);
-              doc.setLineWidth(0.3)
-              doc.setDrawColor(158, 160, 163);
-              doc.line(cordinates.x + 5, cordinates.y + 35, (cordinates.x * 2) - 5, cordinates.y + 35)
-              doc.addImage(arrow.down, cordinates.x + 4, cordinates.y + 41, 3, 3);
-              doc.fromHTML(document.getElementsByClassName('voucher-download')[index], cordinates.x + 8, cordinates.y + 36);
-              doc.addImage(arrow.up, cordinates.x + 4, cordinates.y + 49, 3, 3);
-              doc.fromHTML(document.getElementsByClassName('voucher-upload')[index], cordinates.x + 8, cordinates.y + 44);
-              doc.fromHTML(document.getElementsByClassName('voucher-valid')[index], cordinates.x + 65, cordinates.y + 34.5);
-              
-              row++;
-              cordinates.width = cordinates.y;
-              cordinates.y = fifthHeight * row;
-              doc.setDrawColor(17, 17, 17)
-
-              if(!(index % 10 === 9)){
-                doc.line(halfWidth, cordinates.y, width, cordinates.y);
-              }
+        doc.setLineWidth(0.3);
+        doc.setDrawColor(17, 17, 17);
+        // Left column
+        if (index % 2 === 0) {
+          doc.addImage(
+            this.preferences.captive[2].value,
+            2,
+            cordinates.y + 2,
+            20,
+            20
+          );
+          doc.fromHTML(
+            document.getElementsByClassName("voucher-desc")[index],
+            50,
+            cordinates.y + -3,
+            {
+              width: 55
             }
-        }
-        doc.autoPrint();
-        window.open(doc.output('bloburl'), '_blank');
-      },
-      onChanged(pref) {
-        if (this.$refs['prefInput-' + pref.key][0].image.length > 655360) {
-          pref.onError = true
-          this.$refs['prefInput-' + pref.key][0].image = pref.value
+          );
+          doc.fromHTML(
+            document.getElementsByClassName("voucher-main")[index],
+            35,
+            cordinates.y + 18
+          );
+          doc.setLineWidth(0.3);
+          doc.setDrawColor(158, 160, 163);
+          doc.line(5, cordinates.y + 35, halfWidth - 5, cordinates.y + 35);
+          doc.addImage(arrow.down, 4, cordinates.y + 41, 3, 3);
+          doc.fromHTML(
+            document.getElementsByClassName("voucher-download")[index],
+            8,
+            cordinates.y + 36
+          );
+          doc.addImage(arrow.up, 4, cordinates.y + 49, 3, 3);
+          doc.fromHTML(
+            document.getElementsByClassName("voucher-upload")[index],
+            8,
+            cordinates.y + 44
+          );
+          doc.fromHTML(
+            document.getElementsByClassName("voucher-valid")[index],
+            65,
+            cordinates.y + 34.5
+          );
+
+          doc.setDrawColor(17, 17, 17);
+
+          if (index % 10 === 8) {
+            doc.line(
+              halfWidth,
+              cordinates.y,
+              halfWidth,
+              cordinates.y + fifthHeight
+            );
+          } else {
+            doc.line(
+              0,
+              cordinates.y + fifthHeight,
+              halfWidth,
+              cordinates.y + fifthHeight
+            );
+            doc.line(
+              halfWidth,
+              cordinates.y,
+              halfWidth,
+              cordinates.y + fifthHeight
+            );
+          }
+
+          // Right column
         } else {
-          pref.onError = false
-          pref.value = this.$refs['prefInput-' + pref.key][0].image
+          cordinates.x = halfWidth;
+          doc.addImage(
+            this.preferences.captive[2].value,
+            cordinates.x + 2,
+            cordinates.y + 2,
+            20,
+            20
+          );
+          doc.fromHTML(
+            document.getElementsByClassName("voucher-desc")[index],
+            cordinates.x + 50,
+            cordinates.y + -3,
+            {
+              width: 55
+            }
+          );
+          doc.fromHTML(
+            document.getElementsByClassName("voucher-main")[index],
+            cordinates.x + 35,
+            cordinates.y + 18
+          );
+          doc.setLineWidth(0.3);
+          doc.setDrawColor(158, 160, 163);
+          doc.line(
+            cordinates.x + 5,
+            cordinates.y + 35,
+            cordinates.x * 2 - 5,
+            cordinates.y + 35
+          );
+          doc.addImage(arrow.down, cordinates.x + 4, cordinates.y + 41, 3, 3);
+          doc.fromHTML(
+            document.getElementsByClassName("voucher-download")[index],
+            cordinates.x + 8,
+            cordinates.y + 36
+          );
+          doc.addImage(arrow.up, cordinates.x + 4, cordinates.y + 49, 3, 3);
+          doc.fromHTML(
+            document.getElementsByClassName("voucher-upload")[index],
+            cordinates.x + 8,
+            cordinates.y + 44
+          );
+          doc.fromHTML(
+            document.getElementsByClassName("voucher-valid")[index],
+            cordinates.x + 65,
+            cordinates.y + 34.5
+          );
+
+          row++;
+          cordinates.width = cordinates.y;
+          cordinates.y = fifthHeight * row;
+          doc.setDrawColor(17, 17, 17);
+
+          if (!(index % 10 === 9)) {
+            doc.line(halfWidth, cordinates.y, width, cordinates.y);
+          }
         }
-        this.$forceUpdate()
-      },
-      onUpdate(value) {
-        $('#captive-preview').css('background-color', value.hex);
-      },
-      getAllMACAuth() {
-        this.userGetAll(this.$route.params.id, 'mac', success => {
-          this.macAuth.data = success.body
-          this.macAuth.isLoading = false
-        }, error => {
-          this.macAuth.isLoading = false
-          this.macAuth.data = []
-          console.log(error)
-        })
-      },
-      createMacAuth() {
-        this.newMACAuth.onAction = true
-        var md5 = require('md5');
-        var digest = md5(this.newMACAuth.unit.secret + this.newMACAuth.unit.uuid)
-        console.log(this.newMACAuth)
-        this.userMACCreate(this.newMACAuth, digest, this.newMACAuth.unit.uuid, success => {
-          $('#macAuthModal').modal('toggle');
+      }
+      doc.autoPrint();
+      window.open(doc.output("bloburl"), "_blank");
+    },
+    onChanged(pref) {
+      if (this.$refs["prefInput-" + pref.key][0].image.length > 655360) {
+        pref.onError = true;
+        this.$refs["prefInput-" + pref.key][0].image = pref.value;
+      } else {
+        pref.onError = false;
+        pref.value = this.$refs["prefInput-" + pref.key][0].image;
+      }
+      this.$forceUpdate();
+    },
+    onUpdate(value) {
+      $("#captive-preview").css("background-color", value.hex);
+    },
+    getAllMACAuth() {
+      this.userGetAll(
+        this.$route.params.id,
+        "mac",
+        success => {
+          this.macAuth.data = success.body;
+          this.macAuth.isLoading = false;
+        },
+        error => {
+          this.macAuth.isLoading = false;
+          this.macAuth.data = [];
+          console.log(error);
+        }
+      );
+    },
+    createMacAuth() {
+      this.newMACAuth.onAction = true;
+      var md5 = require("md5");
+      var digest = md5(this.newMACAuth.unit.secret + this.newMACAuth.unit.uuid);
+      console.log(this.newMACAuth);
+      this.userMACCreate(
+        this.newMACAuth,
+        digest,
+        this.newMACAuth.unit.uuid,
+        success => {
+          $("#macAuthModal").modal("toggle");
           this.newMACAuth = {
-            name: '',
-            username: '',
+            name: "",
+            username: "",
             kbps_down: 0,
             kbps_up: 0,
             onAction: false
-          }
-          this.getAllMACAuth()
-          this.newMACAuth.onAction = false
-        }, error => {
+          };
+          this.getAllMACAuth();
+          this.newMACAuth.onAction = false;
+        },
+        error => {
           console.log(error.body);
-          this.newMACAuth.onAction = false
-        })
-      },
-      deleteMacAuth(id) {
-        this.userDelete(id, success => {
-          this.getAllMACAuth()
-        }, error => {
+          this.newMACAuth.onAction = false;
+        }
+      );
+    },
+    deleteMacAuth(id) {
+      this.userDelete(
+        id,
+        success => {
+          this.getAllMACAuth();
+        },
+        error => {
           console.log(error.body);
-        })
-      }
+        }
+      );
     }
   }
-
+};
 </script>
 
 <style scoped>
+textarea {
+  width: 100%;
+  min-height: 180px;
+  resize: vertical;
+}
 
-
-  textarea {
-    width: 100%;
-    min-height: 180px;
-    resize: vertical;
-  }
-
-  #voucher-coupon{
-    display: none;
-  }
-  .voucher-logo {
-      height: 25px;
-      margin: 15px;
-      margin-left: -5px;
-  }
-  .voucher-name {
-      position: absolute;
-      top: -8px;
-      left: 90px;
-      max-width: 200px;
-      color: goldenrod;
-      
-  }
-  .voucher-desc {
-      position: absolute;
-      top: 15px;
-      left: 90px;
-      font-size: 21px;
-      color: #757575;
-      max-width: 200px;
-  }
-  .voucher-code {
-      font-size: 30px;
-      margin-top: 5px;
-  }
-  .voucher-valid {
-      font-size: 18px;
-      margin-top: 6px;
-  }
-  .voucher-main {
-      text-align: center;
-      padding-bottom: 10px;
-      margin-top: 15px;
-  }
-  .voucher-details {
-      padding: 10px;
-      background: #fff;
-  }
-  .voucher-upload {
-      font-size: 18px;
-  }
-  .voucher-download {
-      font-size: 18px;
-  }
-
-
+#voucher-coupon {
+  display: none;
+}
+.voucher-logo {
+  height: 25px;
+  margin: 15px;
+  margin-left: -5px;
+}
+.voucher-name {
+  position: absolute;
+  top: -8px;
+  left: 90px;
+  max-width: 200px;
+  color: goldenrod;
+}
+.voucher-desc {
+  position: absolute;
+  top: 15px;
+  left: 90px;
+  font-size: 21px;
+  color: #757575;
+  max-width: 200px;
+}
+.voucher-code {
+  font-size: 30px;
+  margin-top: 5px;
+}
+.voucher-valid {
+  font-size: 18px;
+  margin-top: 6px;
+}
+.voucher-main {
+  text-align: center;
+  padding-bottom: 10px;
+  margin-top: 15px;
+}
+.voucher-details {
+  padding: 10px;
+  background: #fff;
+}
+.voucher-upload {
+  font-size: 18px;
+}
+.voucher-download {
+  font-size: 18px;
+}
 </style>

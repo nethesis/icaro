@@ -86,99 +86,105 @@
 </template>
 
 <script>
-  import HotspotService from '../services/hotspot';
-  import StorageService from '../services/storage';
-  import UtilService from '../services/util';
+import HotspotService from "../services/hotspot";
+import StorageService from "../services/storage";
+import UtilService from "../services/util";
 
-  import HotspotAction from '../directives/HotspotAction.vue';
+import HotspotAction from "../directives/HotspotAction.vue";
 
-  export default {
-    name: 'Hotspots',
-    mixins: [HotspotService, StorageService, UtilService],
-    components: {
-      hotspotAction: HotspotAction
+export default {
+  name: "Hotspots",
+  mixins: [HotspotService, StorageService, UtilService],
+  components: {
+    hotspotAction: HotspotAction
+  },
+  data() {
+    // get hotspot list
+    this.getAll();
+
+    var newObj = {
+      name: "",
+      description: ""
+    };
+    var errors = {
+      create: false
+    };
+
+    return {
+      msg: this.$i18n.t("menu.hotspots"),
+      isLoading: true,
+      columns: [
+        {
+          label: this.$i18n.t("hotspot.name"),
+          field: "name",
+          filterable: true
+        },
+        {
+          label: this.$i18n.t("hotspot.description"),
+          field: "description",
+          filterable: true
+        },
+        {
+          label: this.$i18n.t("hotspot.created"),
+          field: "created",
+          sortable: false
+        },
+        {
+          label: this.$i18n.t("action"),
+          field: "",
+          sortable: false
+        }
+      ],
+      rows: [],
+      tableLangsTexts: this.tableLangs(),
+      newObj: newObj,
+      errors: errors,
+      hotspotPerPage: this.get("hotspots_per_page") || 25,
+      isAdmin: this.get("loggedUser").account_type == "admin"
+    };
+  },
+  methods: {
+    handlePerPage(evt) {
+      this.set("hotspots_per_page", evt.currentPerPage);
     },
-    data() {
-      // get hotspot list
-      this.getAll()
-
-      var newObj = {
-        name: '',
-        description: ''
-      }
-      var errors = {
-        create: false,
-      }
-
-      return {
-        msg: this.$i18n.t("menu.hotspots"),
-        isLoading: true,
-        columns: [{
-            label: this.$i18n.t('hotspot.name'),
-            field: 'name',
-            filterable: true,
-          },
-          {
-            label: this.$i18n.t('hotspot.description'),
-            field: 'description',
-            filterable: true,
-          },
-          {
-            label: this.$i18n.t('hotspot.created'),
-            field: 'created',
-            sortable: false
-          },
-          {
-            label: this.$i18n.t('action'),
-            field: '',
-            sortable: false
-          },
-        ],
-        rows: [],
-        tableLangsTexts: this.tableLangs(),
-        newObj: newObj,
-        errors: errors,
-        hotspotPerPage: this.get('hotspots_per_page') || 25,
-        isAdmin: this.get("loggedUser").account_type == "admin",
-      }
+    getAll() {
+      this.hotspotGetAll(
+        success => {
+          this.rows = success.body;
+          this.isLoading = false;
+        },
+        error => {
+          this.isLoading = false;
+          console.log(error);
+        }
+      );
     },
-    methods: {
-      handlePerPage(evt) {
-        this.set('hotspots_per_page', evt.currentPerPage)
-      },
-      getAll() {
-        this.hotspotGetAll(success => {
-          this.rows = success.body
-          this.isLoading = false
-        }, error => {
-          this.isLoading = false
-          console.log(error)
-        })
-      },
-      createHotspot() {
-        this.newObj.onAction = true
-        this.hotspotCreate(this.newObj, success => {
-          this.newObj.onAction = false
-          this.newObj.name = ""
-          this.newObj.description = ""
-          $('#HScreateModal').modal('toggle');
-          this.getAll()
-        }, error => {
-          this.newObj.onAction = false
-          this.errors.create = true
+    createHotspot() {
+      this.newObj.onAction = true;
+      this.hotspotCreate(
+        this.newObj,
+        success => {
+          this.newObj.onAction = false;
+          this.newObj.name = "";
+          this.newObj.description = "";
+          $("#HScreateModal").modal("toggle");
+          this.getAll();
+        },
+        error => {
+          this.newObj.onAction = false;
+          this.errors.create = true;
           console.log(error.body.message);
-        })
-      }
+        }
+      );
     }
   }
-
+};
 </script>
 
 <style>
-  .create-hotspot {
-    float: right;
-    margin-top: -52px;
-    margin-right: 35px;
-  }
-
+.create-hotspot {
+  float: right;
+  margin-top: -52px;
+  margin-right: 35px;
+}
 </style>

@@ -140,88 +140,114 @@
 </template>
 
 <script>
-  import SessionService from '../../services/session';
-  import HotspotService from '../../services/hotspot';
-  import UserService from '../../services/user';
-  import DeviceService from '../../services/device';
-  import UnitService from '../../services/unit';
-  import StorageService from '../../services/storage';
-  import UtilService from '../../services/util';
+import SessionService from "../../services/session";
+import HotspotService from "../../services/hotspot";
+import UserService from "../../services/user";
+import DeviceService from "../../services/device";
+import UnitService from "../../services/unit";
+import StorageService from "../../services/storage";
+import UtilService from "../../services/util";
 
-  export default {
-    name: 'SessionsDetails',
-    mixins: [SessionService, StorageService, UnitService, UtilService, HotspotService, DeviceService, UserService],
-    data() {
-      // get account info
-      this.getInfo()
+export default {
+  name: "SessionsDetails",
+  mixins: [
+    SessionService,
+    StorageService,
+    UnitService,
+    UtilService,
+    HotspotService,
+    DeviceService,
+    UserService
+  ],
+  data() {
+    // get account info
+    this.getInfo();
 
-      return {
-        info: {
-          isLoading: true,
-          unit: {},
-          hotspot: {},
-          device: {},
-          user: {},
-          data: {}
-        },
+    return {
+      info: {
+        isLoading: true,
+        unit: {},
+        hotspot: {},
+        device: {},
+        user: {},
+        data: {}
       }
+    };
+  },
+  // enable tooltips after rendering
+  updated: function() {
+    $('[data-toggle="tooltip"]').tooltip();
+  },
+  methods: {
+    getInfo() {
+      this.sessionGet(
+        this.$route.params.id,
+        success => {
+          this.info.data = success.body;
+          this.info.isLoading = false;
+          this.getUnitInfo(success.body.unit_id);
+          this.getUserInfo(success.body.user_id);
+          this.getHotspotInfo(success.body.hotspot_id);
+          this.getDeviceInfo(success.body.device_id);
+        },
+        error => {
+          this.info.isLoading = false;
+          console.log(error.body);
+        }
+      );
     },
-    // enable tooltips after rendering
-    updated: function () {
-      $('[data-toggle="tooltip"]').tooltip()
+    getUnitInfo(unitId) {
+      this.unitGet(
+        unitId,
+        success => {
+          this.info.unit = success.body;
+          this.info.unit.isLoading = false;
+        },
+        error => {
+          this.info.unit.isLoading = false;
+          console.log(error.body);
+        }
+      );
     },
-    methods: {
-      getInfo() {
-        this.sessionGet(this.$route.params.id, success => {
-          this.info.data = success.body
-          this.info.isLoading = false
-          this.getUnitInfo(success.body.unit_id)
-          this.getUserInfo(success.body.user_id)
-          this.getHotspotInfo(success.body.hotspot_id)
-          this.getDeviceInfo(success.body.device_id)
-        }, error => {
-          this.info.isLoading = false
-          console.log(error.body)
-        })
-      },
-      getUnitInfo(unitId) {
-        this.unitGet(unitId, success => {
-          this.info.unit = success.body
-          this.info.unit.isLoading = false
-        }, error => {
-          this.info.unit.isLoading = false
-          console.log(error.body)
-        })
-      },
-      getUserInfo(userId) {
-        this.userGet(userId, success => {
-          this.info.user = success.body
-          this.info.user.isLoading = false
-        }, error => {
-          this.info.user.isLoading = false
-          console.log(error.body)
-        })
-      },
-      getHotspotInfo(hotspotId) {
-        this.hotspotGet(hotspotId, success => {
-          this.info.hotspot = success.body
-          this.info.hotspot.isLoading = false
-        }, error => {
-          this.info.hotspot.isLoading = false
-          console.log(error.body)
-        })
-      },
-      getDeviceInfo(deviceId) {
-        this.deviceGet(deviceId, success => {
-          this.info.device = success.body
-          this.info.device.isLoading = false
-        }, error => {
-          this.info.device.isLoading = false
-          console.log(error.body)
-        })
-      },
-
+    getUserInfo(userId) {
+      this.userGet(
+        userId,
+        success => {
+          this.info.user = success.body;
+          this.info.user.isLoading = false;
+        },
+        error => {
+          this.info.user.isLoading = false;
+          console.log(error.body);
+        }
+      );
+    },
+    getHotspotInfo(hotspotId) {
+      this.hotspotGet(
+        hotspotId,
+        success => {
+          this.info.hotspot = success.body;
+          this.info.hotspot.isLoading = false;
+        },
+        error => {
+          this.info.hotspot.isLoading = false;
+          console.log(error.body);
+        }
+      );
+    },
+    getDeviceInfo(deviceId) {
+      this.deviceGet(
+        deviceId,
+        success => {
+          this.info.device = success.body;
+          this.info.device.isLoading = false;
+        },
+        error => {
+          this.info.device.isLoading = false;
+          console.log(error.body);
+        }
+      );
     }
   }
-
+};
 </script>

@@ -1,16 +1,16 @@
 var StorageService = {
   methods: {
     get(prop) {
-      return JSON.parse(localStorage.getItem(prop))
+      return JSON.parse(localStorage.getItem(prop));
     },
     set(prop, object) {
-      localStorage.setItem(prop, JSON.stringify(object))
+      localStorage.setItem(prop, JSON.stringify(object));
     },
     delete(prop) {
-      localStorage.removeItem(prop)
+      localStorage.removeItem(prop);
     },
     clear() {
-      localStorage.clear()
+      localStorage.clear();
     }
   }
 };

@@ -51,43 +51,46 @@
 </template>
 
 <script>
-  import AccountService from '../../services/account';
-  import StorageService from '../../services/storage';
-  import UtilService from '../../services/util';
-  import AccountAction from '../../directives/AccountAction.vue';
+import AccountService from "../../services/account";
+import StorageService from "../../services/storage";
+import UtilService from "../../services/util";
+import AccountAction from "../../directives/AccountAction.vue";
 
-  export default {
-    name: 'AccountsDetails',
-    mixins: [AccountService, StorageService, UtilService],
-    components: {
-      accountAction: AccountAction
-    },
-    data() {
-      // get account info
-      this.getInfo()
+export default {
+  name: "AccountsDetails",
+  mixins: [AccountService, StorageService, UtilService],
+  components: {
+    accountAction: AccountAction
+  },
+  data() {
+    // get account info
+    this.getInfo();
 
-      return {
-        info: {
-          isLoading: true,
-          data: {}
-        },
+    return {
+      info: {
+        isLoading: true,
+        data: {}
       }
-    },
-    // enable tooltips after rendering
-    updated: function () {
-      $('[data-toggle="tooltip"]').tooltip()
-    },
-    methods: {
-      getInfo() {
-        this.accountGet(this.$route.params.id, success => {
-          this.info.data = success.body
-          this.info.isLoading = false
-        }, error => {
-          this.info.isLoading = false
-          console.log(error.body)
-        })
-      },
+    };
+  },
+  // enable tooltips after rendering
+  updated: function() {
+    $('[data-toggle="tooltip"]').tooltip();
+  },
+  methods: {
+    getInfo() {
+      this.accountGet(
+        this.$route.params.id,
+        success => {
+          this.info.data = success.body;
+          this.info.isLoading = false;
+        },
+        error => {
+          this.info.isLoading = false;
+          console.log(error.body);
+        }
+      );
     }
   }
-
+};
 </script>

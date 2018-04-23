@@ -104,69 +104,74 @@
 </template>
 
 <script>
-  import LoginService from '../services/login';
-  import StorageService from '../services/storage';
-  import UtilService from '../services/util';
-  import StatsService from '../services/stats';
+import LoginService from "../services/login";
+import StorageService from "../services/storage";
+import UtilService from "../services/util";
+import StatsService from "../services/stats";
 
-  export default {
-    name: 'Profile',
-    mixins: [LoginService, StorageService, UtilService, StatsService],
-    data() {
-      // get infos
-      this.getSMSTotal()
+export default {
+  name: "Profile",
+  mixins: [LoginService, StorageService, UtilService, StatsService],
+  data() {
+    // get infos
+    this.getSMSTotal();
 
-      return {
-        msg: this.$i18n.t("menu.profile"),
-        user: {
-          login: this.get('loggedUser') || null,
-          info: this.$parent.user.info,
-        },
-        newPassword: '',
-        confirmPassword: '',
-        errors: {
-          password: false
-        },
-        onAction: false,
-        totals: {
-          sms: {
-            isLoading: false,
-            data: {
-            },
-            isAvailable: false
-          }
+    return {
+      msg: this.$i18n.t("menu.profile"),
+      user: {
+        login: this.get("loggedUser") || null,
+        info: this.$parent.user.info
+      },
+      newPassword: "",
+      confirmPassword: "",
+      errors: {
+        password: false
+      },
+      onAction: false,
+      totals: {
+        sms: {
+          isLoading: false,
+          data: {},
+          isAvailable: false
         }
       }
+    };
+  },
+  methods: {
+    getSMSTotal() {
+      this.statsSMSTotal(
+        success => {
+          this.totals.sms.data = success.body;
+          this.totals.sms.isLoading = false;
+          this.totals.sms.isAvailable = true;
+        },
+        error => {
+          console.log(error.body);
+          this.totals.sms.isLoading = false;
+          this.totals.sms.isAvailable = false;
+        }
+      );
     },
-    methods: {
-      getSMSTotal() {
-        this.statsSMSTotal(success => {
-          this.totals.sms.data = success.body
-          this.totals.sms.isLoading = false
-          this.totals.sms.isAvailable = true
-        }, error => {
-          console.log(error.body)
-          this.totals.sms.isLoading = false
-          this.totals.sms.isAvailable = false
-        })
-      },
-      changePassword() {
-        this.onAction = true
-        this.execChangePassword(this.newPassword, this.user.login.id, success => {
-          this.onAction = false
-          $('#changePassModal').modal('toggle');
-        }, error => {
-          this.onAction = false
-          this.errors.password = true
+    changePassword() {
+      this.onAction = true;
+      this.execChangePassword(
+        this.newPassword,
+        this.user.login.id,
+        success => {
+          this.onAction = false;
+          $("#changePassModal").modal("toggle");
+        },
+        error => {
+          this.onAction = false;
+          this.errors.password = true;
           console.log(error.body.message);
-        })
-      }
+        }
+      );
     }
   }
-
+};
 </script>
 
 <style>
-
 
 </style>

@@ -152,171 +152,190 @@
 
 
 <script>
-  import AccountService from '../services/account';
-  import StorageService from '../services/storage';
-  import HotspotService from '../services/hotspot';
-  import SubscriptionService from '../services/subscription';
-  import UtilService from '../services/util';
+import AccountService from "../services/account";
+import StorageService from "../services/storage";
+import HotspotService from "../services/hotspot";
+import SubscriptionService from "../services/subscription";
+import UtilService from "../services/util";
 
-  import AccountAction from '../directives/AccountAction.vue';
+import AccountAction from "../directives/AccountAction.vue";
 
-  export default {
-    name: 'Accounts',
-    mixins: [AccountService, StorageService, UtilService, HotspotService, SubscriptionService],
-    components: {
-      accountAction: AccountAction
+export default {
+  name: "Accounts",
+  mixins: [
+    AccountService,
+    StorageService,
+    UtilService,
+    HotspotService,
+    SubscriptionService
+  ],
+  components: {
+    accountAction: AccountAction
+  },
+  data() {
+    var newObj = {
+      uuid: "",
+      username: "",
+      name: "",
+      email: "",
+      type: "",
+      password: "",
+      hotspot_id: 0,
+      subscription_plan_id: 0
+    };
+
+    var errors = {
+      create: false
+    };
+
+    var newPassword = "";
+    var confirmPassword = "";
+
+    return {
+      msg: this.$i18n.t("menu.accounts"),
+      isLoading: true,
+      accountType: this.get("loggedUser").account_type,
+      columns: [
+        {
+          label: this.$i18n.t("account.username"),
+          field: "username",
+          filterable: true
+        },
+        {
+          label: this.$i18n.t("account.name"),
+          field: "name",
+          filterable: true
+        },
+        {
+          label: this.$i18n.t("account.email"),
+          field: "email",
+          filterable: true
+        },
+        {
+          label: this.$i18n.t("account.type"),
+          field: "type",
+          filterable: true
+        },
+        {
+          label: this.$i18n.t("account.subscription_plan_name"),
+          field: "subscription.subscription_plan.name",
+          filterable: true,
+          hidden: this.get("loggedUser").account_type != "admin" ? true : false
+        },
+        {
+          label: this.$i18n.t("account.created"),
+          field: "created",
+          filterable: false
+        },
+        {
+          label: this.$i18n.t("action"),
+          field: "",
+          sortable: false
+        }
+      ],
+      rows: [],
+      hotspots: [],
+      plans: [],
+      tableLangsTexts: this.tableLangs(),
+      newObj: newObj,
+      newPassword: newPassword,
+      confirmPassword: confirmPassword,
+      errors: errors,
+      isAdmin: this.get("loggedUser").account_type == "admin",
+      hotspotSearchId: 0,
+      hotspotPerPage: this.get("accounts_per_page") || 25,
+      user: this.get("loggedUser") || null
+    };
+  },
+  mounted() {
+    if (this.$route.params.hotspotId !== undefined) {
+      this.hotspotSearchId = this.$route.params.hotspotId;
+    }
+    // get account list
+    this.getAll();
+    this.getAllHotspots();
+    this.getAllSubscriptionPlans();
+  },
+  methods: {
+    handlePerPage(evt) {
+      this.set("accounts_per_page", evt.currentPerPage);
     },
-    data() {
-      var newObj = {
-        uuid: '',
-        username: '',
-        name: '',
-        email: '',
-        type: '',
-        password: '',
-        hotspot_id: 0,
-        subscription_plan_id: 0
-      }
-
-      var errors = {
-        create: false,
-      }
-
-      var newPassword = '';
-      var confirmPassword = '';
-
-      return {
-        msg: this.$i18n.t("menu.accounts"),
-        isLoading: true,
-        accountType: this.get("loggedUser").account_type,
-        columns: [{
-            label: this.$i18n.t('account.username'),
-            field: 'username',
-            filterable: true,
-          }, {
-            label: this.$i18n.t('account.name'),
-            field: 'name',
-            filterable: true,
-          },
-          {
-            label: this.$i18n.t('account.email'),
-            field: 'email',
-            filterable: true,
-          },
-          {
-            label: this.$i18n.t('account.type'),
-            field: 'type',
-            filterable: true,
-          },
-          {
-            label: this.$i18n.t('account.subscription_plan_name'),
-            field: 'subscription.subscription_plan.name',
-            filterable: true,
-            hidden: this.get("loggedUser").account_type != "admin" ? true : false,
-          },
-          {
-            label: this.$i18n.t('account.created'),
-            field: 'created',
-            filterable: false,
-          },
-          {
-            label: this.$i18n.t('action'),
-            field: '',
-            sortable: false
-          },
-        ],
-        rows: [],
-        hotspots: [],
-        plans: [],
-        tableLangsTexts: this.tableLangs(),
-        newObj: newObj,
-        newPassword: newPassword,
-        confirmPassword: confirmPassword,
-        errors: errors,
-        isAdmin: this.get("loggedUser").account_type == "admin",
-        hotspotSearchId: 0,
-        hotspotPerPage: this.get('accounts_per_page') || 25,
-        user: this.get('loggedUser') || null,
-      }
+    initNewAccount() {
+      this.newObj.uuid = this.generateUUID();
+      this.newObj.password = this.generatePassword();
+      this.newPassword = this.newObj.password;
+      this.confirmPassword = this.newObj.password;
+      this.newObj.type = this.accountType == "admin" ? "reseller" : "customer";
+      this.newObj.username = "";
+      this.newObj.name = "";
+      this.newObj.email = "";
+      this.newObj.hotspot_id = 0;
+      this.newObj.subscription_plan_id = 0;
     },
-    mounted() {
-      if (this.$route.params.hotspotId !== undefined) {
-        this.hotspotSearchId = this.$route.params.hotspotId;
-      }
-      // get account list
-      this.getAll();
-      this.getAllHotspots();
-      this.getAllSubscriptionPlans();
-    },
-    methods: {
-      handlePerPage(evt) {
-        this.set('accounts_per_page', evt.currentPerPage)
-      },
-      initNewAccount() {
-        this.newObj.uuid = this.generateUUID();
-        this.newObj.password = this.generatePassword();
-        this.newPassword = this.newObj.password;
-        this.confirmPassword = this.newObj.password;
-        this.newObj.type = this.accountType == "admin" ? "reseller" : "customer";
-        this.newObj.username = ""
-        this.newObj.name = ""
-        this.newObj.email = ""
-        this.newObj.hotspot_id = 0
-        this.newObj.subscription_plan_id = 0
-      },
-      createAccount(obj) {
-        this.newObj.onAction = true
-        obj.password = this.newPassword
-        this.accountCreate(obj, success => {
-          this.newObj.onAction = false
-          $('#ACcreateModal').modal('toggle');
-          this.getAll()
-        }, error => {
-          this.newObj.onAction = false
-          this.errors.create = true
+    createAccount(obj) {
+      this.newObj.onAction = true;
+      obj.password = this.newPassword;
+      this.accountCreate(
+        obj,
+        success => {
+          this.newObj.onAction = false;
+          $("#ACcreateModal").modal("toggle");
+          this.getAll();
+        },
+        error => {
+          this.newObj.onAction = false;
+          this.errors.create = true;
           this.errors.status = error.status;
           console.log(error);
-        })
-      },
-      getAllHotspots() {
-        this.hotspotGetAll(success => {
-          this.hotspots = success.body
-          $('[data-toggle="tooltip"]').tooltip()
+        }
+      );
+    },
+    getAllHotspots() {
+      this.hotspotGetAll(
+        success => {
+          this.hotspots = success.body;
+          $('[data-toggle="tooltip"]').tooltip();
           this.isLoading = false;
-        }, error => {
-          console.log(error)
-        })
-      },
-      getAllSubscriptionPlans() {
-        this.subscriptionPlansGetAll(success => {
-          this.plans = success.body
-          $('[data-toggle="tooltip"]').tooltip()
+        },
+        error => {
+          console.log(error);
+        }
+      );
+    },
+    getAllSubscriptionPlans() {
+      this.subscriptionPlansGetAll(
+        success => {
+          this.plans = success.body;
+          $('[data-toggle="tooltip"]').tooltip();
           this.isLoading = false;
-        }, error => {
-          console.log(error)
-        })
-      },
-      getAll() {
-        this.accountGetAll(this.hotspotSearchId, success => {
-          this.rows = success.body
+        },
+        error => {
+          console.log(error);
+        }
+      );
+    },
+    getAll() {
+      this.accountGetAll(
+        this.hotspotSearchId,
+        success => {
+          this.rows = success.body;
           this.isLoading = false;
-        }, error => {
-          console.log(error)
-          this.rows = []
+        },
+        error => {
+          console.log(error);
+          this.rows = [];
           this.isLoading = false;
-        })
-      },
-
+        }
+      );
     }
   }
-
+};
 </script>
 
 <style>
-  .create-account {
-    float: right;
-    margin-top: -52px;
-    margin-right: 35px;
-  }
-
+.create-account {
+  float: right;
+  margin-top: -52px;
+  margin-right: 35px;
+}
 </style>

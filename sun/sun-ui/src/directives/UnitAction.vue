@@ -53,50 +53,52 @@
   </div>
 </template>
 <script>
-  import UnitService from '../services/unit';
-  import StorageService from '../services/storage';
+import UnitService from "../services/unit";
+import StorageService from "../services/storage";
 
-  import datePicker from 'vue-bootstrap-datetimepicker';
+import datePicker from "vue-bootstrap-datetimepicker";
 
-  export default {
-    name: 'UnitAction',
-    props: ['details', 'obj', 'update'],
-    mixins: [UnitService, StorageService],
-    components: {
-      datePicker
+export default {
+  name: "UnitAction",
+  props: ["details", "obj", "update"],
+  mixins: [UnitService, StorageService],
+  components: {
+    datePicker
+  },
+  data() {
+    var currentObj = {};
+    var errors = {
+      delete: false
+    };
+
+    return {
+      errors: errors,
+      currentObj: currentObj
+    };
+  },
+  methods: {
+    setCurrentObj(obj) {
+      this.currentObj = Object.assign({}, obj);
     },
-    data() {
-      var currentObj = {}
-      var errors = {
-        delete: false
-      }
-
-      return {
-        errors: errors,
-        currentObj: currentObj,
-      }
-    },
-    methods: {
-      setCurrentObj(obj) {
-        this.currentObj = Object.assign({}, obj);
-      },
-      deleteUnit(obj) {
-        this.currentObj.onAction = true
-        this.unitDelete(obj.id, success => {
-          this.currentObj.onAction = false
-          $('#UndeleteModal' + obj.id).modal('toggle');
-          this.update()
-        }, error => {
-          this.currentObj.onAction = false
-          this.errors.delete = true
+    deleteUnit(obj) {
+      this.currentObj.onAction = true;
+      this.unitDelete(
+        obj.id,
+        success => {
+          this.currentObj.onAction = false;
+          $("#UndeleteModal" + obj.id).modal("toggle");
+          this.update();
+        },
+        error => {
+          this.currentObj.onAction = false;
+          this.errors.delete = true;
           console.log(error.body.message);
-        })
-      }
+        }
+      );
     }
   }
-
+};
 </script>
 <style>
-
 
 </style>

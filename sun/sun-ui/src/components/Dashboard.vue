@@ -113,103 +113,117 @@
 </template>
 
 <script>
-  import StatsService from '../services/stats';
-  import StorageService from '../services/storage';
+import StatsService from "../services/stats";
+import StorageService from "../services/storage";
 
-  export default {
-    name: 'Dashboard',
-    mixins: [StatsService, StorageService],
-    data() {
+export default {
+  name: "Dashboard",
+  mixins: [StatsService, StorageService],
+  data() {
+    // get totals
+    this.getTotals();
 
-      // get totals
-      this.getTotals();
-
-      return {
-        msg: 'Dashboard',
-        totals: {
-          accounts: {
-            isLoading: true,
-            count: 0
-          },
-          units: {
-            isLoading: true,
-            count: 0
-          },
-          hotspots: {
-            isLoading: true,
-            count: 0
-          },
-          users: {
-            isLoading: true,
-            count: 0
-          },
-          devices: {
-            isLoading: true,
-            count: 0
-          },
-          sessions: {
-            isLoading: true,
-            count: 0
-          },
+    return {
+      msg: "Dashboard",
+      totals: {
+        accounts: {
+          isLoading: true,
+          count: 0
         },
-        user: this.get('loggedUser') || null,
-      }
-    },
-    methods: {
-      getTotals() {
-        this.statsHotspotsTotal(success => {
-          this.totals.hotspots.count = success.body.total
-          this.totals.hotspots.isLoading = false
-        }, error => {
-          console.log(error.body)
-          this.totals.hotspots.isLoading = false
-        })
-        this.statsUnitsTotal(success => {
-          this.totals.units.count = success.body.total
-          this.totals.units.isLoading = false
-        }, error => {
-          console.log(error.body)
-          this.totals.units.isLoading = false
-        })
-        this.statsAccountsTotal(success => {
-          this.totals.accounts.count = success.body.total
-          this.totals.accounts.isLoading = false
-        }, error => {
-          console.log(error.body)
-          this.totals.accounts.isLoading = false
-        })
-        this.statsDevicesTotal(success => {
-          this.totals.devices.count = success.body.total
-          this.totals.devices.isLoading = false
-        }, error => {
-          console.log(error.body)
-          this.totals.devices.isLoading = false
-        })
-        this.statsUsersTotal(success => {
-          this.totals.users.count = success.body.total
-          this.totals.users.isLoading = false
-        }, error => {
-          console.log(error.body)
-          this.totals.users.isLoading = false
-        })
-        this.statsSessionsTotal(success => {
-          this.totals.sessions.count = success.body.total
-          this.totals.sessions.isLoading = false
-        }, error => {
-          console.log(error.body)
-          this.totals.sessions.isLoading = false
-        })
+        units: {
+          isLoading: true,
+          count: 0
+        },
+        hotspots: {
+          isLoading: true,
+          count: 0
+        },
+        users: {
+          isLoading: true,
+          count: 0
+        },
+        devices: {
+          isLoading: true,
+          count: 0
+        },
+        sessions: {
+          isLoading: true,
+          count: 0
+        }
       },
-
+      user: this.get("loggedUser") || null
+    };
+  },
+  methods: {
+    getTotals() {
+      this.statsHotspotsTotal(
+        success => {
+          this.totals.hotspots.count = success.body.total;
+          this.totals.hotspots.isLoading = false;
+        },
+        error => {
+          console.log(error.body);
+          this.totals.hotspots.isLoading = false;
+        }
+      );
+      this.statsUnitsTotal(
+        success => {
+          this.totals.units.count = success.body.total;
+          this.totals.units.isLoading = false;
+        },
+        error => {
+          console.log(error.body);
+          this.totals.units.isLoading = false;
+        }
+      );
+      this.statsAccountsTotal(
+        success => {
+          this.totals.accounts.count = success.body.total;
+          this.totals.accounts.isLoading = false;
+        },
+        error => {
+          console.log(error.body);
+          this.totals.accounts.isLoading = false;
+        }
+      );
+      this.statsDevicesTotal(
+        success => {
+          this.totals.devices.count = success.body.total;
+          this.totals.devices.isLoading = false;
+        },
+        error => {
+          console.log(error.body);
+          this.totals.devices.isLoading = false;
+        }
+      );
+      this.statsUsersTotal(
+        success => {
+          this.totals.users.count = success.body.total;
+          this.totals.users.isLoading = false;
+        },
+        error => {
+          console.log(error.body);
+          this.totals.users.isLoading = false;
+        }
+      );
+      this.statsSessionsTotal(
+        success => {
+          this.totals.sessions.count = success.body.total;
+          this.totals.sessions.isLoading = false;
+        },
+        error => {
+          console.log(error.body);
+          this.totals.sessions.isLoading = false;
+        }
+      );
     }
   }
-
+};
 </script>
 
 <style scoped>
-  .adjust-height {
-    max-height: 109px;
-    min-height: 109px;
-  }
-
+.adjust-height {
+  max-height: 109px;
+  min-height: 109px;
+}
 </style>

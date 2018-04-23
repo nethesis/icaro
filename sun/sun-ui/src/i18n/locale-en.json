@@ -36,7 +36,8 @@
     "hotspot": {
       "yes": "Yes",
       "no": "No",
-      "hostname_hotspot": "Only upper and lower case letters, numbers, dots or dash",
+      "hostname_hotspot":
+        "Only upper and lower case letters, numbers, dots or dash",
       "hotspot": "Hotspot",
       "name": "Name",
       "description": "Description",
@@ -46,7 +47,8 @@
       "delete_error_title": "Delete error",
       "delete_error_sub": "Something went wrong on deleting hotspot",
       "warning_delete_title": "Be careful",
-      "warning_delete_sub": "Deleting an hotspot deletes guests, units and sessions",
+      "warning_delete_sub":
+        "Deleting an hotspot deletes guests, units and sessions",
       "create_error_title": "Creation error",
       "create_error_sub": "Something went wrong on creating hotspot",
       "create_new": "Create Hotspot",
@@ -146,7 +148,8 @@
       "change_password_error_title": "Change password error",
       "change_password_error_sub": "Something went wrong on changing password",
       "create_error_title": "Create error",
-      "duplicate_error": "Duplicate manager. Please choose a different username or UUID.",
+      "duplicate_error":
+        "Duplicate manager. Please choose a different username or UUID.",
       "create_error_sub": "An error occurred during manager creation.",
       "subscription_plan_name": "Subscription"
     },
@@ -230,8 +233,10 @@
       "medium_traffic_user_upload": "Average upload traffic for user",
       "average_duration_user": "Average duration for user",
       "medium_traffic_connections": "Average traffic for connections",
-      "medium_traffic_connections_download": "Average download traffic for connections",
-      "medium_traffic_connections_upload": "Average upload traffic for connections",
+      "medium_traffic_connections_download":
+        "Average download traffic for connections",
+      "medium_traffic_connections_upload":
+        "Average upload traffic for connections",
       "average_duration_connections": "Average duration for connections",
       "duration": "Duration",
       "minutes": "Minutes",

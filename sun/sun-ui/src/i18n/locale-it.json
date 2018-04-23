@@ -30,28 +30,35 @@
       "new_password": "Nuova password",
       "confirm_password": "Conferma password",
       "change_password_error_title": "Cambio password non riuscito",
-      "change_password_error_sub": "Ci sono stati problemi durante il cambio password, contatta il tuo amministratore.",
+      "change_password_error_sub":
+        "Ci sono stati problemi durante il cambio password, contatta il tuo amministratore.",
       "sms": "SMS inviati"
     },
     "hotspot": {
       "yes": "Sì",
       "no": "No",
-      "hostname_hotspot": "Solo lettere maiuscole, minuscole, numeri, punti o trattini",
+      "hostname_hotspot":
+        "Solo lettere maiuscole, minuscole, numeri, punti o trattini",
       "hotspot": "Hotspot",
       "name": "Nome",
       "description": "Descrizione",
       "created": "Creato",
       "update_error_title": "Errori durante l'aggiornamento",
-      "update_error_sub": "Non è stato possibile aggiornare le informazioni, si prega di riprovare, se il problema persiste contatta l'amministratore.",
+      "update_error_sub":
+        "Non è stato possibile aggiornare le informazioni, si prega di riprovare, se il problema persiste contatta l'amministratore.",
       "delete_error_title": "Impossibile eliminare l'hotspot",
-      "delete_error_sub": "Non è stato possibile cancellare l'hotspot, si prega di riprovare, se il problema persiste contatta l'amministratore.",
+      "delete_error_sub":
+        "Non è stato possibile cancellare l'hotspot, si prega di riprovare, se il problema persiste contatta l'amministratore.",
       "warning_delete_title": "Fai attenzione",
-      "warning_delete_sub": "La cancellazione di un hotspot cancella l'elenco degli ospiti, le units e le connessioni.",
+      "warning_delete_sub":
+        "La cancellazione di un hotspot cancella l'elenco degli ospiti, le units e le connessioni.",
       "create_error_title": "Errore durante la creazione",
-      "create_error_sub": "Non è stato possibile creare l'hotspot, si prega di riprovare, se il problema persiste contatta l'amministratore.",
+      "create_error_sub":
+        "Non è stato possibile creare l'hotspot, si prega di riprovare, se il problema persiste contatta l'amministratore.",
       "create_new": "Crea un nuovo Hotspot",
       "no_hotspot_found": "Non ci sono Hotspot",
-      "no_hotspot_found_sub": "Clicca sul bottone per aggiungere un nuovo hotspot.",
+      "no_hotspot_found_sub":
+        "Clicca sul bottone per aggiungere un nuovo hotspot.",
       "info": "Informazioni",
       "owner": "Proprietario",
       "preferences": "Preferenze",
@@ -86,8 +93,10 @@
       "voucher_creation": "Creazione Voucher",
       "voucher_creation_count": "Numero di Voucher",
       "auto_login": "Autologin",
-      "CoovaChilli-Bandwidth-Max-Down": "Banda massima in download per utente (Kbps)",
-      "CoovaChilli-Bandwidth-Max-Up": "Banda massima in upload per utente (Kbps)",
+      "CoovaChilli-Bandwidth-Max-Down":
+        "Banda massima in download per utente (Kbps)",
+      "CoovaChilli-Bandwidth-Max-Up":
+        "Banda massima in upload per utente (Kbps)",
       "bandwidth_limit": "Limiti di Banda",
       "bandwidth_down": "Banda massima in Download (Kbps)",
       "bandwidth_up": "Banda massima in Upload (Kbps)",
@@ -113,9 +122,11 @@
       "valid_until": "Valido fino a",
       "created": "Creato",
       "update_error_title": "Errori durante l'aggiornamento",
-      "update_error_sub": "Non è stato possibile aggiornare le informazioni, si prega di riprovare, se il problema persiste contatta l'amministratore.",
+      "update_error_sub":
+        "Non è stato possibile aggiornare le informazioni, si prega di riprovare, se il problema persiste contatta l'amministratore.",
       "delete_error_title": "Impossibile eliminare l'utente",
-      "delete_error_sub": "Non è stato possibile cancellare l'utente, si prega di riprovare, se il problema persiste contatta l'amministratore.",
+      "delete_error_sub":
+        "Non è stato possibile cancellare l'utente, si prega di riprovare, se il problema persiste contatta l'amministratore.",
       "warning_delete_title": "Fai attenzione",
       "warning_delete_sub": "Confermi l'eliminazione?",
       "auto_login": "Autologin",
@@ -134,7 +145,8 @@
       "new_password": "Nuova password",
       "confirm_password": "Conferma password",
       "update_error_title": "Errori durante l'aggiornamento",
-      "update_error_sub": "Non è stato possibile aggiornare le informazioni, si prega di riprovare, se il problema persiste contatta l'amministratore.",
+      "update_error_sub":
+        "Non è stato possibile aggiornare le informazioni, si prega di riprovare, se il problema persiste contatta l'amministratore.",
       "delete_error_title": "Impossibile eliminare l'amministratore",
       "delete_error_sub": "Non è stato possibile cancellare l'amministratore.",
       "warning_delete_title": "Fai attenzione",
@@ -144,9 +156,11 @@
       "type_reseller": "Rivenditore",
       "hotspot": "Hotspot",
       "change_password_error_title": "Cambio password non riuscito",
-      "change_password_error_sub": "Ci sono stati problemi durante il cambio password.",
+      "change_password_error_sub":
+        "Ci sono stati problemi durante il cambio password.",
       "create_error_title": "Errore in fase di creazione",
-      "duplicate_error": "È già presente un amministratore con questo nome, scegli un nome o un ID differente.",
+      "duplicate_error":
+        "È già presente un amministratore con questo nome, scegli un nome o un ID differente.",
       "create_error_sub": "Non è stato possibile creare l'amministratore.",
       "subscription_plan_name": "Subscription"
     },
@@ -229,8 +243,10 @@
       "medium_traffic_user_download": "Download giornaliero per ospite",
       "medium_traffic_user_upload": "Upload giornaliero per ospite",
       "average_duration_user": "Durata media giornaliera per ospite",
-      "medium_traffic_connections": "Traffico medio giornaliero per connessione",
-      "medium_traffic_connections_download": "Download giornaliero per connessione",
+      "medium_traffic_connections":
+        "Traffico medio giornaliero per connessione",
+      "medium_traffic_connections_download":
+        "Download giornaliero per connessione",
       "medium_traffic_connections_upload": "Upload giornaliero per connessione",
       "average_duration_connections": "Durata media per connessione",
       "duration": "Durata",
@@ -275,7 +291,8 @@
     "upload_change": "Cambia",
     "upload_remove": "Rimuovi",
     "upload_drag": "Click or Drag",
-    "upload_file_not_supported": "Tipo file non supportato, utilizzare file png, jpeg o jpg",
+    "upload_file_not_supported":
+      "Tipo file non supportato, utilizzare file png, jpeg o jpg",
     "upload_file_exceed": "File troppo grande (dimensione massima 600 kb)"
   }
 }

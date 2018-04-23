@@ -57,47 +57,54 @@
   </div>
 </template>
 <script>
-  import UnitService from '../../services/unit';
-  import HotspotService from '../../services/hotspot';
-  import UtilService from '../../services/util';
-  import StorageService from '../../services/storage';
-
+import UnitService from "../../services/unit";
+import HotspotService from "../../services/hotspot";
+import UtilService from "../../services/util";
+import StorageService from "../../services/storage";
 
 export default {
-  name: 'UnitsDetails',
+  name: "UnitsDetails",
   mixins: [UnitService, HotspotService, UtilService, StorageService],
   data() {
-      //get unit info
-      this.getInfo()
+    //get unit info
+    this.getInfo();
 
-      return {
-          info: {
-            isLoading: true,
-            unit: {},
-            hotspot: {},
-          }
+    return {
+      info: {
+        isLoading: true,
+        unit: {},
+        hotspot: {}
       }
+    };
   },
   methods: {
-      getInfo() {
-          this.unitGet(this.$route.params.id, success => {
-              this.info.unit = success.body
-              this.info.isLoading = false
-              this.getHotspotInfo(success.body.hotspot_id)
-          }, error => {
-              this.info.unit.isLoading = false
-              console.log(error.body);
-          })
-      },
-      getHotspotInfo(hotspotId) {
-          this.hotspotGet(hotspotId, success => {
-              this.info.hotspot = success.body
-              this.info.isLoading = false
-          }, error => {
-              this.info.isLoading = false
-              console.log(error.body);
-          })
-      }
+    getInfo() {
+      this.unitGet(
+        this.$route.params.id,
+        success => {
+          this.info.unit = success.body;
+          this.info.isLoading = false;
+          this.getHotspotInfo(success.body.hotspot_id);
+        },
+        error => {
+          this.info.unit.isLoading = false;
+          console.log(error.body);
+        }
+      );
+    },
+    getHotspotInfo(hotspotId) {
+      this.hotspotGet(
+        hotspotId,
+        success => {
+          this.info.hotspot = success.body;
+          this.info.isLoading = false;
+        },
+        error => {
+          this.info.isLoading = false;
+          console.log(error.body);
+        }
+      );
+    }
   }
-}
+};
 </script>

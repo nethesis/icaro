@@ -96,62 +96,69 @@
   </div>
 </template>
 <script>
-  import HotspotService from '../services/hotspot';
-  import StorageService from '../services/storage';
+import HotspotService from "../services/hotspot";
+import StorageService from "../services/storage";
 
-  export default {
-    name: 'HotspotAction',
-    props: ['details', 'obj', 'update'],
-    mixins: [HotspotService, StorageService],
-    data() {
-      var currentObj = {}
-      var errors = {
-        update: false,
-        delete: false
-      }
-      return {
-        errors: errors,
-        currentObj: currentObj
-      }
+export default {
+  name: "HotspotAction",
+  props: ["details", "obj", "update"],
+  mixins: [HotspotService, StorageService],
+  data() {
+    var currentObj = {};
+    var errors = {
+      update: false,
+      delete: false
+    };
+    return {
+      errors: errors,
+      currentObj: currentObj
+    };
+  },
+  methods: {
+    setCurrentObj(obj) {
+      this.currentObj = Object.assign({}, obj);
     },
-    methods: {
-      setCurrentObj(obj) {
-        this.currentObj = Object.assign({}, obj);
-      },
-      modifyHotspot(obj) {
-        this.currentObj.onAction = true
-        this.hotspotModify(obj.id, {
+    modifyHotspot(obj) {
+      this.currentObj.onAction = true;
+      this.hotspotModify(
+        obj.id,
+        {
           description: obj.description
-        }, success => {
-          this.currentObj.onAction = false
-          $('#HSmodifyModal' + obj.id).modal('toggle');
-          this.update()
-        }, error => {
-          this.currentObj.onAction = false
-          this.errors.update = true
+        },
+        success => {
+          this.currentObj.onAction = false;
+          $("#HSmodifyModal" + obj.id).modal("toggle");
+          this.update();
+        },
+        error => {
+          this.currentObj.onAction = false;
+          this.errors.update = true;
           console.log(error.body.message);
-        })
-      },
-      deleteHotspot(obj) {
-        this.currentObj.onAction = true
-        this.hotspotDelete(obj.id, success => {
-          this.currentObj.onAction = false
-          $('#HSdeleteModal' + obj.id).modal('toggle');
-          this.update()
+        }
+      );
+    },
+    deleteHotspot(obj) {
+      this.currentObj.onAction = true;
+      this.hotspotDelete(
+        obj.id,
+        success => {
+          this.currentObj.onAction = false;
+          $("#HSdeleteModal" + obj.id).modal("toggle");
+          this.update();
           this.$router.push({
-            path: '/hotspots'
-          })
-        }, error => {
-          this.currentObj.onAction = false
-          this.errors.delete = true
+            path: "/hotspots"
+          });
+        },
+        error => {
+          this.currentObj.onAction = false;
+          this.errors.delete = true;
           console.log(error.body.message);
-        })
-      }
+        }
+      );
     }
   }
-
+};
 </script>
 <style>
-
 
 </style>

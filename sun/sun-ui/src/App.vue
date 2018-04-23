@@ -300,159 +300,167 @@
 </template>
 
 <script>
-  import LoginService from './services/login';
-  import StorageService from './services/storage';
-  import UtilService from './services/util';
-  import {
-    setTimeout
-  } from 'timers';
+import LoginService from "./services/login";
+import StorageService from "./services/storage";
+import UtilService from "./services/util";
+import { setTimeout } from "timers";
 
-  export default {
-    name: 'app',
-    mixins: [LoginService, StorageService, UtilService],
-    created() {
-      document.title = CONFIG.APP_NAME
-    },
-    data() {
-      // is logged
-      var isLogged = false
-      var user = {
-        login: this.get('loggedUser') || null,
-        info: {}
-      }
+export default {
+  name: "app",
+  mixins: [LoginService, StorageService, UtilService],
+  created() {
+    document.title = CONFIG.APP_NAME;
+  },
+  data() {
+    // is logged
+    var isLogged = false;
+    var user = {
+      login: this.get("loggedUser") || null,
+      info: {}
+    };
 
-      var errors = {
-        username: false,
-        password: false,
-      }
+    var errors = {
+      username: false,
+      password: false
+    };
 
-      if (user.login) {
-        this.getInfo(user.login.id, response => {
-          if (response) {
-            this.user.info = response
-            this.isLogged = true
-            this.initGraphics()
-          } else {
-            this.isLogged = false
-            this.showBody()
-          }
-        })
-      } else {
-        this.showBody()
-      }
-
-      return {
-        username: '',
-        password: '',
-        user: user,
-        isLogged: isLogged,
-        errors: errors,
-        appName: CONFIG.APP_NAME,
-        helpUrl: CONFIG.HELP_URL,
-        companyName: CONFIG.COMPANY_NAME
-      }
-    },
-    methods: {
-      currentYear() {
-        return new Date().getFullYear()
-      },
-      getCurrentPath(route) {
-        return this.$route.path.split('/')[1] === route
-      },
-      getLoginIcon() {
-        var icon = 'fa fa-user'
-        switch (this.user.info.type) {
-          case 'admin':
-            icon = 'fa fa-graduation-cap'
-            break;
-          case 'reseller':
-            icon = 'fa fa-user'
-            break;
-          case 'customer':
-            icon = 'fa fa-briefcase'
-            break;
-          case 'desk':
-            icon = 'fa fa-coffee'
-            break;
+    if (user.login) {
+      this.getInfo(user.login.id, response => {
+        if (response) {
+          this.user.info = response;
+          this.isLogged = true;
+          this.initGraphics();
+        } else {
+          this.isLogged = false;
+          this.showBody();
         }
-        return icon
-      },
-      getInfo(id, callback) {
-        this.execGetInfo(id, success => {
-          callback(success.body)
-        }, error => {
-          callback(null)
-        })
-      },
-      doLogin() {
-        this.errors.username = false
-        this.errors.password = false
-        this.execLogin({
+      });
+    } else {
+      this.showBody();
+    }
+
+    return {
+      username: "",
+      password: "",
+      user: user,
+      isLogged: isLogged,
+      errors: errors,
+      appName: CONFIG.APP_NAME,
+      helpUrl: CONFIG.HELP_URL,
+      companyName: CONFIG.COMPANY_NAME
+    };
+  },
+  methods: {
+    currentYear() {
+      return new Date().getFullYear();
+    },
+    getCurrentPath(route) {
+      return this.$route.path.split("/")[1] === route;
+    },
+    getLoginIcon() {
+      var icon = "fa fa-user";
+      switch (this.user.info.type) {
+        case "admin":
+          icon = "fa fa-graduation-cap";
+          break;
+        case "reseller":
+          icon = "fa fa-user";
+          break;
+        case "customer":
+          icon = "fa fa-briefcase";
+          break;
+        case "desk":
+          icon = "fa fa-coffee";
+          break;
+      }
+      return icon;
+    },
+    getInfo(id, callback) {
+      this.execGetInfo(
+        id,
+        success => {
+          callback(success.body);
+        },
+        error => {
+          callback(null);
+        }
+      );
+    },
+    doLogin() {
+      this.errors.username = false;
+      this.errors.password = false;
+      this.execLogin(
+        {
           username: this.username,
           password: this.password
-        }, success => {
+        },
+        success => {
           // extract loggedUser info
-          var loggedUser = success.body
+          var loggedUser = success.body;
           // save to localstorage
-          this.set('loggedUser', loggedUser)
+          this.set("loggedUser", loggedUser);
 
           // get user info
           this.getInfo(loggedUser.id, response => {
             if (response) {
-              this.user.info = response
-              this.isLogged = true
-              this.initGraphics()
+              this.user.info = response;
+              this.isLogged = true;
+              this.initGraphics();
             } else {
-              this.isLogged = false
+              this.isLogged = false;
             }
-          })
+          });
 
           // change route
-          this.isLogged = true
-          this.$router.push('/')
-        }, error => {
-          if (error.body.message == 'No username found!') {
-            this.errors.username = true
+          this.isLogged = true;
+          this.$router.push("/");
+        },
+        error => {
+          if (error.body.message == "No username found!") {
+            this.errors.username = true;
           }
-          if (error.body.message == 'Password is invalid') {
-            this.errors.password = true
+          if (error.body.message == "Password is invalid") {
+            this.errors.password = true;
           }
           console.log(error.body.message);
-        })
-      },
-      doLogout() {
-        this.execLogout(success => {
+        }
+      );
+    },
+    doLogout() {
+      this.execLogout(
+        success => {
           // save to localstorage
-          this.delete('loggedUser')
+          this.delete("loggedUser");
 
           // change route
-          this.isLogged = false
-          this.$router.push('/')
-          this.resetGraphics()
-        }, error => {
+          this.isLogged = false;
+          this.$router.push("/");
+          this.resetGraphics();
+        },
+        error => {
           console.log(error.body.message);
-        })
-      },
-      initGraphics() {
-        $('body').addClass('logged')
-        $('body').removeClass('not-logged')
-        setTimeout(function () {
-          window.$().setupVerticalNavigation(true);
-        }, 1000);
-        this.showBody()
-      },
-      resetGraphics() {
-        $('body').addClass('not-logged')
-        $('body').removeClass('logged')
-        window.location.reload()
-      },
-      showBody() {
-        $('body').show()
-        $('body').addClass('not-logged')
-      }
+        }
+      );
+    },
+    initGraphics() {
+      $("body").addClass("logged");
+      $("body").removeClass("not-logged");
+      setTimeout(function() {
+        window.$().setupVerticalNavigation(true);
+      }, 1000);
+      this.showBody();
+    },
+    resetGraphics() {
+      $("body").addClass("not-logged");
+      $("body").removeClass("logged");
+      window.location.reload();
+    },
+    showBody() {
+      $("body").show();
+      $("body").addClass("not-logged");
     }
   }
-
+};
 </script>
 
 <style src="./styles/main.css">

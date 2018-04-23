@@ -157,75 +157,88 @@
   </div>
 </template>
 <script>
-  import AccountService from '../services/account';
-  import StorageService from '../services/storage';
-  export default {
-    name: 'AccountAction',
-    props: ['details', 'obj', 'update'],
-    mixins: [AccountService, StorageService],
-    data() {
-      var currentObj = {}
-      var newPassword, confirmPassword = ''
+import AccountService from "../services/account";
+import StorageService from "../services/storage";
+export default {
+  name: "AccountAction",
+  props: ["details", "obj", "update"],
+  mixins: [AccountService, StorageService],
+  data() {
+    var currentObj = {};
+    var newPassword,
+      confirmPassword = "";
 
-      var errors = {
-        update: false,
-        delete: false,
-        password: false
-      }
+    var errors = {
+      update: false,
+      delete: false,
+      password: false
+    };
 
-      return {
-        errors: errors,
-        currentObj: currentObj,
-        newPassword: newPassword,
-        confirmPassword: confirmPassword,
-        errors: errors
-      }
+    return {
+      errors: errors,
+      currentObj: currentObj,
+      newPassword: newPassword,
+      confirmPassword: confirmPassword,
+      errors: errors
+    };
+  },
+  methods: {
+    setCurrentObj(obj) {
+      this.currentObj = Object.assign({}, obj);
     },
-    methods: {
-      setCurrentObj(obj) {
-        this.currentObj = Object.assign({}, obj);
-      },
-      modifyAccount(obj) {
-        this.currentObj.onAction = true
-        this.accountModify(obj.id, {
+    modifyAccount(obj) {
+      this.currentObj.onAction = true;
+      this.accountModify(
+        obj.id,
+        {
           name: obj.name,
           email: obj.email,
           type: obj.type
-        }, success => {
-          this.currentObj.onAction = false
-          $('#ACModifyModal' + obj.id).modal('toggle');
-          this.update()
-        }, error => {
-          this.currentObj.onAction = false
-          this.errors.update = true
+        },
+        success => {
+          this.currentObj.onAction = false;
+          $("#ACModifyModal" + obj.id).modal("toggle");
+          this.update();
+        },
+        error => {
+          this.currentObj.onAction = false;
+          this.errors.update = true;
           console.log(error.body.message);
-        })
-      },
-      deleteAccount(obj) {
-        this.currentObj.onAction = true
-        this.accountDelete(obj.id, success => {
-          this.currentObj.onAction = false
-          $('#ACDeleteModal' + obj.id).modal('toggle');
-          this.update()
-        }, error => {
-          this.currentObj.onAction = false
-          this.errors.delete = true
+        }
+      );
+    },
+    deleteAccount(obj) {
+      this.currentObj.onAction = true;
+      this.accountDelete(
+        obj.id,
+        success => {
+          this.currentObj.onAction = false;
+          $("#ACDeleteModal" + obj.id).modal("toggle");
+          this.update();
+        },
+        error => {
+          this.currentObj.onAction = false;
+          this.errors.delete = true;
           console.log(error.body.message);
-        })
-      },
-      changePassword(obj) {
-        this.currentObj.onAction = true
-        this.accountChangePassword(obj.id, this.newPassword, success => {
-          this.currentObj.onAction = false
-          $('#ACChangePasswordModal' + obj.id).modal('toggle');
-        }, error => {
-          this.currentObj.onAction = false
-          this.errors.password = true
+        }
+      );
+    },
+    changePassword(obj) {
+      this.currentObj.onAction = true;
+      this.accountChangePassword(
+        obj.id,
+        this.newPassword,
+        success => {
+          this.currentObj.onAction = false;
+          $("#ACChangePasswordModal" + obj.id).modal("toggle");
+        },
+        error => {
+          this.currentObj.onAction = false;
+          this.errors.password = true;
           console.log(error.body.message);
-        })
-      }
-
+        }
+      );
     }
   }
-
+};
 </script>

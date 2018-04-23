@@ -130,77 +130,84 @@
   </div>
 </template>
 <script>
-  import UserService from '../services/user';
-  import StorageService from '../services/storage';
+import UserService from "../services/user";
+import StorageService from "../services/storage";
 
-  import datePicker from 'vue-bootstrap-datetimepicker';
+import datePicker from "vue-bootstrap-datetimepicker";
 
-  export default {
-    name: 'UserAction',
-    props: ['details', 'obj', 'update'],
-    mixins: [UserService, StorageService],
-    components: {
-      datePicker
-    },
-    data() {
-      var currentObj = {}
-      var errors = {
-        update: false,
-        delete: false
+export default {
+  name: "UserAction",
+  props: ["details", "obj", "update"],
+  mixins: [UserService, StorageService],
+  components: {
+    datePicker
+  },
+  data() {
+    var currentObj = {};
+    var errors = {
+      update: false,
+      delete: false
+    };
+
+    return {
+      errors: errors,
+      currentObj: currentObj,
+      dateConfig: {
+        format: "YYYY-MM-DD HH:mm:ss",
+        useCurrent: false,
+        sideBySide: true,
+        locale: this.$root.$options.currentLocale
       }
-
-      return {
-        errors: errors,
-        currentObj: currentObj,
-        dateConfig: {
-          format: 'YYYY-MM-DD HH:mm:ss',
-          useCurrent: false,
-          sideBySide: true,
-          locale: this.$root.$options.currentLocale
-        }
-      }
+    };
+  },
+  methods: {
+    setCurrentObj(obj) {
+      this.currentObj = Object.assign({}, obj);
     },
-    methods: {
-      setCurrentObj(obj) {
-        this.currentObj = Object.assign({}, obj);
-      },
-      modifyUser(obj) {
-        this.currentObj.onAction = true
-        this.userModify(obj.id, {
+    modifyUser(obj) {
+      this.currentObj.onAction = true;
+      this.userModify(
+        obj.id,
+        {
           name: obj.name,
           email: obj.email,
           kbps_down: parseInt(obj.kbps_down),
           kbps_up: parseInt(obj.kbps_up),
           auto_login: obj.auto_login || false,
           valid_from: new Date(obj.valid_from).toISOString(),
-          valid_until: new Date(obj.valid_until).toISOString(),
-        }, success => {
-          this.currentObj.onAction = false
-          $('#UsmodifyModal' + obj.id).modal('toggle');
-          this.update()
-        }, error => {
-          this.currentObj.onAction = false
-          this.errors.update = true
+          valid_until: new Date(obj.valid_until).toISOString()
+        },
+        success => {
+          this.currentObj.onAction = false;
+          $("#UsmodifyModal" + obj.id).modal("toggle");
+          this.update();
+        },
+        error => {
+          this.currentObj.onAction = false;
+          this.errors.update = true;
           console.log(error.body.message);
-        })
-      },
-      deleteUser(obj) {
-        this.currentObj.onAction = true
-        this.userDelete(obj.id, success => {
-          this.currentObj.onAction = false
-          $('#UsdeleteModal' + obj.id).modal('toggle');
-          this.update()
-        }, error => {
-          this.currentObj.onAction = false
-          this.errors.delete = true
+        }
+      );
+    },
+    deleteUser(obj) {
+      this.currentObj.onAction = true;
+      this.userDelete(
+        obj.id,
+        success => {
+          this.currentObj.onAction = false;
+          $("#UsdeleteModal" + obj.id).modal("toggle");
+          this.update();
+        },
+        error => {
+          this.currentObj.onAction = false;
+          this.errors.delete = true;
           console.log(error.body.message);
-        })
-      }
+        }
+      );
     }
   }
-
+};
 </script>
 <style>
-
 
 </style>

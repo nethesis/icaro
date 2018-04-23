@@ -38,194 +38,263 @@
   </div>
 </template>
 <script>
-  import UnitService from "../services/unit";
-  import StorageService from "../services/storage";
-  import HistoryService from '../services/history'
-  import SessionService from '../services/session'
-  import UserService from '../services/user'
-  import HotspotService from "../services/hotspot";
-  import ReportStatistics from '../components/details-view/ReportStatistics'
-  import ActualReportStatistics from '../components/details-view/ActualReportStatistics'
+import UnitService from "../services/unit";
+import StorageService from "../services/storage";
+import HistoryService from "../services/history";
+import SessionService from "../services/session";
+import UserService from "../services/user";
+import HotspotService from "../services/hotspot";
+import ReportStatistics from "../components/details-view/ReportStatistics";
+import ActualReportStatistics from "../components/details-view/ActualReportStatistics";
 
-  import VueChart from "vue-chart-js";
-  import moment from "moment";
-  import {
-    extendMoment
-  } from 'moment-range';
-  export default {
-    name: "Reports",
-    components: {
-      VueChart,
-      ReportStatistics,
-      ActualReportStatistics
-    },
-    mixins: [HistoryService, StorageService, UserService, HotspotService, SessionService],
-    data() {
-      var hsId = this.get('reports_hotspot_id') || 0
-      if (this.$parent.user.info.type == 'customer' || this.$parent.user.info.type == 'desk') {
-        hsId = this.$parent.user.info.hotspot_id
-      }
-      return {
-        range: null,
-        isChartLoading: true,
-        msg: this.$i18n.t('report.reports'),
-        dataPoints: {
-          to: moment().subtract(7, 'day').startOf('day'),
-          from: moment().startOf("day"),
+import VueChart from "vue-chart-js";
+import moment from "moment";
+import { extendMoment } from "moment-range";
+export default {
+  name: "Reports",
+  components: {
+    VueChart,
+    ReportStatistics,
+    ActualReportStatistics
+  },
+  mixins: [
+    HistoryService,
+    StorageService,
+    UserService,
+    HotspotService,
+    SessionService
+  ],
+  data() {
+    var hsId = this.get("reports_hotspot_id") || 0;
+    if (
+      this.$parent.user.info.type == "customer" ||
+      this.$parent.user.info.type == "desk"
+    ) {
+      hsId = this.$parent.user.info.hotspot_id;
+    }
+    return {
+      range: null,
+      isChartLoading: true,
+      msg: this.$i18n.t("report.reports"),
+      dataPoints: {
+        to: moment()
+          .subtract(7, "day")
+          .startOf("day"),
+        from: moment().startOf("day")
+      },
+      dateRangs: [
+        {
+          display: this.$i18n.t("report.last_7_days"),
+          value: 1
         },
-        dateRangs: [{
-            display: this.$i18n.t('report.last_7_days'),
-            value: 1
-          },
-          {
-            display: this.$i18n.t('report.last_15_days'),
-            value: 2
-          },
-          {
-            display: this.$i18n.t('report.last_month'),
-            value: 3
-          }
-        ],
-        validDate: [],
-        dateRangeSearchId: this.get('reports_date_range_id') || 1,
-        newUsers: [],
-        sessions: [],
-        hotspots: [],
-        connections: [],
-        labels: [],
-        hotspotSearchId: hsId,
-        user: this.get("loggedUser") || null
-      };
-    },
-    mounted() {
-      if (this.$route.params.hotspotId !== undefined) {
-        this.hotspotSearchId = this.$route.params.hotspotId;
-      }
-      this.getSessionsByDate();
-      this.getAllHotspots();
-    },
-    methods: {
-      getSessionsByDate() {
-        this.set('reports_hotspot_id', this.hotspotSearchId || this.get('reports_hotspot_id') || 0)
-        this.set('reports_date_range_id', this.dateRangeSearchId || this.get('reports_date_range_id') || 1)
-
-        const moment1 = extendMoment(moment);
-        this.isChartLoading = true;
-        this.labels = [];
-        switch (this.dateRangeSearchId) {
-          case 1:
-            this.range = moment1.range(moment().utc().subtract(8, 'day').startOf('day').toDate(), moment().utc().subtract(1, 'day')
-              .endOf("day").toDate());
-            this.dataPoints.from = moment().utc().subtract(8, 'day').startOf('day');
-            this.dataPoints.to = moment().utc().subtract(1, 'day').endOf("day");
-            break;
-          case 2:
-            this.range = moment1.range(moment().utc().subtract(15, 'day').startOf('day').toDate(), moment().utc().subtract(1, 'day')
-              .endOf("day"));
-            this.dataPoints.from = moment().utc().subtract(15, 'day').startOf('day');
-            this.dataPoints.to = moment().utc().subtract(1, 'day').endOf("day");
-            break;
-          case 3:
-            this.range = moment1.range(moment().utc().subtract(4, 'week').startOf('week').toDate(), moment().utc().subtract(1,
-              'day').endOf("day"));
-            this.dataPoints.from = moment().utc().subtract(4, 'week').startOf('week');
-            this.dataPoints.to = moment().utc().subtract(1, 'day').endOf("day");
-          default:
-            break;
+        {
+          display: this.$i18n.t("report.last_15_days"),
+          value: 2
+        },
+        {
+          display: this.$i18n.t("report.last_month"),
+          value: 3
         }
-        let selectedRange = Array.from(this.range.by('day'));
+      ],
+      validDate: [],
+      dateRangeSearchId: this.get("reports_date_range_id") || 1,
+      newUsers: [],
+      sessions: [],
+      hotspots: [],
+      connections: [],
+      labels: [],
+      hotspotSearchId: hsId,
+      user: this.get("loggedUser") || null
+    };
+  },
+  mounted() {
+    if (this.$route.params.hotspotId !== undefined) {
+      this.hotspotSearchId = this.$route.params.hotspotId;
+    }
+    this.getSessionsByDate();
+    this.getAllHotspots();
+  },
+  methods: {
+    getSessionsByDate() {
+      this.set(
+        "reports_hotspot_id",
+        this.hotspotSearchId || this.get("reports_hotspot_id") || 0
+      );
+      this.set(
+        "reports_date_range_id",
+        this.dateRangeSearchId || this.get("reports_date_range_id") || 1
+      );
 
-        this.validDate = selectedRange.map(function (item) {
-          return item.format('YYYY-MM-DD');
-        })
+      const moment1 = extendMoment(moment);
+      this.isChartLoading = true;
+      this.labels = [];
+      switch (this.dateRangeSearchId) {
+        case 1:
+          this.range = moment1.range(
+            moment()
+              .utc()
+              .subtract(8, "day")
+              .startOf("day")
+              .toDate(),
+            moment()
+              .utc()
+              .subtract(1, "day")
+              .endOf("day")
+              .toDate()
+          );
+          this.dataPoints.from = moment()
+            .utc()
+            .subtract(8, "day")
+            .startOf("day");
+          this.dataPoints.to = moment()
+            .utc()
+            .subtract(1, "day")
+            .endOf("day");
+          break;
+        case 2:
+          this.range = moment1.range(
+            moment()
+              .utc()
+              .subtract(15, "day")
+              .startOf("day")
+              .toDate(),
+            moment()
+              .utc()
+              .subtract(1, "day")
+              .endOf("day")
+          );
+          this.dataPoints.from = moment()
+            .utc()
+            .subtract(15, "day")
+            .startOf("day");
+          this.dataPoints.to = moment()
+            .utc()
+            .subtract(1, "day")
+            .endOf("day");
+          break;
+        case 3:
+          this.range = moment1.range(
+            moment()
+              .utc()
+              .subtract(4, "week")
+              .startOf("week")
+              .toDate(),
+            moment()
+              .utc()
+              .subtract(1, "day")
+              .endOf("day")
+          );
+          this.dataPoints.from = moment()
+            .utc()
+            .subtract(4, "week")
+            .startOf("week");
+          this.dataPoints.to = moment()
+            .utc()
+            .subtract(1, "day")
+            .endOf("day");
+        default:
+          break;
+      }
+      let selectedRange = Array.from(this.range.by("day"));
 
-        let valueToDisplay = selectedRange.map(function (item) {
-          return item.format('DD MMM');
-        })
-        this.labels = valueToDisplay;
-        this.getSession();
-      },
-      // Get All Session between date range
-      getSession() {
-        this.historiesGetAll(
-          this.hotspotSearchId,
-          "",
-          "",
-          this.dataPoints.from.toISOString(),
-          this.dataPoints.to.toISOString(),
-          success => {
-            this.sessions = success.body;
-            this.getNewUsers()
-          },
-          error => {
-            this.sessions = [];
-            this.getNewUsers()
-            console.log(error);
-          }
-        );
-      },
-      // Get Users
-      getNewUsers() {
-        this.userGetAll(this.hotspotSearchId, null, success => {
+      this.validDate = selectedRange.map(function(item) {
+        return item.format("YYYY-MM-DD");
+      });
+
+      let valueToDisplay = selectedRange.map(function(item) {
+        return item.format("DD MMM");
+      });
+      this.labels = valueToDisplay;
+      this.getSession();
+    },
+    // Get All Session between date range
+    getSession() {
+      this.historiesGetAll(
+        this.hotspotSearchId,
+        "",
+        "",
+        this.dataPoints.from.toISOString(),
+        this.dataPoints.to.toISOString(),
+        success => {
+          this.sessions = success.body;
+          this.getNewUsers();
+        },
+        error => {
+          this.sessions = [];
+          this.getNewUsers();
+          console.log(error);
+        }
+      );
+    },
+    // Get Users
+    getNewUsers() {
+      this.userGetAll(
+        this.hotspotSearchId,
+        null,
+        success => {
           this.newUsers = success.body;
           this.getTodayUsersLogin();
-        }, error => {
-          this.newUsers = []
+        },
+        error => {
+          this.newUsers = [];
           this.getTodayUsersLogin();
-          console.log(error)
-        })
-      },
-      getAllHotspots() {
-        this.hotspotGetAll(
-          success => {
-            this.hotspots = success.body;
-            $('[data-toggle="tooltip"]').tooltip();
-          },
-          error => {
-            console.log(error);
-          }
-        );
-      },
-      getTodayUsersLogin() {
-        this.sessionGetAll(
-          this.hotspotSearchId,
-          "",
-          "",
-          moment().utc().startOf('day').toISOString(),
-          "",
-          success => {
-            this.connections = success.body;
-            this.isChartLoading = false;
-          }, error => {
-            this.connections = [];
-            this.isChartLoading = false;
-            console.log(error);
-          })
-      },
+          console.log(error);
+        }
+      );
+    },
+    getAllHotspots() {
+      this.hotspotGetAll(
+        success => {
+          this.hotspots = success.body;
+          $('[data-toggle="tooltip"]').tooltip();
+        },
+        error => {
+          console.log(error);
+        }
+      );
+    },
+    getTodayUsersLogin() {
+      this.sessionGetAll(
+        this.hotspotSearchId,
+        "",
+        "",
+        moment()
+          .utc()
+          .startOf("day")
+          .toISOString(),
+        "",
+        success => {
+          this.connections = success.body;
+          this.isChartLoading = false;
+        },
+        error => {
+          this.connections = [];
+          this.isChartLoading = false;
+          console.log(error);
+        }
+      );
     }
-  };
-
+  }
+};
 </script>
 <style scoped>
-  .control-label p {
-    display: inline;
+.control-label p {
+  display: inline;
+}
 
-  }
+#lbl-date-range {
+  padding-right: 8px;
+}
 
-  #lbl-date-range {
-    padding-right: 8px;
-  }
+.graphs-container {
+  margin: 10px;
+}
 
-  .graphs-container {
-    margin: 10px;
-  }
+.title-graphs {
+  margin-top: 60px;
+}
 
-  .title-graphs {
-    margin-top: 60px;
-  }
-
-  .adjust-top {
-    margin-top: -30px;
-  }
-
+.adjust-top {
+  margin-top: -30px;
+}
 </style>
