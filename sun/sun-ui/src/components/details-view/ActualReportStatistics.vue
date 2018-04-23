@@ -107,7 +107,7 @@
         const momentRange = extendMoment(moment);
         this.dateRange.from = moment().startOf("day");
         this.dateRange.to = moment();
-        
+
         this.actualStatisticChart.labels = Array.from(
           momentRange.range(this.dateRange.from, this.dateRange.to).by("hours")
         ).map(function (date) {
@@ -129,7 +129,7 @@
           session.update_time = filters.formatDate(session.update_time)
           sessionToCalculate.push(Object.assign({}, session))
         });
-        
+
         sessionToCalculate.forEach(function(session) {
           if (idsArray.length === 0) {
             idsArray.push(session.user_id);
@@ -141,7 +141,7 @@
             }else {
               newLoginsArray.map(function(newLogin) {
                 if(session.user_id===newLogin.user_id){
-                  if (session.start_time.substring(15, 17)<newLogin.start_time.substring(15, 17)) {
+                  if (moment(session.start_time).utc()<moment(newLogin.start_time).utc()) {
                     newLogin.start_time = session.start_time
                     newLogin.stop_time = session.stop_time
                     newLogin.update_time = session.update_time
@@ -151,14 +151,14 @@
             }
           }
         })
-        this.actualStatisticChart.labels.forEach(date => {
+        this.actualStatisticChart.labels.forEach(hour => {
           let newLogins = 0;
           let newLoginCounter = 0;
           let connections = 0;
           let userConnected = 0;
           // Insert newLogins on chart
           this.todayConnections.map(function(connection) {
-            if (connection.start_time.substring(15, 17) === date) {
+            if (moment(connection.start_time).format('HH') === hour) {
               connections++;
               if (connection.stop_time === '-') {
                 userConnected++;
@@ -166,7 +166,7 @@
             }
           });
           newLoginsArray.map(function(connection) {
-            if (connection.start_time.substring(15, 17) === date) {
+            if (moment(connection.start_time).format('HH') === hour) {
               newLogins++;
             }
           })
@@ -179,7 +179,7 @@
       }
     }
   };
-  
+
 </script>
 
 <style scoped>
@@ -227,5 +227,5 @@
       font-size: 13px;
     }
   }
-  
+
 </style>
