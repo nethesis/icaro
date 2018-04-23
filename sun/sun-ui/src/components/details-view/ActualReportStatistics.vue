@@ -125,9 +125,6 @@ export default {
       let sessionToCalculate = [];
 
       this.todayConnections.forEach(session => {
-        session.start_time = filters.formatDate(session.start_time);
-        session.stop_time = filters.formatDate(session.stop_time);
-        session.update_time = filters.formatDate(session.update_time);
         sessionToCalculate.push(Object.assign({}, session));
       });
 
