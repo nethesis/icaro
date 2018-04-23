@@ -141,6 +141,7 @@
 
 <script>
 import SessionService from "../../services/session";
+import HistoryService from "../../services/history";
 import HotspotService from "../../services/hotspot";
 import UserService from "../../services/user";
 import DeviceService from "../../services/device";
@@ -152,6 +153,7 @@ export default {
   name: "SessionsDetails",
   mixins: [
     SessionService,
+    HistoryService,
     StorageService,
     UnitService,
     UtilService,
@@ -191,8 +193,23 @@ export default {
           this.getDeviceInfo(success.body.device_id);
         },
         error => {
-          this.info.isLoading = false;
           console.log(error.body);
+          // try to get session on history
+          this.historiesGet(
+            this.$route.params.id,
+            success => {
+              this.info.data = success.body;
+              this.info.isLoading = false;
+              this.getUnitInfo(success.body.unit_id);
+              this.getUserInfo(success.body.user_id);
+              this.getHotspotInfo(success.body.hotspot_id);
+              this.getDeviceInfo(success.body.device_id);
+            },
+            error => {
+              this.info.isLoading = false;
+              console.log(error.body);
+            }
+          );
         }
       );
     },

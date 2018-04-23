@@ -148,7 +148,7 @@ func GetSession(c *gin.Context) {
 }
 
 func GetSessionHistory(c *gin.Context) {
-	var session models.Session
+	var session models.SessionHistory
 	accountId := c.MustGet("token").(models.AccessToken).AccountId
 
 	historyId := c.Param("history_id")
