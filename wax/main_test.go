@@ -54,8 +54,8 @@ func startupEnv(endpoint string, query string) (*gofight.RequestConfig, *gin.Eng
 	// define API
 	DefineAPI(router)
 
-        // init database
-        database.Init()
+	// init database
+	database.Init()
 
 	// calculate URI with correct MD
 	uri := calculateUri(endpoint, query)
@@ -162,16 +162,6 @@ func TestInvalidStage(t *testing.T) {
 }
 
 /** Counters **/
-
-func TestCountersInvalidHotspot(t *testing.T) {
-	f, r, uri := startupEnv("/wax/aaa", "stage=counters&nasid=BAD&ap=00-00-00-00-00-00&status=start")
-
-	f.GET(uri).
-		Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
-			assert.Equal(t, http.StatusNotFound, f.Code)
-		})
-}
-
 func TestCountersInvalidUnit(t *testing.T) {
 	f, r, uri := startupEnv("/wax/aaa", "stage=counters&nasid=HSTest&ap=xx-00-00-00-00-00&status=start")
 
