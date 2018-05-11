@@ -89,7 +89,7 @@
         },
         methods: {
             changeRoute(path) {
-                sessionStorage.setItem('loginDest', path)
+                this.$root.$options.session['loginDest'] = path
                 this.$router.push({
                     path: 'login/disclaimer'
                 })
@@ -108,7 +108,7 @@
                 // get user id
                 this.$http.get(url).then(responseAuth => {
                     this.voucherValidated = true
-                    sessionStorage.setItem('voucher_code', responseAuth.body.code)
+                    this.$root.$options.session['voucherCode'] = responseAuth.body.code
                 }, error => {
                     this.voucherValidated = false
                     this.badCode = true

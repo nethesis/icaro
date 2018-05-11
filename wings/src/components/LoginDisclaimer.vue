@@ -19,7 +19,7 @@
                 hotspot: {
                     disclaimers: this.$root.$options.hotspot.disclaimers
                 },
-                loginDest: sessionStorage.getItem('loginDest'),
+                loginDest: this.$root.$options.session['loginDest'],
             }
         },
         methods: {
