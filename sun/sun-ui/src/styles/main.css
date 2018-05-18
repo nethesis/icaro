@@ -415,3 +415,7 @@ a {
   font-size: 20px;
   z-index: 1;
 }
+
+.span-radio {
+  margin-right: 20px;
+}

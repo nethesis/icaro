@@ -385,14 +385,26 @@ func VoucherAuth(c *gin.Context) {
 
 			c.JSON(http.StatusUnauthorized, gin.H{"message": "Voucher is expired"})
 		} else {
-			// update epiration date
-			if voucher.Expires.IsZero() {
-				voucher.Expires = time.Now().UTC().AddDate(0, 0, voucher.Duration)
-				db := database.Instance()
-				db.Save(&voucher)
+			// check max use
+			if voucher.RemainUse != -1 && voucher.RemainUse == 0 {
+				c.JSON(http.StatusUnauthorized, gin.H{"message": "Voucher limit reached"})
+			} else {
+				// update epiration date
+				if voucher.Expires.IsZero() {
+					voucher.Expires = time.Now().UTC().AddDate(0, 0, voucher.Duration)
+
+					// check if is not limitless
+					if voucher.RemainUse != -1 {
+						voucher.RemainUse--
+					}
+
+					db := database.Instance()
+					db.Save(&voucher)
+				}
+
+				c.JSON(http.StatusOK, gin.H{"message": "Voucher is valid", "code": voucher.Code})
 			}
 
-			c.JSON(http.StatusOK, gin.H{"message": "Voucher is valid", "code": voucher.Code})
 		}
 	}
 

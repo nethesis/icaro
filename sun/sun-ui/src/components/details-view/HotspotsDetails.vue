@@ -119,6 +119,10 @@
                 <td class="fancy">
                   <span :class="['fa', checkVoucherUse(props.row.expires) ? 'fa-check green' : 'fa-minus']"></span>
                 </td>
+                <td class="fancy">
+                  {{props.row.remain_use == -1 ? $t('hotspot.limitless') : $t('hotspot.max_use') + ': ' }}
+                  <strong v-if="props.row.remain_use != -1">{{props.row.remain_use}}</strong>
+                </td>
                 <td>
                   <button v-on:click="printVoucher(props.row)" class="btn btn-primary" type="button">
                     <span class="fa fa-print"></span>
@@ -239,7 +243,7 @@
       </div>
     </div>
 
-    <div v-if="(user.account_type == 'admin' || user.account_type == 'reseller') && totals.units.count > 0" class="row row-cards-pf">
+    <div v-if="totals.units.count > 0" class="row row-cards-pf">
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <div class="card-pf card-pf-accented">
           <div class="card-pf-heading">
@@ -369,6 +373,29 @@
                   <input v-model="newVoucher.duration" type="number" id="textInput-modal-markup" class="form-control">
                 </div>
               </div>
+              <div class="form-group">
+                <label class="col-sm-5 control-label" for="textInput-modal-markup">{{$t('hotspot.mode')}}</label>
+                <div class="col-sm-7">
+                  <span class="span-radio">
+                    <input required v-model="newVoucher.limitless" class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="true">
+                    <label class="form-check-label" for="exampleRadios1">
+                      {{$t('hotspot.limitless')}}
+                    </label>
+                  </span>
+                  <span class="span-radio">
+                    <input required v-model="newVoucher.limitless" class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="false">
+                    <label class="form-check-label" for="exampleRadios2">
+                      {{$t('hotspot.with_limit')}}
+                    </label>
+                  </span>
+                </div>
+              </div>
+              <div v-if="newVoucher.limitless == 'false'" class="form-group">
+                <label class="col-sm-5 control-label" for="textInput-modal-markup">{{$t('hotspot.max_use')}}</label>
+                <div class="col-sm-7">
+                  <input v-model="newVoucher.remain_use" type="number" id="textInput-modal-markup" class="form-control">
+                </div>
+              </div>
             </form>
           </div>
           <div class="modal-footer">
@@ -436,7 +463,7 @@
       </div>
     </div>
 
-     <div v-if="!info.isLoading" v-for="voucher in vouchers.data" v-bind:key="voucher.id" class="card-pf" id="voucher-coupon">
+     <div v-for="voucher in vouchers.data" v-bind:key="voucher.id" class="card-pf" id="voucher-coupon">
             <img class="voucher-logo" src="/static/logo.png" />
             <h2 class="card-pf-title voucher-name" id="test">
                 {{info.data.name}}
@@ -541,7 +568,9 @@ export default {
         auto_login: true,
         bandwidth_down: 0,
         bandwidth_up: 0,
-        duration: 7
+        duration: 7,
+        remain_use: 3,
+        limitless: 'true'
       },
       newMACAuth: {
         name: "",
@@ -605,6 +634,12 @@ export default {
         {
           label: this.$i18n.t("hotspot.used"),
           field: "expires",
+          filterable: false,
+          sortable: false
+        },
+        {
+          label: this.$i18n.t("hotspot.mode"),
+          field: "remain_use",
           filterable: false,
           sortable: false
         },
@@ -709,7 +744,8 @@ export default {
                 auto_login: context.newVoucher.auto_login,
                 bandwidth_down: parseInt(context.newVoucher.bandwidth_down),
                 bandwidth_up: parseInt(context.newVoucher.bandwidth_up),
-                duration: parseInt(context.newVoucher.duration)
+                duration: parseInt(context.newVoucher.duration),
+                remain_use: context.newVoucher.limitless == 'true' ? -1 : context.newVoucher.remain_use
               },
               success => {
                 resolve();

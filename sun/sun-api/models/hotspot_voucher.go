@@ -32,5 +32,6 @@ type HotspotVoucher struct {
 	BandwidthUp   int       `db:"bandwidth_up" json:"bandwidth_up"`
 	BandwidthDown int       `db:"bandwidth_down" json:"bandwidth_down"`
 	Duration      int       `db:"duration" json:"duration"`
+	RemainUse     int       `db:"remain_use" json:"remain_use"`
 	Expires       time.Time `db:"expires" json:"expires"`
 }

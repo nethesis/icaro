@@ -49,6 +49,7 @@ func CreateVoucher(c *gin.Context) {
 		BandwidthUp:   json.BandwidthUp,
 		BandwidthDown: json.BandwidthDown,
 		Duration:      json.Duration,
+		RemainUse:     json.RemainUse,
 	}
 
 	hotspotVoucher.HotspotId = json.HotspotId
