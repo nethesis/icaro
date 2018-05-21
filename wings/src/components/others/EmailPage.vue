@@ -1,15 +1,16 @@
 <template>
     <div class="ui segment form">
         <div v-if="!dedaloRequested">
-            <div v-if="!codeRequested" class="inline field" v-bind:class="{ error: errors.badInput }">
+            <div v-if="choosedMode" class="inline field" v-bind:class="{ error: errors.badInput }">
                 <label>Email</label>
                 <div class="ui big left icon input">
                     <input v-model="authEmail" type="email" :placeholder="$t('email.insert_email')">
                     <i class="mail icon"></i>
                 </div>
             </div>
-            <button v-if="!codeRequested" v-on:click="getCode()" class="ui big button request-code">{{ $t("email.have_code") }}</button>
-            <button v-if="!codeRequested" v-on:click="getCode(true)" class="ui big button">{{ $t("email.get_code") }}</button>
+            <button v-if="!codeRequested && !choosedMode" v-on:click="chooseMode(true)" class="ui big green button request-code">{{ $t("sms.have_code") }}</button>
+            <button v-if="!codeRequested && !choosedMode" v-on:click="chooseMode()" class="ui big red button request-code">{{ $t("sms.not_have_code") }}</button>
+            <button v-if="!codeRequested && choosedMode" v-on:click="getCode(true)" class="ui big button request-code">{{ $t("sms.get_code") }}</button>
             <div v-if="errors.badMail" class="ui tiny icon negative message">
                 <i class="remove icon"></i>
                 <div class="content">
@@ -90,6 +91,7 @@
 
             return {
                 authorized: false,
+                choosedMode: false,
                 codeRequested: this.$route.query.code || false,
                 dedaloRequested: false,
                 authEmail: this.$route.query.email || '',
@@ -111,6 +113,12 @@
         methods: {
             isDisabled() {
                 return this.authEmail.length == 0 || this.authCode.length == 0
+            },
+            chooseMode(haveCode) {
+                this.choosedMode = true
+                if(haveCode) {
+                    this.codeRequested = true
+                }
             },
             getCode(reset) {
                 this.errors.badMail = false
