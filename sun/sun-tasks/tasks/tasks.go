@@ -45,6 +45,10 @@ func Init(action string, worker bool) {
 		c.AddFunc("@daily", storeSessions)
 		storeSessions()
 
+	case "clean-sessions":
+		c.AddFunc("@every 2h", cleanSessions)
+		cleanSessions()
+
 	default:
 		fmt.Println("Specify a valid action to execute, see -h option")
 	}
@@ -96,4 +100,42 @@ func storeSessions() {
 		}
 	}
 
+}
+
+func cleanSessions() {
+	var sessions []models.Session
+
+	start := time.Now().UTC()
+	maxSessionTimout := start.Add(time.Hour * -1)
+
+	db := database.Instance()
+
+	db.Where("update_time <= ? and stop_time = 0", maxSessionTimout).Find(&sessions)
+
+	for _, s := range sessions {
+		sessionHistory := models.SessionHistory{
+			SessionId:   s.Id,
+			UnitId:      s.UnitId,
+			UnitMac:     s.UnitMac,
+			HotspotId:   s.HotspotId,
+			HotspotDesc: s.HotspotDesc,
+			DeviceId:    s.DeviceId,
+			DeviceMAC:   s.DeviceMAC,
+			UserId:      s.UserId,
+			Username:    s.Username,
+			BytesUp:     s.BytesUp,
+			BytesDown:   s.BytesDown,
+			Duration:    s.Duration,
+			AuthTime:    s.AuthTime,
+			StartTime:   s.StartTime,
+			UpdateTime:  s.UpdateTime,
+			StopTime:    s.UpdateTime,
+			SessionKey:  s.SessionKey,
+		}
+		// save to session_histories table
+		db.Save(&sessionHistory)
+
+		// delete from sessions table
+		db.Delete(&s)
+	}
 }
