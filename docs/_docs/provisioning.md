@@ -62,11 +62,6 @@ If you prefere to use another cloud provider, edit ``Vagrantfile`` accordingly.
    vagrant up --provider=digital_ocean
    ```
 
-7. At the end, reboot the droplet:
-   ```
-   vagrant reload
-   ```
-
 You can destroy the droplet using:
 ```
 vagrant destroy
