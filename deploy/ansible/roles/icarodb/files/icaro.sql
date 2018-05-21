@@ -81,6 +81,7 @@ CREATE TABLE `hotspot_vouchers` (
   `bandwidth_up` integer unsigned,
   `bandwidth_down` integer unsigned,
   `duration` integer unsigned,
+  `remain_use` integer,
   `expires` datetime DEFAULT NULL,
   FOREIGN KEY (`hotspot_id`) REFERENCES hotspots(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   UNIQUE KEY (`hotspot_id`, `code`),
