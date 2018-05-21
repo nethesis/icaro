@@ -10,7 +10,8 @@ EnvironmentFile=-/opt/icaro/sun-api/conf.env
 WorkingDirectory=/opt/icaro/sun-api/
 Environment=GIN_MODE=release
 ExecStart=/opt/icaro/sun-api/sun-api
-Restart=on-abort
+Restart=on-failure
+RestartSec=5
 
 [Install]
 WantedBy=multi-user.target
