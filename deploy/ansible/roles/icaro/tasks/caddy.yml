@@ -37,6 +37,10 @@
     src: etc/systemd/system/caddy.service.d/override.conf
     dest: /etc/systemd/system/caddy.service.d/override.conf
 
+- name: Disable SELinux
+  selinux:
+    state: disabled
+
 - name: Enable Caddy server
   service:
     name: caddy
