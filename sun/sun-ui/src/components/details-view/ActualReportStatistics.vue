@@ -161,7 +161,7 @@ export default {
         this.todayConnections.map(function(connection) {
           if (moment(connection.start_time).format("HH") === hour) {
             connections++;
-            if (connection.stop_time === "-") {
+            if (+new Date(connection.stop_time) < 0) {
               userConnected++;
             }
           }
