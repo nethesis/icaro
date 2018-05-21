@@ -102,7 +102,10 @@
       "new_mac_auth": "New MAC Auth",
       "used": "Used",
       "valid": "Valid",
-      "unlimited": "Unlimited"
+      "unlimited": "Unlimited",
+      "export_csv": "Export CSV",
+      "enabled": "Enabled",
+      "disabled": "Disabled"
     },
     "user": {
       "username": "Username",

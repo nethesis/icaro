@@ -118,6 +118,7 @@
                 <td class="fancy">{{ props.row.duration }} ({{$t('hotspot.days')}})</td>
                 <td class="fancy">
                   <span :class="['fa', checkVoucherUse(props.row.expires) ? 'fa-check green' : 'fa-minus']"></span>
+                  ({{$t('hotspot.expires')}}: {{props.row.expires | formatDate}})
                 </td>
                 <td class="fancy">
                   {{props.row.remain_use == -1 ? $t('hotspot.limitless') : $t('hotspot.max_use') + ': ' }}
@@ -140,6 +141,10 @@
               <button v-on:click="printAllVoucher()" class="btn btn-default" type="button">
                 <span class="fa fa-print"></span>
                 {{ $t("hotspot.print_all_voucher") }}
+              </button>
+              <button v-on:click="exportCSVVoucher()" class="btn btn-default" type="button">
+                <span class="fa fa-list"></span>
+                {{ $t("hotspot.export_csv") }}
               </button>
             </div>
             <p>
@@ -570,7 +575,7 @@ export default {
         bandwidth_up: 0,
         duration: 7,
         remain_use: 3,
-        limitless: 'true'
+        limitless: "true"
       },
       newMACAuth: {
         name: "",
@@ -617,7 +622,8 @@ export default {
         {
           label: this.$i18n.t("hotspot.auto_login"),
           field: "auto_login",
-          filterable: false
+          filterable: false,
+          sortable: false
         },
         {
           label: this.$i18n.t("hotspot.bandwidth_limit"),
@@ -635,7 +641,7 @@ export default {
           label: this.$i18n.t("hotspot.used"),
           field: "expires",
           filterable: false,
-          sortable: false
+          sortable: true
         },
         {
           label: this.$i18n.t("hotspot.mode"),
@@ -745,7 +751,10 @@ export default {
                 bandwidth_down: parseInt(context.newVoucher.bandwidth_down),
                 bandwidth_up: parseInt(context.newVoucher.bandwidth_up),
                 duration: parseInt(context.newVoucher.duration),
-                remain_use: context.newVoucher.limitless == 'true' ? -1 : context.newVoucher.remain_use
+                remain_use:
+                  context.newVoucher.limitless == "true"
+                    ? -1
+                    : context.newVoucher.remain_use
               },
               success => {
                 resolve();
@@ -1201,6 +1210,42 @@ export default {
       }
       doc.autoPrint();
       window.open(doc.output("bloburl"), "_blank");
+    },
+    exportCSVVoucher() {
+      var voucherRows = JSON.parse(JSON.stringify(this.vouchers.data));
+      for (var r in voucherRows) {
+        var banDown =
+          voucherRows[r].bandwidth_down > 0
+            ? this.$options.filters["byteFormat"](voucherRows[r].bandwidth_down)
+            : "-";
+
+        var banUp =
+          voucherRows[r].bandwidth_up > 0
+            ? this.$options.filters["byteFormat"](voucherRows[r].bandwidth_up)
+            : "-";
+
+        voucherRows[r].bandwidth = "Down: " + banDown + " | Up: " + banUp;
+
+        voucherRows[r].auto_login = voucherRows[r].auto_login
+          ? this.$i18n.t("hotspot.enabled")
+          : this.$i18n.t("hotspot.disabled");
+
+        voucherRows[r].duration =
+          voucherRows[r].duration + " (" + this.$i18n.t("hotspot.days") + ")";
+
+        voucherRows[r].expires = this.checkVoucherUse(voucherRows[r].expires)
+          ? this.$i18n.t("hotspot.expires") + ': ' + this.$options.filters["formatDate"](voucherRows[r].expires)
+          : "-";
+
+        voucherRows[r].remain_use =
+          voucherRows[r].remain_use == -1
+            ? this.$i18n.t("hotspot.limitless")
+            : this.$i18n.t("hotspot.max_use") +
+              ": " +
+              voucherRows[r].remain_use;
+      }
+      var csv = this.createCSV(this.columns, voucherRows);
+      this.downloadCSV(csv.cols, csv.rows, "vouchers");
     },
     onChanged(pref) {
       if (this.$refs["prefInput-" + pref.key][0].image.length > 655360) {
