@@ -119,8 +119,34 @@ func stopSession(sessionId string, unitMacAddress string, bytesDown string, byte
 		session.BytesUp = bu
 	}
 
+	sessionHistory := models.SessionHistory{
+		SessionId:   session.Id,
+		UnitId:      session.UnitId,
+		UnitMac:     session.UnitMac,
+		HotspotId:   session.HotspotId,
+		HotspotDesc: session.HotspotDesc,
+		DeviceId:    session.DeviceId,
+		DeviceMAC:   session.DeviceMAC,
+		UserId:      session.UserId,
+		Username:    session.Username,
+		BytesUp:     session.BytesUp,
+		BytesDown:   session.BytesDown,
+		Duration:    session.Duration,
+		AuthTime:    session.AuthTime,
+		StartTime:   session.StartTime,
+		UpdateTime:  session.UpdateTime,
+		StopTime:    session.StopTime,
+		SessionKey:  session.SessionKey,
+	}
+
 	db := database.Instance()
-	db.Save(&session)
+
+	// save to session_histories table
+	db.Save(&sessionHistory)
+
+	// delete from sessions table
+	db.Delete(&session)
+
 	return 1
 }
 
