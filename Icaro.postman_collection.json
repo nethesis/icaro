@@ -53,7 +53,7 @@
 					},
 					"response": [
 						{
-							"id": "e15966dc-f95e-4401-a6b0-b21f3aa1e9d0",
+							"id": "89c9f1d6-c214-4f59-9f1f-d99665c7ebe2",
 							"name": "/accounts",
 							"originalRequest": {
 								"method": "GET",
@@ -134,7 +134,7 @@
 					},
 					"response": [
 						{
-							"id": "3343e6cb-9fe9-4d83-bfe9-3dc90c2695be",
+							"id": "6cad02ed-a7d0-4a83-9fe0-495df6bcf3a0",
 							"name": "/accounts/:id",
 							"originalRequest": {
 								"method": "GET",
@@ -204,7 +204,7 @@
 					},
 					"response": [
 						{
-							"id": "715cea01-dc3c-4e42-9478-dc8f9d163ac6",
+							"id": "889604e0-4e5b-42d6-bb41-528c68f567a9",
 							"name": "/accounts",
 							"originalRequest": {
 								"method": "POST",
@@ -243,7 +243,7 @@
 							"body": "{\n    \"id\": 1,\n    \"status\": \"success\"\n}"
 						},
 						{
-							"id": "e6a0cfdd-620b-4194-9b36-5bb16d49ead7",
+							"id": "95903469-7e13-434e-bdac-79a3b1f03501",
 							"name": "/accounts customer",
 							"originalRequest": {
 								"method": "POST",
@@ -323,7 +323,7 @@
 					},
 					"response": [
 						{
-							"id": "92ecbdcd-af6c-40c2-9c8c-63dd1dbb1b4e",
+							"id": "e8772442-9a11-4f94-b79d-00503a855f6a",
 							"name": "/accounts/:id",
 							"originalRequest": {
 								"method": "PUT",
@@ -400,7 +400,7 @@
 					},
 					"response": [
 						{
-							"id": "33501e60-e24e-45a2-bb57-54dea085390a",
+							"id": "fe45d14b-6fa4-421b-a0ee-48fa822edec7",
 							"name": "/accounts/:id",
 							"originalRequest": {
 								"method": "DELETE",
@@ -484,7 +484,7 @@
 					},
 					"response": [
 						{
-							"id": "43dcfa9d-2b6b-4738-b597-22b0fb863162",
+							"id": "7e832f8f-907f-49f1-b8fd-0b4af8876049",
 							"name": "devices",
 							"originalRequest": {
 								"method": "GET",
@@ -568,7 +568,7 @@
 					},
 					"response": [
 						{
-							"id": "9c0106b0-ccee-4045-a8bb-481a90bbbdd5",
+							"id": "822e2894-c741-412a-9545-fabdb8639d3c",
 							"name": "device",
 							"originalRequest": {
 								"method": "GET",
@@ -651,7 +651,7 @@
 					},
 					"response": [
 						{
-							"id": "8122f915-c505-46f8-bd19-7e08eff3a583",
+							"id": "ba2b6556-5272-4f0a-904e-66e616bdcf4a",
 							"name": "sessions history",
 							"originalRequest": {
 								"method": "GET",
@@ -735,7 +735,7 @@
 					},
 					"response": [
 						{
-							"id": "037948b5-b6a5-41a4-a901-c90b047993e4",
+							"id": "dc799caa-6cd7-4f67-a581-d0eb7a555c48",
 							"name": "session history",
 							"originalRequest": {
 								"method": "GET",
@@ -813,7 +813,7 @@
 					},
 					"response": [
 						{
-							"id": "09764d65-6b4f-4139-8702-a9feccaf8868",
+							"id": "3e067374-c91c-41cd-9141-88a643663a0e",
 							"name": "/hotspots",
 							"originalRequest": {
 								"method": "GET",
@@ -897,7 +897,7 @@
 					},
 					"response": [
 						{
-							"id": "244dbd05-de1a-4759-8ed6-3c46c3ac157b",
+							"id": "c9479fbe-1c75-4668-9293-057d35346365",
 							"name": "/hotspots",
 							"originalRequest": {
 								"method": "GET",
@@ -967,7 +967,7 @@
 					},
 					"response": [
 						{
-							"id": "b4c5549f-6153-4586-a6c1-d15f31c527c6",
+							"id": "0bd1ae1a-ecda-42c6-b482-c8e4a9e03540",
 							"name": "/hotspots",
 							"originalRequest": {
 								"method": "POST",
@@ -1048,7 +1048,7 @@
 					},
 					"response": [
 						{
-							"id": "dbebdf2a-c2d0-4ee2-a9f1-98d80ddbc366",
+							"id": "2ca331fd-7a49-455f-871a-ea2dbc1b34aa",
 							"name": "/hotspots/:id",
 							"originalRequest": {
 								"method": "PUT",
@@ -1125,7 +1125,7 @@
 					},
 					"response": [
 						{
-							"id": "ab156779-c64a-479d-92b3-3b04b7d271f6",
+							"id": "e55f8b8c-6a90-46e3-8f31-4bfc99be44f6",
 							"name": "/hotspots/:id",
 							"originalRequest": {
 								"method": "DELETE",
@@ -1192,7 +1192,7 @@
 					},
 					"response": [
 						{
-							"id": "29f9b703-496e-44b2-be1a-775448daa797",
+							"id": "5f3765ab-bcd2-460d-9a67-f8bc05cd99de",
 							"name": "/login Invalid username",
 							"originalRequest": {
 								"method": "POST",
@@ -1227,7 +1227,7 @@
 							"body": "{\"message\":\"No username found!\"}"
 						},
 						{
-							"id": "ff38a92d-69d1-4430-bccd-993458d83e9b",
+							"id": "0f7a2268-483d-4df8-b571-0ee296e3a8d9",
 							"name": "/login OK",
 							"originalRequest": {
 								"method": "POST",
@@ -1262,7 +1262,7 @@
 							"body": "{\n    \"status\": \"success\",\n    \"account_type\": \"desk\",\n    \"token\": \"c1b5ebd45281f0480cb9c6de963e5dd420c577d8b5abdc0e45944fddc988c67d\",\n    \"expires\": \"2017-12-21 11:13:05.377926455 +0000 UTC\",\n    \"id\": 1,\n\n            \"subscription\": {\n                \"id\": 1,\n                \"valid_from\": \"0001-01-01T00:00:00Z\",\n                \"valid_until\": \"0001-01-01T00:00:00Z\",\n                \"created\": \"0001-01-01T00:00:00Z\",\n                \"account_id\": 1,\n                \"subscription_plan\": {\n                    \"id\": 1,\n                    \"code\": \"free\",\n                    \"name\": \"test\",\n                    \"description\": \"my plan\",\n                    \"price\": 0,\n                    \"period\": 365,\n                    \"included_sms\": 300,\n                    \"max_units\": 10,\n                    \"advanced_report\": false,\n                    \"wings_customization\": false,\n                    \"social_analytics\": false\n                },\n                \"expired\": true\n            }\n        \n}"
 						},
 						{
-							"id": "4f3fd620-da51-4b06-ba99-1373f3ed1ff5",
+							"id": "2aea16bb-5c2f-4e8c-871d-a5d311a0c56e",
 							"name": "/login Invalid password",
 							"originalRequest": {
 								"method": "POST",
@@ -1327,7 +1327,7 @@
 					},
 					"response": [
 						{
-							"id": "b8c77f37-99e2-4b66-9702-a9c5290ac8a2",
+							"id": "b489cbd4-e9b5-499e-9a9d-c939c2a9c21f",
 							"name": "/logout",
 							"originalRequest": {
 								"method": "POST",
@@ -1390,7 +1390,7 @@
 					},
 					"response": [
 						{
-							"id": "1065f412-3752-43a8-86ef-1ffb0c2d587a",
+							"id": "9969e23c-73b1-461e-b72a-b6dfb876e28a",
 							"name": "/preferences/accounts",
 							"originalRequest": {
 								"method": "GET",
@@ -1459,7 +1459,7 @@
 					},
 					"response": [
 						{
-							"id": "02800fd9-96c0-4884-891b-e0e59279f0be",
+							"id": "6a892647-f5d7-456d-ab81-4219b22b8d96",
 							"name": "/preferences/accounts",
 							"originalRequest": {
 								"method": "PUT",
@@ -1534,7 +1534,7 @@
 					},
 					"response": [
 						{
-							"id": "360f485a-6cb8-4904-830e-365f71456a33",
+							"id": "65d4d54f-c268-465e-bebe-dd04ca6785b2",
 							"name": "/preferences/hotspots",
 							"originalRequest": {
 								"method": "GET",
@@ -1610,7 +1610,7 @@
 					},
 					"response": [
 						{
-							"id": "acef1f39-165d-46b9-a87b-a6cf0235d5d6",
+							"id": "12e985d7-f452-4d50-8c12-9d88258e6030",
 							"name": "/preferences/hotspots",
 							"originalRequest": {
 								"method": "PUT",
@@ -1698,7 +1698,7 @@
 					},
 					"response": [
 						{
-							"id": "382eed83-36a4-4773-97e6-5bef71fa5193",
+							"id": "7287c155-3186-45f3-88c2-b3efb3c40320",
 							"name": "sessions",
 							"originalRequest": {
 								"method": "GET",
@@ -1782,7 +1782,7 @@
 					},
 					"response": [
 						{
-							"id": "34c9c60f-a657-4823-a1f9-cbe3d139386b",
+							"id": "e5f95008-376a-4b53-8241-ac57b01d1abd",
 							"name": "session",
 							"originalRequest": {
 								"method": "GET",
@@ -1848,7 +1848,7 @@
 					},
 					"response": [
 						{
-							"id": "df61cf6b-0b71-4873-89b8-c19832d02cde",
+							"id": "241ced32-5b57-4e82-a3e8-5189dad4c42a",
 							"name": "/subscription_plans",
 							"originalRequest": {
 								"method": "GET",
@@ -1927,7 +1927,7 @@
 					},
 					"response": [
 						{
-							"id": "9d72517d-364f-4da6-b09b-62f05107708e",
+							"id": "ac48e288-d551-4ce4-9920-51db2498c2d8",
 							"name": "units",
 							"originalRequest": {
 								"method": "GET",
@@ -2011,7 +2011,7 @@
 					},
 					"response": [
 						{
-							"id": "05423039-2930-44ca-a612-a0e6fb596282",
+							"id": "07d91d27-8e81-45c5-9c47-0c9817d1c7c6",
 							"name": "unit",
 							"originalRequest": {
 								"method": "GET",
@@ -2081,7 +2081,7 @@
 					},
 					"response": [
 						{
-							"id": "f843c10d-91c3-4f61-a066-0ae889a21f5b",
+							"id": "36090ca0-d0f4-49d5-9ec2-e6c08d27e9be",
 							"name": "/units",
 							"originalRequest": {
 								"method": "POST",
@@ -2157,7 +2157,7 @@
 					},
 					"response": [
 						{
-							"id": "e1a71ff0-977a-4bc8-9c76-737aea9b2d5a",
+							"id": "eb76a49d-0ca3-486f-b68a-82bab6545f68",
 							"name": "/units/:id",
 							"originalRequest": {
 								"method": "DELETE",
@@ -2210,7 +2210,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "https://{{hostname}}/api/users?page=:page&limit=:limit&hotspot=:hotspot_id",
+							"raw": "https://{{hostname}}/api/users?page=:page&limit=:limit&hotspot=:hotspot_id&type=:account_type",
 							"protocol": "https",
 							"host": [
 								"{{hostname}}"
@@ -2234,6 +2234,11 @@
 									"key": "hotspot",
 									"value": ":hotspot_id",
 									"equals": true
+								},
+								{
+									"key": "type",
+									"value": ":account_type",
+									"equals": true
 								}
 							]
 						},
@@ -2241,7 +2246,7 @@
 					},
 					"response": [
 						{
-							"id": "d2804c7b-81ea-4fc5-9456-9216b07f3e3c",
+							"id": "55a24a39-f907-4cb2-adc7-84d4d6de16c2",
 							"name": "users",
 							"originalRequest": {
 								"method": "GET",
@@ -2325,7 +2330,7 @@
 					},
 					"response": [
 						{
-							"id": "d734c7ec-639b-489b-a661-becaf663bfbc",
+							"id": "b1f4c489-d165-4afc-9320-e38b869649cf",
 							"name": "user",
 							"originalRequest": {
 								"method": "GET",
@@ -2402,7 +2407,7 @@
 					},
 					"response": [
 						{
-							"id": "efb0d3cc-5bf2-4d8b-b6b5-e3670b71d9e3",
+							"id": "bcec4e6c-1733-4664-9d58-60306e60df35",
 							"name": "users/:id",
 							"originalRequest": {
 								"method": "PUT",
@@ -2479,7 +2484,7 @@
 					},
 					"response": [
 						{
-							"id": "8dffed4b-a65a-4544-9abe-5e709ca1e59b",
+							"id": "6937f8b5-ba10-43d2-b9e4-00156a4f1b25",
 							"name": "users",
 							"originalRequest": {
 								"method": "DELETE",
@@ -2558,7 +2563,7 @@
 					},
 					"response": [
 						{
-							"id": "142f2f5d-da16-4e43-aa44-ce678102f728",
+							"id": "5acd2658-44b2-4d80-9ee3-ebe271233ef2",
 							"name": "vouchers",
 							"originalRequest": {
 								"method": "GET",
@@ -2602,7 +2607,7 @@
 							"header": [],
 							"cookie": [],
 							"responseTime": "0",
-							"body": "{\n    \"data\": [\n        {\n            \"id\": 1,\n            \"hotspot_id\": 1,\n            \"code\": \"asd-123-asd\",\n            \"expires\": \"2017-12-12 09:48:27\"\n        },\n        {\n            \"id\": 2,\n            \"hotspot_id\": 2,\n            \"code\": \"asd-456-asd\",\n            \"expires\": \"2017-12-13 09:48:27\"\n        }\n    ],\n    \"total\": 20\n}"
+							"body": "{\n    \"data\": [\n        {\n            \"id\": 1,\n            \"hotspot_id\": 1,\n            \"code\": \"asd-123-asd\",\n            \"expires\": \"2017-12-12 09:48:27\",\n            \"auto_login\": true,\n            \"bandwidth_down\": 150,\n            \"bandwidth_up\": 50,\n            \"duration\": 7,\n            \"remain_use\": -1\n        },\n        {\n            \"id\": 2,\n            \"hotspot_id\": 2,\n            \"code\": \"asd-456-asd\",\n            \"expires\": \"2017-12-13 09:48:27\",\n            \"auto_login\": true,\n    \"bandwidth_down\": 150,\n    \"bandwidth_up\": 50,\n    \"duration\": 7,\n    \"remain_use\": -1\n        }\n    ],\n    \"total\": 20\n}"
 						}
 					]
 				},
@@ -2622,7 +2627,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"hotspot_id\": \"integer\",\n    \"code\": \"string\"\n}"
+							"raw": "{\n    \"hotspot_id\": \"integer\",\n    \"code\": \"string\",\n    \"auto_login\": \"boolean\",\n    \"bandwidth_down\": \"integer\",\n    \"bandwidth_up\": \"integer\",\n    \"duration\": \"integer | days number\",\n    \"remain_use\": \"integer | -1 limitless\"\n}"
 						},
 						"url": {
 							"raw": "https://{{hostname}}/api/vouchers",
@@ -2639,7 +2644,7 @@
 					},
 					"response": [
 						{
-							"id": "5cf22976-c3eb-42e6-b0a8-260ae94a914a",
+							"id": "0659b458-2e6d-437b-8937-291ec2965273",
 							"name": "/vouchers",
 							"originalRequest": {
 								"method": "POST",
@@ -2655,7 +2660,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"hotspot_id\": 1,\n\t\"code\": \"asd-123-asd\"\n}"
+									"raw": "{\n\t\"hotspot_id\": 1,\n\t\"code\": \"asd-123-asd\",\n\t\"auto_login\": true,\n    \"bandwidth_down\": 150,\n    \"bandwidth_up\": 50,\n    \"duration\": 7,\n    \"remain_use\": -1\n}"
 								},
 								"url": {
 									"raw": "https://{{hostname}}/api/vouchers",
@@ -2715,7 +2720,7 @@
 					},
 					"response": [
 						{
-							"id": "44a1928f-9e87-4dca-9a21-a5d94c5b6bdf",
+							"id": "b9976978-9b7c-468d-9985-76cf2e551ce5",
 							"name": "/vouchers/:id",
 							"originalRequest": {
 								"method": "DELETE",
@@ -2811,7 +2816,7 @@
 					},
 					"response": [
 						{
-							"id": "5149f224-65c3-4457-81d6-919effbbef34",
+							"id": "0e259bf9-a602-44dd-8dd6-a6e9ededa8f4",
 							"name": "/wax/marketings/:user_id",
 							"originalRequest": {
 								"method": "DELETE",
@@ -2903,7 +2908,7 @@
 					},
 					"response": [
 						{
-							"id": "dbac18eb-58e7-4c5a-a8f6-7d62e7c6b78e",
+							"id": "7725f60a-4373-40d4-85a5-7c21009515eb",
 							"name": "/wax/preferences",
 							"originalRequest": {
 								"method": "GET",
@@ -2990,7 +2995,7 @@
 					},
 					"response": [
 						{
-							"id": "3d21c941-bb84-48f0-bf9c-14de039d11a4",
+							"id": "165193be-c70b-4c5a-87d1-3261b2c4a3f2",
 							"name": "/register/social/facebook",
 							"originalRequest": {
 								"method": "GET",
@@ -3080,7 +3085,7 @@
 					},
 					"response": [
 						{
-							"id": "f4e21034-dfff-491b-9508-a9bad21a8397",
+							"id": "b76d7526-c4cc-4bab-bebf-56a4ab77db0b",
 							"name": "/register/social/google",
 							"originalRequest": {
 								"method": "GET",
@@ -3170,7 +3175,7 @@
 					},
 					"response": [
 						{
-							"id": "6345ae68-ddec-44b6-8f17-ebd267f7c79b",
+							"id": "ab625e11-ea72-4a9e-ba45-67bd6dfd311c",
 							"name": "/register/social/linkedin",
 							"originalRequest": {
 								"method": "GET",
@@ -3242,7 +3247,7 @@
 					},
 					"response": [
 						{
-							"id": "232bf811-c3ec-4f2d-a70b-c03f79a08cfa",
+							"id": "15ef1684-ad61-4b4c-b5b9-33dba797aaa7",
 							"name": "/register/sms",
 							"originalRequest": {
 								"method": "GET",
@@ -3330,7 +3335,7 @@
 					},
 					"response": [
 						{
-							"id": "f89a134b-8429-4b4c-b86f-32bd54e03464",
+							"id": "d22f572a-1b92-423b-83a6-846ded402366",
 							"name": "/register/voucher",
 							"originalRequest": {
 								"method": "GET",
@@ -3418,7 +3423,7 @@
 					},
 					"response": [
 						{
-							"id": "ac9ef965-ac73-40a8-9a8d-1073f7ead7c0",
+							"id": "3bb9db29-0400-41a3-beb4-e6fcd0e81499",
 							"name": "/register/email",
 							"originalRequest": {
 								"method": "GET",
