@@ -338,6 +338,12 @@ func SendSMSCode(number string, code string, unit models.Unit, auth string) int 
 
 }
 
+func SaveHotspotSMSCount(hotspotSmsCount models.HotspotSmsCount) {
+	// save hotspot sms count
+	db := database.Instance()
+	db.Save(&hotspotSmsCount)
+}
+
 func SendEmailCode(email string, code string, unit models.Unit, auth string) bool {
 	hotspot := GetHotspotById(unit.HotspotId)
 

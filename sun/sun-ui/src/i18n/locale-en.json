@@ -18,7 +18,8 @@
       "sessions": "Sessions",
       "devices": "Devices",
       "accounts": "Managers",
-      "hotspots": "Hotspots"
+      "hotspots": "Hotspots",
+      "sms_sent": "SMS Sent"
     },
     "profile": {
       "info": "Information",

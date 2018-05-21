@@ -85,7 +85,19 @@
           </div>
         </div>
       </div>
-      <div class="col-xs-12 col-sm-12 col-md-6">
+      <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2">
+        <div class="card-pf card-pf-accented">
+          <div class="card-pf-heading">
+            <h2 class="card-pf-title">
+                <span class="fa fa-commenting card-info-title"></span>
+                {{ $t("dashboard.sms_sent") }}
+                <span v-if="!totals.sms.isLoading" class="right">
+                  <strong class="soft">{{ totals.sms.count}}</strong>
+                </span>
+              <div v-if="totals.sms.isLoading" class="spinner spinner-sm right"></div>
+            </h2>
+          </div>
+        </div>
       </div>
     </div>
     <div class="row row-cards-pf">
@@ -507,6 +519,7 @@ import UnitService from "../../services/unit";
 import UserService from "../../services/user";
 import DeviceService from "../../services/device";
 import SessionService from "../../services/session";
+import StatsService from "../../services/stats";
 import StorageService from "../../services/storage";
 import UtilService from "../../services/util";
 
@@ -529,6 +542,7 @@ export default {
     UserService,
     DeviceService,
     SessionService,
+    StatsService,
     StorageService,
     UtilService
   ],
@@ -554,6 +568,9 @@ export default {
 
     // get mac auths
     this.getAllMACAuth();
+
+    // get sms count
+    this.getSmsCount();
 
     return {
       info: {
@@ -608,6 +625,10 @@ export default {
           count: 0
         },
         sessions: {
+          isLoading: true,
+          count: 0
+        },
+        sms: {
           isLoading: true,
           count: 0
         }
@@ -734,6 +755,20 @@ export default {
     },
     getPrefIcon(pref) {
       return this.getPrefTypeIcon(pref);
+    },
+    getSmsCount() {
+      this.statsSMSSent(
+        this.$route.params.id,
+        success => {
+          this.totals.sms.count = success.body.length;
+          this.totals.sms.isLoading = false;
+        },
+        error => {
+          console.log(error.body);
+          this.totals.sms.data = 0;
+          this.totals.sms.isLoading = false;
+        }
+      );
     },
     createVoucher() {
       this.vouchers.isLoading = true;
@@ -1234,7 +1269,9 @@ export default {
           voucherRows[r].duration + " (" + this.$i18n.t("hotspot.days") + ")";
 
         voucherRows[r].expires = this.checkVoucherUse(voucherRows[r].expires)
-          ? this.$i18n.t("hotspot.expires") + ': ' + this.$options.filters["formatDate"](voucherRows[r].expires)
+          ? this.$i18n.t("hotspot.expires") +
+            ": " +
+            this.$options.filters["formatDate"](voucherRows[r].expires)
           : "-";
 
         voucherRows[r].remain_use =

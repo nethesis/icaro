@@ -95,7 +95,22 @@ var StatsService = {
         .get(
           this.$root.$options.api_scheme +
             this.$root.$options.api_host +
-            "/api/stats/sms/total",
+            "/api/stats/sms",
+          {
+            headers: {
+              Token:
+                (this.get("loggedUser") && this.get("loggedUser").token) || ""
+            }
+          }
+        )
+        .then(success, error);
+    },
+    statsSMSSent(hotspotId, success, error) {
+      this.$http
+        .get(
+          this.$root.$options.api_scheme +
+            this.$root.$options.api_host +
+            "/api/stats/sms/" + hotspotId,
           {
             headers: {
               Token:

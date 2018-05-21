@@ -116,6 +116,16 @@ func SMSAuth(c *gin.Context) {
 			return
 		}
 
+		// add sms statistics
+		hotspotSmsCount := models.HotspotSmsCount{
+			HotspotId: unit.HotspotId,
+			UniId:     unit.Id,
+			Number:    number,
+			Reset:     false,
+			Sent:      time.Now().UTC(),
+		}
+		utils.SaveHotspotSMSCount(hotspotSmsCount)
+
 		// create marketing info with user infos
 		utils.CreateUserMarketing(newUser.Id, smsMarketingData{Number: number}, "sms")
 
@@ -162,6 +172,16 @@ func SMSAuth(c *gin.Context) {
 				c.JSON(http.StatusBadRequest, gin.H{"error": "authorization code not send"})
 				return
 			}
+
+			// add sms statistics
+			hotspotSmsCount := models.HotspotSmsCount{
+				HotspotId: unit.HotspotId,
+				UniId:     unit.Id,
+				Number:    number,
+				Reset:     true,
+				Sent:      time.Now().UTC(),
+			}
+			utils.SaveHotspotSMSCount(hotspotSmsCount)
 
 			// update code
 			user.Password = code

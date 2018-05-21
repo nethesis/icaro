@@ -259,4 +259,16 @@ CREATE TABLE `account_sms_counts` (
   UNIQUE KEY (`account_id`),
   PRIMARY KEY(`id`)
 );
+
+CREATE TABLE `hotspot_sms_counts` (
+  `id` serial,
+  `hotspot_id` bigint unsigned NOT NULL,
+  `unit_id` bigint unsigned NOT NULL,
+  `number` varchar(200) NOT NULL,
+  `reset` tinyint NOT NULL,
+  `sent` datetime,
+  FOREIGN KEY (`hotspot_id`) REFERENCES hotspots(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  FOREIGN KEY (`unit_id`) REFERENCES units(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  PRIMARY KEY(`id`)
+);
 /* ------ */

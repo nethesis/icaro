@@ -29,8 +29,8 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 
-	"github.com/nethesis/icaro/sun/sun-api/database"
 	"github.com/nethesis/icaro/sun/sun-api/configuration"
+	"github.com/nethesis/icaro/sun/sun-api/database"
 	"github.com/nethesis/icaro/sun/sun-api/methods"
 	"github.com/nethesis/icaro/sun/sun-api/middleware"
 )
@@ -121,7 +121,8 @@ func DefineAPI(router *gin.Engine) {
 			sessionsStats.GET("/total", methods.StatsSessionTotal)
 
 			smsStats := stats.Group("/sms")
-			smsStats.GET("/total", methods.StatsSMSTotal)
+			smsStats.GET("", methods.StatsSMSTotal)
+			smsStats.GET("/:hotspot_id", methods.StatsSMSSent)
 		}
 
 		units := api.Group("/units")
