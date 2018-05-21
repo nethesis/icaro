@@ -92,17 +92,18 @@ func SMSAuth(c *gin.Context) {
 		code := utils.GenerateCode(6)
 
 		newUser := models.User{
-			HotspotId:   unit.HotspotId,
-			Name:        number,
-			Username:    number,
-			Password:    code,
-			Email:       "",
-			AccountType: "sms",
-			KbpsDown:    downInt,
-			KbpsUp:      upInt,
-			AutoLogin:   autoLoginBool,
-			ValidFrom:   time.Now().UTC(),
-			ValidUntil:  time.Now().UTC().AddDate(0, 0, daysInt+1),
+			HotspotId:     unit.HotspotId,
+			Name:          number,
+			Username:      number,
+			Password:      code,
+			Email:         "",
+			AccountType:   "sms",
+			MarketingAuth: true,
+			KbpsDown:      downInt,
+			KbpsUp:        upInt,
+			AutoLogin:     autoLoginBool,
+			ValidFrom:     time.Now().UTC(),
+			ValidUntil:    time.Now().UTC().AddDate(0, 0, daysInt+1),
 		}
 		newUser.Id = methods.CreateUser(newUser)
 
@@ -244,17 +245,18 @@ func EmailAuth(c *gin.Context) {
 		code := utils.GenerateCode(6)
 
 		newUser := models.User{
-			HotspotId:   unit.HotspotId,
-			Name:        email,
-			Username:    email,
-			Password:    code,
-			Email:       email,
-			AccountType: "email",
-			KbpsDown:    downInt,
-			KbpsUp:      upInt,
-			AutoLogin:   autoLoginBool,
-			ValidFrom:   time.Now().UTC(),
-			ValidUntil:  time.Now().UTC().AddDate(0, 0, daysInt+1),
+			HotspotId:     unit.HotspotId,
+			Name:          email,
+			Username:      email,
+			Password:      code,
+			Email:         email,
+			AccountType:   "email",
+			MarketingAuth: true,
+			KbpsDown:      downInt,
+			KbpsUp:        upInt,
+			AutoLogin:     autoLoginBool,
+			ValidFrom:     time.Now().UTC(),
+			ValidUntil:    time.Now().UTC().AddDate(0, 0, daysInt+1),
 		}
 		newUser.Id = methods.CreateUser(newUser)
 

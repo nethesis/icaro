@@ -24,18 +24,24 @@ package methods
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 
 	"github.com/nethesis/icaro/sun/sun-api/database"
 	"github.com/nethesis/icaro/sun/sun-api/models"
+	"github.com/nethesis/icaro/wax/utils"
 )
 
 func DeleteMarketing(c *gin.Context) {
 	var userMarketing models.UserMarketing
 
 	userId := c.Param("user_id")
+	userIdInt, err := strconv.Atoi(userId)
+	if err != nil {
+		userIdInt = 0
+	}
 
 	db := database.Instance()
 	db.Where("user_id = ?", userId).First(&userMarketing)
@@ -46,6 +52,11 @@ func DeleteMarketing(c *gin.Context) {
 	}
 
 	db.Delete(&userMarketing)
+
+	// remove marketing auth
+	user := utils.GetUserById(userIdInt)
+	user.MarketingAuth = false
+	db.Save(&user)
 
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }

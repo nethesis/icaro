@@ -25,7 +25,10 @@
       </div>
     </div>
     <div v-if="!isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
-      <div class="result-list">{{rows.length}} {{rows.length == 1 ? $t('result') : $t('results')}}</div>
+      <div class="col-sm-12">
+          <button @click="exportCSVUsers()" class="btn btn-primary export-btn">{{$t('session.export_csv')}}</button>
+        </div>
+      <div class="result-list adjust-results">{{rows.length}} {{rows.length == 1 ? $t('result') : $t('results')}}</div>
     </div>
     <vue-good-table v-if="!isLoading" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]" :perPage="hotspotPerPage"
       :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'username', type: 'asc'}" :globalSearch="true"
@@ -198,7 +201,37 @@ export default {
           console.log(error);
         }
       );
+    },
+    exportCSVUsers() {
+      var usersRows = JSON.parse(JSON.stringify(this.rows));
+      for (var r in usersRows) {
+        // get only email verified users
+        if(usersRows[r].account_type == "email" && !usersRows[r].email_verified) {
+          delete usersRows[r]
+        }
+
+        // check marketing authorization
+        if(usersRows[r] && !usersRows[r].marketing_auth) {
+          delete usersRows[r]
+        }
+      }
+
+      delete this.columns[3]
+      delete this.columns[4]
+      delete this.columns[5]
+      delete this.columns[6]
+      delete this.columns[7]
+
+      var csv = this.createCSV(this.columns, usersRows);
+      this.downloadCSV(csv.cols, csv.rows, "users");
     }
   }
 };
 </script>
+
+<style>
+.adjust-results {
+  right: 45px !important;
+  top: 0px;
+}
+</style>

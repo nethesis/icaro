@@ -87,6 +87,13 @@ func startSession(userName string, deviceMacAddress string, deviceIp string, ses
 
 	db := database.Instance()
 	db.Save(&session)
+
+	// verified email only if user is authenticated
+	if user.AccountType == "email" {
+		user.EmailVerified = true
+	}
+	db.Save(&user)
+
 	return 1
 }
 
@@ -159,7 +166,6 @@ func accountingOn(ap string) int {
 		sessions[i].StopTime = time.Now().UTC()
 		db.Save(&sessions[i])
 	}
-
 
 	return 1
 }

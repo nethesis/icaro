@@ -142,17 +142,18 @@ func FacebookAuth(c *gin.Context) {
 		}
 
 		newUser := models.User{
-			HotspotId:   unit.HotspotId,
-			Name:        fbUserDetail.Name,
-			Username:    fbInspectToken.Data.UserId,
-			Password:    "",
-			Email:       fbUserDetail.Email,
-			AccountType: "facebook",
-			KbpsDown:    downInt,
-			KbpsUp:      upInt,
-			AutoLogin:   autoLoginBool,
-			ValidFrom:   time.Now().UTC(),
-			ValidUntil:  time.Now().UTC().AddDate(0, 0, daysInt+1),
+			HotspotId:     unit.HotspotId,
+			Name:          fbUserDetail.Name,
+			Username:      fbInspectToken.Data.UserId,
+			Password:      "",
+			Email:         fbUserDetail.Email,
+			AccountType:   "facebook",
+			MarketingAuth: true,
+			KbpsDown:      downInt,
+			KbpsUp:        upInt,
+			AutoLogin:     autoLoginBool,
+			ValidFrom:     time.Now().UTC(),
+			ValidUntil:    time.Now().UTC().AddDate(0, 0, daysInt+1),
 		}
 		newUser.Id = methods.CreateUser(newUser)
 
@@ -285,17 +286,18 @@ func LinkedInAuth(c *gin.Context) {
 		}
 
 		newUser := models.User{
-			HotspotId:   unit.HotspotId,
-			Name:        liUserDetail.FirstName + " " + liUserDetail.LastName,
-			Username:    liUserDetail.Id,
-			Password:    "",
-			Email:       liUserDetail.Email,
-			AccountType: "linkedin",
-			KbpsDown:    downInt,
-			KbpsUp:      upInt,
-			AutoLogin:   autoLoginBool,
-			ValidFrom:   time.Now().UTC(),
-			ValidUntil:  time.Now().UTC().AddDate(0, 0, daysInt+1),
+			HotspotId:     unit.HotspotId,
+			Name:          liUserDetail.FirstName + " " + liUserDetail.LastName,
+			Username:      liUserDetail.Id,
+			Password:      "",
+			Email:         liUserDetail.Email,
+			AccountType:   "linkedin",
+			MarketingAuth: true,
+			KbpsDown:      downInt,
+			KbpsUp:        upInt,
+			AutoLogin:     autoLoginBool,
+			ValidFrom:     time.Now().UTC(),
+			ValidUntil:    time.Now().UTC().AddDate(0, 0, daysInt+1),
 		}
 		newUser.Id = methods.CreateUser(newUser)
 
@@ -420,17 +422,18 @@ func InstagramAuth(c *gin.Context) {
 		}
 
 		newUser := models.User{
-			HotspotId:   unit.HotspotId,
-			Name:        inUserDetail.Data.FullName,
-			Username:    inUserDetail.Data.Id,
-			Password:    "",
-			Email:       "",
-			AccountType: "instagram",
-			KbpsDown:    downInt,
-			KbpsUp:      upInt,
-			AutoLogin:   autoLoginBool,
-			ValidFrom:   time.Now().UTC(),
-			ValidUntil:  time.Now().UTC().AddDate(0, 0, daysInt+1),
+			HotspotId:     unit.HotspotId,
+			Name:          inUserDetail.Data.FullName,
+			Username:      inUserDetail.Data.Id,
+			Password:      "",
+			Email:         "",
+			AccountType:   "instagram",
+			MarketingAuth: true,
+			KbpsDown:      downInt,
+			KbpsUp:        upInt,
+			AutoLogin:     autoLoginBool,
+			ValidFrom:     time.Now().UTC(),
+			ValidUntil:    time.Now().UTC().AddDate(0, 0, daysInt+1),
 		}
 		newUser.Id = methods.CreateUser(newUser)
 
