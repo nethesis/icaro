@@ -188,9 +188,31 @@ func accountingOn(ap string) int {
 	db := database.Instance()
 	db.Where("unit_id = ? and stop_time = 0", unit.Id).Find(&sessions)
 
-	for i, _ := range sessions {
-		sessions[i].StopTime = time.Now().UTC()
-		db.Save(&sessions[i])
+	for _, s := range sessions {
+		sessionHistory := models.SessionHistory{
+			SessionId:   s.Id,
+			UnitId:      s.UnitId,
+			UnitMac:     s.UnitMac,
+			HotspotId:   s.HotspotId,
+			HotspotDesc: s.HotspotDesc,
+			DeviceId:    s.DeviceId,
+			DeviceMAC:   s.DeviceMAC,
+			UserId:      s.UserId,
+			Username:    s.Username,
+			BytesUp:     s.BytesUp,
+			BytesDown:   s.BytesDown,
+			Duration:    s.Duration,
+			AuthTime:    s.AuthTime,
+			StartTime:   s.StartTime,
+			UpdateTime:  s.UpdateTime,
+			StopTime:    time.Now().UTC(),
+			SessionKey:  s.SessionKey,
+		}
+		// save to session_histories table
+		db.Save(&sessionHistory)
+
+		// delete from sessions table
+		db.Delete(&s)
 	}
 
 	return 1
