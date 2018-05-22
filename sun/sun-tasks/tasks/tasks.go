@@ -129,7 +129,7 @@ func cleanSessions() {
 			AuthTime:    s.AuthTime,
 			StartTime:   s.StartTime,
 			UpdateTime:  s.UpdateTime,
-			StopTime:    s.UpdateTime,
+			StopTime:    time.Now().UTC(),
 			SessionKey:  s.SessionKey,
 		}
 		// save to session_histories table
