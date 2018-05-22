@@ -27,7 +27,7 @@ import "time"
 type HotspotSmsCount struct {
 	Id        int       `db:"id" json:"id"`
 	HotspotId int       `db:"hotspot_id" json:"hotspot_id"`
-	UniId     int       `db:"unit_id" json:"unit_id"`
+	UnitId    int       `db:"unit_id" json:"unit_id"`
 	Number    string    `db:"number" json:"number"`
 	Reset     bool      `db:"reset" json:"reset"`
 	Sent      time.Time `db:"sent" json:"sent"`

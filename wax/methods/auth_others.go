@@ -120,7 +120,7 @@ func SMSAuth(c *gin.Context) {
 		// add sms statistics
 		hotspotSmsCount := models.HotspotSmsCount{
 			HotspotId: unit.HotspotId,
-			UniId:     unit.Id,
+			UnitId:    unit.Id,
 			Number:    number,
 			Reset:     false,
 			Sent:      time.Now().UTC(),
@@ -177,7 +177,7 @@ func SMSAuth(c *gin.Context) {
 			// add sms statistics
 			hotspotSmsCount := models.HotspotSmsCount{
 				HotspotId: unit.HotspotId,
-				UniId:     unit.Id,
+				UnitId:    unit.Id,
 				Number:    number,
 				Reset:     true,
 				Sent:      time.Now().UTC(),
