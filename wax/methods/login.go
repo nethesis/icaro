@@ -30,6 +30,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
+	"github.com/nethesis/icaro/sun/sun-api/models"
 	"github.com/nethesis/icaro/wax/utils"
 )
 
@@ -48,13 +49,53 @@ func AuthReject(c *gin.Context, description string) {
 	c.Abort()
 }
 
-func autoLogin(c *gin.Context, unitMacAddress string, username string, userMac string, sessionId string) {
+func calculatePreferences(c *gin.Context, unit models.Unit, user models.User, timezone string) (bytes.Buffer, string) {
+	errorMessage := ""
+
+	// extract preferences
+	prefs := utils.GetHotspotPreferencesByKeys(
+		unit.HotspotId,
+		[]string{"Idle-Timeout", "Acct-Session-Time"},
+	)
+	var outPrefs bytes.Buffer
+	for _, pref := range prefs {
+		outPrefs.WriteString(fmt.Sprintf("%s:%s\n", pref.Key, pref.Value))
+	}
+
+	outPrefs.WriteString(fmt.Sprintf("%s:%d\n", "CoovaChilli-Bandwidth-Max-Up", user.KbpsUp))
+	outPrefs.WriteString(fmt.Sprintf("%s:%d\n", "CoovaChilli-Bandwidth-Max-Down", user.KbpsDown))
+
+	sessionTimeout := utils.CalculateRemainTime(user, timezone)
+	if sessionTimeout <= 0 {
+		errorMessage = "max navigation time reached"
+
+	}
+	outPrefs.WriteString(fmt.Sprintf("%s:%d\n", "Session-Timeout", sessionTimeout))
+
+	if user.MaxNavigationTraffic != 0 {
+		remainTraffic := utils.CalculateRemainTraffic(user)
+
+		if remainTraffic <= 0 {
+			errorMessage = "max navigation traffic reached"
+		}
+		outPrefs.WriteString(fmt.Sprintf("%s:%d\n", "CoovaChilli-Max-Total-Octets", remainTraffic))
+	}
+
+	return outPrefs, errorMessage
+}
+
+func autoLogin(c *gin.Context, unitMacAddress string, username string, userMac string, sessionId string, timezone string) {
+	// extract unit and user
+	unit := utils.GetUnitByMacAddress(unitMacAddress)
 	isValid, user := utils.GetUserByMacAddressAndunitMacAddress(userMac, unitMacAddress)
+
+	// check if user exists
 	if !isValid {
 		AuthReject(c, "user account not found")
 		return
 	}
 
+	// check autologin
 	if !user.AutoLogin {
 		AuthReject(c, "auto login not permitted")
 		return
@@ -67,25 +108,17 @@ func autoLogin(c *gin.Context, unitMacAddress string, username string, userMac s
 	}
 
 	// extract preferences
-	unit := utils.GetUnitByMacAddress(unitMacAddress)
-	prefs := utils.GetHotspotPreferencesByKeys(
-		unit.HotspotId,
-		[]string{"Idle-Timeout", "Acct-Session-Time", "Session-Timeout"},
-	)
-
-	var outPrefs bytes.Buffer
-	for _, pref := range prefs {
-		outPrefs.WriteString(fmt.Sprintf("%s:%s\n", pref.Key, pref.Value))
-	}
-
-	outPrefs.WriteString(fmt.Sprintf("%s:%d\n", "CoovaChilli-Bandwidth-Max-Up", user.KbpsUp))
-	outPrefs.WriteString(fmt.Sprintf("%s:%d\n", "CoovaChilli-Bandwidth-Max-Down", user.KbpsDown))
+	outPrefs, errorMessage := calculatePreferences(c, unit, user, timezone)
 
 	// response to dedalo
+	if len(errorMessage) > 0 {
+		AuthReject(c, errorMessage)
+		return
+	}
 	AuthAccept(c, outPrefs.String())
 }
 
-func Login(c *gin.Context, unitMacAddress string, username string, chapPass string, chapChal string, sessionId string) {
+func Login(c *gin.Context, unitMacAddress string, username string, chapPass string, chapChal string, sessionId string, timezone string) {
 	// check if unit exists
 	unit := utils.GetUnitByMacAddress(unitMacAddress)
 	if unit.Id <= 0 {
@@ -128,19 +161,13 @@ func Login(c *gin.Context, unitMacAddress string, username string, chapPass stri
 	}
 
 	// extract preferences
-	prefs := utils.GetHotspotPreferencesByKeys(
-		unit.HotspotId,
-		[]string{"Idle-Timeout", "Acct-Session-Time", "Session-Timeout"},
-	)
-	var outPrefs bytes.Buffer
-	for _, pref := range prefs {
-		outPrefs.WriteString(fmt.Sprintf("%s:%s\n", pref.Key, pref.Value))
-	}
-
-	outPrefs.WriteString(fmt.Sprintf("%s:%d\n", "CoovaChilli-Bandwidth-Max-Up", user.KbpsUp))
-	outPrefs.WriteString(fmt.Sprintf("%s:%d\n", "CoovaChilli-Bandwidth-Max-Down", user.KbpsDown))
+	outPrefs, errorMessage := calculatePreferences(c, unit, user, timezone)
 
 	// response to dedalo
+	if len(errorMessage) > 0 {
+		AuthReject(c, errorMessage)
+		return
+	}
 	AuthAccept(c, outPrefs.String())
 
 }
@@ -154,7 +181,8 @@ func Logins(c *gin.Context) {
 		user := c.Query("user")
 		userMac := c.Query("mac")
 		sessionId := c.Query("sessionid")
-		autoLogin(c, unitMacAddress, user, userMac, sessionId)
+		timezone := c.Query("timezone")
+		autoLogin(c, unitMacAddress, user, userMac, sessionId, timezone)
 
 	case "login":
 		unitMacAddress := c.Query("ap")
@@ -162,7 +190,8 @@ func Logins(c *gin.Context) {
 		chapPass := c.Query("chap_pass")
 		chapChal := c.Query("chap_chal")
 		sessionId := c.Query("sessionid")
-		Login(c, unitMacAddress, user, chapPass, chapChal, sessionId)
+		timezone := c.Query("timezone")
+		Login(c, unitMacAddress, user, chapPass, chapChal, sessionId, timezone)
 
 	default:
 		c.String(http.StatusNotFound, "Invalid login service: '%s'", service)
