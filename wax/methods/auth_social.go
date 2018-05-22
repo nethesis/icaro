@@ -126,6 +126,12 @@ func FacebookAuth(c *gin.Context) {
 		up := utils.GetHotspotPreferencesByKey(unit.HotspotId, "CoovaChilli-Bandwidth-Max-Up")
 		upInt, _ := strconv.Atoi(up.Value)
 
+		maxTraffic := utils.GetHotspotPreferencesByKey(unit.HotspotId, "CoovaChilli-Max-Total-Octets")
+		maxTrafficInt, _ := strconv.Atoi(maxTraffic.Value)
+
+		maxTime := utils.GetHotspotPreferencesByKey(unit.HotspotId, "CoovaChilli-Max-Navigation-Time")
+		maxTimeInt, _ := strconv.Atoi(maxTime.Value)
+
 		autoLogin := utils.GetHotspotPreferencesByKey(unit.HotspotId, "auto_login")
 		autoLoginBool, _ := strconv.ParseBool(autoLogin.Value)
 
@@ -138,22 +144,26 @@ func FacebookAuth(c *gin.Context) {
 				downInt = voucher.BandwidthDown
 				upInt = voucher.BandwidthUp
 				autoLoginBool = voucher.AutoLogin
+				maxTrafficInt = voucher.MaxTraffic
+				maxTimeInt = voucher.MaxTime
 			}
 		}
 
 		newUser := models.User{
-			HotspotId:     unit.HotspotId,
-			Name:          fbUserDetail.Name,
-			Username:      fbInspectToken.Data.UserId,
-			Password:      "",
-			Email:         fbUserDetail.Email,
-			AccountType:   "facebook",
-			MarketingAuth: true,
-			KbpsDown:      downInt,
-			KbpsUp:        upInt,
-			AutoLogin:     autoLoginBool,
-			ValidFrom:     time.Now().UTC(),
-			ValidUntil:    time.Now().UTC().AddDate(0, 0, daysInt+1),
+			HotspotId:            unit.HotspotId,
+			Name:                 fbUserDetail.Name,
+			Username:             fbInspectToken.Data.UserId,
+			Password:             "",
+			Email:                fbUserDetail.Email,
+			AccountType:          "facebook",
+			MarketingAuth:        true,
+			KbpsDown:             downInt,
+			KbpsUp:               upInt,
+			MaxNavigationTraffic: maxTrafficInt,
+			MaxNavigationTime:    maxTimeInt,
+			AutoLogin:            autoLoginBool,
+			ValidFrom:            time.Now().UTC(),
+			ValidUntil:           time.Now().UTC().AddDate(0, 0, daysInt+1),
 		}
 		newUser.Id = methods.CreateUser(newUser)
 
@@ -270,6 +280,12 @@ func LinkedInAuth(c *gin.Context) {
 		up := utils.GetHotspotPreferencesByKey(unit.HotspotId, "CoovaChilli-Bandwidth-Max-Up")
 		upInt, _ := strconv.Atoi(up.Value)
 
+		maxTraffic := utils.GetHotspotPreferencesByKey(unit.HotspotId, "CoovaChilli-Max-Total-Octets")
+		maxTrafficInt, _ := strconv.Atoi(maxTraffic.Value)
+
+		maxTime := utils.GetHotspotPreferencesByKey(unit.HotspotId, "CoovaChilli-Max-Navigation-Time")
+		maxTimeInt, _ := strconv.Atoi(maxTime.Value)
+
 		autoLogin := utils.GetHotspotPreferencesByKey(unit.HotspotId, "auto_login")
 		autoLoginBool, _ := strconv.ParseBool(autoLogin.Value)
 
@@ -282,22 +298,26 @@ func LinkedInAuth(c *gin.Context) {
 				downInt = voucher.BandwidthDown
 				upInt = voucher.BandwidthUp
 				autoLoginBool = voucher.AutoLogin
+				maxTrafficInt = voucher.MaxTraffic
+				maxTimeInt = voucher.MaxTime
 			}
 		}
 
 		newUser := models.User{
-			HotspotId:     unit.HotspotId,
-			Name:          liUserDetail.FirstName + " " + liUserDetail.LastName,
-			Username:      liUserDetail.Id,
-			Password:      "",
-			Email:         liUserDetail.Email,
-			AccountType:   "linkedin",
-			MarketingAuth: true,
-			KbpsDown:      downInt,
-			KbpsUp:        upInt,
-			AutoLogin:     autoLoginBool,
-			ValidFrom:     time.Now().UTC(),
-			ValidUntil:    time.Now().UTC().AddDate(0, 0, daysInt+1),
+			HotspotId:            unit.HotspotId,
+			Name:                 liUserDetail.FirstName + " " + liUserDetail.LastName,
+			Username:             liUserDetail.Id,
+			Password:             "",
+			Email:                liUserDetail.Email,
+			AccountType:          "linkedin",
+			MarketingAuth:        true,
+			KbpsDown:             downInt,
+			KbpsUp:               upInt,
+			MaxNavigationTraffic: maxTrafficInt,
+			MaxNavigationTime:    maxTimeInt,
+			AutoLogin:            autoLoginBool,
+			ValidFrom:            time.Now().UTC(),
+			ValidUntil:           time.Now().UTC().AddDate(0, 0, daysInt+1),
 		}
 		newUser.Id = methods.CreateUser(newUser)
 
@@ -406,6 +426,12 @@ func InstagramAuth(c *gin.Context) {
 		up := utils.GetHotspotPreferencesByKey(unit.HotspotId, "CoovaChilli-Bandwidth-Max-Up")
 		upInt, _ := strconv.Atoi(up.Value)
 
+		maxTraffic := utils.GetHotspotPreferencesByKey(unit.HotspotId, "CoovaChilli-Max-Total-Octets")
+		maxTrafficInt, _ := strconv.Atoi(maxTraffic.Value)
+
+		maxTime := utils.GetHotspotPreferencesByKey(unit.HotspotId, "CoovaChilli-Max-Navigation-Time")
+		maxTimeInt, _ := strconv.Atoi(maxTime.Value)
+
 		autoLogin := utils.GetHotspotPreferencesByKey(unit.HotspotId, "auto_login")
 		autoLoginBool, _ := strconv.ParseBool(autoLogin.Value)
 
@@ -418,22 +444,26 @@ func InstagramAuth(c *gin.Context) {
 				downInt = voucher.BandwidthDown
 				upInt = voucher.BandwidthUp
 				autoLoginBool = voucher.AutoLogin
+				maxTrafficInt = voucher.MaxTraffic
+				maxTimeInt = voucher.MaxTime
 			}
 		}
 
 		newUser := models.User{
-			HotspotId:     unit.HotspotId,
-			Name:          inUserDetail.Data.FullName,
-			Username:      inUserDetail.Data.Id,
-			Password:      "",
-			Email:         "",
-			AccountType:   "instagram",
-			MarketingAuth: true,
-			KbpsDown:      downInt,
-			KbpsUp:        upInt,
-			AutoLogin:     autoLoginBool,
-			ValidFrom:     time.Now().UTC(),
-			ValidUntil:    time.Now().UTC().AddDate(0, 0, daysInt+1),
+			HotspotId:            unit.HotspotId,
+			Name:                 inUserDetail.Data.FullName,
+			Username:             inUserDetail.Data.Id,
+			Password:             "",
+			Email:                "",
+			AccountType:          "instagram",
+			MarketingAuth:        true,
+			KbpsDown:             downInt,
+			KbpsUp:               upInt,
+			MaxNavigationTraffic: maxTrafficInt,
+			MaxNavigationTime:    maxTimeInt,
+			AutoLogin:            autoLoginBool,
+			ValidFrom:            time.Now().UTC(),
+			ValidUntil:           time.Now().UTC().AddDate(0, 0, daysInt+1),
 		}
 		newUser.Id = methods.CreateUser(newUser)
 

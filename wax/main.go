@@ -30,8 +30,8 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 
-	"github.com/nethesis/icaro/sun/sun-api/database"
 	"github.com/nethesis/icaro/sun/sun-api/configuration"
+	"github.com/nethesis/icaro/sun/sun-api/database"
 	"github.com/nethesis/icaro/wax/methods"
 	"github.com/nethesis/icaro/wax/middleware"
 )

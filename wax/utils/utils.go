@@ -403,3 +403,80 @@ func GetUserByMacAddressAndunitMacAddress(mac string, unitMacAddress string) (bo
 
 	return true, user
 }
+
+func GetTodaySessionTrafficByUser(user models.User) int {
+	// calculate today midnight
+	now := time.Now().UTC()
+	midnightToday := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location())
+
+	var sessions []models.Session
+	var sessionHistories []models.SessionHistory
+
+	db := database.Instance()
+	db.Where("update_time >= ? AND user_id = ?", midnightToday, user.Id).Find(&sessions)
+	db.Where("update_time >= ? AND user_id = ?", midnightToday, user.Id).Find(&sessionHistories)
+
+	var todayTraffic = 0
+
+	for _, session := range sessions {
+		todayTraffic += session.BytesDown + session.BytesUp
+	}
+	for _, history := range sessionHistories {
+		todayTraffic += history.BytesDown + history.BytesUp
+	}
+
+	return todayTraffic
+}
+
+func GetTodaySessionTimeByUser(user models.User) int {
+	// calculate today midnight
+	now := time.Now().UTC()
+	midnightToday := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location())
+
+	var sessions []models.Session
+	var sessionHistories []models.SessionHistory
+
+	db := database.Instance()
+	db.Where("update_time >= ? AND user_id = ?", midnightToday, user.Id).Find(&sessions)
+	db.Where("update_time >= ? AND user_id = ?", midnightToday, user.Id).Find(&sessionHistories)
+
+	var todayTime = 0
+
+	for _, session := range sessions {
+		todayTime += session.Duration
+	}
+	for _, history := range sessionHistories {
+		todayTime += history.Duration
+	}
+
+	return todayTime
+}
+
+func CalculateRemainTraffic(user models.User) int {
+	// get today total navigation traffic for user
+	totalTraffic := GetTodaySessionTrafficByUser(user)
+	remainTraffic := user.MaxNavigationTraffic - totalTraffic
+
+	return remainTraffic
+}
+
+func CalculateRemainTime(user models.User, timezone string) int {
+	// get today total navigation time for user
+	totalTime := GetTodaySessionTimeByUser(user)
+	remainTime := user.MaxNavigationTime - totalTime
+
+	loc, _ := time.LoadLocation(timezone)
+	now := time.Now().In(loc)
+	midnightNow := time.Date(now.Year(), now.Month(), now.Add(time.Hour*24).Day(), 0, 0, 0, 0, now.Location())
+	secondsToMidnight := int(midnightNow.Sub(now).Seconds()) // Session-Timeout
+
+	if user.MaxNavigationTime == 0 && user.MaxNavigationTraffic == 0 {
+		return int(user.ValidUntil.Sub(time.Now().UTC()).Seconds())
+	} else if user.MaxNavigationTime != 0 {
+		if remainTime < secondsToMidnight {
+			return remainTime
+		}
+	}
+
+	return secondsToMidnight
+}

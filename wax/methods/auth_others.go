@@ -73,6 +73,12 @@ func SMSAuth(c *gin.Context) {
 		up := utils.GetHotspotPreferencesByKey(unit.HotspotId, "CoovaChilli-Bandwidth-Max-Up")
 		upInt, _ := strconv.Atoi(up.Value)
 
+		maxTraffic := utils.GetHotspotPreferencesByKey(unit.HotspotId, "CoovaChilli-Max-Total-Octets")
+		maxTrafficInt, _ := strconv.Atoi(maxTraffic.Value)
+
+		maxTime := utils.GetHotspotPreferencesByKey(unit.HotspotId, "CoovaChilli-Max-Navigation-Time")
+		maxTimeInt, _ := strconv.Atoi(maxTime.Value)
+
 		autoLogin := utils.GetHotspotPreferencesByKey(unit.HotspotId, "auto_login")
 		autoLoginBool, _ := strconv.ParseBool(autoLogin.Value)
 
@@ -85,6 +91,8 @@ func SMSAuth(c *gin.Context) {
 				downInt = voucher.BandwidthDown
 				upInt = voucher.BandwidthUp
 				autoLoginBool = voucher.AutoLogin
+				maxTrafficInt = voucher.MaxTraffic
+				maxTimeInt = voucher.MaxTime
 			}
 		}
 
@@ -92,18 +100,20 @@ func SMSAuth(c *gin.Context) {
 		code := utils.GenerateCode(6)
 
 		newUser := models.User{
-			HotspotId:     unit.HotspotId,
-			Name:          number,
-			Username:      number,
-			Password:      code,
-			Email:         "",
-			AccountType:   "sms",
-			MarketingAuth: true,
-			KbpsDown:      downInt,
-			KbpsUp:        upInt,
-			AutoLogin:     autoLoginBool,
-			ValidFrom:     time.Now().UTC(),
-			ValidUntil:    time.Now().UTC().AddDate(0, 0, daysInt+1),
+			HotspotId:            unit.HotspotId,
+			Name:                 number,
+			Username:             number,
+			Password:             code,
+			Email:                "",
+			AccountType:          "sms",
+			MarketingAuth:        true,
+			KbpsDown:             downInt,
+			KbpsUp:               upInt,
+			MaxNavigationTraffic: maxTrafficInt,
+			MaxNavigationTime:    maxTimeInt,
+			AutoLogin:            autoLoginBool,
+			ValidFrom:            time.Now().UTC(),
+			ValidUntil:           time.Now().UTC().AddDate(0, 0, daysInt+1),
 		}
 		newUser.Id = methods.CreateUser(newUser)
 
@@ -226,6 +236,12 @@ func EmailAuth(c *gin.Context) {
 		up := utils.GetHotspotPreferencesByKey(unit.HotspotId, "CoovaChilli-Bandwidth-Max-Up")
 		upInt, _ := strconv.Atoi(up.Value)
 
+		maxTraffic := utils.GetHotspotPreferencesByKey(unit.HotspotId, "CoovaChilli-Max-Total-Octets")
+		maxTrafficInt, _ := strconv.Atoi(maxTraffic.Value)
+
+		maxTime := utils.GetHotspotPreferencesByKey(unit.HotspotId, "CoovaChilli-Max-Navigation-Time")
+		maxTimeInt, _ := strconv.Atoi(maxTime.Value)
+
 		autoLogin := utils.GetHotspotPreferencesByKey(unit.HotspotId, "auto_login")
 		autoLoginBool, _ := strconv.ParseBool(autoLogin.Value)
 
@@ -238,6 +254,8 @@ func EmailAuth(c *gin.Context) {
 				downInt = voucher.BandwidthDown
 				upInt = voucher.BandwidthUp
 				autoLoginBool = voucher.AutoLogin
+				maxTrafficInt = voucher.MaxTraffic
+				maxTimeInt = voucher.MaxTime
 			}
 		}
 
@@ -245,18 +263,20 @@ func EmailAuth(c *gin.Context) {
 		code := utils.GenerateCode(6)
 
 		newUser := models.User{
-			HotspotId:     unit.HotspotId,
-			Name:          email,
-			Username:      email,
-			Password:      code,
-			Email:         email,
-			AccountType:   "email",
-			MarketingAuth: true,
-			KbpsDown:      downInt,
-			KbpsUp:        upInt,
-			AutoLogin:     autoLoginBool,
-			ValidFrom:     time.Now().UTC(),
-			ValidUntil:    time.Now().UTC().AddDate(0, 0, daysInt+1),
+			HotspotId:            unit.HotspotId,
+			Name:                 email,
+			Username:             email,
+			Password:             code,
+			Email:                email,
+			AccountType:          "email",
+			MarketingAuth:        true,
+			KbpsDown:             downInt,
+			KbpsUp:               upInt,
+			MaxNavigationTraffic: maxTrafficInt,
+			MaxNavigationTime:    maxTimeInt,
+			AutoLogin:            autoLoginBool,
+			ValidFrom:            time.Now().UTC(),
+			ValidUntil:           time.Now().UTC().AddDate(0, 0, daysInt+1),
 		}
 		newUser.Id = methods.CreateUser(newUser)
 
@@ -352,17 +372,19 @@ func MACAuth(c *gin.Context) {
 		upInt, _ := strconv.Atoi(kbps_up)
 
 		newUser := models.User{
-			HotspotId:   unit.HotspotId,
-			Name:        name,
-			Username:    mac,
-			Password:    "",
-			Email:       "",
-			AccountType: "mac",
-			KbpsDown:    downInt,
-			KbpsUp:      upInt,
-			AutoLogin:   true,
-			ValidFrom:   time.Now().UTC(),
-			ValidUntil:  time.Now().UTC().AddDate(0, 0, 3650), // ten years
+			HotspotId:            unit.HotspotId,
+			Name:                 name,
+			Username:             mac,
+			Password:             "",
+			Email:                "",
+			AccountType:          "mac",
+			KbpsDown:             downInt,
+			KbpsUp:               upInt,
+			MaxNavigationTraffic: 0,
+			MaxNavigationTime:    0,
+			AutoLogin:            true,
+			ValidFrom:            time.Now().UTC(),
+			ValidUntil:           time.Now().UTC().AddDate(0, 0, 3650), // ten years
 		}
 		newUser.Id = methods.CreateUser(newUser)
 
