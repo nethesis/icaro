@@ -154,8 +154,7 @@
       "change_password_error_title": "Change password error",
       "change_password_error_sub": "Something went wrong on changing password",
       "create_error_title": "Create error",
-      "duplicate_error":
-        "Duplicate manager. Please choose a different username or UUID.",
+      "duplicate_error": "Duplicate manager. Please choose a different username or UUID.",
       "create_error_sub": "An error occurred during manager creation.",
       "subscription_plan_name": "Subscription"
     },
