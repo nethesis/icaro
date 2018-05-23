@@ -8,8 +8,8 @@
                     <i class="mail icon"></i>
                 </div>
             </div>
-            <button v-if="!codeRequested && !choosedMode" v-on:click="chooseMode(true)" class="ui big green button request-code">{{ $t("sms.have_code") }}</button>
-            <button v-if="!codeRequested && !choosedMode" v-on:click="chooseMode()" class="ui big red button request-code">{{ $t("sms.not_have_code") }}</button>
+            <button v-if="!codeRequested && !choosedMode" v-on:click="chooseMode()" class="ui big button request-code">{{ $t("sms.not_have_code") }}</button>
+            <button v-if="!codeRequested && !choosedMode" v-on:click="chooseMode(true)" class="ui big button request-code">{{ $t("sms.have_code") }}</button>
             <button v-if="!codeRequested && choosedMode" v-on:click="getCode(true)" class="ui big button request-code">{{ $t("sms.get_code") }}</button>
             <div v-if="errors.badMail" class="ui tiny icon negative message">
                 <i class="remove icon"></i>
@@ -26,6 +26,14 @@
                     <div class="ui big left icon input">
                         <input v-model="authCode" type="number" :placeholder="$t('email.insert_your_code')">
                         <i class="braille icon"></i>
+                    </div>
+                </div>
+                <div class="ui compact message info no-margin-top">
+                    <div class="content">
+                        <div class="header">
+                            {{$t('email.wait')}}
+                        </div>
+                        <p>{{$t('email.we_are_sending_email_code')}}</p>
                     </div>
                 </div>
             </div>
@@ -91,7 +99,7 @@
 
             return {
                 authorized: false,
-                choosedMode: false,
+                choosedMode: (this.$route.query.email && this.$route.query.code) ? true : false,
                 codeRequested: this.$route.query.code || false,
                 dedaloRequested: false,
                 authEmail: this.$route.query.email || '',
@@ -116,7 +124,7 @@
             },
             chooseMode(haveCode) {
                 this.choosedMode = true
-                if(haveCode) {
+                if (haveCode) {
                     this.codeRequested = true
                 }
             },
@@ -237,5 +245,9 @@
 
     .request-code {
         margin-bottom: 10px !important;
+    }
+
+    .no-margin-top {
+        margin-top: 0px;
     }
 </style>

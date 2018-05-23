@@ -1,7 +1,7 @@
 <template>
     <div class="ui segment form">
         <div v-if="!dedaloRequested">
-            <div v-if="choosedMode" class="inline field" v-bind:class="{ error: errors.badInput }">
+            <div v-if="choosedMode && !authSMS" class="inline field" v-bind:class="{ error: errors.badInput }">
                 <label>{{ $t("sms.prefix") }}</label>
                 <div class="ui fluid pointing search selection dropdown select-state">
                     <input type="hidden" name="country">
@@ -21,8 +21,8 @@
                     <i class="talk icon"></i>
                 </div>
             </div>
-            <button v-if="!codeRequested && !choosedMode" v-on:click="chooseMode(true)" class="ui big green button request-code">{{ $t("sms.have_code") }}</button>
-            <button v-if="!codeRequested && !choosedMode" v-on:click="chooseMode()" class="ui big red button request-code">{{ $t("sms.not_have_code") }}</button>
+            <button v-if="!codeRequested && !choosedMode" v-on:click="chooseMode()" class="ui big button request-code">{{ $t("sms.not_have_code") }}</button>
+            <button v-if="!codeRequested && !choosedMode" v-on:click="chooseMode(true)" class="ui big button request-code">{{ $t("sms.have_code") }}</button>
             <button v-if="!codeRequested && choosedMode" v-on:click="getCode(true)" class="ui big button request-code">{{ $t("sms.get_code") }}</button>
             <div v-if="errors.badNumber" class="ui tiny icon negative message">
                 <i class="remove icon"></i>
@@ -39,6 +39,14 @@
                     <div class="ui big left icon input">
                         <input v-model="authCode" type="number" :placeholder="$t('sms.insert_your_code')">
                         <i class="braille icon"></i>
+                    </div>
+                </div>
+                <div class="ui compact message info no-margin-top">
+                    <div class="content">
+                        <div class="header">
+                            {{$t('sms.wait')}}
+                        </div>
+                        <p>{{$t('sms.we_are_sending_sms_code')}}</p>
                     </div>
                 </div>
             </div>
@@ -104,7 +112,7 @@
 
             return {
                 authorized: false,
-                choosedMode: false,
+                choosedMode: (this.$route.query.num && this.$route.query.code) ? true : false,
                 codeRequested: this.$route.query.code || false,
                 dedaloRequested: false,
                 authPrefix: '',
@@ -134,13 +142,13 @@
             },
             chooseMode(haveCode) {
                 this.choosedMode = true
-                if(haveCode) {
+                if (haveCode) {
                     this.codeRequested = true
                 }
-                setTimeout(function() {
+                setTimeout(function () {
                     $('.ui.dropdown')
-                    .dropdown();
-                },100)
+                        .dropdown();
+                }, 100)
             },
             getCode(reset) {
                 this.errors.badNumber = false
@@ -246,5 +254,9 @@
 
     .request-code {
         margin-bottom: 10px !important;
+    }
+
+    .no-margin-top {
+        margin-top: 0px;
     }
 </style>
