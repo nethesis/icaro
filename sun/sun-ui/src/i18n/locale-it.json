@@ -37,28 +37,22 @@
     "hotspot": {
       "yes": "Sì",
       "no": "No",
-      "hostname_hotspot":
-        "Solo lettere maiuscole, minuscole, numeri, punti o trattini",
+      "hostname_hotspot": "Solo lettere maiuscole, minuscole, numeri, punti o trattini",
       "hotspot": "Hotspot",
       "name": "Nome",
       "description": "Descrizione",
       "created": "Creato",
       "update_error_title": "Errori durante l'aggiornamento",
-      "update_error_sub":
-        "Non è stato possibile aggiornare le informazioni, si prega di riprovare, se il problema persiste contatta l'amministratore.",
+      "update_error_sub": "Non è stato possibile aggiornare le informazioni, si prega di riprovare, se il problema persiste contatta l'amministratore.",
       "delete_error_title": "Impossibile eliminare l'hotspot",
-      "delete_error_sub":
-        "Non è stato possibile cancellare l'hotspot, si prega di riprovare, se il problema persiste contatta l'amministratore.",
+      "delete_error_sub": "Non è stato possibile cancellare l'hotspot, si prega di riprovare, se il problema persiste contatta l'amministratore.",
       "warning_delete_title": "Fai attenzione",
-      "warning_delete_sub":
-        "La cancellazione di un hotspot cancella l'elenco degli ospiti, le units e le connessioni.",
+      "warning_delete_sub": "La cancellazione di un hotspot cancella l'elenco degli ospiti, le units e le connessioni.",
       "create_error_title": "Errore durante la creazione",
-      "create_error_sub":
-        "Non è stato possibile creare l'hotspot, si prega di riprovare, se il problema persiste contatta l'amministratore.",
+      "create_error_sub": "Non è stato possibile creare l'hotspot, si prega di riprovare, se il problema persiste contatta l'amministratore.",
       "create_new": "Crea un nuovo Hotspot",
       "no_hotspot_found": "Non ci sono Hotspot",
-      "no_hotspot_found_sub":
-        "Clicca sul bottone per aggiungere un nuovo hotspot.",
+      "no_hotspot_found_sub": "Clicca sul bottone per aggiungere un nuovo hotspot.",
       "info": "Informazioni",
       "owner": "Proprietario",
       "preferences": "Preferenze",
