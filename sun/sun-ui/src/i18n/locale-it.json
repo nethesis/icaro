@@ -18,7 +18,8 @@
       "sessions": "Connessioni",
       "devices": "Dispositivi",
       "accounts": "Amministratori",
-      "hotspots": "Hotspot"
+      "hotspots": "Hotspot",
+      "sms_sent": "SMS Inviati"
     },
     "profile": {
       "info": "Informazioni",
@@ -85,6 +86,10 @@
       "start_navigate": "Naviga",
       "voucher_creation": "Creazione Voucher",
       "voucher_creation_count": "Numero di Voucher",
+      "mode": "Modalità Voucher",
+      "limitless": "Riutilizzabile Infinite volte",
+      "with_limit": "Limitato",
+      "max_use": "Numero massimo di utilizzi del voucher",
       "auto_login": "Autologin",
       "CoovaChilli-Bandwidth-Max-Down": "Banda massima in download per utente (Kbps)",
       "CoovaChilli-Bandwidth-Max-Up": "Banda massima in upload per utente (Kbps)",
@@ -96,7 +101,10 @@
       "new_mac_auth": "Crea nuova autenticazione",
       "used": "Utilizzato",
       "valid": "Validità",
-      "unlimited": "Illimitato"
+      "unlimited": "Illimitato",
+      "export_csv": "Esporta in CSV",
+      "enabled": "Abilitato",
+      "disabled": "Disabilitato"
     },
     "user": {
       "username": "Utente",
@@ -276,6 +284,8 @@
     "upload_remove": "Rimuovi",
     "upload_drag": "Click or Drag",
     "upload_file_not_supported": "Tipo file non supportato, utilizzare file png, jpeg o jpg",
-    "upload_file_exceed": "File troppo grande (dimensione massima 600 kb)"
+    "upload_file_exceed": "File troppo grande (dimensione massima 600 kb)",
+    "result": "Risultato",
+    "results": "Risultati"
   }
 }
