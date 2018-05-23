@@ -90,12 +90,12 @@ var StatsService = {
         )
         .then(success, error);
     },
-    statsSMSTotal(success, error) {
+    statsSMSTotalForAccount(success, error) {
       this.$http
         .get(
           this.$root.$options.api_scheme +
             this.$root.$options.api_host +
-            "/api/stats/sms",
+            "/api/stats/sms/accounts",
           {
             headers: {
               Token:
@@ -105,12 +105,12 @@ var StatsService = {
         )
         .then(success, error);
     },
-    statsSMSSent(hotspotId, success, error) {
+    statsSMSSentByHotspot(hotspotId, success, error) {
       this.$http
         .get(
           this.$root.$options.api_scheme +
             this.$root.$options.api_host +
-            "/api/stats/sms/" + hotspotId,
+            (hotspotId > 0 ? "/api/stats/sms/hotspots/" + hotspotId : "/api/stats/sms/hotspots"),
           {
             headers: {
               Token:

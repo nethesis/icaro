@@ -14,6 +14,7 @@
         </select>
       </div>
     </div>
+
     <div v-if="!isChartLoading">
       <h2 :class="['graphs-container',(user.account_type == 'admin') || (user.account_type == 'reseller') ? 'title-graphs' : '']">{{ $t('report.current_situation') }}</h2>
       <actual-report-statistics class="graphs-container adjust-top" :todayConnections="connections"></actual-report-statistics>
@@ -35,6 +36,15 @@
       <report-statistics class="graphs-container" :chartLabels="labels" :chartDateRange="validDate" :newUsersReport="newUsers"
         :sessionsReport="sessions"></report-statistics>
     </div>
+    <div v-if="!isChartLoading">
+      <h2 class="graphs-container title-graphs">{{ $t('report.sms_reports') }}</h2>
+      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+      <sms-report-statistics class="graphs-container adjust-top" :isYear="true" :chartLabels="labelsSms" :chartDateRange="validDateSms" :smsData="sms"></sms-report-statistics>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+      <sms-report-statistics class="graphs-container adjust-top" :isYear="false" :chartLabels="labels" :chartDateRange="validDate" :smsData="sms"></sms-report-statistics>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -44,8 +54,11 @@ import HistoryService from "../services/history";
 import SessionService from "../services/session";
 import UserService from "../services/user";
 import HotspotService from "../services/hotspot";
+import StatsService from "../services/stats";
+
 import ReportStatistics from "../components/details-view/ReportStatistics";
 import ActualReportStatistics from "../components/details-view/ActualReportStatistics";
+import SmsReportStatistics from "../components/details-view/SmsReportStatistics";
 
 import VueChart from "vue-chart-js";
 import moment from "moment";
@@ -55,14 +68,16 @@ export default {
   components: {
     VueChart,
     ReportStatistics,
-    ActualReportStatistics
+    ActualReportStatistics,
+    SmsReportStatistics
   },
   mixins: [
     HistoryService,
     StorageService,
     UserService,
     HotspotService,
-    SessionService
+    SessionService,
+    StatsService
   ],
   data() {
     var hsId = this.get("reports_hotspot_id") || 0;
@@ -97,12 +112,15 @@ export default {
         }
       ],
       validDate: [],
+      validDateSms: [],
       dateRangeSearchId: this.get("reports_date_range_id") || 1,
       newUsers: [],
       sessions: [],
       hotspots: [],
       connections: [],
+      sms: [],
       labels: [],
+      labelsSms: [],
       hotspotSearchId: hsId,
       user: this.get("loggedUser") || null
     };
@@ -113,6 +131,7 @@ export default {
     }
     this.getSessionsByDate();
     this.getAllHotspots();
+    this.getSmsData();
   },
   methods: {
     getSessionsByDate() {
@@ -128,6 +147,7 @@ export default {
       const moment1 = extendMoment(moment);
       this.isChartLoading = true;
       this.labels = [];
+      this.labelsSms = [];
       switch (this.dateRangeSearchId) {
         case 1:
           this.range = moment1.range(
@@ -195,17 +215,29 @@ export default {
         default:
           break;
       }
+      let rangeYear = moment1.range(moment().utc().startOf("year"), moment().utc());
       let selectedRange = Array.from(this.range.by("day"));
+      let selectedRangeSms = Array.from(rangeYear.by("month"));
 
       this.validDate = selectedRange.map(function(item) {
+        return item.format("YYYY-MM-DD");
+      });
+      this.validDateSms = selectedRangeSms.map(function(item) {
         return item.format("YYYY-MM-DD");
       });
 
       let valueToDisplay = selectedRange.map(function(item) {
         return item.format("DD MMM");
       });
+      let valueToDisplaySms = selectedRangeSms.map(function(item) {
+        return item.format("MMM");
+      });
+
       this.labels = valueToDisplay;
+      this.labelsSms = valueToDisplaySms;
+
       this.getSession();
+      this.getSmsData();
     },
     // Get All Session between date range
     getSession() {
@@ -271,6 +303,20 @@ export default {
           this.connections = [];
           this.isChartLoading = false;
           console.log(error);
+        }
+      );
+    },
+    getSmsData() {
+      this.statsSMSSentByHotspot(
+        this.hotspotSearchId,
+        success => {
+          this.sms = success.body;
+          this.isChartLoading = false;
+        },
+        error => {
+          console.log(error.body);
+          this.sms = [];
+          this.isChartLoading = false;
         }
       );
     }

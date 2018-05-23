@@ -8,9 +8,9 @@
                     <i class="mail icon"></i>
                 </div>
             </div>
-            <button v-if="!codeRequested && !choosedMode" v-on:click="chooseMode()" class="ui big button request-code">{{ $t("sms.not_have_code") }}</button>
-            <button v-if="!codeRequested && !choosedMode" v-on:click="chooseMode(true)" class="ui big button request-code">{{ $t("sms.have_code") }}</button>
-            <button v-if="!codeRequested && choosedMode" v-on:click="getCode(true)" class="ui big button request-code">{{ $t("sms.get_code") }}</button>
+            <button v-if="!codeRequested && !choosedMode" v-on:click="chooseMode()" class="ui big button request-code">{{ $t("email.not_have_code") }}</button>
+            <button v-if="!codeRequested && !choosedMode" v-on:click="chooseMode(true)" class="ui big button request-code">{{ $t("email.have_code") }}</button>
+            <button v-if="!codeRequested && choosedMode" v-on:click="getCode(true)" class="ui big button request-code">{{ $t("email.get_code") }}</button>
             <div v-if="errors.badMail" class="ui tiny icon negative message">
                 <i class="remove icon"></i>
                 <div class="content">
@@ -28,7 +28,7 @@
                         <i class="braille icon"></i>
                     </div>
                 </div>
-                <div class="ui compact message info no-margin-top">
+                <div v-if="bannerShow" class="ui compact message info no-margin-top">
                     <div class="content">
                         <div class="header">
                             {{$t('email.wait')}}
@@ -40,10 +40,6 @@
             <div class="ui divider"></div>
             <button v-on:click="execLogin()" :disabled="isDisabled()" class="big ui green button">
                 {{ $t("email.start_navigate") }}
-            </button>
-            <div v-if="authReset && resetDone != 'true'" class="ui divider"></div>
-            <button v-on:click="getCode(true)" v-if="authReset && resetDone != 'true'" class="ui red button">
-                {{ $t("email.reset_code") }}
             </button>
         </div>
         <div v-if="dedaloRequested">
@@ -101,6 +97,7 @@
                 authorized: false,
                 choosedMode: (this.$route.query.email && this.$route.query.code) ? true : false,
                 codeRequested: this.$route.query.code || false,
+                bannerShow: false,
                 dedaloRequested: false,
                 authEmail: this.$route.query.email || '',
                 authCode: this.$route.query.code || '',
@@ -130,6 +127,7 @@
             },
             getCode(reset) {
                 this.errors.badMail = false
+                this.bannerShow = true
                 if (this.authEmail.indexOf('@') == -1) {
                     this.errors.badInput = true
                     return

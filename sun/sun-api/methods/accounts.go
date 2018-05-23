@@ -309,7 +309,7 @@ func StatsAccountTotal(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"total": count})
 }
 
-func StatsSMSTotal(c *gin.Context) {
+func StatsSMSTotalForAccount(c *gin.Context) {
 	var accountSMS models.AccountSmsCount
 	accountId := c.MustGet("token").(models.AccessToken).AccountId
 

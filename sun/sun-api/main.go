@@ -121,8 +121,9 @@ func DefineAPI(router *gin.Engine) {
 			sessionsStats.GET("/total", methods.StatsSessionTotal)
 
 			smsStats := stats.Group("/sms")
-			smsStats.GET("", methods.StatsSMSTotal)
-			smsStats.GET("/:hotspot_id", methods.StatsSMSSent)
+			smsStats.GET("/accounts", methods.StatsSMSTotalForAccount)
+			smsStats.GET("/hotspots", methods.StatsSMSTotalSentForHotspot)
+			smsStats.GET("/hotspots/:hotspot_id", methods.StatsSMSTotalSentForHotspotByHotspot)
 		}
 
 		units := api.Group("/units")

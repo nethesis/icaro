@@ -139,7 +139,7 @@ export default {
   },
   methods: {
     getSMSTotal() {
-      this.statsSMSTotal(
+      this.statsSMSTotalForAccount(
         success => {
           this.totals.sms.data = success.body;
           this.totals.sms.isLoading = false;

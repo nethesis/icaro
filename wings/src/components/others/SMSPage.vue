@@ -41,7 +41,7 @@
                         <i class="braille icon"></i>
                     </div>
                 </div>
-                <div class="ui compact message info no-margin-top">
+                <div v-if="bannerShow" class="ui compact message info no-margin-top">
                     <div class="content">
                         <div class="header">
                             {{$t('sms.wait')}}
@@ -53,10 +53,6 @@
             <div class="ui divider"></div>
             <button v-on:click="execLogin()" :disabled="isDisabled()" class="big ui green button">
                 {{ $t("sms.start_navigate") }}
-            </button>
-            <div v-if="authReset && resetDone != 'true'" class="ui divider"></div>
-            <button v-on:click="getCode(true)" v-if="authReset && resetDone != 'true'" class="ui red button">
-                {{ $t("sms.reset_code") }}
             </button>
         </div>
         <div v-if="dedaloRequested">
@@ -114,6 +110,7 @@
                 authorized: false,
                 choosedMode: (this.$route.query.num && this.$route.query.code) ? true : false,
                 codeRequested: this.$route.query.code || false,
+                bannerShow: false,
                 dedaloRequested: false,
                 authPrefix: '',
                 authSMS: this.$route.query.num || '',
@@ -152,6 +149,7 @@
             },
             getCode(reset) {
                 this.errors.badNumber = false
+                this.bannerShow = true
                 if (!(this.authPrefix + this.authSMS).startsWith('+')) {
                     this.errors.badInput = true
                     return

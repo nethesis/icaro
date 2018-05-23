@@ -24,8 +24,11 @@
 import VueChart from "vue-chart-js";
 import moment from "moment";
 import { extendMoment } from "moment-range";
+
 import UtilService from "../../services/util";
+import StatsService from "../../services/stats";
 import filters from "../../filters/filters";
+
 export default {
   name: "ActualReport",
   components: {
@@ -36,7 +39,7 @@ export default {
       type: Array
     }
   },
-  mixins: [UtilService],
+  mixins: [UtilService, StatsService],
   data() {
     return {
       userCurrentlyLogin: 0,

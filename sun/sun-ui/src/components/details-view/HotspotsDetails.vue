@@ -757,7 +757,7 @@ export default {
       return this.getPrefTypeIcon(pref);
     },
     getSmsCount() {
-      this.statsSMSSent(
+      this.statsSMSSentByHotspot(
         this.$route.params.id,
         success => {
           this.totals.sms.count = success.body.length;

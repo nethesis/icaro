@@ -255,7 +255,14 @@
       "new_daily_logins": "New daily logins",
       "history_situation": "History Situation",
       "connection_newlogins": "Sessions and new guests",
-      "connection_traffic": "Sessions and traffic"
+      "connection_traffic": "Sessions and traffic",
+      "sms_reports": "SMS Reports",
+      "sms_sent": "SMS Sent",
+      "sms": "SMS",
+      "sent_this_year": "Sent this year",
+      "sent_last_7_days": "Sent last 7 days",
+      "sent_last_15_days": "Sent last 15 days",
+      "sent_last_month": "Sent last month"
     },
     "sessions": "Sessions",
     "help": "Help",
