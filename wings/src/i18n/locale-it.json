@@ -51,7 +51,7 @@
             "code": "Codice",
             "have_code": "Ho già un codice d'accesso",
             "not_have_code": "Inviami un codice d'accesso",
-            "get_code": "Non ho un codice, inviamelo",
+            "get_code": "Richiedi codice",
             "reset_code": "Inviami un nuovo Codice",
             "start_navigate": "Naviga",
             "error_code": "Errore nell'invio del codice di verifica",
