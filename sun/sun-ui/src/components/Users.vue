@@ -51,6 +51,13 @@
         </td>
         <td :class="[isExpired(props.row.valid_until) ? 'disabled' : '', 'fancy']">
           <div>
+            <strong>{{ $t('user.traffic') }}</strong>: {{ props.row.max_navigation_traffic | byteFormat }}</div>
+          <div>
+            <strong>{{ $t('user.time') }}</strong>: {{ props.row.max_navigation_time | secondsInHour }}
+          </div>
+        </td>
+        <td :class="[isExpired(props.row.valid_until) ? 'disabled' : '', 'fancy']">
+          <div>
             <strong>{{ $t('user.from') }}</strong>: {{ props.row.valid_from | formatDate }}</div>
           <div>
             <strong>{{ $t('user.until') }}</strong>: {{ props.row.valid_until | formatDate }}
@@ -114,6 +121,12 @@ export default {
         {
           label: this.$i18n.t("user.bandwidth_limit"),
           field: "bandwidth",
+          filterable: true,
+          sortable: false
+        },
+        {
+          label: this.$i18n.t("user.daily_limit"),
+          field: "limit",
           filterable: true,
           sortable: false
         },

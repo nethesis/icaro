@@ -48,6 +48,8 @@ func CreateVoucher(c *gin.Context) {
 		AutoLogin:     json.AutoLogin,
 		BandwidthUp:   json.BandwidthUp,
 		BandwidthDown: json.BandwidthDown,
+		MaxTraffic:    json.MaxTraffic,
+		MaxTime:       json.MaxTime,
 		Duration:      json.Duration,
 		RemainUse:     json.RemainUse,
 	}

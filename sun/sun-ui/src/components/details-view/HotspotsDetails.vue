@@ -89,11 +89,11 @@
         <div class="card-pf card-pf-accented">
           <div class="card-pf-heading">
             <h2 class="card-pf-title">
-                <span class="fa fa-commenting card-info-title"></span>
-                {{ $t("dashboard.sms_sent") }}
-                <span v-if="!totals.sms.isLoading" class="right">
-                  <strong class="soft">{{ totals.sms.count}}</strong>
-                </span>
+              <span class="fa fa-commenting card-info-title"></span>
+              {{ $t("dashboard.sms_sent") }}
+              <span v-if="!totals.sms.isLoading" class="right">
+                <strong class="soft">{{ totals.sms.count}}</strong>
+              </span>
               <div v-if="totals.sms.isLoading" class="spinner spinner-sm right"></div>
             </h2>
           </div>
@@ -126,6 +126,12 @@
                     <strong>{{ $t('user.kbps_down') }}</strong>: {{ props.row.bandwidth_down || '-' }}</div>
                   <div>
                     <strong>{{ $t('user.kbps_up') }}</strong>: {{ props.row.bandwidth_up || '-' }}</div>
+                </td>
+                <td class="fancy">
+                  <div>
+                    <strong>{{ $t('user.traffic') }}</strong>: {{ props.row.max_traffic || '-' | byteFormat }}</div>
+                  <div>
+                    <strong>{{ $t('user.time') }}</strong>: {{ props.row.max_time || '-' | secondsInHour }}</div>
                 </td>
                 <td class="fancy">{{ props.row.duration }} ({{$t('hotspot.days')}})</td>
                 <td class="fancy">
@@ -219,8 +225,8 @@
                 </label>
                 <div class="col-sm-6">
                   <picture-input v-if="pref.key == 'captive_3_logo' || pref.key == 'captive_5_banner'" :ref="'prefInput-'+pref.key" :prefill="urltoFile(pref.value, pref.key)"
-                    :alertOnError="false" @change="onChanged(pref)" :width="100" :height="100"
-                    :crop="false" :zIndex="1000" :customStrings="uploadLangstexts" removeButtonClass="btn btn-danger" buttonClass="btn btn-default">
+                    :alertOnError="false" @change="onChanged(pref)" :width="100" :height="100" :crop="false" :zIndex="1000"
+                    :customStrings="uploadLangstexts" removeButtonClass="btn btn-danger" buttonClass="btn btn-default">
 
                   </picture-input>
                   <span v-if="pref.onError" class="help-block">{{$t('upload_file_exceed')}}</span>
@@ -385,6 +391,18 @@
                 </div>
               </div>
               <div class="form-group">
+                <label class="col-sm-5 control-label" for="textInput-modal-markup">{{$t('hotspot.daily_traffic_limit')}}</label>
+                <div class="col-sm-7">
+                  <input v-model="newVoucher.max_traffic" type="number" id="textInput-modal-markup" class="form-control">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-5 control-label" for="textInput-modal-markup">{{$t('hotspot.daily_time_limit')}}</label>
+                <div class="col-sm-7">
+                  <input v-model="newVoucher.max_time" type="number" id="textInput-modal-markup" class="form-control">
+                </div>
+              </div>
+              <div class="form-group">
                 <label class="col-sm-5 control-label" for="textInput-modal-markup">{{$t('hotspot.duration')}} ({{$t('hotspot.days')}})</label>
                 <div class="col-sm-7">
                   <input v-model="newVoucher.duration" type="number" id="textInput-modal-markup" class="form-control">
@@ -394,13 +412,15 @@
                 <label class="col-sm-5 control-label" for="textInput-modal-markup">{{$t('hotspot.mode')}}</label>
                 <div class="col-sm-7">
                   <span class="span-radio">
-                    <input required v-model="newVoucher.limitless" class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="true">
+                    <input required v-model="newVoucher.limitless" class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1"
+                      value="true">
                     <label class="form-check-label" for="exampleRadios1">
                       {{$t('hotspot.limitless')}}
                     </label>
                   </span>
                   <span class="span-radio">
-                    <input required v-model="newVoucher.limitless" class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="false">
+                    <input required v-model="newVoucher.limitless" class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2"
+                      value="false">
                     <label class="form-check-label" for="exampleRadios2">
                       {{$t('hotspot.with_limit')}}
                     </label>
@@ -480,34 +500,53 @@
       </div>
     </div>
 
-     <div v-for="voucher in vouchers.data" v-bind:key="voucher.id" class="card-pf" id="voucher-coupon">
-            <img class="voucher-logo" src="/static/logo.png" />
-            <h2 class="card-pf-title voucher-name" id="test">
-                {{info.data.name}}
-            </h2>
-            <h3 class="card-pf-title voucher-desc">
-                {{info.data.description}}
-            </h3>
-            <div class="card-pf-body voucher-main">
-                <p>
-                    <strong class="voucher-code">{{voucher.code}}</strong>
-                </p>
-            </div>
-            <div class="card-pf-footer voucher-details">
-                <div class="card-pf-time-frame-filter voucher-valid">
-                    {{ $t("hotspot.valid") }}:
-                    <strong>{{voucher.duration}}</strong> <span> {{ $t("hotspot.days") }} </span>
-                </div>
-                <div class="voucher-download">
-                    <span class="fa fa-arrow-down"></span> Download: <span v-if="voucher.bandwidth_down === 0"> {{ $t("hotspot.unlimited") }}</span>
-                                                                     <span v-else><strong> {{voucher.bandwidth_down}} </strong>  Kb/s</span>
-                </div>
-                <div class="voucher-upload">
-                    <span class="fa fa-arrow-up"></span> Upload:<span v-if="voucher.bandwidth_up === 0"> {{ $t("hotspot.unlimited") }}</span>
-                                                                <span v-else><strong> {{voucher.bandwidth_up}} </strong> Kb/s</span>
-                </div>
-            </div>
+    <div v-for="voucher in vouchers.data" v-bind:key="voucher.id" class="card-pf" id="voucher-coupon">
+      <img class="voucher-logo" src="/static/logo.png" />
+      <h2 class="card-pf-title voucher-name" id="test">
+        {{info.data.name}}
+      </h2>
+      <h3 class="card-pf-title voucher-desc">
+        {{info.data.description}}
+      </h3>
+      <div class="card-pf-body voucher-main">
+        <p>
+          <strong class="voucher-code">{{voucher.code}}</strong>
+        </p>
+      </div>
+      <div class="card-pf-footer voucher-details">
+        <div class="card-pf-time-frame-filter voucher-valid">
+          {{ $t("hotspot.valid") }}:
+          <strong>{{voucher.duration}}</strong>
+          <span> {{ $t("hotspot.days") }} </span>
         </div>
+        <div class="card-pf-time-frame-filter voucher-max-use">
+          {{ $t("hotspot.mode") }}:
+          {{voucher.remain_use == -1 ? $t('hotspot.limitless') : $t('hotspot.max_use') + ': ' }}
+          <strong v-if="voucher.remain_use != -1">{{voucher.remain_use}}</strong>
+        </div>
+        <div class="card-pf-time-frame-filter voucher-traffic">
+          {{ $t("hotspot.traffic") }}:
+          <strong>{{voucher.max_traffic | byteFormat}}</strong>
+        </div>
+        <div class="card-pf-time-frame-filter voucher-time">
+          {{ $t("hotspot.time") }}:
+          <strong>{{voucher.max_time | secondsInHour}}</strong>
+        </div>
+
+        <div class="voucher-download">
+          <span class="fa fa-arrow-down"></span> Download:
+          <span v-if="voucher.bandwidth_down === 0"> {{ $t("hotspot.unlimited") }}</span>
+          <span v-else>
+            <strong> {{voucher.bandwidth_down}} </strong> Kb/s</span>
+        </div>
+        <div class="voucher-upload">
+          <span class="fa fa-arrow-up"></span> Upload:
+          <span v-if="voucher.bandwidth_up === 0"> {{ $t("hotspot.unlimited") }}</span>
+          <span v-else>
+            <strong> {{voucher.bandwidth_up}} </strong> Kb/s</span>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -590,6 +629,8 @@ export default {
         auto_login: true,
         bandwidth_down: 0,
         bandwidth_up: 0,
+        max_traffic: 0,
+        max_time: 0,
         duration: 7,
         remain_use: 3,
         limitless: "true"
@@ -649,6 +690,12 @@ export default {
         {
           label: this.$i18n.t("hotspot.bandwidth_limit"),
           field: "bandwidth",
+          filterable: false,
+          sortable: false
+        },
+        {
+          label: this.$i18n.t("hotspot.daily_limit"),
+          field: "limit",
           filterable: false,
           sortable: false
         },
@@ -785,6 +832,9 @@ export default {
                 auto_login: context.newVoucher.auto_login,
                 bandwidth_down: parseInt(context.newVoucher.bandwidth_down),
                 bandwidth_up: parseInt(context.newVoucher.bandwidth_up),
+                max_traffic:
+                  parseInt(context.newVoucher.max_traffic) * 1024 * 1024,
+                max_time: parseInt(context.newVoucher.max_time) * 60,
                 duration: parseInt(context.newVoucher.duration),
                 remain_use:
                   context.newVoucher.limitless == "true"
@@ -953,6 +1003,14 @@ export default {
             } else {
               globalPref.push(pref);
             }
+
+            if (pref.key == "CoovaChilli-Max-Total-Octets") {
+              pref.value = parseInt(pref.value) / 1024 / 1024;
+            }
+
+            if (pref.key == "CoovaChilli-Max-Navigation-Time") {
+              pref.value = parseInt(pref.value) / 60;
+            }
           }
 
           this.preferences.global = globalPref;
@@ -980,6 +1038,15 @@ export default {
             if (typeof pref.value == "boolean") {
               pref.value = pref.value.toString();
             }
+
+            if (pref.key == "CoovaChilli-Max-Total-Octets") {
+              pref.value = (pref.value * 1024 * 1024).toString();
+            }
+
+            if (pref.key == "CoovaChilli-Max-Navigation-Time") {
+              pref.value = (pref.value * 60).toString();
+            }
+
             this.hsPrefModify(
               this.$route.params.id,
               pref,
@@ -1062,28 +1129,45 @@ export default {
       );
       doc.fromHTML(
         document.getElementsByClassName("voucher-main")[index],
-        35,
-        18
-      );
-      doc.setLineWidth(0.3);
-      doc.setDrawColor(158, 160, 163);
-      doc.line(5, 35, halfWidth - 5, +35);
-      doc.addImage(arrow.down, 4, 41, 3, 3);
-      doc.fromHTML(
-        document.getElementsByClassName("voucher-download")[index],
-        8,
-        36
-      );
-      doc.addImage(arrow.up, 4, 49, 3, 3);
-      doc.fromHTML(
-        document.getElementsByClassName("voucher-upload")[index],
-        8,
-        44
+        15,
+        21
       );
       doc.fromHTML(
         document.getElementsByClassName("voucher-valid")[index],
         65,
-        34.5
+        21
+      );
+      doc.fromHTML(
+        document.getElementsByClassName("voucher-max-use")[index],
+        65,
+        29
+      );
+
+      doc.setLineWidth(0.3);
+      doc.setDrawColor(158, 160, 163);
+      doc.line(5, 41, halfWidth - 5, +41);
+      doc.addImage(arrow.down, 4, 45, 3, 3);
+      doc.fromHTML(
+        document.getElementsByClassName("voucher-download")[index],
+        8,
+        40
+      );
+      doc.addImage(arrow.up, 4, 50, 3, 3);
+      doc.fromHTML(
+        document.getElementsByClassName("voucher-upload")[index],
+        8,
+        45
+      );
+
+      doc.fromHTML(
+        document.getElementsByClassName("voucher-traffic")[index],
+        65,
+        40
+      );
+      doc.fromHTML(
+        document.getElementsByClassName("voucher-time")[index],
+        65,
+        45
       );
 
       doc.autoPrint();
@@ -1136,28 +1220,45 @@ export default {
           );
           doc.fromHTML(
             document.getElementsByClassName("voucher-main")[index],
-            35,
-            cordinates.y + 18
-          );
-          doc.setLineWidth(0.3);
-          doc.setDrawColor(158, 160, 163);
-          doc.line(5, cordinates.y + 35, halfWidth - 5, cordinates.y + 35);
-          doc.addImage(arrow.down, 4, cordinates.y + 41, 3, 3);
-          doc.fromHTML(
-            document.getElementsByClassName("voucher-download")[index],
-            8,
-            cordinates.y + 36
-          );
-          doc.addImage(arrow.up, 4, cordinates.y + 49, 3, 3);
-          doc.fromHTML(
-            document.getElementsByClassName("voucher-upload")[index],
-            8,
-            cordinates.y + 44
+            15,
+            cordinates.y + 21
           );
           doc.fromHTML(
             document.getElementsByClassName("voucher-valid")[index],
             65,
-            cordinates.y + 34.5
+            cordinates.y + 21
+          );
+          doc.fromHTML(
+            document.getElementsByClassName("voucher-max-use")[index],
+            65,
+            cordinates.y + 29
+          );
+
+          doc.setLineWidth(0.3);
+          doc.setDrawColor(158, 160, 163);
+          doc.line(5, cordinates.y + 41, halfWidth - 5, cordinates.y + 41);
+          doc.addImage(arrow.down, 4, cordinates.y + 45, 3, 3);
+          doc.fromHTML(
+            document.getElementsByClassName("voucher-download")[index],
+            8,
+            cordinates.y + 40
+          );
+          doc.addImage(arrow.up, 4, cordinates.y + 50, 3, 3);
+          doc.fromHTML(
+            document.getElementsByClassName("voucher-upload")[index],
+            8,
+            cordinates.y + 45
+          );
+
+          doc.fromHTML(
+            document.getElementsByClassName("voucher-traffic")[index],
+            65,
+            cordinates.y + 40
+          );
+          doc.fromHTML(
+            document.getElementsByClassName("voucher-time")[index],
+            65,
+            cordinates.y + 45
           );
 
           doc.setDrawColor(17, 17, 17);
@@ -1204,33 +1305,49 @@ export default {
           );
           doc.fromHTML(
             document.getElementsByClassName("voucher-main")[index],
-            cordinates.x + 35,
-            cordinates.y + 18
+            cordinates.x + 15,
+            cordinates.y + 21
+          );
+          doc.fromHTML(
+            document.getElementsByClassName("voucher-valid")[index],
+            cordinates.x + 65,
+            cordinates.y + 21
+          );
+          doc.fromHTML(
+            document.getElementsByClassName("voucher-max-use")[index],
+            cordinates.x + 65,
+            cordinates.y + 29
           );
           doc.setLineWidth(0.3);
           doc.setDrawColor(158, 160, 163);
           doc.line(
             cordinates.x + 5,
-            cordinates.y + 35,
+            cordinates.y + 41,
             cordinates.x * 2 - 5,
-            cordinates.y + 35
+            cordinates.y + 41
           );
-          doc.addImage(arrow.down, cordinates.x + 4, cordinates.y + 41, 3, 3);
+          doc.addImage(arrow.down, cordinates.x + 4, cordinates.y + 45, 3, 3);
           doc.fromHTML(
             document.getElementsByClassName("voucher-download")[index],
             cordinates.x + 8,
-            cordinates.y + 36
+            cordinates.y + 40
           );
-          doc.addImage(arrow.up, cordinates.x + 4, cordinates.y + 49, 3, 3);
+          doc.addImage(arrow.up, cordinates.x + 4, cordinates.y + 50, 3, 3);
           doc.fromHTML(
             document.getElementsByClassName("voucher-upload")[index],
             cordinates.x + 8,
-            cordinates.y + 44
+            cordinates.y + 45
+          );
+
+          doc.fromHTML(
+            document.getElementsByClassName("voucher-traffic")[index],
+            cordinates.x + 65,
+            cordinates.y + 40
           );
           doc.fromHTML(
-            document.getElementsByClassName("voucher-valid")[index],
+            document.getElementsByClassName("voucher-time")[index],
             cordinates.x + 65,
-            cordinates.y + 34.5
+            cordinates.y + 45
           );
 
           row++;
@@ -1251,15 +1368,31 @@ export default {
       for (var r in voucherRows) {
         var banDown =
           voucherRows[r].bandwidth_down > 0
-            ? this.$options.filters["byteFormat"](voucherRows[r].bandwidth_down)
+            ? this.$options.filters["byteFormat"](
+                voucherRows[r].bandwidth_down * 1024
+              )
             : "-";
 
         var banUp =
           voucherRows[r].bandwidth_up > 0
-            ? this.$options.filters["byteFormat"](voucherRows[r].bandwidth_up)
+            ? this.$options.filters["byteFormat"](
+                voucherRows[r].bandwidth_up * 1024
+              )
             : "-";
 
         voucherRows[r].bandwidth = "Down: " + banDown + " | Up: " + banUp;
+
+        var traffic =
+          voucherRows[r].max_traffic > 0
+            ? this.$options.filters["byteFormat"](voucherRows[r].max_traffic)
+            : "-";
+
+        var time =
+          voucherRows[r].max_time > 0
+            ? this.$options.filters["secondsInHour"](voucherRows[r].max_time)
+            : "-";
+
+        voucherRows[r].limit = "Traffic: " + traffic + " | Time: " + time;
 
         voucherRows[r].auto_login = voucherRows[r].auto_login
           ? this.$i18n.t("hotspot.enabled")
@@ -1364,11 +1497,13 @@ textarea {
 #voucher-coupon {
   display: none;
 }
+
 .voucher-logo {
   height: 25px;
   margin: 15px;
   margin-left: -5px;
 }
+
 .voucher-name {
   position: absolute;
   top: -8px;
@@ -1376,6 +1511,7 @@ textarea {
   max-width: 200px;
   color: goldenrod;
 }
+
 .voucher-desc {
   position: absolute;
   top: 15px;
@@ -1384,27 +1520,45 @@ textarea {
   color: #757575;
   max-width: 200px;
 }
+
 .voucher-code {
   font-size: 30px;
   margin-top: 5px;
 }
+
 .voucher-valid {
   font-size: 18px;
   margin-top: 6px;
 }
+
+.voucher-traffic {
+  font-size: 18px;
+}
+
+.voucher-time {
+  font-size: 18px;
+}
+
 .voucher-main {
   text-align: center;
   padding-bottom: 10px;
   margin-top: 15px;
 }
+
 .voucher-details {
   padding: 10px;
   background: #fff;
 }
+
 .voucher-upload {
   font-size: 18px;
 }
+
 .voucher-download {
+  font-size: 18px;
+}
+
+.voucher-max-use {
   font-size: 18px;
 }
 </style>
