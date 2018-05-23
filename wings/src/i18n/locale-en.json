@@ -40,7 +40,9 @@
             "auth_success": "You are successfully authenticated",
             "auth_success_sub": "In a few seconds you will be redirected",
             "auth_error": "Error on authentication",
-            "auth_error_sub": "Something went wrong on authentication process"
+            "auth_error_sub": "Something went wrong on authentication process",
+            "wait":"Please wait few seconds",
+            "we_are_sending_email_code":"We are sending you an email with your personal code, if you do not receive any email, try looking in your SPAM box"
         },
         "sms": {
             "number": "Number",
@@ -60,7 +62,9 @@
             "auth_error": "Error on authentication",
             "auth_error_sub": "Something went wrong on authentication process",
             "select_state": "Select state",
-            "prefix": "Prefix"
+            "prefix": "Prefix",
+            "wait":"Please wait few seconds",
+            "we_are_sending_sms_code":"We are sending you an SMS with your personal code"
         }
     }
 }
