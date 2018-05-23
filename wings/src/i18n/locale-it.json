@@ -40,7 +40,9 @@
             "auth_success": "Ti sei autenticato con successo",
             "auth_success_sub": "Dopo aver visualizzato le informazioni privacy potrai navigare",
             "auth_error": "Errore di autenticazione",
-            "auth_error_sub": "Si è verificato un errore durante l'autenticazione"
+            "auth_error_sub": "Si è verificato un errore durante l'autenticazione",
+            "wait":"solo qualche secondo...",
+            "we_are_sending_email_code":"Ti stiamo inviando un email con il tuo codice d'accesso,se non dovessi visualizzarla prova guardare nella tua casella SPAM."
         },
         "sms": {
             "number": "Numero telefonico",
@@ -60,7 +62,9 @@
             "auth_error": "Errore di autenticazione",
             "auth_error_sub": "Si è verificato un errore durante l'autenticazione",
             "select_state": "Seleziona Stato",
-            "prefix": "Prefisso Internazionale"
+            "prefix": "Prefisso Internazionale",
+            "wait":"Solo qualche secondo...",
+            "we_are_sending_sms_code":"Ti stiamo inviando un SMS con il tuo codice d'accesso."
         }
     }
 }
