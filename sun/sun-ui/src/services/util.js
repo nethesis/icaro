@@ -23,7 +23,7 @@ var UtilService = {
       var d = new Date().getTime();
       var uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
         /[xy]/g,
-        function(c) {
+        function (c) {
           var r = ((d + Math.random() * 16) % 16) | 0;
           d = Math.floor(d / 16);
           return (c == "x" ? r : (r & 0x3) | 0x8).toString(16);
@@ -100,13 +100,19 @@ var UtilService = {
         case "CoovaChilli-Bandwidth-Max-Up":
           icon = "fa fa-arrow-circle-up login-pref-option";
           break;
+        case "CoovaChilli-Max-Navigation-Time":
+          icon = "fa fa-clock-o login-pref-option";
+          break;
+        case "CoovaChilli-Max-Total-Octets":
+          icon = "fa fa-database login-pref-option";
+          break;
       }
       return icon;
     },
     generatePassword() {
       var length = 8,
         charset =
-          "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
         retVal = "";
       for (var i = 0, n = charset.length; i < length; ++i) {
         retVal += charset.charAt(Math.floor(Math.random() * n));
@@ -139,6 +145,8 @@ var UtilService = {
         case "voucher_expiration_days":
         case "CoovaChilli-Bandwidth-Max-Down":
         case "CoovaChilli-Bandwidth-Max-Up":
+        case "CoovaChilli-Max-Navigation-Time":
+        case "CoovaChilli-Max-Total-Octets":
           type = "number";
           break;
         case "captive_1_redir":
@@ -157,9 +165,9 @@ var UtilService = {
       var mimeString =
         dataURI &&
         dataURI
-          .split(",")[0]
-          .split(":")[1]
-          .split(";")[0];
+        .split(",")[0]
+        .split(":")[1]
+        .split(";")[0];
 
       // write the bytes of the string to a typed array
       var ia = new Uint8Array(byteString.length);

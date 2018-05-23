@@ -81,6 +81,13 @@ func UpdateUser(c *gin.Context) {
 			user.KbpsUp = json.KbpsUp
 		}
 
+		if json.MaxNavigationTraffic >= 0 {
+			user.MaxNavigationTraffic = json.MaxNavigationTraffic
+		}
+		if json.MaxNavigationTime >= 0 {
+			user.MaxNavigationTime = json.MaxNavigationTime
+		}
+
 		if !json.ValidFrom.IsZero() {
 			user.ValidFrom = json.ValidFrom
 		}
