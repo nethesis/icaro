@@ -26,7 +26,7 @@ type Endpoints struct {
 	Sms struct {
 		AccountSid string `json:"account_sid"`
 		AuthToken  string `json:"auth_token"`
-		Number     string `json:"number"`
+		ServiceSid string `json:"service_sid"`
 		Link       string `json:"link"`
 	} `json:"sms"`
 	Email struct {

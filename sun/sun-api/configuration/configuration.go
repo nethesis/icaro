@@ -137,8 +137,8 @@ func Init(ConfigFilePtr *string) {
 	if os.Getenv("SMS_AUTH_TOKEN") != "" {
 		Config.Endpoints.Sms.AuthToken = os.Getenv("SMS_AUTH_TOKEN")
 	}
-	if os.Getenv("SMS_NUMBER") != "" {
-		Config.Endpoints.Sms.Number = os.Getenv("SMS_NUMBER")
+	if os.Getenv("SMS_SERVICE_SID") != "" {
+		Config.Endpoints.Sms.ServiceSid = os.Getenv("SMS_SERVICE_SID")
 	}
 	if os.Getenv("SMS_LOGIN_LINK") != "" {
 		Config.Endpoints.Sms.Link = os.Getenv("SMS_LOGIN_LINK")

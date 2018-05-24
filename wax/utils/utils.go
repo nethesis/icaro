@@ -307,7 +307,7 @@ func SendSMSCode(number string, code string, unit models.Unit, auth string) int 
 		// compose message data
 		msgData := url.Values{}
 		msgData.Set("To", number)
-		msgData.Set("From", configuration.Config.Endpoints.Sms.Number)
+		msgData.Set("MessagingServiceSid", configuration.Config.Endpoints.Sms.ServiceSid)
 		msgData.Set("Body", "SMS login code: "+code+
 			"\n\nLogin Link: "+configuration.Config.Endpoints.Sms.Link+
 			"?"+auth+"&code="+code+"&num="+url.QueryEscape(number)+

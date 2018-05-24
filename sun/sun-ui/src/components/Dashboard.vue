@@ -108,122 +108,157 @@
         </div>
       </div>
 
+      <div v-if="(user.account_type == 'admin') || (user.account_type == 'reseller')" class="col-xs-12 col-sm-6 col-md-3 adjust-height">
+        <div class="card-pf card-pf-accented card-pf-aggregate-status">
+          <h2 class="card-pf-title">
+            <span class="fa fa-commenting"></span>
+            <span class="">{{ $t("dashboard.sms_sent") }}</span>
+          </h2>
+          <div class="card-pf-body">
+            <p class="card-pf-aggregate-status-notifications">
+              <span class="card-pf-aggregate-status-notification">
+                <div v-if="totals.sms.isLoading" class="spinner spinner-sm"></div>
+                <div v-if="!totals.sms.isLoading">{{ totals.sms.count }} / <strong class="soft">{{ totals.sms.max_count }}</strong></div>
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </template>
 
 <script>
-import StatsService from "../services/stats";
-import StorageService from "../services/storage";
+  import StatsService from "../services/stats";
+  import StorageService from "../services/storage";
 
-export default {
-  name: "Dashboard",
-  mixins: [StatsService, StorageService],
-  data() {
-    // get totals
-    this.getTotals();
+  export default {
+    name: "Dashboard",
+    mixins: [StatsService, StorageService],
+    data() {
+      // get totals
+      this.getTotals();
 
-    return {
-      msg: "Dashboard",
-      totals: {
-        accounts: {
-          isLoading: true,
-          count: 0
+      return {
+        msg: "Dashboard",
+        totals: {
+          accounts: {
+            isLoading: true,
+            count: 0
+          },
+          units: {
+            isLoading: true,
+            count: 0
+          },
+          hotspots: {
+            isLoading: true,
+            count: 0
+          },
+          users: {
+            isLoading: true,
+            count: 0
+          },
+          devices: {
+            isLoading: true,
+            count: 0
+          },
+          sessions: {
+            isLoading: true,
+            count: 0
+          },
+          sms: {
+            isLoading: true,
+            count: 0,
+            max_count: 0
+          }
         },
-        units: {
-          isLoading: true,
-          count: 0
-        },
-        hotspots: {
-          isLoading: true,
-          count: 0
-        },
-        users: {
-          isLoading: true,
-          count: 0
-        },
-        devices: {
-          isLoading: true,
-          count: 0
-        },
-        sessions: {
-          isLoading: true,
-          count: 0
-        }
-      },
-      user: this.get("loggedUser") || null
-    };
-  },
-  methods: {
-    getTotals() {
-      this.statsHotspotsTotal(
+        user: this.get("loggedUser") || null
+      };
+    },
+    methods: {
+      getTotals() {
+        this.statsHotspotsTotal(
+          success => {
+            this.totals.hotspots.count = success.body.total;
+            this.totals.hotspots.isLoading = false;
+          },
+          error => {
+            console.log(error.body);
+            this.totals.hotspots.isLoading = false;
+          }
+        );
+        this.statsUnitsTotal(
+          success => {
+            this.totals.units.count = success.body.total;
+            this.totals.units.isLoading = false;
+          },
+          error => {
+            console.log(error.body);
+            this.totals.units.isLoading = false;
+          }
+        );
+        this.statsAccountsTotal(
+          success => {
+            this.totals.accounts.count = success.body.total;
+            this.totals.accounts.isLoading = false;
+          },
+          error => {
+            console.log(error.body);
+            this.totals.accounts.isLoading = false;
+          }
+        );
+        this.statsDevicesTotal(
+          success => {
+            this.totals.devices.count = success.body.total;
+            this.totals.devices.isLoading = false;
+          },
+          error => {
+            console.log(error.body);
+            this.totals.devices.isLoading = false;
+          }
+        );
+        this.statsUsersTotal(
+          success => {
+            this.totals.users.count = success.body.total;
+            this.totals.users.isLoading = false;
+          },
+          error => {
+            console.log(error.body);
+            this.totals.users.isLoading = false;
+          }
+        );
+        this.statsSessionsTotal(
+          success => {
+            this.totals.sessions.count = success.body.total;
+            this.totals.sessions.isLoading = false;
+          },
+          error => {
+            console.log(error.body);
+            this.totals.sessions.isLoading = false;
+          }
+        );
+        this.statsSMSTotalForAccount(
         success => {
-          this.totals.hotspots.count = success.body.total;
-          this.totals.hotspots.isLoading = false;
+          this.totals.sms.count = success.body.sms_count;
+          this.totals.sms.max_count = success.body.sms_max_count;
+          this.totals.sms.isLoading = false;
         },
         error => {
           console.log(error.body);
-          this.totals.hotspots.isLoading = false;
+          this.totals.sms.isLoading = false;
         }
       );
-      this.statsUnitsTotal(
-        success => {
-          this.totals.units.count = success.body.total;
-          this.totals.units.isLoading = false;
-        },
-        error => {
-          console.log(error.body);
-          this.totals.units.isLoading = false;
-        }
-      );
-      this.statsAccountsTotal(
-        success => {
-          this.totals.accounts.count = success.body.total;
-          this.totals.accounts.isLoading = false;
-        },
-        error => {
-          console.log(error.body);
-          this.totals.accounts.isLoading = false;
-        }
-      );
-      this.statsDevicesTotal(
-        success => {
-          this.totals.devices.count = success.body.total;
-          this.totals.devices.isLoading = false;
-        },
-        error => {
-          console.log(error.body);
-          this.totals.devices.isLoading = false;
-        }
-      );
-      this.statsUsersTotal(
-        success => {
-          this.totals.users.count = success.body.total;
-          this.totals.users.isLoading = false;
-        },
-        error => {
-          console.log(error.body);
-          this.totals.users.isLoading = false;
-        }
-      );
-      this.statsSessionsTotal(
-        success => {
-          this.totals.sessions.count = success.body.total;
-          this.totals.sessions.isLoading = false;
-        },
-        error => {
-          console.log(error.body);
-          this.totals.sessions.isLoading = false;
-        }
-      );
+      }
     }
-  }
-};
+  };
+
 </script>
 
 <style scoped>
-.adjust-height {
-  max-height: 109px;
-  min-height: 109px;
-}
+  .adjust-height {
+    max-height: 109px;
+    min-height: 109px;
+  }
+
 </style>

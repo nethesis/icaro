@@ -34,7 +34,7 @@ icaro:
     instagram_client_secret: "InstagramClientSecret"
     twilio_account_sid: "TwilioAccountSID"
     twilio_auth_token: "TwilioAuthToken"
-    twilio_number: "TwilioNumber"
+    twilio_service_sid: "TwilioServiceSID"
     email_from: "admin@example.com"
     email_smtp_host: "EmailSMTPHost"
     email_smtp_port: "25"

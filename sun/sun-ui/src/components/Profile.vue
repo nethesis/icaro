@@ -40,21 +40,6 @@
           </div>
         </div>
       </div>
-      <div v-if="totals.sms.isAvailable" class="col-xs-12 col-sm-12 col-md-6">
-        <div class="card-pf card-pf-accented">
-          <div class="card-pf-heading">
-            <h2 class="card-pf-title">
-              <span class="fa fa-commenting card-info-title"></span>
-              {{ $t("profile.sms") }}
-              <span v-if="!totals.sms.isLoading && totals.sms.isAvailable" class="right">
-                <span :class="totals.sms.data.sms_count > totals.sms.data.sms_max_count ? 'red' : ''">{{ totals.sms.data.sms_count }}</span> /
-                <strong class="soft">{{ totals.sms.data.sms_max_count }}</strong>
-              </span>
-              <div v-if="totals.sms.isLoading" class="spinner spinner-sm right"></div>
-            </h2>
-          </div>
-        </div>
-      </div>
     </div>
 
     <div class="modal fade" id="changePassModal" tabindex="-1" role="dialog" aria-labelledby="changePassModalLabel" aria-hidden="true">
@@ -113,9 +98,6 @@ export default {
   name: "Profile",
   mixins: [LoginService, StorageService, UtilService, StatsService],
   data() {
-    // get infos
-    this.getSMSTotal();
-
     return {
       msg: this.$i18n.t("menu.profile"),
       user: {
@@ -128,30 +110,9 @@ export default {
         password: false
       },
       onAction: false,
-      totals: {
-        sms: {
-          isLoading: false,
-          data: {},
-          isAvailable: false
-        }
-      }
     };
   },
   methods: {
-    getSMSTotal() {
-      this.statsSMSTotalForAccount(
-        success => {
-          this.totals.sms.data = success.body;
-          this.totals.sms.isLoading = false;
-          this.totals.sms.isAvailable = true;
-        },
-        error => {
-          console.log(error.body);
-          this.totals.sms.isLoading = false;
-          this.totals.sms.isAvailable = false;
-        }
-      );
-    },
     changePassword() {
       this.onAction = true;
       this.execChangePassword(

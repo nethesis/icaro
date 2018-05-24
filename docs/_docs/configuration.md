@@ -79,7 +79,7 @@ For the SMS login process Icaro use Twilio as SMS sender, register your app here
 	"sms": {
 		"account_sid": "twilio_account_sid",
 		"auth_token": "twilio_account_token",
-		"number": "send_number"
+		"service_sid": "twilio_messaging_service_sid"
 	},
 	"email": {
 		"from": "email_from",
@@ -158,4 +158,4 @@ This variables are common to all backends:
 ##### SMS
 * `SMS_ACCOUNT_SID` Twilio account SID
 * `SMS_AUTH_TOKEN` Twilio auth token
-* `SMS_NUMBER` Twilio send number
+* `SMS_SERVICE_SID` Twilio messaging service sid

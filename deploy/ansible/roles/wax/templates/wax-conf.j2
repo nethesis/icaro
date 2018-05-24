@@ -43,10 +43,10 @@
         "sms": {
 {% if icaro.wax.twilio_account_sid is defined and
 icaro.wax.twilio_auth_token is defined and
-icaro.wax.twilio_number is defined %}
+icaro.wax.twilio_service_sid is defined %}
             "account_sid": "{{ icaro.wax.twilio_account_sid }}",
             "auth_token": "{{ icaro.wax.twilio_auth_token }}",
-            "number": "{{ icaro.wax.twilio_number }}",
+            "service_sid": "{{ icaro.wax.twilio_service_sid }}",
             "link": "http://{{ icaro.hostname }}/wings/login/sms"
 {% endif %}
         },
