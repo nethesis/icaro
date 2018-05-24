@@ -28,6 +28,8 @@ var AuthMixin = {
             var sessionid = this.$root.$options.hotspot.sessionid || null
             var uamip = this.$root.$options.hotspot.uamip || null
             var uamport = this.$root.$options.hotspot.uamport || null
+            var uamport = this.$root.$options.hotspot.uamport || null
+            var voucher = this.$root.$options.session && this.$root.$options.session['voucherCode'] ? this.$root.$options.session['voucherCode'] : null
 
             return {
                 code: code,
@@ -36,7 +38,8 @@ var AuthMixin = {
                 uuid: uuid,
                 sessionid: sessionid,
                 uamip: uamip,
-                uamport: uamport
+                uamport: uamport,
+                voucher: voucher
             }
         },
         parseState(state) {
@@ -45,12 +48,14 @@ var AuthMixin = {
             var sessionid = state.split('&')[2]
             var uamip = state.split('&')[3]
             var uamport = state.split('&')[4]
+            var voucher = state.split('&')[5]
             return {
                 digest: digest,
                 uuid: uuid,
                 sessionid: sessionid,
                 uamip: uamip,
-                uamport: uamport
+                uamport: uamport,
+                voucher: voucher
             }
         },
         createWaxURL(code, params, endpoint, reset) {
@@ -62,7 +67,7 @@ var AuthMixin = {
                 '&reset=' + reset +
                 '&uamip=' + params.uamip +
                 '&uamport=' + params.uamport +
-                (this.$root.$options.session && this.$root.$options.session['voucherCode'] ? ('&voucher_code=' + this.$root.$options.session['voucherCode']) : '')
+                '&voucher_code=' + params.voucher
             return url
         },
         getSocialLoginURL(params, social) {
@@ -71,7 +76,7 @@ var AuthMixin = {
                 case 'facebook':
                     url = 'https://www.facebook.com/v2.11/dialog/oauth?' +
                         'client_id=' + params.fb_client_id +
-                        '&state=' + encodeURIComponent(params.digest + "&" + params.uuid + "&" + params.sessionid + "&" + params.uamip + "&" + params.uamport) +
+                        '&state=' + encodeURIComponent(params.digest + "&" + params.uuid + "&" + params.sessionid + "&" + params.uamip + "&" + params.uamport + "&" + params.voucher) +
                         '&scope=email,public_profile,user_birthday,user_likes,user_location' +
                         '&redirect_uri=' + escape('http://' + window.location.host + '/wings/login/facebook')
                     break
@@ -79,7 +84,7 @@ var AuthMixin = {
                 case 'linkedin':
                     url = 'https://www.linkedin.com/oauth/v2/authorization?' +
                         'client_id=' + params.li_client_id +
-                        '&state=' + encodeURIComponent(params.digest + "&" + params.uuid + "&" + params.sessionid + "&" + params.uamip + "&" + params.uamport) +
+                        '&state=' + encodeURIComponent(params.digest + "&" + params.uuid + "&" + params.sessionid + "&" + params.uamip + "&" + params.uamport + "&" + params.voucher) +
                         '&scope=' + escape('r_basicprofile r_emailaddress w_share') +
                         '&redirect_uri=' + escape('http://' + window.location.host + '/wings/login/linkedin') +
                         '&response_type=code'
@@ -88,7 +93,7 @@ var AuthMixin = {
                 case 'instagram':
                     url = 'https://api.instagram.com/oauth/authorize/?' +
                         'client_id=' + params.in_client_id +
-                        '&state=' + encodeURIComponent(params.digest + "&" + params.uuid + "&" + params.sessionid + "&" + params.uamip + "&" + params.uamport) +
+                        '&state=' + encodeURIComponent(params.digest + "&" + params.uuid + "&" + params.sessionid + "&" + params.uamip + "&" + params.uamport + "&" + params.voucher) +
                         '&scope=' + escape('basic') +
                         '&redirect_uri=' + escape('http://' + window.location.host + '/wings/login/instagram') +
                         '&response_type=code'
