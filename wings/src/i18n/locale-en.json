@@ -22,8 +22,8 @@
             "auth_progress": "Authorization in progress",
             "auth_success": "You are successfully authenticated",
             "auth_success_sub": "Read the marketing disclaimer and in a few seconds you will be redirected",
-            "auth_error": "Error on authentication",
-            "auth_error_sub": "Something went wrong on authentication process"
+            "auth_error": "Access Denied",
+            "auth_error_sub": "Something went wrong, the reasons could be the following:<br><ul style='padding-left: 0px; list-style-type: none;'><li style='margin-bottom: 7px;'>The data entered may not be correct</li><li style='margin-bottom: 7px;'>The voucher you are using could be expired</li><li style='margin-bottom: 7px;'>You could have reached your maximum daily time</li><li style='margin-bottom: 7px;'>You could have reach your maximum daily traffic</li>"
         },
         "email": {
             "insert_email": "Insert your email",
@@ -39,8 +39,8 @@
             "auth_progress": "Authorization in progress",
             "auth_success": "You are successfully authenticated",
             "auth_success_sub": "In a few seconds you will be redirected",
-            "auth_error": "Error on authentication",
-            "auth_error_sub": "Something went wrong on authentication process",
+            "auth_error": "Access Denied",
+            "auth_error_sub": "Something went wrong, the reasons could be the following:<br><ul style='padding-left: 0px; list-style-type: none;'><li style='margin-bottom: 7px;'>The data entered may not be correct</li><li style='margin-bottom: 7px;'>The voucher you are using could be expired</li><li style='margin-bottom: 7px;'>You could have reached your maximum daily time</li><li style='margin-bottom: 7px;'>You could have reach your maximum daily traffic</li>",
             "wait":"Please wait few seconds",
             "we_are_sending_email_code":"We are sending you an email with your personal code, if you do not receive any email, try looking in your SPAM box"
         },
@@ -59,8 +59,8 @@
             "auth_progress": "Authorization in progress",
             "auth_success": "You are successfully authenticated",
             "auth_success_sub": "In a few seconds you will be redirected",
-            "auth_error": "Error on authentication",
-            "auth_error_sub": "Something went wrong on authentication process",
+            "auth_error": "Access Denied",
+            "auth_error_sub": "Something went wrong, the reasons could be the following:<br><ul style='padding-left: 0px; list-style-type: none;'><li style='margin-bottom: 7px;'>The data entered may not be correct</li><li style='margin-bottom: 7px;'>The voucher you are using could be expired</li><li style='margin-bottom: 7px;'>You could have reached your maximum daily time</li><li style='margin-bottom: 7px;'>You could have reach your maximum daily traffic</li>",
             "select_state": "Select state",
             "prefix": "Prefix",
             "wait":"Please wait few seconds",
