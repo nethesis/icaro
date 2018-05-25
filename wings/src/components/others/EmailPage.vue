@@ -17,7 +17,7 @@
                     <div class="header">
                         {{ $t("email.error_code") }}
                     </div>
-                    <p v-html="$t('email.auth_error_sub')"></p>
+                    <p>{{ $t("email.error_code_sub") }}</p>
                 </div>
             </div>
             <div v-if="codeRequested">

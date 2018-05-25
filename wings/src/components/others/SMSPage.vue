@@ -30,7 +30,7 @@
                     <div class="header">
                         {{ $t("sms.error_code") }}
                     </div>
-                    <p v-html="$t('sms.auth_error_sub')"></p>
+                    <p>{{ $t("sms.error_code_sub") }}</p>
                 </div>
             </div>
             <div v-if="codeRequested">
