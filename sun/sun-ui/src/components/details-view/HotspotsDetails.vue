@@ -501,7 +501,7 @@
       </div>
     </div>
 
-    <div v-for="voucher in vouchers.data" v-bind:key="voucher.id" class="card-pf" id="voucher-coupon">
+    <div v-for="voucher in vouchers.data" v-bind:key="voucher.id" v-if="voucher.remain_use != 0" class="card-pf" id="voucher-coupon">
       <img class="voucher-logo" src="/static/logo.png" />
       <h2 class="card-pf-title voucher-name" id="test">
         {{info.data.name}}
@@ -1190,6 +1190,10 @@ export default {
       };
 
       for (var index = 0; index < this.vouchers.data.length; index++) {
+        // skip voucher with remain_use == 0
+        if(this.vouchers.data[index].remain_use == 0) {
+          continue
+        }
         if (index % 10 === 0 && index !== 0) {
           doc.addPage();
           row = 0;
@@ -1366,6 +1370,12 @@ export default {
     },
     exportCSVVoucher() {
       var voucherRows = JSON.parse(JSON.stringify(this.vouchers.data));
+      // remove voucher with remain_use == 0
+      for(var r in voucherRows) {
+        if(voucherRows[r].remain_use == 0) {
+          delete voucherRows[r]
+        }
+      }
       for (var r in voucherRows) {
         var banDown =
           voucherRows[r].bandwidth_down > 0
