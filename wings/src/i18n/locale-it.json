@@ -23,7 +23,8 @@
             "auth_success": "Ti sei autenticato con successo",
             "auth_success_sub": "Dopo aver visualizzato le informazioni privacy potrai navigare",
             "auth_error": "Accesso Negato",
-            "auth_error_sub": "Si è verificato un errore, i motivi potrebbero essere i seguenti:<br><ul style='padding-left: 0px; list-style-type: none;'><li style='margin-bottom: 7px;'>I dati inseriti potrebbero non essere corretti</li><li style='margin-bottom: 7px;'>Il voucher che stai usando potrebbe essere scaduto</li><li style='margin-bottom: 7px;'>Potresti aver raggiunto il tempo massimo consentito giornaliero</li><li style='margin-bottom: 7px;'>Potresti aver raggiunto il traffico massimo consentito giornaliero</li>"
+            "auth_error_sub": "Si è verificato un errore, i motivi potrebbero essere i seguenti: 1)I dati inseriti potrebbero non essere corretti. 2)Il voucher che stai usando potrebbe essere scaduto. 3)Potresti aver raggiunto il tempo massimo consentito giornaliero. 4)Potresti aver raggiunto il traffico massimo consentito giornaliero.
+"
         },
         "email": {
             "insert_email": "Inserisci la tua email",
@@ -40,7 +41,8 @@
             "auth_success": "Ti sei autenticato con successo",
             "auth_success_sub": "Dopo aver visualizzato le informazioni privacy potrai navigare",
             "auth_error": "Accesso Negato",
-            "auth_error_sub": "Si è verificato un errore, i motivi potrebbero essere i seguenti:<br><ul style='padding-left: 0px; list-style-type: none;'><li style='margin-bottom: 7px;'>I dati inseriti potrebbero non essere corretti</li><li style='margin-bottom: 7px;'>Il voucher che stai usando potrebbe essere scaduto</li><li style='margin-bottom: 7px;'>Potresti aver raggiunto il tempo massimo consentito giornaliero</li><li style='margin-bottom: 7px;'>Potresti aver raggiunto il traffico massimo consentito giornaliero</li>",
+            "auth_error_sub": "Si è verificato un errore, i motivi potrebbero essere i seguenti: 1)I dati inseriti potrebbero non essere corretti. 2)Il voucher che stai usando potrebbe essere scaduto. 3)Potresti aver raggiunto il tempo massimo consentito giornaliero. 4)Potresti aver raggiunto il traffico massimo consentito giornaliero.
+",
             "wait":"Solo qualche secondo...",
             "we_are_sending_email_code":"Ti stiamo inviando un email con il tuo codice d'accesso,se non dovessi visualizzarla prova a guardare nella tua casella SPAM."
         },
@@ -60,7 +62,8 @@
             "auth_success": "Ti sei autenticato con successo",
             "auth_success_sub": "Dopo aver visualizzato le informazioni privacy potrai navigare",
             "auth_error": "Accesso Negato",
-            "auth_error_sub": "Si è verificato un errore, i motivi potrebbero essere i seguenti:<br><ul style='padding-left: 0px; list-style-type: none;'><li style='margin-bottom: 7px;'>I dati inseriti potrebbero non essere corretti</li><li style='margin-bottom: 7px;'>Il voucher che stai usando potrebbe essere scaduto</li><li style='margin-bottom: 7px;'>Potresti aver raggiunto il tempo massimo consentito giornaliero</li><li style='margin-bottom: 7px;'>Potresti aver raggiunto il traffico massimo consentito giornaliero</li>",
+            "auth_error_sub": "Si è verificato un errore, i motivi potrebbero essere i seguenti: 1)I dati inseriti potrebbero non essere corretti. 2)Il voucher che stai usando potrebbe essere scaduto. 3)Potresti aver raggiunto il tempo massimo consentito giornaliero. 4)Potresti aver raggiunto il traffico massimo consentito giornaliero.
+",
             "select_state": "Seleziona Stato",
             "prefix": "Prefisso Internazionale",
             "wait":"Solo qualche secondo...",
