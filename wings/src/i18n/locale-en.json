@@ -23,7 +23,7 @@
             "auth_success": "You are successfully authenticated",
             "auth_success_sub": "Read the marketing disclaimer and in a few seconds you will be redirected",
             "auth_error": "Access Denied",
-            "auth_error_sub": "Something went wrong, the reasons could be the following: 1)The data entered may not be correct. 2)The voucher you are using could be expired. 3)You could have reached your maximum daily time. 4)You could have reach your maximum daily traffic."
+            "auth_error_sub": "Something went wrong, the reasons could be the following: 1)The data entered may not be correct. 2)The voucher you are using could be expired. 3)You could have reached your maximum daily time. 4)You could have reached your maximum daily traffic."
         },
         "email": {
             "insert_email": "Insert your email",
@@ -40,7 +40,7 @@
             "auth_success": "You are successfully authenticated",
             "auth_success_sub": "In a few seconds you will be redirected",
             "auth_error": "Access Denied",
-            "auth_error_sub": "Something went wrong, the reasons could be the following: 1)The data entered may not be correct. 2)The voucher you are using could be expired. 3)You could have reached your maximum daily time. 4)You could have reach your maximum daily traffic.",
+            "auth_error_sub": "Something went wrong, the reasons could be the following: 1)The data entered may not be correct. 2)The voucher you are using could be expired. 3)You could have reached your maximum daily time. 4)You could have reached your maximum daily traffic.",
             "wait":"Please wait few seconds",
             "we_are_sending_email_code":"We are sending you an email with your personal code, if you do not receive any email, try looking in your SPAM box"
         },
@@ -60,7 +60,7 @@
             "auth_success": "You are successfully authenticated",
             "auth_success_sub": "In a few seconds you will be redirected",
             "auth_error": "Access Denied",
-            "auth_error_sub": "Something went wrong, the reasons could be the following: 1)The data entered may not be correct. 2)The voucher you are using could be expired. 3)You could have reached your maximum daily time. 4)You could have reach your maximum daily traffic.",
+            "auth_error_sub": "Something went wrong, the reasons could be the following: 1)The data entered may not be correct. 2)The voucher you are using could be expired. 3)You could have reached your maximum daily time. 4)You could have reached your maximum daily traffic.",
             "select_state": "Select state",
             "prefix": "Prefix",
             "wait":"Please wait few seconds",
