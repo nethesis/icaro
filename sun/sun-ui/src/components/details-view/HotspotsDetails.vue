@@ -144,7 +144,7 @@
                   <strong class="red" v-if="props.row.remain_use == 0">{{$t('hotspot.limit_reached')}}</strong>
                 </td>
                 <td>
-                  <button v-on:click="printVoucher(props.row)" class="btn btn-primary" type="button">
+                  <button v-if="props.row.remain_use != 0" v-on:click="printVoucher(props.row)" class="btn btn-primary" type="button">
                     <span class="fa fa-print"></span>
                   </button>
                   <button v-on:click="deleteVoucher(props.row.id)" class="btn btn-danger" type="button">
@@ -501,7 +501,7 @@
       </div>
     </div>
 
-    <div v-for="voucher in vouchers.data" v-bind:key="voucher.id" v-if="voucher.remain_use != 0" class="card-pf" id="voucher-coupon">
+    <div v-for="voucher in vouchers.usable" v-bind:key="voucher.id" class="card-pf" id="voucher-coupon">
       <img class="voucher-logo" src="/static/logo.png" />
       <h2 class="card-pf-title voucher-name" id="test">
         {{info.data.name}}
@@ -521,7 +521,6 @@
           <span> {{ $t("hotspot.days") }} </span>
         </div>
         <div class="card-pf-time-frame-filter voucher-max-use">
-          {{ $t("hotspot.mode") }}:
           {{voucher.remain_use == -1 ? $t('hotspot.limitless') : $t('hotspot.max_use') + ': ' }}
           <strong v-if="voucher.remain_use != -1">{{voucher.remain_use}}</strong>
         </div>
@@ -619,7 +618,8 @@ export default {
       },
       vouchers: {
         isLoading: true,
-        data: []
+        data: [],
+        usable: []
       },
       macAuth: {
         isLoading: true,
@@ -884,6 +884,11 @@ export default {
         this.$route.params.id,
         success => {
           this.vouchers.data = success.body;
+          for(var r in this.vouchers.data) {
+            if(this.vouchers.data[r].remain_use != 0) {
+              this.vouchers.usable.push(this.vouchers.data[r])
+            }
+          }
           this.vouchers.isLoading = false;
         },
         error => {
@@ -1106,8 +1111,8 @@ export default {
     },
     printVoucher(voucher) {
       let index;
-      for (let i = 0; i < this.vouchers.data.length; i++) {
-        if (this.vouchers.data[i].id === voucher.id) {
+      for (let i = 0; i < this.vouchers.usable.length; i++) {
+        if (this.vouchers.usable[i].id === voucher.id) {
           index = i;
         }
       }
@@ -1130,17 +1135,17 @@ export default {
       );
       doc.fromHTML(
         document.getElementsByClassName("voucher-main")[index],
-        15,
+        65,
         21
       );
       doc.fromHTML(
         document.getElementsByClassName("voucher-valid")[index],
-        65,
+        1,
         21
       );
       doc.fromHTML(
         document.getElementsByClassName("voucher-max-use")[index],
-        65,
+        1,
         29
       );
 
@@ -1189,11 +1194,7 @@ export default {
         height: 0
       };
 
-      for (var index = 0; index < this.vouchers.data.length; index++) {
-        // skip voucher with remain_use == 0
-        if(this.vouchers.data[index].remain_use == 0) {
-          continue
-        }
+      for (var index = 0; index < this.vouchers.usable.length; index++) {
         if (index % 10 === 0 && index !== 0) {
           doc.addPage();
           row = 0;
@@ -1225,17 +1226,17 @@ export default {
           );
           doc.fromHTML(
             document.getElementsByClassName("voucher-main")[index],
-            15,
+            65,
             cordinates.y + 21
           );
           doc.fromHTML(
             document.getElementsByClassName("voucher-valid")[index],
-            65,
+            1,
             cordinates.y + 21
           );
           doc.fromHTML(
             document.getElementsByClassName("voucher-max-use")[index],
-            65,
+            1,
             cordinates.y + 29
           );
 
@@ -1310,17 +1311,17 @@ export default {
           );
           doc.fromHTML(
             document.getElementsByClassName("voucher-main")[index],
-            cordinates.x + 15,
+            cordinates.x + 65,
             cordinates.y + 21
           );
           doc.fromHTML(
             document.getElementsByClassName("voucher-valid")[index],
-            cordinates.x + 65,
+            cordinates.x + 1,
             cordinates.y + 21
           );
           doc.fromHTML(
             document.getElementsByClassName("voucher-max-use")[index],
-            cordinates.x + 65,
+            cordinates.x + 1,
             cordinates.y + 29
           );
           doc.setLineWidth(0.3);
@@ -1369,13 +1370,7 @@ export default {
       window.open(doc.output("bloburl"), "_blank");
     },
     exportCSVVoucher() {
-      var voucherRows = JSON.parse(JSON.stringify(this.vouchers.data));
-      // remove voucher with remain_use == 0
-      for(var r in voucherRows) {
-        if(voucherRows[r].remain_use == 0) {
-          delete voucherRows[r]
-        }
-      }
+      var voucherRows = JSON.parse(JSON.stringify(this.vouchers.usable));
       for (var r in voucherRows) {
         var banDown =
           voucherRows[r].bandwidth_down > 0

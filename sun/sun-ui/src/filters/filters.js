@@ -12,19 +12,19 @@ var Filters = {
         break;
 
       case size >= 1024 && size < Math.pow(1024, 2):
-        result = Math.round(size / 1024 * 100) / 100 + " K";
+        result = Math.round(size / 1024 * 100) / 100 + " KB";
         break;
 
       case size >= Math.pow(1024, 2) && size < Math.pow(1024, 3):
-        result = Math.round(size / Math.pow(1024, 2) * 100) / 100 + " M";
+        result = Math.round(size / Math.pow(1024, 2) * 100) / 100 + " MB";
         break;
 
       case size >= Math.pow(1024, 3) && size < Math.pow(1024, 4):
-        result = Math.round(size / Math.pow(1024, 3) * 100) / 100 + " G";
+        result = Math.round(size / Math.pow(1024, 3) * 100) / 100 + " GB";
         break;
 
       default:
-        result = Math.round(size / Math.pow(1024, 4) * 100) / 100 + " T";
+        result = Math.round(size / Math.pow(1024, 4) * 100) / 100 + " TB";
     }
 
     return result;

@@ -16,7 +16,7 @@
                 <div class="header">
                     {{ $t("social.auth_error") }}
                 </div>
-                <p>{{ $t("social.auth_error_sub") }}</p>
+                <p v-html="$t('social.auth_error_sub')"></p>
             </div>
         </div>
         <div v-if="authorized">
