@@ -1,7 +1,7 @@
 <template>
     <div class="ui segment form">
         <div v-if="!dedaloRequested">
-            <div v-if="choosedMode && !authSMS" class="inline field" v-bind:class="{ error: errors.badInput }">
+            <div v-if="choosedMode && !this.$route.query.num" class="inline field" v-bind:class="{ error: errors.badInput }">
                 <label>{{ $t("sms.prefix") }}</label>
                 <div class="ui fluid pointing search selection dropdown select-state">
                     <input type="hidden" name="country">

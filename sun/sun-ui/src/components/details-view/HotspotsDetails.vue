@@ -140,7 +140,8 @@
                 </td>
                 <td class="fancy">
                   {{props.row.remain_use == -1 ? $t('hotspot.limitless') : $t('hotspot.max_use') + ': ' }}
-                  <strong v-if="props.row.remain_use != -1">{{props.row.remain_use}}</strong>
+                  <strong v-if="props.row.remain_use > 0">{{props.row.remain_use}}</strong>
+                  <strong class="red" v-if="props.row.remain_use == 0">{{$t('hotspot.limit_reached')}}</strong>
                 </td>
                 <td>
                   <button v-on:click="printVoucher(props.row)" class="btn btn-primary" type="button">

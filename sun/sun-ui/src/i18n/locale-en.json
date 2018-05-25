@@ -111,7 +111,8 @@
       "unlimited": "Unlimited",
       "export_csv": "Export CSV",
       "enabled": "Enabled",
-      "disabled": "Disabled"
+      "disabled": "Disabled",
+      "limit_reached": "Limit reached"
     },
     "user": {
       "username": "Username",
