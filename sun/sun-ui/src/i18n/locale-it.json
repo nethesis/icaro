@@ -140,7 +140,7 @@
       "traffic": "Traffico",
       "time": "Tempo",
       "traffic_limit": "Traffico massimo giornaliero (MB)",
-      "time_limit": "Durata massima giornaliera (Minuti)",
+      "time_limit": "Durata massima giornaliera (Minuti)"
     },
     "account": {
       "uuid": "ID",
