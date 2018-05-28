@@ -14,7 +14,7 @@
     export default {
         name: 'LoginPage',
         mixins: [AuthMixin],
-        data() {
+        data: function() {
             return {
                 hotspot: {
                     disclaimers: this.$root.$options.hotspot.disclaimers
@@ -23,12 +23,12 @@
             }
         },
         methods: {
-            decline() {
+            decline: function() {
                 this.$router.push({
                     path: '/login'
                 })
             },
-            accept() {
+            accept: function() {
                 this.$router.push({
                     path: this.loginDest
                 })

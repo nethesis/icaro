@@ -32,16 +32,16 @@
   export default {
     name: 'SplashPage',
     mixins: [AuthMixin],
-    data() {
+    data: function() {
       var loaded = false
       this.getPreferences({
         digest: this.$root.$options.hotspot.digest,
         uuid: this.$root.$options.hotspot.uuid,
         sessionid: this.$root.$options.hotspot.sessionid,
-      }, success => {
+      }, function(success) {
         this.hotspot.preferences = success.body.preferences
         this.hotspot.loaded = true
-      }, error => {
+      }, function(error) {
         this.hotspot.loaded = false
         console.error(error)
       })

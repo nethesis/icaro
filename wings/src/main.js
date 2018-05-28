@@ -28,7 +28,7 @@ try {
 }
 
 // configure i18n
-const i18n = new VueI18n({
+var i18n = new VueI18n({
   locale: userLang,
   messages,
 })

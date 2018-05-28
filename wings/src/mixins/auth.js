@@ -2,7 +2,7 @@ import CryptoJS from 'crypto-js'
 
 var AuthMixin = {
     methods: {
-        getPreferences(params, success, error) {
+        getPreferences: function(params, success, error) {
             var host = window.location.host
             this.$http.get("https://" + host + '/wax/preferences' +
                 '?digest=' + params.digest +
@@ -10,7 +10,7 @@ var AuthMixin = {
                 '&sessionid=' + params.sessionid
             ).then(success, error);
         },
-        deleteMarketingInfo(userId, params, success, error) {
+        deleteMarketingInfo: function(userId, params, success, error) {
             var host = window.location.host
             this.$http.delete("https://" + host + '/wax/marketings/' + userId +
                 '?digest=' + params.digest +
@@ -18,7 +18,7 @@ var AuthMixin = {
                 '&sessionid=' + params.sessionid
             ).then(success, error);
         },
-        extractParams() {
+        extractParams: function() {
             var code = this.$route.query.code || null
             var state = this.$route.query.state || null
 
@@ -42,7 +42,7 @@ var AuthMixin = {
                 voucher: voucher
             }
         },
-        parseState(state) {
+        parseState: function(state) {
             var digest = state.split('&')[0]
             var uuid = state.split('&')[1]
             var sessionid = state.split('&')[2]
@@ -58,7 +58,7 @@ var AuthMixin = {
                 voucher: voucher
             }
         },
-        createWaxURL(code, params, endpoint, reset) {
+        createWaxURL: function(code, params, endpoint, reset) {
             var host = window.location.host
             var url = 'https://' + host + '/wax/register/' + endpoint + '/' + encodeURIComponent(code) +
                 '?digest=' + params.digest +
@@ -70,7 +70,7 @@ var AuthMixin = {
                 '&voucher_code=' + params.voucher
             return url
         },
-        getSocialLoginURL(params, social) {
+        getSocialLoginURL: function(params, social) {
             var url = ''
             switch (social) {
                 case 'facebook':
@@ -101,7 +101,7 @@ var AuthMixin = {
             }
             return url
         },
-        doDedaloLogin(user, callback) {
+        doDedaloLogin: function(user, callback) {
             var params = this.extractParams()
             var ip = params.uamip || null
             var port = params.uamport || null
@@ -114,7 +114,7 @@ var AuthMixin = {
             var dedaloUrl = ip + ':' + port
 
             // do dedalo login
-            this.$http.get('http://' + dedaloUrl + '/json/status').then(responseStatus => {
+            this.$http.get('http://' + dedaloUrl + '/json/status').then(function(responseStatus) {
                 // extract info to calculate response
                 var chap_challenge = responseStatus.body.challenge;
                 var string_to_hash = "00" + user.password + chap_challenge;
@@ -125,11 +125,11 @@ var AuthMixin = {
                 // do dedalo login
                 this.$http.get('http://' + dedaloUrl + '/json/logon?username=' + encodeURIComponent(user.id) +
                     '&response=' + response).then(callback);
-            }, response => {
+            }, function(response) {
                 callback(response)
             });
         },
-        doDedaloLogout(callback) {
+        doDedaloLogout: function(callback) {
             var params = this.extractParams()
             var ip = params.uamip || null
             var port = params.uamport || null
@@ -144,7 +144,7 @@ var AuthMixin = {
             // do dedalo logout
             this.$http.get('http://' + dedaloUrl + '/json/logout').then(callback);
         },
-        doTempSession(email, callback) {
+        doTempSession: function(email, callback) {
             var params = this.extractParams()
             var ip = params.uamip || null
             var port = params.uamport || null

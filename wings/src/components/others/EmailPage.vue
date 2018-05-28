@@ -82,14 +82,14 @@
     export default {
         name: 'EmailPage',
         mixins: [AuthMixin],
-        data() {
+        data: function() {
             var params = this.extractParams()
 
-            this.getPreferences(params, success => {
+            this.getPreferences(params, function(success) {
                 this.$parent.hotspot.disclaimers = success.body.disclaimers
                 this.$root.$options.hotspot.disclaimers = success.body.disclaimers
                 this.hotspot.disclaimers = success.body.disclaimers
-            }, error => {
+            }, function(error) {
                 console.error(error)
             })
 
@@ -116,16 +116,16 @@
             }
         },
         methods: {
-            isDisabled() {
+            isDisabled: function() {
                 return this.authEmail.length == 0 || this.authCode.length == 0
             },
-            chooseMode(haveCode) {
+            chooseMode: function(haveCode) {
                 this.choosedMode = true
                 if (haveCode) {
                     this.codeRequested = true
                 }
             },
-            getCode(reset) {
+            getCode: function(reset) {
                 this.errors.badMail = false
                 this.bannerShow = true
                 if (this.authEmail.indexOf('@') == -1) {
@@ -138,7 +138,7 @@
                 var url = this.createWaxURL(this.authEmail, params, 'email', reset)
 
                 // get user id
-                this.$http.get(url).then(responseAuth => {
+                this.$http.get(url).then(function(responseAuth) {
                     this.authReset = responseAuth.body.exists
                     this.resetDone = responseAuth.body.reset
                     this.userId = responseAuth.body.user_db_id
@@ -148,33 +148,33 @@
                         this.codeRequested = true
                     } else {
                         // open temp session for the user
-                        this.doTempSession(this.authEmail, responseTmp => {
+                        this.doTempSession(this.authEmail, function(responseTmp) {
                             this.codeRequested = true
-                        }, error => {
+                        }, function(error) {
                             this.codeRequested = false
                             this.errors.badMail = true
                             console.error(error)
                         })
                     }
-                }, error => {
+                }, function(error) {
                     this.codeRequested = false
                     this.errors.badMail = true
                     console.error(error)
                 });
             },
-            execLogin() {
+            execLogin: function() {
                 this.dedaloRequested = true
                 this.authorized = false
                 this.errors.dedaloError = false
                 this.errors.badCode = false
 
                 // exec logout
-                this.doDedaloLogout(responseDedaloLogout => {
+                this.doDedaloLogout(function(responseDedaloLogout) {
                     // exec dedalo login
                     this.doDedaloLogin({
                         id: this.authEmail,
                         password: this.authCode || ''
-                    }, responseDedalo => {
+                    }, function(responseDedalo) {
                         if (responseDedalo.body.clientState == 1) {
                             this.authorized = true
                             this.errors.dedaloError = false
@@ -183,18 +183,18 @@
                             this.errors.dedaloError = true
                             this.errors.badCode = true
                         }
-                    }, error => {
+                    }, function(error) {
                         this.authorized = false
                         this.errors.dedaloError = true
                         console.error(error)
                     })
-                }, error => {
+                }, function(error) {
                     this.authorized = false
                     this.errors.dedaloError = true
                     console.error(error)
                 })
             },
-            deleteInfo() {
+            deleteInfo: function() {
                 // extract code and state
                 var params = this.extractParams()
                 this.deleteMarketingInfo(this.userId, params, function (success) {
@@ -206,7 +206,7 @@
                     }
                 })
             },
-            accept() {
+            accept: function() {
                 // open redir url
                 window.location.replace(this.$root.$options.hotspot.preferences
                     .captive_1_redir)

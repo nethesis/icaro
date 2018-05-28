@@ -66,7 +66,7 @@
     export default {
         name: 'LoginPage',
         mixins: [AuthMixin],
-        data() {
+        data: function() {
             var voucherAvailable = false
             var voucherValidated = false
             var badCode = false
@@ -88,13 +88,13 @@
             }
         },
         methods: {
-            changeRoute(path) {
+            changeRoute: function(path) {
                 this.$root.$options.session['loginDest'] = path
                 this.$router.push({
                     path: 'login/disclaimer'
                 })
             },
-            validateCode() {
+            validateCode: function() {
                 this.badCode = false
                 if (this.authCode.length == 0) {
                     this.badInput = true
@@ -106,10 +106,10 @@
                 var url = this.createWaxURL(this.authCode, params, 'voucher')
 
                 // get user id
-                this.$http.get(url).then(responseAuth => {
+                this.$http.get(url).then(function(responseAuth) {
                     this.voucherValidated = true
                     this.$root.$options.session['voucherCode'] = responseAuth.body.code
-                }, error => {
+                }, function(error) {
                     this.voucherValidated = false
                     this.badCode = true
                     console.error(error)

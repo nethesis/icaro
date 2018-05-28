@@ -38,7 +38,7 @@
     export default {
         name: 'FacebookPage',
         mixins: [AuthMixin],
-        data() {
+        data: function() {
             var authorized = false
             var dedaloError = false
 
@@ -47,7 +47,7 @@
 
             if (params.code && params.state) {
                 // extract wings preferences
-                this.getPreferences(this.parseState(params.state), success => {
+                this.getPreferences(this.parseState(params.state), function(success) {
                     this.$parent.hotspot.name = success.body.hotspot_name
                     this.$parent.hotspot.disclaimers = success.body.disclaimers
                     this.$parent.hotspot.preferences = success.body.preferences
@@ -56,7 +56,7 @@
                     this.hotspot.disclaimers = success.body.disclaimers
                     $("body").css("background-color", success.body.preferences.captive_7_background ||
                         '#2a87be');
-                }, error => {
+                }, function(error) {
                     this.authorized = false
                     console.error(error)
                 })
@@ -65,13 +65,13 @@
                 var url = this.createWaxURL(params.code, this.parseState(params.state), 'social/facebook')
 
                 // get user id
-                this.$http.get(url).then(responseAuth => {
+                this.$http.get(url).then(function(responseAuth) {
                     this.userId = responseAuth.body.user_db_id
                     // exec dedalo login
                     this.doDedaloLogin({
                         id: responseAuth.body.user_id,
                         password: responseAuth.password || ''
-                    }, responseDedalo => {
+                    }, function(responseDedalo) {
                         if (responseDedalo.body.clientState == 1) {
                             this.authorized = true
                             this.dedaloError = false
@@ -79,12 +79,12 @@
                             this.authorized = false
                             this.dedaloError = true
                         }
-                    }, error => {
+                    }, function(error) {
                         this.authorized = false
                         this.dedaloError = true
                         console.error(error)
                     })
-                }, error => {
+                }, function(error) {
                     this.authorized = false
                     this.dedaloError = true
                     console.error(error)
@@ -107,7 +107,7 @@
             }
         },
         methods: {
-            deleteInfo() {
+            deleteInfo: function() {
                 // extract code and state
                 var params = this.extractParams()
                 this.deleteMarketingInfo(this.userId, this.parseState(params.state), function (success) {
@@ -119,7 +119,7 @@
                     }
                 })
             },
-            accept() {
+            accept: function() {
                 // open redir url
                 if (this.$root.$options.hotspot.preferences
                     .facebook_login_page && this.$root.$options.hotspot.preferences

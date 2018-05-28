@@ -95,14 +95,14 @@
     export default {
         name: 'SMSPage',
         mixins: [AuthMixin],
-        data() {
+        data: function() {
             var params = this.extractParams()
 
-            this.getPreferences(params, success => {
+            this.getPreferences(params, function(success) {
                 this.$parent.hotspot.disclaimers = success.body.disclaimers
                 this.$root.$options.hotspot.disclaimers = success.body.disclaimers
                 this.hotspot.disclaimers = success.body.disclaimers
-            }, error => {
+            }, function(error) {
                 console.error(error)
             })
 
@@ -131,13 +131,13 @@
             }
         },
         methods: {
-            isDisabled() {
+            isDisabled: function() {
                 return this.authSMS.length == 0 || this.authCode.length == 0
             },
-            setPrefix(prefix) {
+            setPrefix: function(prefix) {
                 this.authPrefix = prefix
             },
-            chooseMode(haveCode) {
+            chooseMode: function(haveCode) {
                 this.choosedMode = true
                 if (haveCode) {
                     this.codeRequested = true
@@ -147,7 +147,7 @@
                         .dropdown();
                 }, 100)
             },
-            getCode(reset) {
+            getCode: function(reset) {
                 this.errors.badNumber = false
                 this.bannerShow = true
                 if (!(this.authPrefix + this.authSMS).startsWith('+')) {
@@ -160,18 +160,18 @@
                 var url = this.createWaxURL(this.authPrefix + this.authSMS, params, 'sms', reset)
 
                 // get user id
-                this.$http.get(url).then(responseAuth => {
+                this.$http.get(url).then(function(responseAuth) {
                     this.codeRequested = true
                     this.authReset = responseAuth.body.exists
                     this.resetDone = responseAuth.body.reset
                     this.userId = responseAuth.body.user_db_id
-                }, error => {
+                }, function(error) {
                     this.codeRequested = false
                     this.errors.badNumber = true
                     console.error(error)
                 });
             },
-            execLogin() {
+            execLogin: function() {
                 this.dedaloRequested = true
                 this.authorized = false
                 this.errors.dedaloError = false
@@ -181,7 +181,7 @@
                 this.doDedaloLogin({
                     id: this.authPrefix + this.authSMS,
                     password: this.authCode || ''
-                }, responseDedalo => {
+                }, function(responseDedalo) {
                     if (responseDedalo.body.clientState == 1) {
                         this.authorized = true
                         this.errors.dedaloError = false
@@ -190,13 +190,13 @@
                         this.errors.dedaloError = true
                         this.errors.badCode = true
                     }
-                }, error => {
+                }, function(error) {
                     this.authorized = false
                     this.errors.dedaloError = true
                     console.error(error)
                 })
             },
-            deleteInfo() {
+            deleteInfo: function() {
                 // extract code and state
                 var params = this.extractParams()
                 this.deleteMarketingInfo(this.userId, params, function (success) {
@@ -208,7 +208,7 @@
                     }
                 })
             },
-            accept() {
+            accept: function() {
                 // open redir url
                 window.location.replace(this.$root.$options.hotspot.preferences
                     .captive_1_redir)
