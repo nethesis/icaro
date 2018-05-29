@@ -103,7 +103,7 @@ func stopSession(sessionId string, unitMacAddress string, bytesDown string, byte
 		return 0
 	}
 	session := utils.GetSessionByKeyAndUnitId(sessionId, unit.Id)
-	if session.Id < 0 {
+	if session.Id <= 0 {
 		return 0
 	}
 
@@ -156,7 +156,7 @@ func updateSession(sessionId string, unitMacAddress string, bytesDown string, by
 		return 0
 	}
 	session := utils.GetSessionByKeyAndUnitId(sessionId, unit.Id)
-	if session.Id < 0 {
+	if session.Id <= 0 {
 		return 0
 	}
 
