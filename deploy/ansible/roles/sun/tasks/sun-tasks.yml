@@ -28,3 +28,9 @@
     name: sun-tasks@store-sessions
     daemon_reload: yes
     enabled: yes
+
+- name: Enable sun-tasks clean-sessions service
+  systemd:
+    name: sun-tasks@clean-sessions
+    daemon_reload: yes
+    enabled: yes
