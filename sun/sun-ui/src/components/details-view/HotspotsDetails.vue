@@ -840,7 +840,7 @@ export default {
                 remain_use:
                   context.newVoucher.limitless == "true"
                     ? -1
-                    : context.newVoucher.remain_use
+                    : parseInt(context.newVoucher.remain_use)
               },
               success => {
                 resolve();
