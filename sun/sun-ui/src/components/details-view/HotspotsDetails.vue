@@ -884,9 +884,9 @@ export default {
         this.$route.params.id,
         success => {
           this.vouchers.data = success.body;
-          for(var r in this.vouchers.data) {
-            if(this.vouchers.data[r].remain_use != 0) {
-              this.vouchers.usable.push(this.vouchers.data[r])
+          for (var r in this.vouchers.data) {
+            if (this.vouchers.data[r].remain_use != 0) {
+              this.vouchers.usable.push(this.vouchers.data[r]);
             }
           }
           this.vouchers.isLoading = false;
@@ -1124,60 +1124,73 @@ export default {
       doc.setDrawColor(17, 17, 17);
       doc.line(0, fifthHeight, halfWidth, fifthHeight);
       doc.line(halfWidth, 0, halfWidth, fifthHeight);
-      doc.addImage(this.preferences.captive[2].value, 2, 2, 20, 20);
-      doc.fromHTML(
-        document.getElementsByClassName("voucher-desc")[index],
-        50,
-        -3,
-        {
-          width: 55
-        }
-      );
-      doc.fromHTML(
-        document.getElementsByClassName("voucher-main")[index],
-        65,
-        21
-      );
-      doc.fromHTML(
-        document.getElementsByClassName("voucher-valid")[index],
-        1,
-        21
-      );
-      doc.fromHTML(
-        document.getElementsByClassName("voucher-max-use")[index],
-        1,
-        29
-      );
 
-      doc.setLineWidth(0.3);
-      doc.setDrawColor(158, 160, 163);
-      doc.line(5, 41, halfWidth - 5, +41);
-      doc.addImage(arrow.down, 4, 45, 3, 3);
-      doc.fromHTML(
-        document.getElementsByClassName("voucher-download")[index],
-        8,
-        40
-      );
-      doc.addImage(arrow.up, 4, 50, 3, 3);
-      doc.fromHTML(
-        document.getElementsByClassName("voucher-upload")[index],
-        8,
-        45
-      );
+      var image = new Image();
+      var context = this;
+      image.onload = function() {
+        var values = context.resizeImage(image, 20, 20);
+        doc.addImage(
+          context.preferences.captive[2].value,
+          2,
+          2,
+          values.width,
+          values.height
+        );
+        doc.fromHTML(
+          document.getElementsByClassName("voucher-desc")[index],
+          50,
+          -3,
+          {
+            width: 55
+          }
+        );
+        doc.fromHTML(
+          document.getElementsByClassName("voucher-main")[index],
+          65,
+          21
+        );
+        doc.fromHTML(
+          document.getElementsByClassName("voucher-valid")[index],
+          1,
+          21
+        );
+        doc.fromHTML(
+          document.getElementsByClassName("voucher-max-use")[index],
+          1,
+          29
+        );
 
-      doc.fromHTML(
-        document.getElementsByClassName("voucher-traffic")[index],
-        65,
-        40
-      );
-      doc.fromHTML(
-        document.getElementsByClassName("voucher-time")[index],
-        65,
-        45
-      );
+        doc.setLineWidth(0.3);
+        doc.setDrawColor(158, 160, 163);
+        doc.line(5, 41, halfWidth - 5, +41);
+        doc.addImage(arrow.down, 4, 45, 3, 3);
+        doc.fromHTML(
+          document.getElementsByClassName("voucher-download")[index],
+          8,
+          40
+        );
+        doc.addImage(arrow.up, 4, 50, 3, 3);
+        doc.fromHTML(
+          document.getElementsByClassName("voucher-upload")[index],
+          8,
+          45
+        );
 
-      doc.autoPrint();
-      window.open(doc.output("bloburl"), "_blank");
+        doc.fromHTML(
+          document.getElementsByClassName("voucher-traffic")[index],
+          65,
+          40
+        );
+        doc.fromHTML(
+          document.getElementsByClassName("voucher-time")[index],
+          65,
+          45
+        );
+
+        doc.autoPrint();
+        window.open(doc.output("bloburl"), "_blank");
+      };
+      image.src = this.preferences.captive[2].value;
     },
     printAllVoucher() {
       var doc = new jsPDF("portrait", "mm", "a4");
@@ -1194,180 +1207,187 @@ export default {
         height: 0
       };
 
-      for (var index = 0; index < this.vouchers.usable.length; index++) {
-        if (index % 10 === 0 && index !== 0) {
-          doc.addPage();
-          row = 0;
-          cordinates = {
-            y: 0,
-            x: 0,
-            width: 0,
-            height: 0
-          };
-        }
-        doc.setLineWidth(0.3);
-        doc.setDrawColor(17, 17, 17);
-        // Left column
-        if (index % 2 === 0) {
-          doc.addImage(
-            this.preferences.captive[2].value,
-            2,
-            cordinates.y + 2,
-            20,
-            20
-          );
-          doc.fromHTML(
-            document.getElementsByClassName("voucher-desc")[index],
-            50,
-            cordinates.y + -3,
-            {
-              width: 55
-            }
-          );
-          doc.fromHTML(
-            document.getElementsByClassName("voucher-main")[index],
-            65,
-            cordinates.y + 21
-          );
-          doc.fromHTML(
-            document.getElementsByClassName("voucher-valid")[index],
-            1,
-            cordinates.y + 21
-          );
-          doc.fromHTML(
-            document.getElementsByClassName("voucher-max-use")[index],
-            1,
-            cordinates.y + 29
-          );
+      var image = new Image();
+      var context = this;
+      image.onload = function() {
+        var values = context.resizeImage(image, 20, 20);
 
+        for (var index = 0; index < context.vouchers.usable.length; index++) {
+          if (index % 10 === 0 && index !== 0) {
+            doc.addPage();
+            row = 0;
+            cordinates = {
+              y: 0,
+              x: 0,
+              width: 0,
+              height: 0
+            };
+          }
           doc.setLineWidth(0.3);
-          doc.setDrawColor(158, 160, 163);
-          doc.line(5, cordinates.y + 41, halfWidth - 5, cordinates.y + 41);
-          doc.addImage(arrow.down, 4, cordinates.y + 45, 3, 3);
-          doc.fromHTML(
-            document.getElementsByClassName("voucher-download")[index],
-            8,
-            cordinates.y + 40
-          );
-          doc.addImage(arrow.up, 4, cordinates.y + 50, 3, 3);
-          doc.fromHTML(
-            document.getElementsByClassName("voucher-upload")[index],
-            8,
-            cordinates.y + 45
-          );
-
-          doc.fromHTML(
-            document.getElementsByClassName("voucher-traffic")[index],
-            65,
-            cordinates.y + 40
-          );
-          doc.fromHTML(
-            document.getElementsByClassName("voucher-time")[index],
-            65,
-            cordinates.y + 45
-          );
-
           doc.setDrawColor(17, 17, 17);
-
-          if (index % 10 === 8) {
-            doc.line(
-              halfWidth,
-              cordinates.y,
-              halfWidth,
-              cordinates.y + fifthHeight
+          // Left column
+          if (index % 2 === 0) {
+            doc.addImage(
+              context.preferences.captive[2].value,
+              2,
+              cordinates.y + 2,
+              values.width,
+              values.height
             );
+            doc.fromHTML(
+              document.getElementsByClassName("voucher-desc")[index],
+              50,
+              cordinates.y + -3,
+              {
+                width: 55
+              }
+            );
+            doc.fromHTML(
+              document.getElementsByClassName("voucher-main")[index],
+              65,
+              cordinates.y + 21
+            );
+            doc.fromHTML(
+              document.getElementsByClassName("voucher-valid")[index],
+              1,
+              cordinates.y + 21
+            );
+            doc.fromHTML(
+              document.getElementsByClassName("voucher-max-use")[index],
+              1,
+              cordinates.y + 29
+            );
+
+            doc.setLineWidth(0.3);
+            doc.setDrawColor(158, 160, 163);
+            doc.line(5, cordinates.y + 41, halfWidth - 5, cordinates.y + 41);
+            doc.addImage(arrow.down, 4, cordinates.y + 45, 3, 3);
+            doc.fromHTML(
+              document.getElementsByClassName("voucher-download")[index],
+              8,
+              cordinates.y + 40
+            );
+            doc.addImage(arrow.up, 4, cordinates.y + 50, 3, 3);
+            doc.fromHTML(
+              document.getElementsByClassName("voucher-upload")[index],
+              8,
+              cordinates.y + 45
+            );
+
+            doc.fromHTML(
+              document.getElementsByClassName("voucher-traffic")[index],
+              65,
+              cordinates.y + 40
+            );
+            doc.fromHTML(
+              document.getElementsByClassName("voucher-time")[index],
+              65,
+              cordinates.y + 45
+            );
+
+            doc.setDrawColor(17, 17, 17);
+
+            if (index % 10 === 8) {
+              doc.line(
+                halfWidth,
+                cordinates.y,
+                halfWidth,
+                cordinates.y + fifthHeight
+              );
+            } else {
+              doc.line(
+                0,
+                cordinates.y + fifthHeight,
+                halfWidth,
+                cordinates.y + fifthHeight
+              );
+              doc.line(
+                halfWidth,
+                cordinates.y,
+                halfWidth,
+                cordinates.y + fifthHeight
+              );
+            }
+
+            // Right column
           } else {
-            doc.line(
-              0,
-              cordinates.y + fifthHeight,
-              halfWidth,
-              cordinates.y + fifthHeight
+            cordinates.x = halfWidth;
+            doc.addImage(
+              context.preferences.captive[2].value,
+              cordinates.x + 2,
+              cordinates.y + 2,
+              values.width,
+              values.height
             );
-            doc.line(
-              halfWidth,
-              cordinates.y,
-              halfWidth,
-              cordinates.y + fifthHeight
+            doc.fromHTML(
+              document.getElementsByClassName("voucher-desc")[index],
+              cordinates.x + 50,
+              cordinates.y + -3,
+              {
+                width: 55
+              }
             );
-          }
+            doc.fromHTML(
+              document.getElementsByClassName("voucher-main")[index],
+              cordinates.x + 65,
+              cordinates.y + 21
+            );
+            doc.fromHTML(
+              document.getElementsByClassName("voucher-valid")[index],
+              cordinates.x + 1,
+              cordinates.y + 21
+            );
+            doc.fromHTML(
+              document.getElementsByClassName("voucher-max-use")[index],
+              cordinates.x + 1,
+              cordinates.y + 29
+            );
+            doc.setLineWidth(0.3);
+            doc.setDrawColor(158, 160, 163);
+            doc.line(
+              cordinates.x + 5,
+              cordinates.y + 41,
+              cordinates.x * 2 - 5,
+              cordinates.y + 41
+            );
+            doc.addImage(arrow.down, cordinates.x + 4, cordinates.y + 45, 3, 3);
+            doc.fromHTML(
+              document.getElementsByClassName("voucher-download")[index],
+              cordinates.x + 8,
+              cordinates.y + 40
+            );
+            doc.addImage(arrow.up, cordinates.x + 4, cordinates.y + 50, 3, 3);
+            doc.fromHTML(
+              document.getElementsByClassName("voucher-upload")[index],
+              cordinates.x + 8,
+              cordinates.y + 45
+            );
 
-          // Right column
-        } else {
-          cordinates.x = halfWidth;
-          doc.addImage(
-            this.preferences.captive[2].value,
-            cordinates.x + 2,
-            cordinates.y + 2,
-            20,
-            20
-          );
-          doc.fromHTML(
-            document.getElementsByClassName("voucher-desc")[index],
-            cordinates.x + 50,
-            cordinates.y + -3,
-            {
-              width: 55
+            doc.fromHTML(
+              document.getElementsByClassName("voucher-traffic")[index],
+              cordinates.x + 65,
+              cordinates.y + 40
+            );
+            doc.fromHTML(
+              document.getElementsByClassName("voucher-time")[index],
+              cordinates.x + 65,
+              cordinates.y + 45
+            );
+
+            row++;
+            cordinates.width = cordinates.y;
+            cordinates.y = fifthHeight * row;
+            doc.setDrawColor(17, 17, 17);
+
+            if (!(index % 10 === 9)) {
+              doc.line(halfWidth, cordinates.y, width, cordinates.y);
             }
-          );
-          doc.fromHTML(
-            document.getElementsByClassName("voucher-main")[index],
-            cordinates.x + 65,
-            cordinates.y + 21
-          );
-          doc.fromHTML(
-            document.getElementsByClassName("voucher-valid")[index],
-            cordinates.x + 1,
-            cordinates.y + 21
-          );
-          doc.fromHTML(
-            document.getElementsByClassName("voucher-max-use")[index],
-            cordinates.x + 1,
-            cordinates.y + 29
-          );
-          doc.setLineWidth(0.3);
-          doc.setDrawColor(158, 160, 163);
-          doc.line(
-            cordinates.x + 5,
-            cordinates.y + 41,
-            cordinates.x * 2 - 5,
-            cordinates.y + 41
-          );
-          doc.addImage(arrow.down, cordinates.x + 4, cordinates.y + 45, 3, 3);
-          doc.fromHTML(
-            document.getElementsByClassName("voucher-download")[index],
-            cordinates.x + 8,
-            cordinates.y + 40
-          );
-          doc.addImage(arrow.up, cordinates.x + 4, cordinates.y + 50, 3, 3);
-          doc.fromHTML(
-            document.getElementsByClassName("voucher-upload")[index],
-            cordinates.x + 8,
-            cordinates.y + 45
-          );
-
-          doc.fromHTML(
-            document.getElementsByClassName("voucher-traffic")[index],
-            cordinates.x + 65,
-            cordinates.y + 40
-          );
-          doc.fromHTML(
-            document.getElementsByClassName("voucher-time")[index],
-            cordinates.x + 65,
-            cordinates.y + 45
-          );
-
-          row++;
-          cordinates.width = cordinates.y;
-          cordinates.y = fifthHeight * row;
-          doc.setDrawColor(17, 17, 17);
-
-          if (!(index % 10 === 9)) {
-            doc.line(halfWidth, cordinates.y, width, cordinates.y);
           }
         }
-      }
-      doc.autoPrint();
-      window.open(doc.output("bloburl"), "_blank");
+        doc.autoPrint();
+        window.open(doc.output("bloburl"), "_blank");
+      };
+      image.src = this.preferences.captive[2].value;
     },
     exportCSVVoucher() {
       var voucherRows = JSON.parse(JSON.stringify(this.vouchers.usable));

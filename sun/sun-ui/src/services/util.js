@@ -10,6 +10,30 @@ var UtilService = {
         allText: this.$i18n.t("all")
       };
     },
+    resizeImage(img, maxWidth, maxHeight) {
+      var srcWidth = img.width;
+      var srcHeight = img.height;
+
+      var resizeWidth = srcWidth;
+      var resizeHeight = srcHeight;
+
+      var aspect = resizeWidth / resizeHeight;
+
+      if (resizeWidth > maxWidth) {
+        resizeWidth = maxWidth;
+        resizeHeight = resizeWidth / aspect;
+      }
+      if (resizeHeight > maxHeight) {
+        aspect = resizeWidth / resizeHeight;
+        resizeHeight = maxHeight;
+        resizeWidth = resizeHeight * aspect;
+      }
+
+      return {
+        width: resizeWidth,
+        height: resizeHeight
+      }
+    },
     uploadImageLangs() {
       return {
         drag: "<h1>" + this.$i18n.t("upload_drag") + "</h1>",
