@@ -159,6 +159,6 @@ Exportable data should include:
 * phone number
 * username 
 
-Other data (like gender, age...) we can receive from social login are still not exportable,the system will export ONLY data from users that allow marketing usage.
-
+Some extra data from social logins, like gender and age, are still not exportable.
+Also note that the system will export data only for users who explicitly gave marketing consensus during login.
 
