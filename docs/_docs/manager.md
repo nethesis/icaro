@@ -58,12 +58,12 @@ List of the views with the associated profile: **R**eseller, **C**ustomer, **D**
 
 * Dashboard (**R, C, D**)
 * Hotspot 
-    * See all hotspot instances (**R** only)
-    * See only its hotspot instance (**C, D**)
+    * View of all hotspot instances (**R** only)
+    * View of only its own hotspot instance (**C, D**)
     * Voucher management (**R, C, D**)
     * Technical Preferences like auth type, bandwidth... (**R** only)
     * Captive Portal customization (**R, C, D**)
-    * MAC address allowed (for special devices) (**R, C**)
+    * MAC address allowed (for special devices) (**R, C, D**)
 * Units ((**R, C**)
 * Guests ((**R, C, D**)
 * Devices ((**R, C**)
@@ -94,16 +94,33 @@ It has 3 levels of informations depending on the user authorizations.
 2. Social network data (when we have login via social network)
 3. Data obtained through a questionnaire (mainly hotel use)
 
-## General
+## Sessions
 
+Show the actual and the historical sessions made by guests, every session has :
+* username (email, phone, social id) 
+* byte transferred
+* duration
+* start time 
+* end time
 
-General data about the use of the service (login and SMS users only)
+## Devices
 
-1. Graph Traffic in the last days
-2. Graph of number of customers connected in the last days
-3. Graph Customers activated in the last days
-4. Table of Currently connected Users (as current)
-   * Login, name, last access, duration, IN / OUT traffic
+Show informations about devices connected, username, mac address, unit where devices are connected to, ip address.
+
+## Reports
+
+Report usage data with tables and graphs, reports are per single hotspot instance.
+
+Real time
+
+1. Actual users connected
+2. Daily connections
+3. Daily logins (new)
+
+Historical data (7,15, 30 days)
+1. Traffic graphs
+2. Duration graphs
+3. SMS usage detailed graphs (for single hotspot instance)
 
 
 ### Social information
