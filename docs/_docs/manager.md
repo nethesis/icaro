@@ -49,19 +49,28 @@ The is the person at the desk of the hotel, Desk can:
 
 * delete accounts
 * see the list of accounts
-* see how many accounts are connected and the bandwidth consumption (e.g. slow traffic) (**Not yet implemented**)
-* create and delete vauchers (**Not yet implemented**)
+* see how many accounts are connected and the traffic each one has made
+* create and delete vouchers 
 
 ### Hotspot manager views
 
 List of the views with the associated profile: **R**eseller, **C**ustomer, **D**esk
 
-* Dashboard (**C,D**)
-* Account (creation and management)(**C,D**)
-* Report and Logs (**C**)
-* Marketing (**C**) (**not yet implemented**)
-* Non-techincal preferences like captive portal customization (**C**) (**Not yet implemented**)
-* Techincal preferences (**R**eseller only)
+* Dashboard (**R, C, D**)
+* Hotspot 
+    * See all hotspot instances (**R** only)
+    * See only its hotspot instance (**C, D**)
+    * Voucher management (**R, C, D**)
+    * Technical Preferences like auth type, bandwidth... (**R** only)
+    * Captive Portal customization (**R, C, D**)
+    * MAC address allowed (for special devices) (**R, C**)
+* Units ((**R, C**)
+* Guests ((**R, C, D**)
+* Devices ((**R, C**)
+* Sessions (**R,C**)
+* Report (**R,C,D**)
+* Marketing (**R, C**) (**not yet implemented a specific panel** but some data can be exported)
+
 
 
 ## Single sign-on
@@ -87,7 +96,6 @@ It has 3 levels of informations depending on the user authorizations.
 
 ## General
 
-(**Not yet implemented**)
 
 General data about the use of the service (login and SMS users only)
 
@@ -124,15 +132,16 @@ Data obtained through questionnaires
 
 
 ### Data export
+(**Partially implemented**)
 
-(**Not yet implemented**)
-
-The customer should be able to export data in CSV format to reuse them in mass marketing software (eg. MailChimp).
+The customer is able to export data in CSV format to reuse them in mass marketing software (eg. MailChimp).
 
 Exportable data should include:
 
-* Profile users according to the characteristics
-* Export emails only for specific campaigns
-* Subset of standardized profiles (?)
+* email 
+* phone number
+* username 
+
+Other data (like gender, age...) we can receive from social login are still not exportable,the system will export ONLY data from users that allow marketing usage.
 
 
