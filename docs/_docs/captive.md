@@ -27,11 +27,13 @@ For more details, see [Login configuration](/icaro/docs/configuration/) page, to
 
 Voucher (used for security/payment) can be:
 
- * `none`: Hotspot access is free, use one of the auths below to navigate
+ * `none`: Hotspot access is free, use one of the auths below to navigate, no voucher is required
+ 
+ * `voucher unlimited` : this kind of voucher can be re-used infinite times, allowing you to protect the access from people outside the company structure, just communicate this voucher code to guests inside the company and they will be able to autenticate themselves using one of the authentication methods to navigate
 
- * `block`: is used to protectd the access from people outside the company structure, then use one of the auths below to navigate
-
- * `paid`: the code can be sold from office desk for each user, then use one of the auths below to navigate
+* `voucher limited` : this kind of voucher can be re-used only a finite number of times, its tipical use is with premium (payed) accounts with better conditions (autologin, more bandwidth, more traffic and so on).
+ 
+Voucher can be exported in CSV format or printed (individually or globally).
 
 Login type after the voucher check:
 
@@ -73,9 +75,20 @@ The system should be functional only with one or two SMS providers (eg. [Twilio]
 Also WhatsApp Business has been released, it could be an alternative way to make login without pay SMS
 Drawback: WA should be permitted without authentication, will they make login to the Hotspot?
 
+#### Guests Limits and features
+
+We can limit guests operativity with different parameters:
+
+* Maximum download Bandwidth (kbps)
+* Maximum upload Bandwidth (kbps)
+* Daily Navigation Time limit (Minutes)
+* Daily Navigation Traffic limit (MB) 
+
+The **Autologin** feature allows guests to autenticate themselves just once, the next time the hotspot will recognize the guests and will make them browse without requiring any authentication.
+
+
 #### Special device accounts
 
-(**Not yet implemented**)
 
 Devices in the Hotspot unit network which needs direct access to the Internet (eg. printers, special workstations),
 can have special access rights directly in the firewall configuration using CoovaChilli.

@@ -49,19 +49,28 @@ The is the person at the desk of the hotel, Desk can:
 
 * delete accounts
 * see the list of accounts
-* see how many accounts are connected and the bandwidth consumption (e.g. slow traffic) (**Not yet implemented**)
-* create and delete vauchers (**Not yet implemented**)
+* see how many accounts are connected and the traffic each one has made
+* create and delete vouchers 
 
 ### Hotspot manager views
 
 List of the views with the associated profile: **R**eseller, **C**ustomer, **D**esk
 
-* Dashboard (**C,D**)
-* Account (creation and management)(**C,D**)
-* Report and Logs (**C**)
-* Marketing (**C**) (**not yet implemented**)
-* Non-techincal preferences like captive portal customization (**C**) (**Not yet implemented**)
-* Techincal preferences (**R**eseller only)
+* Dashboard (**R, C, D**)
+* Hotspot 
+    * View of all hotspot instances (**R** only)
+    * View of only its own hotspot instance (**C, D**)
+    * Voucher management (**R, C, D**)
+    * Technical Preferences like auth type, bandwidth... (**R** only)
+    * Captive Portal customization (**R, C, D**)
+    * MAC address allowed (for special devices) (**R, C, D**)
+* Units ((**R, C**)
+* Guests ((**R, C, D**)
+* Devices ((**R, C**)
+* Sessions (**R,C**)
+* Report (**R,C,D**)
+* Marketing (**R, C**) (**not yet implemented a specific panel** but some data can be exported)
+
 
 
 ## Single sign-on
@@ -85,17 +94,33 @@ It has 3 levels of informations depending on the user authorizations.
 2. Social network data (when we have login via social network)
 3. Data obtained through a questionnaire (mainly hotel use)
 
-## General
+## Sessions
 
-(**Not yet implemented**)
+Show the actual and the historical sessions made by guests, every session has :
+* username (email, phone, social id) 
+* byte transferred
+* duration
+* start time 
+* end time
 
-General data about the use of the service (login and SMS users only)
+## Devices
 
-1. Graph Traffic in the last days
-2. Graph of number of customers connected in the last days
-3. Graph Customers activated in the last days
-4. Table of Currently connected Users (as current)
-   * Login, name, last access, duration, IN / OUT traffic
+Show informations about devices connected, username, mac address, unit where devices are connected to, ip address.
+
+## Reports
+
+Report usage data with tables and graphs, reports are per single hotspot instance.
+
+Real time
+
+1. Actual users connected
+2. Daily connections
+3. Daily logins (new)
+
+Historical data (7,15, 30 days)
+1. Traffic graphs
+2. Duration graphs
+3. SMS usage detailed graphs (for single hotspot instance)
 
 
 ### Social information
@@ -124,15 +149,16 @@ Data obtained through questionnaires
 
 
 ### Data export
+(**Partially implemented**)
 
-(**Not yet implemented**)
-
-The customer should be able to export data in CSV format to reuse them in mass marketing software (eg. MailChimp).
+The customer is able to export data in CSV format to reuse them in mass marketing software (eg. MailChimp).
 
 Exportable data should include:
 
-* Profile users according to the characteristics
-* Export emails only for specific campaigns
-* Subset of standardized profiles (?)
+* email 
+* phone number
+* username 
 
+Some extra data from social logins, like gender and age, are still not exportable.
+Also note that the system will export data only for users who explicitly gave marketing consensus during login.
 
