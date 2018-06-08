@@ -186,9 +186,18 @@ func HotspotIsOverQuota(hotspotId int) bool {
 func CanChangeCaptivePortalOptions(accountId int) bool {
 	var subscription models.Subscription
 
+	// get account
+	account := GetAccountById(accountId)
+
 	db := database.Instance()
 	db.Set("gorm:auto_preload", true)
-	db.Preload("SubscriptionPlan").Where("account_id = ?", accountId).First(&subscription)
+
+	if account.Type == "customer" {
+		db.Preload("SubscriptionPlan").Where("account_id = ?", account.CreatorId).First(&subscription)
+	} else {
+		db.Preload("SubscriptionPlan").Where("account_id = ?", accountId).First(&subscription)
+
+	}
 
 	return subscription.SubscriptionPlan.WingsCustomization
 }
