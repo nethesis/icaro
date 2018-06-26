@@ -6,7 +6,6 @@
       <label v-if="!isLoading" class="col-sm-2 control-label" for="textInput-markup">Hotspot</label>
       <div v-if="!isLoading" class="col-sm-4">
         <select v-on:change="getAll()" v-model="hotspotSearchId" class="form-control">
-          <option value="0">-</option>
           <option v-for="hotspot in hotspots" v-bind:key="hotspot.id" v-bind:value="hotspot.id">
             {{ hotspot.name }} - {{ hotspot.description}}
           </option>
@@ -162,13 +161,6 @@ export default {
     Datepicker
   },
   data() {
-    var hsId = this.get("sessions_hotspot_id") || 0;
-    if (
-      this.$parent.user.info.type == "customer" ||
-      this.$parent.user.info.type == "desk"
-    ) {
-      hsId = this.$parent.user.info.hotspot_id;
-    }
     var activeTab = this.get("sessions_active_tab") || "active";
     setTimeout(function() {
       window.$("#" + activeTab + "-tab-parent").click();
@@ -279,19 +271,17 @@ export default {
       activeTab: activeTab,
       tableLangsTexts: this.tableLangs(),
       hotspots: [],
-      hotspotSearchId: hsId,
+      hotspotSearchId: 0,
       hotspotUserId: this.get("sessions_user_id") || 0,
       hotspotUnitId: this.get("sessions_unit_id") || 0,
-      hotspotDateFrom:
-        moment(Date.now() - 12096e5)
-          .utc()
-          .startOf("day")
-          .toISOString(),
-      hotspotDateTo:
-        moment(Date.now())
-          .endOf("day")
-          .utc()
-          .toISOString(),
+      hotspotDateFrom: moment(Date.now() - 12096e5)
+        .utc()
+        .startOf("day")
+        .toISOString(),
+      hotspotDateTo: moment(Date.now())
+        .endOf("day")
+        .utc()
+        .toISOString(),
       hotspotPerPage: this.get("sessions_per_page") || 25,
       user: this.get("loggedUser") || null,
       users: [],
@@ -303,10 +293,14 @@ export default {
       this.hotspotSearchId = this.$route.params.hotspotId;
     }
     // get session list
-    this.getAll(true);
-    this.getAllHotspots();
-    this.getAllUsers();
-    this.getAllUnits();
+    var context = this;
+    this.getAllHotspots(function() {
+      context.getAllUsers(function() {
+        context.getAllUnits(function() {
+          context.getAll(true);
+        });
+      });
+    });
   },
   methods: {
     handleTab(tab) {
@@ -330,12 +324,22 @@ export default {
     dateFormatter(date) {
       return moment(date).format("DD MMMM YYYY");
     },
-    getAllHotspots() {
+    getAllHotspots(callback) {
       this.hotspotGetAll(
         success => {
           this.hotspots = success.body;
+          var hsId = this.get("sessions_hotspot_id") || this.hotspots[0].id;
+          if (
+            this.$parent.user.info.type == "customer" ||
+            this.$parent.user.info.type == "desk"
+          ) {
+            hsId = this.$parent.user.info.hotspot_id;
+          }
+          this.hotspotSearchId = hsId;
           $('[data-toggle="tooltip"]').tooltip();
           this.isLoading = false;
+
+          callback();
         },
         error => {
           console.log(error);
@@ -360,10 +364,6 @@ export default {
         "sessions_unit_id",
         this.hotspotUnitId || this.get("sessions_unit_id") || 0
       );
-
-      // preload users and units
-      this.getAllUsers();
-      this.getAllUnits();
 
       if (refresh) {
         if (
@@ -417,28 +417,32 @@ export default {
         );
       }
     },
-    getAllUsers() {
+    getAllUsers(callback) {
       this.userGetAll(
         this.hotspotSearchId,
         null,
         success => {
           this.users = success.body;
+          callback();
         },
         error => {
           console.log(error);
           this.users = {};
+          callback();
         }
       );
     },
-    getAllUnits() {
+    getAllUnits(callback) {
       this.unitGetAll(
         this.hotspotSearchId,
         success => {
           this.units = success.body;
+          callback();
         },
         error => {
           console.log(error);
           this.units = {};
+          callback();
         }
       );
     },

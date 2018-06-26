@@ -7,7 +7,6 @@
       <label class="col-sm-2 control-label" for="textInput-markup">Hotspot</label>
       <div class="col-sm-4">
         <select v-on:change="getSessionsByDate()" v-model="hotspotSearchId" class="form-control">
-          <option value="0">-</option>
           <option v-for="hotspot in hotspots" v-bind:key="hotspot.id" v-bind:value="hotspot.id">
             {{ hotspot.name }} - {{ hotspot.description}}
           </option>
@@ -80,13 +79,6 @@ export default {
     StatsService
   ],
   data() {
-    var hsId = this.get("reports_hotspot_id") || 0;
-    if (
-      this.$parent.user.info.type == "customer" ||
-      this.$parent.user.info.type == "desk"
-    ) {
-      hsId = this.$parent.user.info.hotspot_id;
-    }
     return {
       range: null,
       isChartLoading: true,
@@ -121,7 +113,7 @@ export default {
       sms: [],
       labels: [],
       labelsSms: [],
-      hotspotSearchId: hsId,
+      hotspotSearchId: 0,
       user: this.get("loggedUser") || null
     };
   },
@@ -129,9 +121,12 @@ export default {
     if (this.$route.params.hotspotId !== undefined) {
       this.hotspotSearchId = this.$route.params.hotspotId;
     }
-    this.getSessionsByDate();
-    this.getAllHotspots();
-    this.getSmsData();
+
+    var context = this;
+    this.getAllHotspots(function() {
+      context.getSessionsByDate();
+      context.getSmsData();
+    });
   },
   methods: {
     getSessionsByDate() {
@@ -215,7 +210,12 @@ export default {
         default:
           break;
       }
-      let rangeYear = moment1.range(moment().utc().startOf("year"), moment().utc());
+      let rangeYear = moment1.range(
+        moment()
+          .utc()
+          .startOf("year"),
+        moment().utc()
+      );
       let selectedRange = Array.from(this.range.by("day"));
       let selectedRangeSms = Array.from(rangeYear.by("month"));
 
@@ -274,14 +274,27 @@ export default {
         }
       );
     },
-    getAllHotspots() {
+    getAllHotspots(callback) {
       this.hotspotGetAll(
         success => {
           this.hotspots = success.body;
+
+          var hsId = this.get("reports_hotspot_id") || this.hotspots[0].id;
+          if (
+            this.$parent.user.info.type == "customer" ||
+            this.$parent.user.info.type == "desk"
+          ) {
+            hsId = this.$parent.user.info.hotspot_id;
+          }
+          this.hotspotSearchId = hsId;
+
           $('[data-toggle="tooltip"]').tooltip();
+
+          callback();
         },
         error => {
           console.log(error);
+          callback();
         }
       );
     },

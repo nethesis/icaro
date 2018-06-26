@@ -109,9 +109,9 @@ func GetHotspots(c *gin.Context) {
 
 	db := database.Instance()
 	if accountId == 1 {
-		db.Offset(offsets[0]).Limit(offsets[1]).Find(&hotspots)
+		db.Offset(offsets[0]).Limit(offsets[1]).Order("name asc, description").Find(&hotspots)
 	} else {
-		db.Where("account_id = ?", accountId).Offset(offsets[0]).Limit(offsets[1]).Find(&hotspots)
+		db.Where("account_id = ?", accountId).Offset(offsets[0]).Limit(offsets[1]).Order("name asc, description").Find(&hotspots)
 	}
 
 	if len(hotspots) <= 0 {

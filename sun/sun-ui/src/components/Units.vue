@@ -6,7 +6,6 @@
       <label v-if="!isLoading" class="col-sm-2 control-label" for="textInput-markup">Hotspot</label>
       <div v-if="!isLoading" class="col-sm-4">
         <select v-on:change="getAll()" v-model="hotspotSearchId" class="form-control">
-          <option value="0">-</option>
           <option v-for="hotspot in hotspots" v-bind:key="hotspot.id" v-bind:value="hotspot.id">
             {{ hotspot.name }} - {{ hotspot.description}}
           </option>
@@ -56,13 +55,6 @@ export default {
     unitAction: UnitAtion
   },
   data() {
-    var hsId = this.get("units_hotspot_id") || 0;
-    if (
-      this.$parent.user.info.type == "customer" ||
-      this.$parent.user.info.type == "desk"
-    ) {
-      hsId = this.$parent.user.info.hotspot_id;
-    }
     return {
       msg: this.$i18n.t("menu.units"),
       isLoading: true,
@@ -96,7 +88,7 @@ export default {
       rows: [],
       tableLangsTexts: this.tableLangs(),
       hotspots: [],
-      hotspotSearchId: hsId,
+      hotspotSearchId: 0,
       hotspotPerPage: this.get("units_per_page") || 25,
       user: this.get("loggedUser") || null
     };
@@ -106,22 +98,35 @@ export default {
       this.hotspotSearchId = this.$route.params.hotspotId;
     }
     // get unit list
-    this.getAll();
-    this.getAllHotspots();
+    var context = this;
+    this.getAllHotspots(function() {
+      context.getAll();
+    });
   },
   methods: {
     handlePerPage(evt) {
       this.set("units_per_page", evt.currentPerPage);
     },
-    getAllHotspots() {
+    getAllHotspots(callback) {
       this.hotspotGetAll(
         success => {
           this.hotspots = success.body;
+          var hsId = this.get("units_hotspot_id") || this.hotspots[0].id;
+          if (
+            this.$parent.user.info.type == "customer" ||
+            this.$parent.user.info.type == "desk"
+          ) {
+            hsId = this.$parent.user.info.hotspot_id;
+          }
+          this.hotspotSearchId = hsId;
           $('[data-toggle="tooltip"]').tooltip();
           this.isLoading = false;
+
+          callback();
         },
         error => {
           console.log(error);
+          callback()
         }
       );
     },
@@ -148,5 +153,4 @@ export default {
 };
 </script>
 <style scoped>
-
 </style>

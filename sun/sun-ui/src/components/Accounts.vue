@@ -8,7 +8,6 @@
       <label v-if="!isLoading" class="col-sm-2 control-label" for="textInput-markup">Hotspot</label>
       <div v-if="!isLoading" class="col-sm-4">
         <select v-on:change="getAll()" v-model="hotspotSearchId" class="form-control">
-          <option value="0">-</option>
           <option v-for="hotspot in hotspots" v-bind:key="hotspot.id" v-bind:value="hotspot.id">
             {{ hotspot.name }}
           </option>
@@ -252,9 +251,11 @@ export default {
       this.hotspotSearchId = this.$route.params.hotspotId;
     }
     // get account list
-    this.getAll();
-    this.getAllHotspots();
-    this.getAllSubscriptionPlans();
+    var context = this;
+    this.getAllHotspots(function() {
+      context.getAll();
+      context.getAllSubscriptionPlans();
+    });
   },
   methods: {
     handlePerPage(evt) {
@@ -290,15 +291,28 @@ export default {
         }
       );
     },
-    getAllHotspots() {
+    getAllHotspots(callback) {
       this.hotspotGetAll(
         success => {
           this.hotspots = success.body;
+          var hsId = this.get("users_hotspot_id") || this.hotspots[0].id;
+          if (
+            this.$parent.user.info.type == "customer" ||
+            this.$parent.user.info.type == "desk"
+          ) {
+            hsId = this.$parent.user.info.hotspot_id;
+          }
+          this.hotspotSearchId = hsId;
+
           $('[data-toggle="tooltip"]').tooltip();
           this.isLoading = false;
+
+          callback();
         },
         error => {
           console.log(error);
+
+          callback();
         }
       );
     },
