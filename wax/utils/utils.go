@@ -239,6 +239,14 @@ func GetUserByUsername(username string) models.User {
 	return user
 }
 
+func GetUserByUsernameAndHotspot(username string, hotspotId int) models.User {
+	var user models.User
+	db := database.Instance()
+	db.Where("username = ? AND hotspot_id = ?", username, hotspotId).First(&user)
+
+	return user
+}
+
 func HotspotHasValidSubscription(hotspotId int) bool {
 	var hotspot models.Hotspot
 	var subscription models.Subscription

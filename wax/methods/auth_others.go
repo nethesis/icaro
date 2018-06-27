@@ -59,11 +59,10 @@ func SMSAuth(c *gin.Context) {
 	}
 
 	// check if user exists
-	user := utils.GetUserByUsername(number)
+	// get unit
+	unit := utils.GetUnitByUuid(uuid)
+	user := utils.GetUserByUsernameAndHotspot(number, unit.HotspotId)
 	if user.Id == 0 {
-		// get unit
-		unit := utils.GetUnitByUuid(uuid)
-
 		// create user
 		days := utils.GetHotspotPreferencesByKey(unit.HotspotId, "user_expiration_days")
 		daysInt, _ := strconv.Atoi(days.Value)
@@ -222,11 +221,10 @@ func EmailAuth(c *gin.Context) {
 	}
 
 	// check if user exists
-	user := utils.GetUserByUsername(email)
+	// get unit
+	unit := utils.GetUnitByUuid(uuid)
+	user := utils.GetUserByUsernameAndHotspot(email, unit.HotspotId)
 	if user.Id == 0 {
-		// get unit
-		unit := utils.GetUnitByUuid(uuid)
-
 		// create user
 		days := utils.GetHotspotPreferencesByKey(unit.HotspotId, "user_expiration_days")
 		daysInt, _ := strconv.Atoi(days.Value)
@@ -362,11 +360,10 @@ func MACAuth(c *gin.Context) {
 	}
 
 	// check if user exists
-	user := utils.GetUserByUsername(mac)
+	// get unit
+	unit := utils.GetUnitByUuid(uuid)
+	user := utils.GetUserByUsernameAndHotspot(mac, unit.HotspotId)
 	if user.Id == 0 {
-		// get unit
-		unit := utils.GetUnitByUuid(uuid)
-
 		// create user
 		downInt, _ := strconv.Atoi(kbps_down)
 		upInt, _ := strconv.Atoi(kbps_up)

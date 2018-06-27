@@ -114,10 +114,10 @@ func FacebookAuth(c *gin.Context) {
 	}
 
 	// check if user exists
-	user := utils.GetUserByUsername(fbInspectToken.Data.UserId)
+	unit := utils.GetUnitByUuid(uuid)
+	user := utils.GetUserByUsernameAndHotspot(fbInspectToken.Data.UserId, unit.HotspotId)
 	if user.Id == 0 {
 		// create user
-		unit := utils.GetUnitByUuid(uuid)
 		days := utils.GetHotspotPreferencesByKey(unit.HotspotId, "user_expiration_days")
 		daysInt, _ := strconv.Atoi(days.Value)
 
@@ -268,10 +268,10 @@ func LinkedInAuth(c *gin.Context) {
 	}
 
 	// check if user exists
-	user := utils.GetUserByUsername(liUserDetail.Id)
+	unit := utils.GetUnitByUuid(uuid)
+	user := utils.GetUserByUsernameAndHotspot(liUserDetail.Id, unit.HotspotId)
 	if user.Id == 0 {
 		// create user
-		unit := utils.GetUnitByUuid(uuid)
 		days := utils.GetHotspotPreferencesByKey(unit.HotspotId, "user_expiration_days")
 		daysInt, _ := strconv.Atoi(days.Value)
 
@@ -414,10 +414,10 @@ func InstagramAuth(c *gin.Context) {
 	}
 
 	// check if user exists
-	user := utils.GetUserByUsername(inUserDetail.Data.Id)
+	unit := utils.GetUnitByUuid(uuid)
+	user := utils.GetUserByUsernameAndHotspot(inUserDetail.Data.Id, unit.HotspotId)
 	if user.Id == 0 {
 		// create user
-		unit := utils.GetUnitByUuid(uuid)
 		days := utils.GetHotspotPreferencesByKey(unit.HotspotId, "user_expiration_days")
 		daysInt, _ := strconv.Atoi(days.Value)
 
