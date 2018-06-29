@@ -131,7 +131,9 @@ func ExtractHotspotIds(accountId int, admin bool, hotspotId int) []int {
 		if hotspotId != 0 {
 			db.Select("id").Where("account_id = ? AND id = ?", accountId, hotspotId).Find(&hotspots)
 		} else {
-			db.Select("id").Where("account_id = ?", accountId).Find(&hotspots)
+			if account.Type == "reseller" {
+				db.Select("id").Where("account_id = ?", accountId).Find(&hotspots)
+			}
 		}
 	}
 
