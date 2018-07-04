@@ -49,6 +49,7 @@ func DefineAPI(router *gin.Engine) {
 	api := router.Group("/api")
 
 	api.POST("/login", methods.Login)
+	api.POST("/login-auth0", methods.LoginAuth0)
 	api.POST("/logout", methods.Logout)
 
 	api.Use(middleware.AAWall)

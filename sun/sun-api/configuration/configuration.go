@@ -79,6 +79,10 @@ type Configuration struct {
 		FeedbackSmsBodyText         string `json:"feedback_sms_body_text"`
 		ReviewSmsBodyText           string `json:"review_sms_body_text"`
 	} `json:"survey"`
+	Auth0 struct {
+		Domain   string `json:"domain"`
+		Audience string `json:"audience"`
+	} `json:"auth0"`
 }
 
 var Config = Configuration{}
