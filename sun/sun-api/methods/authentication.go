@@ -29,8 +29,10 @@ import (
 	"net/http"
 	"time"
 
+	auth0 "github.com/auth0-community/go-auth0"
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
+	jose "gopkg.in/square/go-jose.v2"
 
 	"github.com/nethesis/icaro/sun/sun-api/configuration"
 	"github.com/nethesis/icaro/sun/sun-api/database"
@@ -103,6 +105,74 @@ func Login(c *gin.Context) {
 		}
 	}
 
+}
+
+func LoginAuth0(c *gin.Context) {
+	var subscription models.Subscription
+
+	// define api endpoint and audience
+	AUTH0_DOMAIN := "https://" + configuration.Config.Auth0.Domain + "/"
+	JWKS_URI := "https://" + configuration.Config.Auth0.Domain + "/.well-known/jwks.json"
+	AUDIENCE := []string{configuration.Config.Auth0.Audience}
+
+	// create client configuration instance to check jwt
+	client := auth0.NewJWKClient(auth0.JWKClientOptions{URI: JWKS_URI})
+	configAuth0 := auth0.NewConfiguration(client, AUDIENCE, AUTH0_DOMAIN, jose.RS256)
+	validator := auth0.NewValidator(configAuth0)
+
+	// check jwt validation
+	token, err := validator.ValidateRequest(c.Request)
+	fmt.Println(err)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"message": "Missing or invalid token"})
+		return
+	} else {
+		// extract claims from token
+		claims := map[string]interface{}{}
+		err := validator.Claims(c.Request, token, &claims)
+		if err != nil {
+			c.JSON(http.StatusUnauthorized, gin.H{"message": "Claims extraction failed"})
+			return
+		}
+
+		// check if account exists
+		account := utils.GetAccountOrCreate(claims)
+
+		// create authorization token
+		h := sha256.New()
+		h.Write([]byte(time.Now().UTC().String() + account.Uuid))
+		token := fmt.Sprintf("%x", h.Sum(nil))
+
+		// set expiration date
+		expires := time.Now().UTC().AddDate(0, 0, configuration.Config.TokenExpiresDays)
+
+		accessToken := models.AccessToken{
+			AccountId: account.Id,
+			Token:     token,
+			Role:      account.Type,
+			Expires:   expires,
+		}
+
+		db := database.Instance()
+		db.Save(&accessToken)
+
+		db.Set("gorm:auto_preload", true)
+		if account.Type == "reseller" {
+			db.Preload("SubscriptionPlan").Where("account_id = ?", account.Id).First(&subscription)
+		} else {
+			db.Preload("SubscriptionPlan").Where("account_id = ?", account.CreatorId).First(&subscription)
+		}
+		subscription.Expired = subscription.ValidUntil.Before(time.Now().UTC())
+
+		c.JSON(http.StatusCreated, gin.H{
+			"account_type": account.Type,
+			"status":       "success",
+			"token":        token,
+			"expires":      expires.String(),
+			"id":           account.Id,
+			"subscription": subscription,
+		})
+	}
 }
 
 func Logout(c *gin.Context) {

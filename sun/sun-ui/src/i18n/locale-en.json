@@ -5,7 +5,9 @@
       "insert_username": "Insert you username",
       "insert_password": "Insert your password",
       "user_error": "Invalid username",
-      "password_error": "Invalid password"
+      "password_error": "Invalid password",
+      "login_credentials": "Login with credentials",
+      "login_apps": "Login with apps"
     },
     "dashboard": {
       "preferences": "Preferences",

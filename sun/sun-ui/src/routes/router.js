@@ -19,8 +19,7 @@ import Devices from "../components/Devices.vue";
 Vue.use(Router);
 
 const router = new Router({
-  routes: [
-    {
+  routes: [{
       path: "/",
       name: "Dashboard",
       component: Dashboard,
@@ -139,7 +138,7 @@ const router = new Router({
       meta: {
         roles: ["admin", "reseller", "customer", "desk"]
       }
-    }
+    },
   ]
 });
 
@@ -148,6 +147,11 @@ router.beforeEach((to, from, next) => {
   if (user && to.meta.roles && to.meta.roles.indexOf(user.account_type) >= 0) {
     next();
   } else {
+    if (to.path.indexOf("/access_token") > -1) {
+      localStorage.setItem("auth0Data", JSON.stringify({
+        path: to.path.substring(1)
+      }))
+    }
     next(false);
   }
 });

@@ -446,3 +446,48 @@ a {
   margin-left: 20px;
   width: 96%;
 }
+
+.auth0-container {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  border-top: 1px solid #9f9898;
+  padding-top: 10px;
+}
+
+.details {
+  border-left: none !important;
+}
+
+.login {
+  border-right: 1px solid #9f9898 !important;
+}
+
+#auth0-login {
+  min-height: 60px;
+}
+
+.auth0-lock-header {
+  display: none !important;
+}
+
+.auth0-lock-content {
+  padding: 5px !important;
+}
+
+.auth0-lock.auth0-lock .auth0-lock-cred-pane {
+  background: transparent !important;
+}
+
+.title-description {
+  margin-bottom: -5px;
+}
+
+.profile-picture-mini {
+  height: 37px;
+  position: fixed;
+  border-radius: 50%;
+  margin-left: -45px;
+  margin-top: -10px;
+  border: 1px solid #27a9a3;
+  padding: 2px;
+}

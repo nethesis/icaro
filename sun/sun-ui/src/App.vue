@@ -15,6 +15,9 @@
             </div>
             <!--/.col-*-->
             <div class="col-sm-7 col-md-6 col-lg-5 login">
+              <p>
+                <b>{{$t('login.login_credentials')}}</b>
+              </p>
               <form class="form-horizontal" role="form" v-on:submit.prevent="doLogin()">
                 <div v-bind:class="[errors.username ? 'has-error' : '', 'form-group']">
                   <label for="inputUsername" class="col-sm-2 col-md-2 control-label">Username</label>
@@ -41,6 +44,12 @@
                   </div>
                 </div>
               </form>
+              <div class="auth0-container">
+                <p class="title-description">
+                  <b>{{$t('login.login_apps')}}</b>
+                </p>
+                <div id="auth0-login"></div>
+              </div>
             </div>
             <!--/.col-*-->
             <div class="col-sm-5 col-md-6 col-lg-7 details">
@@ -91,6 +100,7 @@
 
             <li class="dropdown">
               <a href="#" class="dropdown-toggle nav-item-iconic" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                <img v-if="user.info.picture" class="profile-picture-mini" :src="user.info.picture" />
                 <p class="login-main-name">{{ user.info.name }}</p>
                 <p class="login-main-type">
                   <span v-bind:class="[getLoginIcon(user.info.type), 'login-main-icon']"></span>
@@ -300,11 +310,31 @@ import StorageService from "./services/storage";
 import UtilService from "./services/util";
 import { setTimeout } from "timers";
 
+import URI from "urijs";
+
 export default {
   name: "app",
   mixins: [LoginService, StorageService, UtilService],
-  created() {
+  mounted() {
     document.title = CONFIG.APP_NAME;
+
+    var context = this;
+    var lock = this.initAuth0Lock();
+
+    var accessToken = null;
+    if (this.get("auth0Data") && this.get("auth0Data").path) {
+      accessToken = URI(
+        window.location.origin + "?" + this.get("auth0Data").path
+      ).query(true).access_token;
+    }
+
+    if (accessToken) {
+      this.handleAuth0Lock(accessToken);
+    } else {
+      if (!this.get("loggedUser")) {
+        this.showAuth0Lock();
+      }
+    }
   },
   data() {
     // is logged
@@ -325,7 +355,15 @@ export default {
           this.user.info = response;
           this.isLogged = true;
           this.initGraphics();
+
+          if(this.get("auth0User")) {
+            var auth0User = this.get("auth0User")
+            this.user.info.name = auth0User.name;
+            this.user.info.email = auth0User.email;
+            this.user.info.picture = auth0User.picture;
+          }
         } else {
+          this.delete("loggedUser")
           this.isLogged = false;
           this.showBody();
         }
@@ -402,6 +440,7 @@ export default {
               this.isLogged = true;
               this.initGraphics();
             } else {
+              this.delete("loggedUser")
               this.isLogged = false;
             }
           });
@@ -426,6 +465,7 @@ export default {
         success => {
           // save to localstorage
           this.delete("loggedUser");
+          this.delete("auth0User");
 
           // change route
           this.isLogged = false;
@@ -459,5 +499,4 @@ export default {
 </script>
 
 <style src="./styles/main.css">
-
 </style>

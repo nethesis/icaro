@@ -68,6 +68,10 @@ type Configuration struct {
 		LogoContents   string `json:"-"`      // base64 content of Logo
 		BannerContents string `json:"-"`      //base64 content of Banner
 	} `json:"captive_portal"`
+	Auth0 struct {
+		Domain   string `json:"domain"`
+		Audience string `json:"audience"`
+	} `json:"auth0"`
 }
 
 var Config = Configuration{}

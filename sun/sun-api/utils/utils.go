@@ -210,6 +210,51 @@ func CanChangeCaptivePortalOptions(accountId int) bool {
 	return subscription.SubscriptionPlan.WingsCustomization
 }
 
+func GetAccountOrCreate(claims map[string]interface{}) models.Account {
+	var account models.Account
+	var subscriptionPlan models.SubscriptionPlan
+	var accountSMS models.AccountSmsCount
+
+	//get account
+	db := database.Instance()
+	db.Where("username = ?", claims["sub"].(string)).First(&account)
+
+	if account.Id == 0 {
+		newAccount := models.Account{
+			CreatorId: 1, //admin
+			Uuid:      claims["sub"].(string),
+			Type:      "reseller",
+			Name:      claims["sub"].(string),
+			Username:  claims["sub"].(string),
+			Password:  "",
+			Email:     claims["sub"].(string),
+			Created:   time.Now().UTC(),
+		}
+		db.Save(&newAccount)
+
+		// retrieve subscription plain basic
+		db.Where("id = 2").First(&subscriptionPlan)
+
+		// create new subscription
+		subscription := models.Subscription{
+			AccountID:          newAccount.Id,
+			SubscriptionPlanID: 2, // basic
+			ValidFrom:          time.Now().UTC(),
+			ValidUntil:         time.Now().UTC().AddDate(0, 0, subscriptionPlan.Period),
+			Created:            time.Now().UTC(),
+		}
+		db.Save(&subscription)
+
+		// create SMS accounting
+		accountSMS.AccountId = newAccount.Id
+		accountSMS.SmsMaxCount = subscriptionPlan.IncludedSMS
+		db.Save(&accountSMS)
+
+		return newAccount
+	}
+	return account
+}
+
 func Contains(intSlice []int, searchInt int) bool {
 	for _, value := range intSlice {
 		if value == searchInt {
