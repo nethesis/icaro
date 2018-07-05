@@ -29,7 +29,7 @@
               <dd>{{$t(user.info.type)}}</dd>
             </div>
           </div>
-          <div class="card-pf-footer">
+          <div v-if="!isAuth0()" class="card-pf-footer">
             <div class="dropdown card-pf-time-frame-filter">
               <button class="btn btn-default" data-toggle="modal" data-target="#changePassModal">{{ $t("profile.change_password") }}</button>
             </div>
@@ -37,6 +37,35 @@
               <a href="#" class="card-pf-link-with-icon">
               </a>
             </p>
+          </div>
+        </div>
+      </div>
+
+      <div v-if="isAuth0()" class="col-xs-12 col-sm-12 col-md-6">
+        <div class="card-pf card-pf-accented">
+          <div class="card-pf-heading">
+            <h2 class="card-pf-title">
+              {{ $t("profile.subscription") }}
+              <div :class="[isExpired(user.info.subscription.valid_until) ? 'pficon pficon-error-circle-o' : 'pficon pficon-ok', 'right']" data-toggle="tooltip" data-placement="left" :title="isExpired(user.info.subscription.valid_until) ? $t('profile.invalid') : $t('profile.valid')"></div>
+            </h2>
+          </div>
+          <div class="card-pf-body">
+            <div class="list-details">
+              <dt>{{ $t("profile.name") }}</dt>
+              <dd>{{user.info.subscription.subscription_plan.name}}</dd>
+            </div>
+            <div class="list-details">
+              <dt>{{ $t("profile.description") }}</dt>
+              <dd>{{user.info.subscription.subscription_plan.description}}</dd>
+            </div>
+            <div class="list-details">
+              <dt>{{ $t("profile.valid_from") }}</dt>
+              <dd>{{user.info.subscription.valid_from | formatDate}}</dd>
+            </div>
+            <div class="list-details">
+              <dt>{{ $t("profile.valid_until") }}</dt>
+              <dd>{{user.info.subscription.valid_until | formatDate}}</dd>
+            </div>
           </div>
         </div>
       </div>
@@ -97,6 +126,9 @@ import StatsService from "../services/stats";
 export default {
   name: "Profile",
   mixins: [LoginService, StorageService, UtilService, StatsService],
+  mounted: function() {
+    $('[data-toggle="tooltip"]').tooltip();
+  },
   data() {
     return {
       msg: this.$i18n.t("menu.profile"),
@@ -109,10 +141,16 @@ export default {
       errors: {
         password: false
       },
-      onAction: false,
+      onAction: false
     };
   },
   methods: {
+    isAuth0() {
+      return this.get("auth0User");
+    },
+    isExpired(date) {
+      return new Date().toISOString() > date;
+    },
     changePassword() {
       this.onAction = true;
       this.execChangePassword(
@@ -134,5 +172,4 @@ export default {
 </script>
 
 <style>
-
 </style>

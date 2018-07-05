@@ -56,7 +56,7 @@
             <p class="card-pf-aggregate-status-notifications">
               <span class="card-pf-aggregate-status-notification">
                 <div v-if="totals.units.isLoading" class="spinner spinner-sm"></div>
-                <div v-if="!totals.units.isLoading">{{ totals.units.count }}</div>
+                <div v-if="!totals.units.isLoading">{{ totals.units.count }} <span v-if="isAuth0()">/ <strong class="soft">{{ user.subscription.subscription_plan.max_units }}</strong></span></div>
               </span>
             </p>
           </div>
@@ -321,7 +321,10 @@ export default {
           this.totals.sms.isLoading = false;
         }
       );
-    }
+    },
+    isAuth0() {
+      return this.get("auth0User");
+    },
   }
 };
 </script>

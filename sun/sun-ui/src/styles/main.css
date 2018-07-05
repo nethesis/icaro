@@ -93,6 +93,12 @@ input {
   margin-bottom: 10px;
 }
 
+.divider-list {
+  border-top: 1px solid #d1d1d1;
+  margin-top: 0px;
+  margin-bottom: 10px;
+}
+
 .list-details {
   margin-bottom: 5px;
 }
@@ -499,4 +505,16 @@ a {
   margin-top: -10px;
   border: 1px solid #27a9a3;
   padding: 2px;
+}
+
+.navbar-pf-vertical .nav .nav-item-iconic:focus,
+.navbar-pf-vertical .nav .nav-item-iconic:hover {
+  color: #fff;
+  background-color: transparent;
+}
+
+.navbar-pf-vertical .nav .open>.nav-item-iconic, .navbar-pf-vertical .nav .open>.nav-item-iconic:focus, .navbar-pf-vertical .nav .open>.nav-item-iconic:hover {
+  background-color: transparent;
+  color: #fff;
+
 }
