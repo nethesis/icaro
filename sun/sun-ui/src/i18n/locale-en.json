@@ -28,13 +28,19 @@
       "change_password": "Change password",
       "username": "Username",
       "name": "Name",
+      "description": "Description",
       "email": "Email",
       "type": "Type",
       "new_password": "New password",
       "confirm_password": "Confirm password",
       "change_password_error_title": "Change password error",
       "change_password_error_sub": "Something went wrong on changing password",
-      "sms": "SMS sent"
+      "sms": "SMS sent",
+      "subscription": "Subscription",
+      "valid_from": "Valid from",
+      "valid_until": "Valid until",
+      "valid": "Active",
+      "invalid": "Expired"
     },
     "hotspot": {
       "yes": "Yes",
