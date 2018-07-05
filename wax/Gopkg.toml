@@ -29,6 +29,10 @@
   name = "github.com/appleboy/gofight"
   version = "2.0.0"
 
+[[override]]
+  branch = "master"
+  name = "github.com/auth0-community/go-auth0"
+
 [[constraint]]
   name = "github.com/gin-contrib/cors"
   version = "1.2.0"
