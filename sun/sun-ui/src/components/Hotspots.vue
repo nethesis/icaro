@@ -2,7 +2,7 @@
   <div>
     <h2>{{ msg }}</h2>
     <div v-if="isLoading" class="spinner spinner-lg"></div>
-    <button v-if="rows.length > 0 && !isLoading && !isAdmin" data-toggle="modal" data-target="#HScreateModal" class="btn btn-primary btn-lg create-hotspot">
+    <button :disabled="isExpired(user.subscription.valid_until)" v-if="rows.length > 0 && !isLoading && !isAdmin" data-toggle="modal" data-target="#HScreateModal" class="btn btn-primary btn-lg create-hotspot">
       {{ $t('hotspot.create_new') }} </button>
     <div v-if="rows.length == 0 && !isLoading && !isAdmin" class="blank-slate-pf " id="">
       <div class="blank-slate-pf-icon">
@@ -15,7 +15,7 @@
         {{ $t('hotspot.no_hotspot_found_sub') }}.
       </p>
       <div class="blank-slate-pf-main-action">
-        <button data-toggle="modal" data-target="#HScreateModal" class="btn btn-primary btn-lg"> {{ $t('hotspot.create_new') }} </button>
+        <button :disabled="isExpired(user.subscription.valid_until)" data-toggle="modal" data-target="#HScreateModal" class="btn btn-primary btn-lg"> {{ $t('hotspot.create_new') }} </button>
       </div>
     </div>
     <div v-if="rows.length > 0 && !isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -224,6 +224,9 @@ export default {
     this.getAll();
   },
   methods: {
+    isExpired(date) {
+      return new Date().toISOString() > date;
+    },
     handlePerPage(evt) {
       this.set("hotspots_per_page", evt.currentPerPage);
     },

@@ -29,6 +29,7 @@ import (
 
 	"github.com/nethesis/icaro/sun/sun-api/database"
 	"github.com/nethesis/icaro/sun/sun-api/models"
+	"github.com/nethesis/icaro/wax/utils"
 )
 
 func Reply(c *gin.Context, httpCode int, message string) {
@@ -64,6 +65,15 @@ func Dispatch(c *gin.Context) {
 
 	if !isHotspotUnit(hotspotUnitMac) {
 		Reply(c, http.StatusNotFound, "Hotspot unit not found")
+		return
+	}
+
+	// check subscription validity
+	unit := utils.GetUnitByMacAddress(hotspotUnitMac)
+	hotspot := utils.GetHotspotById(unit.HotspotId)
+	subscription := utils.GetSubscriptionByAccountId(hotspot.AccountId)
+	if subscription.IsExpired() {
+		Reply(c, http.StatusForbidden, "Subscription related to this Hotspot is expired")
 		return
 	}
 
