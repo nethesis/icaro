@@ -11,7 +11,7 @@
   branch = "master"
   name = "github.com/auth0-community/go-auth0"
   packages = ["."]
-  revision = "9ebd072c579e8060c6d60690e9dffd3b79718992"
+  revision = "ac84847319d2d9c15a4fa3093715f5bb7bcf4487"
 
 [[projects]]
   name = "github.com/davecgh/go-spew"
