@@ -60,7 +60,7 @@
                   </div>
                 </div>
               </form>
-              <div class="auth0-container">
+              <div id="auth0-cont" class="auth0-container">
                 <p class="title-description">
                   <b>{{$t('login.login_apps')}}</b>
                 </p>
@@ -422,7 +422,12 @@ export default {
     document.title = CONFIG.APP_NAME;
 
     var context = this;
-    var lock = this.initAuth0Lock();
+
+    if (CONFIG.AUTH0_CLIENT_ID) {
+      var lock = this.initAuth0Lock();
+    } else {
+      $("#auth0-cont").hide();
+    }
 
     var accessToken = null;
     if (this.get("auth0Data") && this.get("auth0Data").path) {
@@ -431,10 +436,10 @@ export default {
       ).query(true).access_token;
     }
 
-    if (accessToken) {
+    if (accessToken && CONFIG.AUTH0_CLIENT_ID) {
       this.handleAuth0Lock(accessToken);
     } else {
-      if (!this.get("loggedUser")) {
+      if (!this.get("loggedUser") && CONFIG.AUTH0_CLIENT_ID) {
         this.showAuth0Lock();
       }
     }
@@ -459,20 +464,22 @@ export default {
           this.isLogged = true;
           this.initGraphics();
 
-          if(this.get("auth0User")) {
-            var auth0User = this.get("auth0User")
+          if (this.get("auth0User")) {
+            var auth0User = this.get("auth0User");
             this.user.info.name = auth0User.name;
             this.user.info.email = auth0User.email;
             this.user.info.picture = auth0User.picture;
           }
         } else {
-          this.delete("loggedUser")
+          this.delete("loggedUser");
           this.isLogged = false;
           this.showBody();
         }
       });
     } else {
-      this.showBody();
+      if (!(this.get("auth0Data") && this.get("auth0Data").path)) {
+        this.showBody();
+      }
     }
 
     return {
@@ -543,7 +550,7 @@ export default {
               this.isLogged = true;
               this.initGraphics();
             } else {
-              this.delete("loggedUser")
+              this.delete("loggedUser");
               this.isLogged = false;
             }
           });
