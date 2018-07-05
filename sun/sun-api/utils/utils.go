@@ -283,13 +283,13 @@ func GetAccountOrCreate(claims map[string]interface{}) models.Account {
 		}
 		db.Save(&newAccount)
 
-		// retrieve subscription plain basic
-		db.Where("id = 2").First(&subscriptionPlan)
+		// retrieve subscription plan free
+		db.Where("id = 1").First(&subscriptionPlan)
 
 		// create new subscription
 		subscription := models.Subscription{
 			AccountID:          newAccount.Id,
-			SubscriptionPlanID: 2, // basic
+			SubscriptionPlanID: 1, // free
 			ValidFrom:          time.Now().UTC(),
 			ValidUntil:         time.Now().UTC().AddDate(0, 0, subscriptionPlan.Period),
 			Created:            time.Now().UTC(),
