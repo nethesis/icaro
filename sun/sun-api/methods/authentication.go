@@ -116,9 +116,9 @@ func LoginAuth0(c *gin.Context) {
 	AUDIENCE := []string{configuration.Config.Auth0.Audience}
 
 	// create client configuration instance to check jwt
-	client := auth0.NewJWKClient(auth0.JWKClientOptions{URI: JWKS_URI})
+	client := auth0.NewJWKClient(auth0.JWKClientOptions{URI: JWKS_URI}, nil)
 	configAuth0 := auth0.NewConfiguration(client, AUDIENCE, AUTH0_DOMAIN, jose.RS256)
-	validator := auth0.NewValidator(configAuth0)
+	validator := auth0.NewValidator(configAuth0, nil)
 
 	// check jwt validation
 	token, err := validator.ValidateRequest(c.Request)
