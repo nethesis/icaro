@@ -464,6 +464,11 @@ export default {
           this.isLogged = true;
           this.initGraphics();
 
+          // update user subscription info
+          var loggedUser = this.get("loggedUser")
+          loggedUser.subscription = response.subscription
+          this.set("loggedUser", loggedUser)
+
           if (this.get("auth0User")) {
             var auth0User = this.get("auth0User");
             this.user.info.name = auth0User.name;

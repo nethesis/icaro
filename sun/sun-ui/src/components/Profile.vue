@@ -46,7 +46,8 @@
           <div class="card-pf-heading">
             <h2 class="card-pf-title">
               {{ $t("profile.subscription") }}
-              <div :class="[isExpired(user.info.subscription.valid_until) ? 'pficon pficon-error-circle-o' : 'pficon pficon-ok', 'right']" data-toggle="tooltip" data-placement="left" :title="isExpired(user.info.subscription.valid_until) ? $t('profile.invalid') : $t('profile.valid')"></div>
+              <div :class="[isExpired(user.info.subscription.valid_until) ? 'pficon pficon-error-circle-o' : 'pficon pficon-ok', 'right']"
+                data-toggle="tooltip" data-placement="left" :title="isExpired(user.info.subscription.valid_until) ? $t('profile.invalid') : $t('profile.valid')"></div>
             </h2>
           </div>
           <div class="card-pf-body">
@@ -118,57 +119,57 @@
 </template>
 
 <script>
-import LoginService from "../services/login";
-import StorageService from "../services/storage";
-import UtilService from "../services/util";
-import StatsService from "../services/stats";
+  import LoginService from "../services/login";
+  import StorageService from "../services/storage";
+  import UtilService from "../services/util";
+  import StatsService from "../services/stats";
 
-export default {
-  name: "Profile",
-  mixins: [LoginService, StorageService, UtilService, StatsService],
-  mounted: function() {
-    $('[data-toggle="tooltip"]').tooltip();
-  },
-  data() {
-    return {
-      msg: this.$i18n.t("menu.profile"),
-      user: {
-        login: this.get("loggedUser") || null,
-        info: this.$parent.user.info
-      },
-      newPassword: "",
-      confirmPassword: "",
-      errors: {
-        password: false
-      },
-      onAction: false
-    };
-  },
-  methods: {
-    isAuth0() {
-      return this.get("auth0User");
+  export default {
+    name: "Profile",
+    mixins: [LoginService, StorageService, UtilService, StatsService],
+    mounted: function () {
+      $('[data-toggle="tooltip"]').tooltip();
     },
-    isExpired(date) {
-      return new Date().toISOString() > date;
-    },
-    changePassword() {
-      this.onAction = true;
-      this.execChangePassword(
-        this.newPassword,
-        this.user.login.id,
-        success => {
-          this.onAction = false;
-          $("#changePassModal").modal("toggle");
+    data() {
+      return {
+        msg: this.$i18n.t("menu.profile"),
+        user: {
+          login: this.get("loggedUser") || null,
+          info: this.$parent.user.info
         },
-        error => {
-          this.onAction = false;
-          this.errors.password = true;
-          console.error(error.body.message);
-        }
-      );
+        newPassword: "",
+        confirmPassword: "",
+        errors: {
+          password: false
+        },
+        onAction: false
+      };
+    },
+    methods: {
+      isAuth0() {
+        return this.get("auth0User");
+      },
+      isExpired(date) {
+        return new Date().toISOString() > date;
+      },
+      changePassword() {
+        this.onAction = true;
+        this.execChangePassword(
+          this.newPassword,
+          this.user.login.id,
+          success => {
+            this.onAction = false;
+            $("#changePassModal").modal("toggle");
+          },
+          error => {
+            this.onAction = false;
+            this.errors.password = true;
+            console.error(error.body.message);
+          }
+        );
+      }
     }
-  }
-};
+  };
 </script>
 
 <style>

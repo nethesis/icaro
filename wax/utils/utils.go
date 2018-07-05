@@ -212,6 +212,14 @@ func GetAccountByAccountId(accountId int) models.Account {
 	return account
 }
 
+func GetSubscriptionByAccountId(id int) models.Subscription {
+	var subscription models.Subscription
+	db := database.Instance()
+	db.Where("account_id = ?", id).First(&subscription)
+
+	return subscription
+}
+
 func GetSessionByKeyAndUnitId(key string, unitId int) models.Session {
 	var session models.Session
 	db := database.Instance()

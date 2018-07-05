@@ -2,7 +2,9 @@
   <div>
     <h2>{{ msg }}</h2>
     <div v-if="isLoading" class="spinner spinner-lg"></div>
+
     <button
+      :disabled="isExpired(user.subscription.valid_until)"
       v-if="rows.length > 0 && !isLoading && !isAdmin"
       data-toggle="modal"
       data-target="#HScreateModal"
@@ -16,6 +18,7 @@
       <p>{{ $t('hotspot.no_hotspot_found_sub') }}.</p>
       <div class="blank-slate-pf-main-action">
         <button
+          :disabled="isExpired(user.subscription.valid_until)"
           data-toggle="modal"
           data-target="#HScreateModal"
           class="btn btn-primary btn-lg"
@@ -331,6 +334,9 @@ export default {
     this.getAll();
   },
   methods: {
+    isExpired(date) {
+      return new Date().toISOString() > date;
+    },
     handlePerPage(evt) {
       this.set("hotspots_per_page", evt.currentPerPage);
     },
