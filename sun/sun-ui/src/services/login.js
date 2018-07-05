@@ -60,8 +60,6 @@ var LoginService = {
             context.getInfo(loggedUser.id, response => {
               if (response) {
                 context.user.info = response;
-                context.isLogged = true;
-                context.initGraphics();
                 context.user.info.name = profile.name;
                 context.user.info.email = profile.email;
                 context.user.info.picture = profile.picture;
@@ -72,6 +70,7 @@ var LoginService = {
                 context.$router.replace({
                   path: "/"
                 })
+                context.initGraphics();
               } else {
                 context.isLogged = false;
               }
