@@ -79,10 +79,18 @@ type Configuration struct {
 		FeedbackSmsBodyText         string `json:"feedback_sms_body_text"`
 		ReviewSmsBodyText           string `json:"review_sms_body_text"`
 	} `json:"survey"`
+	PayPal struct {
+		ClientID     string `json:"client_id"`
+		ClientSecret string `json:"client_secret"`
+		Sandbox      bool   `json:"sandbox"`
+	} `json:"paypal"`
 	Auth0 struct {
 		Domain   string `json:"domain"`
 		Audience string `json:"audience"`
 	} `json:"auth0"`
+	Billing struct {
+		Country string `json:"country"`
+	}
 }
 
 var Config = Configuration{}

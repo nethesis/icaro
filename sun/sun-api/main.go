@@ -200,7 +200,22 @@ func DefineAPI(router *gin.Engine) {
 
 		subscriptionsPlans := api.Group("/subscription_plans")
 		{
-			subscriptionsPlans.GET("/", methods.GetSubscriptionPlans)
+			subscriptionsPlans.GET("", methods.GetSubscriptionPlans)
+			subscriptionsPlans.GET("/upgrade_price", methods.UpgradePlanPrice)
+			subscriptionsPlans.POST("/renewal", methods.RenewalPlan)
+			subscriptionsPlans.POST("/upgrade", methods.UpgradePlan)
+		}
+
+		billings := api.Group("/billings")
+		{
+			billings.GET("", methods.GetBilling)
+			billings.POST("", methods.CreateBilling)
+			billings.PUT("", methods.UpdateBilling)
+		}
+
+		taxes := api.Group("/taxes")
+		{
+			taxes.GET("", methods.GetTaxes)
 		}
 	}
 

@@ -107,8 +107,8 @@ func CreateAccount(c *gin.Context) {
 
 		// create new subscription
 		subscription := models.Subscription{
-			AccountID:          account.Id,
-			SubscriptionPlanID: json.SubscriptionPlanId,
+			AccountId:          account.Id,
+			SubscriptionPlanId: json.SubscriptionPlanId,
 			ValidFrom:          time.Now().UTC(),
 			ValidUntil:         time.Now().UTC().AddDate(0, 0, subscriptionPlan.Period),
 			Created:            time.Now().UTC(),

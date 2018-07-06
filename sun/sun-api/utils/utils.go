@@ -28,6 +28,7 @@ import (
 	"crypto/sha256"
 	"encoding/json"
 	"fmt"
+	"math"
 	"net/http"
 	"strconv"
 	"time"
@@ -288,8 +289,8 @@ func GetAccountOrCreate(claims map[string]interface{}) models.Account {
 
 		// create new subscription
 		subscription := models.Subscription{
-			AccountID:          newAccount.Id,
-			SubscriptionPlanID: 1, // free
+			AccountId:          newAccount.Id,
+			SubscriptionPlanId: 1, // free
 			ValidFrom:          time.Now().UTC(),
 			ValidUntil:         time.Now().UTC().AddDate(0, 0, subscriptionPlan.Period),
 			Created:            time.Now().UTC(),
@@ -304,6 +305,44 @@ func GetAccountOrCreate(claims map[string]interface{}) models.Account {
 		return newAccount
 	}
 	return account
+}
+
+func GetSubscriptionPlanByCode(code string) models.SubscriptionPlan {
+	var subscriptionPlan models.SubscriptionPlan
+	db := database.Instance()
+	db.Where("code = ?", code).First(&subscriptionPlan)
+
+	return subscriptionPlan
+}
+
+func GetSubscriptionPlanById(id int) models.SubscriptionPlan {
+	var subscriptionPlan models.SubscriptionPlan
+	db := database.Instance()
+	db.Where("id = ?", id).First(&subscriptionPlan)
+
+	return subscriptionPlan
+}
+
+func Round(val float64, roundOn float64, places int) float64 {
+	pow := math.Pow(10, float64(places))
+	digit := pow * val
+	_, div := math.Modf(digit)
+
+	var round float64
+	if val > 0 {
+		if div >= roundOn {
+			round = math.Ceil(digit)
+		} else {
+			round = math.Floor(digit)
+		}
+	} else {
+		if div >= roundOn {
+			round = math.Floor(digit)
+		} else {
+			round = math.Ceil(digit)
+		}
+	}
+	return round / pow
 }
 
 func Contains(intSlice []int, searchInt int) bool {

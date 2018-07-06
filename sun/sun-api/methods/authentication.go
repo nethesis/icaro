@@ -125,7 +125,6 @@ func LoginAuth0(c *gin.Context) {
 
 	// check jwt validation
 	token, err := validator.ValidateRequest(c.Request)
-	fmt.Println(err)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"message": "Missing or invalid token"})
 		return

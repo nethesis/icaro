@@ -254,6 +254,7 @@
 </template>
 
 <script>
+import AccountService from "../services/account";
 import HotspotService from "../services/hotspot";
 import StorageService from "../services/storage";
 import UtilService from "../services/util";
@@ -262,7 +263,7 @@ import HotspotAction from "../directives/HotspotAction.vue";
 
 export default {
   name: "Hotspots",
-  mixins: [HotspotService, StorageService, UtilService],
+  mixins: [AccountService, HotspotService, StorageService, UtilService],
   components: {
     hotspotAction: HotspotAction
   },
@@ -335,7 +336,15 @@ export default {
   },
   methods: {
     isExpired(date) {
+      console.log(new Date().toISOString() , date)
       return new Date().toISOString() > date;
+    },
+    getSubscriptionInfo() {
+      this.accountGet(this.get("loggedUser").id, success => {
+        this.user.subscription = success.body.subscription;
+      }, error => {
+
+      });
     },
     handlePerPage(evt) {
       this.set("hotspots_per_page", evt.currentPerPage);

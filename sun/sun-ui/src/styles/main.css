@@ -513,8 +513,55 @@ a {
   background-color: transparent;
 }
 
-.navbar-pf-vertical .nav .open>.nav-item-iconic, .navbar-pf-vertical .nav .open>.nav-item-iconic:focus, .navbar-pf-vertical .nav .open>.nav-item-iconic:hover {
+.navbar-pf-vertical .nav .open>.nav-item-iconic,
+.navbar-pf-vertical .nav .open>.nav-item-iconic:focus,
+.navbar-pf-vertical .nav .open>.nav-item-iconic:hover {
   background-color: transparent;
   color: #fff;
+}
 
+.details-pay-item .dropdown-toggle,
+.details-pay-item>a {
+  font-size: 110%;
+}
+
+.details-markdown ul {
+  list-style: none;
+  padding: 0;
+}
+
+.details-markdown li {
+  padding-left: 1.3em;
+}
+
+.details-markdown li:before {
+  content: "\f00c";
+  font-family: FontAwesome;
+  display: inline-block;
+  margin-left: -1.3em;
+  width: 1.3em;
+}
+
+.details-pay-item {
+  display: flex !important;
+}
+
+.done-payment-button {
+  float: right;
+  margin-top: 10px;
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+.adjust-icon-size {
+  width: 75px !important;
+  height: 75px !important;
+  font-size: 30px !important;
+  line-height: 72px !important;
+}
+
+.card-pf-item-text {
+  font-size: 16px;
 }

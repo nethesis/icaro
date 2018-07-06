@@ -56,7 +56,13 @@
             <p class="card-pf-aggregate-status-notifications">
               <span class="card-pf-aggregate-status-notification">
                 <div v-if="totals.units.isLoading" class="spinner spinner-sm"></div>
-                <div v-if="!totals.units.isLoading">{{ totals.units.count }} <span v-if="isAuth0()">/ <strong class="soft">{{ user.subscription.subscription_plan.max_units }}</strong></span></div>
+                <div v-if="!totals.units.isLoading">
+                  {{ totals.units.count }}
+                  <span v-if="isAuth0()">
+                    /
+                    <strong class="soft">{{ user.subscription.subscription_plan.max_units }}</strong>
+                  </span>
+                </div>
               </span>
             </p>
           </div>
@@ -188,17 +194,21 @@
 </template>
 
 <script>
+import AccountService from "../services/account";
 import StatsService from "../services/stats";
 import StorageService from "../services/storage";
 import IntegrationService from "../services/integration";
 
 export default {
   name: "Dashboard",
-  mixins: [StatsService, StorageService, IntegrationService],
+  mixins: [AccountService, StatsService, StorageService, IntegrationService],
   data() {
     // get totals
     this.getTotals();
     this.getIntegrations();
+
+    // get subscription info
+    this.getSubscriptionInfo();
 
     return {
       msg: "Dashboard",
@@ -238,6 +248,15 @@ export default {
     };
   },
   methods: {
+    getSubscriptionInfo() {
+      this.accountGet(
+        this.get("loggedUser").id,
+        success => {
+          this.user.subscription = success.body.subscription;
+        },
+        error => {}
+      );
+    },
     getIntegrations() {
       this.integrationGetAll(
         success => {
@@ -324,7 +343,7 @@ export default {
     },
     isAuth0() {
       return this.get("auth0User");
-    },
+    }
   }
 };
 </script>
