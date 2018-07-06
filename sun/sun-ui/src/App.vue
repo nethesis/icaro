@@ -19,12 +19,13 @@
                 <b>{{$t('login.login_credentials')}}</b>
               </p>
               <form class="form-horizontal" role="form" v-on:submit.prevent="doLogin()">
-                <div v-bind:class="[errors.username ? 'has-error' : '', 'form-group']">
+                <div v-bind:class="[errors.username || errors.auth0User ? 'has-error' : '', 'form-group']">
                   <label for="inputUsername" class="col-sm-2 col-md-2 control-label">Username</label>
                   <div class="col-sm-10 col-md-10">
                     <input autocomplete="username" required v-model="username" type="text" class="form-control" id="inputUsername" :placeholder="$t('login.insert_username')"
                       tabindex="1">
                     <span v-if="errors.username" class="help-block">{{ $t("login.user_error") }}</span>
+                    <span v-if="errors.auth0User" class="help-block">{{$t("login.user_auth0_error")}}</span>
                   </div>
                 </div>
                 <div v-bind:class="[errors.password ? 'has-error' : '', 'form-group']">
@@ -351,7 +352,8 @@ export default {
 
     var errors = {
       username: false,
-      password: false
+      password: false,
+      auth0User: false,
     };
 
     if (user.login) {
@@ -440,6 +442,13 @@ export default {
           password: this.password
         },
         success => {
+          // check accountType
+          var accountType = success.body.uuid.split("|")[0]
+          if (accountType == "auth0") {
+            this.errors.auth0User = true;
+            return;
+          }
+
           // extract loggedUser info
           var loggedUser = success.body;
           // save to localstorage
