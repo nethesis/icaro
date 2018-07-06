@@ -274,12 +274,12 @@ func GetAccountOrCreate(claims map[string]interface{}) models.Account {
 	if account.Id == 0 {
 		newAccount := models.Account{
 			CreatorId: 1, //admin
-			Uuid:      claims["sub"].(string),
+			Uuid:      "auth0|" + claims["sub"].(string),
 			Type:      "reseller",
 			Name:      claims["sub"].(string),
 			Username:  claims["sub"].(string),
-			Password:  "",
-			Email:     claims["sub"].(string),
+			Password:  GenerateSecret(time.Now().UTC().String() + claims["sub"].(string)),
+			Email:     "",
 			Created:   time.Now().UTC(),
 		}
 		db.Save(&newAccount)
@@ -321,6 +321,13 @@ func GetSubscriptionPlanById(id int) models.SubscriptionPlan {
 	db.Where("id = ?", id).First(&subscriptionPlan)
 
 	return subscriptionPlan
+}
+
+func GenerateSecret(uuid string) string {
+	h := sha256.New()
+	h.Write([]byte(time.Now().UTC().String() + uuid))
+	secret := fmt.Sprintf("%x", h.Sum(nil))
+	return secret
 }
 
 func Round(val float64, roundOn float64, places int) float64 {

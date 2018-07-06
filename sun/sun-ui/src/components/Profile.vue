@@ -28,6 +28,13 @@
               <dt>{{ $t("profile.type") }}</dt>
               <dd>{{$t(user.info.type)}}</dd>
             </div>
+            <div v-if="isAuth0()" class="list-details">
+              <strong>{{$t('profile.secret')}}</strong>
+              <a href="" class="btn btn-default right" data-placement="left" data-toggle="popover" data-html="true" :title="$t('profile.secret')"
+                :data-content="user.info.password">
+                {{$t('profile.show_secret')}}
+              </a>
+            </div>
           </div>
           <div v-if="!isAuth0()" class="card-pf-footer">
             <div class="dropdown card-pf-time-frame-filter">
@@ -212,150 +219,157 @@
 </template>
 
 <script>
-import AccountService from "../services/account";
-import LoginService from "../services/login";
-import StorageService from "../services/storage";
-import UtilService from "../services/util";
-import StatsService from "../services/stats";
-import SubscriptionService from "../services/subscription";
+  import AccountService from "../services/account";
+  import LoginService from "../services/login";
+  import StorageService from "../services/storage";
+  import UtilService from "../services/util";
+  import StatsService from "../services/stats";
+  import SubscriptionService from "../services/subscription";
 
-import RenewButton from "./details-view/RenewButton.vue";
+  import RenewButton from "./details-view/RenewButton.vue";
 
-export default {
-  name: "Profile",
-  mixins: [
-    AccountService,
-    LoginService,
-    StorageService,
-    UtilService,
-    StatsService,
-    SubscriptionService
-  ],
-  components: {
-    renewButton: RenewButton
-  },
-  mounted: function() {
-    $('[data-toggle="tooltip"]').tooltip();
-  },
-  data() {
-    var updateBilling = false;
-    if (this.$parent.action == "updateBilling") {
-      updateBilling = true;
-      this.delete("query_params");
-    }
-
-    // get subscription info
-    this.getSubscriptionInfo()
-
-    // get country list
-    this.getCountryList();
-
-    // get billing info
-    this.getBillingInfo();
-
-    return {
-      msg: this.$i18n.t("menu.profile"),
-      user: {
-        login: this.get("loggedUser") || null,
-        info: this.$parent.user.info
-      },
-      newPassword: "",
-      confirmPassword: "",
-      errors: {
-        password: false
-      },
-      onAction: false,
-      updateBilling: updateBilling,
-      billingInfo: {},
-      billingType: "person",
-      billingEmpty: true,
-      countries: [],
-      isSaving: false,
-      isBillingLoading: true
-    };
-  },
-  methods: {
-    isAuth0() {
-      return this.get("auth0User");
+  export default {
+    name: "Profile",
+    mixins: [
+      AccountService,
+      LoginService,
+      StorageService,
+      UtilService,
+      StatsService,
+      SubscriptionService
+    ],
+    components: {
+      renewButton: RenewButton
     },
-    isExpired(date) {
-      return new Date().toISOString() > date;
+    mounted: function () {
+      $('[data-toggle="tooltip"]').tooltip();
+      $("[data-toggle=popover]")
+        .popovers()
+        .on("hidden.bs.popover", function(e) {
+          $(e.target).data("bs.popover").inState.click = false;
+        });
     },
-    getSubscriptionInfo() {
-      this.accountGet(this.get("loggedUser").id, success => {
-        this.user.info.subscription = success.body.subscription;
-      }, error => {
-
-      });
-    },
-    changePassword() {
-      this.onAction = true;
-      this.execChangePassword(
-        this.newPassword,
-        this.user.login.id,
-        success => {
-          this.onAction = false;
-          $("#changePassModal").modal("toggle");
-        },
-        error => {
-          this.onAction = false;
-          this.errors.password = true;
-          console.log(error.body.message);
-        }
-      );
-    },
-    getBillingInfo() {
-      this.isBillingLoading = true;
-      this.subscriptionBillingsGetAll(
-        success => {
-          this.isBillingLoading = false;
-          this.billingEmpty = false;
-          this.billingInfo = success.body;
-          if (success.body.vat && success.body.vat.length > 0) {
-            this.billingType = "business";
-          } else {
-            this.billingType = "person";
-          }
-        },
-        error => {
-          this.billingEmpty = true;
-          this.billingType = "person";
-          this.isBillingLoading = false;
-          console.error(error);
-        }
-      );
-    },
-    getCountryList() {
-      this.subscriptionTaxesGetAll(
-        success => {
-          this.countries = success.body;
-        },
-        error => {
-          console.error(error);
-        }
-      );
-    },
-    updateBillingInfo() {
-      this.isSaving = true;
-      if (this.billingType == "person") {
-        this.billingInfo.vat = "";
+    data() {
+      var updateBilling = false;
+      if (this.$parent.action == "updateBilling") {
+        updateBilling = true;
+        this.delete("query_params");
       }
 
-      this.subscriptionBillingUpdate(
-        this.billingEmpty,
-        success => {
-          this.isSaving = false;
-          this.updateBilling = false;
-          this.billingEmpty = false;
+      // get subscription info
+      this.getSubscriptionInfo();
+
+      // get country list
+      this.getCountryList();
+
+      // get billing info
+      this.getBillingInfo();
+
+      return {
+        msg: this.$i18n.t("menu.profile"),
+        user: {
+          login: this.get("loggedUser") || null,
+          info: this.$parent.user.info
         },
-        error => {
-          this.isSaving = false;
-          console.error(error);
+        newPassword: "",
+        confirmPassword: "",
+        errors: {
+          password: false
+        },
+        onAction: false,
+        updateBilling: updateBilling,
+        billingInfo: {},
+        billingType: "person",
+        billingEmpty: true,
+        countries: [],
+        isSaving: false,
+        isBillingLoading: true
+      };
+    },
+    methods: {
+      isAuth0() {
+        return this.get("auth0User");
+      },
+      isExpired(date) {
+        return new Date().toISOString() > date;
+      },
+      getSubscriptionInfo() {
+        this.accountGet(
+          this.get("loggedUser").id,
+          success => {
+            this.user.info.subscription = success.body.subscription;
+          },
+          error => {}
+        );
+      },
+      changePassword() {
+        this.onAction = true;
+        this.execChangePassword(
+          this.newPassword,
+          this.user.login.id,
+          success => {
+            this.onAction = false;
+            $("#changePassModal").modal("toggle");
+          },
+          error => {
+            this.onAction = false;
+            this.errors.password = true;
+            console.log(error.body.message);
+          }
+        );
+      },
+      getBillingInfo() {
+        this.isBillingLoading = true;
+        this.subscriptionBillingsGetAll(
+          success => {
+            this.isBillingLoading = false;
+            this.billingEmpty = false;
+            this.billingInfo = success.body;
+            if (success.body.vat && success.body.vat.length > 0) {
+              this.billingType = "business";
+            } else {
+              this.billingType = "person";
+            }
+          },
+          error => {
+            this.billingEmpty = true;
+            this.billingType = "person";
+            this.isBillingLoading = false;
+            console.error(error);
+          }
+        );
+      },
+      getCountryList() {
+        this.subscriptionTaxesGetAll(
+          success => {
+            this.countries = success.body;
+          },
+          error => {
+            console.error(error);
+          }
+        );
+      },
+      updateBillingInfo() {
+        this.isSaving = true;
+        if (this.billingType == "person") {
+          this.billingInfo.vat = "";
         }
-      );
+
+        this.subscriptionBillingUpdate(
+          this.billingEmpty,
+          success => {
+            this.isSaving = false;
+            this.updateBilling = false;
+            this.billingEmpty = false;
+          },
+          error => {
+            this.isSaving = false;
+            console.error(error);
+          }
+        );
+      }
     }
-  }
-};
+  };
 </script>
 
 <style>
