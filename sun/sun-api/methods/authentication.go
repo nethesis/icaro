@@ -27,6 +27,7 @@ import (
 	"crypto/sha256"
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	auth0 "github.com/auth0-community/go-auth0"
@@ -60,52 +61,65 @@ func Login(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, gin.H{"message": "No username found!"})
 		return
 	} else {
-		// check password
-		h := md5.New()
-		h.Write([]byte(password))
-		digest := fmt.Sprintf("%x", h.Sum(nil))
+		// check account type
+		s := strings.Split(account.Uuid, "|")
+		accountType := s[0]
 
-		if account.Password == digest {
-			// create authorization token
-			h := sha256.New()
-			h.Write([]byte(time.Now().UTC().String() + username + password))
-			token := fmt.Sprintf("%x", h.Sum(nil))
-
-			// set expiration date
-			expires := time.Now().UTC().AddDate(0, 0, configuration.Config.TokenExpiresDays)
-
-			accessToken := models.AccessToken{
-				AccountId:   account.Id,
-				Token:       token,
-				Role:        account.Type,
-				Type:        "login",
-				Expires:     expires,
-				ACLs:        "full",
-				Description: "",
+		if accountType == "auth0" {
+			if account.Password != password {
+				c.JSON(http.StatusUnauthorized, gin.H{"message": "Password is invalid"})
+				return
 			}
-
-			db.Save(&accessToken)
-
-			db.Set("gorm:auto_preload", true)
-			if account.Type == "reseller" {
-				db.Preload("SubscriptionPlan").Where("account_id = ?", account.Id).First(&subscription)
-			} else {
-				db.Preload("SubscriptionPlan").Where("account_id = ?", account.CreatorId).First(&subscription)
-			}
-			subscription.Expired = subscription.ValidUntil.Before(time.Now().UTC())
-
-			c.JSON(http.StatusCreated, gin.H{
-				"account_type": account.Type,
-				"status":       "success",
-				"token":        token,
-				"expires":      expires.String(),
-				"id":           account.Id,
-				"subscription": subscription,
-			})
-
 		} else {
-			c.JSON(http.StatusUnauthorized, gin.H{"message": "Password is invalid"})
+			// check password
+			h := md5.New()
+			h.Write([]byte(password))
+			digest := fmt.Sprintf("%x", h.Sum(nil))
+
+			if account.Password != digest {
+				c.JSON(http.StatusUnauthorized, gin.H{"message": "Password is invalid"})
+				return
+			}
 		}
+
+		// create authorization token
+		h := sha256.New()
+		h.Write([]byte(time.Now().UTC().String() + username + password))
+		token := fmt.Sprintf("%x", h.Sum(nil))
+
+		// set expiration date
+		expires := time.Now().UTC().AddDate(0, 0, configuration.Config.TokenExpiresDays)
+
+		accessToken := models.AccessToken{
+			AccountId:   account.Id,
+			Token:       token,
+			Role:        account.Type,
+			Type:        "login",
+			Expires:     expires,
+			ACLs:        "full",
+			Description: "",
+		}
+
+		db.Save(&accessToken)
+
+		db.Set("gorm:auto_preload", true)
+		if account.Type == "reseller" {
+			db.Preload("SubscriptionPlan").Where("account_id = ?", account.Id).First(&subscription)
+		} else {
+			db.Preload("SubscriptionPlan").Where("account_id = ?", account.CreatorId).First(&subscription)
+		}
+		subscription.Expired = subscription.ValidUntil.Before(time.Now().UTC())
+
+		c.JSON(http.StatusCreated, gin.H{
+			"account_type": account.Type,
+			"status":       "success",
+			"token":        token,
+			"expires":      expires.String(),
+			"id":           account.Id,
+			"subscription": subscription,
+			"uuid":         account.Uuid,
+		})
+
 	}
 
 }
@@ -119,9 +133,9 @@ func LoginAuth0(c *gin.Context) {
 	AUDIENCE := []string{configuration.Config.Auth0.Audience}
 
 	// create client configuration instance to check jwt
-	client := auth0.NewJWKClient(auth0.JWKClientOptions{URI: JWKS_URI}, nil)
+	client := auth0.NewJWKClient(auth0.JWKClientOptions{URI: JWKS_URI})
 	configAuth0 := auth0.NewConfiguration(client, AUDIENCE, AUTH0_DOMAIN, jose.RS256)
-	validator := auth0.NewValidator(configAuth0, nil)
+	validator := auth0.NewValidator(configAuth0)
 
 	// check jwt validation
 	token, err := validator.ValidateRequest(c.Request)
