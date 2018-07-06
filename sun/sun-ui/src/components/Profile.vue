@@ -68,8 +68,101 @@
               <dd>{{user.info.subscription.valid_until | formatDate}}</dd>
             </div>
           </div>
+          <div class="card-pf-footer">
+            <div class="dropdown card-pf-time-frame-filter">
+              <renew-button :obj="user.info" :status="billingEmpty" :update="getSubscriptionInfo"></renew-button>
+            </div>
+            <p>
+              <a href="#" class="card-pf-link-with-icon">
+              </a>
+            </p>
+          </div>
         </div>
       </div>
+
+      <div v-if="isAuth0()" class="col-xs-12 col-sm-12 col-md-6">
+        <div class="card-pf card-pf-accented">
+          <div class="card-pf-heading">
+            <h2 class="card-pf-title">
+              {{$t('profile.billing')}}
+              <div v-if="isBillingLoading" class="spinner spinner-sm loader-spinner right"></div>
+              <div v-if="!isBillingLoading" class="fa fa-list right"></div>
+            </h2>
+          </div>
+          <form class="form-horizontal" v-on:submit.prevent="updateBillingInfo()">
+            <div class="card-pf-body">
+              <div class="form-group">
+                <label class="col-sm-3 control-label" for="textInput-markup">{{$t('profile.name')}}</label>
+                <div class="col-sm-9">
+                  <input v-model="billingInfo.name" required type="text" id="textInput-markup" class="form-control">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-3 control-label" for="textInput-markup">{{$t('profile.address')}}</label>
+                <div class="col-sm-9">
+                  <input v-model="billingInfo.address" required type="text" id="textInput-markup" class="form-control">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-3 control-label" for="textInput-markup">{{$t('profile.city')}}</label>
+                <div class="col-sm-9">
+                  <input v-model="billingInfo.city" required type="text" id="textInput-markup" class="form-control">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-3 control-label" for="textInput-markup">{{$t('profile.postal_code')}}</label>
+                <div class="col-sm-9">
+                  <input v-model="billingInfo.postal_code" required type="text" id="textInput-markup" class="form-control">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-3 control-label" for="textInput-markup">{{$t('profile.country')}}</label>
+                <div class="col-sm-9">
+                  <select required v-model="billingInfo.country" class="form-control">
+                    <option v-for="c in countries" v-bind:key="c.id" v-bind:value="c.country">
+                      {{ c.country }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-3 control-label" for="textInput-markup">{{$t('profile.type')}}</label>
+                <div class="col-sm-9">
+                  <span class="span-radio">
+                    <input required v-model="billingType" class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="business">
+                    <label class="form-check-label" for="exampleRadios1">
+                      {{$t('profile.type_business')}}
+                    </label>
+                  </span>
+                  <span class="span-radio">
+                    <input required v-model="billingType" class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="person">
+                    <label class="form-check-label" for="exampleRadios2">
+                      {{$t('profile.type_person')}}
+                    </label>
+                  </span>
+                </div>
+              </div>
+              <div v-if="billingType == 'business'" class="form-group">
+                <label class="col-sm-3 control-label" for="textInput-markup">{{$t('profile.vat')}}</label>
+                <div class="col-sm-9">
+                  <input v-model="billingInfo.vat" required type="text" id="textInput-markup" class="form-control">
+                </div>
+              </div>
+            </div>
+            <div class="card-pf-footer">
+              <div class="dropdown card-pf-time-frame-filter">
+                <button :disabled="isSaving" type="submit" class="btn btn-primary">Save</button>
+              </div>
+              <p>
+                <a href="#" class="card-pf-link-with-icon">
+                </a>
+              </p>
+            </div>
+          </form>
+
+        </div>
+      </div>
+
     </div>
 
     <div class="modal fade" id="changePassModal" tabindex="-1" role="dialog" aria-labelledby="changePassModalLabel" aria-hidden="true">
@@ -119,57 +212,150 @@
 </template>
 
 <script>
-  import LoginService from "../services/login";
-  import StorageService from "../services/storage";
-  import UtilService from "../services/util";
-  import StatsService from "../services/stats";
+import AccountService from "../services/account";
+import LoginService from "../services/login";
+import StorageService from "../services/storage";
+import UtilService from "../services/util";
+import StatsService from "../services/stats";
+import SubscriptionService from "../services/subscription";
 
-  export default {
-    name: "Profile",
-    mixins: [LoginService, StorageService, UtilService, StatsService],
-    mounted: function () {
-      $('[data-toggle="tooltip"]').tooltip();
-    },
-    data() {
-      return {
-        msg: this.$i18n.t("menu.profile"),
-        user: {
-          login: this.get("loggedUser") || null,
-          info: this.$parent.user.info
-        },
-        newPassword: "",
-        confirmPassword: "",
-        errors: {
-          password: false
-        },
-        onAction: false
-      };
-    },
-    methods: {
-      isAuth0() {
-        return this.get("auth0User");
-      },
-      isExpired(date) {
-        return new Date().toISOString() > date;
-      },
-      changePassword() {
-        this.onAction = true;
-        this.execChangePassword(
-          this.newPassword,
-          this.user.login.id,
-          success => {
-            this.onAction = false;
-            $("#changePassModal").modal("toggle");
-          },
-          error => {
-            this.onAction = false;
-            this.errors.password = true;
-            console.error(error.body.message);
-          }
-        );
-      }
+import RenewButton from "./details-view/RenewButton.vue";
+
+export default {
+  name: "Profile",
+  mixins: [
+    AccountService,
+    LoginService,
+    StorageService,
+    UtilService,
+    StatsService,
+    SubscriptionService
+  ],
+  components: {
+    renewButton: RenewButton
+  },
+  mounted: function() {
+    $('[data-toggle="tooltip"]').tooltip();
+  },
+  data() {
+    var updateBilling = false;
+    if (this.$parent.action == "updateBilling") {
+      updateBilling = true;
+      this.delete("query_params");
     }
-  };
+
+    // get subscription info
+    this.getSubscriptionInfo()
+
+    // get country list
+    this.getCountryList();
+
+    // get billing info
+    this.getBillingInfo();
+
+    return {
+      msg: this.$i18n.t("menu.profile"),
+      user: {
+        login: this.get("loggedUser") || null,
+        info: this.$parent.user.info
+      },
+      newPassword: "",
+      confirmPassword: "",
+      errors: {
+        password: false
+      },
+      onAction: false,
+      updateBilling: updateBilling,
+      billingInfo: {},
+      billingType: "person",
+      billingEmpty: true,
+      countries: [],
+      isSaving: false,
+      isBillingLoading: true
+    };
+  },
+  methods: {
+    isAuth0() {
+      return this.get("auth0User");
+    },
+    isExpired(date) {
+      return new Date().toISOString() > date;
+    },
+    getSubscriptionInfo() {
+      this.accountGet(this.get("loggedUser").id, success => {
+        this.user.info.subscription = success.body.subscription;
+      }, error => {
+
+      });
+    },
+    changePassword() {
+      this.onAction = true;
+      this.execChangePassword(
+        this.newPassword,
+        this.user.login.id,
+        success => {
+          this.onAction = false;
+          $("#changePassModal").modal("toggle");
+        },
+        error => {
+          this.onAction = false;
+          this.errors.password = true;
+          console.log(error.body.message);
+        }
+      );
+    },
+    getBillingInfo() {
+      this.isBillingLoading = true;
+      this.subscriptionBillingsGetAll(
+        success => {
+          this.isBillingLoading = false;
+          this.billingEmpty = false;
+          this.billingInfo = success.body;
+          if (success.body.vat && success.body.vat.length > 0) {
+            this.billingType = "business";
+          } else {
+            this.billingType = "person";
+          }
+        },
+        error => {
+          this.billingEmpty = true;
+          this.billingType = "person";
+          this.isBillingLoading = false;
+          console.error(error);
+        }
+      );
+    },
+    getCountryList() {
+      this.subscriptionTaxesGetAll(
+        success => {
+          this.countries = success.body;
+        },
+        error => {
+          console.error(error);
+        }
+      );
+    },
+    updateBillingInfo() {
+      this.isSaving = true;
+      if (this.billingType == "person") {
+        this.billingInfo.vat = "";
+      }
+
+      this.subscriptionBillingUpdate(
+        this.billingEmpty,
+        success => {
+          this.isSaving = false;
+          this.updateBilling = false;
+          this.billingEmpty = false;
+        },
+        error => {
+          this.isSaving = false;
+          console.error(error);
+        }
+      );
+    }
+  }
+};
 </script>
 
 <style>

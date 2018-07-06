@@ -27,7 +27,7 @@ import (
 )
 
 type SubscriptionPlan struct {
-	ID                 int     `db:"id" json:"id"`
+	Id                 int     `db:"id" json:"id"`
 	Code               string  `db:"code" json:"code"`
 	Name               string  `db:"name" json:"name"`
 	Description        string  `db:"description" json:"description"`
@@ -41,15 +41,23 @@ type SubscriptionPlan struct {
 }
 
 type Subscription struct {
-	ID         int       `db:"id" json:"id"`
+	Id         int       `db:"id" json:"id"`
 	ValidFrom  time.Time `db:"valid_from" json:"valid_from"`
 	ValidUntil time.Time `db:"valid_until" json:"valid_until"`
 	Created    time.Time `db:"created" json:"created"`
-	AccountID  int       `db:"account_id" json:"account_id"`
+	AccountId  int       `db:"account_id" json:"account_id"`
 
-	SubscriptionPlanID int              `db:"subscription_plan_id" json:"-"`
+	SubscriptionPlanId int              `db:"subscription_plan_id" json:"-"`
 	SubscriptionPlan   SubscriptionPlan `json:"subscription_plan"`
 	Expired            bool             `sql:"-" json:"expired"`
+}
+
+type SubscriptionRenewalJSON struct {
+	PaymentId string `json:"payment_id"`
+}
+type SubscriptionUpgradeJSON struct {
+	SubscriptionPlanId int    `json:"subscription_plan_id"`
+	PaymentId          string `json:"payment_id"`
 }
 
 func (s Subscription) IsExpired() bool {

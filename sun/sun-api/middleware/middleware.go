@@ -23,6 +23,7 @@
 package middleware
 
 import (
+	"fmt"
 	"net/http"
 	"reflect"
 	"regexp"
@@ -30,8 +31,10 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/logpacker/PayPal-Go-SDK"
 
 	"github.com/nethesis/icaro/sun/sun-api/configuration"
+	"github.com/nethesis/icaro/sun/sun-api/database"
 	"github.com/nethesis/icaro/sun/sun-api/models"
 	"github.com/nethesis/icaro/sun/sun-api/utils"
 )
@@ -105,4 +108,42 @@ func AAWall(c *gin.Context) {
 	c.Set("token", accessToken)
 	c.Next()
 
+}
+
+func PaymentCheck(paymentID string, planCode string, uuid string) bool {
+	var apiBase string
+	if configuration.Config.PayPal.Sandbox {
+		apiBase = paypalsdk.APIBaseSandBox
+	} else {
+		apiBase = paypalsdk.APIBaseLive
+	}
+	c, errSDK := paypalsdk.NewClient(configuration.Config.PayPal.ClientID, configuration.Config.PayPal.ClientSecret, apiBase)
+	if errSDK != nil {
+		fmt.Println(errSDK.Error())
+	}
+	_, err := c.GetAccessToken()
+
+	payment, err := c.GetPayment(paymentID)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	SavePaymentDetails(paymentID, uuid)
+
+	if payment.State == "approved" {
+		if payment.Transactions[0].ItemList.Items[0].Name == planCode && payment.Transactions[0].ItemList.Items[0].SKU == uuid {
+			return true
+		}
+		return false
+	}
+	return false
+}
+
+func SavePaymentDetails(paymentID string, accountUUID string) {
+	var account models.Account
+
+	db := database.Instance()
+	db.Set("gorm:auto_preload", false).Where("uuid = ?", accountUUID).First(&account)
+	payment := models.Payment{Payment: paymentID, AccountId: account.Id, Created: time.Now().UTC()}
+	db.Create(&payment)
 }

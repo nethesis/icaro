@@ -68,10 +68,18 @@ type Configuration struct {
 		LogoContents   string `json:"-"`      // base64 content of Logo
 		BannerContents string `json:"-"`      //base64 content of Banner
 	} `json:"captive_portal"`
+	PayPal struct {
+		ClientID     string `json:"client_id"`
+		ClientSecret string `json:"client_secret"`
+		Sandbox      bool   `json:"sandbox"`
+	} `json:"paypal"`
 	Auth0 struct {
 		Domain   string `json:"domain"`
 		Audience string `json:"audience"`
 	} `json:"auth0"`
+	Billing struct {
+		Country string `json:"country"`
+	}
 }
 
 var Config = Configuration{}

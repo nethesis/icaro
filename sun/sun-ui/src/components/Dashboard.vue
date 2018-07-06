@@ -130,15 +130,19 @@
 </template>
 
 <script>
+  import AccountService from "../services/account";
   import StatsService from "../services/stats";
   import StorageService from "../services/storage";
 
   export default {
     name: "Dashboard",
-    mixins: [StatsService, StorageService],
+    mixins: [AccountService, StatsService, StorageService],
     data() {
       // get totals
       this.getTotals();
+
+      // get subscription info
+      this.getSubscriptionInfo()
 
       return {
         msg: "Dashboard",
@@ -179,6 +183,13 @@
     methods: {
       isAuth0() {
         return this.get("auth0User");
+      },
+      getSubscriptionInfo() {
+        this.accountGet(this.get("loggedUser").id, success => {
+          this.user.subscription = success.body.subscription;
+        }, error => {
+
+        });
       },
       getTotals() {
         this.statsHotspotsTotal(

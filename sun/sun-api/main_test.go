@@ -214,7 +214,7 @@ func TestResellerAccountCreation(t *testing.T) {
 			"username":             fmt.Sprintf("reseller%d", time.Now().Nanosecond()),
 			"password":             "testpassword",
 			"email":                "testreseller@nethserver.org",
-			"subscription_plan_id": subPlan.ID,
+			"subscription_plan_id": subPlan.Id,
 		}).
 		Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
 			err := json.Unmarshal([]byte(f.Body.String()), &cr)
@@ -348,7 +348,7 @@ func TestFailingCaptiveConfiguration(t *testing.T) {
 			"username":             "restestcaptive",
 			"password":             "restestcaptive",
 			"email":                "testreseller@nethserver.org",
-			"subscription_plan_id": subPlan.ID,
+			"subscription_plan_id": subPlan.Id,
 		}).
 		Run(r, func(f gofight.HTTPResponse, rq gofight.HTTPRequest) {
 			err := json.Unmarshal([]byte(f.Body.String()), &cr)

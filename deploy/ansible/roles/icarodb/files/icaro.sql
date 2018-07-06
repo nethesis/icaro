@@ -268,33 +268,96 @@ CREATE TABLE `session_histories` (
 /* -------------------- */
 
 /* SUBSCRIPTIONS */
-CREATE TABLE subscription_plans (
-    id serial not null primary key,
-    code varchar(200) not null,
-    name varchar(200) not null,
-    description varchar(200) not null,
-    price decimal(5,2),
-    period integer default null,
-    included_sms integer not null,
-    max_units integer not null,
-    advanced_report boolean default false,
-    wings_customization boolean default false,
-    social_analytics boolean default false
+CREATE TABLE `subscription_plans` (
+    `id` serial,
+    `code` varchar(200) NOT NULL,
+    `name` varchar(200) NOT NULL,
+    `description` varchar(200) NOT NULL,
+    `price` decimal(5,2),
+    `period` integer unsigned,
+    `included_sms` integer unsigned,
+    `max_units` integer unsigned,
+    `advanced_report` tinyint default 0,
+    `wings_customization` tinyint default 0,
+    `social_analytics` tinyint default 0,
+    PRIMARY KEY(`id`)
 );
 
 INSERT INTO subscription_plans VALUES (1, 'free', 'Free', 'Free limited plan', 0.00, 365, 0, 1, false, false, false);
 INSERT INTO subscription_plans VALUES (2, 'basic', 'Basic', 'Basic plan', 0.00, 365, 500, 1, true, false, false);
-INSERT INTO subscription_plans VALUES (3, 'standard', 'Standard', 'Standard lan', 0.00, 365, 1000, 10, true, true, false);
+INSERT INTO subscription_plans VALUES (3, 'standard', 'Standard', 'Standard plan', 0.00, 365, 1000, 10, true, true, false);
 INSERT INTO subscription_plans VALUES (4, 'premium', 'Premium', 'Premium plan', 0.00, 3650, 2000, 100, true, true, true);
 
-CREATE TABLE subscriptions (
-    id serial not null primary key,
-    account_id bigint unsigned not null references accounts(id),
-    subscription_plan_id bigint not null references subscription_plans(id),
-    valid_from timestamp null,
-    valid_until timestamp null,
-    created timestamp default current_timestamp
+CREATE TABLE `subscriptions` (
+    `id` serial,
+    `account_id` bigint unsigned NOT NULL,
+    `subscription_plan_id` bigint unsigned NOT NULL,
+    `valid_from` datetime,
+    `valid_until` datetime,
+    `created` datetime,
+    FOREIGN KEY (`account_id`) REFERENCES accounts(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+    FOREIGN KEY (`subscription_plan_id`) REFERENCES subscription_plans(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+    PRIMARY KEY(`id`)
 );
+
+CREATE TABLE `payments` (
+  `id` serial,
+  `account_id` bigint unsigned NOT NULL,
+  `payment` varchar(255) NOT NULL,
+  `created` datetime,
+  UNIQUE(payment),
+  PRIMARY KEY(`id`)
+);
+
+CREATE TABLE `taxes` (
+  `country` varchar(255) NOT NULL,
+  `percentage` integer,
+  PRIMARY KEY(`country`)
+);
+
+CREATE TABLE `billings` (
+  `id` serial,
+  `account_id` bigint unsigned NOT NULL,
+  `name` varchar(1024) NOT NULL,
+  `address` varchar(1024) NOT NULL,
+  `city` varchar(1024) NOT NULL,
+  `postal_code` varchar(1024) NOT NULL,
+  `country` varchar(255) NOT NULL,
+  `vat` varchar(1024),
+  UNIQUE(account_id),
+  FOREIGN KEY (`country`) REFERENCES taxes(`country`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  PRIMARY KEY(`id`)
+);
+
+INSERT INTO taxes VALUES ('Other',0);
+INSERT INTO taxes VALUES ('Belgium',21);
+INSERT INTO taxes VALUES ('Bulgaria',20);
+INSERT INTO taxes VALUES ('Czech Republic',21);
+INSERT INTO taxes VALUES ('Denmark',25);
+INSERT INTO taxes VALUES ('Germany',19);
+INSERT INTO taxes VALUES ('Estonia',20);
+INSERT INTO taxes VALUES ('Ireland',23);
+INSERT INTO taxes VALUES ('Greece',24);
+INSERT INTO taxes VALUES ('Spain',21);
+INSERT INTO taxes VALUES ('France',20);
+INSERT INTO taxes VALUES ('Croatia',25);
+INSERT INTO taxes VALUES ('Italy',22);
+INSERT INTO taxes VALUES ('Cyprus',19);
+INSERT INTO taxes VALUES ('Latvia',21);
+INSERT INTO taxes VALUES ('Lithuania',21);
+INSERT INTO taxes VALUES ('Luxembourg',17);
+INSERT INTO taxes VALUES ('Hungary',27);
+INSERT INTO taxes VALUES ('Malta',18);
+INSERT INTO taxes VALUES ('Netherlands',21);
+INSERT INTO taxes VALUES ('Austria',20);
+INSERT INTO taxes VALUES ('Poland',23);
+INSERT INTO taxes VALUES ('Portugal',23);
+INSERT INTO taxes VALUES ('Romania',19);
+INSERT INTO taxes VALUES ('Slovenia',22);
+INSERT INTO taxes VALUES ('Slovakia',20);
+INSERT INTO taxes VALUES ('Finland',24);
+INSERT INTO taxes VALUES ('Sweden',25);
+INSERT INTO taxes VALUES ('United Kingdom',20);
 
 /* -------------------- */
 
