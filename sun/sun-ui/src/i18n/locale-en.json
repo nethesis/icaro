@@ -50,7 +50,9 @@
       "country": "Country",
       "vat": "VAT",
       "type_business": "Business",
-      "type_person": "Personal"
+      "type_person": "Personal",
+      "secret": "Secret",
+      "show_secret": "Show secret"
     },
     "hotspot": {
       "yes": "Yes",

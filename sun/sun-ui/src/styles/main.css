@@ -556,3 +556,7 @@ a {
 .card-pf-item-text {
   font-size: 16px;
 }
+
+.popover-content {
+  word-break: break-all;
+}
