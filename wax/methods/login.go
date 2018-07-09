@@ -87,7 +87,7 @@ func calculatePreferences(c *gin.Context, unit models.Unit, user models.User, ti
 func autoLogin(c *gin.Context, unitMacAddress string, username string, userMac string, sessionId string, timezone string) {
 	// extract unit and user
 	unit := utils.GetUnitByMacAddress(unitMacAddress)
-	isValid, user := utils.GetUserByMacAddressAndunitMacAddress(userMac, unitMacAddress)
+	isValid, users := utils.GetUsersByMacAddressAndunitMacAddress(userMac, unitMacAddress)
 
 	// check if user exists
 	if !isValid {
@@ -95,8 +95,8 @@ func autoLogin(c *gin.Context, unitMacAddress string, username string, userMac s
 		return
 	}
 
-	// check autologin
-	if !user.AutoLogin {
+	user := utils.FindAutoLoginUser(users)
+	if user.Id <= 0 {
 		AuthReject(c, "auto login not permitted")
 		return
 	}

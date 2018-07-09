@@ -228,7 +228,8 @@ func Counters(c *gin.Context, parameters url.Values) {
 		if strings.Compare(c.Query("user"), "temporary") != 0 {
 			if strings.Compare(c.Query("user"), c.Query("mac")) == 0 {
 				//autologin
-				_, user := utils.GetUserByMacAddressAndunitMacAddress(c.Query("mac"), c.Query("ap"))
+				_, users := utils.GetUsersByMacAddressAndunitMacAddress(c.Query("mac"), c.Query("ap"))
+				user := utils.FindAutoLoginUser(users)
 				username = user.Username
 			} else {
 				username = c.Query("user")
