@@ -132,6 +132,13 @@ func GetHotspot(c *gin.Context) {
 	if accountId == 1 {
 		db.Select("hotspots.*, accounts.name as account_name").Where("hotspots.id = ?", hotspotId).Joins("JOIN accounts on accounts.id = hotspots.account_id").First(&hotspot)
 	} else {
+		var account models.Account
+		db.Where("id = ?", accountId).First(&account)
+
+		if account.Type == "customer" || account.Type == "desk" {
+			accountId = account.CreatorId
+		}
+
 		db.Select("hotspots.*, accounts.name as account_name").Where("hotspots.id = ? AND account_id = ?", hotspotId, accountId).Joins("JOIN accounts on accounts.id = hotspots.account_id").First(&hotspot)
 	}
 
