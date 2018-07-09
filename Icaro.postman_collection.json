@@ -53,7 +53,7 @@
 					},
 					"response": [
 						{
-							"id": "89c9f1d6-c214-4f59-9f1f-d99665c7ebe2",
+							"id": "b3d5adcc-e82f-444f-bd61-e2fc4412370d",
 							"name": "/accounts",
 							"originalRequest": {
 								"method": "GET",
@@ -134,7 +134,7 @@
 					},
 					"response": [
 						{
-							"id": "6cad02ed-a7d0-4a83-9fe0-495df6bcf3a0",
+							"id": "a84471d3-c0c0-412e-b750-41964a1676e2",
 							"name": "/accounts/:id",
 							"originalRequest": {
 								"method": "GET",
@@ -204,7 +204,7 @@
 					},
 					"response": [
 						{
-							"id": "889604e0-4e5b-42d6-bb41-528c68f567a9",
+							"id": "1ea911ee-99ab-4abb-816b-a3a4ee872dd8",
 							"name": "/accounts",
 							"originalRequest": {
 								"method": "POST",
@@ -243,7 +243,7 @@
 							"body": "{\n    \"id\": 1,\n    \"status\": \"success\"\n}"
 						},
 						{
-							"id": "95903469-7e13-434e-bdac-79a3b1f03501",
+							"id": "3ef6f724-7276-4850-b67c-71c1a571cec8",
 							"name": "/accounts customer",
 							"originalRequest": {
 								"method": "POST",
@@ -323,7 +323,7 @@
 					},
 					"response": [
 						{
-							"id": "e8772442-9a11-4f94-b79d-00503a855f6a",
+							"id": "b23e7b7f-e735-4108-9411-a4d65cd067e8",
 							"name": "/accounts/:id",
 							"originalRequest": {
 								"method": "PUT",
@@ -400,7 +400,7 @@
 					},
 					"response": [
 						{
-							"id": "fe45d14b-6fa4-421b-a0ee-48fa822edec7",
+							"id": "7f9c1700-ee88-4028-96d9-8c2a39cd29f3",
 							"name": "/accounts/:id",
 							"originalRequest": {
 								"method": "DELETE",
@@ -484,7 +484,7 @@
 					},
 					"response": [
 						{
-							"id": "7e832f8f-907f-49f1-b8fd-0b4af8876049",
+							"id": "94677a8a-ac4d-4e56-957b-23d4261ea51d",
 							"name": "devices",
 							"originalRequest": {
 								"method": "GET",
@@ -568,7 +568,7 @@
 					},
 					"response": [
 						{
-							"id": "822e2894-c741-412a-9545-fabdb8639d3c",
+							"id": "91ba48e7-7f26-47d8-a254-ec9ae5a91028",
 							"name": "device",
 							"originalRequest": {
 								"method": "GET",
@@ -651,7 +651,7 @@
 					},
 					"response": [
 						{
-							"id": "ba2b6556-5272-4f0a-904e-66e616bdcf4a",
+							"id": "46247b94-7c1d-4cf9-867b-8d0d326b29c6",
 							"name": "sessions history",
 							"originalRequest": {
 								"method": "GET",
@@ -735,7 +735,7 @@
 					},
 					"response": [
 						{
-							"id": "dc799caa-6cd7-4f67-a581-d0eb7a555c48",
+							"id": "bddd570c-a98b-4420-a43e-49917964d59c",
 							"name": "session history",
 							"originalRequest": {
 								"method": "GET",
@@ -813,7 +813,7 @@
 					},
 					"response": [
 						{
-							"id": "3e067374-c91c-41cd-9141-88a643663a0e",
+							"id": "6520ecc6-28bf-4978-8330-bd6cf47b2e87",
 							"name": "/hotspots",
 							"originalRequest": {
 								"method": "GET",
@@ -857,7 +857,7 @@
 							"header": [],
 							"cookie": [],
 							"responseTime": "0",
-							"body": "{\n    \"data\": [\n        {\n            \"id\": 1,\n            \"account_id\": 10,\n            \"name\": \"My cool hotspot\",\n            \"description\": \"This is the hotspot area for hotels\",\n            \"created\": \"2017-12-15 10:30:00\"\n        },\n        {\n            \"id\": 2,\n            \"account_id\": 4,\n            \"name\": \"My cool hotspot 2\",\n            \"description\": \"This is the hotspot area for seconds hotels\",\n            \"created\": \"2017-12-17 11:30:00\"\n        }\n    ],\n    \"total\": 100\n}"
+							"body": "{\n    \"data\": [\n        {\n            \"id\": 1,\n            \"account_id\": 10,\n            \"name\": \"My cool hotspot\",\n            \"description\": \"This is the hotspot area for hotels\",\n            \"business_name\": \"Great Hotel Ltd\",\n            \"created\": \"2017-12-15 10:30:00\"\n        },\n        {\n            \"id\": 2,\n            \"account_id\": 4,\n            \"name\": \"My cool hotspot 2\",\n            \"description\": \"This is the hotspot area for seconds hotels\",\n            \"business_name\": \"Great Hotel Ltd\",\n            \"created\": \"2017-12-17 11:30:00\"\n        }\n    ],\n    \"total\": 100\n}"
 						}
 					]
 				},
@@ -897,7 +897,7 @@
 					},
 					"response": [
 						{
-							"id": "c9479fbe-1c75-4668-9293-057d35346365",
+							"id": "a7c36def-44bb-4dce-a28b-ea2a4b0d824c",
 							"name": "/hotspots",
 							"originalRequest": {
 								"method": "GET",
@@ -930,7 +930,7 @@
 							"header": [],
 							"cookie": [],
 							"responseTime": "0",
-							"body": "{\n    \"id\": 2,\n    \"account_id\": 4,\n    \"name\": \"My cool hotspot 2\",\n    \"description\": \"This is the hotspot area for seconds hotels\",\n    \"created\": \"2017-12-17 11:30:00\"\n}"
+							"body": "{\n    \"id\": 2,\n    \"account_id\": 4,\n    \"name\": \"My cool hotspot 2\",\n    \"description\": \"This is the hotspot area for seconds hotels\",\n    \"business_name\": \"Great Hotel Ltd\",\n    \"created\": \"2017-12-17 11:30:00\"\n}"
 						}
 					]
 				},
@@ -950,7 +950,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"name\": \"string\",\n  \"description\": \"string\"\n}"
+							"raw": "{\n  \"name\": \"string\",\n  \"description\": \"string\",\n  \"business_name\": \"string\"\n}"
 						},
 						"url": {
 							"raw": "https://{{hostname}}/api/hotspots",
@@ -967,7 +967,7 @@
 					},
 					"response": [
 						{
-							"id": "0bd1ae1a-ecda-42c6-b482-c8e4a9e03540",
+							"id": "b5b33c9a-5e7f-4904-8292-af45faaa5361",
 							"name": "/hotspots",
 							"originalRequest": {
 								"method": "POST",
@@ -983,7 +983,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"name\": \"My cool hotspot\",\n\t\"description\": \"Hotspot area for my hotels\"\n}"
+									"raw": "{\n\t\"name\": \"My cool hotspot\",\n\t\"description\": \"Hotspot area for my hotels\",\n\t\"business_name\": \"Great Hotel Ltd\"\n}"
 								},
 								"url": {
 									"raw": "https://{{hostname}}/api/hotspots",
@@ -995,8 +995,7 @@
 										"api",
 										"hotspots"
 									]
-								},
-								"description": ""
+								}
 							},
 							"status": "Created",
 							"code": 201,
@@ -1024,7 +1023,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"description\": \"string\"\n}"
+							"raw": "{\n  \"description\": \"string\",\n  \"business_name\": \"string\"\n}"
 						},
 						"url": {
 							"raw": "https://{{hostname}}/api/hotspots/:id",
@@ -1048,7 +1047,7 @@
 					},
 					"response": [
 						{
-							"id": "2ca331fd-7a49-455f-871a-ea2dbc1b34aa",
+							"id": "a624f85a-1b52-4883-a666-edb260ced9a5",
 							"name": "/hotspots/:id",
 							"originalRequest": {
 								"method": "PUT",
@@ -1064,7 +1063,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"description\": \"my cool description updated\"\n}"
+									"raw": "{\n\t\"description\": \"my cool description updated\",\n\t\"business_name\": \"Great Hotel Ltd\"\n}"
 								},
 								"url": {
 									"raw": "https://{{hostname}}/api/hotspots/1",
@@ -1125,7 +1124,7 @@
 					},
 					"response": [
 						{
-							"id": "e55f8b8c-6a90-46e3-8f31-4bfc99be44f6",
+							"id": "412ebb80-3551-4c47-a566-f456ebc3b7a3",
 							"name": "/hotspots/:id",
 							"originalRequest": {
 								"method": "DELETE",
@@ -1192,7 +1191,7 @@
 					},
 					"response": [
 						{
-							"id": "5f3765ab-bcd2-460d-9a67-f8bc05cd99de",
+							"id": "d7a3fc8e-d599-4a10-9e79-88fc218747b3",
 							"name": "/login Invalid username",
 							"originalRequest": {
 								"method": "POST",
@@ -1227,7 +1226,7 @@
 							"body": "{\"message\":\"No username found!\"}"
 						},
 						{
-							"id": "0f7a2268-483d-4df8-b571-0ee296e3a8d9",
+							"id": "7a657bde-0f9c-4e59-b9b7-516314151edb",
 							"name": "/login OK",
 							"originalRequest": {
 								"method": "POST",
@@ -1262,7 +1261,7 @@
 							"body": "{\n    \"status\": \"success\",\n    \"account_type\": \"desk\",\n    \"token\": \"c1b5ebd45281f0480cb9c6de963e5dd420c577d8b5abdc0e45944fddc988c67d\",\n    \"expires\": \"2017-12-21 11:13:05.377926455 +0000 UTC\",\n    \"id\": 1,\n\n            \"subscription\": {\n                \"id\": 1,\n                \"valid_from\": \"0001-01-01T00:00:00Z\",\n                \"valid_until\": \"0001-01-01T00:00:00Z\",\n                \"created\": \"0001-01-01T00:00:00Z\",\n                \"account_id\": 1,\n                \"subscription_plan\": {\n                    \"id\": 1,\n                    \"code\": \"free\",\n                    \"name\": \"test\",\n                    \"description\": \"my plan\",\n                    \"price\": 0,\n                    \"period\": 365,\n                    \"included_sms\": 300,\n                    \"max_units\": 10,\n                    \"advanced_report\": false,\n                    \"wings_customization\": false,\n                    \"social_analytics\": false\n                },\n                \"expired\": true\n            }\n        \n}"
 						},
 						{
-							"id": "2aea16bb-5c2f-4e8c-871d-a5d311a0c56e",
+							"id": "93f90ab0-506b-48ec-97f8-6528ec6c8fad",
 							"name": "/login Invalid password",
 							"originalRequest": {
 								"method": "POST",
@@ -1327,7 +1326,7 @@
 					},
 					"response": [
 						{
-							"id": "b489cbd4-e9b5-499e-9a9d-c939c2a9c21f",
+							"id": "5fb3cfe4-dd04-4be9-a634-d60601f110f5",
 							"name": "/logout",
 							"originalRequest": {
 								"method": "POST",
@@ -1390,7 +1389,7 @@
 					},
 					"response": [
 						{
-							"id": "9969e23c-73b1-461e-b72a-b6dfb876e28a",
+							"id": "13d008f7-212d-4853-81bf-d319cdd32e6b",
 							"name": "/preferences/accounts",
 							"originalRequest": {
 								"method": "GET",
@@ -1459,7 +1458,7 @@
 					},
 					"response": [
 						{
-							"id": "6a892647-f5d7-456d-ab81-4219b22b8d96",
+							"id": "20affc86-8a2e-4c3b-857b-518cd1b7f89e",
 							"name": "/preferences/accounts",
 							"originalRequest": {
 								"method": "PUT",
@@ -1534,7 +1533,7 @@
 					},
 					"response": [
 						{
-							"id": "65d4d54f-c268-465e-bebe-dd04ca6785b2",
+							"id": "f2a51aa2-787c-4df7-99b3-c5e1796e197c",
 							"name": "/preferences/hotspots",
 							"originalRequest": {
 								"method": "GET",
@@ -1610,7 +1609,7 @@
 					},
 					"response": [
 						{
-							"id": "12e985d7-f452-4d50-8c12-9d88258e6030",
+							"id": "07140244-4f37-4958-8943-c1ccd699db47",
 							"name": "/preferences/hotspots",
 							"originalRequest": {
 								"method": "PUT",
@@ -1698,7 +1697,7 @@
 					},
 					"response": [
 						{
-							"id": "7287c155-3186-45f3-88c2-b3efb3c40320",
+							"id": "11cef18d-3321-4d9e-9f7d-7c48f74988f7",
 							"name": "sessions",
 							"originalRequest": {
 								"method": "GET",
@@ -1782,7 +1781,7 @@
 					},
 					"response": [
 						{
-							"id": "e5f95008-376a-4b53-8241-ac57b01d1abd",
+							"id": "1c5290f7-8d7b-4749-8eb6-5182e472d0b0",
 							"name": "session",
 							"originalRequest": {
 								"method": "GET",
@@ -1848,7 +1847,7 @@
 					},
 					"response": [
 						{
-							"id": "241ced32-5b57-4e82-a3e8-5189dad4c42a",
+							"id": "c2024fcd-ff2c-4e2d-bf5a-14fb9a3ca2c3",
 							"name": "/subscription_plans",
 							"originalRequest": {
 								"method": "GET",
@@ -1927,7 +1926,7 @@
 					},
 					"response": [
 						{
-							"id": "ac48e288-d551-4ce4-9920-51db2498c2d8",
+							"id": "2eff2060-f375-4f69-881f-611f0054a559",
 							"name": "units",
 							"originalRequest": {
 								"method": "GET",
@@ -2011,7 +2010,7 @@
 					},
 					"response": [
 						{
-							"id": "07d91d27-8e81-45c5-9c47-0c9817d1c7c6",
+							"id": "e71a1b57-2ea0-4dbd-ade4-04411b759aed",
 							"name": "unit",
 							"originalRequest": {
 								"method": "GET",
@@ -2081,7 +2080,7 @@
 					},
 					"response": [
 						{
-							"id": "36090ca0-d0f4-49d5-9ec2-e6c08d27e9be",
+							"id": "be1b41d0-d730-49ed-9c81-0f639d0b14f9",
 							"name": "/units",
 							"originalRequest": {
 								"method": "POST",
@@ -2157,7 +2156,7 @@
 					},
 					"response": [
 						{
-							"id": "eb76a49d-0ca3-486f-b68a-82bab6545f68",
+							"id": "0fa98b1f-2772-4f03-9271-4b70ee194d20",
 							"name": "/units/:id",
 							"originalRequest": {
 								"method": "DELETE",
@@ -2246,7 +2245,7 @@
 					},
 					"response": [
 						{
-							"id": "55a24a39-f907-4cb2-adc7-84d4d6de16c2",
+							"id": "97d53025-2973-4dcf-923d-66dbbcf327da",
 							"name": "users",
 							"originalRequest": {
 								"method": "GET",
@@ -2330,7 +2329,7 @@
 					},
 					"response": [
 						{
-							"id": "b1f4c489-d165-4afc-9320-e38b869649cf",
+							"id": "6a822d78-d186-40d3-9562-b39ebc6b823d",
 							"name": "user",
 							"originalRequest": {
 								"method": "GET",
@@ -2407,7 +2406,7 @@
 					},
 					"response": [
 						{
-							"id": "bcec4e6c-1733-4664-9d58-60306e60df35",
+							"id": "f953ad44-1609-4859-a778-d00719013dd8",
 							"name": "users/:id",
 							"originalRequest": {
 								"method": "PUT",
@@ -2484,7 +2483,7 @@
 					},
 					"response": [
 						{
-							"id": "6937f8b5-ba10-43d2-b9e4-00156a4f1b25",
+							"id": "828573da-5f65-4db4-859a-982dc89c2538",
 							"name": "users",
 							"originalRequest": {
 								"method": "DELETE",
@@ -2563,7 +2562,7 @@
 					},
 					"response": [
 						{
-							"id": "5acd2658-44b2-4d80-9ee3-ebe271233ef2",
+							"id": "9ead0882-dee0-4455-8037-188ce1223fcd",
 							"name": "vouchers",
 							"originalRequest": {
 								"method": "GET",
@@ -2644,7 +2643,7 @@
 					},
 					"response": [
 						{
-							"id": "0659b458-2e6d-437b-8937-291ec2965273",
+							"id": "7be4dd3b-958b-409f-86df-d124aa60028b",
 							"name": "/vouchers",
 							"originalRequest": {
 								"method": "POST",
@@ -2687,6 +2686,88 @@
 				{
 					"name": "/vouchers/:id",
 					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Token",
+								"value": "c1b5ebd45281f0480cb9c6de963e5dd420c577d8b5abdc0e45944fddc988c67d"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"printed\": \"boolean\"\n}"
+						},
+						"url": {
+							"raw": "https://{{hostname}}/api/vouchers/:id",
+							"protocol": "https",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"api",
+								"vouchers",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						},
+						"description": "Delete an voucher by its id"
+					},
+					"response": [
+						{
+							"id": "c97cc8c2-7d5b-45aa-b6e1-f8ae1c3d20a6",
+							"name": "/vouchers/:id",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Token",
+										"value": "c1b5ebd45281f0480cb9c6de963e5dd420c577d8b5abdc0e45944fddc988c67d"
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"printed\": true\n}"
+								},
+								"url": {
+									"raw": "https://{{hostname}}/api/vouchers/1",
+									"protocol": "https",
+									"host": [
+										"{{hostname}}"
+									],
+									"path": [
+										"api",
+										"vouchers",
+										"1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"responseTime": "0",
+							"body": "{\n    \"status\": \"success\"\n}"
+						}
+					]
+				},
+				{
+					"name": "/vouchers/:id",
+					"request": {
 						"method": "DELETE",
 						"header": [
 							{
@@ -2720,7 +2801,7 @@
 					},
 					"response": [
 						{
-							"id": "b9976978-9b7c-468d-9985-76cf2e551ce5",
+							"id": "1631223b-4f2c-4951-af37-7ad773e5bc10",
 							"name": "/vouchers/:id",
 							"originalRequest": {
 								"method": "DELETE",
@@ -2816,7 +2897,7 @@
 					},
 					"response": [
 						{
-							"id": "0e259bf9-a602-44dd-8dd6-a6e9ededa8f4",
+							"id": "c5a26553-cf91-421d-80b9-0e7570f81a7c",
 							"name": "/wax/marketings/:user_id",
 							"originalRequest": {
 								"method": "DELETE",
@@ -2908,7 +2989,7 @@
 					},
 					"response": [
 						{
-							"id": "7725f60a-4373-40d4-85a5-7c21009515eb",
+							"id": "833353d7-81c4-4191-87c9-4c98f27eac14",
 							"name": "/wax/preferences",
 							"originalRequest": {
 								"method": "GET",
@@ -2995,7 +3076,7 @@
 					},
 					"response": [
 						{
-							"id": "165193be-c70b-4c5a-87d1-3261b2c4a3f2",
+							"id": "38a9b353-d0c9-43a3-b620-16f25f51ba9f",
 							"name": "/register/social/facebook",
 							"originalRequest": {
 								"method": "GET",
@@ -3085,7 +3166,7 @@
 					},
 					"response": [
 						{
-							"id": "b76d7526-c4cc-4bab-bebf-56a4ab77db0b",
+							"id": "ec5d4972-7442-4ae8-afae-83553ccf3a58",
 							"name": "/register/social/google",
 							"originalRequest": {
 								"method": "GET",
@@ -3175,7 +3256,7 @@
 					},
 					"response": [
 						{
-							"id": "ab625e11-ea72-4a9e-ba45-67bd6dfd311c",
+							"id": "df17a375-0cd5-423d-9f92-85f6115463a3",
 							"name": "/register/social/linkedin",
 							"originalRequest": {
 								"method": "GET",
@@ -3247,7 +3328,7 @@
 					},
 					"response": [
 						{
-							"id": "15ef1684-ad61-4b4c-b5b9-33dba797aaa7",
+							"id": "1eb54848-5768-4a6b-8e1d-bfdc7e64dded",
 							"name": "/register/sms",
 							"originalRequest": {
 								"method": "GET",
@@ -3335,7 +3416,7 @@
 					},
 					"response": [
 						{
-							"id": "d22f572a-1b92-423b-83a6-846ded402366",
+							"id": "a0cca983-b4c2-4ab4-aed1-7e4b23110dcf",
 							"name": "/register/voucher",
 							"originalRequest": {
 								"method": "GET",
@@ -3423,7 +3504,7 @@
 					},
 					"response": [
 						{
-							"id": "3bb9db29-0400-41a3-beb4-e6fcd0e81499",
+							"id": "de2393a2-0f2a-4604-8994-4b0844869000",
 							"name": "/register/email",
 							"originalRequest": {
 								"method": "GET",
