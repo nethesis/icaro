@@ -121,7 +121,8 @@
       "delete_all_vouchers": "Delete all vouchers",
       "warning_delete_vouchers": "All vouchers matching the filters will be deleted",
       "business_name": "Customer's business name",
-      "missing_business_name": "Add a valid customer's business name"
+      "missing_business_name": "Add a valid customer's business name",
+      "show_all": "Show all (with no filters)"
     },
     "user": {
       "username": "Username",

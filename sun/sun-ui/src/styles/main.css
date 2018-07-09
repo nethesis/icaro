@@ -298,6 +298,10 @@ input {
   margin-right: 10px !important;
 }
 
+.centered {
+  text-align: center !important;
+}
+
 .select-search {
   margin-left: 15px !important;
 }
