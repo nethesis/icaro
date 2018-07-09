@@ -145,8 +145,9 @@ func GetHotspot(c *gin.Context) {
 
 func DeleteHotspot(c *gin.Context) {
 	var hotspot models.Hotspot
-	accountId := c.MustGet("token").(models.AccessToken).AccountId
+	var accountsHotspot []models.AccountsHotspot
 
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
 	hotspotId := c.Param("hotspot_id")
 
 	db := database.Instance()
@@ -161,6 +162,16 @@ func DeleteHotspot(c *gin.Context) {
 		return
 	}
 
+	// delete all accounts related
+	db.Where("hotspot_id = ?", hotspotId).Find(&accountsHotspot)
+	for _, accountHotspot := range accountsHotspot {
+		var account models.Account
+
+		db.Where("id = ?", accountHotspot.AccountId).First(&account)
+		db.Delete(&account)
+	}
+
+	// delete hotspot
 	db.Delete(&hotspot)
 
 	c.JSON(http.StatusOK, gin.H{"status": "success"})

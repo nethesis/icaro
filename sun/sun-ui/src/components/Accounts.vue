@@ -8,6 +8,7 @@
       <label v-if="!isLoading" class="col-sm-2 control-label" for="textInput-markup">Hotspot</label>
       <div v-if="!isLoading" class="col-sm-4">
         <select v-on:change="getAll()" v-model="hotspotSearchId" class="form-control">
+          <option v-bind:value="0">-</option>
           <option v-for="hotspot in hotspots" v-bind:key="hotspot.id" v-bind:value="hotspot.id">
             {{ hotspot.name }}
           </option>
@@ -250,6 +251,7 @@ export default {
     if (this.$route.params.hotspotId !== undefined) {
       this.hotspotSearchId = this.$route.params.hotspotId;
     }
+
     // get account list
     var context = this;
     this.getAllHotspots(function() {
@@ -302,7 +304,6 @@ export default {
           ) {
             hsId = this.$parent.user.info.hotspot_id;
           }
-          this.hotspotSearchId = hsId;
 
           $('[data-toggle="tooltip"]').tooltip();
           this.isLoading = false;
