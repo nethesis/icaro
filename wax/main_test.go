@@ -218,3 +218,100 @@ func TestCountersInvalid(t *testing.T) {
 
 		})
 }
+
+func TestFindAutoLoginUser(t *testing.T) {
+	var user models.User
+	time_now := time.Now().UTC()
+
+	var test_users []models.User
+	var test_users_empty = []models.User{}
+	var test_users_autologin_false = []models.User{
+		models.User{
+			Id:                   11,
+			HotspotId:            10,
+			Name:                 "+555555555555555",
+			Username:             "+555555555555555",
+			Password:             "123456",
+			Email:                "",
+			EmailVerified:        false,
+			AccountType:          "sms",
+			MarketingAuth:        false,
+			KbpsDown:             0,
+			KbpsUp:               0,
+			MaxNavigationTraffic: 0,
+			MaxNavigationTime:    0,
+			AutoLogin:            false,
+			ValidFrom:            time_now,
+			ValidUntil:           time_now.Add((time.Hour * 24) * 30),
+			Created:              time_now,
+		},
+	}
+	var test_users_autologin_true = []models.User{
+		models.User{
+			Id:                   12,
+			HotspotId:            10,
+			Name:                 "+555555555555555",
+			Username:             "+555555555555555",
+			Password:             "123456",
+			Email:                "",
+			EmailVerified:        false,
+			AccountType:          "sms",
+			MarketingAuth:        false,
+			KbpsDown:             0,
+			KbpsUp:               0,
+			MaxNavigationTraffic: 0,
+			MaxNavigationTime:    0,
+			AutoLogin:            true,
+			ValidFrom:            time_now,
+			ValidUntil:           time_now.Add((time.Hour * 24) * 30),
+			Created:              time_now,
+		},
+	}
+
+	var test_users_autologin_true_new = []models.User{
+		models.User{
+			Id:                   13,
+			HotspotId:            10,
+			Name:                 "+555555555555555",
+			Username:             "+555555555555555",
+			Password:             "123456",
+			Email:                "",
+			EmailVerified:        false,
+			AccountType:          "sms",
+			MarketingAuth:        false,
+			KbpsDown:             0,
+			KbpsUp:               0,
+			MaxNavigationTraffic: 0,
+			MaxNavigationTime:    0,
+			AutoLogin:            true,
+			ValidFrom:            time_now.Add(time.Hour * 24),
+			ValidUntil:           time_now.Add((time.Hour * 24) * 30),
+			Created:              time_now.Add(time.Hour * 24),
+		},
+	}
+
+	user = utils.FindAutoLoginUser(test_users_empty)
+	if !assert.Equal(t, user.Id, 0) {
+		t.Fatal("expected user.Id = 0, got:", user.Id)
+	}
+
+	user = utils.FindAutoLoginUser(test_users_autologin_false)
+	if !assert.Equal(t, user.Id, 0) {
+		t.Fatal("expected user.Id = 0, got:", user.Id)
+	}
+
+	user = utils.FindAutoLoginUser(test_users_autologin_true)
+	if !assert.Equal(t, user.Id, 12) {
+		t.Fatal("expected user.Id = 12, got:", user.Id)
+	}
+
+	test_users = append(test_users, test_users_autologin_false[0],
+		test_users_autologin_true[0],
+		test_users_autologin_true_new[0])
+
+	user = utils.FindAutoLoginUser(test_users)
+	if !assert.Equal(t, user.Id, 13) {
+		t.Fatal("expected user.Id = 13, got:", user.Id)
+	}
+
+}
