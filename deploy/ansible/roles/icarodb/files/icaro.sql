@@ -47,6 +47,7 @@ CREATE TABLE `hotspots` (
   `account_id` bigint unsigned NOT NULL,
   `name` varchar(200) NOT NULL,
   `description` varchar(250),
+  `business_name` varchar(512),
   `created` datetime,
   FOREIGN KEY (`account_id`) REFERENCES accounts(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   KEY(`name`),

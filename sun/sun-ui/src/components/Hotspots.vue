@@ -38,6 +38,8 @@
           </a>
         </td>
         <td class="fancy">{{ props.row.description }}</td>
+        <td v-if="props.row.business_name.length > 0" class="fancy">{{ props.row.business_name }}</td>
+        <td v-if="props.row.business_name.length == 0" class="fancy"><span class="pficon pficon-error-circle-o"></span> <span class="red">{{$t('hotspot.missing_business_name')}}</span></td>
         <td class="fancy">{{ props.row.created | formatDate }}</td>
         <td>
           <hotspot-action details="true" :obj="props.row" :update="getAll"></hotspot-action>
@@ -66,6 +68,12 @@
                 <label class="col-sm-4 control-label" for="textInput2-modal-markup">{{ $t("hotspot.description") }}</label>
                 <div class="col-sm-8">
                   <input required v-model="newObj.description" type="text" id="textInput2-modal-markup" class="form-control" :placeholder="$t('hotspot.description')">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-4 control-label" for="textInput2-modal-markup">{{ $t("hotspot.business_name") }}</label>
+                <div class="col-sm-8">
+                  <input required v-model="newObj.business_name" type="text" id="textInput2-modal-markup" class="form-control" :placeholder="$t('hotspot.business_name')">
                 </div>
               </div>
               <div v-if="errors.create" class="alert alert-danger alert-dismissable">
@@ -122,6 +130,11 @@ export default {
         {
           label: this.$i18n.t("hotspot.description"),
           field: "description",
+          filterable: true
+        },
+        {
+          label: this.$i18n.t("hotspot.business_name"),
+          field: "business_name",
           filterable: true
         },
         {

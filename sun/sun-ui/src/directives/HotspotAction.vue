@@ -50,6 +50,12 @@
                   <input required v-model="currentObj.description" type="text" id="textInput2-modal-markup" class="form-control" :placeholder="$t('hotspot.description')">
                 </div>
               </div>
+              <div class="form-group">
+                <label class="col-sm-4 control-label" for="textInput2-modal-markup">{{ $t("hotspot.business_name") }}</label>
+                <div class="col-sm-8">
+                  <input required v-model="currentObj.business_name" type="text" id="textInput2-modal-markup" class="form-control" :placeholder="$t('hotspot.business_name')">
+                </div>
+              </div>
               <div v-if="errors.update" class="alert alert-danger alert-dismissable">
                 <span class="pficon pficon-error-circle-o"></span>
                 <strong>{{ $t("hotspot.update_error_title") }}</strong>. {{ $t("hotspot.update_error_sub") }}.
@@ -123,7 +129,8 @@ export default {
       this.hotspotModify(
         obj.id,
         {
-          description: obj.description
+          description: obj.description,
+          business_name: obj.business_name
         },
         success => {
           this.currentObj.onAction = false;

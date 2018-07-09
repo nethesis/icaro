@@ -19,6 +19,24 @@ Example of landing page:
 
 ![Captive portal](../img/captive.png "Schema")
 
+### Term of Use
+Each Captive portal is served from the same cloud server, but each captive portal related to a particular hotspot inherits its configuration.
+
+Also the `Term of Use` and `Marketing` disclaimers are inherited from hotspot replacing the `$$BUSINESS_NAME$$` variable inside each disclaimers.
+
+For example if your customer's business company is `Great Hotel Ltd`, this:
+```
+This software is powerd by Icaro and hosted by $$BUSINESS_NAME$$ that provides the free Wi-Fi system.
+```
+
+became:
+
+```
+This software is powerd by Icaro and hosted by Great Hotel Ltd that provides the free Wi-Fi system.
+```
+
+You must specify the business name during Hotspot creation.
+
 
 ### Login Methods and type of Accounts
 For more details, see [Login configuration](/icaro/docs/configuration/) page, to properly configure each logins option.
@@ -28,11 +46,11 @@ For more details, see [Login configuration](/icaro/docs/configuration/) page, to
 Voucher (used for security/payment) can be:
 
  * `none`: Hotspot access is free, use one of the auths below to navigate, no voucher is required
- 
+
  * `voucher unlimited` : this kind of voucher can be re-used infinite times, allowing you to protect the access from people outside the company structure, just communicate this voucher code to guests inside the company and they will be able to autenticate themselves using one of the authentication methods to navigate
 
 * `voucher limited` : this kind of voucher can be re-used only a finite number of times, its tipical use is with premium (payed) accounts with better conditions (autologin, more bandwidth, more traffic and so on).
- 
+
 Voucher can be exported in CSV format or printed (individually or globally).
 
 Login type after the voucher check:
@@ -82,14 +100,12 @@ We can limit guests operativity with different parameters:
 * Maximum download Bandwidth (kbps)
 * Maximum upload Bandwidth (kbps)
 * Daily Navigation Time limit (Minutes)
-* Daily Navigation Traffic limit (MB) 
+* Daily Navigation Traffic limit (MB)
 
 The **Autologin** feature allows guests to autenticate themselves just once, the next time the hotspot will recognize the guests and will make them browse without requiring any authentication.
 
 
 #### Special device accounts
 
-
 Devices in the Hotspot unit network which needs direct access to the Internet (eg. printers, special workstations),
 can have special access rights directly in the firewall configuration using CoovaChilli.
-

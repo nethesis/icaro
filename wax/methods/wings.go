@@ -24,6 +24,7 @@ package methods
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
@@ -61,8 +62,8 @@ func GetWingsPrefs(c *gin.Context) {
 	wingsPrefs.Socials.InstagramClientId = configuration.Config.AuthSocial.Instagram.ClientId
 
 	// disclaimers
-	wingsPrefs.Disclaimers.TermsOfUse = configuration.Config.Disclaimers.TermsOfUse
-	wingsPrefs.Disclaimers.MarketingUse = configuration.Config.Disclaimers.MarketingUse
+	wingsPrefs.Disclaimers.TermsOfUse = strings.Replace(configuration.Config.Disclaimers.TermsOfUse, "$$BUSINESS_NAME$$", hotspot.BusinessName, -1)
+	wingsPrefs.Disclaimers.MarketingUse = strings.Replace(configuration.Config.Disclaimers.MarketingUse, "$$BUSINESS_NAME$$", hotspot.BusinessName, -1)
 
 	c.JSON(http.StatusOK, wingsPrefs)
 }

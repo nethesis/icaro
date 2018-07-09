@@ -45,10 +45,11 @@ func CreateHotspot(c *gin.Context) {
 	accountId := c.MustGet("token").(models.AccessToken).AccountId
 
 	hotspot := models.Hotspot{
-		AccountId:   accountId,
-		Name:        json.Name,
-		Description: json.Description,
-		Created:     time.Now().UTC(),
+		AccountId:    accountId,
+		Name:         json.Name,
+		Description:  json.Description,
+		BusinessName: json.BusinessName,
+		Created:      time.Now().UTC(),
 	}
 
 	db := database.Instance()
@@ -91,6 +92,9 @@ func UpdateHotspot(c *gin.Context) {
 
 	if len(json.Description) > 0 {
 		hotspot.Description = json.Description
+	}
+	if len(json.BusinessName) > 0 {
+		hotspot.BusinessName = json.BusinessName
 	}
 
 	db.Save(&hotspot)

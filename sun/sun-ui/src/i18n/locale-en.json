@@ -119,7 +119,9 @@
       "0_all": "0 = all",
       "delete_all": "Delete all",
       "delete_all_vouchers": "Delete all vouchers",
-      "warning_delete_vouchers": "All vouchers matching the filters will be deleted"
+      "warning_delete_vouchers": "All vouchers matching the filters will be deleted",
+      "business_name": "Customer's business name",
+      "missing_business_name": "Add a valid customer's business name"
     },
     "user": {
       "username": "Username",
