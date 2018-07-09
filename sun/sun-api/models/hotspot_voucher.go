@@ -36,4 +36,6 @@ type HotspotVoucher struct {
 	MaxTime       int       `db:"max_time" json:"max_time"`
 	RemainUse     int       `db:"remain_use" json:"remain_use"`
 	Expires       time.Time `db:"expires" json:"expires"`
+	Printed       bool      `db:"printed" json:"printed"`
+	OwnerId       int       `db:"owner_id" json:"owner_id"`
 }

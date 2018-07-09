@@ -112,7 +112,14 @@
       "export_csv": "Export CSV",
       "enabled": "Enabled",
       "disabled": "Disabled",
-      "limit_reached": "Limit reached"
+      "limit_reached": "Limit reached",
+      "reusable": "Reusable",
+      "printed": "Printed",
+      "apply_filters": "Apply filters",
+      "0_all": "0 = all",
+      "delete_all": "Delete all",
+      "delete_all_vouchers": "Delete all vouchers",
+      "warning_delete_vouchers": "All vouchers matching the filters will be deleted"
     },
     "user": {
       "username": "Username",

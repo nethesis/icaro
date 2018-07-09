@@ -116,11 +116,17 @@ func ExtractHotspotIds(accountId int, admin bool, hotspotId int) []int {
 	var hotspots []models.Hotspot
 	account := GetAccountById(accountId)
 
+	db := database.Instance()
+
 	if account.Type == "customer" || account.Type == "desk" {
 		accountId = account.CreatorId
+
+		// retrieve hotspot of this account
+		var accountsHotspot models.AccountsHotspot
+		db.Where("account_id = ?", account.Id).First(&accountsHotspot)
+		hotspotId = accountsHotspot.HotspotId
 	}
 
-	db := database.Instance()
 	if admin {
 		if hotspotId != 0 {
 			db.Select("id").Where("id = ?", hotspotId).Find(&hotspots)
@@ -194,7 +200,7 @@ func CanChangeCaptivePortalOptions(accountId int) bool {
 	db := database.Instance()
 	db.Set("gorm:auto_preload", true)
 
-	if account.Type == "customer" {
+	if account.Type == "customer" || account.Type == "desk" {
 		db.Preload("SubscriptionPlan").Where("account_id = ?", account.CreatorId).First(&subscription)
 	} else {
 		db.Preload("SubscriptionPlan").Where("account_id = ?", accountId).First(&subscription)

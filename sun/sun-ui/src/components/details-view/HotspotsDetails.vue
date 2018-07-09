@@ -111,6 +111,39 @@
             </h2>
           </div>
           <div v-if="!vouchers.isLoading" class="card-pf-body">
+            <div class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
+              <label class="col-sm-2 control-label" for="textInput-markup">{{$t('hotspot.duration')}} ({{$t('hotspot.0_all')}})</label>
+              <div class="col-sm-4">
+                <input v-model="vouchers.filters.duration" type="number" class="form-control">
+              </div>
+
+              <label class="col-sm-2 control-label" for="textInput-markup">{{$t('hotspot.auto_login')}}</label>
+              <div class="col-sm-4">
+                <input v-model="vouchers.filters.auto_login" type="checkbox" class="form-control">
+              </div>
+            </div>
+            <div class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
+              <label class="col-sm-1 control-label" for="textInput-markup">{{$t('hotspot.used')}}</label>
+              <div class="col-sm-3">
+                <input v-model="vouchers.filters.used" type="checkbox" class="form-control">
+              </div>
+
+              <label class="col-sm-1 control-label" for="textInput-markup">{{$t('hotspot.reusable')}}</label>
+              <div class="col-sm-3">
+                <input v-model="vouchers.filters.reusable" type="checkbox" class="form-control">
+              </div>
+
+              <label class="col-sm-1 control-label" for="textInput-markup">{{$t('hotspot.printed')}}</label>
+              <div class="col-sm-3">
+                <input v-model="vouchers.filters.printed" type="checkbox" class="form-control">
+              </div>
+
+            </div>
+
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+              <button @click="getVouchers()" class="btn btn-primary">{{$t('hotspot.apply_filters')}}</button>
+            </div>
+
             <vue-good-table :perPage="5" :paginate="true" :columns="columns" :rows="vouchers.data" :lineNumbers="false" :defaultSortBy="{field: 'expires', type: 'asc'}"
               styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText" :rowsPerPageText="tableLangsTexts.rowsPerPageText"
               :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder" :ofText="tableLangsTexts.ofText">
@@ -157,14 +190,15 @@
           <div v-if="!vouchers.isLoading" class="card-pf-footer">
             <div class="dropdown card-pf-time-frame-filter">
               <button data-toggle="modal" data-target="#voucherModal" class="btn btn-primary" type="button">{{ $t("hotspot.create_voucher") }}</button>
-              <button v-on:click="printAllVoucher()" class="btn btn-default" type="button">
+              <button :disabled="vouchers.data.length == 0" v-on:click="printAllVoucher()" class="btn btn-default" type="button">
                 <span class="fa fa-print"></span>
                 {{ $t("hotspot.print_all_voucher") }}
               </button>
-              <button v-on:click="exportCSVVoucher()" class="btn btn-default" type="button">
+              <button :disabled="vouchers.data.length == 0" v-on:click="exportCSVVoucher()" class="btn btn-default" type="button">
                 <span class="fa fa-list"></span>
                 {{ $t("hotspot.export_csv") }}
               </button>
+              <button :disabled="vouchers.data.length == 0" data-toggle="modal" data-target="#voucherDeleteAll" class="btn btn-danger" type="button">{{ $t("hotspot.delete_all") }}</button>
             </div>
             <p>
               <a href="#" class="card-pf-link-with-icon">
@@ -437,9 +471,36 @@
             </form>
           </div>
           <div class="modal-footer">
+            <span v-if="vouchers.isCreating" class="spinner spinner-sm spinner-inline modal-spinner"></span>
             <button type="button" class="btn btn-default" data-dismiss="modal">{{$t('cancel')}}</button>
             <button v-on:click="createVoucher()" type="button" class="btn btn-primary">{{$t('save')}}</button>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="voucherDeleteAll" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              <span class="pficon pficon-close"></span>
+            </button>
+            <h4 class="modal-title" id="HSdeleteVoucherModalLabel">{{ $t("hotspot.delete_all_vouchers") }}</h4>
+          </div>
+          <form class="form-horizontal" role="form" v-on:submit.prevent="deleteAllVouchers()">
+            <div class="modal-body">
+              <div class="alert alert-warning alert-dismissable">
+                <span class="pficon pficon-warning-triangle-o"></span>
+                <strong>{{ $t("hotspot.warning_delete_title") }}</strong>. {{ $t("hotspot.warning_delete_vouchers") }}.
+              </div>
+            </div>
+            <div class="modal-footer">
+              <span v-if="vouchers.isDeleting" class="spinner spinner-sm spinner-inline modal-spinner"></span>
+              <button type="button" class="btn btn-default" data-dismiss="modal">{{ $t("cancel") }}</button>
+              <button type="submit" class="btn btn-danger">{{ $t("delete") }}</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
@@ -592,7 +653,7 @@ export default {
     captivePortal: CaptivePortal,
     VueEditor
   },
-  data() {
+  mounted() {
     // get hotspot info
     this.getInfo();
 
@@ -610,7 +671,8 @@ export default {
 
     // get sms count
     this.getSmsCount();
-
+  },
+  data() {
     return {
       info: {
         isLoading: true,
@@ -618,8 +680,17 @@ export default {
       },
       vouchers: {
         isLoading: true,
+        isDeleting: false,
+        isCreating: false,
         data: [],
-        usable: []
+        usable: [],
+        filters: {
+          duration: 7,
+          auto_login: true,
+          used: false,
+          reusable: true,
+          printed: false
+        }
       },
       macAuth: {
         isLoading: true,
@@ -819,7 +890,7 @@ export default {
       );
     },
     createVoucher() {
-      this.vouchers.isLoading = true;
+      this.vouchers.isCreating = true;
 
       var promises = [];
       var context = this;
@@ -855,13 +926,13 @@ export default {
       }
       Promise.all(promises)
         .then(function() {
-          context.vouchers.isLoading = false;
+          context.vouchers.isCreating = false;
           context.getVouchers();
           $("#voucherModal").modal("hide");
         })
         .catch(function(err) {
           console.error(err);
-          context.vouchers.isLoading = false;
+          context.vouchers.isCreating = false;
         });
     },
     deleteVoucher(id) {
@@ -879,8 +950,50 @@ export default {
         }
       );
     },
+    deleteAllVouchers() {
+      var context = this;
+      var promises = [];
+      this.vouchers.isDeleting = true;
+
+      for (var v in this.vouchers.data) {
+        var voucher = this.vouchers.data[v];
+        promises.push(
+          new Promise((resolve, reject) => {
+            context.hotspotVoucherDelete(
+              voucher.id,
+              success => {
+                resolve(success);
+              },
+              error => {
+                reject(error);
+              }
+            );
+          })
+        );
+      }
+
+      Promise.all(promises)
+        .then(function() {
+          context.vouchers.isDeleting = false;
+          context.getVouchers();
+          $("#voucherDeleteAll").modal("toggle");
+        })
+        .catch(function(err) {
+          console.error(err);
+          context.vouchers.isDeleting = false;
+        });
+    },
     getVouchers() {
+      this.vouchers.data = [];
+      this.vouchers.usable = [];
       this.hotspotGetVouchers(
+        {
+          duration: this.vouchers.filters.duration,
+          auto_login: this.vouchers.filters.auto_login,
+          used: this.vouchers.filters.used,
+          reusable: this.vouchers.filters.reusable,
+          printed: this.vouchers.filters.printed
+        },
         this.$route.params.id,
         success => {
           this.vouchers.data = success.body;
@@ -1113,84 +1226,97 @@ export default {
       let index;
       for (let i = 0; i < this.vouchers.usable.length; i++) {
         if (this.vouchers.usable[i].id === voucher.id) {
+          console.log(this.vouchers.usable[i].id, voucher.id);
           index = i;
         }
       }
 
-      var doc = new jsPDF("portrait", "mm", "a4");
-      var halfWidth = Math.round(doc.internal.pageSize.width / 2);
-      var fifthHeight = Math.round(doc.internal.pageSize.height / 5);
+      // update voucher status
+      this.hotspotUpdateVoucher(
+        voucher.id,
+        {
+          printed: true
+        },
+        success => {
+          var doc = new jsPDF("portrait", "mm", "a4");
+          var halfWidth = Math.round(doc.internal.pageSize.width / 2);
+          var fifthHeight = Math.round(doc.internal.pageSize.height / 5);
 
-      doc.setDrawColor(17, 17, 17);
-      doc.line(0, fifthHeight, halfWidth, fifthHeight);
-      doc.line(halfWidth, 0, halfWidth, fifthHeight);
+          doc.setDrawColor(17, 17, 17);
+          doc.line(0, fifthHeight, halfWidth, fifthHeight);
+          doc.line(halfWidth, 0, halfWidth, fifthHeight);
 
-      var image = new Image();
-      var context = this;
-      image.onload = function() {
-        var values = context.resizeImage(image, 20, 20);
-        doc.addImage(
-          context.preferences.captive[2].value,
-          2,
-          2,
-          values.width,
-          values.height
-        );
-        doc.fromHTML(
-          document.getElementsByClassName("voucher-desc")[index],
-          50,
-          -3,
-          {
-            width: 55
-          }
-        );
-        doc.fromHTML(
-          document.getElementsByClassName("voucher-main")[index],
-          65,
-          21
-        );
-        doc.fromHTML(
-          document.getElementsByClassName("voucher-valid")[index],
-          1,
-          21
-        );
-        doc.fromHTML(
-          document.getElementsByClassName("voucher-max-use")[index],
-          1,
-          29
-        );
+          var image = new Image();
+          var context = this;
+          image.onload = function() {
+            var values = context.resizeImage(image, 20, 20);
+            doc.addImage(
+              context.preferences.captive[2].value,
+              2,
+              2,
+              values.width,
+              values.height
+            );
+            doc.fromHTML(
+              document.getElementsByClassName("voucher-desc")[index],
+              50,
+              -3,
+              {
+                width: 55
+              }
+            );
+            doc.fromHTML(
+              document.getElementsByClassName("voucher-main")[index],
+              65,
+              21
+            );
+            doc.fromHTML(
+              document.getElementsByClassName("voucher-valid")[index],
+              1,
+              21
+            );
+            doc.fromHTML(
+              document.getElementsByClassName("voucher-max-use")[index],
+              1,
+              29
+            );
 
-        doc.setLineWidth(0.3);
-        doc.setDrawColor(158, 160, 163);
-        doc.line(5, 41, halfWidth - 5, +41);
-        doc.addImage(arrow.down, 4, 45, 3, 3);
-        doc.fromHTML(
-          document.getElementsByClassName("voucher-download")[index],
-          8,
-          40
-        );
-        doc.addImage(arrow.up, 4, 50, 3, 3);
-        doc.fromHTML(
-          document.getElementsByClassName("voucher-upload")[index],
-          8,
-          45
-        );
+            doc.setLineWidth(0.3);
+            doc.setDrawColor(158, 160, 163);
+            doc.line(5, 41, halfWidth - 5, +41);
+            doc.addImage(arrow.down, 4, 45, 3, 3);
+            doc.fromHTML(
+              document.getElementsByClassName("voucher-download")[index],
+              8,
+              40
+            );
+            doc.addImage(arrow.up, 4, 50, 3, 3);
+            doc.fromHTML(
+              document.getElementsByClassName("voucher-upload")[index],
+              8,
+              45
+            );
 
-        doc.fromHTML(
-          document.getElementsByClassName("voucher-traffic")[index],
-          65,
-          40
-        );
-        doc.fromHTML(
-          document.getElementsByClassName("voucher-time")[index],
-          65,
-          45
-        );
+            doc.fromHTML(
+              document.getElementsByClassName("voucher-traffic")[index],
+              65,
+              40
+            );
+            doc.fromHTML(
+              document.getElementsByClassName("voucher-time")[index],
+              65,
+              45
+            );
 
-        doc.autoPrint();
-        window.open(doc.output("bloburl"), "_blank");
-      };
-      image.src = this.preferences.captive[2].value;
+            doc.autoPrint();
+            window.open(doc.output("bloburl"), "_blank");
+          };
+          image.src = this.preferences.captive[2].value;
+        },
+        error => {
+          console.error(error);
+        }
+      );
     },
     printAllVoucher() {
       var doc = new jsPDF("portrait", "mm", "a4");
@@ -1209,10 +1335,28 @@ export default {
 
       var image = new Image();
       var context = this;
+      var promises = [];
       image.onload = function() {
         var values = context.resizeImage(image, 20, 20);
 
         for (var index = 0; index < context.vouchers.usable.length; index++) {
+          promises.push(
+            new Promise(function(resolve, reject) {
+              context.hotspotUpdateVoucher(
+                context.vouchers.usable[index].id,
+                {
+                  printed: true
+                },
+                success => {
+                  resolve(success);
+                },
+                error => {
+                  reject(error);
+                }
+              );
+            })
+          );
+
           if (index % 10 === 0 && index !== 0) {
             doc.addPage();
             row = 0;
@@ -1383,6 +1527,14 @@ export default {
               doc.line(halfWidth, cordinates.y, width, cordinates.y);
             }
           }
+
+          Promise.all(promises)
+            .then(function() {
+              console.log("done");
+            })
+            .catch(function(err) {
+              console.error(err);
+            });
         }
         doc.autoPrint();
         window.open(doc.output("bloburl"), "_blank");

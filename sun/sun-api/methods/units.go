@@ -68,7 +68,7 @@ func CreateUnit(c *gin.Context) {
 	}
 
 	// check hotspot ownership
-	if utils.Contains(utils.ExtractHotspotIds(accountId, (accountId == 1), 0), hotspot.Id) {
+	if utils.Contains(utils.ExtractHotspotIds(accountId, (accountId == 1), hotspot.Id), hotspot.Id) {
 		db := database.Instance()
 		db.Save(&unit)
 

@@ -99,7 +99,7 @@ func UpdateHotspotPrefs(c *gin.Context) {
 	}
 
 	// check hotspot ownership
-	if utils.Contains(utils.ExtractHotspotIds(accountId, (accountId == 1), 0), hotspotIdInt) {
+	if utils.Contains(utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt), hotspotIdInt) {
 		db := database.Instance()
 		db.Where("`key` = ? AND hotspot_id = ?", json.Key, hotspotIdInt).First(&hsPref)
 

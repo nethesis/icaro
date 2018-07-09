@@ -4,9 +4,8 @@ var HotspotService = {
       this.$http
         .get(
           this.$root.$options.api_scheme +
-            this.$root.$options.api_host +
-            "/api/hotspots",
-          {
+          this.$root.$options.api_host +
+          "/api/hotspots", {
             headers: {
               Token:
                 (this.get("loggedUser") && this.get("loggedUser").token) || ""
@@ -19,10 +18,9 @@ var HotspotService = {
       this.$http
         .get(
           this.$root.$options.api_scheme +
-            this.$root.$options.api_host +
-            "/api/hotspots/" +
-            id,
-          {
+          this.$root.$options.api_host +
+          "/api/hotspots/" +
+          id, {
             headers: {
               Token:
                 (this.get("loggedUser") && this.get("loggedUser").token) || ""
@@ -35,10 +33,9 @@ var HotspotService = {
       this.$http
         .post(
           this.$root.$options.api_scheme +
-            this.$root.$options.api_host +
-            "/api/hotspots",
-          body,
-          {
+          this.$root.$options.api_host +
+          "/api/hotspots",
+          body, {
             headers: {
               Token:
                 (this.get("loggedUser") && this.get("loggedUser").token) || ""
@@ -51,11 +48,10 @@ var HotspotService = {
       this.$http
         .put(
           this.$root.$options.api_scheme +
-            this.$root.$options.api_host +
-            "/api/hotspots/" +
-            id,
-          body,
-          {
+          this.$root.$options.api_host +
+          "/api/hotspots/" +
+          id,
+          body, {
             headers: {
               Token:
                 (this.get("loggedUser") && this.get("loggedUser").token) || ""
@@ -68,10 +64,9 @@ var HotspotService = {
       this.$http
         .delete(
           this.$root.$options.api_scheme +
-            this.$root.$options.api_host +
-            "/api/hotspots/" +
-            id,
-          {
+          this.$root.$options.api_host +
+          "/api/hotspots/" +
+          id, {
             headers: {
               Token:
                 (this.get("loggedUser") && this.get("loggedUser").token) || ""
@@ -80,14 +75,18 @@ var HotspotService = {
         )
         .then(success, error);
     },
-    hotspotGetVouchers(hotspotId, success, error) {
+    hotspotGetVouchers(filters, hotspotId, success, error) {
       this.$http
         .get(
           this.$root.$options.api_scheme +
-            this.$root.$options.api_host +
-            "/api/vouchers/" +
-            hotspotId,
-          {
+          this.$root.$options.api_host +
+          "/api/vouchers/" +
+          hotspotId + "?" +
+          (filters && filters.duration != 0 ? "&duration=" + filters.duration : "") +
+          (filters && filters.auto_login ? "&auto_login=" + filters.auto_login : "") +
+          (filters && filters.used ? "&used=" + filters.used : "") +
+          (filters && filters.reusable ? "&reusable=" + filters.reusable : "") +
+          (filters && filters.printed ? "&printed=" + filters.printed : ""), {
             headers: {
               Token:
                 (this.get("loggedUser") && this.get("loggedUser").token) || ""
@@ -100,10 +99,24 @@ var HotspotService = {
       this.$http
         .post(
           this.$root.$options.api_scheme +
-            this.$root.$options.api_host +
-            "/api/vouchers",
-          body,
-          {
+          this.$root.$options.api_host +
+          "/api/vouchers",
+          body, {
+            headers: {
+              Token:
+                (this.get("loggedUser") && this.get("loggedUser").token) || ""
+            }
+          }
+        )
+        .then(success, error);
+    },
+    hotspotUpdateVoucher(id, body, success, error) {
+      this.$http
+        .put(
+          this.$root.$options.api_scheme +
+          this.$root.$options.api_host +
+          "/api/vouchers/" + id,
+          body, {
             headers: {
               Token:
                 (this.get("loggedUser") && this.get("loggedUser").token) || ""
@@ -116,10 +129,9 @@ var HotspotService = {
       this.$http
         .delete(
           this.$root.$options.api_scheme +
-            this.$root.$options.api_host +
-            "/api/vouchers/" +
-            id,
-          {
+          this.$root.$options.api_host +
+          "/api/vouchers/" +
+          id, {
             headers: {
               Token:
                 (this.get("loggedUser") && this.get("loggedUser").token) || ""

@@ -66,7 +66,7 @@ func UpdateUser(c *gin.Context) {
 	}
 
 	// check hotspot ownership
-	if utils.Contains(utils.ExtractHotspotIds(accountId, (accountId == 1), 0), user.HotspotId) {
+	if utils.Contains(utils.ExtractHotspotIds(accountId, (accountId == 1), user.HotspotId), user.HotspotId) {
 		if len(json.Name) > 0 {
 			user.Name = json.Name
 		}
