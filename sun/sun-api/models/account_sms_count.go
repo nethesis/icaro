@@ -28,3 +28,7 @@ type AccountSmsCount struct {
 	SmsMaxCount int `db:"sms_max_count" json:"sms_max_count"`
 	SmsCount    int `db:"sms_count" json:"sms_count"`
 }
+
+type AccountSmsCountJSON struct {
+	SmsToAdd int `json:"sms_to_add"`
+}

@@ -4,9 +4,8 @@ var StatsService = {
       this.$http
         .get(
           this.$root.$options.api_scheme +
-            this.$root.$options.api_host +
-            "/api/stats/hotspots/total",
-          {
+          this.$root.$options.api_host +
+          "/api/stats/hotspots/total", {
             headers: {
               Token:
                 (this.get("loggedUser") && this.get("loggedUser").token) || ""
@@ -19,9 +18,8 @@ var StatsService = {
       this.$http
         .get(
           this.$root.$options.api_scheme +
-            this.$root.$options.api_host +
-            "/api/stats/units/total",
-          {
+          this.$root.$options.api_host +
+          "/api/stats/units/total", {
             headers: {
               Token:
                 (this.get("loggedUser") && this.get("loggedUser").token) || ""
@@ -34,9 +32,8 @@ var StatsService = {
       this.$http
         .get(
           this.$root.$options.api_scheme +
-            this.$root.$options.api_host +
-            "/api/stats/accounts/total",
-          {
+          this.$root.$options.api_host +
+          "/api/stats/accounts/total", {
             headers: {
               Token:
                 (this.get("loggedUser") && this.get("loggedUser").token) || ""
@@ -49,9 +46,8 @@ var StatsService = {
       this.$http
         .get(
           this.$root.$options.api_scheme +
-            this.$root.$options.api_host +
-            "/api/stats/devices/total",
-          {
+          this.$root.$options.api_host +
+          "/api/stats/devices/total", {
             headers: {
               Token:
                 (this.get("loggedUser") && this.get("loggedUser").token) || ""
@@ -64,9 +60,8 @@ var StatsService = {
       this.$http
         .get(
           this.$root.$options.api_scheme +
-            this.$root.$options.api_host +
-            "/api/stats/users/total",
-          {
+          this.$root.$options.api_host +
+          "/api/stats/users/total", {
             headers: {
               Token:
                 (this.get("loggedUser") && this.get("loggedUser").token) || ""
@@ -79,9 +74,8 @@ var StatsService = {
       this.$http
         .get(
           this.$root.$options.api_scheme +
-            this.$root.$options.api_host +
-            "/api/stats/sessions/total",
-          {
+          this.$root.$options.api_host +
+          "/api/stats/sessions/total", {
             headers: {
               Token:
                 (this.get("loggedUser") && this.get("loggedUser").token) || ""
@@ -94,9 +88,36 @@ var StatsService = {
       this.$http
         .get(
           this.$root.$options.api_scheme +
-            this.$root.$options.api_host +
-            "/api/stats/sms/accounts",
-          {
+          this.$root.$options.api_host +
+          "/api/stats/sms/accounts", {
+            headers: {
+              Token:
+                (this.get("loggedUser") && this.get("loggedUser").token) || ""
+            }
+          }
+        )
+        .then(success, error);
+    },
+    statsSMSTotalForAccountByAccount(accountId, success, error) {
+      this.$http
+        .get(
+          this.$root.$options.api_scheme +
+          this.$root.$options.api_host +
+          "/api/stats/sms/accounts/" + accountId, {
+            headers: {
+              Token:
+                (this.get("loggedUser") && this.get("loggedUser").token) || ""
+            }
+          }
+        )
+        .then(success, error);
+    },
+    updateSMSTotalForAccountByAccount(body, accountId, success, error) {
+      this.$http
+        .post(
+          this.$root.$options.api_scheme +
+          this.$root.$options.api_host +
+          "/api/stats/sms/accounts/" + accountId, body, {
             headers: {
               Token:
                 (this.get("loggedUser") && this.get("loggedUser").token) || ""
@@ -109,9 +130,8 @@ var StatsService = {
       this.$http
         .get(
           this.$root.$options.api_scheme +
-            this.$root.$options.api_host +
-            (hotspotId > 0 ? "/api/stats/sms/hotspots/" + hotspotId : "/api/stats/sms/hotspots"),
-          {
+          this.$root.$options.api_host +
+          (hotspotId > 0 ? "/api/stats/sms/hotspots/" + hotspotId : "/api/stats/sms/hotspots"), {
             headers: {
               Token:
                 (this.get("loggedUser") && this.get("loggedUser").token) || ""

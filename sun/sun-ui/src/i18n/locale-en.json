@@ -169,7 +169,11 @@
       "create_error_title": "Create error",
       "duplicate_error": "Duplicate manager. Please choose a different username or UUID.",
       "create_error_sub": "An error occurred during manager creation.",
-      "subscription_plan_name": "Subscription"
+      "subscription_plan_name": "Subscription",
+      "add_sms": "Add SMS pack",
+      "sms_sent": "SMS Sent",
+      "sms_total": "SMS Total",
+      "sms_to_add": "SMS to add"
     },
     "unit": {
       "unit": "Unit",

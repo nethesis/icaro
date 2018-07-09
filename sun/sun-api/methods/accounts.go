@@ -314,7 +314,13 @@ func StatsSMSTotalForAccount(c *gin.Context) {
 	accountId := c.MustGet("token").(models.AccessToken).AccountId
 
 	db := database.Instance()
-	db.Where("account_id = ?", accountId).First(&accountSMS)
+
+	if accountId == 1 {
+		destAccountId := c.Param("account_id")
+		db.Where("account_id = ?", destAccountId).First(&accountSMS)
+	} else {
+		db.Where("account_id = ?", accountId).First(&accountSMS)
+	}
 
 	if accountSMS.Id == 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No sms account found!"})
@@ -322,4 +328,29 @@ func StatsSMSTotalForAccount(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, accountSMS)
+}
+
+func UpdateSMSTotalForAccount(c *gin.Context) {
+	var accountSMS models.AccountSmsCount
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
+
+	if accountId != 1 {
+		c.JSON(http.StatusForbidden, gin.H{"message": "Operation not permitted!"})
+		return
+	}
+
+	var json models.AccountSmsCountJSON
+	if err := c.BindJSON(&json); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Request fields malformed", "error": err.Error()})
+		return
+	}
+
+	db := database.Instance()
+
+	destAccountId := c.Param("account_id")
+	db.Where("account_id = ?", destAccountId).First(&accountSMS)
+
+	accountSMS.SmsMaxCount = accountSMS.SmsMaxCount + json.SmsToAdd
+
+	db.Save(&accountSMS)
 }
