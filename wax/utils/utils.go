@@ -183,12 +183,12 @@ func GetDeviceByMacAddress(mac string) models.Device {
 	return unit
 }
 
-func GetDeviceByHotspotidAndMacAddress(hotspot_id int, mac string) models.Device {
-	var device models.Device
+func GetDevicesByHotspotidAndMacAddress(hotspot_id int, mac string) []models.Device {
+	var devices []models.Device
 	db := database.Instance()
-	db.Where("hotspot_id = ? and mac_address = ?", hotspot_id, mac).First(&device)
+	db.Where("hotspot_id = ? and mac_address = ?", hotspot_id, mac).Find(&devices)
 
-	return device
+	return devices
 }
 
 func GetUnitByMacAddress(mac string) models.Unit {
@@ -390,26 +390,34 @@ func Contains(intSlice []int, searchInt int) bool {
 	return false
 }
 
-func GetUserByMacAddressAndunitMacAddress(mac string, unitMacAddress string) (bool, models.User) {
+func GetUsersByMacAddressAndunitMacAddress(mac string, unitMacAddress string) (bool, []models.User) {
 
-	var user models.User
+	var users []models.User
 
 	unit := GetUnitByMacAddress(unitMacAddress)
 	if unit.Id <= 0 {
-		return false, user
+		return false, users
 	}
 
-	device := GetDeviceByHotspotidAndMacAddress(unit.HotspotId, mac)
-	if device.Id < 0 {
-		return false, user
+	devices := GetDevicesByHotspotidAndMacAddress(unit.HotspotId, mac)
+	if len(devices) < 0 {
+		return false, users
 	}
 
-	user = GetUserById(device.UserId)
-	if user.Id < 0 {
-		return false, user
+	for _, device := range devices {
+
+		user := GetUserById(device.UserId)
+
+		if user.Id > 0 {
+			users = append(users, user)
+		}
 	}
 
-	return true, user
+	if len(users) <= 0 {
+		return false, users
+	}
+
+	return true, users
 }
 
 func GetTodaySessionTrafficByUser(user models.User) int {
