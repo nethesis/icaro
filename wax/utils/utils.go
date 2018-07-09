@@ -488,3 +488,30 @@ func CalculateRemainTime(user models.User, timezone string) int {
 
 	return secondsToMidnight
 }
+
+func FindAutoLoginUser(users []models.User) models.User {
+
+	var users_enabled []models.User
+	var user models.User
+
+	//find users with autologin enabled
+	for _, _user := range users {
+		if _user.AutoLogin {
+			users_enabled = append(users_enabled, _user)
+		}
+	}
+
+	// check if there is any autologin enabled users
+	if len(users_enabled) <= 0 {
+		return user
+	}
+
+	//find the most recent created user
+	for _, user_enabled := range users_enabled {
+		if user_enabled.Created.After(user.Created) {
+			user = user_enabled
+		}
+	}
+
+	return user
+}
