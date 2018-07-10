@@ -101,8 +101,6 @@ before_install:
   - sh -c "if [ ! -z '$TRAVIS_GO_VERSION' ]; then mysql icaro < $TRAVIS_BUILD_DIR/deploy/ansible/roles/icarodb/files/icaro.sql; fi"
   - sh -c "if [ ! -z '$TRAVIS_GO_VERSION' ]; then mysql icaro < $TRAVIS_BUILD_DIR/wax/testdata/test-grant.sql; fi"
   - sh -c "if [ ! -z '$TRAVIS_GO_VERSION' ]; then mysql icaro < $TRAVIS_BUILD_DIR/wax/testdata/test-records.sql; fi"
-  - sh -c "if [ ! -z '$TRAVIS_GO_VERSION' ]; then go get -u github.com/golang/dep/cmd/dep; fi"
-  - sh -c "if [ ! -z '$TRAVIS_GO_VERSION' ]; then cd $TRAVIS_BUILD_DIR/$(dirname $DEPLOY_FILES) && dep ensure; fi"
 
 before_deploy:
   - mkdir $TRAVIS_BUILD_DIR/deploy_files
