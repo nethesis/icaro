@@ -34,12 +34,21 @@ Wax and Sun database configuration is saved inside the file `/opt/icaro/wax/conf
 ```
 
 ## Disclaimers
-Terms of use and marketing disclaimers are visualized before the user chooses the login method. To add your disclaimers modify the `/opt/icaro/wax/conf.json` in the `disclaimers`.
+Each Captive portal is served from the same cloud server, but each captive portal related to a particular hotspot inherits its configuration.
+
+You must specify the business name during Hotspot creation that will be replaced in the disclaimers for each hotspots.
+
+Terms of use and marketing disclaimers are visualized before the user chooses the login method. To add your disclaimers modify the `/opt/icaro/wax/conf.json` in the `disclaimers` and use `$$BUSINESS_NAME$$` variable.
 ```json
 "disclaimers": {
-	"terms_of_use": "This is a disclaimer test\n\n - chapter 1\n - chapter 2",
-	"marketing_use": "This is marketing informationt\n\n - chapter 1\n - chapter 2"
+	"terms_of_use": "This is a disclaimer test\n\n - chapter 1\n - chapter 2 provided by $$BUSINESS_NAME$$",
+	"marketing_use": "This is marketing informationt\n\n - chapter 1\n - chapter 2  provided by $$BUSINESS_NAME$$"
 }
+```
+
+Became (if the hotspot's business name is `Great Hotel Ltd` for example)
+```
+This is a disclaimer test\n\n - chapter 1\n - chapter 2 provided by Great Hotel Ltd
 ```
 
 ## Social

@@ -19,24 +19,6 @@ Example of landing page:
 
 ![Captive portal](../img/captive.png "Schema")
 
-### Term of Use
-Each Captive portal is served from the same cloud server, but each captive portal related to a particular hotspot inherits its configuration.
-
-Also the `Term of Use` and `Marketing` disclaimers are inherited from hotspot replacing the `$$BUSINESS_NAME$$` variable inside each disclaimers.
-
-For example if your customer's business company is `Great Hotel Ltd`, this:
-```
-This software is powerd by Icaro and hosted by $$BUSINESS_NAME$$ that provides the free Wi-Fi system.
-```
-
-became:
-
-```
-This software is powerd by Icaro and hosted by Great Hotel Ltd that provides the free Wi-Fi system.
-```
-
-You must specify the business name during Hotspot creation.
-
 
 ### Login Methods and type of Accounts
 For more details, see [Login configuration](/icaro/docs/configuration/) page, to properly configure each logins option.
