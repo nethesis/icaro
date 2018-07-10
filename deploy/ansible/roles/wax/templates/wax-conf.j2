@@ -47,7 +47,9 @@ icaro.wax.twilio_service_sid is defined %}
             "account_sid": "{{ icaro.wax.twilio_account_sid }}",
             "auth_token": "{{ icaro.wax.twilio_auth_token }}",
             "service_sid": "{{ icaro.wax.twilio_service_sid }}",
-            "link": "http://{{ icaro.hostname }}/wings/login/sms"
+            "link": "http://{{ icaro.hostname }}/wings/login/sms",
+            "send_quota_alert": {{ icaro.wax.sms_send_quota_alert | lower }}
+
 {% endif %}
         },
         "email": {

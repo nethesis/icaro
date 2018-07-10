@@ -35,6 +35,7 @@ icaro:
     twilio_account_sid: "TwilioAccountSID"
     twilio_auth_token: "TwilioAuthToken"
     twilio_service_sid: "TwilioServiceSID"
+    sms_send_quota_alert: false
     email_from: "admin@example.com"
     email_smtp_host: "EmailSMTPHost"
     email_smtp_port: "25"
