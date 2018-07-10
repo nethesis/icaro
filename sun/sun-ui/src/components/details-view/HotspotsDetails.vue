@@ -120,7 +120,7 @@
             </div>
             <div class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
               <label class="col-sm-3 control-label centered" for="textInput-markup">{{$t('hotspot.auto_login')}}</label>
-              <div class="col-sm-3">
+              <div class="col-sm-3 list-details">
                 <select v-model="vouchers.filters.auto_login" class="form-control">
                   <option value="">-</option>
                   <option value="1">{{$t('hotspot.yes')}}</option>
@@ -128,7 +128,7 @@
                 </select>
               </div>
               <label class="col-sm-3 control-label centered" for="textInput-markup">{{$t('hotspot.used')}}</label>
-              <div class="col-sm-3">
+              <div class="col-sm-3 list-details">
                 <select v-model="vouchers.filters.used" class="form-control">
                   <option value="">-</option>
                   <option value="1">{{$t('hotspot.yes')}}</option>
@@ -137,7 +137,7 @@
               </div>
 
               <label class="col-sm-3 control-label centered" for="textInput-markup">{{$t('hotspot.reusable')}}</label>
-              <div class="col-sm-3">
+              <div class="col-sm-3 list-details">
                 <select v-model="vouchers.filters.reusable" class="form-control">
                   <option value="">-</option>
                   <option value="1">{{$t('hotspot.yes')}}</option>
@@ -146,7 +146,7 @@
               </div>
 
               <label class="col-sm-3 control-label centered" for="textInput-markup">{{$t('hotspot.printed')}}</label>
-              <div class="col-sm-3">
+              <div class="col-sm-3 list-details">
                 <select v-model="vouchers.filters.printed" class="form-control">
                   <option value="">-</option>
                   <option value="1">{{$t('hotspot.yes')}}</option>
