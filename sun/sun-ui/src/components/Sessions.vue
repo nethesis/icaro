@@ -421,6 +421,7 @@ export default {
       this.userGetAll(
         this.hotspotSearchId,
         null,
+        false,
         success => {
           this.users = success.body;
           callback();

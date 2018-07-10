@@ -30,4 +30,5 @@ type UserMarketing struct {
 	AccountType string    `db:"account_type" json:"account_type"`
 	Data        string    `db:"data" json:"data"`
 	Created     time.Time `db:"created" json:"created"`
+	UserExpired bool      `db:"user_expired" json:"user_expired"`
 }

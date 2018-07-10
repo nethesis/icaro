@@ -122,7 +122,7 @@ func GetUsers(c *gin.Context) {
 	offsets := utils.OffsetCalc(page, limit)
 
 	db := database.Instance()
-	chain := db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt))
+	chain := db.Where("hotspot_id in (?) AND valid_until > NOW()", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt))
 
 	if len(accountType) > 0 {
 		chain = chain.Where("account_type = ?", accountType)
@@ -136,6 +136,47 @@ func GetUsers(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, users)
+}
+
+func GetUsersExpired(c *gin.Context) {
+	var users []models.User
+	var userHistories []models.UserHistory
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
+
+	page := c.Query("page")
+	limit := c.Query("limit")
+	hotspotId := c.Query("hotspot")
+	accountType := c.Query("type")
+
+	hotspotIdInt, err := strconv.Atoi(hotspotId)
+	if err != nil {
+		hotspotIdInt = 0
+	}
+
+	offsets := utils.OffsetCalc(page, limit)
+
+	db := database.Instance()
+
+	// users expired
+	chain := db.Where("hotspot_id in (?) AND valid_until <= NOW()", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt))
+	if len(accountType) > 0 {
+		chain = chain.Where("account_type = ?", accountType)
+	}
+	chain.Offset(offsets[0]).Limit(offsets[1]).Find(&users)
+
+	// users history
+	chain = db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt))
+	if len(accountType) > 0 {
+		chain = chain.Where("account_type = ?", accountType)
+	}
+	chain.Offset(offsets[0]).Limit(offsets[1]).Find(&userHistories)
+
+	if len(users) == 0 && len(userHistories) == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"message": "No user expired found!"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"user_histories": userHistories, "users": users})
 }
 
 func GetUser(c *gin.Context) {
@@ -169,6 +210,12 @@ func DeleteUser(c *gin.Context) {
 		return
 	}
 
+	// delete marketing info
+	var userMarketing models.UserMarketing
+	db.Where("user_id = ?", user.Id).First(&userMarketing)
+	db.Delete(&userMarketing)
+
+	// delete user
 	db.Delete(&user)
 
 	c.JSON(http.StatusOK, gin.H{"status": "success"})

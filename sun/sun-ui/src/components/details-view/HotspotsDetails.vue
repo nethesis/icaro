@@ -238,7 +238,7 @@
           </div>
           <form class="form-horizontal" role="form" v-on:submit.prevent="updatePreferences(preferences.global)">
             <div v-if="!preferences.isLoading" class="card-pf-body">
-              <div v-for="pref in preferences.global" :key="pref.key" class="form-group">
+              <div v-if="isAuthRenew(pref.key)" v-for="pref in preferences.global" :key="pref.key" class="form-group">
                 <label class="col-sm-4 control-label" for="textInput-markup">{{$t('hotspot.'+pref.key)}}
                   <span :class="[getPrefIcon(pref.key)]"></span>
                 </label>
@@ -961,6 +961,21 @@ export default {
         }
       );
     },
+    isAuthRenew(prefKey) {
+      if (prefKey != "user_expiration_days") {
+        return true;
+      } else {
+        for (var p in this.preferences.global) {
+          var pref = this.preferences.global[p];
+
+          if (pref.key == "auth_renew" && pref.value) {
+            return false;
+          }
+
+          return true;
+        }
+      }
+    },
     createVoucher() {
       this.vouchers.isCreating = true;
 
@@ -1127,6 +1142,7 @@ export default {
       this.userGetAll(
         this.$route.params.id,
         null,
+        false,
         success => {
           this.totals.users.count = success.body.length;
           this.totals.users.isLoading = false;
@@ -1685,6 +1701,7 @@ export default {
       this.userGetAll(
         this.$route.params.id,
         "mac",
+        false,
         success => {
           this.macAuth.data = success.body;
           this.macAuth.isLoading = false;

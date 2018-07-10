@@ -123,13 +123,35 @@ CREATE TABLE `users` (
   PRIMARY KEY(`id`)
 );
 
+CREATE TABLE `user_histories` (
+  `id` serial,
+  `user_id` bigint unsigned NOT NULL,
+  `hotspot_id` bigint unsigned NOT NULL,
+  `name` varchar(200) NOT NULL,
+  `username` varchar(200) NOT NULL,
+  `password` varchar(200) NOT NULL,
+  `email` varchar(200),
+  `email_verified` tinyint NOT NULL,
+  `account_type` varchar(200) NOT NULL,
+  `marketing_auth` tinyint NOT NULL,
+  `kbps_down` integer unsigned,
+  `kbps_up` integer unsigned,
+  `max_navigation_traffic` integer unsigned,
+  `max_navigation_time` integer unsigned,
+  `auto_login` tinyint NOT NULL,
+  `valid_from` datetime,
+  `valid_until` datetime,
+  `created` datetime,
+  PRIMARY KEY(`id`)
+);
+
 CREATE TABLE `user_marketings` (
   `id` serial,
   `user_id` bigint unsigned NOT NULL,
   `account_type` varchar(200) NOT NULL,
   `data` longtext NOT NULL,
   `created` datetime,
-  FOREIGN KEY (`user_id`) REFERENCES users(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  `user_expired` tinyint NOT NULL,
   UNIQUE KEY (`user_id`),
   PRIMARY KEY(`id`)
 );

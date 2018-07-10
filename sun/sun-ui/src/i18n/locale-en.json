@@ -132,7 +132,8 @@
       "privacy": "Disclaimers",
       "marketing_info": "Privacy",
       "terms_info": "Terms of Use",
-      "print_privacy": "Print disclaimers"
+      "print_privacy": "Print disclaimers",
+      "auth_renew": "Autentication renew after expiration"
     },
     "user": {
       "username": "Username",

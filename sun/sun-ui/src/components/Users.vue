@@ -64,7 +64,7 @@
           </div>
         </td>
         <td>
-          <user-action details="false" :obj="props.row" :update="getAll"></user-action>
+          <user-action :disabled="hotspotShowExpired" details="false" :obj="props.row" :update="getAll"></user-action>
         </td>
       </template>
     </vue-good-table>
@@ -148,7 +148,7 @@ export default {
       this.hotspotSearchId = this.$route.params.hotspotId;
     }
     // get user list
-    var context = this
+    var context = this;
     this.getAllHotspots(function() {
       context.getAll();
     });
@@ -176,17 +176,18 @@ export default {
           $('[data-toggle="tooltip"]').tooltip();
           this.isLoading = false;
 
-          callback()
+          callback();
         },
         error => {
           console.error(error);
-          callback()
+          callback();
         }
       );
     },
     toggleExpire() {
       this.isLoading = true;
-      this.set("users_show_expired", !this.hotspotShowExpired);
+      this.hotspotShowExpired = !this.hotspotShowExpired;
+      this.set("users_show_expired", this.hotspotShowExpired);
       this.getAll();
     },
     getAll() {
@@ -198,17 +199,21 @@ export default {
       this.userGetAll(
         this.hotspotSearchId,
         null,
+        this.hotspotShowExpired,
         success => {
           this.rows = [];
-          for (var s in success.body) {
-            var res = success.body[s];
-
-            if (!this.isExpired(res.valid_until)) {
+          if (this.hotspotShowExpired) {
+            for (var s in success.body.users) {
+              var res = success.body.users[s];
               this.rows.push(res);
-            } else if (
-              this.isExpired(res.valid_until) &&
-              this.hotspotShowExpired
-            ) {
+            }
+            for (var s in success.body.user_histories) {
+              var res = success.body.user_histories[s];
+              this.rows.push(res);
+            }
+          } else {
+            for (var s in success.body) {
+              var res = success.body[s];
               this.rows.push(res);
             }
           }

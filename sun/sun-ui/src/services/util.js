@@ -162,6 +162,7 @@ var UtilService = {
         case "sms_login":
         case "voucher_login":
         case "auto_login":
+        case "auth_renew":
           type = "checkbox";
           break;
         case "temp_session_duration":

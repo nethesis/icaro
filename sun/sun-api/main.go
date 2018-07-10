@@ -144,6 +144,11 @@ func DefineAPI(router *gin.Engine) {
 			users.DELETE("/:user_id", methods.DeleteUser)
 		}
 
+		usersExpired := api.Group("/users_expired")
+		{
+			usersExpired.GET("", methods.GetUsersExpired)
+		}
+
 		vouchers := api.Group("/vouchers")
 		{
 			vouchers.GET("/:hotspot_id", methods.GetVouchers)

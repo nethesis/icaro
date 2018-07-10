@@ -33,10 +33,9 @@ var HotspotPreferences = map[string]string{
 	"email_login":                     "true",
 	"voucher_login":                   "false",
 	"auto_login":                      "true",
+	"auth_renew":                      "true",
 	"CoovaChilli-Bandwidth-Max-Down":  "0",
 	"CoovaChilli-Bandwidth-Max-Up":    "0",
 	"CoovaChilli-Max-Total-Octets":    "0",
 	"CoovaChilli-Max-Navigation-Time": "0",
 }
-
-var SMSMaxCount = 500

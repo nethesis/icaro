@@ -49,6 +49,10 @@ func Init(action string, worker bool) {
 		c.AddFunc("@every 2h", cleanSessions)
 		cleanSessions()
 
+	case "store-users":
+		c.AddFunc("@every 1h", storeUsers)
+		storeUsers()
+
 	default:
 		fmt.Println("Specify a valid action to execute, see -h option")
 	}
@@ -137,5 +141,48 @@ func cleanSessions() {
 
 		// delete from sessions table
 		db.Delete(&s)
+	}
+}
+
+func storeUsers() {
+	var users []models.User
+
+	db := database.Instance()
+	db.Joins("JOIN hotspot_preferences p on p.hotspot_id = users.hotspot_id").Where("valid_until <= NOW() and p.`key` = 'auth_renew' and value = 'true'").Find(&users)
+	for _, u := range users {
+		// create user history model
+		userHistory := models.UserHistory{
+			UserId:               u.Id,
+			HotspotId:            u.HotspotId,
+			Name:                 u.Name,
+			Username:             u.Username,
+			Password:             u.Password,
+			Email:                u.Email,
+			EmailVerified:        u.EmailVerified,
+			AccountType:          u.AccountType,
+			MarketingAuth:        u.MarketingAuth,
+			KbpsDown:             u.KbpsDown,
+			KbpsUp:               u.KbpsUp,
+			MaxNavigationTraffic: u.MaxNavigationTraffic,
+			MaxNavigationTime:    u.MaxNavigationTime,
+			AutoLogin:            u.AutoLogin,
+			ValidFrom:            u.ValidFrom,
+			ValidUntil:           u.ValidUntil,
+			Created:              u.Created,
+		}
+		// save to user_histories table
+		db.Save(&userHistory)
+
+		// update marketing info
+		var userMarketing models.UserMarketing
+		db.Where("user_id = ?", u.Id).First(&userMarketing)
+
+		if userMarketing.Id != 0 {
+			userMarketing.UserExpired = true
+			db.Save(&userMarketing)
+		}
+
+		// delete from users table
+		db.Delete(&u)
 	}
 }

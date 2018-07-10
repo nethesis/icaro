@@ -263,6 +263,7 @@ export default {
       this.userGetAll(
         this.hotspotSearchId,
         null,
+        false,
         success => {
           this.newUsers = success.body;
           this.getTodayUsersLogin();
