@@ -88,7 +88,8 @@ For the SMS login process Icaro use Twilio as SMS sender, register your app here
 	"sms": {
 		"account_sid": "twilio_account_sid",
 		"auth_token": "twilio_account_token",
-		"service_sid": "twilio_messaging_service_sid"
+		"service_sid": "twilio_messaging_service_sid",
+		"send_quota_alert": true
 	},
 	"email": {
 		"from": "email_from",
@@ -100,6 +101,8 @@ For the SMS login process Icaro use Twilio as SMS sender, register your app here
 }
 
 ```
+
+If `send_quota_alert` is set to true, resellers will be notify when theirs SMS quota limit is reached. (default: false)
 
 ## Captive portal defaults
 The captive portal can be customized for each Hotspot, but if the user doesn't have the rights, you can set captive portal default options under the the `captive_portal` section:
@@ -168,3 +171,4 @@ This variables are common to all backends:
 * `SMS_ACCOUNT_SID` Twilio account SID
 * `SMS_AUTH_TOKEN` Twilio auth token
 * `SMS_SERVICE_SID` Twilio messaging service sid
+* `SMS_SEND_QUOTA_ALERT` `true | false` Enable/Disable SMS quota limit alert.
