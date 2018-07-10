@@ -24,10 +24,11 @@ package models
 
 type Endpoints struct {
 	Sms struct {
-		AccountSid string `json:"account_sid"`
-		AuthToken  string `json:"auth_token"`
-		ServiceSid string `json:"service_sid"`
-		Link       string `json:"link"`
+		AccountSid     string `json:"account_sid"`
+		AuthToken      string `json:"auth_token"`
+		ServiceSid     string `json:"service_sid"`
+		Link           string `json:"link"`
+		SendQuotaAlert bool   `json:"send_quota_alert"`
 	} `json:"sms"`
 	Email struct {
 		From         string `json:"from"`

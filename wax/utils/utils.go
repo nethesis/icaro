@@ -167,6 +167,14 @@ func GetAccountSMSByAccountId(accountId int) models.AccountSmsCount {
 	return accountSMS
 }
 
+func GetAccountByAccountId(accountId int) models.Account {
+	var account models.Account
+	db := database.Instance()
+	db.Where("id = ?", accountId).First(&account)
+
+	return account
+}
+
 func GetSessionByKeyAndUnitId(key string, unitId int) models.Session {
 	var session models.Session
 	db := database.Instance()
@@ -341,6 +349,12 @@ func SendSMSCode(number string, code string, unit models.Unit, auth string) int 
 		return resp.StatusCode
 
 	} else {
+
+		if configuration.Config.Endpoints.Sms.SendQuotaAlert {
+			resellerAccount := GetAccountByAccountId(hotspot.AccountId)
+			SendSmsQuotaLimitAlert(resellerAccount)
+		}
+
 		return 500
 	}
 
@@ -522,4 +536,34 @@ func FindAutoLoginUser(users []models.User) models.User {
 	}
 
 	return user
+}
+
+func SendSmsQuotaLimitAlert(reseller models.Account) bool {
+	status := true
+
+	if reseller.Type == "reseller" {
+		m := gomail.NewMessage()
+		m.SetHeader("From", configuration.Config.Endpoints.Email.From)
+		m.SetHeader("To", reseller.Email)
+		m.SetHeader("Subject", "Hotspot Alert: SMS quota limit exceeded")
+		m.SetBody("text/plain", "You do not have any more SMS to send in your account,\n"+
+			"please buy an additional SMS quota or disable sms login from yours hotspots.\n")
+
+		d := gomail.NewDialer(
+			configuration.Config.Endpoints.Email.SMTPHost,
+			configuration.Config.Endpoints.Email.SMTPPort,
+			configuration.Config.Endpoints.Email.SMTPUser,
+			configuration.Config.Endpoints.Email.SMTPPassword,
+		)
+
+		// send the email
+		if err := d.DialAndSend(m); err != nil {
+			fmt.Println(err)
+			status = false
+		}
+	} else {
+		status = false
+	}
+
+	return status
 }

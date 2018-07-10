@@ -143,6 +143,9 @@ func Init(ConfigFilePtr *string) {
 	if os.Getenv("SMS_LOGIN_LINK") != "" {
 		Config.Endpoints.Sms.Link = os.Getenv("SMS_LOGIN_LINK")
 	}
+	if os.Getenv("SMS_SEND_QUOTA_ALERT") != "" {
+		Config.Endpoints.Sms.SendQuotaAlert, _ = strconv.ParseBool(os.Getenv("SMS_SEND_QUOTA_ALERT"))
+	}
 
 	if os.Getenv("EMAIL_FROM") != "" {
 		Config.Endpoints.Email.From = os.Getenv("EMAIL_FROM")
