@@ -203,7 +203,7 @@ export default {
         error => {
           this.currentObj.onAction = false;
           this.errors.update = true;
-          console.log(error.body.message);
+          console.error(error.body.message);
         }
       );
     },
@@ -219,7 +219,7 @@ export default {
         error => {
           this.currentObj.onAction = false;
           this.errors.delete = true;
-          console.log(error.body.message);
+          console.error(error.body.message);
         }
       );
     },
@@ -235,7 +235,7 @@ export default {
         error => {
           this.currentObj.onAction = false;
           this.errors.password = true;
-          console.log(error.body.message);
+          console.error(error.body.message);
         }
       );
     }

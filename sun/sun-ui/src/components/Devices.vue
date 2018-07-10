@@ -167,7 +167,7 @@ export default {
           callback();
         },
         error => {
-          console.log(error);
+          console.error(error);
           callback()
         }
       );
@@ -193,7 +193,7 @@ export default {
         error => {
           this.isLoading = false;
           this.rows = [];
-          console.log(error);
+          console.error(error);
         }
       );
     },
@@ -206,7 +206,7 @@ export default {
           callback()
         },
         error => {
-          console.log(error);
+          console.error(error);
           this.users = {};
           callback()
         }

@@ -125,7 +125,7 @@ export default {
         error => {
           this.onAction = false;
           this.errors.password = true;
-          console.log(error.body.message);
+          console.error(error.body.message);
         }
       );
     }

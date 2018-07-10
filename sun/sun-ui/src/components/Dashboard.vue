@@ -184,7 +184,7 @@
             this.totals.hotspots.isLoading = false;
           },
           error => {
-            console.log(error.body);
+            console.error(error.body);
             this.totals.hotspots.isLoading = false;
           }
         );
@@ -194,7 +194,7 @@
             this.totals.units.isLoading = false;
           },
           error => {
-            console.log(error.body);
+            console.error(error.body);
             this.totals.units.isLoading = false;
           }
         );
@@ -204,7 +204,7 @@
             this.totals.accounts.isLoading = false;
           },
           error => {
-            console.log(error.body);
+            console.error(error.body);
             this.totals.accounts.isLoading = false;
           }
         );
@@ -214,7 +214,7 @@
             this.totals.devices.isLoading = false;
           },
           error => {
-            console.log(error.body);
+            console.error(error.body);
             this.totals.devices.isLoading = false;
           }
         );
@@ -224,7 +224,7 @@
             this.totals.users.isLoading = false;
           },
           error => {
-            console.log(error.body);
+            console.error(error.body);
             this.totals.users.isLoading = false;
           }
         );
@@ -234,7 +234,7 @@
             this.totals.sessions.isLoading = false;
           },
           error => {
-            console.log(error.body);
+            console.error(error.body);
             this.totals.sessions.isLoading = false;
           }
         );
@@ -245,7 +245,7 @@
           this.totals.sms.isLoading = false;
         },
         error => {
-          console.log(error.body);
+          console.error(error.body);
           this.totals.sms.isLoading = false;
         }
       );

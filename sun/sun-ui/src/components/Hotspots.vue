@@ -169,7 +169,7 @@ export default {
         error => {
           this.isLoading = false;
           this.rows = [];
-          console.log(error);
+          console.error(error);
         }
       );
     },
@@ -187,7 +187,7 @@ export default {
         error => {
           this.newObj.onAction = false;
           this.errors.create = true;
-          console.log(error.body.message);
+          console.error(error.body.message);
         }
       );
     }

@@ -422,7 +422,7 @@ export default {
           if (error.body.message == "Password is invalid") {
             this.errors.password = true;
           }
-          console.log(error.body.message);
+          console.error(error.body.message);
         }
       );
     },
@@ -438,7 +438,7 @@ export default {
           this.resetGraphics();
         },
         error => {
-          console.log(error.body.message);
+          console.error(error.body.message);
         }
       );
     },

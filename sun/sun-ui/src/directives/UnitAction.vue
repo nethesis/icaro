@@ -92,7 +92,7 @@ export default {
         error => {
           this.currentObj.onAction = false;
           this.errors.delete = true;
-          console.log(error.body.message);
+          console.error(error.body.message);
         }
       );
     }

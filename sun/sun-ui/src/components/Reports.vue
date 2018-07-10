@@ -254,7 +254,7 @@ export default {
         error => {
           this.sessions = [];
           this.getNewUsers();
-          console.log(error);
+          console.error(error);
         }
       );
     },
@@ -270,7 +270,7 @@ export default {
         error => {
           this.newUsers = [];
           this.getTodayUsersLogin();
-          console.log(error);
+          console.error(error);
         }
       );
     },
@@ -293,7 +293,7 @@ export default {
           callback();
         },
         error => {
-          console.log(error);
+          console.error(error);
           callback();
         }
       );
@@ -315,7 +315,7 @@ export default {
         error => {
           this.connections = [];
           this.isChartLoading = false;
-          console.log(error);
+          console.error(error);
         }
       );
     },
@@ -327,7 +327,7 @@ export default {
           this.isChartLoading = false;
         },
         error => {
-          console.log(error.body);
+          console.error(error.body);
           this.sms = [];
           this.isChartLoading = false;
         }

@@ -900,7 +900,7 @@ export default {
           this.totals.sms.isLoading = false;
         },
         error => {
-          console.log(error.body);
+          console.error(error.body);
           this.totals.sms.data = 0;
           this.totals.sms.isLoading = false;
         }
@@ -934,7 +934,6 @@ export default {
                 resolve();
               },
               error => {
-                console.log(error.body);
                 reject();
               }
             );
@@ -961,7 +960,7 @@ export default {
           this.getVouchers();
         },
         error => {
-          console.log(error.body);
+          console.error(error.body);
           this.vouchers.isLoading = false;
           this.getVouchers();
         }
@@ -1022,7 +1021,7 @@ export default {
           this.vouchers.isLoading = false;
         },
         error => {
-          console.log(error.body);
+          console.error(error.body);
           this.vouchers.data = [];
           this.vouchers.isLoading = false;
         }
@@ -1039,7 +1038,7 @@ export default {
           this.info.isLoading = false;
         },
         error => {
-          console.log(error.body);
+          console.error(error.body);
         }
       );
     },
@@ -1051,7 +1050,7 @@ export default {
           this.totals.accounts.isLoading = false;
         },
         error => {
-          console.log(error.body);
+          console.error(error.body);
           this.totals.accounts.isLoading = false;
         }
       );
@@ -1063,7 +1062,7 @@ export default {
           this.totals.units.isLoading = false;
         },
         error => {
-          console.log(error.body);
+          console.error(error.body);
           this.totals.units.isLoading = false;
         }
       );
@@ -1075,7 +1074,7 @@ export default {
           this.totals.users.isLoading = false;
         },
         error => {
-          console.log(error.body);
+          console.error(error.body);
           this.totals.users.isLoading = false;
         }
       );
@@ -1087,7 +1086,7 @@ export default {
           this.totals.devices.isLoading = false;
         },
         error => {
-          console.log(error.body);
+          console.error(error.body);
           this.totals.devices.isLoading = false;
         }
       );
@@ -1102,7 +1101,7 @@ export default {
           this.totals.sessions.isLoading = false;
         },
         error => {
-          console.log(error.body);
+          console.error(error.body);
           this.totals.sessions.isLoading = false;
         }
       );
@@ -1159,7 +1158,7 @@ export default {
           }, 0);
         },
         error => {
-          console.log(error.body);
+          console.error(error.body);
         }
       );
     },
@@ -1243,7 +1242,6 @@ export default {
       let index;
       for (let i = 0; i < this.vouchers.usable.length; i++) {
         if (this.vouchers.usable[i].id === voucher.id) {
-          console.log(this.vouchers.usable[i].id, voucher.id);
           index = i;
         }
       }
@@ -1636,7 +1634,7 @@ export default {
         error => {
           this.macAuth.isLoading = false;
           this.macAuth.data = [];
-          console.log(error);
+          console.error(error);
         }
       );
     },
@@ -1644,7 +1642,6 @@ export default {
       this.newMACAuth.onAction = true;
       var md5 = require("md5");
       var digest = md5(this.newMACAuth.unit.secret + this.newMACAuth.unit.uuid);
-      console.log(this.newMACAuth);
       this.userMACCreate(
         this.newMACAuth,
         digest,
@@ -1662,7 +1659,7 @@ export default {
           this.newMACAuth.onAction = false;
         },
         error => {
-          console.log(error.body);
+          console.error(error.body);
           this.newMACAuth.onAction = false;
         }
       );
@@ -1674,7 +1671,7 @@ export default {
           this.getAllMACAuth();
         },
         error => {
-          console.log(error.body);
+          console.error(error.body);
         }
       );
     }

@@ -133,7 +133,7 @@ export default {
         },
         error => {
           this.info.isLoading = false;
-          console.log(error.body);
+          console.error(error.body);
         }
       );
     },
@@ -146,7 +146,7 @@ export default {
         },
         error => {
           this.sms.isLoading = false;
-          console.log(error.body);
+          console.error(error.body);
         }
       );
     },
@@ -165,7 +165,7 @@ export default {
         },
         error => {
           this.sms.isLoading = false;
-          console.log(error.body);
+          console.error(error.body);
         }
       );
     }

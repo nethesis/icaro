@@ -342,7 +342,7 @@ export default {
           callback();
         },
         error => {
-          console.log(error);
+          console.error(error);
         }
       );
     },
@@ -395,7 +395,7 @@ export default {
           error => {
             this.isLoading = false;
             this.rows_active = [];
-            console.log(error);
+            console.error(error);
           }
         );
       } else {
@@ -412,7 +412,7 @@ export default {
           error => {
             this.isLoading = false;
             this.rows_history = [];
-            console.log(error);
+            console.error(error);
           }
         );
       }
@@ -426,7 +426,7 @@ export default {
           callback();
         },
         error => {
-          console.log(error);
+          console.error(error);
           this.users = {};
           callback();
         }
@@ -440,7 +440,7 @@ export default {
           callback();
         },
         error => {
-          console.log(error);
+          console.error(error);
           this.units = {};
           callback();
         }

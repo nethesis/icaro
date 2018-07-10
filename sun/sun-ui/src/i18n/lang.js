@@ -9,7 +9,7 @@ var Lang = {
     try {
       messages = require("./locale-" + userLang + ".json");
     } catch (e) {
-      console.log("locale: " + userLang + " not found. fallback to en");
+      console.info("locale: " + userLang + " not found. fallback to en");
       messages = require("./locale-en.json");
       userLang = "en";
     }

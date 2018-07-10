@@ -289,7 +289,7 @@ export default {
           this.newObj.onAction = false;
           this.errors.create = true;
           this.errors.status = error.status;
-          console.log(error);
+          console.error(error);
         }
       );
     },
@@ -311,7 +311,7 @@ export default {
           callback();
         },
         error => {
-          console.log(error);
+          console.error(error);
 
           callback();
         }
@@ -325,7 +325,7 @@ export default {
           this.isLoading = false;
         },
         error => {
-          console.log(error);
+          console.error(error);
         }
       );
     },
@@ -337,7 +337,7 @@ export default {
           this.isLoading = false;
         },
         error => {
-          console.log(error);
+          console.error(error);
           this.rows = [];
           this.isLoading = false;
         }

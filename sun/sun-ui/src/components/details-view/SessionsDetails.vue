@@ -193,7 +193,7 @@ export default {
           this.getDeviceInfo(success.body.device_id);
         },
         error => {
-          console.log(error.body);
+          console.error(error.body);
           // try to get session on history
           this.historiesGet(
             this.$route.params.id,
@@ -207,7 +207,7 @@ export default {
             },
             error => {
               this.info.isLoading = false;
-              console.log(error.body);
+              console.error(error.body);
             }
           );
         }
@@ -222,7 +222,7 @@ export default {
         },
         error => {
           this.info.unit.isLoading = false;
-          console.log(error.body);
+          console.error(error.body);
         }
       );
     },
@@ -235,7 +235,7 @@ export default {
         },
         error => {
           this.info.user.isLoading = false;
-          console.log(error.body);
+          console.error(error.body);
         }
       );
     },
@@ -248,7 +248,7 @@ export default {
         },
         error => {
           this.info.hotspot.isLoading = false;
-          console.log(error.body);
+          console.error(error.body);
         }
       );
     },
@@ -261,7 +261,7 @@ export default {
         },
         error => {
           this.info.device.isLoading = false;
-          console.log(error.body);
+          console.error(error.body);
         }
       );
     }
