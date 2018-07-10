@@ -112,42 +112,52 @@
           </div>
           <div v-if="!vouchers.isLoading" class="card-pf-body">
             <div class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
-              <label class="col-sm-4 control-label centered" for="textInput-markup">{{$t('hotspot.duration')}} ({{$t('hotspot.0_all')}})</label>
-              <div class="col-sm-8">
+              <label class="col-sm-3 control-label centered" for="textInput-markup">{{$t('hotspot.duration')}} ({{$t('hotspot.0_all')}})</label>
+              <div class="col-sm-9">
                 <input v-model="vouchers.filters.duration" type="number" class="form-control">
               </div>
 
             </div>
             <div class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
-               <label class="col-sm-4 control-label centered" for="textInput-markup">{{$t('hotspot.auto_login')}}</label>
-              <div class="col-sm-2">
-                <input v-model="vouchers.filters.auto_login" type="checkbox" class="form-control">
+              <label class="col-sm-3 control-label centered" for="textInput-markup">{{$t('hotspot.auto_login')}}</label>
+              <div class="col-sm-3">
+                <select v-model="vouchers.filters.auto_login" class="form-control">
+                  <option value="">-</option>
+                  <option value="1">{{$t('hotspot.yes')}}</option>
+                  <option value="0">{{$t('hotspot.no')}}</option>
+                </select>
               </div>
-              <label class="col-sm-4 control-label centered" for="textInput-markup">{{$t('hotspot.used')}}</label>
-              <div class="col-sm-2">
-                <input v-model="vouchers.filters.used" type="checkbox" class="form-control">
+              <label class="col-sm-3 control-label centered" for="textInput-markup">{{$t('hotspot.used')}}</label>
+              <div class="col-sm-3">
+                <select v-model="vouchers.filters.used" class="form-control">
+                  <option value="">-</option>
+                  <option value="1">{{$t('hotspot.yes')}}</option>
+                  <option value="0">{{$t('hotspot.no')}}</option>
+                </select>
               </div>
 
-              <label class="col-sm-4 control-label centered" for="textInput-markup">{{$t('hotspot.reusable')}}</label>
-              <div class="col-sm-2">
-                <input v-model="vouchers.filters.reusable" type="checkbox" class="form-control">
+              <label class="col-sm-3 control-label centered" for="textInput-markup">{{$t('hotspot.reusable')}}</label>
+              <div class="col-sm-3">
+                <select v-model="vouchers.filters.reusable" class="form-control">
+                  <option value="">-</option>
+                  <option value="1">{{$t('hotspot.yes')}}</option>
+                  <option value="0">{{$t('hotspot.no')}}</option>
+                </select>
               </div>
 
-              <label class="col-sm-4 control-label centered" for="textInput-markup">{{$t('hotspot.printed')}}</label>
-              <div class="col-sm-2">
-                <input v-model="vouchers.filters.printed" type="checkbox" class="form-control">
+              <label class="col-sm-3 control-label centered" for="textInput-markup">{{$t('hotspot.printed')}}</label>
+              <div class="col-sm-3">
+                <select v-model="vouchers.filters.printed" class="form-control">
+                  <option value="">-</option>
+                  <option value="1">{{$t('hotspot.yes')}}</option>
+                  <option value="0">{{$t('hotspot.no')}}</option>
+                </select>
               </div>
 
             </div>
 
             <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
               <button @click="getVouchers()" class="btn btn-primary">{{$t('hotspot.apply_filters')}}</button>
-            </div>
-            <div class="form-group col-xs-9 col-sm-9 col-md-9 col-lg-9">
-              <label class="col-sm-6 col-xs-6 control-label centered" for="textInput-markup">{{$t('hotspot.show_all')}}</label>
-              <div class="col-sm-3 col-xs-3">
-                <input @click="getVouchers(true)" v-model="vouchers.filters.show_all" type="checkbox" class="form-control">
-              </div>
             </div>
 
             <vue-good-table :perPage="5" :paginate="true" :columns="columns" :rows="vouchers.data" :lineNumbers="false" :defaultSortBy="{field: 'expires', type: 'asc'}"
@@ -183,7 +193,7 @@
                   <strong class="red" v-if="props.row.remain_use == 0">{{$t('hotspot.limit_reached')}}</strong>
                 </td>
                 <td>
-                  <button v-if="props.row.remain_use != 0" v-on:click="printVoucher(props.row)" class="btn btn-primary" type="button">
+                  <button v-if="props.row.remain_use != 0" v-on:click="printVoucher(props.row)" :class="['btn', props.row.printed ? '' : 'btn-primary']" type="button">
                     <span class="fa fa-print"></span>
                   </button>
                   <button v-on:click="deleteVoucher(props.row.id)" class="btn btn-danger" type="button">
@@ -204,7 +214,8 @@
                 <span class="fa fa-list"></span>
                 {{ $t("hotspot.export_csv") }}
               </button>
-              <button :disabled="vouchers.data.length == 0" data-toggle="modal" data-target="#voucherDeleteAll" class="btn btn-danger" type="button">{{ $t("hotspot.delete_all") }}</button>
+              <button :disabled="vouchers.data.length == 0" data-toggle="modal" data-target="#voucherDeleteAll" class="btn btn-danger"
+                type="button">{{ $t("hotspot.delete_all") }}</button>
             </div>
             <p>
               <a href="#" class="card-pf-link-with-icon">
@@ -691,12 +702,11 @@ export default {
         data: [],
         usable: [],
         filters: {
-          duration: 7,
-          auto_login: true,
-          used: false,
-          reusable: true,
-          printed: false,
-          show_all: true
+          duration: 0,
+          auto_login: "",
+          used: "",
+          reusable: "",
+          printed: ""
         }
       },
       macAuth: {
@@ -990,7 +1000,7 @@ export default {
           context.vouchers.isDeleting = false;
         });
     },
-    getVouchers(autoShow) {
+    getVouchers() {
       this.vouchers.data = [];
       this.vouchers.usable = [];
       this.hotspotGetVouchers(
@@ -999,8 +1009,7 @@ export default {
           auto_login: this.vouchers.filters.auto_login,
           used: this.vouchers.filters.used,
           reusable: this.vouchers.filters.reusable,
-          printed: this.vouchers.filters.printed,
-          show_all: autoShow ? !this.vouchers.filters.show_all : this.vouchers.filters.show_all,
+          printed: this.vouchers.filters.printed
         },
         this.$route.params.id,
         success => {

@@ -122,7 +122,6 @@ func GetVouchers(c *gin.Context) {
 	used := c.Query("used")
 	reusable := c.Query("reusable")
 	printed := c.Query("printed")
-	showAll := c.Query("show_all")
 
 	hotspotId := c.Param("hotspot_id")
 
@@ -141,34 +140,32 @@ func GetVouchers(c *gin.Context) {
 		chain = chain.Where("owner_id = ?", accountId)
 	}
 
-	if len(showAll) == 0 {
-		if len(duration) > 0 {
-			chain = chain.Where("duration = ?", duration)
-		}
+	if len(duration) > 0 {
+		chain = chain.Where("duration = ?", duration)
+	}
 
-		if len(autoLogin) > 0 {
-			chain = chain.Where("auto_login = 1")
-		} else {
-			chain = chain.Where("auto_login = 0")
-		}
+	if len(autoLogin) > 0 {
+		chain = chain.Where("auto_login = ?", autoLogin)
+	}
 
-		if len(used) > 0 {
-			chain = chain.Where("expires != 0")
-		} else {
+	if len(used) > 0 {
+		if used == "0" {
 			chain = chain.Where("expires = 0")
-		}
-
-		if len(reusable) > 0 {
-			chain = chain.Where("remain_use = -1")
 		} else {
+			chain = chain.Where("expires != 0")
+		}
+	}
+
+	if len(reusable) > 0 {
+		if reusable == "0" {
 			chain = chain.Where("remain_use > 0")
-		}
-
-		if len(printed) > 0 {
-			chain = chain.Where("printed = 1")
 		} else {
-			chain = chain.Where("printed = 0")
+			chain = chain.Where("remain_use = -1")
 		}
+	}
+
+	if len(printed) > 0 {
+		chain = chain.Where("printed = ?", printed)
 	}
 
 	chain.Offset(offsets[0]).Limit(offsets[1]).Find(&hotspotVouchers)
