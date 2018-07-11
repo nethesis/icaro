@@ -41,5 +41,3 @@ icaro:
     email_smtp_port: "25"
     email_smtp_user: "EmailSMTPUser"
     email_smtp_password: "EmailSMTPPassword"
-    tos_path: "files/tos"
-    marketing_use_path: "files/marketing"
