@@ -13,8 +13,8 @@
         "methods": ["GET", "PUT", "POST", "DELETE"]
     },
     "disclaimers": {
-      "terms_of_use": "{% include icaro.wax.tos_path ignore missing %}",
-      "marketing_use": "{% include icaro.wax.marketing_use_path ignore missing %}"
+      "terms_of_use": {{ lookup('file', 'files/tos') | to_json }},
+      "marketing_use": {{ lookup('file', 'files/marketing') | to_json }}
     },
     "auth_social": {
         "facebook": {

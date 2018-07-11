@@ -11,16 +11,6 @@ https://{$ICARO_HOSTNAME} {
   log / stdout {combined}
 }
 
-https://{$ICARO_HOSTNAME}/privacy {
-  root /opt/icaro/privacy
-{% if icaro.tls is defined and icaro.tls == "self_signed" %}
-  tls self_signed
-{% elif icaro.tls is defined and icaro.tls == "manual" %}
-  tls /opt/icaro/{$ICARO_HOSTNAME}_cert.pem /opt/icaro/{$ICARO_HOSTNAME}_private_key.pem
-{% endif %}
-}
-
-
 http://{$ICARO_HOSTNAME} {
   redir {
     if {path} not_starts_with /wings
