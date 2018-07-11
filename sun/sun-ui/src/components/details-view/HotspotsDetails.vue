@@ -193,7 +193,8 @@
                   <strong class="red" v-if="props.row.remain_use == 0">{{$t('hotspot.limit_reached')}}</strong>
                 </td>
                 <td>
-                  <button v-if="props.row.remain_use != 0" v-on:click="printVoucher(props.row)" :class="['btn', props.row.printed ? '' : 'btn-primary']" type="button">
+                  <button v-if="props.row.remain_use != 0" v-on:click="printVoucher(props.row)" :class="['btn', props.row.printed ? '' : 'btn-primary']"
+                    type="button">
                     <span class="fa fa-print"></span>
                   </button>
                   <button v-on:click="deleteVoucher(props.row.id)" class="btn btn-danger" type="button">
@@ -389,6 +390,22 @@
               <dd>{{info.data.description}}</dd>
             </div>
             <div class="list-details">
+              <dt>{{ $t("hotspot.business_name") }}</dt>
+              <dd>{{info.data.business_name || '-'}}</dd>
+            </div>
+            <div class="list-details">
+              <dt>{{ $t("hotspot.business_vat") }}</dt>
+              <dd>{{info.data.business_vat || '-'}}</dd>
+            </div>
+            <div class="list-details">
+              <dt>{{ $t("hotspot.business_address") }}</dt>
+              <dd>{{info.data.business_address || '-'}}</dd>
+            </div>
+            <div class="list-details">
+              <dt>{{ $t("hotspot.business_email") }}</dt>
+              <dd>{{info.data.business_email || '-'}}</dd>
+            </div>
+            <div class="list-details">
               <dt>{{ $t("hotspot.created") }}</dt>
               <dd>{{info.data.created | formatDate}}</dd>
             </div>
@@ -396,6 +413,40 @@
           <div v-if="!info.isLoading" class="card-pf-footer">
             <div class="dropdown card-pf-time-frame-filter">
               <hotspot-action details="false" :obj="info.data" :update="getInfo"></hotspot-action>
+            </div>
+            <p>
+              <a href="#" class="card-pf-link-with-icon">
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row row-cards-pf">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="card-pf card-pf-accented">
+          <div class="card-pf-heading">
+            <h2 class="card-pf-title">
+              {{ $t("hotspot.privacy") }}
+              <div v-if="info.privacy.isLoading" class="spinner spinner-sm right"></div>
+            </h2>
+          </div>
+          <div v-if="!info.privacy.isLoading" class="card-pf-body">
+            <div class="list-details">
+              <dt>{{ $t("hotspot.marketing_info") }}</dt>
+              <textarea id="marketings-info" :value="info.privacy.data.marketings"></textarea>
+            </div>
+            <div class="list-details">
+              <dt>{{ $t("hotspot.terms_info") }}</dt>
+              <dd>
+                <textarea :value="info.privacy.data.terms"></textarea>
+              </dd>
+            </div>
+          </div>
+          <div v-if="!info.privacy.isLoading" class="card-pf-footer">
+            <div class="dropdown card-pf-time-frame-filter">
+              <button @click="printPrivacy()" class="btn btn-primary">{{$t('hotspot.print_privacy')}}</button>
             </div>
             <p>
               <a href="#" class="card-pf-link-with-icon">
@@ -693,7 +744,11 @@ export default {
     return {
       info: {
         isLoading: true,
-        data: {}
+        data: {},
+        privacy: {
+          isLoading: true,
+          data: {}
+        }
       },
       vouchers: {
         isLoading: true,
@@ -1036,6 +1091,9 @@ export default {
         success => {
           this.info.data = success.body;
           this.info.isLoading = false;
+
+          // get privacy info
+          this.getPrivacyInfo(this.info.data.uuid);
         },
         error => {
           console.error(error.body);
@@ -1674,6 +1732,36 @@ export default {
           console.error(error.body);
         }
       );
+    },
+    getPrivacyInfo(uuid) {
+      this.hotspotPrivacy(
+        uuid,
+        success => {
+          this.info.privacy.isLoading = false;
+          this.info.privacy.data = success.body;
+        },
+        error => {
+          console.error(error.body);
+          this.info.privacy.isLoading = false;
+        }
+      );
+    },
+    printPrivacy() {
+      var bodyPrivacy = this.info.privacy.data.marketings;
+      var finalPrivacy = "data:text/plain;charset=utf-8," + bodyPrivacy;
+      var encodedUri = encodeURI(finalPrivacy);
+      var link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "privacy" + ".txt");
+      link.click();
+
+      var bodyTos = this.info.privacy.data.terms;
+      var finalTos = "data:text/plain;charset=utf-8," + bodyTos;
+      var encodedUri = encodeURI(finalTos);
+      var link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "tos" + ".txt");
+      link.click();
     }
   }
 };

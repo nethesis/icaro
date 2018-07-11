@@ -122,7 +122,17 @@
       "warning_delete_vouchers": "All vouchers matching the filters will be deleted",
       "business_name": "Customer's business name",
       "missing_business_name": "Add a valid customer's business name",
-      "show_all": "Show all (with no filters)"
+      "business_vat": "Customer's business VAT",
+      "missing_business_vat": "Add a valid customer's business VAT",
+      "business_address": "Customer's business address",
+      "missing_business_address": "Add a valid customer's business address",
+      "business_email": "Customer's business email",
+      "missing_business_email": "Add a valid customer's business email",
+      "show_all": "Show all (with no filters)",
+      "privacy": "Disclaimers",
+      "marketing_info": "Privacy",
+      "terms_info": "Terms of Use",
+      "print_privacy": "Print disclaimers"
     },
     "user": {
       "username": "Username",

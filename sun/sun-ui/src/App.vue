@@ -281,11 +281,6 @@
                   <strong>Dedalo</strong>
                   <a target="blank" href="https://github.com/nethesis/icaro/tree/master/dedalo">GitHub</a>
                 </li>
-                <li class="space-line"></li>
-                <li>
-                  <strong>Privacy</strong>
-                  <a target="blank" href="/privacy">Link</a>
-                </li>
               </ul>
             </div>
           </div>

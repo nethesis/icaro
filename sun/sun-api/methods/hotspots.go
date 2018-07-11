@@ -29,6 +29,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"github.com/satori/go.uuid"
 
 	"github.com/nethesis/icaro/sun/sun-api/database"
 	"github.com/nethesis/icaro/sun/sun-api/models"
@@ -45,11 +46,15 @@ func CreateHotspot(c *gin.Context) {
 	accountId := c.MustGet("token").(models.AccessToken).AccountId
 
 	hotspot := models.Hotspot{
-		AccountId:    accountId,
-		Name:         json.Name,
-		Description:  json.Description,
-		BusinessName: json.BusinessName,
-		Created:      time.Now().UTC(),
+		Uuid:            uuid.Must(uuid.NewV4()).String(),
+		AccountId:       accountId,
+		Name:            json.Name,
+		Description:     json.Description,
+		BusinessName:    json.BusinessName,
+		BusinessVAT:     json.BusinessVAT,
+		BusinessAddress: json.BusinessAddress,
+		BusinessEmail:   json.BusinessEmail,
+		Created:         time.Now().UTC(),
 	}
 
 	db := database.Instance()
@@ -95,6 +100,15 @@ func UpdateHotspot(c *gin.Context) {
 	}
 	if len(json.BusinessName) > 0 {
 		hotspot.BusinessName = json.BusinessName
+	}
+	if len(json.BusinessVAT) > 0 {
+		hotspot.BusinessVAT = json.BusinessVAT
+	}
+	if len(json.BusinessAddress) > 0 {
+		hotspot.BusinessAddress = json.BusinessAddress
+	}
+	if len(json.BusinessEmail) > 0 {
+		hotspot.BusinessEmail = json.BusinessEmail
 	}
 
 	db.Save(&hotspot)

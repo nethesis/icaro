@@ -44,10 +44,14 @@ CREATE TABLE `access_tokens` (
 /* ACCOUNTING AAA */
 CREATE TABLE `hotspots` (
   `id` serial,
+  `uuid` varchar(200) NOT NULL DEFAULT UUID(),
   `account_id` bigint unsigned NOT NULL,
   `name` varchar(200) NOT NULL,
   `description` varchar(250),
   `business_name` varchar(512),
+  `business_vat` varchar(512),
+  `business_address` varchar(512),
+  `business_email` varchar(512),
   `created` datetime,
   FOREIGN KEY (`account_id`) REFERENCES accounts(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   KEY(`name`),

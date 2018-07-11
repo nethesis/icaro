@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Icaro.  If not, see COPYING.
  *
- * author: Edoardo Spadoni <edoardo.spadoni@nethesis.it>
+ * author: Edoard Spadoni <edoardo.spadoni@nethesis.it>
  */
 
 package methods
@@ -27,40 +27,19 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-
 	"github.com/nethesis/icaro/sun/sun-api/configuration"
-	"github.com/nethesis/icaro/sun/sun-api/models"
 	"github.com/nethesis/icaro/wax/utils"
 )
 
-func GetWingsPrefs(c *gin.Context) {
-	uuid := c.Query("uuid")
+func GetPrivacies(c *gin.Context) {
+	hotspotUuid := c.Param("hotspot_uuid")
+	hotspot := utils.GetHotspotByUuid(hotspotUuid)
 
-	// extract unit info
-	unit := utils.GetUnitByUuid(uuid)
-
-	// extract hotspot info
-	hotspot := utils.GetHotspotById(unit.HotspotId)
-
-	// get hotspot preferences
-	prefs := utils.GetHotspotPreferences(hotspot.Id)
-
-	var wingsPrefs models.WingsPrefs
-	wingsPrefs.HotspotId = hotspot.Id
-	wingsPrefs.HotspotName = hotspot.Name
-
-	prefsMap := make(map[string]string)
-	for i := 0; i < len(prefs); i++ {
-		prefsMap[prefs[i].Key] = prefs[i].Value
+	if hotspot.Id == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"id": hotspot.Id, "status": "hotspot not found"})
+		return
 	}
-	wingsPrefs.Preferences = prefsMap
 
-	// get social ids
-	wingsPrefs.Socials.FacebookClientId = configuration.Config.AuthSocial.Facebook.ClientId
-	wingsPrefs.Socials.LinkedInClientId = configuration.Config.AuthSocial.LinkedIn.ClientId
-	wingsPrefs.Socials.InstagramClientId = configuration.Config.AuthSocial.Instagram.ClientId
-
-	// disclaimers
 	terms := configuration.Config.Disclaimers.TermsOfUse
 	terms = strings.Replace(terms, "$$COMPANY_NAME$$", hotspot.BusinessName, -1)
 	terms = strings.Replace(terms, "$$COMPANY_VAT$$", hotspot.BusinessVAT, -1)
@@ -73,8 +52,5 @@ func GetWingsPrefs(c *gin.Context) {
 	marketings = strings.Replace(marketings, "$$COMPANY_ADDRESS$$", hotspot.BusinessAddress, -1)
 	marketings = strings.Replace(marketings, "$$COMPANY_EMAIL$$", hotspot.BusinessEmail, -1)
 
-	wingsPrefs.Disclaimers.TermsOfUse = terms
-	wingsPrefs.Disclaimers.MarketingUse = marketings
-
-	c.JSON(http.StatusOK, wingsPrefs)
+	c.JSON(http.StatusOK, gin.H{"terms": terms, "marketings": marketings})
 }
