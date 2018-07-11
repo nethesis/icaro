@@ -40,6 +40,12 @@
         <td class="fancy">{{ props.row.description }}</td>
         <td v-if="props.row.business_name.length > 0" class="fancy">{{ props.row.business_name }}</td>
         <td v-if="props.row.business_name.length == 0" class="fancy"><span class="pficon pficon-error-circle-o"></span> <span class="red">{{$t('hotspot.missing_business_name')}}</span></td>
+        <td v-if="props.row.business_vat.length > 0" class="fancy">{{ props.row.business_vat }}</td>
+        <td v-if="props.row.business_vat.length == 0" class="fancy"><span class="pficon pficon-error-circle-o"></span> <span class="red">{{$t('hotspot.missing_business_vat')}}</span></td>
+        <td v-if="props.row.business_address.length > 0" class="fancy">{{ props.row.business_address }}</td>
+        <td v-if="props.row.business_address.length == 0" class="fancy"><span class="pficon pficon-error-circle-o"></span> <span class="red">{{$t('hotspot.missing_business_address')}}</span></td>
+        <td v-if="props.row.business_email.length > 0" class="fancy">{{ props.row.business_email }}</td>
+        <td v-if="props.row.business_email.length == 0" class="fancy"><span class="pficon pficon-error-circle-o"></span> <span class="red">{{$t('hotspot.missing_business_email')}}</span></td>
         <td class="fancy">{{ props.row.created | formatDate }}</td>
         <td>
           <hotspot-action details="true" :obj="props.row" :update="getAll"></hotspot-action>
@@ -74,6 +80,24 @@
                 <label class="col-sm-4 control-label" for="textInput2-modal-markup">{{ $t("hotspot.business_name") }}</label>
                 <div class="col-sm-8">
                   <input required v-model="newObj.business_name" type="text" id="textInput2-modal-markup" class="form-control" :placeholder="$t('hotspot.business_name')">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-4 control-label" for="textInput2-modal-markup">{{ $t("hotspot.business_vat") }}</label>
+                <div class="col-sm-8">
+                  <input required v-model="newObj.business_vat" type="text" id="textInput2-modal-markup" class="form-control" :placeholder="$t('hotspot.business_vat')">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-4 control-label" for="textInput2-modal-markup">{{ $t("hotspot.business_address") }}</label>
+                <div class="col-sm-8">
+                  <input required v-model="newObj.business_address" type="text" id="textInput2-modal-markup" class="form-control" :placeholder="$t('hotspot.business_address')">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-4 control-label" for="textInput2-modal-markup">{{ $t("hotspot.business_email") }}</label>
+                <div class="col-sm-8">
+                  <input required v-model="newObj.business_email" type="text" id="textInput2-modal-markup" class="form-control" :placeholder="$t('hotspot.business_email')">
                 </div>
               </div>
               <div v-if="errors.create" class="alert alert-danger alert-dismissable">
@@ -134,6 +158,21 @@ export default {
         },
         {
           label: this.$i18n.t("hotspot.business_name"),
+          field: "business_name",
+          filterable: true
+        },
+        {
+          label: this.$i18n.t("hotspot.business_vat"),
+          field: "business_name",
+          filterable: true
+        },
+        {
+          label: this.$i18n.t("hotspot.business_address"),
+          field: "business_name",
+          filterable: true
+        },
+        {
+          label: this.$i18n.t("hotspot.business_email"),
           field: "business_name",
           filterable: true
         },

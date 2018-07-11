@@ -25,24 +25,32 @@ package models
 import "time"
 
 type Hotspot struct {
-	Id           int       `db:"id" json:"id"`
-	AccountId    int       `db:"account_id" json:"account_id"`
-	Name         string    `db:"name" json:"name"`
-	Description  string    `db:"description" json:"description"`
-	BusinessName string    `db:"business_name" json:"business_name"`
-	Created      time.Time `db:"created" json:"created"`
+	Id              int       `db:"id" json:"id"`
+	Uuid            string    `db:"uuid" json:"uuid"`
+	AccountId       int       `db:"account_id" json:"account_id"`
+	Name            string    `db:"name" json:"name"`
+	Description     string    `db:"description" json:"description"`
+	BusinessName    string    `db:"business_name" json:"business_name"`
+	BusinessVAT     string    `db:"business_vat" json:"business_vat"`
+	BusinessAddress string    `db:"business_address" json:"business_address"`
+	BusinessEmail   string    `db:"business_email" json:"business_email"`
+	Created         time.Time `db:"created" json:"created"`
 
 	Account Account `gorm:"PRELOAD:false json:"account"`
 }
 
 type HotspotJSON struct {
-	Id           int       `db:"id" json:"id"`
-	AccountId    int       `db:"account_id" json:"account_id"`
-	Name         string    `db:"name" json:"name"`
-	Description  string    `db:"description" json:"description"`
-	BusinessName string    `db:"business_name" json:"business_name"`
-	Created      time.Time `db:"created" json:"created"`
-	AccountName  string    `db:"account_name" json:"account_name"`
+	Id              int       `db:"id" json:"id"`
+	Uuid            string    `db:"uuid" json:"uuid"`
+	AccountId       int       `db:"account_id" json:"account_id"`
+	Name            string    `db:"name" json:"name"`
+	Description     string    `db:"description" json:"description"`
+	BusinessName    string    `db:"business_name" json:"business_name"`
+	BusinessVAT     string    `db:"business_vat" json:"business_vat"`
+	BusinessAddress string    `db:"business_address" json:"business_address"`
+	BusinessEmail   string    `db:"business_email" json:"business_email"`
+	Created         time.Time `db:"created" json:"created"`
+	AccountName     string    `db:"account_name" json:"account_name"`
 }
 
 func (HotspotJSON) TableName() string {

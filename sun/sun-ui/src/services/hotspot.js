@@ -139,6 +139,15 @@ var HotspotService = {
           }
         )
         .then(success, error);
+    },
+    hotspotPrivacy(uuid, success, error) {
+      this.$http
+        .get(
+          this.$root.$options.wax_url +
+          "privacy/" +
+          uuid
+        )
+        .then(success, error);
     }
   }
 };

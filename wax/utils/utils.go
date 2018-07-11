@@ -231,6 +231,14 @@ func GetHotspotById(id int) models.Hotspot {
 	return hotspot
 }
 
+func GetHotspotByUuid(id string) models.Hotspot {
+	var hotspot models.Hotspot
+	db := database.Instance()
+	db.Where("uuid = ?", id).First(&hotspot)
+
+	return hotspot
+}
+
 func GetUserById(id int) models.User {
 	var user models.User
 	db := database.Instance()
