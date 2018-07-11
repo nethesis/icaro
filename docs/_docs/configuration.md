@@ -38,17 +38,25 @@ Each Captive portal is served from the same cloud server, but each captive porta
 
 You must specify the business name during Hotspot creation that will be replaced in the disclaimers for each hotspots.
 
-Terms of use and marketing disclaimers are visualized before the user chooses the login method. To add your disclaimers modify the `/opt/icaro/wax/conf.json` in the `disclaimers` and use `$$BUSINESS_NAME$$` variable.
+Terms of use and marketing disclaimers are visualized before the user chooses the login method. To add your disclaimers modify the `/opt/icaro/wax/conf.json` in the `disclaimers` and use
+
+- `$$COMPANY_NAME$$` for company name.
+- `$$COMPANY_VAT$$` for company VAT.
+- `$$COMPANY_ADDRESS$$` for company address.
+- `$$COMPANY_EMAIL$$` for company email.
+
+inside the disclaimers JSON object:
+
 ```json
 "disclaimers": {
-	"terms_of_use": "This is a disclaimer test\n\n - chapter 1\n - chapter 2 provided by $$BUSINESS_NAME$$",
-	"marketing_use": "This is marketing informationt\n\n - chapter 1\n - chapter 2  provided by $$BUSINESS_NAME$$"
+	"terms_of_use": "This is a disclaimer test\n\n - chapter 1\n - chapter 2 provided by $$BUSINESS_NAME$$ located in $$COMPANY_ADDRESS$$",
+	"marketing_use": "This is marketing informationt\n\n - chapter 1\n - chapter 2  provided by $$BUSINESS_NAME$$  located in $$COMPANY_ADDRESS$$"
 }
 ```
 
-Became (if the hotspot's business name is `Great Hotel Ltd` for example)
+Became (if the hotspot's business name is `Great Hotel Ltd` located in `Street of Null` for example)
 ```
-This is a disclaimer test\n\n - chapter 1\n - chapter 2 provided by Great Hotel Ltd
+This is a disclaimer test\n\n - chapter 1\n - chapter 2 provided by Great Hotel Ltd located in Street of Null
 ```
 
 ## Social

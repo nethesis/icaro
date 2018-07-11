@@ -44,7 +44,7 @@ CREATE TABLE `access_tokens` (
 /* ACCOUNTING AAA */
 CREATE TABLE `hotspots` (
   `id` serial,
-  `uuid` varchar(200) NOT NULL DEFAULT UUID(),
+  `uuid` varchar(200) NOT NULL,
   `account_id` bigint unsigned NOT NULL,
   `name` varchar(200) NOT NULL,
   `description` varchar(250),

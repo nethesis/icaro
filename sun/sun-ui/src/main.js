@@ -43,7 +43,7 @@ new Vue({
   i18n,
   render: (h) => h(App),
   api_host: window.location.host,
-  wax_url: CONFIG.WAX_URL,
+  wax_url: CONFIG.WAX_URL || (window.location.protocol + "//" + window.location.host),
   api_scheme: window.location.protocol + '//',
   currentLocale: langConf.locale,
   moment: moment
