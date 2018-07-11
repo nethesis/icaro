@@ -15,10 +15,6 @@
   roles:
     - role: icarodb
 
-- hosts: icaro_nodes
-  roles:
-    - role: papertrail
-
 - hosts: backends
   roles:
      - role: caddy-backend
