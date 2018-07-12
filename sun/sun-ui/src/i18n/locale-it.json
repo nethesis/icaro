@@ -116,7 +116,7 @@
       "reusable": "Riutilizzabile",
       "printed": "Stampato",
       "apply_filters": "Applica filtri",
-      "0_all": "0 = qualsiasi durata",
+      "0_all": "0 = Qualsiasi durata",
       "delete_all": "Elimina tutti",
       "delete_all_vouchers": "Elimina tutti i voucher",
       "warning_delete_vouchers": "Tutti i voucher selezionati saranno eliminati",
@@ -132,7 +132,7 @@
       "privacy": "Disclaimer",
       "marketing_info": "Privacy",
       "terms_info": "Condizioni di utilizzo",
-      "print_privacy": "Stampa Disclaimer",
+      "print_privacy": "Download Disclaimer",
       "auth_renew": "Permetti nuova autenticazione agli account scaduti"
     },
     "user": {
