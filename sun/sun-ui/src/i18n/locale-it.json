@@ -132,7 +132,8 @@
       "privacy": "Disclaimer",
       "marketing_info": "Privacy",
       "terms_info": "Condizioni di utilizzo",
-      "print_privacy": "Stampa Disclaimer"
+      "print_privacy": "Stampa Disclaimer",
+      "auth_renew": "Permetti nuova autenticazione agli account scaduti"
     },
     "user": {
       "username": "Utente",
