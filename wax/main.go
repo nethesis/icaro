@@ -47,10 +47,9 @@ func DefineAPI(router *gin.Engine) {
 	health := router.Group("/health")
 	health.GET("/check", methods.HealthCheck)
 
-	privacy := router.Group("/privacy")
-	privacy.GET("/:hotspot_uuid", methods.GetPrivacies)
-
 	wax := router.Group("/wax")
+	privacy := wax.Group("/privacy")
+	privacy.GET("/:hotspot_uuid", methods.GetPrivacies)
 
 	wax.Use(middleware.WaxWall)
 	{
