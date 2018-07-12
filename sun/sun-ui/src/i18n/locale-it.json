@@ -112,7 +112,27 @@
       "export_csv": "Esporta in CSV",
       "enabled": "Abilitato",
       "disabled": "Disabilitato",
-      "limit_reached": "Esauriti"
+      "limit_reached": "Esauriti",
+      "reusable": "Riutilizzabile",
+      "printed": "stampato",
+      "apply_filters": "Applica filtri",
+      "0_all": "0 = tutti",
+      "delete_all": "Elimina tutti",
+      "delete_all_vouchers": "Elimina tutti i voucher",
+      "warning_delete_vouchers": "Tutti i voucher selezionati saranno eliminati",
+      "business_name": "Ragione Sociale",
+      "missing_business_name": "Inserisci una ragione sociale valida",
+      "business_vat": "P. IVA/C.F.",
+      "missing_business_vat": "Inserisci una P.IVA o codice fiscale valido",
+      "business_address": "Indirizzo",
+      "missing_business_address": "Inserisci un indirizzo valido",
+      "business_email": "Email del Cliente",
+      "missing_business_email": "Inserisci un indirizzo email valido",
+      "show_all": "Mostra tutti (nessun filtro applicato)",
+      "privacy": "Disclaimer",
+      "marketing_info": "Privacy",
+      "terms_info": "Condizioni di utilizzo",
+      "print_privacy": "Stampa Disclaimer"
     },
     "user": {
       "username": "Utente",
@@ -169,7 +189,11 @@
       "create_error_title": "Errore in fase di creazione",
       "duplicate_error": "È già presente un amministratore con questo nome, scegli un nome o un ID differente.",
       "create_error_sub": "Non è stato possibile creare l'amministratore.",
-      "subscription_plan_name": "Subscription"
+      "subscription_plan_name": "Subscription",
+      "add_sms": "Carica SMS",
+      "sms_sent": "SMS Inviati",
+      "sms_total": "SMS Totali",
+      "sms_to_add": "Numero di SMS da caricare"
     },
     "unit": {
       "unit": "Unità",
