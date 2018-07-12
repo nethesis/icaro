@@ -338,11 +338,11 @@ export default {
           this.hotspotSearchId = hsId;
           $('[data-toggle="tooltip"]').tooltip();
           this.isLoading = false;
-
           callback();
         },
         error => {
           console.error(error);
+          this.isLoading = false;
         }
       );
     },
