@@ -3,7 +3,7 @@ var Filters = {
     var result;
 
     switch (true) {
-      case size === null || size === "" || isNaN(size):
+      case size === null || size === "" || isNaN(size) || size === 0:
         result = "-";
         break;
 
