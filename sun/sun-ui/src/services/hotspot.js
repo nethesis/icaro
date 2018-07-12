@@ -144,7 +144,7 @@ var HotspotService = {
       this.$http
         .get(
           this.$root.$options.wax_url +
-          "privacy/" +
+          "/privacy/" +
           uuid
         )
         .then(success, error);
