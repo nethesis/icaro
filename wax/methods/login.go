@@ -127,7 +127,7 @@ func Login(c *gin.Context, unitMacAddress string, username string, chapPass stri
 	}
 
 	// check if user exists
-	user := utils.GetUserByUsername(username)
+	user := utils.GetUserByUsernameAndHotspot(username, unit.HotspotId)
 	if user.Id <= 0 {
 		AuthReject(c, "user not found")
 		return

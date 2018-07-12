@@ -44,7 +44,7 @@ func Temporary(c *gin.Context, parameters url.Values) {
 	}
 
 	// check if user exists
-	user := utils.GetUserByUsername(username)
+	user := utils.GetUserByUsernameAndHotspot(username, unit.HotspotId)
 	if user.Id <= 0 {
 		c.String(http.StatusForbidden, "user not found")
 		return

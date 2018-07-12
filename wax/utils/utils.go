@@ -247,14 +247,6 @@ func GetUserById(id int) models.User {
 	return user
 }
 
-func GetUserByUsername(username string) models.User {
-	var user models.User
-	db := database.Instance()
-	db.Where("username = ?", username).First(&user)
-
-	return user
-}
-
 func GetUserByUsernameAndHotspot(username string, hotspotId int) models.User {
 	var user models.User
 	db := database.Instance()
