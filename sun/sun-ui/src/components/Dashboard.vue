@@ -118,7 +118,7 @@
             <p class="card-pf-aggregate-status-notifications">
               <span class="card-pf-aggregate-status-notification">
                 <div v-if="totals.sms.isLoading" class="spinner spinner-sm"></div>
-                <div v-if="!totals.sms.isLoading">{{ totals.sms.count }} / <strong class="soft">{{ totals.sms.max_count }}</strong></div>
+                <div v-if="!totals.sms.isLoading"><span :class="[totals.sms.count >= totals.sms.max_count ? 'red' : '']">{{ totals.sms.count }}</span> / <strong class="soft"><span :class="[totals.sms.count >= totals.sms.max_count ? 'red' : '']">{{ totals.sms.max_count }}</span></strong></div>
               </span>
             </p>
           </div>
