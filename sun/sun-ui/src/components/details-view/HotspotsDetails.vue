@@ -238,7 +238,7 @@
           </div>
           <form class="form-horizontal" role="form" v-on:submit.prevent="updatePreferences(preferences.global)">
             <div v-if="!preferences.isLoading" class="card-pf-body">
-              <div :key="pref.key" class="form-group">
+              <div v-for="pref in preferences.global" :key="pref.key" class="form-group">
                 <label class="col-sm-4 control-label" for="textInput-markup">{{$t('hotspot.'+pref.key)}}
                   <span :class="[getPrefIcon(pref.key)]"></span>
                 </label>
