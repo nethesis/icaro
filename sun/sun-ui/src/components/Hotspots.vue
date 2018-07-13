@@ -97,7 +97,7 @@
               <div class="form-group">
                 <label class="col-sm-4 control-label" for="textInput2-modal-markup">{{ $t("hotspot.business_email") }}</label>
                 <div class="col-sm-8">
-                  <input required v-model="newObj.business_email" type="text" id="textInput2-modal-markup" class="form-control" :placeholder="$t('hotspot.business_email')">
+                  <input required v-model="newObj.business_email" type="email" id="textInput2-modal-markup" class="form-control" :placeholder="$t('hotspot.business_email')">
                 </div>
               </div>
               <div v-if="errors.create" class="alert alert-danger alert-dismissable">
