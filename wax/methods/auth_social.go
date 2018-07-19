@@ -172,6 +172,9 @@ func FacebookAuth(c *gin.Context) {
 
 		// create marketing info with user infos
 		utils.CreateUserMarketing(newUser.Id, fbUserDetail, "facebook")
+
+		// response to client
+		c.JSON(http.StatusOK, gin.H{"user_id": fbInspectToken.Data.UserId, "user_db_id": newUser.Id})
 	} else {
 		// update user info
 		days := utils.GetHotspotPreferencesByKey(user.HotspotId, "user_expiration_days")
@@ -197,10 +200,10 @@ func FacebookAuth(c *gin.Context) {
 				user.AutoLogin = voucher.AutoLogin
 			}
 		}
-	}
 
-	// response to client
-	c.JSON(http.StatusOK, gin.H{"user_id": fbInspectToken.Data.UserId, "user_db_id": user.Id})
+		// response to client
+		c.JSON(http.StatusOK, gin.H{"user_id": fbInspectToken.Data.UserId, "user_db_id": user.Id})
+	}
 
 }
 
@@ -326,6 +329,9 @@ func LinkedInAuth(c *gin.Context) {
 
 		// create marketing info with user infos
 		utils.CreateUserMarketing(newUser.Id, liUserDetail, "linkedin")
+
+		// response to client
+		c.JSON(http.StatusOK, gin.H{"user_id": liUserDetail.Id, "user_db_id": newUser.Id})
 	} else {
 		// update user info
 		days := utils.GetHotspotPreferencesByKey(user.HotspotId, "user_expiration_days")
@@ -351,10 +357,11 @@ func LinkedInAuth(c *gin.Context) {
 				user.AutoLogin = voucher.AutoLogin
 			}
 		}
+
+		// response to client
+		c.JSON(http.StatusOK, gin.H{"user_id": liUserDetail.Id, "user_db_id": user.Id})
 	}
 
-	// response to client
-	c.JSON(http.StatusOK, gin.H{"user_id": liUserDetail.Id, "user_db_id": user.Id})
 }
 
 func InstagramAuth(c *gin.Context) {
@@ -472,6 +479,9 @@ func InstagramAuth(c *gin.Context) {
 
 		// create marketing info with user infos
 		utils.CreateUserMarketing(newUser.Id, inUserDetail.Data, "instagram")
+
+		// response to client
+		c.JSON(http.StatusOK, gin.H{"user_id": inUserDetail.Data.Id, "user_db_id": newUser.Id})
 	} else {
 		// update user info
 		days := utils.GetHotspotPreferencesByKey(user.HotspotId, "user_expiration_days")
@@ -497,8 +507,9 @@ func InstagramAuth(c *gin.Context) {
 				user.AutoLogin = voucher.AutoLogin
 			}
 		}
+
+		// response to client
+		c.JSON(http.StatusOK, gin.H{"user_id": inUserDetail.Data.Id, "user_db_id": user.Id})
 	}
 
-	// response to client
-	c.JSON(http.StatusOK, gin.H{"user_id": inUserDetail.Data.Id, "user_db_id": user.Id})
 }

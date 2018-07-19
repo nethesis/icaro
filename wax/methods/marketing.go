@@ -54,6 +54,12 @@ func DeleteMarketing(c *gin.Context) {
 
 	// remove marketing auth
 	user := utils.GetUserById(userIdInt)
+
+	if user.Id == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"message": "No user found!"})
+		return
+	}
+
 	user.MarketingAuth = false
 	db.Save(&user)
 
