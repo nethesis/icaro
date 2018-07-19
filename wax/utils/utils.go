@@ -183,10 +183,10 @@ func GetSessionByKeyAndUnitId(key string, unitId int) models.Session {
 	return session
 }
 
-func GetDeviceByMacAddress(mac string) models.Device {
+func GetDeviceByMacAddress(mac string, userId int) models.Device {
 	var unit models.Device
 	db := database.Instance()
-	db.Where("mac_address = ?", mac).First(&unit)
+	db.Where("mac_address = ? and user_id = ?", mac, userId).First(&unit)
 
 	return unit
 }

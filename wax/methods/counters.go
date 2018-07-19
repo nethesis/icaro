@@ -49,7 +49,7 @@ func startSession(userName string, deviceMacAddress string, deviceIp string, ses
 	if user.Id <= 0 {
 		return 0
 	}
-	device := utils.GetDeviceByMacAddress(deviceMacAddress)
+	device := utils.GetDeviceByMacAddress(deviceMacAddress, user.Id)
 	if device.Id <= 0 {
 		device.HotspotId = unit.HotspotId
 		device.UserId = user.Id
