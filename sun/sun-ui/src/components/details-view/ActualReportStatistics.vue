@@ -39,6 +39,13 @@ export default {
       type: Array
     }
   },
+  watch: {
+    todayConnections: function(val) {
+      this.todayConnections = val;
+      this.configureChart();
+      this.implementToChart();
+    }
+  },
   mixins: [UtilService, StatsService],
   data() {
     return {
@@ -101,10 +108,6 @@ export default {
         }
       }
     };
-  },
-  created() {
-    this.configureChart();
-    this.implementToChart();
   },
   methods: {
     configureChart() {

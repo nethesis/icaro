@@ -128,6 +128,9 @@ export default {
             return item == true;
           }).length;
         this.totalTrafficChart.datasets[0].data.push(this.smsToShow);
+        this.$set(this.totalTrafficChart.datasets[0], 0, {
+        labels: this.chartLabels
+      });
       });
     }
   }

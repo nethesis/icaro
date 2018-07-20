@@ -93,6 +93,26 @@ export default {
       type: Array
     }
   },
+  watch: {
+    newUsersReport: function(val) {
+      this.newUsersReport = val;
+      this.getNewUserSessions();
+      this.implementDataInChart();
+      this.fillTotalTrafficChart();
+      this.implementUserChart();
+      this.implementSessionChart();
+      this.implementAvgTable();
+    },
+    sessionsReport: function(val) {
+      this.sessionsReport = val;
+      this.getNewUserSessions();
+      this.implementDataInChart();
+      this.fillTotalTrafficChart();
+      this.implementUserChart();
+      this.implementSessionChart();
+      this.implementAvgTable();
+    }
+  },
   components: {
     VueChart
   },
@@ -458,14 +478,6 @@ export default {
       avgUploadTrafficUser: 0
     };
   },
-  created() {
-    this.getNewUserSessions();
-    this.implementDataInChart();
-    this.fillTotalTrafficChart();
-    this.implementUserChart();
-    this.implementSessionChart();
-    this.implementAvgTable();
-  },
   methods: {
     calculateAVG(input) {
       let sum = 0;
@@ -559,7 +571,11 @@ export default {
           .filter(function(item) {
             return item == true;
           }).length;
+
         this.totalTrafficChart.datasets[0].data.push(this.sessionToShow);
+        this.$set(this.totalTrafficChart.datasets[0], 0, {
+          labels: this.chartLabels
+        });
       });
       this.chartDateRange.forEach(element => {
         newUsers = 0;
@@ -567,6 +583,9 @@ export default {
           if (session.start_time.substring(0, 10) === element) newUsers++;
         });
         this.totalTrafficChart.datasets[1].data.push(newUsers);
+        this.$set(this.totalTrafficChart.datasets[1], 0, {
+          labels: this.chartLabels
+        });
       });
     },
     fillTotalTrafficChart() {
@@ -599,6 +618,12 @@ export default {
         });
         this.trafficChartData.datasets[0].data.push(bpsUp);
         this.trafficChartData.datasets[1].data.push(bpsDown);
+        this.$set(this.trafficChartData.datasets[0], 0, {
+          labels: this.chartLabels
+        });
+        this.$set(this.trafficChartData.datasets[1], 0, {
+          labels: this.chartLabels
+        });
       });
     },
 
@@ -642,6 +667,15 @@ export default {
         this.avgDurationUserChart.datasets[0].data.push(
           this.calculateAVG(durationArray)
         );
+        this.$set(this.avgTrafficUserChart.datasets[0], 0, {
+          labels: this.chartLabels
+        });
+        this.$set(this.avgTrafficUserChart.datasets[1], 0, {
+          labels: this.chartLabels
+        });
+        this.$set(this.avgDurationUserChart.datasets[0], 0, {
+          labels: this.chartLabels
+        });
       });
     },
     implementSessionChart() {
@@ -684,6 +718,15 @@ export default {
         this.avgDurationSessionChart.datasets[0].data.push(
           this.calculateAVG(duration)
         );
+        this.$set(this.avgTrafficSessionChart.datasets[0], 0, {
+          labels: this.chartLabels
+        });
+        this.$set(this.avgTrafficSessionChart.datasets[1], 0, {
+          labels: this.chartLabels
+        });
+        this.$set(this.avgDurationSessionChart.datasets[0], 0, {
+          labels: this.chartLabels
+        });
       });
     },
     implementAvgTable() {
@@ -706,6 +749,25 @@ export default {
       this.avgDownloadTrafficUser = prettyBytes(
         this.calculateAVG(this.avgTrafficUserChart.datasets[1].data)
       );
+
+      this.$set(this.avgDurationSessionChart.datasets[0], 0, {
+        labels: this.chartLabels
+      });
+      this.$set(this.avgTrafficSessionChart.datasets[0], 0, {
+        labels: this.chartLabels
+      });
+      this.$set(this.avgTrafficSessionChart.datasets[1], 0, {
+        labels: this.chartLabels
+      });
+      this.$set(this.avgDurationUserChart.datasets[0], 0, {
+        labels: this.chartLabels
+      });
+      this.$set(this.avgTrafficUserChart.datasets[0], 0, {
+        labels: this.chartLabels
+      });
+      this.$set(this.avgTrafficUserChart.datasets[1], 0, {
+        labels: this.chartLabels
+      });
     }
   }
 };
