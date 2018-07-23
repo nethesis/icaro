@@ -29,6 +29,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/avct/uasurfer"
 	"github.com/gin-gonic/gin"
 
 	"github.com/nethesis/icaro/sun/sun-api/database"
@@ -40,7 +41,7 @@ func Ack(c *gin.Context, act int) {
 	c.String(http.StatusOK, "Ack: %d", act)
 }
 
-func startSession(userName string, deviceMacAddress string, deviceIp string, sessionId string, hotspotName string, unitMacAddress string) int {
+func startSession(userName string, deviceMacAddress string, deviceIp string, sessionId string, hotspotName string, unitMacAddress string, userAgent string) int {
 	unit := utils.GetUnitByMacAddress(unitMacAddress)
 	if unit.Id <= 0 {
 		return 0
@@ -55,8 +56,17 @@ func startSession(userName string, deviceMacAddress string, deviceIp string, ses
 		device.UserId = user.Id
 		device.MacAddress = deviceMacAddress
 		device.IpAddress = deviceIp
-		device.Description = ""
 		device.Created = time.Now().UTC()
+
+		// parse UserAgent
+		ua := uasurfer.Parse(userAgent)
+		browserVersion := strconv.Itoa(ua.Browser.Version.Major)
+		osVersion := strconv.Itoa(ua.OS.Version.Major)
+		device.Description = ua.Browser.Name.String() + "|" + // browser name
+			browserVersion + "|" + // browser version
+			ua.OS.Name.String() + "|" + // os name
+			osVersion + "|" + // os version
+			ua.DeviceType.String() // device type
 
 		// save new device
 		db := database.Instance()
@@ -233,7 +243,7 @@ func Counters(c *gin.Context, parameters url.Values) {
 			} else {
 				username = c.Query("user")
 			}
-			Ack(c, startSession(username, c.Query("mac"), c.Query("ip"), c.Query("sessionid"), c.Query("nasid"), c.Query("ap")))
+			Ack(c, startSession(username, c.Query("mac"), c.Query("ip"), c.Query("sessionid"), c.Query("nasid"), c.Query("ap"), c.Query("user_agent")))
 		} else {
 			Ack(c, 1)
 		}
