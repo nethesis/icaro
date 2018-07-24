@@ -72,11 +72,11 @@
         <div class="col-sm-12">
           <button @click="exportCSVActive()" class="btn btn-primary export-btn">{{$t('session.export_csv')}}</button>
         </div>
-        <div class="result-list adjust-results">{{rows_active.length}} {{rows_active.length == 1 ? $t('result') : $t('results')}}</div>
+        <div class="result-list adjust-results">{{totalActive}} {{totalActive == 1 ? $t('result') : $t('results')}}</div>
       </div>
       <vue-good-table v-if="!isLoading && activeTab == 'active'" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]"
         :perPage="hotspotPerPage" :columns="columns_active" :rows="rows_active" :lineNumbers="false" :defaultSortBy="{field: 'duration', type: 'asc'}"
-        :globalSearch="true" :globalSearchFn="searchFn" :paginate="true" styleClass="table" :nextText="tableLangsTexts.nextText"
+        :globalSearch="true" :globalSearchFn="searchFn" :paginate="false" styleClass="table" :nextText="tableLangsTexts.nextText"
         :prevText="tableLangsTexts.prevText" :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
         :ofText="tableLangsTexts.ofText">
         <template slot="table-row" slot-scope="props">
@@ -98,17 +98,24 @@
           </td>
         </template>
       </vue-good-table>
+      <div v-if="!isLoading&& activeTab == 'active'" class="right paginator">
+        <span class="page-count">
+          <b>{{hotspotPageActive}}</b> {{tableLangsTexts.ofText}} {{totalActive / hotspotPerPage | adjustPage}} (
+          <b>{{hotspotPerPage}}</b> {{tableLangsTexts.rowsPerPageText}})</span>
+        <button :disabled="availablePrevPageActive()" @click="prevPageActive()" class="btn btn-default">{{tableLangsTexts.prevText}}</button>
+        <button :disabled="availableNextPageActive()" @click="nextPageActive()" class="btn btn-default">{{tableLangsTexts.nextText}}</button>
+      </div>
     </div>
     <div class="tab-pane fade" id="history-tab" role="tabpanel" aria-labelledby="history-tab">
       <div v-if="!isLoading && activeTab == 'history'" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <div class="col-sm-12">
           <button @click="exportCSVHistory()" class="btn btn-primary export-btn">{{$t('session.export_csv')}}</button>
         </div>
-        <div class="result-list adjust-results">{{rows_history.length}} {{rows_history.length == 1 ? $t('result') : $t('results')}}</div>
+        <div class="result-list adjust-results">{{totalHistory}} {{totalHistory == 1 ? $t('result') : $t('results')}}</div>
       </div>
       <vue-good-table v-if="!isLoading && activeTab == 'history'" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]"
         :perPage="hotspotPerPage" :columns="columns_history" :rows="rows_history" :lineNumbers="false" :defaultSortBy="{field: 'duration', type: 'asc'}"
-        :globalSearch="true" :globalSearchFn="searchFn" :paginate="true" styleClass="table" :nextText="tableLangsTexts.nextText"
+        :globalSearch="true" :globalSearchFn="searchFn" :paginate="false" styleClass="table" :nextText="tableLangsTexts.nextText"
         :prevText="tableLangsTexts.prevText" :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
         :ofText="tableLangsTexts.ofText">
         <template slot="table-row" slot-scope="props">
@@ -130,6 +137,13 @@
           </td>
         </template>
       </vue-good-table>
+      <div v-if="!isLoading&& activeTab == 'history'" class="right paginator">
+        <span class="page-count">
+          <b>{{hotspotPageHistory}}</b> {{tableLangsTexts.ofText}} {{totalHistory / hotspotPerPage | adjustPage}} (
+          <b>{{hotspotPerPage}}</b> {{tableLangsTexts.rowsPerPageText}})</span>
+        <button :disabled="availablePrevPageHistory()" @click="prevPageHistory()" class="btn btn-default">{{tableLangsTexts.prevText}}</button>
+        <button :disabled="availableNextPageHistory()" @click="nextPageHistory()" class="btn btn-default">{{tableLangsTexts.nextText}}</button>
+      </div>
     </div>
   </div>
 </template>
@@ -282,7 +296,11 @@ export default {
         .endOf("day")
         .utc()
         .toISOString(),
-      hotspotPerPage: this.get("sessions_per_page") || 25,
+      hotspotPerPage: 25,
+      hotspotPageActive: 1,
+      totalActive: 0,
+      hotspotPageHistory: 1,
+      totalHistory: 0,
       user: this.get("loggedUser") || null,
       users: [],
       units: []
@@ -326,8 +344,10 @@ export default {
     },
     getAllHotspots(callback) {
       this.hotspotGetAll(
+        null,
+        null,
         success => {
-          this.hotspots = success.body;
+          this.hotspots = success.body.data;
           var hsId = this.get("sessions_hotspot_id") || this.hotspots[0].id;
           if (
             this.$parent.user.info.type == "customer" ||
@@ -388,8 +408,11 @@ export default {
           this.hotspotUnitId,
           new Date(this.hotspotDateFrom).toISOString(),
           new Date(this.hotspotDateTo).toISOString(),
+          this.hotspotPageActive,
+          this.hotspotPerPage,
           success => {
-            this.rows_active = success.body;
+            this.rows_active = success.body.data;
+            this.totalActive = success.body.total;
             this.isLoading = false;
           },
           error => {
@@ -405,8 +428,11 @@ export default {
           this.hotspotUnitId,
           new Date(this.hotspotDateFrom).toISOString(),
           new Date(this.hotspotDateTo).toISOString(),
+          this.hotspotPageHistory,
+          this.hotspotPerPage,
           success => {
-            this.rows_history = success.body;
+            this.rows_history = success.body.data;
+            this.totalHistory = success.body.total;
             this.isLoading = false;
           },
           error => {
@@ -422,8 +448,10 @@ export default {
         this.hotspotSearchId,
         null,
         false,
+        null,
+        null,
         success => {
-          this.users = success.body;
+          this.users = success.body.data;
           callback();
         },
         error => {
@@ -436,8 +464,10 @@ export default {
     getAllUnits(callback) {
       this.unitGetAll(
         this.hotspotSearchId,
+        null,
+        null,
         success => {
-          this.units = success.body;
+          this.units = success.body.data;
           callback();
         },
         error => {
@@ -539,6 +569,54 @@ export default {
       }
       var csv = this.createCSV(this.columns_history, newRows);
       this.downloadCSV(csv.cols, csv.rows, "sessions_history");
+    },
+    prevPageActive() {
+      if (this.hotspotPageActive != 1) {
+        this.hotspotPageActive--;
+      }
+      this.getAll();
+    },
+    nextPageActive() {
+      if (
+        this.hotspotPageActive !=
+        Math.ceil(this.totalActive / this.hotspotPerPage)
+      ) {
+        this.hotspotPageActive++;
+      }
+      this.getAll();
+    },
+    availablePrevPageActive() {
+      return this.hotspotPageActive == 1;
+    },
+    availableNextPageActive() {
+      return (
+        this.hotspotPageActive ==
+        Math.ceil(this.totalActive / this.hotspotPerPage)
+      );
+    },
+    prevPageHistory() {
+      if (this.hotspotPageHistory != 1) {
+        this.hotspotPageHistory--;
+      }
+      this.getAll();
+    },
+    nextPageHistory() {
+      if (
+        this.hotspotPageHistory !=
+        Math.ceil(this.totalHistory / this.hotspotPerPage)
+      ) {
+        this.hotspotPageHistory++;
+      }
+      this.getAll();
+    },
+    availablePrevPageHistory() {
+      return this.hotspotPageHistory == 1;
+    },
+    availableNextPageHistory() {
+      return (
+        this.hotspotPageHistory ==
+        Math.ceil(this.totalHistory / this.hotspotPerPage)
+      );
     }
   }
 };

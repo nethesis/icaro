@@ -107,6 +107,7 @@ func UpdateUser(c *gin.Context) {
 
 func GetUsers(c *gin.Context) {
 	var users []models.User
+	var total int
 	accountId := c.MustGet("token").(models.AccessToken).AccountId
 
 	page := c.Query("page")
@@ -128,6 +129,7 @@ func GetUsers(c *gin.Context) {
 		chain = chain.Where("account_type = ?", accountType)
 	}
 
+	chain.Find(&users).Count(&total)
 	chain.Offset(offsets[0]).Limit(offsets[1]).Find(&users)
 
 	if len(users) <= 0 {
@@ -135,12 +137,14 @@ func GetUsers(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, users)
+	c.JSON(http.StatusOK, gin.H{"data": users, "total": total})
 }
 
 func GetUsersExpired(c *gin.Context) {
 	var users []models.User
 	var userHistories []models.UserHistory
+	var totalUsers int
+	var totalHistories int
 	accountId := c.MustGet("token").(models.AccessToken).AccountId
 
 	page := c.Query("page")
@@ -162,6 +166,7 @@ func GetUsersExpired(c *gin.Context) {
 	if len(accountType) > 0 {
 		chain = chain.Where("account_type = ?", accountType)
 	}
+	chain.Find(&users).Count(&totalUsers)
 	chain.Offset(offsets[0]).Limit(offsets[1]).Find(&users)
 
 	// users history
@@ -169,6 +174,7 @@ func GetUsersExpired(c *gin.Context) {
 	if len(accountType) > 0 {
 		chain = chain.Where("account_type = ?", accountType)
 	}
+	chain.Find(&userHistories).Count(&totalHistories)
 	chain.Offset(offsets[0]).Limit(offsets[1]).Find(&userHistories)
 
 	if len(users) == 0 && len(userHistories) == 0 {
@@ -176,7 +182,7 @@ func GetUsersExpired(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"user_histories": userHistories, "users": users})
+	c.JSON(http.StatusOK, gin.H{"total": totalHistories + totalUsers, "data_user_histories": userHistories, "data_users": users})
 }
 
 func GetUser(c *gin.Context) {

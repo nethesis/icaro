@@ -1,13 +1,14 @@
 var UnitService = {
   methods: {
-    unitGetAll(hotspotId, success, error) {
+    unitGetAll(hotspotId, page, limit, success, error) {
       this.$http
         .get(
           this.$root.$options.api_scheme +
-            this.$root.$options.api_host +
-            "/api/units?" +
-            (hotspotId && hotspotId != 0 ? "&hotspot=" + hotspotId : ""),
-          {
+          this.$root.$options.api_host +
+          "/api/units?" +
+          (page ? "&page=" + page : "") +
+          (limit ? "&limit=" + limit : "") +
+          (hotspotId && hotspotId != 0 ? "&hotspot=" + hotspotId : ""), {
             headers: {
               Token:
                 (this.get("loggedUser") && this.get("loggedUser").token) || ""
@@ -20,10 +21,9 @@ var UnitService = {
       this.$http
         .get(
           this.$root.$options.api_scheme +
-            this.$root.$options.api_host +
-            "/api/units/" +
-            id,
-          {
+          this.$root.$options.api_host +
+          "/api/units/" +
+          id, {
             headers: {
               Token:
                 (this.get("loggedUser") && this.get("loggedUser").token) || ""
@@ -36,11 +36,10 @@ var UnitService = {
       this.$http
         .put(
           this.$root.$options.api_scheme +
-            this.$root.$options.api_host +
-            "/api/units/" +
-            id,
-          body,
-          {
+          this.$root.$options.api_host +
+          "/api/units/" +
+          id,
+          body, {
             headers: {
               Token:
                 (this.get("loggedUser") && this.get("loggedUser").token) || ""
@@ -53,10 +52,9 @@ var UnitService = {
       this.$http
         .delete(
           this.$root.$options.api_scheme +
-            this.$root.$options.api_host +
-            "/api/units/" +
-            id,
-          {
+          this.$root.$options.api_host +
+          "/api/units/" +
+          id, {
             headers: {
               Token:
                 (this.get("loggedUser") && this.get("loggedUser").token) || ""

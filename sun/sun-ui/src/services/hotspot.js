@@ -1,11 +1,13 @@
 var HotspotService = {
   methods: {
-    hotspotGetAll(success, error) {
+    hotspotGetAll(page, limit, success, error) {
       this.$http
         .get(
           this.$root.$options.api_scheme +
           this.$root.$options.api_host +
-          "/api/hotspots", {
+          "/api/hotspots?" +
+          (page ? "&page=" + page : "") +
+          (limit ? "&limit=" + limit : ""), {
             headers: {
               Token:
                 (this.get("loggedUser") && this.get("loggedUser").token) || ""

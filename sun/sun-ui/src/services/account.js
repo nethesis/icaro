@@ -1,13 +1,14 @@
 var AccountService = {
   methods: {
-    accountGetAll(hotspotId, success, error) {
+    accountGetAll(hotspotId, page, limit, success, error) {
       this.$http
         .get(
           this.$root.$options.api_scheme +
-            this.$root.$options.api_host +
-            "/api/accounts?" +
-            (hotspotId && hotspotId != 0 ? "&hotspot=" + hotspotId : ""),
-          {
+          this.$root.$options.api_host +
+          "/api/accounts?" +
+          (page ? "&page=" + page : "") +
+          (limit ? "&limit=" + limit : "") +
+          (hotspotId && hotspotId != 0 ? "&hotspot=" + hotspotId : ""), {
             headers: {
               Token:
                 (this.get("loggedUser") && this.get("loggedUser").token) || ""
@@ -20,10 +21,9 @@ var AccountService = {
       this.$http
         .get(
           this.$root.$options.api_scheme +
-            this.$root.$options.api_host +
-            "/api/accounts/" +
-            id,
-          {
+          this.$root.$options.api_host +
+          "/api/accounts/" +
+          id, {
             headers: {
               Token:
                 (this.get("loggedUser") && this.get("loggedUser").token) || ""
@@ -36,11 +36,10 @@ var AccountService = {
       this.$http
         .put(
           this.$root.$options.api_scheme +
-            this.$root.$options.api_host +
-            "/api/accounts/" +
-            id,
-          body,
-          {
+          this.$root.$options.api_host +
+          "/api/accounts/" +
+          id,
+          body, {
             headers: {
               Token:
                 (this.get("loggedUser") && this.get("loggedUser").token) || ""
@@ -53,10 +52,9 @@ var AccountService = {
       this.$http
         .delete(
           this.$root.$options.api_scheme +
-            this.$root.$options.api_host +
-            "/api/accounts/" +
-            id,
-          {
+          this.$root.$options.api_host +
+          "/api/accounts/" +
+          id, {
             headers: {
               Token:
                 (this.get("loggedUser") && this.get("loggedUser").token) || ""
@@ -69,13 +67,11 @@ var AccountService = {
       this.$http
         .put(
           this.$root.$options.api_scheme +
-            this.$root.$options.api_host +
-            "/api/accounts/" +
-            id,
-          {
+          this.$root.$options.api_host +
+          "/api/accounts/" +
+          id, {
             password: password
-          },
-          {
+          }, {
             headers: {
               Token:
                 (this.get("loggedUser") && this.get("loggedUser").token) || ""
@@ -88,10 +84,9 @@ var AccountService = {
       this.$http
         .post(
           this.$root.$options.api_scheme +
-            this.$root.$options.api_host +
-            "/api/accounts",
-          body,
-          {
+          this.$root.$options.api_host +
+          "/api/accounts",
+          body, {
             headers: {
               Token:
                 (this.get("loggedUser") && this.get("loggedUser").token) || ""

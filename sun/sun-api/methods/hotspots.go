@@ -118,6 +118,7 @@ func UpdateHotspot(c *gin.Context) {
 
 func GetHotspots(c *gin.Context) {
 	var hotspots []models.Hotspot
+	var total int
 	accountId := c.MustGet("token").(models.AccessToken).AccountId
 
 	page := c.Query("page")
@@ -127,8 +128,10 @@ func GetHotspots(c *gin.Context) {
 
 	db := database.Instance()
 	if accountId == 1 {
+		db.Order("name asc, description").Find(&hotspots).Count(&total)
 		db.Offset(offsets[0]).Limit(offsets[1]).Order("name asc, description").Find(&hotspots)
 	} else {
+		db.Where("account_id = ?", accountId).Order("name asc, description").Find(&hotspots).Count(&total)
 		db.Where("account_id = ?", accountId).Offset(offsets[0]).Limit(offsets[1]).Order("name asc, description").Find(&hotspots)
 	}
 
@@ -137,7 +140,7 @@ func GetHotspots(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, hotspots)
+	c.JSON(http.StatusOK, gin.H{"data": hotspots, "total": total})
 }
 
 func GetHotspot(c *gin.Context) {

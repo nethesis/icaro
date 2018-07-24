@@ -6,20 +6,23 @@ var HistoryService = {
       unitId,
       dateFrom,
       dateTo,
+      page,
+      limit,
       success,
       error
     ) {
       this.$http
         .get(
           this.$root.$options.api_scheme +
-            this.$root.$options.api_host +
-            "/api/histories?" +
-            (hotspotId && hotspotId != 0 ? "&hotspot=" + hotspotId : "") +
-            (userId && userId != 0 ? "&user=" + userId : "") +
-            (unitId && unitId != 0 ? "&unit=" + unitId : "") +
-            (dateFrom && dateFrom != 0 ? "&from=" + dateFrom : "") +
-            (dateTo && dateTo != 0 ? "&to=" + dateTo : ""),
-          {
+          this.$root.$options.api_host +
+          "/api/histories?" +
+          (page ? "&page=" + page : "") +
+          (limit ? "&limit=" + limit : "") +
+          (hotspotId && hotspotId != 0 ? "&hotspot=" + hotspotId : "") +
+          (userId && userId != 0 ? "&user=" + userId : "") +
+          (unitId && unitId != 0 ? "&unit=" + unitId : "") +
+          (dateFrom && dateFrom != 0 ? "&from=" + dateFrom : "") +
+          (dateTo && dateTo != 0 ? "&to=" + dateTo : ""), {
             headers: {
               Token:
                 (this.get("loggedUser") && this.get("loggedUser").token) || ""
@@ -32,10 +35,9 @@ var HistoryService = {
       this.$http
         .get(
           this.$root.$options.api_scheme +
-            this.$root.$options.api_host +
-            "/api/histories/" +
-            id,
-          {
+          this.$root.$options.api_host +
+          "/api/histories/" +
+          id, {
             headers: {
               Token:
                 (this.get("loggedUser") && this.get("loggedUser").token) || ""

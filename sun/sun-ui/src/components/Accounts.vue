@@ -21,11 +21,11 @@
       </div>
     </div>
     <div v-if="!isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
-      <div class="result-list">{{rows.length}} {{rows.length == 1 ? $t('result') : $t('results')}}</div>
+      <div class="result-list">{{total}} {{total == 1 ? $t('result') : $t('results')}}</div>
     </div>
     <vue-good-table v-if="!isLoading" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]" :perPage="hotspotPerPage"
       :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'username', type: 'asc'}" :globalSearch="true"
-      :paginate="true" styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText" :rowsPerPageText="tableLangsTexts.rowsPerPageText"
+      :paginate="false" styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText" :rowsPerPageText="tableLangsTexts.rowsPerPageText"
       :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder" :ofText="tableLangsTexts.ofText">
       <template slot="table-row" slot-scope="props">
         <td>
@@ -46,6 +46,13 @@
         </td>
       </template>
     </vue-good-table>
+    <div v-if="!isLoading" class="right paginator">
+      <span class="page-count">
+        <b>{{hotspotPage}}</b> {{tableLangsTexts.ofText}} {{total / hotspotPerPage | adjustPage}} (
+        <b>{{hotspotPerPage}}</b> {{tableLangsTexts.rowsPerPageText}})</span>
+      <button :disabled="availablePrevPage()" @click="prevPage()" class="btn btn-default">{{tableLangsTexts.prevText}}</button>
+      <button :disabled="availableNextPage()" @click="nextPage()" class="btn btn-default">{{tableLangsTexts.nextText}}</button>
+    </div>
 
     <div class="modal fade" id="ACcreateModal" tabindex="-1" role="dialog" aria-labelledby="ACModifyModalLabel" aria-hidden="true">
       <div class="modal-dialog">
@@ -243,7 +250,9 @@ export default {
       errors: errors,
       isAdmin: this.get("loggedUser").account_type == "admin",
       hotspotSearchId: 0,
-      hotspotPerPage: this.get("accounts_per_page") || 25,
+      hotspotPerPage: 25,
+      hotspotPage: 1,
+      total: 0,
       user: this.get("loggedUser") || null
     };
   },
@@ -295,8 +304,10 @@ export default {
     },
     getAllHotspots(callback) {
       this.hotspotGetAll(
+        null,
+        null,
         success => {
-          this.hotspots = success.body;
+          this.hotspots = success.body.data;
           var hsId = this.get("users_hotspot_id") || this.hotspots[0].id;
           if (
             this.$parent.user.info.type == "customer" ||
@@ -332,8 +343,11 @@ export default {
     getAll() {
       this.accountGetAll(
         this.hotspotSearchId,
+        this.hotspotPage,
+        this.hotspotPerPage,
         success => {
-          this.rows = success.body;
+          this.rows = success.body.data;
+          this.total = success.body.total;
           this.isLoading = false;
         },
         error => {
@@ -342,6 +356,24 @@ export default {
           this.isLoading = false;
         }
       );
+    },
+    prevPage() {
+      if (this.hotspotPage != 1) {
+        this.hotspotPage--;
+      }
+      this.getAll();
+    },
+    nextPage() {
+      if (this.hotspotPage != Math.ceil(this.total / this.hotspotPerPage)) {
+        this.hotspotPage++;
+      }
+      this.getAll();
+    },
+    availablePrevPage() {
+      return this.hotspotPage == 1;
+    },
+    availableNextPage() {
+      return this.hotspotPage == Math.ceil(this.total / this.hotspotPerPage);
     }
   }
 };

@@ -247,8 +247,10 @@ export default {
         "",
         this.dataPoints.from.toISOString(),
         this.dataPoints.to.toISOString(),
+        null,
+        null,
         success => {
-          this.sessions = success.body;
+          this.sessions = success.body.data;
           this.getNewUsers();
         },
         error => {
@@ -264,8 +266,10 @@ export default {
         this.hotspotSearchId,
         null,
         false,
+        null,
+        null,
         success => {
-          this.newUsers = success.body;
+          this.newUsers = success.body.data;
           this.getTodayUsersLogin();
         },
         error => {
@@ -277,8 +281,10 @@ export default {
     },
     getAllHotspots(callback) {
       this.hotspotGetAll(
+        null,
+        null,
         success => {
-          this.hotspots = success.body;
+          this.hotspots = success.body.data;
 
           var hsId = this.get("reports_hotspot_id") || this.hotspots[0].id;
           if (
@@ -309,8 +315,10 @@ export default {
           .startOf("day")
           .toISOString(),
         "",
+        null,
+        null,
         success => {
-          this.connections = success.body;
+          this.connections = success.body.data;
           this.isChartLoading = false;
         },
         error => {

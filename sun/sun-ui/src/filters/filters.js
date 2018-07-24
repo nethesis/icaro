@@ -56,6 +56,9 @@ var Filters = {
     if (+new Date(value) > 0)
       return moment(String(value)).format("DD MMMM YYYY, HH:mm");
     else return "-";
+  },
+  adjustPage: function(value) {
+    return Math.ceil(value)
   }
 };
 

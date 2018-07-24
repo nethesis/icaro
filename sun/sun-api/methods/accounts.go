@@ -191,6 +191,7 @@ func UpdateAccount(c *gin.Context) {
 
 func GetAccounts(c *gin.Context) {
 	var accounts []models.AccountJSON
+	var total int
 	creatorId := c.MustGet("token").(models.AccessToken).AccountId
 
 	page := c.Query("page")
@@ -205,14 +206,18 @@ func GetAccounts(c *gin.Context) {
 	if creatorId == 1 {
 		// Queries for admin user
 		if hotspotId != "" {
+			db.Select(selectQuery).Joins(joinQuery).Where("hotspots.id = ?", hotspotId).Find(&accounts).Count(&total)
 			db.Select(selectQuery).Joins(joinQuery).Where("hotspots.id = ?", hotspotId).Offset(offsets[0]).Limit(offsets[1]).Find(&accounts)
 		} else {
+			db.Select(selectQuery).Joins(joinQuery).Find(&accounts).Count(&total)
 			db.Select(selectQuery).Joins(joinQuery).Offset(offsets[0]).Limit(offsets[1]).Find(&accounts)
 		}
 	} else {
 		if hotspotId != "" {
+			db.Select(selectQuery).Joins(joinQuery).Where("creator_id = ? AND hotspots.id = ?", creatorId, hotspotId).Find(&accounts).Count(&total)
 			db.Select(selectQuery).Joins(joinQuery).Where("creator_id = ? AND hotspots.id = ?", creatorId, hotspotId).Offset(offsets[0]).Limit(offsets[1]).Find(&accounts)
 		} else {
+			db.Select(selectQuery).Joins(joinQuery).Where("creator_id = ?", creatorId).Find(&accounts).Count(&total)
 			db.Select(selectQuery).Joins(joinQuery).Where("creator_id = ?", creatorId).Offset(offsets[0]).Limit(offsets[1]).Find(&accounts)
 		}
 	}
@@ -229,7 +234,8 @@ func GetAccounts(c *gin.Context) {
 		accounts[i].Subscription = subscription
 		accounts[i].Subscription.Expired = subscription.IsExpired()
 	}
-	c.JSON(http.StatusOK, accounts)
+
+	c.JSON(http.StatusOK, gin.H{"data": accounts, "total": total})
 }
 
 func GetAccount(c *gin.Context) {

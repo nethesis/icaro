@@ -24,11 +24,11 @@
       </div>
     </div>
     <div v-if="!isLoading && rows.length > 0" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
-      <div class="result-list">{{rows.length}} {{rows.length == 1 ? $t('result') : $t('results')}}</div>
+      <div class="result-list">{{total}} {{total == 1 ? $t('result') : $t('results')}}</div>
     </div>
     <vue-good-table v-if="rows.length > 0 && !isLoading" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]"
       :perPage="hotspotPerPage" :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'name', type: 'asc'}"
-      :globalSearch="true" :paginate="true" styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText"
+      :globalSearch="true" :paginate="false" styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText"
       :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
       :ofText="tableLangsTexts.ofText">
       <template slot="table-row" slot-scope="props">
@@ -39,19 +39,39 @@
         </td>
         <td class="fancy">{{ props.row.description }}</td>
         <td v-if="props.row.business_name.length > 0" class="fancy">{{ props.row.business_name }}</td>
-        <td v-if="props.row.business_name.length == 0" class="fancy"><span class="pficon pficon-error-circle-o"></span> <span class="red">{{$t('hotspot.missing_business_name')}}</span></td>
+        <td v-if="props.row.business_name.length == 0" class="fancy">
+          <span class="pficon pficon-error-circle-o"></span>
+          <span class="red">{{$t('hotspot.missing_business_name')}}</span>
+        </td>
         <td v-if="props.row.business_vat.length > 0" class="fancy">{{ props.row.business_vat }}</td>
-        <td v-if="props.row.business_vat.length == 0" class="fancy"><span class="pficon pficon-error-circle-o"></span> <span class="red">{{$t('hotspot.missing_business_vat')}}</span></td>
+        <td v-if="props.row.business_vat.length == 0" class="fancy">
+          <span class="pficon pficon-error-circle-o"></span>
+          <span class="red">{{$t('hotspot.missing_business_vat')}}</span>
+        </td>
         <td v-if="props.row.business_address.length > 0" class="fancy">{{ props.row.business_address }}</td>
-        <td v-if="props.row.business_address.length == 0" class="fancy"><span class="pficon pficon-error-circle-o"></span> <span class="red">{{$t('hotspot.missing_business_address')}}</span></td>
+        <td v-if="props.row.business_address.length == 0" class="fancy">
+          <span class="pficon pficon-error-circle-o"></span>
+          <span class="red">{{$t('hotspot.missing_business_address')}}</span>
+        </td>
         <td v-if="props.row.business_email.length > 0" class="fancy">{{ props.row.business_email }}</td>
-        <td v-if="props.row.business_email.length == 0" class="fancy"><span class="pficon pficon-error-circle-o"></span> <span class="red">{{$t('hotspot.missing_business_email')}}</span></td>
+        <td v-if="props.row.business_email.length == 0" class="fancy">
+          <span class="pficon pficon-error-circle-o"></span>
+          <span class="red">{{$t('hotspot.missing_business_email')}}</span>
+        </td>
         <td class="fancy">{{ props.row.created | formatDate }}</td>
         <td>
           <hotspot-action details="true" :obj="props.row" :update="getAll"></hotspot-action>
         </td>
       </template>
     </vue-good-table>
+    <div v-if="!isLoading" class="right paginator">
+      <span class="page-count">
+        <b>{{hotspotPage}}</b> {{tableLangsTexts.ofText}} {{total / hotspotPerPage | adjustPage}} (
+        <b>{{hotspotPerPage}}</b> {{tableLangsTexts.rowsPerPageText}})</span>
+      <button :disabled="availablePrevPage()" @click="prevPage()" class="btn btn-default">{{tableLangsTexts.prevText}}</button>
+      <button :disabled="availableNextPage()" @click="nextPage()" class="btn btn-default">{{tableLangsTexts.nextText}}</button>
+    </div>
+
     <div class="modal fade" id="HScreateModal" tabindex="-1" role="dialog" aria-labelledby="HScreateModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -131,17 +151,6 @@ export default {
     hotspotAction: HotspotAction
   },
   data() {
-    // get hotspot list
-    this.getAll();
-
-    var newObj = {
-      name: "",
-      description: ""
-    };
-    var errors = {
-      create: false
-    };
-
     return {
       msg: this.$i18n.t("menu.hotspots"),
       isLoading: true,
@@ -189,11 +198,22 @@ export default {
       ],
       rows: [],
       tableLangsTexts: this.tableLangs(),
-      newObj: newObj,
-      errors: errors,
-      hotspotPerPage: this.get("hotspots_per_page") || 25,
+      newObj: {
+        name: "",
+        description: ""
+      },
+      errors: {
+        create: false
+      },
+      hotspotPerPage: 25,
+      hotspotPage: 1,
+      total: 0,
       isAdmin: this.get("loggedUser").account_type == "admin"
     };
+  },
+  mounted() {
+    // get hotspot list
+    this.getAll();
   },
   methods: {
     handlePerPage(evt) {
@@ -201,8 +221,11 @@ export default {
     },
     getAll() {
       this.hotspotGetAll(
+        this.hotspotPage,
+        this.hotspotPerPage,
         success => {
-          this.rows = success.body;
+          this.rows = success.body.data;
+          this.total = success.body.total;
           this.isLoading = false;
         },
         error => {
@@ -229,6 +252,24 @@ export default {
           console.error(error.body.message);
         }
       );
+    },
+    prevPage() {
+      if (this.hotspotPage != 1) {
+        this.hotspotPage--;
+      }
+      this.getAll();
+    },
+    nextPage() {
+      if (this.hotspotPage != Math.ceil(this.total / this.hotspotPerPage)) {
+        this.hotspotPage++;
+      }
+      this.getAll();
+    },
+    availablePrevPage() {
+      return this.hotspotPage == 1;
+    },
+    availableNextPage() {
+      return this.hotspotPage == Math.ceil(this.total / this.hotspotPerPage);
     }
   }
 };

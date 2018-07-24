@@ -36,6 +36,7 @@ import (
 
 func GetDevices(c *gin.Context) {
 	var devices []models.Device
+	var total int
 	accountId := c.MustGet("token").(models.AccessToken).AccountId
 
 	page := c.Query("page")
@@ -57,6 +58,7 @@ func GetDevices(c *gin.Context) {
 		chain = chain.Where("user_id = ?", userId)
 	}
 
+	chain.Find(&devices).Count(&total)
 	chain.Offset(offsets[0]).Limit(offsets[1]).Find(&devices)
 
 	if len(devices) <= 0 {
@@ -64,7 +66,7 @@ func GetDevices(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, devices)
+	c.JSON(http.StatusOK, gin.H{"data": devices, "total": total})
 }
 
 func GetDevice(c *gin.Context) {

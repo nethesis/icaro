@@ -1,11 +1,13 @@
 var UserService = {
   methods: {
-    userGetAll(hotspotId, accountType, expired, success, error) {
+    userGetAll(hotspotId, accountType, expired, page, limit, success, error) {
       this.$http
         .get(
           this.$root.$options.api_scheme +
           this.$root.$options.api_host +
           "/api/users" + (expired ? "_expired" : "") + "?" +
+          (page ? "&page=" + page : "") +
+          (limit ? "&limit=" + limit : "") +
           (hotspotId && hotspotId != 0 ? "&hotspot=" + hotspotId : "") +
           (accountType && accountType.length > 0 ?
             "&type=" + accountType :

@@ -25,13 +25,13 @@
     </div>
     <div v-if="!isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
       <div class="col-sm-12">
-          <button @click="exportCSVUsers()" class="btn btn-primary export-btn">{{$t('session.export_csv')}}</button>
-        </div>
-      <div class="result-list adjust-results">{{rows.length}} {{rows.length == 1 ? $t('result') : $t('results')}}</div>
+        <button @click="exportCSVUsers()" class="btn btn-primary export-btn">{{$t('session.export_csv')}}</button>
+      </div>
+      <div class="result-list adjust-results">{{total}} {{total == 1 ? $t('result') : $t('results')}}</div>
     </div>
     <vue-good-table v-if="!isLoading" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]" :perPage="hotspotPerPage"
       :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'username', type: 'asc'}" :globalSearch="true"
-      :paginate="true" styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText" :rowsPerPageText="tableLangsTexts.rowsPerPageText"
+      :paginate="false" styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText" :rowsPerPageText="tableLangsTexts.rowsPerPageText"
       :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder" :ofText="tableLangsTexts.ofText">
       <template slot="table-row" slot-scope="props">
         <td :class="[isExpired(props.row.valid_until) ? 'disabled' : '', 'fancy']">{{ props.row.name }}</td>
@@ -68,6 +68,13 @@
         </td>
       </template>
     </vue-good-table>
+    <div v-if="!isLoading" class="right paginator">
+      <span class="page-count">
+        <b>{{hotspotPage}}</b> {{tableLangsTexts.ofText}} {{total / hotspotPerPage | adjustPage}} (
+        <b>{{hotspotPerPage}}</b> {{tableLangsTexts.rowsPerPageText}})</span>
+      <button :disabled="availablePrevPage()" @click="prevPage()" class="btn btn-default">{{tableLangsTexts.prevText}}</button>
+      <button :disabled="availableNextPage()" @click="nextPage()" class="btn btn-default">{{tableLangsTexts.nextText}}</button>
+    </div>
   </div>
 </template>
 
@@ -139,7 +146,9 @@ export default {
       hotspots: [],
       hotspotSearchId: 0,
       hotspotShowExpired: this.get("users_show_expired") || false,
-      hotspotPerPage: this.get("users_per_page") || 25,
+      hotspotPerPage: 25,
+      hotspotPage: 1,
+      total: 0,
       user: this.get("loggedUser") || null
     };
   },
@@ -162,8 +171,10 @@ export default {
     },
     getAllHotspots(callback) {
       this.hotspotGetAll(
+        null,
+        null,
         success => {
-          this.hotspots = success.body;
+          this.hotspots = success.body.data;
           var hsId = this.get("users_hotspot_id") || this.hotspots[0].id;
           if (
             this.$parent.user.info.type == "customer" ||
@@ -200,23 +211,26 @@ export default {
         this.hotspotSearchId,
         null,
         this.hotspotShowExpired,
+        this.hotspotPage,
+        this.hotspotPerPage,
         success => {
           this.rows = [];
           if (this.hotspotShowExpired) {
-            for (var s in success.body.users) {
-              var res = success.body.users[s];
+            for (var s in success.body.data_users) {
+              var res = success.body.data_users[s];
               this.rows.push(res);
             }
-            for (var s in success.body.user_histories) {
-              var res = success.body.user_histories[s];
+            for (var s in success.body.data_user_histories) {
+              var res = success.body.data_user_histories[s];
               this.rows.push(res);
             }
           } else {
-            for (var s in success.body) {
-              var res = success.body[s];
+            for (var s in success.body.data) {
+              var res = success.body.data[s];
               this.rows.push(res);
             }
           }
+          this.total = success.body.total;
           this.isLoading = false;
         },
         error => {
@@ -251,6 +265,24 @@ export default {
 
       var csv = this.createCSV(this.columns, usersRows);
       this.downloadCSV(csv.cols, csv.rows, "users");
+    },
+    prevPage() {
+      if (this.hotspotPage != 1) {
+        this.hotspotPage--;
+      }
+      this.getAll();
+    },
+    nextPage() {
+      if (this.hotspotPage != Math.ceil(this.total / this.hotspotPerPage)) {
+        this.hotspotPage++;
+      }
+      this.getAll();
+    },
+    availablePrevPage() {
+      return this.hotspotPage == 1;
+    },
+    availableNextPage() {
+      return this.hotspotPage == Math.ceil(this.total / this.hotspotPerPage);
     }
   }
 };

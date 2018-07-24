@@ -84,6 +84,7 @@ func CreateUnit(c *gin.Context) {
 
 func GetUnits(c *gin.Context) {
 	var units []models.Unit
+	var total int
 	accountId := c.MustGet("token").(models.AccessToken).AccountId
 
 	page := c.Query("page")
@@ -98,6 +99,7 @@ func GetUnits(c *gin.Context) {
 	offsets := utils.OffsetCalc(page, limit)
 
 	db := database.Instance()
+	db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt)).Find(&units).Count(&total)
 	db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt)).Offset(offsets[0]).Limit(offsets[1]).Find(&units)
 
 	if len(units) <= 0 {
@@ -105,7 +107,7 @@ func GetUnits(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, units)
+	c.JSON(http.StatusOK, gin.H{"data": units, "total": total})
 }
 
 func GetUnit(c *gin.Context) {

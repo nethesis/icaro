@@ -36,6 +36,7 @@ import (
 
 func GetSessions(c *gin.Context) {
 	var sessions []models.Session
+	var total int
 	accountId := c.MustGet("token").(models.AccessToken).AccountId
 
 	page := c.Query("page")
@@ -72,6 +73,7 @@ func GetSessions(c *gin.Context) {
 		chain = chain.Where("start_time <= ?", to)
 	}
 
+	chain.Find(&sessions).Count(&total)
 	chain.Offset(offsets[0]).Limit(offsets[1]).Find(&sessions)
 
 	if len(sessions) <= 0 {
@@ -79,11 +81,12 @@ func GetSessions(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, sessions)
+	c.JSON(http.StatusOK, gin.H{"data": sessions, "total": total})
 }
 
 func GetSessionsHistory(c *gin.Context) {
 	var sessions []models.SessionHistory
+	var total int
 	accountId := c.MustGet("token").(models.AccessToken).AccountId
 
 	page := c.Query("page")
@@ -120,6 +123,7 @@ func GetSessionsHistory(c *gin.Context) {
 		chain = chain.Where("start_time <= ?", to)
 	}
 
+	chain.Find(&sessions).Count(&total)
 	chain.Offset(offsets[0]).Limit(offsets[1]).Find(&sessions)
 
 	if len(sessions) <= 0 {
@@ -127,7 +131,7 @@ func GetSessionsHistory(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, sessions)
+	c.JSON(http.StatusOK, gin.H{"data": sessions, "total": total})
 }
 
 func GetSession(c *gin.Context) {
