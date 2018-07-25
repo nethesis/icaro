@@ -65,6 +65,8 @@ func Init(action string, worker bool) {
 
 func cleanTokens() {
 	db := database.Instance()
+	defer db.Close()
+
 	db.Where("expires < ?", time.Now().UTC()).Delete(models.AccessToken{})
 }
 
@@ -72,6 +74,8 @@ func storeSessions() {
 	var sessions []models.Session
 
 	db := database.Instance()
+	defer db.Close()
+
 	db.Find(&sessions)
 
 	for _, s := range sessions {
@@ -113,6 +117,7 @@ func cleanSessions() {
 	maxSessionTimout := start.Add(time.Hour * -1)
 
 	db := database.Instance()
+	defer db.Close()
 
 	db.Where("update_time <= ? and stop_time = 0", maxSessionTimout).Find(&sessions)
 
@@ -148,6 +153,8 @@ func storeUsers() {
 	var users []models.User
 
 	db := database.Instance()
+	defer db.Close()
+
 	db.Joins("JOIN hotspot_preferences p on p.hotspot_id = users.hotspot_id").Where("valid_until <= NOW() and p.`key` = 'auth_renew' and value = 'true'").Find(&users)
 	for _, u := range users {
 		// create user history model
