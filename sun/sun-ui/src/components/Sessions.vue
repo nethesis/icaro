@@ -5,7 +5,7 @@
     <div v-if="(user.account_type == 'admin') || (user.account_type == 'reseller') && !isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
       <label v-if="!isLoading" class="col-sm-2 control-label" for="textInput-markup">Hotspot</label>
       <div v-if="!isLoading" class="col-sm-4">
-        <select v-on:change="getAll()" v-model="hotspotSearchId" class="form-control">
+        <select v-on:change="getAll(false, true)" v-model="hotspotSearchId" class="form-control">
           <option v-for="hotspot in hotspots" v-bind:key="hotspot.id" v-bind:value="hotspot.id">
             {{ hotspot.name }} - {{ hotspot.description}}
           </option>
@@ -15,7 +15,7 @@
     <div v-if="!isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
       <label class="col-sm-2 control-label" for="textInput-markup">{{$t('session.user')}}</label>
       <div class="col-sm-4">
-        <select v-on:change="getAll()" v-model="hotspotUserId" class="form-control">
+        <select v-on:change="getAll(false, true)" v-model="hotspotUserId" class="form-control">
           <option value="0">-</option>
           <option v-for="user in users" v-bind:key="user.id" v-bind:value="user.id">
             {{ user.name }}
@@ -26,7 +26,7 @@
     <div v-if="!isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
       <label class="col-sm-2 control-label" for="textInput-markup">{{$t('session.unit')}}</label>
       <div class="col-sm-4">
-        <select v-on:change="getAll()" v-model="hotspotUnitId" class="form-control">
+        <select v-on:change="getAll(false, true)" v-model="hotspotUnitId" class="form-control">
           <option value="0">-</option>
           <option v-for="unit in units" v-bind:key="unit.id" v-bind:value="unit.id">
             {{ unit.name }} - {{ unit.description }}
@@ -74,14 +74,19 @@
         </div>
         <div class="result-list adjust-results">{{totalActive}} {{totalActive == 1 ? $t('result') : $t('results')}}</div>
       </div>
+      <div v-if="!isLoading && activeTab == 'active'">
+        <form v-on:submit.prevent="searchFn($event, 'active')">
+          <input class="form-control input-lg search-table-input" type="text" :placeholder="tableLangsTexts.globalSearchPlaceholder">
+        </form>
+      </div>
       <vue-good-table v-if="!isLoading && activeTab == 'active'" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]"
         :perPage="hotspotPerPage" :columns="columns_active" :rows="rows_active" :lineNumbers="false" :defaultSortBy="{field: 'duration', type: 'asc'}"
-        :globalSearch="true" :globalSearchFn="searchFn" :paginate="false" styleClass="table" :nextText="tableLangsTexts.nextText"
+        :globalSearch="true" :paginate="false" styleClass="table" :nextText="tableLangsTexts.nextText"
         :prevText="tableLangsTexts.prevText" :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
         :ofText="tableLangsTexts.ofText">
         <template slot="table-row" slot-scope="props">
           <td class="fancy">
-            <a :href="'#/units/'+ props.row.unit_id">{{ extractUnit(props.row.unit_id) && extractUnit(props.row.unit_id).name || '-'}}</a>
+            <a :href="'#/units/'+ props.row.unit_id">{{ props.row.unit.name || '-'}}</a>
           </td>
           <td class="fancy">
             <a :href="'#/sessions/'+ props.row.id">{{ props.row.username || '-'}}</a>
@@ -113,14 +118,19 @@
         </div>
         <div class="result-list adjust-results">{{totalHistory}} {{totalHistory == 1 ? $t('result') : $t('results')}}</div>
       </div>
+      <div v-if="!isLoading && activeTab == 'history'">
+        <form v-on:submit.prevent="searchFn($event, 'history')">
+          <input class="form-control input-lg search-table-input" type="text" :placeholder="tableLangsTexts.globalSearchPlaceholder">
+        </form>
+      </div>
       <vue-good-table v-if="!isLoading && activeTab == 'history'" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]"
         :perPage="hotspotPerPage" :columns="columns_history" :rows="rows_history" :lineNumbers="false" :defaultSortBy="{field: 'duration', type: 'asc'}"
-        :globalSearch="true" :globalSearchFn="searchFn" :paginate="false" styleClass="table" :nextText="tableLangsTexts.nextText"
+        :globalSearch="true" :paginate="false" styleClass="table" :nextText="tableLangsTexts.nextText"
         :prevText="tableLangsTexts.prevText" :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
         :ofText="tableLangsTexts.ofText">
         <template slot="table-row" slot-scope="props">
           <td class="fancy">
-            <a :href="'#/units/'+ props.row.unit_id">{{ extractUnit(props.row.unit_id) && extractUnit(props.row.unit_id).name || '-'}}</a>
+            <a :href="'#/units/'+ props.row.unit_id">{{ props.row.unit.name || '-'}}</a>
           </td>
           <td class="fancy">
             <a :href="'#/sessions/'+ props.row.id">{{ props.row.username || '-'}}</a>
@@ -303,7 +313,9 @@ export default {
       totalHistory: 0,
       user: this.get("loggedUser") || null,
       users: [],
-      units: []
+      units: [],
+      searchStringActive: "",
+      searchStringHistory: ""
     };
   },
   mounted() {
@@ -328,22 +340,22 @@ export default {
     handlePerPage(evt) {
       this.set("sessions_per_page", evt.currentPerPage);
     },
-    searchFn(row, col, cellValue, searchTerm) {
-      var value = cellValue.toString().toLowerCase();
-      if (col.field == "unit_id") {
-        value = this.extractUnit(cellValue).description.toLowerCase();
+    searchFn(evt, type) {
+      if (type == "active") {
+        this.searchStringActive = evt.srcElement[0].value;
       }
 
-      if (col.field == "user_id") {
-        value = this.extractUser(cellValue).name.toLowerCase();
+      if (type == "history") {
+        this.searchStringHistory = evt.srcElement[0].value;
       }
-      return value.includes(searchTerm.toLowerCase());
+      this.getAll(true);
     },
     dateFormatter(date) {
       return moment(date).format("DD MMMM YYYY");
     },
     getAllHotspots(callback) {
       this.hotspotGetAll(
+        null,
         null,
         null,
         success => {
@@ -366,7 +378,7 @@ export default {
         }
       );
     },
-    getAll(refresh) {
+    getAll(refresh, reset) {
       // save to storage
       this.set(
         "sessions_active_tab",
@@ -400,6 +412,13 @@ export default {
         }
       }
 
+      if (reset) {
+        this.hotspotPageActive = 1;
+        this.hotspotPageHistory = 1;
+        this.totalActive = 0;
+        this.totalHistory = 0;
+      }
+
       // get all sessions
       if (this.activeTab == "active") {
         this.sessionGetAll(
@@ -410,10 +429,15 @@ export default {
           new Date(this.hotspotDateTo).toISOString(),
           this.hotspotPageActive,
           this.hotspotPerPage,
+          encodeURIComponent(this.searchStringActive),
           success => {
             this.rows_active = success.body.data;
             this.totalActive = success.body.total;
             this.isLoading = false;
+            var activeTab = this.get("sessions_active_tab") || "active";
+            setTimeout(function() {
+              window.$("#" + activeTab + "-tab-parent").click();
+            }, 250);
           },
           error => {
             this.isLoading = false;
@@ -430,10 +454,15 @@ export default {
           new Date(this.hotspotDateTo).toISOString(),
           this.hotspotPageHistory,
           this.hotspotPerPage,
+          encodeURIComponent(this.searchStringHistory),
           success => {
             this.rows_history = success.body.data;
             this.totalHistory = success.body.total;
             this.isLoading = false;
+            var activeTab = this.get("sessions_active_tab") || "active";
+            setTimeout(function() {
+              window.$("#" + activeTab + "-tab-parent").click();
+            }, 250);
           },
           error => {
             this.isLoading = false;
@@ -448,6 +477,7 @@ export default {
         this.hotspotSearchId,
         null,
         false,
+        null,
         null,
         null,
         success => {
@@ -466,6 +496,7 @@ export default {
         this.hotspotSearchId,
         null,
         null,
+        null,
         success => {
           this.units = success.body.data;
           callback();
@@ -477,24 +508,7 @@ export default {
         }
       );
     },
-    extractUnit(id) {
-      for (var u in this.units) {
-        if (this.units[u].id == id) {
-          return this.units[u];
-          break;
-        }
-      }
-    },
-    extractUser(id) {
-      for (var u in this.users) {
-        if (this.users[u].id == id) {
-          return this.users[u];
-          break;
-        }
-      }
-    },
     clearFilters() {
-      this.hotspotSearchId = 0;
       this.hotspotUserId = 0;
       this.hotspotUnitId = 0;
       this.hotspotDateFrom = moment(Date.now() - 12096e5)
@@ -505,7 +519,6 @@ export default {
         .endOf("day")
         .utc()
         .toISOString();
-      this.set("sessions_hotspot_id", 0);
       this.set("sessions_user_id", 0);
       this.set("sessions_unit_id", 0);
       this.getAll();
@@ -513,14 +526,8 @@ export default {
     exportCSVActive() {
       var newRows = JSON.parse(JSON.stringify(this.rows_active));
       for (var r in newRows) {
-        newRows[r].unit_id =
-          (this.extractUnit(newRows[r].unit_id) &&
-            this.extractUnit(newRows[r].unit_id).description) ||
-          "-";
-        newRows[r].user_id =
-          (this.extractUser(newRows[r].user_id) &&
-            this.extractUser(newRows[r].user_id).name) ||
-          "-";
+        newRows[r].unit_id = newRows[r].unit.description || "-";
+        newRows[r].user_id = newRows[r].username || "-";
         newRows[r].bytes_up = this.$options.filters["byteFormat"](
           newRows[r].bytes_up
         );
@@ -543,14 +550,8 @@ export default {
     exportCSVHistory() {
       var newRows = JSON.parse(JSON.stringify(this.rows_history));
       for (var r in newRows) {
-        newRows[r].unit_id =
-          (this.extractUnit(newRows[r].unit_id) &&
-            this.extractUnit(newRows[r].unit_id).description) ||
-          "-";
-        newRows[r].user_id =
-          (this.extractUser(newRows[r].user_id) &&
-            this.extractUser(newRows[r].user_id).name) ||
-          "-";
+        newRows[r].unit_id = newRows[r].unit.description || "-";
+        newRows[r].user_id = newRows[r].username || "-";
         newRows[r].bytes_up = this.$options.filters["byteFormat"](
           newRows[r].bytes_up
         );
@@ -571,12 +572,14 @@ export default {
       this.downloadCSV(csv.cols, csv.rows, "sessions_history");
     },
     prevPageActive() {
+      this.isLoading = true;
       if (this.hotspotPageActive != 1) {
         this.hotspotPageActive--;
       }
       this.getAll();
     },
     nextPageActive() {
+      this.isLoading = true;
       if (
         this.hotspotPageActive !=
         Math.ceil(this.totalActive / this.hotspotPerPage)
@@ -595,12 +598,14 @@ export default {
       );
     },
     prevPageHistory() {
+      this.isLoading = true;
       if (this.hotspotPageHistory != 1) {
         this.hotspotPageHistory--;
       }
       this.getAll();
     },
     nextPageHistory() {
+      this.isLoading = true;
       if (
         this.hotspotPageHistory !=
         Math.ceil(this.totalHistory / this.hotspotPerPage)

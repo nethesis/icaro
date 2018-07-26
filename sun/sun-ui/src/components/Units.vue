@@ -5,7 +5,7 @@
     <div v-if="(user.account_type == 'admin') || (user.account_type == 'reseller') && !isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
       <label v-if="!isLoading" class="col-sm-2 control-label" for="textInput-markup">Hotspot</label>
       <div v-if="!isLoading" class="col-sm-4">
-        <select v-on:change="getAll()" v-model="hotspotSearchId" class="form-control">
+        <select v-on:change="getAll(true)" v-model="hotspotSearchId" class="form-control">
           <option v-for="hotspot in hotspots" v-bind:key="hotspot.id" v-bind:value="hotspot.id">
             {{ hotspot.name }} - {{ hotspot.description}}
           </option>
@@ -20,10 +20,16 @@
     <div v-if="!isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
       <div class="result-list">{{total}} {{total == 1 ? $t('result') : $t('results')}}</div>
     </div>
+    <div v-if="!isLoading">
+      <form v-on:submit.prevent="searchFn($event)">
+        <input class="form-control input-lg search-table-input" type="text" :placeholder="tableLangsTexts.globalSearchPlaceholder">
+      </form>
+    </div>
     <vue-good-table v-if="!isLoading" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]" :perPage="hotspotPerPage"
       :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'name', type: 'asc'}" :globalSearch="true"
-      :paginate="false" styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText" :rowsPerPageText="tableLangsTexts.rowsPerPageText"
-      :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder" :ofText="tableLangsTexts.ofText">
+      :globalSearchFn="searchFn" :paginate="false" styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText"
+      :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
+      :ofText="tableLangsTexts.ofText">
       <template slot="table-row" slot-scope="props">
         <td class="fancy">
           <a :href="'#/units/'+ props.row.id">{{ props.row.name || '-' }}</a>
@@ -39,7 +45,9 @@
       </template>
     </vue-good-table>
     <div v-if="!isLoading" class="right paginator">
-      <span class="page-count"><b>{{hotspotPage}}</b> {{tableLangsTexts.ofText}} {{total / hotspotPerPage | adjustPage}} (<b>{{hotspotPerPage}}</b> {{tableLangsTexts.rowsPerPageText}})</span>
+      <span class="page-count">
+        <b>{{hotspotPage}}</b> {{tableLangsTexts.ofText}} {{total / hotspotPerPage | adjustPage}} (
+        <b>{{hotspotPerPage}}</b> {{tableLangsTexts.rowsPerPageText}})</span>
       <button :disabled="availablePrevPage()" @click="prevPage()" class="btn btn-default">{{tableLangsTexts.prevText}}</button>
       <button :disabled="availableNextPage()" @click="nextPage()" class="btn btn-default">{{tableLangsTexts.nextText}}</button>
     </div>
@@ -97,7 +105,8 @@ export default {
       hotspotPerPage: 25,
       hotspotPage: 1,
       total: 0,
-      user: this.get("loggedUser") || null
+      user: this.get("loggedUser") || null,
+      searchString: ""
     };
   },
   mounted() {
@@ -114,8 +123,13 @@ export default {
     handlePerPage(evt) {
       this.set("units_per_page", evt.currentPerPage);
     },
+    searchFn(evt) {
+      this.searchString = evt.srcElement[0].value;
+      this.getAll(true);
+    },
     getAllHotspots(callback) {
       this.hotspotGetAll(
+        null,
         null,
         null,
         success => {
@@ -135,11 +149,16 @@ export default {
         },
         error => {
           console.error(error);
-          callback()
+          callback();
         }
       );
     },
-    getAll() {
+    getAll(reset) {
+      if (reset) {
+        this.hotspotPage = 1;
+        this.total = 0;
+      }
+
       this.set(
         "units_hotspot_id",
         this.hotspotSearchId || this.get("units_hotspot_id") || 0
@@ -149,6 +168,7 @@ export default {
         this.hotspotSearchId,
         this.hotspotPage,
         this.hotspotPerPage,
+        encodeURIComponent(this.searchString),
         success => {
           this.rows = success.body.data;
           this.total = success.body.total;
@@ -162,22 +182,24 @@ export default {
       );
     },
     prevPage() {
-      if(this.hotspotPage != 1) {
-        this.hotspotPage--
+      this.isLoading = true;
+      if (this.hotspotPage != 1) {
+        this.hotspotPage--;
       }
-      this.getAll()
+      this.getAll();
     },
     nextPage() {
-      if(this.hotspotPage != Math.ceil(this.total/this.hotspotPerPage)) {
-        this.hotspotPage++
+      this.isLoading = true;
+      if (this.hotspotPage != Math.ceil(this.total / this.hotspotPerPage)) {
+        this.hotspotPage++;
       }
-      this.getAll()
+      this.getAll();
     },
     availablePrevPage() {
-      return this.hotspotPage == 1
+      return this.hotspotPage == 1;
     },
     availableNextPage() {
-      return this.hotspotPage == Math.ceil(this.total/this.hotspotPerPage)
+      return this.hotspotPage == Math.ceil(this.total / this.hotspotPerPage);
     }
   }
 };

@@ -1,11 +1,12 @@
 var SessionService = {
   methods: {
-    sessionGetAll(hotspotId, userId, unitId, dateFrom, dateTo, page, limit, success, error) {
+    sessionGetAll(hotspotId, userId, unitId, dateFrom, dateTo, page, limit, q, success, error) {
       this.$http
         .get(
           this.$root.$options.api_scheme +
           this.$root.$options.api_host +
           "/api/sessions?" +
+          (q ? "&q=" + q : "") +
           (page ? "&page=" + page : "") +
           (limit ? "&limit=" + limit : "") +
           (hotspotId && hotspotId != 0 ? "&hotspot=" + hotspotId : "") +

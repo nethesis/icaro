@@ -1,11 +1,12 @@
 var UnitService = {
   methods: {
-    unitGetAll(hotspotId, page, limit, success, error) {
+    unitGetAll(hotspotId, page, limit, q, success, error) {
       this.$http
         .get(
           this.$root.$options.api_scheme +
           this.$root.$options.api_host +
           "/api/units?" +
+          (q ? "&q=" + q : "") +
           (page ? "&page=" + page : "") +
           (limit ? "&limit=" + limit : "") +
           (hotspotId && hotspotId != 0 ? "&hotspot=" + hotspotId : ""), {

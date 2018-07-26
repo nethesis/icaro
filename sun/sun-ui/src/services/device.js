@@ -1,11 +1,12 @@
 var DeviceService = {
   methods: {
-    deviceGetAll(hotspotId, userId, page, limit, success, error) {
+    deviceGetAll(hotspotId, userId, page, limit, q, success, error) {
       this.$http
         .get(
           this.$root.$options.api_scheme +
           this.$root.$options.api_host +
           "/api/devices?" +
+          (q ? "&q=" + q : "") +
           (page ? "&page=" + page : "") +
           (limit ? "&limit=" + limit : "") +
           (hotspotId && hotspotId != 0 ? "&hotspot=" + hotspotId : "") +

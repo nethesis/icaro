@@ -8,6 +8,7 @@ var HistoryService = {
       dateTo,
       page,
       limit,
+      q,
       success,
       error
     ) {
@@ -16,6 +17,7 @@ var HistoryService = {
           this.$root.$options.api_scheme +
           this.$root.$options.api_host +
           "/api/histories?" +
+          (q ? "&q=" + q : "") +
           (page ? "&page=" + page : "") +
           (limit ? "&limit=" + limit : "") +
           (hotspotId && hotspotId != 0 ? "&hotspot=" + hotspotId : "") +

@@ -157,6 +157,7 @@ input {
   background-image: none !important;
   border-radius: 1px !important;
   width: calc(50%) !important;
+  display: none !important;
 }
 
 .table>thead {
@@ -424,4 +425,10 @@ a {
 
 .page-count {
   margin-right: 5px;
+}
+
+.search-table-input {
+  margin-left: 30px;
+  border-radius: 1px !important;
+  width: calc(50%) !important;
 }

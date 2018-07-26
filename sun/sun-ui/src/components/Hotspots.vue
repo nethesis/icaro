@@ -26,10 +26,15 @@
     <div v-if="!isLoading && rows.length > 0" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
       <div class="result-list">{{total}} {{total == 1 ? $t('result') : $t('results')}}</div>
     </div>
+    <div v-if="!isLoading">
+      <form v-on:submit.prevent="searchFn($event)">
+        <input class="form-control input-lg search-table-input" type="text" :placeholder="tableLangsTexts.globalSearchPlaceholder">
+      </form>
+    </div>
     <vue-good-table v-if="rows.length > 0 && !isLoading" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]"
       :perPage="hotspotPerPage" :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'name', type: 'asc'}"
-      :globalSearch="true" :paginate="false" styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText"
-      :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
+      :globalSearch="true" :paginate="false" styleClass="table" :nextText="tableLangsTexts.nextText"
+      :prevText="tableLangsTexts.prevText" :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
       :ofText="tableLangsTexts.ofText">
       <template slot="table-row" slot-scope="props">
         <td>
@@ -208,7 +213,8 @@ export default {
       hotspotPerPage: 25,
       hotspotPage: 1,
       total: 0,
-      isAdmin: this.get("loggedUser").account_type == "admin"
+      isAdmin: this.get("loggedUser").account_type == "admin",
+      searchString: ""
     };
   },
   mounted() {
@@ -219,10 +225,20 @@ export default {
     handlePerPage(evt) {
       this.set("hotspots_per_page", evt.currentPerPage);
     },
-    getAll() {
+    searchFn(evt) {
+      this.searchString = evt.srcElement[0].value;
+      this.getAll(true);
+    },
+    getAll(reset) {
+      if (reset) {
+        this.hotspotPage = 1;
+        this.total = 0;
+      }
+
       this.hotspotGetAll(
         this.hotspotPage,
         this.hotspotPerPage,
+        encodeURIComponent(this.searchString),
         success => {
           this.rows = success.body.data;
           this.total = success.body.total;
@@ -254,12 +270,14 @@ export default {
       );
     },
     prevPage() {
+      this.isLoading = true;
       if (this.hotspotPage != 1) {
         this.hotspotPage--;
       }
       this.getAll();
     },
     nextPage() {
+      this.isLoading = true;
       if (this.hotspotPage != Math.ceil(this.total / this.hotspotPerPage)) {
         this.hotspotPage++;
       }

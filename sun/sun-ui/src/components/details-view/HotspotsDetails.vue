@@ -1103,8 +1103,11 @@ export default {
     getTotals() {
       this.accountGetAll(
         this.$route.params.id,
+        null,
+        null,
+        null,
         success => {
-          this.totals.accounts.count = success.body.length;
+          this.totals.accounts.count = success.body.total;
           this.totals.accounts.isLoading = false;
         },
         error => {
@@ -1114,9 +1117,12 @@ export default {
       );
       this.unitGetAll(
         this.$route.params.id,
+        null,
+        null,
+        null,
         success => {
           this.totals.units.data = success.body;
-          this.totals.units.count = success.body.length;
+          this.totals.units.count = success.body.total;
           this.totals.units.isLoading = false;
         },
         error => {
@@ -1128,8 +1134,11 @@ export default {
         this.$route.params.id,
         null,
         false,
+        null,
+        null,
+        null,
         success => {
-          this.totals.users.count = success.body.length;
+          this.totals.users.count = success.body.total;
           this.totals.users.isLoading = false;
         },
         error => {
@@ -1140,8 +1149,11 @@ export default {
       this.deviceGetAll(
         this.$route.params.id,
         "",
+        null,
+        null,
+        null,
         success => {
-          this.totals.devices.count = success.body.length;
+          this.totals.devices.count = success.body.total;
           this.totals.devices.isLoading = false;
         },
         error => {
@@ -1155,8 +1167,11 @@ export default {
         null,
         null,
         null,
+        null,
+        null,
+        null,
         success => {
-          this.totals.sessions.count = success.body.length;
+          this.totals.sessions.count = success.body.total;
           this.totals.sessions.isLoading = false;
         },
         error => {
@@ -1687,8 +1702,11 @@ export default {
         this.$route.params.id,
         "mac",
         false,
+        null,
+        null,
+        null,
         success => {
-          this.macAuth.data = success.body;
+          this.macAuth.data = success.body.data;
           this.macAuth.isLoading = false;
         },
         error => {

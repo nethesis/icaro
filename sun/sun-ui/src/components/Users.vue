@@ -5,7 +5,7 @@
     <div v-if="(user.account_type == 'admin') || (user.account_type == 'reseller') && !isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
       <label v-if="!isLoading" class="col-sm-2 control-label" for="textInput-markup">Hotspot</label>
       <div v-if="!isLoading" class="col-sm-4">
-        <select v-on:change="getAll()" v-model="hotspotSearchId" class="form-control">
+        <select v-on:change="getAll(true)" v-model="hotspotSearchId" class="form-control">
           <option v-for="hotspot in hotspots" v-bind:key="hotspot.id" v-bind:value="hotspot.id">
             {{ hotspot.name }} - {{ hotspot.description}}
           </option>
@@ -29,10 +29,16 @@
       </div>
       <div class="result-list adjust-results">{{total}} {{total == 1 ? $t('result') : $t('results')}}</div>
     </div>
+    <div v-if="!isLoading">
+      <form v-on:submit.prevent="searchFn($event)">
+        <input class="form-control input-lg search-table-input" type="text" :placeholder="tableLangsTexts.globalSearchPlaceholder">
+      </form>
+    </div>
     <vue-good-table v-if="!isLoading" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]" :perPage="hotspotPerPage"
       :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'username', type: 'asc'}" :globalSearch="true"
-      :paginate="false" styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText" :rowsPerPageText="tableLangsTexts.rowsPerPageText"
-      :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder" :ofText="tableLangsTexts.ofText">
+      :globalSearchFn="searchFn" :paginate="false" styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText"
+      :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
+      :ofText="tableLangsTexts.ofText">
       <template slot="table-row" slot-scope="props">
         <td :class="[isExpired(props.row.valid_until) ? 'disabled' : '', 'fancy']">{{ props.row.name }}</td>
         <td :class="[isExpired(props.row.valid_until) ? 'disabled' : '', 'fancy']">{{ props.row.email || '-' }}</td>
@@ -149,7 +155,8 @@ export default {
       hotspotPerPage: 25,
       hotspotPage: 1,
       total: 0,
-      user: this.get("loggedUser") || null
+      user: this.get("loggedUser") || null,
+      searchString: ""
     };
   },
   mounted() {
@@ -166,11 +173,16 @@ export default {
     handlePerPage(evt) {
       this.set("users_per_page", evt.currentPerPage);
     },
+    searchFn(evt) {
+      this.searchString = evt.srcElement[0].value;
+      this.getAll(true);
+    },
     isExpired(date) {
       return new Date().toISOString() > date;
     },
     getAllHotspots(callback) {
       this.hotspotGetAll(
+        null,
         null,
         null,
         success => {
@@ -199,9 +211,14 @@ export default {
       this.isLoading = true;
       this.hotspotShowExpired = !this.hotspotShowExpired;
       this.set("users_show_expired", this.hotspotShowExpired);
-      this.getAll();
+      this.getAll(true);
     },
-    getAll() {
+    getAll(reset) {
+      if (reset) {
+        this.hotspotPage = 1;
+        this.total = 0;
+      }
+
       this.set(
         "users_hotspot_id",
         this.hotspotSearchId || this.get("users_hotspot_id") || 0
@@ -213,6 +230,7 @@ export default {
         this.hotspotShowExpired,
         this.hotspotPage,
         this.hotspotPerPage,
+        encodeURIComponent(this.searchString),
         success => {
           this.rows = [];
           if (this.hotspotShowExpired) {
@@ -267,12 +285,14 @@ export default {
       this.downloadCSV(csv.cols, csv.rows, "users");
     },
     prevPage() {
+      this.isLoading = true;
       if (this.hotspotPage != 1) {
         this.hotspotPage--;
       }
       this.getAll();
     },
     nextPage() {
+      this.isLoading = true;
       if (this.hotspotPage != Math.ceil(this.total / this.hotspotPerPage)) {
         this.hotspotPage++;
       }

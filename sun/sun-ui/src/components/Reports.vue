@@ -283,6 +283,7 @@ export default {
       this.hotspotGetAll(
         null,
         null,
+        null,
         success => {
           this.hotspots = success.body.data;
 

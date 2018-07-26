@@ -1,11 +1,12 @@
 var HotspotService = {
   methods: {
-    hotspotGetAll(page, limit, success, error) {
+    hotspotGetAll(page, limit, q, success, error) {
       this.$http
         .get(
           this.$root.$options.api_scheme +
           this.$root.$options.api_host +
           "/api/hotspots?" +
+          (q ? "&q=" + q : "") +
           (page ? "&page=" + page : "") +
           (limit ? "&limit=" + limit : ""), {
             headers: {

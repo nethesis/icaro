@@ -5,7 +5,7 @@
     <div v-if="(user.account_type == 'admin') || (user.account_type == 'reseller') && !isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
       <label v-if="!isLoading" class="col-sm-2 control-label" for="textInput-markup">Hotspot</label>
       <div v-if="!isLoading" class="col-sm-4">
-        <select v-on:change="getAll()" v-model="hotspotSearchId" class="form-control">
+        <select v-on:change="getAll(true)" v-model="hotspotSearchId" class="form-control">
           <option v-for="hotspot in hotspots" v-bind:key="hotspot.id" v-bind:value="hotspot.id">
             {{ hotspot.name }} - {{ hotspot.description}}
           </option>
@@ -15,7 +15,8 @@
     <div v-if="!isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
       <label class="col-sm-2 control-label" for="textInput-markup">{{$t('session.user')}}</label>
       <div class="col-sm-4">
-        <select v-on:change="getAll()" v-model="hotspotUserId" class="form-control">
+        <select v-on:change="getAll(true)" v-model="hotspotUserId" class="form-control">
+          <option value="0">-</option>
           <option v-for="user in users" v-bind:key="user.id" v-bind:value="user.id">
             {{ user.name }}
           </option>
@@ -35,17 +36,21 @@
     <div v-if="!isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
       <div class="result-list">{{total}} {{total == 1 ? $t('result') : $t('results')}}</div>
     </div>
+    <div v-if="!isLoading">
+      <form v-on:submit.prevent="searchFn($event)">
+        <input class="form-control input-lg search-table-input" type="text" :placeholder="tableLangsTexts.globalSearchPlaceholder">
+      </form>
+    </div>
     <vue-good-table v-if="!isLoading" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]" :perPage="hotspotPerPage"
       :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'name', type: 'asc'}" :globalSearch="true"
       :paginate="false" styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText" :rowsPerPageText="tableLangsTexts.rowsPerPageText"
-      :globalSearchFn="searchFn" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder" :ofText="tableLangsTexts.ofText">
+      :ofText="tableLangsTexts.ofText">
       <template slot="table-row" slot-scope="props">
         <td class="fancy">
-          <a :href="'#/hotspots/'+ props.row.hotspot_id">{{ extractHotspot(props.row.hotspot_id) && extractHotspot(props.row.hotspot_id).name +' - '+ extractHotspot(props.row.hotspot_id).description
-            || '-' }}</a>
+          <a :href="'#/hotspots/'+ props.row.hotspot_id">{{ props.row.hotspot.name +' - '+ props.row.hotspot.description || '-' }}</a>
         </td>
         <td class="fancy">
-          {{ extractUser(props.row.user_id) && extractUser(props.row.user_id).name || '-' }}
+          {{ props.row.user.name || '-' }}
         </td>
         <td class="fancy">{{ props.row.mac_address }}</td>
         <td>
@@ -126,7 +131,8 @@ export default {
       hotspotPage: 1,
       total: 0,
       user: this.get("loggedUser") || null,
-      users: []
+      users: [],
+      searchString: ""
     };
   },
   mounted() {
@@ -145,19 +151,13 @@ export default {
     handlePerPage(evt) {
       this.set("devices_per_page", evt.currentPerPage);
     },
-    searchFn(row, col, cellValue, searchTerm) {
-      var value = cellValue.toString().toLowerCase();
-      if (col.field == "hotspot_id") {
-        value = this.extractHotspot(cellValue).name.toLowerCase();
-      }
-
-      if (col.field == "user_id") {
-        value = this.extractUser(cellValue).name.toLowerCase();
-      }
-      return value.includes(searchTerm.toLowerCase());
+    searchFn(evt) {
+      this.searchString = evt.srcElement[0].value;
+      this.getAll(true);
     },
     getAllHotspots(callback) {
       this.hotspotGetAll(
+        null,
         null,
         null,
         success => {
@@ -183,7 +183,12 @@ export default {
         }
       );
     },
-    getAll() {
+    getAll(reset) {
+      if (reset) {
+        this.hotspotPage = 1;
+        this.total = 0;
+      }
+
       this.set(
         "devices_hotspot_id",
         this.hotspotSearchId || this.get("devices_hotspot_id") || 0
@@ -199,6 +204,7 @@ export default {
         this.hotspotUserId,
         this.hotspotPage,
         this.hotspotPerPage,
+        encodeURIComponent(this.searchString),
         success => {
           this.rows = success.body.data;
           this.total = success.body.total;
@@ -218,6 +224,7 @@ export default {
         false,
         null,
         null,
+        null,
         success => {
           this.users = success.body.data;
           callback();
@@ -229,36 +236,20 @@ export default {
         }
       );
     },
-    extractHotspot(id) {
-      for (var h in this.hotspots) {
-        if (this.hotspots[h].id == id) {
-          return this.hotspots[h];
-          break;
-        }
-      }
-    },
-    extractUser(id) {
-      for (var u in this.users) {
-        if (this.users[u].id == id) {
-          return this.users[u];
-          break;
-        }
-      }
-    },
     clearFilters() {
-      this.hotspotSearchId = 0;
       this.hotspotUserId = 0;
-      this.set("devices_hotspot_id", 0);
       this.set("devices_user_id", 0);
       this.getAll();
     },
     prevPage() {
+      this.isLoading = true;
       if (this.hotspotPage != 1) {
         this.hotspotPage--;
       }
       this.getAll();
     },
     nextPage() {
+      this.isLoading = true;
       if (this.hotspotPage != Math.ceil(this.total / this.hotspotPerPage)) {
         this.hotspotPage++;
       }

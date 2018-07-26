@@ -1,11 +1,12 @@
 var AccountService = {
   methods: {
-    accountGetAll(hotspotId, page, limit, success, error) {
+    accountGetAll(hotspotId, page, limit, q, success, error) {
       this.$http
         .get(
           this.$root.$options.api_scheme +
           this.$root.$options.api_host +
           "/api/accounts?" +
+          (q ? "&q=" + q : "") +
           (page ? "&page=" + page : "") +
           (limit ? "&limit=" + limit : "") +
           (hotspotId && hotspotId != 0 ? "&hotspot=" + hotspotId : ""), {
