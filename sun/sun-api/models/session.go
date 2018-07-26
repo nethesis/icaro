@@ -26,13 +26,9 @@ import "time"
 
 type Session struct {
 	Id          int       `db:"id" json:"id"`
-	UnitId      int       `db:"unit_id" json:"unit_id"`
 	UnitMac     string    `db:"unit_mac" json:"unit_mac"`
-	HotspotId   int       `db:"hotspot_id" json:"hotspot_id"`
 	HotspotDesc string    `db:"hotspot_desc" json:"hotspot_desc"`
-	DeviceId    int       `db:"device_id" json:"device_id"`
 	DeviceMAC   string    `db:"device_mac" json:"device_mac"`
-	UserId      int       `db:"user_id" json:"user_id"`
 	Username    string    `db:"username" json:"username"`
 	BytesUp     int       `db:"bytes_up" json:"bytes_up"`
 	BytesDown   int       `db:"bytes_down" json:"bytes_down"`
@@ -42,4 +38,16 @@ type Session struct {
 	UpdateTime  time.Time `db:"update_time" json:"update_time"`
 	StopTime    time.Time `db:"stop_time" json:"stop_time"`
 	SessionKey  string    `db:"session_key" json:"session_key"`
+
+	Unit   Unit `json:"unit"`
+	UnitId int  `db:"unit_id" json:"unit_id"`
+
+	Hotspot   Hotspot `json:"hotspot"`
+	HotspotId int     `db:"hotspot_id" json:"hotspot_id"`
+
+	Device   Device `json:"device"`
+	DeviceId int    `db:"device_id" json:"device_id"`
+
+	User   User `json:"user"`
+	UserId int  `db:"user_id" json:"user_id"`
 }

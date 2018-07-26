@@ -90,6 +90,7 @@ func GetUnits(c *gin.Context) {
 	page := c.Query("page")
 	limit := c.Query("limit")
 	hotspotId := c.Query("hotspot")
+	q := c.Query("q")
 
 	hotspotIdInt, err := strconv.Atoi(hotspotId)
 	if err != nil {
@@ -99,8 +100,14 @@ func GetUnits(c *gin.Context) {
 	offsets := utils.OffsetCalc(page, limit)
 
 	db := database.Instance()
-	db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt)).Find(&units).Count(&total)
-	db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt)).Offset(offsets[0]).Limit(offsets[1]).Find(&units)
+	chain := db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt))
+
+	if len(q) > 0 {
+		chain = chain.Where("name LIKE ? OR description LIKE ? OR mac_address LIKE ? OR uuid LIKE ?", "%"+q+"%", "%"+q+"%", "%"+q+"%", "%"+q+"%")
+	}
+
+	chain = chain.Find(&units).Count(&total)
+	chain = chain.Offset(offsets[0]).Limit(offsets[1]).Find(&units)
 
 	if len(units) <= 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No units found!"})

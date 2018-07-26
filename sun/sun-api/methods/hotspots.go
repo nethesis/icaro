@@ -123,16 +123,23 @@ func GetHotspots(c *gin.Context) {
 
 	page := c.Query("page")
 	limit := c.Query("limit")
+	q := c.Query("q")
 
 	offsets := utils.OffsetCalc(page, limit)
 
 	db := database.Instance()
+	chain := db.Order("name asc, description")
+
+	if len(q) > 0 {
+		chain = chain.Where("business_address LIKE ? OR business_email LIKE ? OR business_name LIKE ? OR business_vat LIKE ? OR description LIKE ? OR name LIKE ?", "%"+q+"%", "%"+q+"%", "%"+q+"%", "%"+q+"%", "%"+q+"%", "%"+q+"%")
+	}
+
 	if accountId == 1 {
-		db.Order("name asc, description").Find(&hotspots).Count(&total)
-		db.Offset(offsets[0]).Limit(offsets[1]).Order("name asc, description").Find(&hotspots)
+		chain = chain.Find(&hotspots).Count(&total)
+		chain = chain.Offset(offsets[0]).Limit(offsets[1]).Find(&hotspots)
 	} else {
-		db.Where("account_id = ?", accountId).Order("name asc, description").Find(&hotspots).Count(&total)
-		db.Where("account_id = ?", accountId).Offset(offsets[0]).Limit(offsets[1]).Order("name asc, description").Find(&hotspots)
+		chain = chain.Where("account_id = ?", accountId).Find(&hotspots).Count(&total)
+		chain = chain.Where("account_id = ?", accountId).Offset(offsets[0]).Limit(offsets[1]).Find(&hotspots)
 	}
 
 	if len(hotspots) <= 0 {

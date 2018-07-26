@@ -46,6 +46,7 @@ func GetSessions(c *gin.Context) {
 	unitId := c.Query("unit")
 	from := c.Query("from")
 	to := c.Query("to")
+	q := c.Query("q")
 
 	hotspotIdInt, err := strconv.Atoi(hotspotId)
 	if err != nil {
@@ -55,22 +56,27 @@ func GetSessions(c *gin.Context) {
 	offsets := utils.OffsetCalc(page, limit)
 
 	db := database.Instance()
-	chain := db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt))
+	chain := db.Preload("Unit").Where("sessions.hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt))
 
 	if len(userId) > 0 {
-		chain = chain.Where("user_id = ?", userId)
+		chain = chain.Where("sessions.user_id = ?", userId)
 	}
 
 	if len(unitId) > 0 {
-		chain = chain.Where("unit_id = ?", unitId)
+		chain = chain.Where("sessions.unit_id = ?", unitId)
 	}
 
 	if len(from) > 0 {
-		chain = chain.Where("start_time >= ?", from)
+		chain = chain.Where("sessions.start_time >= ?", from)
 	}
 
 	if len(to) > 0 {
-		chain = chain.Where("start_time <= ?", to)
+		chain = chain.Where("sessions.start_time <= ?", to)
+	}
+
+	if len(q) > 0 {
+		chain = chain.Select("sessions.*, units.*").Joins("JOIN units on units.id = sessions.unit_id").
+			Where("units.name LIKE ? OR sessions.username LIKE ?", "%"+q+"%", "%"+q+"%")
 	}
 
 	chain.Find(&sessions).Count(&total)
@@ -96,6 +102,7 @@ func GetSessionsHistory(c *gin.Context) {
 	unitId := c.Query("unit")
 	from := c.Query("from")
 	to := c.Query("to")
+	q := c.Query("q")
 
 	hotspotIdInt, err := strconv.Atoi(hotspotId)
 	if err != nil {
@@ -105,22 +112,27 @@ func GetSessionsHistory(c *gin.Context) {
 	offsets := utils.OffsetCalc(page, limit)
 
 	db := database.Instance()
-	chain := db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt))
+	chain := db.Preload("Unit").Where("session_histories.hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt))
 
 	if len(userId) > 0 {
-		chain = chain.Where("user_id = ?", userId)
+		chain = chain.Where("session_histories.user_id = ?", userId)
 	}
 
 	if len(unitId) > 0 {
-		chain = chain.Where("unit_id = ?", unitId)
+		chain = chain.Where("session_histories.unit_id = ?", unitId)
 	}
 
 	if len(from) > 0 {
-		chain = chain.Where("start_time >= ?", from)
+		chain = chain.Where("session_histories.start_time >= ?", from)
 	}
 
 	if len(to) > 0 {
-		chain = chain.Where("start_time <= ?", to)
+		chain = chain.Where("session_histories.start_time <= ?", to)
+	}
+
+	if len(q) > 0 {
+		chain = chain.Select("session_histories.*, units.*").Joins("JOIN units on units.id = session_histories.unit_id").
+			Where("units.name LIKE ? OR session_histories.username LIKE ?", "%"+q+"%", "%"+q+"%")
 	}
 
 	chain.Find(&sessions).Count(&total)

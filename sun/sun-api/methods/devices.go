@@ -43,6 +43,7 @@ func GetDevices(c *gin.Context) {
 	limit := c.Query("limit")
 	hotspotId := c.Query("hotspot")
 	userId := c.Query("user")
+	q := c.Query("q")
 
 	hotspotIdInt, err := strconv.Atoi(hotspotId)
 	if err != nil {
@@ -52,10 +53,15 @@ func GetDevices(c *gin.Context) {
 	offsets := utils.OffsetCalc(page, limit)
 
 	db := database.Instance()
-	chain := db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt))
+	chain := db.Preload("User").Preload("Hotspot").Where("devices.hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt))
 
 	if len(userId) > 0 {
-		chain = chain.Where("user_id = ?", userId)
+		chain = chain.Where("devices.user_id = ?", userId)
+	}
+
+	if len(q) > 0 {
+		chain = chain.Select("users.*, devices.*").Joins("JOIN hotspots on hotspots.id = devices.hotspot_id JOIN users on users.id = devices.user_id").
+			Where("devices.mac_address LIKE ? OR devices.ip_address LIKE ? OR users.name LIKE ?", "%"+q+"%", "%"+q+"%", "%"+q+"%")
 	}
 
 	chain.Find(&devices).Count(&total)

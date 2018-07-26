@@ -26,10 +26,14 @@ import "time"
 
 type Device struct {
 	Id          int       `db:"id" json:"id"`
-	HotspotId   int       `db:"hotspot_id" json:"hotspot_id"`
-	UserId      int       `db:"user_id" json:"user_id"`
 	MacAddress  string    `db:"mac_address" json:"mac_address"`
 	IpAddress   string    `db:"ip_address" json:"ip_address"`
 	Description string    `db:"description" json:"description"`
 	Created     time.Time `db:"created" json:"created"`
+
+	User   User `json:"user"`
+	UserId int  `db:"user_id" json:"user_id"`
+
+	Hotspot   Hotspot `json:"hotspot"`
+	HotspotId int     `db:"hotspot_id" json:"hotspot_id"`
 }

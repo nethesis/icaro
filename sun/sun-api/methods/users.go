@@ -114,6 +114,7 @@ func GetUsers(c *gin.Context) {
 	limit := c.Query("limit")
 	hotspotId := c.Query("hotspot")
 	accountType := c.Query("type")
+	q := c.Query("q")
 
 	hotspotIdInt, err := strconv.Atoi(hotspotId)
 	if err != nil {
@@ -127,6 +128,10 @@ func GetUsers(c *gin.Context) {
 
 	if len(accountType) > 0 {
 		chain = chain.Where("account_type = ?", accountType)
+	}
+
+	if len(q) > 0 {
+		chain = chain.Where("username LIKE ? OR name LIKE ? OR email LIKE ? OR account_type LIKE ? OR kbps_down LIKE ? OR kbps_up LIKE ? OR max_navigation_time LIKE ? OR max_navigation_traffic LIKE ?", "%"+q+"%", "%"+q+"%", "%"+q+"%", "%"+q+"%", "%"+q+"%", "%"+q+"%", "%"+q+"%", "%"+q+"%")
 	}
 
 	chain.Find(&users).Count(&total)

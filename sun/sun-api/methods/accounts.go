@@ -197,28 +197,36 @@ func GetAccounts(c *gin.Context) {
 	page := c.Query("page")
 	limit := c.Query("limit")
 	hotspotId := c.Query("hotspot")
+	q := c.Query("q")
 
 	offsets := utils.OffsetCalc(page, limit)
 
 	db := database.Instance()
 	selectQuery := "accounts.*, hotspots.id as hotspot_id, hotspots.name as hotspot_name"
 	joinQuery := "LEFT JOIN accounts_hotspots on accounts_hotspots.account_id = accounts.id LEFT JOIN hotspots on accounts_hotspots.hotspot_id = hotspots.id"
+
+	chain := db.Select(selectQuery).Joins(joinQuery)
+
+	if len(q) > 0 {
+		chain = chain.Where("accounts.username LIKE ? OR accounts.name LIKE ? OR accounts.email LIKE ? OR accounts.type LIKE ?", "%"+q+"%", "%"+q+"%", "%"+q+"%", "%"+q+"%")
+	}
+
 	if creatorId == 1 {
 		// Queries for admin user
 		if hotspotId != "" {
-			db.Select(selectQuery).Joins(joinQuery).Where("hotspots.id = ?", hotspotId).Find(&accounts).Count(&total)
-			db.Select(selectQuery).Joins(joinQuery).Where("hotspots.id = ?", hotspotId).Offset(offsets[0]).Limit(offsets[1]).Find(&accounts)
+			chain = chain.Where("hotspots.id = ?", hotspotId).Find(&accounts).Count(&total)
+			chain = chain.Where("hotspots.id = ?", hotspotId).Offset(offsets[0]).Limit(offsets[1]).Find(&accounts)
 		} else {
-			db.Select(selectQuery).Joins(joinQuery).Find(&accounts).Count(&total)
-			db.Select(selectQuery).Joins(joinQuery).Offset(offsets[0]).Limit(offsets[1]).Find(&accounts)
+			chain = chain.Find(&accounts).Count(&total)
+			chain = chain.Offset(offsets[0]).Limit(offsets[1]).Find(&accounts)
 		}
 	} else {
 		if hotspotId != "" {
-			db.Select(selectQuery).Joins(joinQuery).Where("creator_id = ? AND hotspots.id = ?", creatorId, hotspotId).Find(&accounts).Count(&total)
-			db.Select(selectQuery).Joins(joinQuery).Where("creator_id = ? AND hotspots.id = ?", creatorId, hotspotId).Offset(offsets[0]).Limit(offsets[1]).Find(&accounts)
+			chain = chain.Where("creator_id = ? AND hotspots.id = ?", creatorId, hotspotId).Find(&accounts).Count(&total)
+			chain = chain.Where("creator_id = ? AND hotspots.id = ?", creatorId, hotspotId).Offset(offsets[0]).Limit(offsets[1]).Find(&accounts)
 		} else {
-			db.Select(selectQuery).Joins(joinQuery).Where("creator_id = ?", creatorId).Find(&accounts).Count(&total)
-			db.Select(selectQuery).Joins(joinQuery).Where("creator_id = ?", creatorId).Offset(offsets[0]).Limit(offsets[1]).Find(&accounts)
+			chain = chain.Where("creator_id = ?", creatorId).Find(&accounts).Count(&total)
+			chain = chain.Where("creator_id = ?", creatorId).Offset(offsets[0]).Limit(offsets[1]).Find(&accounts)
 		}
 	}
 
