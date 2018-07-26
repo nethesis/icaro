@@ -75,6 +75,7 @@ CREATE TABLE `hotspot_preferences` (
   `value` mediumtext NOT NULL,
   FOREIGN KEY (`hotspot_id`) REFERENCES hotspots(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   UNIQUE KEY (`hotspot_id`, `key`),
+  KEY `hotspot_id_2` (`hotspot_id`),
   PRIMARY KEY(`id`)
 );
 
@@ -120,6 +121,7 @@ CREATE TABLE `users` (
   KEY(`created`),
   KEY(`username`),
   KEY(`email`),
+  KEY `hotspot_id_2` (`hotspot_id`),
   PRIMARY KEY(`id`)
 );
 
@@ -142,7 +144,9 @@ CREATE TABLE `user_histories` (
   `valid_from` datetime,
   `valid_until` datetime,
   `created` datetime,
-  PRIMARY KEY(`id`)
+  PRIMARY KEY(`id`),
+  KEY `hotspot_id` (`hotspot_id`),
+  KEY `user_id` (`user_id`)
 );
 
 CREATE TABLE `user_marketings` (
@@ -248,7 +252,9 @@ CREATE TABLE `session_histories` (
   `update_time` datetime,
   `stop_time` datetime,
   `session_key` varchar(200),
-  PRIMARY KEY(`id`)
+  PRIMARY KEY(`id`),
+  KEY `user_id` (`user_id`),
+  KEY `hotspot_id` (`hotspot_id`)
 );
 
 /* -------------------- */
