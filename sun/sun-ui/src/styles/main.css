@@ -432,3 +432,7 @@ a {
   border-radius: 1px !important;
   width: calc(50%) !important;
 }
+
+.spinner-adjust {
+  margin-top: 20px;
+}

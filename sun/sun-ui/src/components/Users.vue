@@ -34,7 +34,8 @@
         <input class="form-control input-lg search-table-input" type="text" :placeholder="tableLangsTexts.globalSearchPlaceholder">
       </form>
     </div>
-    <vue-good-table v-if="!isLoading" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]" :perPage="hotspotPerPage"
+    <div v-if="!isLoading && isLoadingTable" class="spinner spinner-lg spinner-adjust"></div>
+    <vue-good-table v-if="!isLoadingTable && !isLoading" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]" :perPage="hotspotPerPage"
       :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'username', type: 'asc'}" :globalSearch="true"
       :globalSearchFn="searchFn" :paginate="false" styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText"
       :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
@@ -74,7 +75,7 @@
         </td>
       </template>
     </vue-good-table>
-    <div v-if="!isLoading" class="right paginator">
+    <div v-if="!isLoadingTable && !isLoading" class="right paginator">
       <span class="page-count">
         <b>{{hotspotPage}}</b> {{tableLangsTexts.ofText}} {{total / hotspotPerPage | adjustPage}} (
         <b>{{hotspotPerPage}}</b> {{tableLangsTexts.rowsPerPageText}})</span>
@@ -102,6 +103,7 @@ export default {
     return {
       msg: this.$i18n.t("menu.users"),
       isLoading: true,
+      isLoadingTable: true,
       columns: [
         {
           label: this.$i18n.t("user.name"),
@@ -214,6 +216,8 @@ export default {
       this.getAll(true);
     },
     getAll(reset) {
+      this.isLoadingTable = true;
+
       if (reset) {
         this.hotspotPage = 1;
         this.total = 0;
@@ -250,9 +254,11 @@ export default {
           }
           this.total = success.body.total;
           this.isLoading = false;
+          this.isLoadingTable = false;
         },
         error => {
           this.isLoading = false;
+          this.isLoadingTable = false;
           this.rows = [];
           console.error(error);
         }

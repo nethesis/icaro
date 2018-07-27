@@ -68,18 +68,19 @@
       </li>
     </ul>
     <div class="tab-pane fade" id="active-tab" role="tabpanel" aria-labelledby="active-tab">
-      <div v-if="!isLoading && activeTab == 'active'" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <div v-if="!isLoading && isLoadingTable && activeTab == 'active'" class="spinner spinner-lg spinner-adjust"></div>
+      <div v-if="!isLoadingTable && !isLoading && activeTab == 'active'" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <div class="col-sm-12">
           <button @click="exportCSVActive()" class="btn btn-primary export-btn">{{$t('session.export_csv')}}</button>
         </div>
         <div class="result-list adjust-results">{{totalActive}} {{totalActive == 1 ? $t('result') : $t('results')}}</div>
       </div>
-      <div v-if="!isLoading && activeTab == 'active'">
+      <div v-if="!isLoadingTable && !isLoading && activeTab == 'active'">
         <form v-on:submit.prevent="searchFn($event, 'active')">
           <input class="form-control input-lg search-table-input" type="text" :placeholder="tableLangsTexts.globalSearchPlaceholder">
         </form>
       </div>
-      <vue-good-table v-if="!isLoading && activeTab == 'active'" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]"
+      <vue-good-table v-if="!isLoadingTable && !isLoading && activeTab == 'active'" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]"
         :perPage="hotspotPerPage" :columns="columns_active" :rows="rows_active" :lineNumbers="false" :defaultSortBy="{field: 'duration', type: 'asc'}"
         :globalSearch="true" :paginate="false" styleClass="table" :nextText="tableLangsTexts.nextText"
         :prevText="tableLangsTexts.prevText" :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
@@ -103,7 +104,7 @@
           </td>
         </template>
       </vue-good-table>
-      <div v-if="!isLoading&& activeTab == 'active'" class="right paginator">
+      <div v-if="!isLoadingTable && !isLoading&& activeTab == 'active'" class="right paginator">
         <span class="page-count">
           <b>{{hotspotPageActive}}</b> {{tableLangsTexts.ofText}} {{totalActive / hotspotPerPage | adjustPage}} (
           <b>{{hotspotPerPage}}</b> {{tableLangsTexts.rowsPerPageText}})</span>
@@ -112,18 +113,19 @@
       </div>
     </div>
     <div class="tab-pane fade" id="history-tab" role="tabpanel" aria-labelledby="history-tab">
-      <div v-if="!isLoading && activeTab == 'history'" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <div v-if="!isLoading && isLoadingTable && activeTab == 'history'" class="spinner spinner-lg spinner-adjust"></div>
+      <div v-if="!isLoadingTable && !isLoading && activeTab == 'history'" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <div class="col-sm-12">
           <button @click="exportCSVHistory()" class="btn btn-primary export-btn">{{$t('session.export_csv')}}</button>
         </div>
         <div class="result-list adjust-results">{{totalHistory}} {{totalHistory == 1 ? $t('result') : $t('results')}}</div>
       </div>
-      <div v-if="!isLoading && activeTab == 'history'">
+      <div v-if="!isLoadingTable && !isLoading && activeTab == 'history'">
         <form v-on:submit.prevent="searchFn($event, 'history')">
           <input class="form-control input-lg search-table-input" type="text" :placeholder="tableLangsTexts.globalSearchPlaceholder">
         </form>
       </div>
-      <vue-good-table v-if="!isLoading && activeTab == 'history'" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]"
+      <vue-good-table v-if="!isLoadingTable && !isLoading && activeTab == 'history'" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]"
         :perPage="hotspotPerPage" :columns="columns_history" :rows="rows_history" :lineNumbers="false" :defaultSortBy="{field: 'duration', type: 'asc'}"
         :globalSearch="true" :paginate="false" styleClass="table" :nextText="tableLangsTexts.nextText"
         :prevText="tableLangsTexts.prevText" :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
@@ -147,7 +149,7 @@
           </td>
         </template>
       </vue-good-table>
-      <div v-if="!isLoading&& activeTab == 'history'" class="right paginator">
+      <div v-if="!isLoadingTable && !isLoading&& activeTab == 'history'" class="right paginator">
         <span class="page-count">
           <b>{{hotspotPageHistory}}</b> {{tableLangsTexts.ofText}} {{totalHistory / hotspotPerPage | adjustPage}} (
           <b>{{hotspotPerPage}}</b> {{tableLangsTexts.rowsPerPageText}})</span>
@@ -193,6 +195,7 @@ export default {
     return {
       msg: this.$i18n.t("menu.sessions"),
       isLoading: true,
+      isLoadingTable: true,
       locale: this.$root.$options.currentLocale,
       columns_active: [
         {
@@ -379,6 +382,7 @@ export default {
       );
     },
     getAll(refresh, reset) {
+      this.isLoadingTable = true;
       // save to storage
       this.set(
         "sessions_active_tab",
@@ -433,6 +437,7 @@ export default {
           success => {
             this.rows_active = success.body.data;
             this.totalActive = success.body.total;
+            this.isLoadingTable = false;
             this.isLoading = false;
             var activeTab = this.get("sessions_active_tab") || "active";
             setTimeout(function() {
@@ -440,6 +445,7 @@ export default {
             }, 250);
           },
           error => {
+            this.isLoadingTable = false;
             this.isLoading = false;
             this.rows_active = [];
             console.error(error);
@@ -458,6 +464,7 @@ export default {
           success => {
             this.rows_history = success.body.data;
             this.totalHistory = success.body.total;
+            this.isLoadingTable = false;
             this.isLoading = false;
             var activeTab = this.get("sessions_active_tab") || "active";
             setTimeout(function() {
@@ -465,6 +472,7 @@ export default {
             }, 250);
           },
           error => {
+            this.isLoadingTable = false;
             this.isLoading = false;
             this.rows_history = [];
             console.error(error);
