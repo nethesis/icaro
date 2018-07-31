@@ -589,7 +589,7 @@
                 <div class="col-sm-7">
                   <select v-model="newMACAuth.unit" class="form-control">
                     <option v-for="u in totals.units.data" v-bind:key="u.id" v-bind:value="u">
-                      {{ u.name }}
+                      {{ u.name }} - {{ u.description }}
                     </option>
                   </select>
                 </div>
@@ -1121,7 +1121,7 @@ export default {
         null,
         null,
         success => {
-          this.totals.units.data = success.body;
+          this.totals.units.data = success.body.data;
           this.totals.units.count = success.body.total;
           this.totals.units.isLoading = false;
         },
