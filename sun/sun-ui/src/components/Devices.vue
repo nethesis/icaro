@@ -172,7 +172,9 @@ export default {
           ) {
             hsId = this.$parent.user.info.hotspot_id;
           }
-          this.hotspotSearchId = hsId;
+          if (this.$route.params.hotspotId === undefined) {
+            this.hotspotSearchId = hsId;
+          }
 
           $('[data-toggle="tooltip"]').tooltip();
           this.isLoading = false;
