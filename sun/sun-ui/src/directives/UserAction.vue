@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="dropup">
-      <button :disabled="disabled" class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+      <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
         {{ $t('action') }}
         <span class="caret"></span>
       </button>
@@ -150,7 +150,7 @@ import datePicker from "vue-bootstrap-datetimepicker";
 
 export default {
   name: "UserAction",
-  props: ["details", "obj", "update", "disabled"],
+  props: ["details", "obj", "update", "expired"],
   mixins: [UserService, StorageService],
   components: {
     datePicker
@@ -203,7 +203,8 @@ export default {
           this.currentObj.onAction = false;
           this.errors.update = true;
           console.error(error.body.message);
-        }
+        },
+        this.expired
       );
     },
     deleteUser(obj) {

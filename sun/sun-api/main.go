@@ -147,6 +147,7 @@ func DefineAPI(router *gin.Engine) {
 		usersExpired := api.Group("/users_expired")
 		{
 			usersExpired.GET("", methods.GetUsersExpired)
+			usersExpired.PUT("/:user_id", methods.UpdateUserExpired)
 		}
 
 		vouchers := api.Group("/vouchers")

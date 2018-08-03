@@ -65,12 +65,12 @@ var UserService = {
         )
         .then(success, error);
     },
-    userModify(id, body, success, error) {
+    userModify(id, body, success, error, expired) {
       this.$http
         .put(
           this.$root.$options.api_scheme +
           this.$root.$options.api_host +
-          "/api/users/" +
+          "/api/users" + (expired ? "_expired/" : "/") +
           id,
           body, {
             headers: {

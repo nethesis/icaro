@@ -436,3 +436,7 @@ a {
 .spinner-adjust {
   margin-top: 20px !important;
 }
+
+.form-horizontal .control-label {
+  white-space: normal !important;
+}

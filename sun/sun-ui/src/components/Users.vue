@@ -71,7 +71,7 @@
           </div>
         </td>
         <td>
-          <user-action :disabled="hotspotShowExpired" details="false" :obj="props.row" :update="getAll"></user-action>
+          <user-action :expired="hotspotShowExpired" details="false" :obj="props.row" :update="getAll"></user-action>
         </td>
       </template>
     </vue-good-table>
