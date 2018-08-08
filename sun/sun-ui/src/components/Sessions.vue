@@ -80,10 +80,14 @@
           <input class="form-control input-lg search-table-input" type="text" :placeholder="tableLangsTexts.globalSearchPlaceholder">
         </form>
       </div>
+      <div v-if="!isLoadingTable && !isLoading && activeTab == 'active' && exportError" class="alert alert-danger alert-dismissable alert-export">
+        <span class="pficon pficon-error-circle-o"></span>
+        <strong>{{$t('session.export_error')}}</strong>. {{$t('session.export_error_details')}}.
+      </div>
       <vue-good-table v-if="!isLoadingTable && !isLoading && activeTab == 'active'" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]"
         :perPage="hotspotPerPage" :columns="columns_active" :rows="rows_active" :lineNumbers="false" :defaultSortBy="{field: 'duration', type: 'asc'}"
-        :globalSearch="true" :paginate="false" styleClass="table" :nextText="tableLangsTexts.nextText"
-        :prevText="tableLangsTexts.prevText" :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
+        :globalSearch="true" :paginate="false" styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText"
+        :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
         :ofText="tableLangsTexts.ofText">
         <template slot="table-row" slot-scope="props">
           <td class="fancy">
@@ -125,10 +129,14 @@
           <input class="form-control input-lg search-table-input" type="text" :placeholder="tableLangsTexts.globalSearchPlaceholder">
         </form>
       </div>
+      <div v-if="!isLoadingTable && !isLoading && activeTab == 'history' && exportError" class="alert alert-danger alert-dismissable alert-export">
+        <span class="pficon pficon-error-circle-o"></span>
+        <strong>{{$t('session.export_error')}}</strong>. {{$t('session.export_error_details')}}.
+      </div>
       <vue-good-table v-if="!isLoadingTable && !isLoading && activeTab == 'history'" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]"
         :perPage="hotspotPerPage" :columns="columns_history" :rows="rows_history" :lineNumbers="false" :defaultSortBy="{field: 'duration', type: 'asc'}"
-        :globalSearch="true" :paginate="false" styleClass="table" :nextText="tableLangsTexts.nextText"
-        :prevText="tableLangsTexts.prevText" :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
+        :globalSearch="true" :paginate="false" styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText"
+        :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
         :ofText="tableLangsTexts.ofText">
         <template slot="table-row" slot-scope="props">
           <td class="fancy">
@@ -318,7 +326,8 @@ export default {
       users: [],
       units: [],
       searchStringActive: "",
-      searchStringHistory: ""
+      searchStringHistory: "",
+      exportError: false
     };
   },
   mounted() {
@@ -337,6 +346,7 @@ export default {
   },
   methods: {
     handleTab(tab) {
+      this.exportError = false;
       this.activeTab = tab;
       this.getAll();
     },
@@ -535,52 +545,104 @@ export default {
       this.getAll();
     },
     exportCSVActive() {
-      var newRows = JSON.parse(JSON.stringify(this.rows_active));
-      for (var r in newRows) {
-        newRows[r].unit_id = newRows[r].unit.description || "-";
-        newRows[r].user_id = newRows[r].username || "-";
-        newRows[r].bytes_up = this.$options.filters["byteFormat"](
-          newRows[r].bytes_up
-        );
-        newRows[r].bytes_down = this.$options.filters["byteFormat"](
-          newRows[r].bytes_down
-        );
-        newRows[r].duration = this.$options.filters["secondsInHour"](
-          newRows[r].duration
-        );
-        newRows[r].start_time = this.$options.filters["formatDate"](
-          newRows[r].start_time
-        );
-        newRows[r].update_time = this.$options.filters["formatDate"](
-          newRows[r].update_time
-        );
-      }
-      var csv = this.createCSV(this.columns_active, newRows);
-      this.downloadCSV(csv.cols, csv.rows, "sessions_active");
+      this.isLoadingTable = true;
+      this.sessionGetAll(
+        this.hotspotSearchId,
+        this.hotspotUserId,
+        this.hotspotUnitId,
+        new Date(this.hotspotDateFrom).toISOString(),
+        new Date(this.hotspotDateTo).toISOString(),
+        null,
+        null,
+        encodeURIComponent(this.searchStringActive),
+        success => {
+          var data_export = success.body.data;
+          if (data_export.length < 5000) {
+            var newRows = JSON.parse(JSON.stringify(data_export));
+            for (var r in newRows) {
+              newRows[r].unit_id = newRows[r].unit.description || "-";
+              newRows[r].user_id = newRows[r].username || "-";
+              newRows[r].bytes_up = this.$options.filters["byteFormat"](
+                newRows[r].bytes_up
+              );
+              newRows[r].bytes_down = this.$options.filters["byteFormat"](
+                newRows[r].bytes_down
+              );
+              newRows[r].duration = this.$options.filters["secondsInHour"](
+                newRows[r].duration
+              );
+              newRows[r].start_time = this.$options.filters["formatDate"](
+                newRows[r].start_time
+              );
+              newRows[r].update_time = this.$options.filters["formatDate"](
+                newRows[r].update_time
+              );
+            }
+            var csv = this.createCSV(this.columns_active, newRows);
+            this.isLoadingTable = false;
+            this.downloadCSV(csv.cols, csv.rows, "sessions_active");
+          } else {
+            this.isLoadingTable = false;
+            this.exportError = true;
+          }
+        },
+        error => {
+          this.isLoadingTable = false;
+          this.isLoading = false;
+          this.rows_active = [];
+          console.error(error);
+        }
+      );
     },
     exportCSVHistory() {
-      var newRows = JSON.parse(JSON.stringify(this.rows_history));
-      for (var r in newRows) {
-        newRows[r].unit_id = newRows[r].unit.description || "-";
-        newRows[r].user_id = newRows[r].username || "-";
-        newRows[r].bytes_up = this.$options.filters["byteFormat"](
-          newRows[r].bytes_up
-        );
-        newRows[r].bytes_down = this.$options.filters["byteFormat"](
-          newRows[r].bytes_down
-        );
-        newRows[r].duration = this.$options.filters["secondsInHour"](
-          newRows[r].duration
-        );
-        newRows[r].start_time = this.$options.filters["formatDate"](
-          newRows[r].start_time
-        );
-        newRows[r].stop_time = this.$options.filters["formatDate"](
-          newRows[r].stop_time
-        );
-      }
-      var csv = this.createCSV(this.columns_history, newRows);
-      this.downloadCSV(csv.cols, csv.rows, "sessions_history");
+      this.isLoadingTable = true;
+      this.historiesGetAll(
+        this.hotspotSearchId,
+        this.hotspotUserId,
+        this.hotspotUnitId,
+        new Date(this.hotspotDateFrom).toISOString(),
+        new Date(this.hotspotDateTo).toISOString(),
+        null,
+        null,
+        encodeURIComponent(this.searchStringHistory),
+        success => {
+          var data_export = success.body.data;
+          if (data_export.length < 5000) {
+            var newRows = JSON.parse(JSON.stringify(data_export));
+            for (var r in newRows) {
+              newRows[r].unit_id = newRows[r].unit.description || "-";
+              newRows[r].user_id = newRows[r].username || "-";
+              newRows[r].bytes_up = this.$options.filters["byteFormat"](
+                newRows[r].bytes_up
+              );
+              newRows[r].bytes_down = this.$options.filters["byteFormat"](
+                newRows[r].bytes_down
+              );
+              newRows[r].duration = this.$options.filters["secondsInHour"](
+                newRows[r].duration
+              );
+              newRows[r].start_time = this.$options.filters["formatDate"](
+                newRows[r].start_time
+              );
+              newRows[r].stop_time = this.$options.filters["formatDate"](
+                newRows[r].stop_time
+              );
+            }
+            var csv = this.createCSV(this.columns_history, newRows);
+            this.isLoadingTable = false;
+            this.downloadCSV(csv.cols, csv.rows, "sessions_history");
+          } else {
+            this.isLoadingTable = false;
+            this.exportError = true;
+          }
+        },
+        error => {
+          this.isLoadingTable = false;
+          this.isLoading = false;
+          this.rows_history = [];
+          console.error(error);
+        }
+      );
     },
     prevPageActive() {
       this.isLoading = true;

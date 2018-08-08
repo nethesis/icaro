@@ -234,7 +234,9 @@
       "export_csv": "Export CSV",
       "refresh": "Refresh",
       "active": "Active",
-      "history": "History"
+      "history": "History",
+      "export_error": "Export error",
+      "export_error_details": "You can export max 5000 rows, apply more filters to reduce results"
     },
     "menu": {
       "dashboard": "Dashboard",

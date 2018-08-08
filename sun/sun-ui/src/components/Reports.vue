@@ -249,6 +249,7 @@ export default {
         this.dataPoints.to.toISOString(),
         null,
         null,
+        "",
         success => {
           this.sessions = success.body.data;
           this.getNewUsers();
@@ -268,6 +269,7 @@ export default {
         false,
         null,
         null,
+        "",
         success => {
           this.newUsers = success.body.data;
           this.getTodayUsersLogin();
@@ -318,6 +320,7 @@ export default {
         "",
         null,
         null,
+        "",
         success => {
           this.connections = success.body.data;
           this.isChartLoading = false;

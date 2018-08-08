@@ -440,3 +440,9 @@ a {
 .form-horizontal .control-label {
   white-space: normal !important;
 }
+
+.alert-export {
+  margin-top: 20px;
+  margin-left: 20px;
+  width: 96%;
+}

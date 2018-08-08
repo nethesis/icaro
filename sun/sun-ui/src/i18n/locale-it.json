@@ -234,7 +234,9 @@
       "export_csv": "Esporta in CSV",
       "refresh": "Aggiorna elenco",
       "active": "Oggi",
-      "history": "Storico"
+      "history": "Storico",
+      "export_error": "Errore esportazione",
+      "export_error_details": "Puoi esportare massimo 5000 righe, applica più filtri per ridurre i risultati"
     },
     "menu": {
       "dashboard": "Dashboard",

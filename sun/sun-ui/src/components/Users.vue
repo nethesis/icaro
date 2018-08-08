@@ -35,10 +35,14 @@
       </form>
     </div>
     <div v-if="!isLoading && isLoadingTable" class="spinner spinner-lg spinner-adjust"></div>
-    <vue-good-table v-if="!isLoadingTable && !isLoading" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]" :perPage="hotspotPerPage"
-      :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'username', type: 'asc'}" :globalSearch="true"
-      :globalSearchFn="searchFn" :paginate="false" styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText"
-      :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
+    <div v-if="!isLoadingTable && !isLoading && exportError" class="alert alert-danger alert-dismissable alert-export">
+      <span class="pficon pficon-error-circle-o"></span>
+      <strong>{{$t('session.export_error')}}</strong>. {{$t('session.export_error_details')}}.
+    </div>
+    <vue-good-table v-if="!isLoadingTable && !isLoading" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]"
+      :perPage="hotspotPerPage" :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'username', type: 'asc'}"
+      :globalSearch="true" :globalSearchFn="searchFn" :paginate="false" styleClass="table" :nextText="tableLangsTexts.nextText"
+      :prevText="tableLangsTexts.prevText" :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
       :ofText="tableLangsTexts.ofText">
       <template slot="table-row" slot-scope="props">
         <td :class="[isExpired(props.row.valid_until) ? 'disabled' : '', 'fancy']">{{ props.row.name }}</td>
@@ -158,7 +162,8 @@ export default {
       hotspotPage: 1,
       total: 0,
       user: this.get("loggedUser") || null,
-      searchString: ""
+      searchString: "",
+      exportError: false
     };
   },
   mounted() {
@@ -267,30 +272,72 @@ export default {
       );
     },
     exportCSVUsers() {
-      var usersRows = JSON.parse(JSON.stringify(this.rows));
-      for (var r in usersRows) {
-        // get only email verified users
-        if (
-          usersRows[r].account_type == "email" &&
-          !usersRows[r].email_verified
-        ) {
-          delete usersRows[r];
+      this.isLoadingTable = true;
+      // get users
+      this.userGetAll(
+        this.hotspotSearchId,
+        null,
+        this.hotspotShowExpired,
+        null,
+        null,
+        encodeURIComponent(this.searchString),
+        success => {
+          var data_export = [];
+          if (this.hotspotShowExpired) {
+            for (var s in success.body.data_users) {
+              var res = success.body.data_users[s];
+              data_export.push(res);
+            }
+            for (var s in success.body.data_user_histories) {
+              var res = success.body.data_user_histories[s];
+              data_export.push(res);
+            }
+          } else {
+            for (var s in success.body.data) {
+              var res = success.body.data[s];
+              data_export.push(res);
+            }
+          }
+
+          if (data_export.length < 5000) {
+            var usersRows = JSON.parse(JSON.stringify(data_export));
+            for (var r in usersRows) {
+              // get only email verified users
+              if (
+                usersRows[r].account_type == "email" &&
+                !usersRows[r].email_verified
+              ) {
+                delete usersRows[r];
+              }
+
+              // check marketing authorization
+              if (usersRows[r] && !usersRows[r].marketing_auth) {
+                delete usersRows[r];
+              }
+            }
+
+            var columns = this.columns.slice();
+
+            delete columns[3];
+            delete columns[4];
+            delete columns[5];
+            delete columns[6];
+            delete columns[7];
+
+            var csv = this.createCSV(columns, usersRows);
+            this.isLoadingTable = false;
+            this.downloadCSV(csv.cols, csv.rows, "users");
+          } else {
+            this.isLoadingTable = false;
+            this.exportError = true;
+          }
+        },
+        error => {
+          this.isLoading = false;
+          this.isLoadingTable = false;
+          console.error(error);
         }
-
-        // check marketing authorization
-        if (usersRows[r] && !usersRows[r].marketing_auth) {
-          delete usersRows[r];
-        }
-      }
-
-      delete this.columns[3];
-      delete this.columns[4];
-      delete this.columns[5];
-      delete this.columns[6];
-      delete this.columns[7];
-
-      var csv = this.createCSV(this.columns, usersRows);
-      this.downloadCSV(csv.cols, csv.rows, "users");
+      );
     },
     prevPage() {
       this.isLoading = true;
