@@ -354,12 +354,13 @@ export default {
       this.set("sessions_per_page", evt.currentPerPage);
     },
     searchFn(evt, type) {
+      var elem = evt.srcElement || evt.target;
       if (type == "active") {
-        this.searchStringActive = evt.srcElement[0].value;
+        this.searchStringActive = elem[0].value;
       }
 
       if (type == "history") {
-        this.searchStringHistory = evt.srcElement[0].value;
+        this.searchStringHistory = elem[0].value;
       }
       this.getAll(true);
     },

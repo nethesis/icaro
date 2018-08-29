@@ -228,7 +228,8 @@ export default {
       this.set("hotspots_per_page", evt.currentPerPage);
     },
     searchFn(evt) {
-      this.searchString = evt.srcElement[0].value;
+      var elem = evt.srcElement || evt.target;
+      this.searchString = elem[0].value;
       this.getAll(true);
     },
     getAll(reset) {
