@@ -220,7 +220,8 @@ export default {
           this.currentObj.onAction = false;
           this.errors.delete = true;
           console.error(error.body.message);
-        }
+        },
+        this.expired
       );
     }
   }

@@ -81,12 +81,12 @@ var UserService = {
         )
         .then(success, error);
     },
-    userDelete(id, success, error) {
+    userDelete(id, success, error, expired) {
       this.$http
         .delete(
           this.$root.$options.api_scheme +
           this.$root.$options.api_host +
-          "/api/users/" +
+          "/api/users" + (expired ? "_expired/" : "/") +
           id, {
             headers: {
               Token:

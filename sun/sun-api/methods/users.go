@@ -326,6 +326,31 @@ func DeleteUser(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }
 
+func DeleteUserExpired(c *gin.Context) {
+	var user models.UserHistory
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
+
+	userId := c.Param("user_id")
+
+	db := database.Instance()
+	db.Where("id = ? AND hotspot_id in (?)", userId, utils.ExtractHotspotIds(accountId, (accountId == 1), 0)).First(&user)
+
+	if user.Id == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"message": "No user found!"})
+		return
+	}
+
+	// delete marketing info
+	var userMarketing models.UserMarketing
+	db.Where("user_id = ?", user.UserId).First(&userMarketing)
+	db.Delete(&userMarketing)
+
+	// delete user
+	db.Delete(&user)
+
+	c.JSON(http.StatusOK, gin.H{"status": "success"})
+}
+
 func StatsUserTotal(c *gin.Context) {
 	accountId := c.MustGet("token").(models.AccessToken).AccountId
 	var count int
