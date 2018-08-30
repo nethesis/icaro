@@ -268,6 +268,8 @@ export default {
     hotspotAction: HotspotAction
   },
   data() {
+    this.getSubscriptionInfo();
+
     return {
       msg: this.$i18n.t("menu.hotspots"),
       isLoading: true,
@@ -327,7 +329,8 @@ export default {
       hotspotPage: 1,
       total: 0,
       isAdmin: this.get("loggedUser").account_type == "admin",
-      searchString: ""
+      searchString: "",
+      user: {}
     };
   },
   mounted() {
@@ -336,14 +339,13 @@ export default {
   },
   methods: {
     isExpired(date) {
-      console.log(new Date().toISOString() , date)
       return new Date().toISOString() > date;
     },
     getSubscriptionInfo() {
       this.accountGet(this.get("loggedUser").id, success => {
         this.user.subscription = success.body.subscription;
       }, error => {
-
+        console.error(error);
       });
     },
     handlePerPage(evt) {
