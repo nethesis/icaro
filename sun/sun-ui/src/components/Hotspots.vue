@@ -26,7 +26,7 @@
     <div v-if="!isLoading && rows.length > 0" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
       <div class="result-list">{{total}} {{total == 1 ? $t('result') : $t('results')}}</div>
     </div>
-    <div v-if="!isLoading">
+    <div v-if="!isLoading && rows.length > 0">
       <form v-on:submit.prevent="searchFn($event)">
         <input class="form-control input-lg search-table-input" type="text" :placeholder="tableLangsTexts.globalSearchPlaceholder">
       </form>
@@ -70,7 +70,7 @@
         </td>
       </template>
     </vue-good-table>
-    <div v-if="!isLoadingTable && !isLoading" class="right paginator">
+    <div v-if="!isLoadingTable && !isLoading && rows.length > 0" class="right paginator">
       <span class="page-count">
         <b>{{hotspotPage}}</b> {{tableLangsTexts.ofText}} {{total / hotspotPerPage | adjustPage}} (
         <b>{{hotspotPerPage}}</b> {{tableLangsTexts.rowsPerPageText}})</span>
@@ -158,6 +158,8 @@ export default {
     hotspotAction: HotspotAction
   },
   data() {
+    this.getSubscriptionInfo();
+
     return {
       msg: this.$i18n.t("menu.hotspots"),
       isLoading: true,
@@ -217,7 +219,8 @@ export default {
       hotspotPage: 1,
       total: 0,
       isAdmin: this.get("loggedUser").account_type == "admin",
-      searchString: ""
+      searchString: "",
+      user: {}
     };
   },
   mounted() {
@@ -226,14 +229,13 @@ export default {
   },
   methods: {
     isExpired(date) {
-      console.log(new Date().toISOString() , date)
       return new Date().toISOString() > date;
     },
     getSubscriptionInfo() {
       this.accountGet(this.get("loggedUser").id, success => {
         this.user.subscription = success.body.subscription;
       }, error => {
-
+        console.error(error);
       });
     },
     handlePerPage(evt) {
