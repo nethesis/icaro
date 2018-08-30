@@ -392,6 +392,7 @@ export default {
         error => {
           console.error(error);
           this.isLoading = false;
+          this.isLoadingTable = false;
         }
       );
     },
