@@ -64,7 +64,7 @@
             "select_state": "Seleziona Stato",
             "prefix": "Prefisso Internazionale",
             "wait":"Invio SMS in corso...",
-            "we_are_sending_sms_code":"Usa lo stesso codice anche al prossimo accesso cliccando sul pulsante 'Ho già un codice'."
+            "we_are_sending_sms_code":"Riutilizza lo stesso codice anche per i prossimi accessi cliccando sul pulsante 'Ho già un codice'."
         }
     }
 }
