@@ -119,7 +119,7 @@
             <div class="card-pf-body">
               <div class="list-details">
                 <dt>{{ $t("session.ip_address") }}</dt>
-                <dd>{{info.device.ip_address || "-"}}</dd>
+                <dd>{{info.device.ip_address || info.data.ip_address || "-"}}</dd>
               </div>
               <div class="list-details">
                 <dt>{{ $t("session.mac_address") }}</dt>

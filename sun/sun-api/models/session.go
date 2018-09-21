@@ -29,6 +29,7 @@ type Session struct {
 	UnitMac     string    `db:"unit_mac" json:"unit_mac"`
 	HotspotDesc string    `db:"hotspot_desc" json:"hotspot_desc"`
 	DeviceMAC   string    `db:"device_mac" json:"device_mac"`
+	IpAddress   string    `db:"ip_address" json:"ip_address"`
 	Username    string    `db:"username" json:"username"`
 	BytesUp     int       `db:"bytes_up" json:"bytes_up"`
 	BytesDown   int       `db:"bytes_down" json:"bytes_down"`
