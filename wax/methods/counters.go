@@ -86,6 +86,7 @@ func startSession(userName string, deviceMacAddress string, deviceIp string, ses
 	session.HotspotDesc = currentHotspot.Name + " - " + currentHotspot.Description
 	session.DeviceId = device.Id
 	session.DeviceMAC = device.MacAddress
+	session.IpAddress = deviceIp
 	session.UserId = user.Id
 	session.Username = user.Username
 	session.BytesUp = 0
