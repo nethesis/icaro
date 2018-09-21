@@ -63,8 +63,8 @@
             "auth_error_sub": "Something went wrong, the reasons could be the following: 1)The data entered may not be correct. 2)The voucher you are using could be expired. 3)You could have reached your maximum daily time. 4)You could have reached your maximum daily traffic.",
             "select_state": "Select state",
             "prefix": "Prefix",
-            "wait":"Please wait few seconds",
-            "we_are_sending_sms_code":"We are sending you an SMS with your personal code"
+            "wait":"Sending SMS...",
+            "we_are_sending_sms_code":"Use the same code also at the next access by clicking on the 'I already have a code' button."
         }
     }
 }
