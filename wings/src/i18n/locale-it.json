@@ -63,8 +63,8 @@
             "auth_error_sub": "Si è verificato un errore, i motivi potrebbero essere i seguenti: 1)I dati inseriti potrebbero non essere corretti. 2)Il voucher che stai usando potrebbe essere scaduto. 3)Potresti aver raggiunto il tempo massimo consentito giornaliero. 4)Potresti aver raggiunto il traffico massimo consentito giornaliero.",
             "select_state": "Seleziona Stato",
             "prefix": "Prefisso Internazionale",
-            "wait":"Solo qualche secondo...",
-            "we_are_sending_sms_code":"Ti stiamo inviando un SMS con il tuo codice d'accesso."
+            "wait":"Invio SMS in corso...",
+            "we_are_sending_sms_code":"Usa lo stesso codice anche al prossimo accesso cliccando sul pulsante 'Ho già un codice'."
         }
     }
 }
