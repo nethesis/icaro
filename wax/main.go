@@ -51,6 +51,8 @@ func DefineAPI(router *gin.Engine) {
 	privacy := wax.Group("/privacy")
 	privacy.GET("/:hotspot_uuid", methods.GetPrivacies)
 
+	wax.GET("/short/:hash", methods.GetLongUrl)
+
 	wax.Use(middleware.WaxWall)
 	{
 		// handle AAA requests

@@ -314,4 +314,15 @@ CREATE TABLE `hotspot_sms_counts` (
   FOREIGN KEY (`unit_id`) REFERENCES units(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   PRIMARY KEY(`id`)
 );
+
+/* -------------------- */
+
+/* URL SHORTENER */
+
+CREATE TABLE `short_urls` (
+  `id` serial,
+  `hash` varchar(200) NOT NULL,
+  `created_at` datetime NOT NULL,
+  `long_url` varchar(2000) NOT NULL
+);
 /* ------ */

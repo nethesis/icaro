@@ -25,6 +25,8 @@ package utils
 import (
 	"crypto/md5"
 	"crypto/rand"
+	"crypto/sha1"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -303,6 +305,35 @@ func GenerateCode(max int) string {
 	return string(b)
 }
 
+func GenerateShortURL(longURL string) string {
+
+	var shortUrl models.ShortUrl
+	h := sha1.New()
+	db := database.Instance()
+
+	io.WriteString(h, longURL)
+	//Calculate sha-1 hash, convert to hexadecimal representation and take only first 7 digits
+	s := fmt.Sprintf("%.7s", fmt.Sprintf("%x", h.Sum(nil)))
+	//Encode the first 7 digits in Base64 without padding and url safe
+	encoded := base64.URLEncoding.WithPadding(base64.NoPadding).EncodeToString([]byte(s))
+
+	shortUrl.Hash = encoded
+	shortUrl.CreatedAt = time.Now().UTC()
+	shortUrl.LongUrl = longURL
+
+	db.Save(&shortUrl)
+
+	return configuration.Config.Shortener.BaseUrl + encoded
+}
+
+func GetShortUrlByHash(hash string) models.ShortUrl {
+	var shortUrl models.ShortUrl
+	db := database.Instance()
+	db.Where("hash = ? ", hash).First(&shortUrl)
+
+	return shortUrl
+}
+
 func SendSMSCode(number string, code string, unit models.Unit, auth string) int {
 	// get account sms count
 	db := database.Instance()
@@ -325,8 +356,8 @@ func SendSMSCode(number string, code string, unit models.Unit, auth string) int 
 		msgData.Set("To", number)
 		msgData.Set("MessagingServiceSid", configuration.Config.Endpoints.Sms.ServiceSid)
 		msgData.Set("Body", "SMS login code: "+code+
-			"\n\nLogin Link: "+configuration.Config.Endpoints.Sms.Link+
-			"?"+auth+"&code="+code+"&num="+url.QueryEscape(number)+
+			"\n\nLogin Link: "+GenerateShortURL(configuration.Config.Endpoints.Sms.Link+
+			"?"+auth+"&code="+code+"&num="+url.QueryEscape(number))+
 			"\n\nLogout Link: http://logout")
 		msgDataReader := *strings.NewReader(msgData.Encode())
 
