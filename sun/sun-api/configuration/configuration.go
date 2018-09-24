@@ -47,6 +47,7 @@ type Configuration struct {
 	TokenExpiresDays int               `json:"token_expires_days"`
 	RouteBlocked     models.AuthMaps   `json:"route_blocked"`
 	Endpoints        models.Endpoints  `json:"endpoints"`
+	Shortener        models.Shortener  `json:"shortener"`
 	Cors             struct {
 		Headers []string `json:"headers"`
 		Origins []string `json:"origins"`
@@ -164,6 +165,10 @@ func Init(ConfigFilePtr *string) {
 	}
 	if os.Getenv("EMAIL_LOGIN_LINK") != "" {
 		Config.Endpoints.Email.Link = os.Getenv("EMAIL_LOGIN_LINK")
+	}
+
+	if os.Getenv("SHORTENER_BASE_URL") != "" {
+		Config.Shortener.BaseUrl = os.Getenv("SHORTENER_BASE_URL")
 	}
 
 	if os.Getenv("CAPTIVE_REDIRECT") != "" {
