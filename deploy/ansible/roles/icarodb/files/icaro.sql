@@ -323,6 +323,7 @@ CREATE TABLE `short_urls` (
   `id` serial,
   `hash` varchar(200) NOT NULL,
   `created_at` datetime NOT NULL,
-  `long_url` varchar(2000) NOT NULL
+  `long_url` varchar(2000) NOT NULL,
+  KEY `hash` (`hash`)
 );
 /* ------ */
