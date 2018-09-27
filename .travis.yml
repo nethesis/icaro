@@ -3,9 +3,12 @@ if: tag != autobuild
 matrix:
   include:
     - language: go
+      go:
+        - 1.11
       env:
         - NAME=sun-api
         - DEPLOY_FILES=sun/sun-api/sun-api
+        - GO111MODULE=on
       script:
         - cp $TRAVIS_BUILD_DIR/wax/testdata/config.json $TRAVIS_BUILD_DIR/sun/sun-api
         - cp $TRAVIS_BUILD_DIR/wax/testdata/*png $TRAVIS_BUILD_DIR/sun/sun-api
@@ -13,16 +16,22 @@ matrix:
         - cd $TRAVIS_BUILD_DIR/sun/sun-api && go build
 
     - language: go
+      go:
+        - 1.11
       env:
         - NAME=sun-tasks
         - DEPLOY_FILES=sun/sun-tasks/sun-tasks
+        - GO111MODULE=on
       script:
         - cd $TRAVIS_BUILD_DIR/sun/sun-tasks && go build
 
     - language: go
+      go:
+        - 1.11
       env:
         - NAME=wax
         - DEPLOY_FILES=wax/wax
+        - GO111MODULE=on
       script:
         - cp $TRAVIS_BUILD_DIR/wax/testdata/config.json $TRAVIS_BUILD_DIR/wax
         - cp $TRAVIS_BUILD_DIR/wax/testdata/*png $TRAVIS_BUILD_DIR/wax
