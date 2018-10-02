@@ -52,6 +52,10 @@ func FacebookAuth(c *gin.Context) {
 	clientSecret := configuration.Config.AuthSocial.Facebook.ClientSecret
 	redirectURI := configuration.Config.AuthSocial.Facebook.RedirectURI
 
+	var client = &http.Client{
+		Timeout: time.Second * 30,
+	}
+
 	// retrieve access token
 	url := "https://graph.facebook.com/v2.11/oauth/access_token?" +
 		"client_id=" + clientId +
@@ -59,7 +63,7 @@ func FacebookAuth(c *gin.Context) {
 		"&client_secret=" + clientSecret +
 		"&code=" + code
 
-	resp, err := http.Get(url)
+	resp, err := client.Get(url)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
@@ -77,7 +81,7 @@ func FacebookAuth(c *gin.Context) {
 		"access_token=" + clientId + "|" + clientSecret +
 		"&input_token=" + fbToken.AccessToken
 
-	resp, err = http.Get(url)
+	resp, err = client.Get(url)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
@@ -95,7 +99,7 @@ func FacebookAuth(c *gin.Context) {
 		"id,name,gender,email,birthday,likes" +
 		"&access_token=" + fbToken.AccessToken
 
-	resp, err = http.Get(url)
+	resp, err = client.Get(url)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
@@ -217,6 +221,10 @@ func LinkedInAuth(c *gin.Context) {
 	clientSecret := configuration.Config.AuthSocial.LinkedIn.ClientSecret
 	redirectURI := configuration.Config.AuthSocial.LinkedIn.RedirectURI
 
+	var client = &http.Client{
+		Timeout: time.Second * 30,
+	}
+
 	// retrieve access token
 	urlEndpoint := "https://www.linkedin.com/oauth/v2/accessToken"
 
@@ -229,7 +237,7 @@ func LinkedInAuth(c *gin.Context) {
 	}
 	bodyByte := bytes.NewBufferString(form.Encode())
 
-	resp, err := http.Post(urlEndpoint, "application/x-www-form-urlencoded", bodyByte)
+	resp, err := client.Post(urlEndpoint, "application/x-www-form-urlencoded", bodyByte)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
@@ -245,7 +253,6 @@ func LinkedInAuth(c *gin.Context) {
 	// extract user info
 	urlAPI := "https://api.linkedin.com/v1/people/~:(id,first-name,last-name,email-address,headline,current-share,num-connections,location,positions)?format=json"
 
-	client := &http.Client{}
 	req, err := http.NewRequest("GET", urlAPI, nil)
 	if err != nil {
 		fmt.Println(err.Error())
@@ -374,6 +381,10 @@ func InstagramAuth(c *gin.Context) {
 	clientSecret := configuration.Config.AuthSocial.Instagram.ClientSecret
 	redirectURI := configuration.Config.AuthSocial.Instagram.RedirectURI
 
+	var client = &http.Client{
+		Timeout: time.Second * 30,
+	}
+
 	// retrieve access token
 	urlEndpoint := "https://api.instagram.com/oauth/access_token"
 
@@ -386,7 +397,7 @@ func InstagramAuth(c *gin.Context) {
 	}
 	bodyByte := bytes.NewBufferString(form.Encode())
 
-	resp, err := http.Post(urlEndpoint, "application/x-www-form-urlencoded", bodyByte)
+	resp, err := client.Post(urlEndpoint, "application/x-www-form-urlencoded", bodyByte)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
@@ -402,7 +413,7 @@ func InstagramAuth(c *gin.Context) {
 	// extract user info
 	urlAPI := "https://api.instagram.com/v1/users/self/?access_token=" + inRespToken.AccessToken
 
-	resp, err = http.Get(urlAPI)
+	resp, err = client.Get(urlAPI)
 	if err != nil {
 		fmt.Println(err.Error())
 	}

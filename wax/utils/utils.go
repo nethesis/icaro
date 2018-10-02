@@ -362,7 +362,9 @@ func SendSMSCode(number string, code string, unit models.Unit, auth string) int 
 		msgDataReader := *strings.NewReader(msgData.Encode())
 
 		// create HTTP request client
-		client := &http.Client{}
+		client := &http.Client{
+			Timeout: time.Second * 30,
+		}
 		req, _ := http.NewRequest("POST", urlAPI, &msgDataReader)
 		req.SetBasicAuth(accountSid, authToken)
 		req.Header.Add("Accept", "application/json")
