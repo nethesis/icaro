@@ -371,7 +371,13 @@ func SendSMSCode(number string, code string, unit models.Unit, auth string) int 
 		req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 
 		// make HTTP POST request
-		resp, _ := client.Do(req)
+		resp, err := client.Do(req)
+
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+
+		defer resp.Body.Close()
 
 		// update sms accounting table
 		if resp.StatusCode == 201 {
