@@ -78,7 +78,7 @@ var AuthMixin = {
                         'client_id=' + params.fb_client_id +
                         '&state=' + encodeURIComponent(params.digest + "&" + params.uuid + "&" + params.sessionid + "&" + params.uamip + "&" + params.uamport + "&" + params.voucher) +
                         '&scope=email,public_profile,user_birthday,user_likes,user_location' +
-                        '&redirect_uri=' + escape('http://' + window.location.host + '/wings/login/facebook')
+                        '&redirect_uri=' + escape('https://' + window.location.host + '/wings/login/facebook')
                     break
 
                 case 'linkedin':
