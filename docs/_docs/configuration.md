@@ -71,7 +71,7 @@ After the registration insert your variables inside the file `/opt/icaro/wax/con
 	"facebook": {
 		"client_id": "fb_client_id",
 		"client_secret": "fb_client_secret",
-		"redirect_uri": "http://<icaro_instance>/wings/login/facebook"
+		"redirect_uri": "https://<icaro_instance>/wings/login/facebook"
 	},
 	"linkedin": {
 		"client_id": "li_client_id",
