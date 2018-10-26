@@ -9,6 +9,11 @@ https://{$ICARO_HOSTNAME} {
   tls /opt/icaro/{$ICARO_HOSTNAME}_cert.pem /opt/icaro/{$ICARO_HOSTNAME}_private_key.pem
 {% endif %}
   log / stdout {combined}
+    redir {
+    if {path} starts_with /wings
+    / http://{host}{uri}/
+  }
+
 }
 
 http://{$ICARO_HOSTNAME} {
