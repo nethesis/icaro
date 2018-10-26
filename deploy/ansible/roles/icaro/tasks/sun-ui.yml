@@ -17,11 +17,17 @@
     dest: /opt/icaro/sun-ui/
     remote_src: yes
 
-- name: Download Sun-ui assets
-  unarchive:
-    src: "{{ icaro.sun_ui.assets_url }}"
-    dest: /opt/icaro/sun-ui/static/
-    remote_src: yes
+- block:
+    - name: Download Sun-ui assets
+      get_url:
+        url: "{{ icaro.sun_ui.assets_url }}"
+        force: yes
+        dest: /tmp/sun-ui-assets.tar
+    - name: Unpack Sun-ui assets
+      unarchive:
+        src: /tmp/sun-ui-assets.tar
+        dest: /opt/icaro/sun-ui/static/
+        remote_src: yes
   when: icaro.sun_ui is defined and icaro.sun_ui.assets_url is defined
 
 - name: Copy Sun-ui config
