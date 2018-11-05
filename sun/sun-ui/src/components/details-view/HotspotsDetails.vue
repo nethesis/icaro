@@ -112,11 +112,17 @@
           </div>
           <div v-if="!vouchers.isLoading" class="card-pf-body">
             <div class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
-              <label class="col-sm-3 control-label centered" for="textInput-markup">{{$t('hotspot.duration')}} ({{$t('hotspot.0_all')}})</label>
+              <label class="col-sm-3 control-label centered" for="textInput-markup">{{$t('hotspot.code')}}</label>
+              <div class="col-sm-9">
+                <input v-model="vouchers.filters.code" type="text" class="form-control">
+              </div>
+            </div>
+            <div class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
+              <label class="col-sm-3 control-label centered" for="textInput-markup">{{$t('hotspot.duration')}}
+                ({{$t('hotspot.0_all')}})</label>
               <div class="col-sm-9">
                 <input v-model="vouchers.filters.duration" type="number" class="form-control">
               </div>
-
             </div>
             <div class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
               <label class="col-sm-3 control-label centered" for="textInput-markup">{{$t('hotspot.auto_login')}}</label>
@@ -806,6 +812,7 @@ export default {
         data: [],
         usable: [],
         filters: {
+          code: "",
           duration: 0,
           auto_login: "",
           used: "",
@@ -1126,6 +1133,7 @@ export default {
       this.vouchers.usable = [];
       this.hotspotGetVouchers(
         {
+          code: this.vouchers.filters.code,
           duration: this.vouchers.filters.duration,
           auto_login: this.vouchers.filters.auto_login,
           used: this.vouchers.filters.used,
