@@ -705,7 +705,7 @@
           <span> {{ $t("hotspot.days") }} </span>
         </div>
         <div class="card-pf-time-frame-filter voucher-max-use">
-          {{voucher.remain_use == -1 ? $t('hotspot.limitless') : $t('hotspot.max_use') + ': ' }}
+          {{voucher.remain_use == -1 ? $t('hotspot.limitless') : $t('hotspot.max_use') + ': ' }} <b>({{$t('hotspot.'+voucher.type+'_print')}})</b>
           <strong v-if="voucher.remain_use != -1">{{voucher.remain_use}}</strong>
         </div>
         <div class="card-pf-time-frame-filter voucher-traffic">
