@@ -66,7 +66,8 @@
             "select_state": "Select state",
             "prefix": "Prefix",
             "wait":"Sending SMS...",
-            "we_are_sending_sms_code":"Use the same code also at the next access by clicking on the 'I already have a code' button."
+            "we_are_sending_sms_code":"Use the same code also at the next access by clicking on the 'I already have a code' button.",
+            "not_code_explain": "Is it the first time you connect to this Wi-Fi?"
         }
     }
 }

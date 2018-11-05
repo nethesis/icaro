@@ -17,10 +17,15 @@
                     <i class="talk icon"></i>
                 </div>
             </div>
-            <button v-if="!codeRequested && !choosedMode" v-on:click="chooseMode()" class="ui big button request-code">{{
-                $t("sms.not_have_code") }}</button>
-            <button v-if="!codeRequested && !choosedMode" v-on:click="chooseMode(true)" class="ui big button request-code">{{
+            <button v-if="!codeRequested && !choosedMode" v-on:click="chooseMode(true)" class="ui big button green request-code">{{
                 $t("sms.have_code") }}</button>
+
+            <p v-if="!codeRequested && !choosedMode" class="not-code-exp">
+                <label>{{$t("sms.not_code_explain") }}</label>
+                <br />
+                <button v-on:click="chooseMode()" class="ui normal button request-code">{{
+                    $t("sms.not_have_code") }}</button>
+            </p>
             <button v-if="!codeRequested && choosedMode" v-on:click="getCode(true)" class="ui big button request-code">{{
                 $t("sms.get_code") }}</button>
             <div v-if="errors.badNumber" class="ui tiny icon negative message">
@@ -255,9 +260,14 @@
 
     .request-code {
         margin-bottom: 10px !important;
+        margin-top: 5px !important;
     }
 
     .no-margin-top {
         margin-top: 0px;
+    }
+
+    .not-code-exp {
+        margin-top: 10px !important;
     }
 </style>

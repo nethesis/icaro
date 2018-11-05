@@ -137,7 +137,9 @@
       "auth_renew": "Autentication renew after expiration",
       "type": "Type",
       "auth": "Authenticate",
+      "auth_print": "Auth.",
       "normal": "Standard",
+      "normal_print": "Stand.",
       "user_name": "User name",
       "user_mail": "User email"
     },
