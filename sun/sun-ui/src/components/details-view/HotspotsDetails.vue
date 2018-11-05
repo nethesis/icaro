@@ -153,19 +153,22 @@
                   <option value="0">{{$t('hotspot.no')}}</option>
                 </select>
               </div>
-
             </div>
 
             <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
               <button @click="getVouchers()" class="btn btn-primary">{{$t('hotspot.apply_filters')}}</button>
             </div>
 
-            <vue-good-table :perPage="5" :paginate="true" :columns="columns" :rows="vouchers.data" :lineNumbers="false" :defaultSortBy="{field: 'expires', type: 'asc'}"
-              styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText" :rowsPerPageText="tableLangsTexts.rowsPerPageText"
+            <vue-good-table :perPage="5" :paginate="true" :columns="columns" :rows="vouchers.data" :lineNumbers="false"
+              :defaultSortBy="{field: 'expires', type: 'asc'}" styleClass="table" :nextText="tableLangsTexts.nextText"
+              :prevText="tableLangsTexts.prevText" :rowsPerPageText="tableLangsTexts.rowsPerPageText"
               :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder" :ofText="tableLangsTexts.ofText">
               <template slot="table-row" slot-scope="props">
                 <td class="fancy">
                   <strong>{{ props.row.code }}</strong>
+                </td>
+                <td class="fancy">
+                  <strong>{{ $t('hotspot.'+props.row.type) }}</strong>
                 </td>
                 <td class="fancy">
                   <span :class="['pficon', props.row.auto_login ? 'pficon-ok' : 'pficon-error-circle-o']"></span>
@@ -206,12 +209,14 @@
           </div>
           <div v-if="!vouchers.isLoading" class="card-pf-footer">
             <div class="dropdown card-pf-time-frame-filter">
-              <button data-toggle="modal" data-target="#voucherModal" class="btn btn-primary" type="button">{{ $t("hotspot.create_voucher") }}</button>
+              <button data-toggle="modal" data-target="#voucherModal" class="btn btn-primary" type="button">{{
+                $t("hotspot.create_voucher") }}</button>
               <button :disabled="vouchers.data.length == 0" v-on:click="printAllVoucher()" class="btn btn-default" type="button">
                 <span class="fa fa-print"></span>
                 {{ $t("hotspot.print_all_voucher") }}
               </button>
-              <button :disabled="vouchers.data.length == 0" v-on:click="exportCSVVoucher()" class="btn btn-default" type="button">
+              <button :disabled="vouchers.data.length == 0" v-on:click="exportCSVVoucher()" class="btn btn-default"
+                type="button">
                 <span class="fa fa-list"></span>
                 {{ $t("hotspot.export_csv") }}
               </button>
@@ -277,17 +282,18 @@
                   <span :class="[getPrefIcon(pref.key)]"></span>
                 </label>
                 <div class="col-sm-6">
-                  <picture-input v-if="pref.key == 'captive_3_logo' || pref.key == 'captive_5_banner'" :ref="'prefInput-'+pref.key" :prefill="urltoFile(pref.value, pref.key)"
-                    :alertOnError="false" @change="onChanged(pref)" :width="100" :height="100" :crop="false" :zIndex="1000"
-                    :customStrings="uploadLangstexts" removeButtonClass="btn btn-danger" buttonClass="btn btn-default">
+                  <picture-input v-if="pref.key == 'captive_3_logo' || pref.key == 'captive_5_banner'" :ref="'prefInput-'+pref.key"
+                    :prefill="urltoFile(pref.value, pref.key)" :alertOnError="false" @change="onChanged(pref)" :width="100"
+                    :height="100" :crop="false" :zIndex="1000" :customStrings="uploadLangstexts" removeButtonClass="btn btn-danger"
+                    buttonClass="btn btn-default">
 
                   </picture-input>
                   <span v-if="pref.onError" class="help-block">{{$t('upload_file_exceed')}}</span>
 
                   <vue-editor :editorToolbar="customToolbar" v-if="pref.key == 'captive_6_description'" v-model="pref.value"></vue-editor>
 
-                  <sketch-picker @input="onUpdate(pref.value)" class="absolute-center" v-if="pref.key == 'captive_7_background'" v-model="pref.value"
-                  />
+                  <sketch-picker @input="onUpdate(pref.value)" class="absolute-center" v-if="pref.key == 'captive_7_background'"
+                    v-model="pref.value" />
 
                   <input required v-if="pref.key != 'captive_6_description' && pref.key != 'captive_3_logo' && pref.key != 'captive_5_banner' && pref.key != 'captive_7_background'"
                     v-model="pref.value" :type="getInputType(pref.key, pref.value)" class="form-control">
@@ -329,8 +335,9 @@
             </h2>
           </div>
           <div v-if="!macAuth.isLoading" class="card-pf-body">
-            <vue-good-table :perPage="5" :paginate="true" :columns="columnsMAC" :rows="macAuth.data" :lineNumbers="false" :defaultSortBy="{field: 'name', type: 'asc'}"
-              styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText" :rowsPerPageText="tableLangsTexts.rowsPerPageText"
+            <vue-good-table :perPage="5" :paginate="true" :columns="columnsMAC" :rows="macAuth.data" :lineNumbers="false"
+              :defaultSortBy="{field: 'name', type: 'asc'}" styleClass="table" :nextText="tableLangsTexts.nextText"
+              :prevText="tableLangsTexts.prevText" :rowsPerPageText="tableLangsTexts.rowsPerPageText"
               :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder" :ofText="tableLangsTexts.ofText">
               <template slot="table-row" slot-scope="props">
                 <td class="fancy">
@@ -354,7 +361,8 @@
           </div>
           <div v-if="!macAuth.isLoading" class="card-pf-footer">
             <div class="dropdown card-pf-time-frame-filter">
-              <button data-toggle="modal" data-target="#macAuthModal" class="btn btn-primary" type="button">{{ $t("hotspot.new_mac_auth") }}</button>
+              <button data-toggle="modal" data-target="#macAuthModal" class="btn btn-primary" type="button">{{
+                $t("hotspot.new_mac_auth") }}</button>
             </div>
             <p>
               <a href="#" class="card-pf-link-with-icon">
@@ -466,8 +474,29 @@
             </button>
             <h4 class="modal-title" id="myModalLabel">{{$t('hotspot.voucher_creation')}}</h4>
           </div>
-          <div class="modal-body">
-            <form class="form-horizontal">
+          <form class="form-horizontal" v-on:submit.prevent="createVoucher()">
+
+            <div class="modal-body">
+              <div class="form-group">
+                <label class="col-sm-5 control-label" for="textInput-modal-markup">{{$t('hotspot.type')}}</label>
+                <div class="col-sm-7">
+                  <span class="span-radio">
+                    <input required v-model="newVoucher.type" class="form-check-input" type="radio" name="voucherType"
+                      id="voucherType1" value="normal">
+                    <label class="form-check-label" for="voucherType1">
+                      {{$t('hotspot.normal')}}
+                    </label>
+                  </span>
+                  <span class="span-radio">
+                    <input required v-model="newVoucher.type" class="form-check-input" type="radio" name="voucherType"
+                      id="voucherType2" value="auth">
+                    <label class="form-check-label" for="voucherType2">
+                      {{$t('hotspot.auth')}}
+                    </label>
+                  </span>
+                </div>
+              </div>
+
               <div class="form-group">
                 <label class="col-sm-5 control-label" for="textInput-modal-markup">{{$t('hotspot.voucher_creation_count')}}</label>
                 <div class="col-sm-7">
@@ -506,7 +535,8 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-5 control-label" for="textInput-modal-markup">{{$t('hotspot.duration')}} ({{$t('hotspot.days')}})</label>
+                <label class="col-sm-5 control-label" for="textInput-modal-markup">{{$t('hotspot.duration')}}
+                  ({{$t('hotspot.days')}})</label>
                 <div class="col-sm-7">
                   <input v-model="newVoucher.duration" type="number" id="textInput-modal-markup" class="form-control">
                 </div>
@@ -515,15 +545,15 @@
                 <label class="col-sm-5 control-label" for="textInput-modal-markup">{{$t('hotspot.mode')}}</label>
                 <div class="col-sm-7">
                   <span class="span-radio">
-                    <input required v-model="newVoucher.limitless" class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1"
-                      value="true">
+                    <input required v-model="newVoucher.limitless" class="form-check-input" type="radio" name="exampleRadios"
+                      id="exampleRadios1" value="true">
                     <label class="form-check-label" for="exampleRadios1">
                       {{$t('hotspot.limitless')}}
                     </label>
                   </span>
                   <span class="span-radio">
-                    <input required v-model="newVoucher.limitless" class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2"
-                      value="false">
+                    <input required v-model="newVoucher.limitless" class="form-check-input" type="radio" name="exampleRadios"
+                      id="exampleRadios2" value="false">
                     <label class="form-check-label" for="exampleRadios2">
                       {{$t('hotspot.with_limit')}}
                     </label>
@@ -536,18 +566,35 @@
                   <input v-model="newVoucher.remain_use" type="number" id="textInput-modal-markup" class="form-control">
                 </div>
               </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <span v-if="vouchers.isCreating" class="spinner spinner-sm spinner-inline modal-spinner"></span>
-            <button type="button" class="btn btn-default" data-dismiss="modal">{{$t('cancel')}}</button>
-            <button v-on:click="createVoucher()" type="button" class="btn btn-primary">{{$t('save')}}</button>
-          </div>
+              <div v-if="newVoucher.type == 'auth'" class="divider"></div>
+              <div v-if="newVoucher.type == 'auth'" class="form-group">
+                <label class="col-sm-5 control-label" for="textInput-modal-markup">{{$t('hotspot.user_name')}}</label>
+                <div class="col-sm-7">
+                  <input :required="newVoucher.type == 'auth' ? true : false" v-model="newVoucher.user_name" type="text"
+                    id="textInput-modal-markup" class="form-control">
+                </div>
+              </div>
+              <div v-if="newVoucher.type == 'auth'" class="form-group">
+                <label class="col-sm-5 control-label" for="textInput-modal-markup">{{$t('hotspot.user_mail')}}</label>
+                <div class="col-sm-7">
+                  <input v-model="newVoucher.user_mail" type="email"
+                    id="textInput-modal-markup" class="form-control">
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <span v-if="vouchers.isCreating" class="spinner spinner-sm spinner-inline modal-spinner"></span>
+              <button type="button" class="btn btn-default" data-dismiss="modal">{{$t('cancel')}}</button>
+              <button type="submit" class="btn btn-primary">{{$t('save')}}</button>
+            </div>
+          </form>
+
         </div>
       </div>
     </div>
 
-    <div class="modal fade" id="voucherDeleteAll" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="voucherDeleteAll" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+      aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -573,7 +620,8 @@
       </div>
     </div>
 
-    <div class="modal fade" id="macAuthModal" tabindex="-1" role="dialog" aria-labelledby="HScreateModalLabel" aria-hidden="true">
+    <div class="modal fade" id="macAuthModal" tabindex="-1" role="dialog" aria-labelledby="HScreateModalLabel"
+      aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -597,14 +645,15 @@
               <div class="form-group">
                 <label class="col-sm-5 control-label" for="textInput-modal-markup">{{ $t("unit.description") }}</label>
                 <div class="col-sm-7">
-                  <input required v-model="newMACAuth.name" type="text" id="textInput-modal-markup" class="form-control" :placeholder="$t('unit.description')">
+                  <input required v-model="newMACAuth.name" type="text" id="textInput-modal-markup" class="form-control"
+                    :placeholder="$t('unit.description')">
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-5 control-label" for="textInput2-modal-markup">{{ $t("unit.mac_address") }}</label>
                 <div class="col-sm-7">
-                  <input required v-model="newMACAuth.username" pattern="^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})" type="text" id="textInput2-modal-markup"
-                    class="form-control" placeholder="00:11:22:AA:BB:CC">
+                  <input required v-model="newMACAuth.username" pattern="^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})" type="text"
+                    id="textInput2-modal-markup" class="form-control" placeholder="00:11:22:AA:BB:CC">
                 </div>
               </div>
               <div class="form-group">
@@ -777,7 +826,10 @@ export default {
         max_time: 0,
         duration: 7,
         remain_use: 3,
-        limitless: "true"
+        limitless: "true",
+        type: "normal",
+        user_name: "",
+        user_mail: ""
       },
       newMACAuth: {
         name: "",
@@ -822,6 +874,12 @@ export default {
         {
           label: this.$i18n.t("hotspot.code"),
           field: "code",
+          filterable: false,
+          sortable: false
+        },
+        {
+          label: this.$i18n.t("hotspot.type"),
+          field: "type",
           filterable: false,
           sortable: false
         },
@@ -980,6 +1038,15 @@ export default {
                   parseInt(context.newVoucher.max_traffic) * 1024 * 1024,
                 max_time: parseInt(context.newVoucher.max_time) * 60,
                 duration: parseInt(context.newVoucher.duration),
+                type: context.newVoucher.type,
+                user_name:
+                  context.newVoucher.type == "auth"
+                    ? context.newVoucher.user_name + (i > 0 ? "-" + i : "")
+                    : null,
+                user_mail:
+                  context.newVoucher.type == "auth"
+                    ? context.newVoucher.user_mail
+                    : null,
                 remain_use:
                   context.newVoucher.limitless == "true"
                     ? -1
@@ -1187,6 +1254,7 @@ export default {
           var globalPref = [];
           var captivePref = [];
           var backgroundColor = "";
+          var vouchersAvailable = false;
 
           for (var p in success.body) {
             var pref = success.body[p];
@@ -1197,10 +1265,8 @@ export default {
               pref.value = false;
             }
 
-            if (pref.key == "voucher_login" && pref.value) {
-              this.preferences.vouchersAvailable = true;
-            } else {
-              this.preferences.vouchersAvailable = false;
+            if ( (pref.key == "voucher_login" && pref.value) || (pref.key == "voucher_code_login" && pref.value) ) {
+              vouchersAvailable = pref.value || vouchersAvailable;
             }
 
             if (pref.key == "captive_7_background") {
@@ -1222,6 +1288,7 @@ export default {
             }
           }
 
+          this.preferences.vouchersAvailable = vouchersAvailable
           this.preferences.global = globalPref;
           this.preferences.captive = captivePref;
           this.preferences.isLoading = false;

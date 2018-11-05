@@ -91,8 +91,12 @@ CREATE TABLE `hotspot_vouchers` (
   `max_time` integer unsigned,
   `remain_use` integer,
   `expires` datetime DEFAULT NULL,
+  `type` varchar(10) NOT NULL,
+  `user_name` varchar(250) NOT NULL,
+  `user_mail` varchar(250) NOT NULL,
   `printed` tinyint NOT NULL,
   `owner_id` bigint unsigned NOT NULL,
+  `created` datetime,
   FOREIGN KEY (`hotspot_id`) REFERENCES hotspots(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   UNIQUE KEY (`hotspot_id`, `code`),
   PRIMARY KEY(`id`)

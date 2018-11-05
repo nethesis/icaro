@@ -16,7 +16,9 @@
             "decline": "Decline",
             "accept": "Accept",
             "disclaimer_use": "Terms of Use",
-            "disclaimer_marketing": "Marketing info"
+            "disclaimer_marketing": "Marketing info",
+            "back": "Back",
+            "code": "Code"
         },
         "social": {
             "auth_progress": "Authorization in progress",

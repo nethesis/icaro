@@ -82,6 +82,7 @@
       "instagram_login": "Captive Portal login with Instagram",
       "linkedin_login": "Captive Portal login with Linkedin",
       "voucher_login": "Captive Portal login with Voucher",
+      "voucher_code_login": "Captive Portal login with Code",
       "temp_session_duration": "Temporary session duration (seconds)",
       "start_navigate": "Start Navigate",
       "voucher_creation": "Vouchers creation",
@@ -133,7 +134,12 @@
       "marketing_info": "Privacy",
       "terms_info": "Terms of Use",
       "print_privacy": "Print disclaimers",
-      "auth_renew": "Autentication renew after expiration"
+      "auth_renew": "Autentication renew after expiration",
+      "type": "Type",
+      "auth": "Authenticate",
+      "normal": "Standard",
+      "user_name": "User name",
+      "user_mail": "User email"
     },
     "user": {
       "username": "Username",
