@@ -154,6 +154,7 @@ func GetVouchers(c *gin.Context) {
 	page := c.Query("page")
 	limit := c.Query("limit")
 
+	code := c.Query("code")
 	duration := c.Query("duration")
 	autoLogin := c.Query("auto_login")
 	used := c.Query("used")
@@ -175,6 +176,10 @@ func GetVouchers(c *gin.Context) {
 	// if desk account, get only my voucher not voucher of other users
 	if account.Type == "desk" {
 		chain = chain.Where("owner_id = ?", accountId)
+	}
+
+	if len(code) > 0 {
+		chain = chain.Where("code LIKE ?", "%"+code+"%")
 	}
 
 	if len(duration) > 0 {
@@ -205,7 +210,7 @@ func GetVouchers(c *gin.Context) {
 		chain = chain.Where("printed = ?", printed)
 	}
 
-	chain.Offset(offsets[0]).Limit(offsets[1]).Find(&hotspotVouchers)
+	chain.Order("created desc").Offset(offsets[0]).Limit(offsets[1]).Find(&hotspotVouchers)
 
 	if len(hotspotVouchers) <= 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No hotspot vouchers found!"})

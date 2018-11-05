@@ -85,6 +85,7 @@ var HotspotService = {
           this.$root.$options.api_host +
           "/api/vouchers/" +
           hotspotId + "?" +
+          (filters && filters.code != 0 ? "&code=" + filters.code : "") +
           (filters && filters.duration != 0 ? "&duration=" + filters.duration : "") +
           (filters && filters.auto_login ? "&auto_login=" + filters.auto_login : "") +
           (filters && filters.used ? "&used=" + filters.used : "") +
