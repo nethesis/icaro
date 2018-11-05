@@ -25,6 +25,7 @@ package methods
 import (
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
@@ -32,7 +33,13 @@ import (
 	"github.com/nethesis/icaro/sun/sun-api/database"
 	"github.com/nethesis/icaro/sun/sun-api/models"
 	"github.com/nethesis/icaro/sun/sun-api/utils"
+	waxUtils "github.com/nethesis/icaro/wax/utils"
 )
+
+type voucherMarketingData struct {
+	Name  string `json:"name"`
+	Email string `json:"email"`
+}
 
 func CreateVoucher(c *gin.Context) {
 	accountId := c.MustGet("token").(models.AccessToken).AccountId
@@ -59,7 +66,11 @@ func CreateVoucher(c *gin.Context) {
 		MaxTime:       json.MaxTime,
 		Duration:      json.Duration,
 		RemainUse:     json.RemainUse,
+		Type:          json.Type,
+		UserName:      json.UserName,
+		UserMail:      json.UserMail,
 		OwnerId:       ownerId,
+		Created:       time.Now().UTC(),
 	}
 
 	hotspotVoucher.HotspotId = json.HotspotId
@@ -69,10 +80,36 @@ func CreateVoucher(c *gin.Context) {
 		db := database.Instance()
 		db.Save(&hotspotVoucher)
 
+		var newUserId = 0
+		if hotspotVoucher.Type == "auth" {
+			newUser := models.User{
+				HotspotId:            json.HotspotId,
+				Name:                 hotspotVoucher.UserName,
+				Username:             hotspotVoucher.Code,
+				Password:             hotspotVoucher.Code,
+				Email:                hotspotVoucher.UserMail,
+				AccountType:          "voucher",
+				MarketingAuth:        true,
+				KbpsDown:             hotspotVoucher.BandwidthDown,
+				KbpsUp:               hotspotVoucher.BandwidthUp,
+				MaxNavigationTraffic: hotspotVoucher.MaxTraffic,
+				MaxNavigationTime:    hotspotVoucher.MaxTime,
+				AutoLogin:            hotspotVoucher.AutoLogin,
+				ValidFrom:            time.Now().UTC(),
+				ValidUntil:           time.Now().UTC().AddDate(0, 0, hotspotVoucher.Duration),
+			}
+
+			// create user
+			newUserId = CreateUser(newUser)
+
+			// create marketing info with user infos
+			waxUtils.CreateUserMarketing(newUserId, voucherMarketingData{Name: hotspotVoucher.UserName, Email: hotspotVoucher.UserMail}, "voucher")
+		}
+
 		if hotspotVoucher.Id == 0 {
 			c.JSON(http.StatusConflict, gin.H{"id": hotspotVoucher.Id, "status": "voucher already exists"})
 		} else {
-			c.JSON(http.StatusCreated, gin.H{"id": hotspotVoucher.Id, "status": "success"})
+			c.JSON(http.StatusCreated, gin.H{"id": hotspotVoucher.Id, "status": "success", "userId": newUserId})
 		}
 	} else {
 		c.JSON(http.StatusUnauthorized, gin.H{"message": "This hotspot is not yours"})

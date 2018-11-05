@@ -118,6 +118,9 @@ var UtilService = {
         case "voucher_login":
           icon = "fa fa-wpforms login-pref-option";
           break;
+        case "voucher_code_login":
+          icon = "fa fa-barcode login-pref-option";
+          break;
         case "CoovaChilli-Bandwidth-Max-Down":
           icon = "fa fa-arrow-circle-down login-pref-option";
           break;
@@ -161,6 +164,7 @@ var UtilService = {
         case "email_login":
         case "sms_login":
         case "voucher_login":
+        case "voucher_code_login":
         case "auto_login":
         case "auth_renew":
           type = "checkbox";

@@ -3,15 +3,11 @@
         <div v-if="!dedaloRequested">
             <div v-if="choosedMode && !this.$route.query.num" class="inline field" v-bind:class="{ error: errors.badInput }">
                 <label>{{ $t("sms.prefix") }}</label>
-                <div class="ui fluid pointing search selection dropdown select-state">
-                    <input type="hidden" name="country">
-                    <i class="dropdown icon"></i>
-                    <div class="default text">{{$t('sms.select_state')}}</div>
-                    <div class="menu">
-                        <div @click="setPrefix(c.dial_code)" v-for="c in countries" v-bind:key="c.code" class="item">
-                            <i :class="[c.code.toLowerCase(), 'flag']"></i>{{c.name}} ({{c.dial_code}})
-                        </div>
-                    </div>
+                <div class="ui big left icon input">
+                    <select v-model="authPrefix">
+                        <option :value="c.dial_code" v-for="c in countries" v-bind:key="c.code">{{c.name}}
+                            ({{c.dial_code}})</option>
+                    </select>
                 </div>
             </div>
             <div v-if="choosedMode" class="inline field">
@@ -21,9 +17,12 @@
                     <i class="talk icon"></i>
                 </div>
             </div>
-            <button v-if="!codeRequested && !choosedMode" v-on:click="chooseMode()" class="ui big button request-code">{{ $t("sms.not_have_code") }}</button>
-            <button v-if="!codeRequested && !choosedMode" v-on:click="chooseMode(true)" class="ui big button request-code">{{ $t("sms.have_code") }}</button>
-            <button v-if="!codeRequested && choosedMode" v-on:click="getCode(true)" class="ui big button request-code">{{ $t("sms.get_code") }}</button>
+            <button v-if="!codeRequested && !choosedMode" v-on:click="chooseMode()" class="ui big button request-code">{{
+                $t("sms.not_have_code") }}</button>
+            <button v-if="!codeRequested && !choosedMode" v-on:click="chooseMode(true)" class="ui big button request-code">{{
+                $t("sms.have_code") }}</button>
+            <button v-if="!codeRequested && choosedMode" v-on:click="getCode(true)" class="ui big button request-code">{{
+                $t("sms.get_code") }}</button>
             <div v-if="errors.badNumber" class="ui tiny icon negative message">
                 <i class="remove icon"></i>
                 <div class="content">
@@ -56,7 +55,8 @@
             </button>
         </div>
         <div v-if="dedaloRequested">
-            <div v-if="!authorized && !errors.dedaloError" class="ui active centered inline text loader">{{ $t("sms.auth_progress") }}...</div>
+            <div v-if="!authorized && !errors.dedaloError" class="ui active centered inline text loader">{{
+                $t("sms.auth_progress") }}...</div>
             <div v-if="authorized" class="ui icon positive message">
                 <i class="check icon"></i>
                 <div class="content">
@@ -95,16 +95,19 @@
     export default {
         name: 'SMSPage',
         mixins: [AuthMixin],
-        data: function() {
+        data: function () {
             var params = this.extractParams()
 
-            this.getPreferences(params, function(success) {
+            this.getPreferences(params, function (success) {
                 this.$parent.hotspot.disclaimers = success.body.disclaimers
                 this.$root.$options.hotspot.disclaimers = success.body.disclaimers
                 this.hotspot.disclaimers = success.body.disclaimers
-            }, function(error) {
+            }, function (error) {
                 console.error(error)
             })
+
+            var countries = require('./../../i18n/countries.json')
+            var authPrefix = countries[0]
 
             return {
                 authorized: false,
@@ -112,7 +115,7 @@
                 codeRequested: this.$route.query.code || false,
                 bannerShow: false,
                 dedaloRequested: false,
-                authPrefix: '',
+                authPrefix: authPrefix,
                 authSMS: this.$route.query.num || '',
                 authCode: this.$route.query.code || '',
                 authReset: this.$route.query.code || false,
@@ -124,20 +127,20 @@
                     dedaloError: false,
                     badInput: false
                 },
-                countries: require('./../../i18n/countries.json'),
+                countries: countries,
                 hotspot: {
                     disclaimers: this.$root.$options.hotspot.disclaimers
                 },
             }
         },
         methods: {
-            isDisabled: function() {
+            isDisabled: function () {
                 return this.authSMS.length == 0 || this.authCode.length == 0
             },
-            setPrefix: function(prefix) {
+            setPrefix: function (prefix) {
                 this.authPrefix = prefix
             },
-            chooseMode: function(haveCode) {
+            chooseMode: function (haveCode) {
                 this.choosedMode = true
                 if (haveCode) {
                     this.codeRequested = true
@@ -147,7 +150,7 @@
                         .dropdown();
                 }, 100)
             },
-            getCode: function(reset) {
+            getCode: function (reset) {
                 this.errors.badNumber = false
                 this.bannerShow = true
                 if (!(this.authPrefix + this.authSMS).startsWith('+')) {
@@ -160,18 +163,18 @@
                 var url = this.createWaxURL(this.authPrefix + this.authSMS, params, 'sms', reset)
 
                 // get user id
-                this.$http.get(url).then(function(responseAuth) {
+                this.$http.get(url).then(function (responseAuth) {
                     this.codeRequested = true
                     this.authReset = responseAuth.body.exists
                     this.resetDone = responseAuth.body.reset
                     this.userId = responseAuth.body.user_db_id
-                }, function(error) {
+                }, function (error) {
                     this.codeRequested = false
                     this.errors.badNumber = true
                     console.error(error)
                 });
             },
-            execLogin: function() {
+            execLogin: function () {
                 this.dedaloRequested = true
                 this.authorized = false
                 this.errors.dedaloError = false
@@ -181,7 +184,7 @@
                 this.doDedaloLogin({
                     id: this.authPrefix + this.authSMS,
                     password: this.authCode || ''
-                }, function(responseDedalo) {
+                }, function (responseDedalo) {
                     if (responseDedalo.body.clientState == 1) {
                         this.authorized = true
                         this.errors.dedaloError = false
@@ -190,13 +193,13 @@
                         this.errors.dedaloError = true
                         this.errors.badCode = true
                     }
-                }, function(error) {
+                }, function (error) {
                     this.authorized = false
                     this.errors.dedaloError = true
                     console.error(error)
                 })
             },
-            deleteInfo: function() {
+            deleteInfo: function () {
                 // extract code and state
                 var params = this.extractParams()
                 this.deleteMarketingInfo(this.userId, params, function (success) {
@@ -208,7 +211,7 @@
                     }
                 })
             },
-            accept: function() {
+            accept: function () {
                 // open redir url
                 window.location.replace(this.$root.$options.hotspot.preferences
                     .captive_1_redir)

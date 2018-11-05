@@ -410,6 +410,7 @@ func VoucherAuth(c *gin.Context) {
 
 	// extract unit
 	unit := utils.GetUnitByUuid(uuid)
+	user := utils.GetUserByUsernameAndHotspot(code, unit.HotspotId)
 
 	// extract voucher
 	voucher := utils.GetVoucherByCode(code, unit.HotspotId)
@@ -443,7 +444,7 @@ func VoucherAuth(c *gin.Context) {
 				db := database.Instance()
 				db.Save(&voucher)
 
-				c.JSON(http.StatusOK, gin.H{"message": "Voucher is valid", "code": voucher.Code})
+				c.JSON(http.StatusOK, gin.H{"message": "Voucher is valid", "code": voucher.Code, "type": voucher.Type, "user_db_id": user.Id})
 			}
 
 		}

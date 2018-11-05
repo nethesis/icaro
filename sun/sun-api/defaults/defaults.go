@@ -32,6 +32,7 @@ var HotspotPreferences = map[string]string{
 	"sms_login":                       "true",
 	"email_login":                     "true",
 	"voucher_login":                   "false",
+	"voucher_code_login":              "false",
 	"auto_login":                      "true",
 	"auth_renew":                      "true",
 	"CoovaChilli-Bandwidth-Max-Down":  "0",
