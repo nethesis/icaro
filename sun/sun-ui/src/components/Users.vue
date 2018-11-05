@@ -19,6 +19,12 @@
       </div>
     </div>
     <div v-if="!isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <label class="col-sm-2 control-label" for="textInput-markup">{{$t('user.show_marketing_auth')}}</label>
+      <div class="col-sm-4">
+        <input @click="toggleMarketing()" v-model="hotspotShowMarketing" type="checkbox" id="textInput2-modal-markup" class="form-control">
+      </div>
+    </div>
+    <div v-if="!isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
       <div class="col-sm-3">
         <button class="btn btn-primary" @click="getAll()">{{$t('session.refresh')}}</button>
       </div>
@@ -158,6 +164,7 @@ export default {
       hotspots: [],
       hotspotSearchId: 0,
       hotspotShowExpired: this.get("users_show_expired") || false,
+      hotspotShowMarketing: this.get("users_show_marketing") || false,
       hotspotPerPage: 25,
       hotspotPage: 1,
       total: 0,
@@ -223,6 +230,12 @@ export default {
       this.set("users_show_expired", this.hotspotShowExpired);
       this.getAll(true);
     },
+    toggleMarketing() {
+      this.isLoading = true;
+      this.hotspotShowMarketing = !this.hotspotShowMarketing;
+      this.set("users_show_marketing", this.hotspotShowMarketing);
+      this.getAll(true);
+    },
     getAll(reset) {
       this.isLoadingTable = true;
 
@@ -269,7 +282,8 @@ export default {
           this.isLoadingTable = false;
           this.rows = [];
           console.error(error);
-        }
+        },
+        this.hotspotShowMarketing
       );
     },
     exportCSVUsers() {
@@ -310,11 +324,6 @@ export default {
               ) {
                 delete usersRows[r];
               }
-
-              // check marketing authorization
-              if (usersRows[r] && !usersRows[r].marketing_auth) {
-                delete usersRows[r];
-              }
             }
 
             var columns = this.columns.slice();
@@ -337,7 +346,8 @@ export default {
           this.isLoading = false;
           this.isLoadingTable = false;
           console.error(error);
-        }
+        },
+        this.hotspotShowMarketing
       );
     },
     prevPage() {

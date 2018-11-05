@@ -202,6 +202,7 @@ func GetUsers(c *gin.Context) {
 	limit := c.Query("limit")
 	hotspotId := c.Query("hotspot")
 	accountType := c.Query("type")
+	marketing := c.Query("marketing")
 	q := c.Query("q")
 
 	hotspotIdInt, err := strconv.Atoi(hotspotId)
@@ -216,6 +217,10 @@ func GetUsers(c *gin.Context) {
 
 	if len(accountType) > 0 {
 		chain = chain.Where("account_type = ?", accountType)
+	}
+
+	if len(marketing) > 0 {
+		chain = chain.Where("marketing_auth = 1")
 	}
 
 	if len(q) > 0 {

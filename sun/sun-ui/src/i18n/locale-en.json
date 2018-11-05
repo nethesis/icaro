@@ -82,7 +82,7 @@
       "instagram_login": "Captive Portal login with Instagram",
       "linkedin_login": "Captive Portal login with Linkedin",
       "voucher_login": "Captive Portal login with Voucher",
-      "voucher_code_login": "Captive Portal login with Code",
+      "temp_code_login": "Captive Portal login with Code",
       "temp_session_duration": "Temporary session duration (seconds)",
       "start_navigate": "Start Navigate",
       "voucher_creation": "Vouchers creation",
@@ -169,7 +169,8 @@
       "traffic": "Traffic",
       "time": "Time",
       "traffic_limit": "Daily traffic limit (MB) (0 = limitless)",
-      "time_limit": "Daily time limit (Minutes) (0 = limitless)"
+      "time_limit": "Daily time limit (Minutes) (0 = limitless)",
+      "show_marketing_auth": "Marketing consent"
     },
     "account": {
       "uuid": "Unique ID",
