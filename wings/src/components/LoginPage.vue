@@ -57,9 +57,9 @@
                     </div>
                 </div>
             </div>
-            <div v-if="hotspot.preferences.voucher_code_login == 'true'" class="ui divider"></div>
+            <div v-if="hotspot.preferences.temp_code_login == 'true'" class="ui divider"></div>
             <div class="ui relaxed list">
-                <div v-if="hotspot.preferences.voucher_code_login == 'true'" class="item">
+                <div v-if="hotspot.preferences.temp_code_login == 'true'" class="item">
                     <div @click="changeRoute('/login', true)" class="ui button teal big fluid">
                         <i class="barcode icon"></i>
                         {{ $t("login.code") }}
@@ -108,7 +108,6 @@
         mixins: [AuthMixin],
         data: function () {
             var voucherAvailable = false;
-            var voucherValidated = false;
             var badCode = false;
             var badInput = false;
             var authorized = false;
@@ -124,7 +123,7 @@
                     disclaimers: this.$root.$options.hotspot.disclaimers
                 },
                 voucherAvailable: voucherAvailable,
-                voucherValidated: voucherValidated,
+                voucherValidated: this.$root.$options.hotspot.voucherValidated,
                 authCode: authCode,
                 badCode: badCode,
                 badInput: badInput,
@@ -136,20 +135,28 @@
         },
         methods: {
             back() {
-                this.voucherAvailable = this.$root.$options.hotspot.preferences.voucher_login
-                this.voucherValidated = false
-                this.authCode = ""
-                this.badCode = false
-                this.badInput = false
-                this.authorized = false
-                this.dedaloError = false
+                this.voucherAvailable = this.$root.$options.hotspot.preferences.voucher_login;
+                this.voucherValidated = false;
+                this.$root.$options.hotspot.voucherValidated = false;
+                this.authCode = "";
+                this.badCode = false;
+                this.badInput = false;
+                this.authorized = false;
+                this.dedaloError = false;
             },
             changeRoute: function (path, withCode) {
-                this.$root.$options.session["loginDest"] = path;
-                this.$root.$options.hotspot.preferences.voucher_login = withCode.toString()
-                this.$router.push({
-                    path: "login/disclaimer"
-                });
+                if (withCode) {
+                    this.voucherAvailable = true
+                    this.voucherValidated = false;
+                    this.authCode = "";
+                    this.$root.$options.hotspot.voucherValidated = false;
+                    this.badCode = false;
+                } else {
+                    this.$router.push({
+                        path: path
+                    });
+                }
+
             },
             validateCode: function () {
                 this.badCode = false;
@@ -166,18 +173,24 @@
                 this.$http.get(url).then(
                     function (responseAuth) {
                         this.$root.$options.session["voucherCode"] = responseAuth.body.code;
-                        this.userId = responseAuth.body.user_db_id
+                        this.userId = responseAuth.body.user_db_id;
 
-                        if (responseAuth.body.type == "auth") {
+                        if (
+                            responseAuth.body.type == "auth" &&
+                            this.hotspot.preferences.temp_code_login == "true"
+                        ) {
                             // do login immediately
-                            var context = this
+                            var context = this;
                             this.doDedaloLogin({
                                     id: responseAuth.body.code,
                                     password: responseAuth.body.code || ""
                                 },
                                 function (responseDedalo) {
-                                    if (responseDedalo && responseDedalo.body && responseDedalo.body.clientState ==
-                                        1) {
+                                    if (
+                                        responseDedalo &&
+                                        responseDedalo.body &&
+                                        responseDedalo.body.clientState == 1
+                                    ) {
                                         context.authorized = true;
                                         context.dedaloError = false;
                                     } else {
@@ -191,12 +204,22 @@
                                     console.error(error);
                                 }
                             );
+                        } else if (
+                            responseAuth.body.type == "auth" &&
+                            this.hotspot.preferences.temp_code_login == "false"
+                        ) {
+                            this.voucherValidated = false;
+                            this.$root.$options.hotspot.voucherValidated = false;
+                            this.badCode = true;
                         } else {
                             this.voucherValidated = true;
+                            this.$root.$options.hotspot.voucherValidated = true;
+                            this.badCode = false;
                         }
                     },
                     function (error) {
                         this.voucherValidated = false;
+                        this.$root.$options.hotspot.voucherValidated = false;
                         this.badCode = true;
                         console.error(error);
                     }
@@ -204,27 +227,33 @@
             },
             navigate() {
                 if (this.conditions) {
-                    this.accept()
+                    this.accept();
                 } else {
-                    this.deleteInfo()
+                    this.deleteInfo();
                 }
             },
             deleteInfo: function () {
                 // extract code and state
-                var params = this.extractParams()
-                this.deleteMarketingInfo(this.userId, params, function (success) {
-                    this.accept()
-                }, function (error) {
-                    console.error(error)
-                    if (error.status == 404) {
-                        this.accept()
+                var params = this.extractParams();
+                this.deleteMarketingInfo(
+                    this.userId,
+                    params,
+                    function (success) {
+                        this.accept();
+                    },
+                    function (error) {
+                        console.error(error);
+                        if (error.status == 404) {
+                            this.accept();
+                        }
                     }
-                })
+                );
             },
             accept: function () {
                 // open redir url
-                window.location.replace(this.$root.$options.hotspot.preferences
-                    .captive_1_redir)
+                window.location.replace(
+                    this.$root.$options.hotspot.preferences.captive_1_redir
+                );
             }
         }
     };
