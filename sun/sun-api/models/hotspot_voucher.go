@@ -43,3 +43,25 @@ type HotspotVoucher struct {
 	OwnerId       int       `db:"owner_id" json:"owner_id"`
 	Created       time.Time `db:"created" json:"created"`
 }
+
+type HotspotVoucherJSON struct {
+	Id            int       `db:"id" json:"id"`
+	HotspotId     int       `db:"hotspot_id" json:"hotspot_id"`
+	Code          string    `db:"code" json:"code"`
+	AutoLogin     bool      `db:"auto_login" json:"auto_login"`
+	BandwidthUp   int       `db:"bandwidth_up" json:"bandwidth_up"`
+	BandwidthDown int       `db:"bandwidth_down" json:"bandwidth_down"`
+	Time          string    `json:"time"`
+	Duration      int       `db:"duration" json:"duration"`
+	Expiration    int       `json:"expiration"`
+	MaxTraffic    int       `db:"max_traffic" json:"max_traffic"`
+	MaxTime       int       `db:"max_time" json:"max_time"`
+	RemainUse     int       `db:"remain_use" json:"remain_use"`
+	Expires       time.Time `db:"expires" json:"expires"`
+	Type          string    `db:"type" json:"type"`
+	UserName      string    `db:"user_name" json:"user_name"`
+	UserMail      string    `db:"user_mail" json:"user_mail"`
+	Printed       bool      `db:"printed" json:"printed"`
+	OwnerId       int       `db:"owner_id" json:"owner_id"`
+	Created       time.Time `db:"created" json:"created"`
+}

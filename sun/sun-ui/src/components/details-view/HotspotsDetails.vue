@@ -166,7 +166,7 @@
             </div>
 
             <vue-good-table :perPage="5" :paginate="true" :columns="columns" :rows="vouchers.data" :lineNumbers="false"
-              :defaultSortBy="{field: 'expires', type: 'asc'}" styleClass="table" :nextText="tableLangsTexts.nextText"
+              :defaultSortBy="{field: 'created', type: 'asc'}" styleClass="table" :nextText="tableLangsTexts.nextText"
               :prevText="tableLangsTexts.prevText" :rowsPerPageText="tableLangsTexts.rowsPerPageText"
               :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder" :ofText="tableLangsTexts.ofText">
               <template slot="table-row" slot-scope="props">
@@ -548,6 +548,37 @@
                 </div>
               </div>
               <div class="form-group">
+                <label class="col-sm-5 control-label" for="textInput-modal-markup">{{$t('hotspot.validity')}}</label>
+                <div class="col-sm-7">
+                  <span class="span-radio">
+                    <input required v-model="newVoucher.time" class="form-check-input" type="radio" name="timeExpiration"
+                      id="timeExpiration1" value="duration">
+                    <label class="form-check-label" for="timeExpiration1">
+                      {{$t('hotspot.duration')}}
+                    </label>
+                  </span>
+                  <span class="span-radio">
+                    <input required v-model="newVoucher.time" class="form-check-input" type="radio" name="timeExpiration"
+                      id="timeExpiration2" value="expiration">
+                    <label class="form-check-label" for="timeExpiration2">
+                      {{$t('hotspot.expiration')}}
+                    </label>
+                  </span>
+                </div>
+              </div>
+              <div v-if="newVoucher.time == 'duration'" class="form-group">
+                <label class="col-sm-5 control-label" for="textInput-modal-markup"></label>
+                <div class="col-sm-7">
+                  <input v-model="newVoucher.duration" type="number" id="textInput-modal-markup" class="form-control">
+                </div>
+              </div>
+              <div v-if="newVoucher.time == 'expiration'" class="form-group">
+                <label class="col-sm-5 control-label" for="textInput-modal-markup"></label>
+                <div class="col-sm-7">
+                  <datepicker :format="dateFormatter" v-model="newVoucher.expiration" :language="locale"></datepicker>
+                </div>
+              </div>
+              <div class="form-group">
                 <label class="col-sm-5 control-label" for="textInput-modal-markup">{{$t('hotspot.mode')}}</label>
                 <div class="col-sm-7">
                   <span class="span-radio">
@@ -754,6 +785,8 @@ import arrow from "../../../static/arrows.js";
 import { Sketch } from "vue-color";
 import { VueEditor } from "vue2-editor";
 import { setTimeout } from "timers";
+import Datepicker from "vuejs-datepicker";
+import moment from "moment";
 
 export default {
   name: "HotspotDetails",
@@ -774,7 +807,8 @@ export default {
     PictureInput,
     "sketch-picker": Sketch,
     captivePortal: CaptivePortal,
-    VueEditor
+    VueEditor,
+    Datepicker
   },
   mounted() {
     // get hotspot info
@@ -836,7 +870,12 @@ export default {
         limitless: "true",
         type: "normal",
         user_name: "",
-        user_mail: ""
+        user_mail: "",
+        time: "duration",
+        expiration: moment(Date.now() + 12096e5)
+          .utc()
+          .startOf("day")
+          .toISOString()
       },
       newMACAuth: {
         name: "",
@@ -1002,10 +1041,14 @@ export default {
         params: {
           hotspotId: this.$route.params.id
         }
-      }
+      },
+      locale: this.$root.$options.currentLocale
     };
   },
   methods: {
+    dateFormatter(date) {
+      return moment(date).format("DD MMMM YYYY");
+    },
     getPrevieHTML(value) {
       return '<img src="' + value + '"></img>';
     },
@@ -1044,7 +1087,9 @@ export default {
                 max_traffic:
                   parseInt(context.newVoucher.max_traffic) * 1024 * 1024,
                 max_time: parseInt(context.newVoucher.max_time) * 60,
+                time: context.newVoucher.time,
                 duration: parseInt(context.newVoucher.duration),
+                expiration: moment(moment(context.newVoucher.expiration)).diff(moment(new Date()), 'days'),
                 type: context.newVoucher.type,
                 user_name:
                   context.newVoucher.type == "auth"
@@ -1273,7 +1318,10 @@ export default {
               pref.value = false;
             }
 
-            if ( (pref.key == "voucher_login" && pref.value) || (pref.key == "voucher_code_login" && pref.value) ) {
+            if (
+              (pref.key == "voucher_login" && pref.value) ||
+              (pref.key == "temp_code_login" && pref.value)
+            ) {
               vouchersAvailable = pref.value || vouchersAvailable;
             }
 
@@ -1296,7 +1344,7 @@ export default {
             }
           }
 
-          this.preferences.vouchersAvailable = vouchersAvailable
+          this.preferences.vouchersAvailable = vouchersAvailable;
           this.preferences.global = globalPref;
           this.preferences.captive = captivePref;
           this.preferences.isLoading = false;
