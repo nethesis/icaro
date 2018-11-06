@@ -17,7 +17,10 @@
             "accept": "Accetta",
             "disclaimer_use": "Condizioni di Utilizzo",
             "disclaimer_marketing": "Informazioni Privacy",
-            "back": "Indietro"
+            "back": "Indietro",
+            "code": "Codice",
+            "navigate": "Naviga",
+            "disclaimer_privacy_accept": "Acconsento all'invio di offerte promozionali"
         },
         "social": {
             "auth_progress": "Autorizzazione in corso",
@@ -30,8 +33,8 @@
             "insert_email": "Inserisci la tua email",
             "insert_your_code": "Inserisci il tuo codice",
             "code": "Codice",
-            "have_code": "Ho già un codice d'accesso",
-            "not_have_code": "Richiedi un codice d'accesso",
+            "have_code": "Entra con email e password",
+            "not_have_code": "Richiedi una password d'accesso",
             "get_code": "Richiedi codice",
             "reset_code": "Inviami un nuovo Codice",
             "start_navigate": "Naviga",
@@ -45,6 +48,7 @@
             "wait":"Solo qualche secondo...",
             "we_are_sending_email_code":"Ti stiamo inviando un email con il tuo codice d'accesso,se non dovessi visualizzarla prova a guardare nella tua casella SPAM."
         },
+        "not_code_explain": "È la prima volta che ti connetti alla nostra rete Wi-Fi?"
         "sms": {
             "number": "Numero telefonico",
             "insert_number": "Inserisci il tuo numero telefonico",
@@ -65,7 +69,9 @@
             "select_state": "Seleziona Stato",
             "prefix": "Prefisso Internazionale",
             "wait":"Invio SMS in corso...",
-            "we_are_sending_sms_code":"Riutilizza lo stesso codice anche per i prossimi accessi cliccando sul pulsante 'Ho già un codice'."
+            "we_are_sending_sms_code":"Riutilizza lo stesso codice anche per i prossimi accessi cliccando sul pulsante 'Ho già un codice'.",
+            "not_code_explain": "È la prima volta che ti connetti alla nostra rete Wi-Fi?"
+        
         }
     }
 }
