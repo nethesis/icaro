@@ -91,8 +91,12 @@
             <div class="inline field">
                 <textarea readonly class="text-center" v-model="hotspot.disclaimers.marketing_use"></textarea>
             </div>
-            <button v-on:click="deleteInfo()" class="ui big button red">{{ $t("login.decline") }}</button>
-            <button v-on:click="accept()" class="ui big button green">{{ $t("login.accept") }}</button>
+            <div class="ui checkbox">
+                <input v-model="conditions" type="checkbox" name="example">
+                <label>{{ $t("login.disclaimer_privacy_accept") }}</label>
+            </div>
+            <br />
+            <button v-on:click="navigate()" class="ui big button green adjust-top">{{ $t("login.navigate") }}</button>
         </div>
     </div>
 </template>
@@ -127,6 +131,7 @@
                 authorized: authorized,
                 dedaloError: dedaloError,
                 userId: 0,
+                conditions: false
             };
         },
         methods: {
@@ -197,6 +202,13 @@
                     }
                 );
             },
+            navigate() {
+                if (this.conditions) {
+                    this.accept()
+                } else {
+                    this.deleteInfo()
+                }
+            },
             deleteInfo: function () {
                 // extract code and state
                 var params = this.extractParams()
@@ -245,5 +257,9 @@
 
     .item {
         margin: 10px;
+    }
+
+    .adjust-top {
+        margin-top: 10px;
     }
 </style>

@@ -8,9 +8,18 @@
                     <i class="mail icon"></i>
                 </div>
             </div>
-            <button v-if="!codeRequested && !choosedMode" v-on:click="chooseMode()" class="ui big button request-code">{{ $t("email.not_have_code") }}</button>
-            <button v-if="!codeRequested && !choosedMode" v-on:click="chooseMode(true)" class="ui big button request-code">{{ $t("email.have_code") }}</button>
-            <button v-if="!codeRequested && choosedMode" v-on:click="getCode(true)" class="ui big button request-code">{{ $t("email.get_code") }}</button>
+            <button v-if="!codeRequested && !choosedMode" v-on:click="chooseMode(true)" class="ui big button green request-code">{{
+                $t("email.have_code") }}</button>
+
+            <p v-if="!codeRequested && !choosedMode" class="not-code-exp">
+                <label>{{$t("email.not_code_explain") }}</label>
+                <br />
+                <button v-on:click="chooseMode()" class="ui normal button request-code">{{
+                    $t("email.not_have_code") }}</button>
+            </p>
+
+            <button v-if="!codeRequested && choosedMode" v-on:click="getCode(true)" class="ui big button request-code">{{
+                $t("email.get_code") }}</button>
             <div v-if="errors.badMail" class="ui tiny icon negative message">
                 <i class="remove icon"></i>
                 <div class="content">
@@ -43,7 +52,8 @@
             </button>
         </div>
         <div v-if="dedaloRequested">
-            <div v-if="!authorized && !errors.dedaloError" class="ui active centered inline text loader">{{ $t("email.auth_progress") }}...</div>
+            <div v-if="!authorized && !errors.dedaloError" class="ui active centered inline text loader">{{
+                $t("email.auth_progress") }}...</div>
             <div v-if="authorized" class="ui icon positive message">
                 <i class="check icon"></i>
                 <div class="content">
@@ -67,8 +77,12 @@
                 <div class="inline field">
                     <textarea readonly class="text-center" v-model="hotspot.disclaimers.marketing_use"></textarea>
                 </div>
-                <button v-on:click="deleteInfo()" class="ui big button red">{{ $t("login.decline") }}</button>
-                <button v-on:click="accept()" class="ui big button green">{{ $t("login.accept") }}</button>
+                <div class="ui checkbox">
+                    <input v-model="conditions" type="checkbox" name="example">
+                    <label>{{ $t("login.disclaimer_privacy_accept") }}</label>
+                </div>
+                <br />
+                <button v-on:click="navigate()" class="ui big button green adjust-top">{{ $t("login.navigate") }}</button>
             </div>
         </div>
     </div>
@@ -82,14 +96,14 @@
     export default {
         name: 'EmailPage',
         mixins: [AuthMixin],
-        data: function() {
+        data: function () {
             var params = this.extractParams()
 
-            this.getPreferences(params, function(success) {
+            this.getPreferences(params, function (success) {
                 this.$parent.hotspot.disclaimers = success.body.disclaimers
                 this.$root.$options.hotspot.disclaimers = success.body.disclaimers
                 this.hotspot.disclaimers = success.body.disclaimers
-            }, function(error) {
+            }, function (error) {
                 console.error(error)
             })
 
@@ -113,19 +127,20 @@
                 hotspot: {
                     disclaimers: this.$root.$options.hotspot.disclaimers
                 },
+                conditions: false
             }
         },
         methods: {
-            isDisabled: function() {
+            isDisabled: function () {
                 return this.authEmail.length == 0 || this.authCode.length == 0
             },
-            chooseMode: function(haveCode) {
+            chooseMode: function (haveCode) {
                 this.choosedMode = true
                 if (haveCode) {
                     this.codeRequested = true
                 }
             },
-            getCode: function(reset) {
+            getCode: function (reset) {
                 this.errors.badMail = false
                 this.bannerShow = true
                 if (this.authEmail.indexOf('@') == -1) {
@@ -138,7 +153,7 @@
                 var url = this.createWaxURL(this.authEmail, params, 'email', reset)
 
                 // get user id
-                this.$http.get(url).then(function(responseAuth) {
+                this.$http.get(url).then(function (responseAuth) {
                     this.authReset = responseAuth.body.exists
                     this.resetDone = responseAuth.body.reset
                     this.userId = responseAuth.body.user_db_id
@@ -148,33 +163,33 @@
                         this.codeRequested = true
                     } else {
                         // open temp session for the user
-                        this.doTempSession(this.authEmail, function(responseTmp) {
+                        this.doTempSession(this.authEmail, function (responseTmp) {
                             this.codeRequested = true
-                        }, function(error) {
+                        }, function (error) {
                             this.codeRequested = false
                             this.errors.badMail = true
                             console.error(error)
                         })
                     }
-                }, function(error) {
+                }, function (error) {
                     this.codeRequested = false
                     this.errors.badMail = true
                     console.error(error)
                 });
             },
-            execLogin: function() {
+            execLogin: function () {
                 this.dedaloRequested = true
                 this.authorized = false
                 this.errors.dedaloError = false
                 this.errors.badCode = false
 
                 // exec logout
-                this.doDedaloLogout(function(responseDedaloLogout) {
+                this.doDedaloLogout(function (responseDedaloLogout) {
                     // exec dedalo login
                     this.doDedaloLogin({
                         id: this.authEmail,
                         password: this.authCode || ''
-                    }, function(responseDedalo) {
+                    }, function (responseDedalo) {
                         if (responseDedalo.body.clientState == 1) {
                             this.authorized = true
                             this.errors.dedaloError = false
@@ -183,18 +198,25 @@
                             this.errors.dedaloError = true
                             this.errors.badCode = true
                         }
-                    }, function(error) {
+                    }, function (error) {
                         this.authorized = false
                         this.errors.dedaloError = true
                         console.error(error)
                     })
-                }, function(error) {
+                }, function (error) {
                     this.authorized = false
                     this.errors.dedaloError = true
                     console.error(error)
                 })
             },
-            deleteInfo: function() {
+            navigate() {
+                if (this.conditions) {
+                    this.accept()
+                } else {
+                    this.deleteInfo()
+                }
+            },
+            deleteInfo: function () {
                 // extract code and state
                 var params = this.extractParams()
                 this.deleteMarketingInfo(this.userId, params, function (success) {
@@ -206,7 +228,7 @@
                     }
                 })
             },
-            accept: function() {
+            accept: function () {
                 // open redir url
                 window.location.replace(this.$root.$options.hotspot.preferences
                     .captive_1_redir)
@@ -247,5 +269,9 @@
 
     .no-margin-top {
         margin-top: 0px;
+    }
+
+    .adjust-top {
+        margin-top: 10px;
     }
 </style>

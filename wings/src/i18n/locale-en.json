@@ -18,7 +18,9 @@
             "disclaimer_use": "Terms of Use",
             "disclaimer_marketing": "Marketing info",
             "back": "Back",
-            "code": "Code"
+            "code": "Code",
+            "navigate": "Navigate",
+            "disclaimer_privacy_accept": "I accept sending promotional offers"
         },
         "social": {
             "auth_progress": "Authorization in progress",
@@ -31,7 +33,7 @@
             "insert_email": "Insert your email",
             "insert_your_code": "Insert your code",
             "code": "Code",
-            "have_code": "Already have a code",
+            "have_code": "I have a code",
             "not_have_code": "I don't have a code",
             "get_code": "Request Code",
             "reset_code": "Request new Code",
@@ -44,7 +46,8 @@
             "auth_error": "Access Denied",
             "auth_error_sub": "Something went wrong, the reasons could be the following: 1)The data entered may not be correct. 2)The voucher you are using could be expired. 3)You could have reached your maximum daily time. 4)You could have reached your maximum daily traffic.",
             "wait":"Please wait few seconds",
-            "we_are_sending_email_code":"We are sending you an email with your personal code, if you do not receive any email, try looking in your SPAM box"
+            "we_are_sending_email_code":"We are sending you an email with your personal code, if you do not receive any email, try looking in your SPAM box",
+            "not_code_explain": "Is it the first time you connect to this Wi-Fi?"
         },
         "sms": {
             "number": "Number",
