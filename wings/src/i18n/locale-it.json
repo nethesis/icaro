@@ -16,7 +16,8 @@
             "decline": "Rifiuta",
             "accept": "Accetta",
             "disclaimer_use": "Condizioni di Utilizzo",
-            "disclaimer_marketing": "Informazioni Privacy"
+            "disclaimer_marketing": "Informazioni Privacy",
+            "back": "Indietro"
         },
         "social": {
             "auth_progress": "Autorizzazione in corso",

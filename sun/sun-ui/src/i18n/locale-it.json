@@ -133,7 +133,8 @@
       "marketing_info": "Privacy",
       "terms_info": "Condizioni di utilizzo",
       "print_privacy": "Download Disclaimer",
-      "auth_renew": "Permetti nuova autenticazione agli account scaduti"
+      "auth_renew": "Permetti nuova autenticazione agli account scaduti",
+      "type": "Tipo"
     },
     "user": {
       "username": "Utente",
