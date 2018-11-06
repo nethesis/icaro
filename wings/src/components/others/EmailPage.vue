@@ -47,6 +47,9 @@
                 </div>
             </div>
             <div class="ui divider"></div>
+            <button v-on:click="back()" class="big ui red button">
+                {{ $t("login.back") }}
+            </button>
             <button v-on:click="execLogin()" :disabled="isDisabled()" class="big ui green button">
                 {{ $t("email.start_navigate") }}
             </button>
@@ -131,6 +134,11 @@
             }
         },
         methods: {
+            back() {
+                this.$router.push({
+                    path: "/login"
+                });
+            },
             isDisabled: function () {
                 return this.authEmail.length == 0 || this.authCode.length == 0
             },
