@@ -44,7 +44,7 @@ type voucherMarketingData struct {
 func CreateVoucher(c *gin.Context) {
 	accountId := c.MustGet("token").(models.AccessToken).AccountId
 
-	var json models.HotspotVoucher
+	var json models.HotspotVoucherJSON
 	if err := c.BindJSON(&json); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "Request fields malformed", "error": err.Error()})
 		return
@@ -64,13 +64,20 @@ func CreateVoucher(c *gin.Context) {
 		BandwidthDown: json.BandwidthDown,
 		MaxTraffic:    json.MaxTraffic,
 		MaxTime:       json.MaxTime,
-		Duration:      json.Duration,
 		RemainUse:     json.RemainUse,
 		Type:          json.Type,
 		UserName:      json.UserName,
 		UserMail:      json.UserMail,
 		OwnerId:       ownerId,
 		Created:       time.Now().UTC(),
+	}
+
+	if json.Time == "duration" {
+		hotspotVoucher.Duration = json.Duration
+	}
+
+	if json.Time == "expiration" {
+		hotspotVoucher.Expires = time.Now().UTC().AddDate(0, 0, json.Expiration+1)
 	}
 
 	hotspotVoucher.HotspotId = json.HotspotId

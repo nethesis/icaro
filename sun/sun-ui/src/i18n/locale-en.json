@@ -104,7 +104,7 @@
       "daily_limit": "Daily limit",
       "traffic": "Traffic",
       "time": "Time",
-      "duration": "Duration",
+      "duration": "Duration (days)",
       "mac_auth": "MAC Authentication",
       "new_mac_auth": "New MAC Auth",
       "used": "Used",
@@ -141,7 +141,9 @@
       "normal": "Standard",
       "normal_print": "Stand.",
       "user_name": "User name",
-      "user_mail": "User email"
+      "user_mail": "User email",
+      "expiration": "Expiration (date)",
+      "validity": "Validity"
     },
     "user": {
       "username": "Username",
