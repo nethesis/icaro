@@ -25,12 +25,12 @@
         methods: {
             decline: function() {
                 this.$router.push({
-                    path: '/login'
+                    path: '/'
                 })
             },
             accept: function() {
                 this.$router.push({
-                    path: this.loginDest
+                    path: '/login'
                 })
             }
         }

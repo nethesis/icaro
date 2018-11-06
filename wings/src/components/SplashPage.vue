@@ -9,7 +9,7 @@
 
         </p>
         <div class="ui divider"></div>
-        <router-link to='/login' class="big ui green button">
+        <router-link to='/login/disclaimer' class="big ui green button">
           {{ $t("splash.start_navigate") }}
         </router-link>
       </div>
