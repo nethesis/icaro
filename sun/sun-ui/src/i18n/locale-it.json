@@ -82,6 +82,7 @@
       "instagram_login": "Instagram Login",
       "linkedin_login": "Linkedin Login ",
       "voucher_login": "Login tramite Voucher",
+      "temp_code_login": "Login tramite codice autorizzativo",
       "temp_session_duration": "Durata sessione temporanea (secondi)",
       "start_navigate": "Naviga",
       "voucher_creation": "Creazione Voucher",
