@@ -103,7 +103,7 @@
       "daily_limit": "Limiti giornalieri",
       "traffic": "Traffico",
       "time": "Tempo",
-      "duration": "Durata",
+      "duration": "Durata (giorni)",
       "mac_auth": "Autenticazione Indirizzo MAC",
       "new_mac_auth": "Crea nuova autenticazione",
       "used": "Utilizzato",
@@ -134,7 +134,15 @@
       "terms_info": "Condizioni di utilizzo",
       "print_privacy": "Download Disclaimer",
       "auth_renew": "Permetti nuova autenticazione agli account scaduti",
-      "type": "Tipo"
+      "type": "Tipo",
+      "auth": "Autorizzativo",
+      "auth_print": "Autor.",
+      "normal": "Standard",
+      "normal_print": "Stand.",
+      "user_name": "Nome",
+      "user_mail": "Email",
+      "expiration": "Scadenza (data)",
+      "validity": "Validità"
     },
     "user": {
       "username": "Utente",
@@ -162,7 +170,8 @@
       "traffic": "Traffico",
       "time": "Tempo",
       "traffic_limit": "Traffico massimo giornaliero (MB)",
-      "time_limit": "Durata massima giornaliera (Minuti)"
+      "time_limit": "Durata massima giornaliera in Minuti (0= senza limiti)",
+      "show_marketing_auth": "Mosta solo account con consenso marketing"
     },
     "account": {
       "uuid": "ID",
