@@ -76,7 +76,7 @@ func GetSessions(c *gin.Context) {
 
 	if len(q) > 0 {
 		chain = chain.Select("sessions.*, units.*").Joins("JOIN units on units.id = sessions.unit_id").
-			Where("units.name LIKE ? OR sessions.username LIKE ?", "%"+q+"%", "%"+q+"%")
+			Where("units.name LIKE ? OR sessions.username LIKE ? OR sessions.ip_address LIKE ?", "%"+q+"%", "%"+q+"%", "%"+q+"%")
 	}
 
 	chain.Find(&sessions).Count(&total)
@@ -132,7 +132,7 @@ func GetSessionsHistory(c *gin.Context) {
 
 	if len(q) > 0 {
 		chain = chain.Select("session_histories.*, units.*").Joins("JOIN units on units.id = session_histories.unit_id").
-			Where("units.name LIKE ? OR session_histories.username LIKE ?", "%"+q+"%", "%"+q+"%")
+			Where("units.name LIKE ? OR session_histories.username LIKE ? OR session_histories.ip_address LIKE ?", "%"+q+"%", "%"+q+"%", "%"+q+"%")
 	}
 
 	chain.Find(&sessions).Count(&total)

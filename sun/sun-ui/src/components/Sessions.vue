@@ -85,7 +85,7 @@
         <strong>{{$t('session.export_error')}}</strong>. {{$t('session.export_error_details')}}.
       </div>
       <vue-good-table v-if="!isLoadingTable && !isLoading && activeTab == 'active'" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]"
-        :perPage="hotspotPerPage" :columns="columns_active" :rows="rows_active" :lineNumbers="false" :defaultSortBy="{field: 'duration', type: 'asc'}"
+        :perPage="hotspotPerPage" :columns="columns_active" :rows="rows_active" :lineNumbers="false" :defaultSortBy="{field: 'start_time', type: 'asc'}"
         :globalSearch="true" :paginate="false" styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText"
         :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
         :ofText="tableLangsTexts.ofText">
@@ -98,6 +98,7 @@
           </td>
           <td class="fancy">{{ props.row.bytes_down | byteFormat}}</td>
           <td class="fancy">{{ props.row.bytes_up | byteFormat }}</td>
+          <td class="fancy">{{ props.row.ip_address }}</td>
           <td class="fancy">{{ props.row.duration | secondsInHour }}</td>
           <td class="fancy">{{ props.row.start_time | formatDate }}</td>
           <td class="fancy">{{ props.row.update_time | formatDate }}</td>
@@ -134,7 +135,7 @@
         <strong>{{$t('session.export_error')}}</strong>. {{$t('session.export_error_details')}}.
       </div>
       <vue-good-table v-if="!isLoadingTable && !isLoading && activeTab == 'history'" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]"
-        :perPage="hotspotPerPage" :columns="columns_history" :rows="rows_history" :lineNumbers="false" :defaultSortBy="{field: 'duration', type: 'asc'}"
+        :perPage="hotspotPerPage" :columns="columns_history" :rows="rows_history" :lineNumbers="false" :defaultSortBy="{field: 'start_time', type: 'asc'}"
         :globalSearch="true" :paginate="false" styleClass="table" :nextText="tableLangsTexts.nextText" :prevText="tableLangsTexts.prevText"
         :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
         :ofText="tableLangsTexts.ofText">
@@ -147,6 +148,7 @@
           </td>
           <td class="fancy">{{ props.row.bytes_down | byteFormat}}</td>
           <td class="fancy">{{ props.row.bytes_up | byteFormat }}</td>
+          <td class="fancy">{{ props.row.ip_address }}</td>
           <td class="fancy">{{ props.row.duration | secondsInHour }}</td>
           <td class="fancy">{{ props.row.start_time | formatDate }}</td>
           <td class="fancy">{{ props.row.stop_time | formatDate }}</td>
@@ -231,6 +233,11 @@ export default {
           filterable: true
         },
         {
+          label: this.$i18n.t("session.ip_address"),
+          field: "ip_address",
+          filterable: true
+        },
+        {
           label: this.$i18n.t("session.duration"),
           field: "duration",
           type: "number",
@@ -276,6 +283,11 @@ export default {
           label: this.$i18n.t("session.bytes_up"),
           field: "bytes_up",
           type: "number",
+          filterable: true
+        },
+        {
+          label: this.$i18n.t("session.ip_address"),
+          field: "ip_address",
           filterable: true
         },
         {
