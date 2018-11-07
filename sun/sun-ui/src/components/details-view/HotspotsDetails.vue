@@ -159,6 +159,15 @@
                   <option value="0">{{$t('hotspot.no')}}</option>
                 </select>
               </div>
+
+              <label class="col-sm-3 control-label centered" for="textInput-markup">{{$t('hotspot.type')}}</label>
+              <div class="col-sm-3 list-details">
+                <select v-model="vouchers.filters.type" class="form-control">
+                  <option value="">-</option>
+                  <option value="normal">{{$t('hotspot.normal')}}</option>
+                  <option value="auth">{{$t('hotspot.auth')}}</option>
+                </select>
+              </div>
             </div>
 
             <div class="form-group col-xs-3 col-sm-3 col-md-3 col-lg-3">
@@ -170,38 +179,38 @@
               :prevText="tableLangsTexts.prevText" :rowsPerPageText="tableLangsTexts.rowsPerPageText"
               :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder" :ofText="tableLangsTexts.ofText">
               <template slot="table-row" slot-scope="props">
-                <td class="fancy">
+                <td :class="['fancy', 'td-voucher-'+props.row.type]">
                   <strong>{{ props.row.code }}</strong>
                 </td>
-                <td class="fancy">
+                <td :class="['fancy', 'td-voucher-'+props.row.type]">
                   <strong>{{ $t('hotspot.'+props.row.type) }}</strong>
                 </td>
-                <td class="fancy">
+                <td :class="['fancy', 'td-voucher-'+props.row.type]">
                   <span :class="['pficon', props.row.auto_login ? 'pficon-ok' : 'pficon-error-circle-o']"></span>
                 </td>
-                <td class="fancy">
+                <td :class="['fancy', 'td-voucher-'+props.row.type]">
                   <div>
                     <strong>{{ $t('user.kbps_down') }}</strong>: {{ props.row.bandwidth_down || '-' }}</div>
                   <div>
                     <strong>{{ $t('user.kbps_up') }}</strong>: {{ props.row.bandwidth_up || '-' }}</div>
                 </td>
-                <td class="fancy">
+                <td :class="['fancy', 'td-voucher-'+props.row.type]">
                   <div>
                     <strong>{{ $t('user.traffic') }}</strong>: {{ props.row.max_traffic || '-' | byteFormat }}</div>
                   <div>
                     <strong>{{ $t('user.time') }}</strong>: {{ props.row.max_time || '-' | secondsInHour }}</div>
                 </td>
-                <td class="fancy">{{ props.row.duration }} ({{$t('hotspot.days')}})</td>
-                <td class="fancy">
+                <td :class="['fancy', 'td-voucher-'+props.row.type]">{{ props.row.duration }} ({{$t('hotspot.days')}})</td>
+                <td :class="['fancy', 'td-voucher-'+props.row.type]">
                   <span :class="['fa', checkVoucherUse(props.row.expires) ? 'fa-check green' : 'fa-minus']"></span>
                   ({{$t('hotspot.expires')}}: {{props.row.expires | formatDate}})
                 </td>
-                <td class="fancy">
+                <td :class="['fancy', 'td-voucher-'+props.row.type]">
                   {{props.row.remain_use == -1 ? $t('hotspot.limitless') : $t('hotspot.max_use') + ': ' }}
                   <strong v-if="props.row.remain_use > 0">{{props.row.remain_use}}</strong>
                   <strong class="red" v-if="props.row.remain_use == 0">{{$t('hotspot.limit_reached')}}</strong>
                 </td>
-                <td>
+                <td :class="['fancy', 'td-voucher-'+props.row.type]">
                   <button v-if="props.row.remain_use != 0" v-on:click="printVoucher(props.row)" :class="['btn', props.row.printed ? '' : 'btn-primary']"
                     type="button">
                     <span class="fa fa-print"></span>
@@ -489,6 +498,7 @@
                   <span class="span-radio">
                     <input required v-model="newVoucher.type" class="form-check-input" type="radio" name="voucherType"
                       id="voucherType1" value="normal">
+                    <span class="voucher-type-span-normal"></span>
                     <label class="form-check-label" for="voucherType1">
                       {{$t('hotspot.normal')}}
                     </label>
@@ -496,6 +506,7 @@
                   <span class="span-radio">
                     <input required v-model="newVoucher.type" class="form-check-input" type="radio" name="voucherType"
                       id="voucherType2" value="auth">
+                    <span class="voucher-type-span-auth"></span>
                     <label class="form-check-label" for="voucherType2">
                       {{$t('hotspot.auth')}}
                     </label>
@@ -614,8 +625,7 @@
               <div v-if="newVoucher.type == 'auth'" class="form-group">
                 <label class="col-sm-5 control-label" for="textInput-modal-markup">{{$t('hotspot.user_mail')}}</label>
                 <div class="col-sm-7">
-                  <input v-model="newVoucher.user_mail" type="email"
-                    id="textInput-modal-markup" class="form-control">
+                  <input v-model="newVoucher.user_mail" type="email" id="textInput-modal-markup" class="form-control">
                 </div>
               </div>
             </div>
@@ -851,7 +861,8 @@ export default {
           auto_login: "",
           used: "",
           reusable: "",
-          printed: ""
+          printed: "",
+          type: ""
         }
       },
       macAuth: {
@@ -1089,7 +1100,10 @@ export default {
                 max_time: parseInt(context.newVoucher.max_time) * 60,
                 time: context.newVoucher.time,
                 duration: parseInt(context.newVoucher.duration),
-                expiration: moment(moment(context.newVoucher.expiration)).diff(moment(new Date()), 'days'),
+                expiration: moment(moment(context.newVoucher.expiration)).diff(
+                  moment(new Date()),
+                  "days"
+                ),
                 type: context.newVoucher.type,
                 user_name:
                   context.newVoucher.type == "auth"
@@ -1183,7 +1197,8 @@ export default {
           auto_login: this.vouchers.filters.auto_login,
           used: this.vouchers.filters.used,
           reusable: this.vouchers.filters.reusable,
-          printed: this.vouchers.filters.printed
+          printed: this.vouchers.filters.printed,
+          type: this.vouchers.filters.type
         },
         this.$route.params.id,
         success => {
@@ -1983,5 +1998,31 @@ textarea {
 
 .voucher-max-use {
   font-size: 18px;
+}
+
+.voucher-type-span-normal {
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  background: #f9d67a;
+  margin-right: 5px;
+  margin-left: 3px;
+}
+
+.voucher-type-span-auth {
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  background: #c8eb79;
+  margin-right: 5px;
+  margin-left: 3px;
+}
+
+.td-voucher-normal {
+  background: #f9d67a;
+}
+
+.td-voucher-auth {
+  background: #c8eb79;
 }
 </style>
