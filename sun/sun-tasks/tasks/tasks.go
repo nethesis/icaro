@@ -45,6 +45,10 @@ func Init(action string, worker bool) {
 		c.AddFunc("@daily", storeSessions)
 		storeSessions()
 
+	case "clean-short-urls":
+		c.AddFunc("@daily", cleanShortUrls)
+		cleanShortUrls()
+
 	case "clean-sessions":
 		c.AddFunc("@every 2h", cleanSessions)
 		cleanSessions()
@@ -105,6 +109,11 @@ func storeSessions() {
 		}
 	}
 
+}
+
+func cleanShortUrls() {
+	db := database.Instance()
+	db.Where("created_at < ?", time.Now().AddDate(0, -6, 0).UTC()).Delete(models.ShortUrl{})
 }
 
 func cleanSessions() {
