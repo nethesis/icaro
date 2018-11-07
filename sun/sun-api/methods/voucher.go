@@ -167,6 +167,7 @@ func GetVouchers(c *gin.Context) {
 	used := c.Query("used")
 	reusable := c.Query("reusable")
 	printed := c.Query("printed")
+	voucherType := c.Query("type")
 
 	hotspotId := c.Param("hotspot_id")
 
@@ -215,6 +216,10 @@ func GetVouchers(c *gin.Context) {
 
 	if len(printed) > 0 {
 		chain = chain.Where("printed = ?", printed)
+	}
+
+	if len(voucherType) > 0 {
+		chain = chain.Where("type = ?", voucherType)
 	}
 
 	chain.Order("created desc").Offset(offsets[0]).Limit(offsets[1]).Find(&hotspotVouchers)

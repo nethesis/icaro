@@ -50,6 +50,7 @@ new Vue({
     uamport: '',
     onError: false,
     preferences: {},
-    socials: {}
+    socials: {},
+    voucherValidated: false
   }
 })

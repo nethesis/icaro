@@ -90,7 +90,8 @@ var HotspotService = {
           (filters && filters.auto_login ? "&auto_login=" + filters.auto_login : "") +
           (filters && filters.used ? "&used=" + filters.used : "") +
           (filters && filters.reusable ? "&reusable=" + filters.reusable : "") +
-          (filters && filters.printed ? "&printed=" + filters.printed : ""), {
+          (filters && filters.printed ? "&printed=" + filters.printed : "") +
+          (filters && filters.type ? "&type=" + filters.type : ""), {
             headers: {
               Token:
                 (this.get("loggedUser") && this.get("loggedUser").token) || ""
