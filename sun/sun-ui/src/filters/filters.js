@@ -30,7 +30,7 @@ var Filters = {
     return result;
   },
   secondsInHour: function (value) {
-    if (value <= 0 || value == '-') {
+    if (value <= 0 || value == '-' || value == null) {
       return '-'
     }
     let hours = parseInt(Math.floor(value / 3600));
