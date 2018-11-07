@@ -70,7 +70,7 @@ func GetCurrentSessions(c *gin.Context) {
 	}
 
 	db := database.Instance()
-	chain := db.Table("users").Select("DATE_FORMAT(created, '%h') AS label, count(distinct id) AS data").Where("created >= CURRENT_DATE() AND created <= NOW()")
+	chain := db.Table("sessions").Select("DATE_FORMAT(start_time, '%h') AS label, count(distinct user_id) AS data")
 	rows, err := chain.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt)).Group("label").Rows()
 
 	var total = 0
@@ -92,7 +92,7 @@ func GetCurrentSessions(c *gin.Context) {
 	}
 	response.Avg = append(response.Avg, res)
 
-	chain = db.Table("sessions").Select("DATE_FORMAT(start_time, '%h') AS label, count(distinct id) AS data").Where("start_time >= CURRENT_DATE() AND start_time <= NOW()")
+	chain = db.Table("sessions").Select("DATE_FORMAT(start_time, '%h') AS label, count(distinct id) AS data")
 	rows, err = chain.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt)).Group("label").Rows()
 
 	total = 0
