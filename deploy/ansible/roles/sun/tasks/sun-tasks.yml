@@ -40,3 +40,9 @@
     name: sun-tasks@store-users
     daemon_reload: yes
     enabled: yes
+
+- name: Enable sun-tasks clean-short-urls service
+  systemd:
+    name: sun-tasks@clean-short-urls
+    daemon_reload: yes
+    enabled: yes
