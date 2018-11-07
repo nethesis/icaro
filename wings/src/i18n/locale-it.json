@@ -46,9 +46,9 @@
             "auth_error": "Accesso Negato",
             "auth_error_sub": "Si è verificato un errore, i motivi potrebbero essere i seguenti: 1)I dati inseriti potrebbero non essere corretti. 2)Il voucher che stai usando potrebbe essere scaduto. 3)Potresti aver raggiunto il tempo massimo consentito giornaliero. 4)Potresti aver raggiunto il traffico massimo consentito giornaliero.",
             "wait":"Solo qualche secondo...",
-            "we_are_sending_email_code":"Ti stiamo inviando un email con il tuo codice d'accesso,se non dovessi visualizzarla prova a guardare nella tua casella SPAM."
+            "we_are_sending_email_code":"Ti stiamo inviando un email con il tuo codice d'accesso,se non dovessi visualizzarla prova a guardare nella tua casella SPAM.",
+            "not_code_explain": "È la prima volta che ti connetti alla nostra rete Wi-Fi?"
         },
-        "not_code_explain": "È la prima volta che ti connetti alla nostra rete Wi-Fi?"
         "sms": {
             "number": "Numero telefonico",
             "insert_number": "Inserisci il tuo numero telefonico",
