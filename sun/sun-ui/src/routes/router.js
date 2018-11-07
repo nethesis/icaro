@@ -15,8 +15,6 @@ import Profile from "../components/Profile.vue";
 import Units from "../components/Units.vue";
 import Reports from "../components/Reports.vue";
 import Devices from "../components/Devices.vue";
-import StorageService from "../services/storage";
-import UtilService from "../services/util";
 
 Vue.use(Router);
 
