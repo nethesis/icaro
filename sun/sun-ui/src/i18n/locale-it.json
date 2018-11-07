@@ -313,7 +313,8 @@
       "sent_this_year": "Inviati nell'ultimo anno",
       "sent_last_7_days": "Inviati negli ultimi 7 giorni",
       "sent_last_15_days": "Inviati negli ultimi 15 giorni",
-      "sent_last_month": "Inviati nell'ultimo mese"
+      "sent_last_month": "Inviati nell'ultimo mese",
+      "sent_this_period": "Inviato in questo periodo"
     },
     "sessions": "Connessioni",
     "help": "Aiuto",
