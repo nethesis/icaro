@@ -414,8 +414,8 @@ func SendEmailCode(email string, code string, unit models.Unit, auth string) boo
 	m.SetHeader("To", email)
 	m.SetHeader("Subject", "Wi-Fi: "+hotspot.Description)
 	m.SetBody("text/plain", "Email login code: "+code+
-		"\n\nLogin Link: "+configuration.Config.Endpoints.Email.Link+
-		"?"+auth+"&code="+code+"&email="+url.QueryEscape(email)+
+		"\n\nLogin Link: "+GenerateShortURL(configuration.Config.Endpoints.Email.Link+
+		"?"+auth+"&code="+code+"&email="+url.QueryEscape(email))+
 		"\n\nLogout Link: http://logout")
 
 	d := gomail.NewDialer(
