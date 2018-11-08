@@ -5,7 +5,7 @@
     <div v-if="(user.account_type == 'admin') || (user.account_type == 'reseller') && !isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
       <label v-if="!isLoading" class="col-sm-2 control-label" for="textInput-markup">Hotspot</label>
       <div v-if="!isLoading" class="col-sm-4">
-        <select v-on:change="getAll(false, true)" v-model="hotspotSearchId" class="form-control">
+        <select :disabled="isLoadingTable" v-on:change="getAll(false, true)" v-model="hotspotSearchId" class="form-control">
           <option v-for="hotspot in hotspots" v-bind:key="hotspot.id" v-bind:value="hotspot.id">
             {{ hotspot.name }} - {{ hotspot.description}}
           </option>
@@ -15,7 +15,7 @@
     <div v-if="!isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
       <label class="col-sm-2 control-label" for="textInput-markup">{{$t('session.user')}}</label>
       <div class="col-sm-4">
-        <select v-on:change="getAll(false, true)" v-model="hotspotUserId" class="form-control">
+        <select :disabled="isLoadingTable" v-on:change="getAll(false, true)" v-model="hotspotUserId" class="form-control">
           <option value="0">-</option>
           <option v-for="user in users" v-bind:key="user.id" v-bind:value="user.id">
             {{ user.name }}
@@ -26,7 +26,7 @@
     <div v-if="!isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
       <label class="col-sm-2 control-label" for="textInput-markup">{{$t('session.unit')}}</label>
       <div class="col-sm-4">
-        <select v-on:change="getAll(false, true)" v-model="hotspotUnitId" class="form-control">
+        <select :disabled="isLoadingTable" v-on:change="getAll(false, true)" v-model="hotspotUnitId" class="form-control">
           <option value="0">-</option>
           <option v-for="unit in units" v-bind:key="unit.id" v-bind:value="unit.id">
             {{ unit.name }} - {{ unit.description }}
@@ -37,13 +37,13 @@
     <div v-if="!isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
       <label class="col-sm-2 control-label" for="textInput-markup">{{$t('session.from')}}</label>
       <div class="col-sm-4">
-        <datepicker :format="dateFormatter" @input="getAll()" v-model="hotspotDateFrom" :language="locale"></datepicker>
+        <datepicker :disabledPicker="isLoadingTable" :format="dateFormatter" @input="getAll()" v-model="hotspotDateFrom" :language="locale"></datepicker>
       </div>
     </div>
     <div v-if="!isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
       <label class="col-sm-2 control-label" for="textInput-markup">{{$t('session.to')}}</label>
       <div class="col-sm-4">
-        <datepicker :format="dateFormatter" @input="getAll()" v-model="hotspotDateTo" :language="locale"></datepicker>
+        <datepicker :disabledPicker="isLoadingTable" :format="dateFormatter" @input="getAll()" v-model="hotspotDateTo" :language="locale"></datepicker>
       </div>
     </div>
     <div v-if="!isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -53,7 +53,7 @@
     </div>
     <div v-if="!isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
       <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-        <button class="btn btn-primary" @click="getAll(true)">{{$t('session.refresh')}}</button>
+        <button :disabled="isLoadingTable" class="btn btn-primary" @click="getAll(true)">{{$t('session.refresh')}}</button>
       </div>
     </div>
 
