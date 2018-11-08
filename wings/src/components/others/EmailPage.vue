@@ -284,6 +284,6 @@
     }
 
     .adjust-top {
-        margin-top: 10px;
+        margin-top: 10px !important;
     }
 </style>
