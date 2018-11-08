@@ -355,7 +355,7 @@ func SendSMSCode(number string, code string, unit models.Unit, auth string) int 
 		msgData := url.Values{}
 		msgData.Set("To", number)
 		msgData.Set("MessagingServiceSid", configuration.Config.Endpoints.Sms.ServiceSid)
-		msgData.Set("Body", "SMS login code: "+code+
+		msgData.Set("Body", "Password: "+code+
 			"\n\nLogin Link: "+GenerateShortURL(configuration.Config.Endpoints.Sms.Link+
 			"?"+auth+"&code="+code+"&num="+url.QueryEscape(number))+
 			"\n\nLogout Link: http://logout")
@@ -413,7 +413,7 @@ func SendEmailCode(email string, code string, unit models.Unit, auth string) boo
 	m.SetHeader("From", configuration.Config.Endpoints.Email.From)
 	m.SetHeader("To", email)
 	m.SetHeader("Subject", "Wi-Fi: "+hotspot.Description)
-	m.SetBody("text/plain", "Email login code: "+code+
+	m.SetBody("text/plain", "Password: "+code+
 		"\n\nLogin Link: "+GenerateShortURL(configuration.Config.Endpoints.Email.Link+
 		"?"+auth+"&code="+code+"&email="+url.QueryEscape(email))+
 		"\n\nLogout Link: http://logout")
