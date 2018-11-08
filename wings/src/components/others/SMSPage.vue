@@ -23,7 +23,7 @@
             <p v-if="!codeRequested && !choosedMode" class="not-code-exp">
                 <label>{{$t("sms.not_code_explain") }}</label>
                 <br />
-                <button v-on:click="chooseMode()" class="ui normal button request-code">{{
+                <button v-on:click="chooseMode()" class="ui small button request-code">{{
                     $t("sms.not_have_code") }}</button>
             </p>
             <button v-if="!codeRequested && choosedMode" v-on:click="getCode(true)" class="ui big button request-code">{{
@@ -288,7 +288,7 @@
     }
 
     .not-code-exp {
-        margin-top: 10px !important;
+        margin-top: 15px !important;
     }
 
     .adjust-top {
