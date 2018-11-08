@@ -119,7 +119,7 @@
             })
 
             var countries = require('./../../i18n/countries.json')
-            var authPrefix = countries[0]
+            var authPrefix = countries[0].dial_code
 
             return {
                 authorized: false,
