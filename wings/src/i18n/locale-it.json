@@ -32,7 +32,7 @@
         "email": {
             "insert_email": "Inserisci la tua email",
             "insert_your_code": "Inserisci password",
-            "code": "password",
+            "code": "Password",
             "have_code": "Entra con password",
             "not_have_code": "Richiedi una password",
             "get_code": "Richiedi password",
