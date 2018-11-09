@@ -90,7 +90,7 @@
       "mode": "Modalità",
       "limitless": "Riutilizzabile",
       "with_limit": "Limitato",
-      "max_use": "Utilizzi disponibili",
+      "max_use": "Utilizzi",
       "auto_login": "Autologin",
       "CoovaChilli-Bandwidth-Max-Down": "Banda massima in download per utente (Kbps) (0=illimitato)",
       "CoovaChilli-Bandwidth-Max-Up": "Banda massima in upload per utente (Kbps) (0=illimitato)",
