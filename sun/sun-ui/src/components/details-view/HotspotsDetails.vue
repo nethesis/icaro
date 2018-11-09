@@ -205,7 +205,7 @@
                   <span v-if="props.row.duration == 0">-</span>
                   </td>
                 <td :class="['fancy', 'td-voucher-'+props.row.type]">
-                  <span :class="['fa', checkVoucherUse(props.row.expires) ? 'fa-check green' : 'fa-minus']"></span>
+                  <span :class="['fa', checkVoucherUse(props.row.expires) ? 'fa-check green' : '']"></span>
                   {{props.row.expires | formatDate}}
                 </td>
                 <td :class="['fancy', 'td-voucher-'+props.row.type]">
