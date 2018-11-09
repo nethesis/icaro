@@ -54,3 +54,7 @@ Proceed with the configuration of green and red interfaces, then:
 
 3. On the first wizard page, insert Sun host name and enter valid reseller credentials.
    Then follow the istructions on the screen.
+
+## Install on OpenWrt
+
+Follow the instructions on [Icaro OpenWrt Github project](https://github.com/nethesis/icaro-openwrt)
