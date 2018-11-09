@@ -57,6 +57,9 @@
           <strong>{{ props.row.account_type }}</strong>
         </td>
         <td class="fancy">
+          <span :class="['pficon', props.row.marketing_auth ? 'pficon-ok' : 'pficon-error-circle-o']"></span>
+        </td>
+        <td class="fancy">
           <span :class="['pficon', props.row.auto_login ? 'pficon-ok' : 'pficon-error-circle-o']"></span>
         </td>
         <td :class="[isExpired(props.row.valid_until) ? 'disabled' : '', 'fancy']">
@@ -128,6 +131,11 @@ export default {
         {
           label: this.$i18n.t("user.type"),
           field: "account_type",
+          filterable: true
+        },
+        {
+          label: this.$i18n.t("user.marketing_auth"),
+          field: "marketing_auth",
           filterable: true
         },
         {

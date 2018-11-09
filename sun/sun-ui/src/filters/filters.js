@@ -51,10 +51,10 @@ var Filters = {
 
     return returnString;
   },
-  formatDate: function (value) {
+  formatDate: function (value, withHour) {
     var moment = require("patternfly/node_modules/moment/moment.js");
     if (+new Date(value) > 0)
-      return moment(String(value)).format("DD MMMM YYYY, HH:mm");
+      return moment(String(value)).format(withHour ? "DD MMMM YYYY" : "DD MMMM YYYY, HH:mm");
     else return "-";
   },
   adjustPage: function(value) {

@@ -172,7 +172,8 @@
       "time": "Tempo",
       "traffic_limit": "Traffico massimo giornaliero (MB)",
       "time_limit": "Durata massima giornaliera in Minuti (0= senza limiti)",
-      "show_marketing_auth": "Mosta solo account con consenso marketing"
+      "show_marketing_auth": "Mosta solo account con consenso marketing",
+      "marketing_auth": "Marketing"
     },
     "account": {
       "uuid": "ID",

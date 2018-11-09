@@ -172,7 +172,8 @@
       "time": "Time",
       "traffic_limit": "Daily traffic limit (MB) (0 = limitless)",
       "time_limit": "Daily time limit (Minutes) (0 = limitless)",
-      "show_marketing_auth": "Marketing consent"
+      "show_marketing_auth": "Marketing consent",
+      "marketing_auth": "Marketing"
     },
     "account": {
       "uuid": "Unique ID",

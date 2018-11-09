@@ -200,10 +200,13 @@
                   <div>
                     <strong>{{ $t('user.time') }}</strong>: {{ props.row.max_time || '-' | secondsInHour }}</div>
                 </td>
-                <td :class="['fancy', 'td-voucher-'+props.row.type]">{{ props.row.duration }} ({{$t('hotspot.days')}})</td>
+                <td :class="['fancy', 'td-voucher-'+props.row.type]">
+                  <span v-if="props.row.duration > 0">{{ props.row.duration }}</span>
+                  <span v-if="props.row.duration == 0">-</span>
+                  </td>
                 <td :class="['fancy', 'td-voucher-'+props.row.type]">
                   <span :class="['fa', checkVoucherUse(props.row.expires) ? 'fa-check green' : 'fa-minus']"></span>
-                  ({{$t('hotspot.expires')}}: {{props.row.expires | formatDate}})
+                  {{props.row.expires | formatDate}}
                 </td>
                 <td :class="['fancy', 'td-voucher-'+props.row.type]">
                   {{props.row.remain_use == -1 ? $t('hotspot.limitless') : $t('hotspot.max_use') + ': ' }}
@@ -742,11 +745,16 @@
       <div class="card-pf-footer voucher-details">
         <div class="card-pf-time-frame-filter voucher-valid">
           {{ $t("hotspot.valid") }}:
-          <strong>{{voucher.duration}}</strong>
-          <span> {{ $t("hotspot.days") }} </span>
+            <strong v-if="voucher.duration > 0">{{voucher.duration}}</strong>
+            <span v-if="voucher.duration > 0"> {{ $t("hotspot.days") }} </span>
+            <strong v-if="voucher.duration == 0">{{voucher.expires | formatDate(true)}}</strong>
         </div>
         <div class="card-pf-time-frame-filter voucher-max-use">
-          {{voucher.remain_use == -1 ? $t('hotspot.limitless') : $t('hotspot.max_use') + ': ' }} <b>({{$t('hotspot.'+voucher.type+'_print')}})</b>
+          <b v-if="voucher.type == 'auth'">
+            {{$t('hotspot.'+voucher.type+'_print')}}
+          </b>
+          <span v-if="voucher.type == 'auth'">-</span>
+          {{voucher.remain_use == -1 ? $t('hotspot.limitless') : $t('hotspot.max_use') + ': ' }}
           <strong v-if="voucher.remain_use != -1">{{voucher.remain_use}}</strong>
         </div>
         <div class="card-pf-time-frame-filter voucher-traffic">
@@ -965,7 +973,7 @@ export default {
           sortable: false
         },
         {
-          label: this.$i18n.t("hotspot.used"),
+          label: this.$i18n.t("hotspot.expiration"),
           field: "expires",
           filterable: false,
           sortable: true
@@ -1771,6 +1779,9 @@ export default {
     exportCSVVoucher() {
       var voucherRows = JSON.parse(JSON.stringify(this.vouchers.usable));
       for (var r in voucherRows) {
+
+        voucherRows[r].type = this.$i18n.t("hotspot."+voucherRows[r].type)
+
         var banDown =
           voucherRows[r].bandwidth_down > 0
             ? this.$options.filters["byteFormat"](
