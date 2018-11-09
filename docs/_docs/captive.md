@@ -33,6 +33,8 @@ Voucher (used for security/payment) can be:
 
 * `voucher limited` : this kind of voucher can be re-used only a finite number of times, its tipical use is with premium (payed) accounts with better conditions (autologin, more bandwidth, more traffic and so on).
 
+* `voucher authentication` : this kind of voucher can be used to authenticate immediately the guest by inserting the code. This voucher can be used combined with the above voucher or alone.
+
 Voucher can be exported in CSV format or printed (individually or globally).
 
 Login type after the voucher check:
@@ -46,6 +48,7 @@ Login type after the voucher check:
     * Instagram
     * Linkedin
     * Twitter (**Not yet implemented**)
+  * Code (this is the voucher authentication explained above)
 
 Social logins are valid only for a specific period of time.
 
