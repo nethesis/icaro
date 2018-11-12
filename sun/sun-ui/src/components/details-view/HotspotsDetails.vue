@@ -495,7 +495,7 @@
           <form class="form-horizontal" v-on:submit.prevent="createVoucher()">
 
             <div class="modal-body">
-              <div class="form-group">
+              <div v-if="vouchers.typesAvailable == 'all'" class="form-group">
                 <label class="col-sm-5 control-label" for="textInput-modal-markup">{{$t('hotspot.type')}}</label>
                 <div class="col-sm-7">
                   <span class="span-radio">
@@ -871,7 +871,8 @@ export default {
           reusable: "",
           printed: "",
           type: ""
-        }
+        },
+        typesAvailable: "normal"
       },
       macAuth: {
         isLoading: true,
@@ -1139,6 +1140,8 @@ export default {
       Promise.all(promises)
         .then(function() {
           context.vouchers.isCreating = false;
+          context.newVoucher.user_name = "";
+          context.newVoucher.user_mail = "";
           context.getVouchers();
           $("#voucherModal").modal("hide");
         })
@@ -1331,6 +1334,7 @@ export default {
           var captivePref = [];
           var backgroundColor = "";
           var vouchersAvailable = false;
+          var voucherFlag = 0;
 
           for (var p in success.body) {
             var pref = success.body[p];
@@ -1346,6 +1350,23 @@ export default {
               (pref.key == "temp_code_login" && pref.value)
             ) {
               vouchersAvailable = pref.value || vouchersAvailable;
+
+              if (pref.key == "voucher_login" && pref.value) {
+                this.vouchers.typesAvailable = "normal";
+                this.newVoucher.type = "normal";
+                voucherFlag++;
+              }
+
+              if (pref.key == "temp_code_login" && pref.value) {
+                this.vouchers.typesAvailable = "auth";
+                this.newVoucher.type = "auth";
+                voucherFlag++;
+              }
+
+              if (voucherFlag == 2) {
+                this.vouchers.typesAvailable = "all";
+                this.newVoucher.type = "normal";
+              }
             }
 
             if (pref.key == "captive_7_background") {
@@ -1779,8 +1800,7 @@ export default {
     exportCSVVoucher() {
       var voucherRows = JSON.parse(JSON.stringify(this.vouchers.usable));
       for (var r in voucherRows) {
-
-        voucherRows[r].type = this.$i18n.t("hotspot."+voucherRows[r].type)
+        voucherRows[r].type = this.$i18n.t("hotspot." + voucherRows[r].type);
 
         var banDown =
           voucherRows[r].bandwidth_down > 0
