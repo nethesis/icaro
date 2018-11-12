@@ -300,7 +300,7 @@
       "time": "Time",
       "today_connections": "Connections",
       "today_logins": "Guests",
-      "current_situation": "Current situation",
+      "current_situation": "Hourly average (yesterday)",
       "connection_logins": "Connections and Guests",
       "users_currently_connected": "Average guests per hour",
       "total_daily_connections": "Average connections per hour",
