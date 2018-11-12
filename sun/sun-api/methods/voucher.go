@@ -91,7 +91,7 @@ func CreateVoucher(c *gin.Context) {
 		if hotspotVoucher.Type == "auth" {
 			newUser := models.User{
 				HotspotId:            json.HotspotId,
-				Name:                 hotspotVoucher.UserName,
+				Name:                 hotspotVoucher.UserName + " (" + hotspotVoucher.Code + ")",
 				Username:             hotspotVoucher.Code,
 				Password:             hotspotVoucher.Code,
 				Email:                hotspotVoucher.UserMail,
