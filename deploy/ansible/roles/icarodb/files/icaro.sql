@@ -235,6 +235,8 @@ CREATE TABLE `sessions` (
   `stop_time` datetime,
   `session_key` varchar(200),
   UNIQUE KEY `session_key` (`session_key`),
+  KEY `hotspot_id` (`hotspot_id`),
+  KEY `unit_id` (`unit_id`),
   PRIMARY KEY(`id`)
 );
 

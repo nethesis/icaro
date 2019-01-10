@@ -107,6 +107,13 @@ func autoLogin(c *gin.Context, unitMacAddress string, username string, userMac s
 		return
 	}
 
+	// check if current device is already logged in other units
+	flagOtherLogin := utils.CheckOtherUnitLogin(userMac, unit.Id, unit.HotspotId)
+	if flagOtherLogin {
+		AuthReject(c, "device already logged in an other unit")
+		return
+	}
+
 	// extract preferences
 	outPrefs, errorMessage := calculatePreferences(c, unit, user, timezone)
 
@@ -118,7 +125,7 @@ func autoLogin(c *gin.Context, unitMacAddress string, username string, userMac s
 	AuthAccept(c, outPrefs.String())
 }
 
-func Login(c *gin.Context, unitMacAddress string, username string, chapPass string, chapChal string, sessionId string, timezone string) {
+func Login(c *gin.Context, unitMacAddress string, username string, userMac string, chapPass string, chapChal string, sessionId string, timezone string) {
 	// check if unit exists
 	unit := utils.GetUnitByMacAddress(unitMacAddress)
 	if unit.Id <= 0 {
@@ -160,6 +167,13 @@ func Login(c *gin.Context, unitMacAddress string, username string, chapPass stri
 		return
 	}
 
+	// check if current device is already logged in other units
+	flagOtherLogin := utils.CheckOtherUnitLogin(userMac, unit.Id, unit.HotspotId)
+	if flagOtherLogin {
+		AuthReject(c, "device already logged in an other unit")
+		return
+	}
+
 	// extract preferences
 	outPrefs, errorMessage := calculatePreferences(c, unit, user, timezone)
 
@@ -187,11 +201,12 @@ func Logins(c *gin.Context) {
 	case "login":
 		unitMacAddress := c.Query("ap")
 		user := c.Query("user")
+		userMac := c.Query("mac")
 		chapPass := c.Query("chap_pass")
 		chapChal := c.Query("chap_chal")
 		sessionId := c.Query("sessionid")
 		timezone := c.Query("timezone")
-		Login(c, unitMacAddress, user, chapPass, chapChal, sessionId, timezone)
+		Login(c, unitMacAddress, user, userMac, chapPass, chapChal, sessionId, timezone)
 
 	default:
 		c.String(http.StatusNotFound, "Invalid login service: '%s'", service)

@@ -145,6 +145,18 @@ func CheckTempUserSession(userId int, deviceMac string, sessionKey string) bool 
 	return check
 }
 
+func CheckOtherUnitLogin(mac string, unitId int, hostspotId int) bool {
+	var session models.Session
+	db := database.Instance()
+	db.Where("device_mac = ? and unit_id != ? and hotspot_id = ? and stop_time = 0", mac, unitId, hostspotId).First(&session)
+
+	if session.Id > 0 {
+		return true
+	}
+
+	return false
+}
+
 func DeleteUserSession(userId int, sessionKey string) bool {
 	var userSession models.UserSession
 
@@ -186,11 +198,11 @@ func GetSessionByKeyAndUnitId(key string, unitId int) models.Session {
 }
 
 func GetDeviceByMacAddressAndUserId(mac string, userId int) models.Device {
-	var unit models.Device
+	var device models.Device
 	db := database.Instance()
-	db.Where("mac_address = ? and user_id = ?", mac, userId).First(&unit)
+	db.Where("mac_address = ? and user_id = ?", mac, userId).First(&device)
 
-	return unit
+	return device
 }
 
 func GetDevicesByHotspotidAndMacAddress(hotspot_id int, mac string) []models.Device {
