@@ -102,8 +102,6 @@ func CreateVoucher(c *gin.Context) {
 				MaxNavigationTraffic: hotspotVoucher.MaxTraffic,
 				MaxNavigationTime:    hotspotVoucher.MaxTime,
 				AutoLogin:            hotspotVoucher.AutoLogin,
-				ValidFrom:            time.Now().UTC(),
-				ValidUntil:           time.Now().UTC().AddDate(0, 0, hotspotVoucher.Duration),
 			}
 
 			// create user

@@ -444,6 +444,19 @@ func VoucherAuth(c *gin.Context) {
 				db := database.Instance()
 				db.Save(&voucher)
 
+				// update user valid info
+				if user.ValidFrom.IsZero() && user.ValidUntil.IsZero() {
+					user.ValidFrom = time.Now().UTC()
+					duration := voucher.Duration
+
+					if duration == 0 {
+						duration = int(voucher.Expires.Sub(time.Now().UTC()).Hours()/24) + 1
+					}
+
+					user.ValidUntil = time.Now().UTC().AddDate(0, 0, duration)
+					db.Save(&user)
+				}
+
 				c.JSON(http.StatusOK, gin.H{"message": "Voucher is valid", "code": voucher.Code, "type": voucher.Type, "user_db_id": user.Id})
 			}
 
