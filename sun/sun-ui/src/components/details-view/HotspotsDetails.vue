@@ -181,6 +181,8 @@
               <template slot="table-row" slot-scope="props">
                 <td :class="['fancy', 'td-voucher-'+props.row.type]">
                   <strong>{{ props.row.code }}</strong>
+                  <br/>
+                  {{ props.row.user_name}} ({{ props.row.user_mail }})
                 </td>
                 <td :class="['fancy', 'td-voucher-'+props.row.type]">
                   <strong>{{ $t('hotspot.'+props.row.type) }}</strong>
