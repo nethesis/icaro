@@ -405,6 +405,7 @@ export default {
           console.error(error);
           this.isLoading = false;
           this.isLoadingTable = false;
+          callback();
         }
       );
     },
