@@ -557,13 +557,6 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-5 control-label" for="textInput-modal-markup">{{$t('hotspot.duration')}}
-                  ({{$t('hotspot.days')}})</label>
-                <div class="col-sm-7">
-                  <input v-model="newVoucher.duration" type="number" id="textInput-modal-markup" class="form-control">
-                </div>
-              </div>
-              <div class="form-group">
                 <label class="col-sm-5 control-label" for="textInput-modal-markup">{{$t('hotspot.validity')}}</label>
                 <div class="col-sm-7">
                   <span class="span-radio">
