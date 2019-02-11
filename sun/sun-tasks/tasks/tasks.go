@@ -159,7 +159,7 @@ func storeUsers() {
 	var users []models.User
 
 	db := database.Instance()
-	db.Joins("JOIN hotspot_preferences p on p.hotspot_id = users.hotspot_id").Where("valid_until <= NOW() and p.`key` = 'auth_renew' and value = 'true'").Find(&users)
+	db.Joins("JOIN hotspot_preferences p on p.hotspot_id = users.hotspot_id").Where("valid_until <= NOW() and p.`key` = 'auth_renew' and value = 'true' and valid_until != 0").Find(&users)
 	for _, u := range users {
 		// create user history model
 		userHistory := models.UserHistory{
