@@ -18,6 +18,8 @@ radiusserver1   "localhost"
 uamserver       "${HS_SPLASH_PAGE_URL}/?digest=${HS_DIGEST}&uuid=${HS_UUID}&timezone=${HS_TIMEZONE}"
 radiusnasid     "${HS_ID}"
 alloworigin     "${HS_ALLOW_ORIGINS}"
+${HS_DHCPSTART:+"dhcpstart  $HS_DHCPSTART"}
+${HS_DHCPEND:+"dhcpend  $HS_DHCPEND"}
 macauth
 
 uamdomain       "${HS_AAA_HOST}"
