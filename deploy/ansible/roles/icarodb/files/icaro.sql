@@ -262,7 +262,8 @@ CREATE TABLE `session_histories` (
   `session_key` varchar(200),
   PRIMARY KEY(`id`),
   KEY `user_id` (`user_id`),
-  KEY `hotspot_id` (`hotspot_id`)
+  KEY `hotspot_id` (`hotspot_id`),
+  KEY `update_time` (`update_time`)
 );
 
 /* -------------------- */
