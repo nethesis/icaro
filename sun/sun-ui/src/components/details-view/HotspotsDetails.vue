@@ -522,7 +522,7 @@
               <div class="form-group">
                 <label class="col-sm-5 control-label" for="textInput-modal-markup">{{$t('hotspot.voucher_creation_count')}}</label>
                 <div class="col-sm-7">
-                  <input v-model="vouchersCount" type="text" id="textInput-modal-markup" class="form-control">
+                  <input required v-model="vouchersCount" type="text" id="textInput-modal-markup" class="form-control">
                 </div>
               </div>
 
