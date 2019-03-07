@@ -93,7 +93,10 @@ func PostReviewResult(c *gin.Context) {
 	}
 
 	if reviewResult.Stars > 0 && reviewResult.Stars <= 5 {
-		utils.SendReviewMessage(adeToken.HotspotId, reviewResult.Stars, reviewResult.Message)
+		if !utils.SendReviewMessage(adeToken, reviewResult.Stars, reviewResult.Message) {
+			c.JSON(http.StatusBadRequest, gin.H{"message": "Feedback submission failed."})
+			return
+		}
 	}
 
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
