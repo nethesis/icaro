@@ -19,6 +19,11 @@ func GetFeedbackPage(c *gin.Context) {
 		return
 	}
 
+	if !adeToken.FeedbackSendTime.IsZero() {
+		c.JSON(http.StatusForbidden, gin.H{"message": "Token expired"})
+		return
+	}
+
 	hotspotPerfs := utils.GetHotspotPrefs(adeToken.HotspotId)
 
 	FeedbackPage.HotspotName = hotspotPerfs["captive_2_title"]
@@ -37,6 +42,11 @@ func PostFeedbackResult(c *gin.Context) {
 
 	if adeToken.Id <= 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No token found!"})
+		return
+	}
+
+	if !adeToken.FeedbackSendTime.IsZero() {
+		c.JSON(http.StatusForbidden, gin.H{"message": "Token expired"})
 		return
 	}
 
