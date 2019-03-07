@@ -9,7 +9,12 @@ import (
 func GetHotspotPrefs(hotspotId int) map[string]string {
 	hotspotPerfs := []string{"captive_2_title",
 		"captive_3_logo",
-		"captive_7_background"}
+		"captive_7_background",
+		"marketing_9_threshold",
+		"marketing_10_first_url",
+		"marketing_11_second_url",
+		"marketing_12_third_url",
+	}
 
 	prefsMap := make(map[string]string)
 

@@ -24,12 +24,46 @@ package methods
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/nethesis/icaro/ade/ade-api/models"
+	"github.com/nethesis/icaro/ade/ade-api/utils"
 )
 
 func GetReviewPage(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"status": "success"})
+	var reviewPage models.ReviewPage
+	var urls []string
+
+	token := c.Param("token")
+	adeToken := utils.GetAdeTokenFromToken(token)
+
+	if adeToken.Id <= 0 {
+		c.JSON(http.StatusNotFound, gin.H{"message": "No token found!"})
+		return
+	}
+
+	hotspotPerfs := utils.GetHotspotPrefs(adeToken.HotspotId)
+
+	reviewPage.HotspotName = hotspotPerfs["captive_2_title"]
+	reviewPage.HotspotLogo = hotspotPerfs["captive_3_logo"]
+	reviewPage.BgColor = hotspotPerfs["captive_7_background"]
+
+	reviewPage.Threshold, _ = strconv.Atoi(hotspotPerfs["marketing_9_threshold"])
+
+	if hotspotPerfs["marketing_10_first_url"] != "" {
+		urls = append(urls, hotspotPerfs["marketing_10_first_url"])
+	}
+	if hotspotPerfs["marketing_11_second_url"] != "" {
+		urls = append(urls, hotspotPerfs["marketing_11_second_url"])
+	}
+	if hotspotPerfs["marketing_12_third_url"] != "" {
+		urls = append(urls, hotspotPerfs["marketing_12_third_url"])
+	}
+
+	reviewPage.Urls = urls
+
+	c.JSON(http.StatusOK, reviewPage)
 }
 
 func PostReviewResult(c *gin.Context) {
