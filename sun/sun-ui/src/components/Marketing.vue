@@ -62,7 +62,7 @@
         >{{$t('marketing.email_first')}}</label>
         <div v-if="!isLoadingMarketing" class="col-sm-4">
           <input
-            v-model="marketingPrefs.marketing_3_first_email"
+            v-model="marketingPrefs.marketing_3_first_email_enabled"
             class="form-control"
             type="checkbox"
           >
@@ -70,7 +70,7 @@
       </div>
 
       <div
-        v-if="!isLoadingMarketing && marketingPrefs.marketing_3_first_email && marketingPrefs.marketing_1_enabled"
+        v-if="!isLoadingMarketing && marketingPrefs.marketing_3_first_email_enabled && marketingPrefs.marketing_1_enabled"
         class="form-group"
       >
         <label
@@ -95,7 +95,7 @@
         >{{$t('marketing.email_second')}}</label>
         <div v-if="!isLoadingMarketing" class="col-sm-4">
           <input
-            v-model="marketingPrefs.marketing_4_second_email"
+            v-model="marketingPrefs.marketing_4_second_email_enabled"
             class="form-control"
             type="checkbox"
           >
@@ -103,7 +103,7 @@
       </div>
 
       <div
-        v-if="!isLoadingMarketing && marketingPrefs.marketing_4_second_email && marketingPrefs.marketing_1_enabled"
+        v-if="!isLoadingMarketing && marketingPrefs.marketing_4_second_email_enabled && marketingPrefs.marketing_1_enabled"
         class="form-group"
       >
         <label
@@ -142,7 +142,7 @@
       </div>
 
       <div
-        v-if="!isLoadingMarketing && marketingPrefs.marketing_4_second_email && marketingPrefs.marketing_7_second_after == 'days' && marketingPrefs.marketing_1_enabled"
+        v-if="!isLoadingMarketing && marketingPrefs.marketing_4_second_email_enabled && marketingPrefs.marketing_7_second_after == 'days' && marketingPrefs.marketing_1_enabled"
         class="form-group"
       >
         <label class="col-sm-3 control-label" for="textInput-modal-markup"></label>
@@ -163,7 +163,11 @@
           for="textInput-markup"
         >{{$t('marketing.sms')}}</label>
         <div v-if="!isLoadingMarketing" class="col-sm-4">
-          <input v-model="marketingPrefs.marketing_5_sms" class="form-control" type="checkbox">
+          <input
+            v-model="marketingPrefs.marketing_5_sms_enabled"
+            class="form-control"
+            type="checkbox"
+          >
         </div>
       </div>
 
@@ -185,7 +189,12 @@
           for="textInput-markup"
         >{{$t('marketing.first_external_url')}}</label>
         <div v-if="!isLoadingMarketing" class="col-sm-4">
-          <input placeholder="https://www.tripadvisor.it/MYRESTAURANT" v-model="marketingPrefs.marketing_10_first_url" class="form-control" type="url">
+          <input
+            placeholder="https://www.tripadvisor.it/MYRESTAURANT"
+            v-model="marketingPrefs.marketing_10_first_url"
+            class="form-control"
+            type="url"
+          >
         </div>
       </div>
       <div v-if="!isLoadingMarketing && marketingPrefs.marketing_1_enabled" class="form-group">
@@ -195,7 +204,12 @@
           for="textInput-markup"
         >{{$t('marketing.second_external_url')}}</label>
         <div v-if="!isLoadingMarketing" class="col-sm-4">
-          <input placeholder="https://www.booking.com/hotel/MYHOTEL" v-model="marketingPrefs.marketing_11_second_url" class="form-control" type="url">
+          <input
+            placeholder="https://www.booking.com/hotel/MYHOTEL"
+            v-model="marketingPrefs.marketing_11_second_url"
+            class="form-control"
+            type="url"
+          >
         </div>
       </div>
       <div v-if="!isLoadingMarketing && marketingPrefs.marketing_1_enabled" class="form-group">
@@ -243,12 +257,12 @@ export default {
       marketingPrefs: {
         marketing_1_enabled: false,
         marketing_2_feedback_email: "",
-        marketing_3_first_email: false,
-        marketing_4_second_email: false,
+        marketing_3_first_email_enabled: false,
+        marketing_4_second_email_enabled: false,
         marketing_6_first_after: false,
         marketing_7_second_after: "expiration",
         marketing_8_second_after_days: 4,
-        marketing_5_sms: false,
+        marketing_5_sms_enabled: false,
         marketing_9_threshold: 3,
         marketing_10_first_url: "",
         marketing_11_second_url: "",
