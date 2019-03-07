@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import Home from './views/Home.vue'
 import Feedbacks from './views/Feedbacks.vue'
 import Reviews from './views/Reviews.vue'
 

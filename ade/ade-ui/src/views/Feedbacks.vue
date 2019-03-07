@@ -55,14 +55,17 @@ export default {
       );
     },
     setFeedback() {
-      this.feedbackLeave = true;
       this.setTokenFeedback(
         {
           message: this.message
         },
         this.$route.params.token,
-        function(success) {},
-        function(error) {}
+        function(success) {
+          this.feedbackLeave = true;
+        },
+        function(error) {
+          this.feedbackLeave = true;
+        }
       );
     }
   }

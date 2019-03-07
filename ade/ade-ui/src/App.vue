@@ -57,4 +57,7 @@ export default {
 .text-center {
   text-align: center !important;
 }
+.no-mg-top {
+  margin-top: 0px !important;
+}
 </style>
