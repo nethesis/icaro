@@ -27,3 +27,7 @@ type FeedbackPage struct {
 	HotspotLogo string `json:"hotspot_logo"`
 	BgColor     string `json:"bg_color"`
 }
+
+type FeedbackResult struct {
+	Message string `json:"message"`
+}
