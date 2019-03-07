@@ -1,0 +1,15 @@
+{
+    "en": {
+        "reviews": "Reviews",
+        "review_text_before": "Insert a review here",
+        "review_text_after": "Thank you, insert a comment below (optional)",
+        "review_good_external": "External url text",
+        "feedbacks": "Feedbacks",
+        "feedback_text": "Feedback text",
+        "submit": "Submit",
+        "not_found": "Not found",
+        "not_found_text": "Not found text",
+        "thank_you_feedback": "Thank you feedback",
+        "thank_you_feedback_text": "Thank you feedback text"
+    }
+}
