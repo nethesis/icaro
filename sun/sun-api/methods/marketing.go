@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Nethesis S.r.l.
+ * Copyright (C) 2019 Nethesis S.r.l.
  * http://www.nethesis.it - info@nethesis.it
  *
  * This file is part of Icaro project.
@@ -25,7 +25,6 @@ package methods
 import (
 	"net/http"
 	"strconv"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
@@ -35,51 +34,7 @@ import (
 	"github.com/nethesis/icaro/sun/sun-api/utils"
 )
 
-func UpdateAccountPrefs(c *gin.Context) {
-	var accountPref models.AccountPreference
-	accountId := c.MustGet("token").(models.AccessToken).AccountId
-
-	var json models.AccountPreference
-	if err := c.BindJSON(&json); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"message": "Request fields malformed", "error": err.Error()})
-		return
-	}
-
-	db := database.Instance()
-	if accountId == 1 {
-		db.Where("`key` = ?", json.Key).First(&accountPref)
-	} else {
-		db.Where("`key` = ? AND account_id = ?", json.Key, accountId).First(&accountPref)
-	}
-
-	if accountPref.Id == 0 {
-		c.JSON(http.StatusNotFound, gin.H{"message": "No preference found!"})
-		return
-	}
-
-	accountPref.Value = json.Value
-
-	db.Save(&accountPref)
-
-	c.JSON(http.StatusCreated, gin.H{"status": "success"})
-}
-
-func GetAccountPrefs(c *gin.Context) {
-	var preferences []models.AccountPreference
-	accountId := c.MustGet("token").(models.AccessToken).AccountId
-
-	db := database.Instance()
-	db.Where("account_id = ?", accountId).Find(&preferences)
-
-	if len(preferences) <= 0 {
-		c.JSON(http.StatusNotFound, gin.H{"message": "No preferences found!"})
-		return
-	}
-
-	c.JSON(http.StatusOK, preferences)
-}
-
-func UpdateHotspotPrefs(c *gin.Context) {
+func UpdateHotspotMarketing(c *gin.Context) {
 	var hsPref models.HotspotPreference
 	accountId := c.MustGet("token").(models.AccessToken).AccountId
 
@@ -104,16 +59,8 @@ func UpdateHotspotPrefs(c *gin.Context) {
 		db.Where("`key` = ? AND hotspot_id = ?", json.Key, hotspotIdInt).First(&hsPref)
 
 		if hsPref.Id == 0 {
-			c.JSON(http.StatusNotFound, gin.H{"message": "No preference found!"})
+			c.JSON(http.StatusNotFound, gin.H{"message": "No marketing preference found!"})
 			return
-		}
-
-		// enforce authorization on captive portal configuration
-		if strings.Index(json.Key, "captive") == 0 {
-			if !utils.CanChangeCaptivePortalOptions(accountId) {
-				c.JSON(http.StatusUnauthorized, gin.H{"message": "Can't update captive portal preference"})
-				return
-			}
 		}
 
 		hsPref.Value = json.Value
@@ -126,7 +73,7 @@ func UpdateHotspotPrefs(c *gin.Context) {
 	}
 }
 
-func GetHotspotPrefs(c *gin.Context) {
+func GetHotspotMarketing(c *gin.Context) {
 	var preferences []models.HotspotPreference
 	accountId := c.MustGet("token").(models.AccessToken).AccountId
 
@@ -139,13 +86,13 @@ func GetHotspotPrefs(c *gin.Context) {
 
 	db := database.Instance()
 	if accountId == 1 {
-		db.Where("hotspot_id = ? AND `key` NOT LIKE 'marketing_%'", hotspotId).Order("`key` asc").Find(&preferences)
+		db.Where("hotspot_id = ? AND `key` LIKE 'marketing_%'", hotspotId).Order("`key` asc").Find(&preferences)
 	} else {
-		db.Where("hotspot_id in (?) AND `key` NOT LIKE 'marketing_%'", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt)).Order("`key` asc").Find(&preferences)
+		db.Where("hotspot_id in (?) AND `key` LIKE 'marketing_%'", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt)).Order("`key` asc").Find(&preferences)
 	}
 
 	if len(preferences) <= 0 {
-		c.JSON(http.StatusNotFound, gin.H{"message": "No preferences found!"})
+		c.JSON(http.StatusNotFound, gin.H{"message": "No marketing preferences found!"})
 		return
 	}
 
