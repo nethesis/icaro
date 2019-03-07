@@ -4,7 +4,7 @@
     <div v-if="!isLogged" class="login-pf">
       <div>
         <span id="badge">
-          <img src="/static/logo-light.png" alt=" logo" />
+          <img src="/static/logo-light.png" alt=" logo">
         </span>
         <div class="container">
           <div class="row">
@@ -19,16 +19,32 @@
                 <div v-bind:class="[errors.username ? 'has-error' : '', 'form-group']">
                   <label for="inputUsername" class="col-sm-2 col-md-2 control-label">Username</label>
                   <div class="col-sm-10 col-md-10">
-                    <input autocomplete="username" required v-model="username" type="text" class="form-control" id="inputUsername" :placeholder="$t('login.insert_username')"
-                      tabindex="1">
+                    <input
+                      autocomplete="username"
+                      required
+                      v-model="username"
+                      type="text"
+                      class="form-control"
+                      id="inputUsername"
+                      :placeholder="$t('login.insert_username')"
+                      tabindex="1"
+                    >
                     <span v-if="errors.username" class="help-block">{{ $t("login.user_error") }}</span>
                   </div>
                 </div>
                 <div v-bind:class="[errors.password ? 'has-error' : '', 'form-group']">
                   <label for="inputPassword" class="col-sm-2 col-md-2 control-label">Password</label>
                   <div class="col-sm-10 col-md-10">
-                    <input autocomplete="current-password" required v-model="password" type="password" class="form-control" id="inputPassword"
-                      :placeholder="$t('login.insert_password')" tabindex="2">
+                    <input
+                      autocomplete="current-password"
+                      required
+                      v-model="password"
+                      type="password"
+                      class="form-control"
+                      id="inputPassword"
+                      :placeholder="$t('login.insert_password')"
+                      tabindex="2"
+                    >
                     <span v-if="errors.password" class="help-block">{{ $t("login.password_error") }}</span>
                   </div>
                 </div>
@@ -52,13 +68,23 @@
           </div>
           <!--/.row-->
           <div class="right">
-            <a class="unsplash" href="https://unsplash.com/@mojoblogs?utm_medium=referral&amp;utm_campaign=photographer-credit&amp;utm_content=creditBadge"
-              target="_blank" rel="noopener noreferrer" title="Download free do whatever you want high-resolution photos from Zara Walker">
+            <a
+              class="unsplash"
+              href="https://unsplash.com/@mojoblogs?utm_medium=referral&amp;utm_campaign=photographer-credit&amp;utm_content=creditBadge"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Download free do whatever you want high-resolution photos from Zara Walker"
+            >
               <span style="display:inline-block;padding:2px 3px;">
-                <svg xmlns="http://www.w3.org/2000/svg" style="height:12px;width:auto;position:relative;vertical-align:middle;top:-1px;fill:white;"
-                  viewBox="0 0 32 32">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  style="height:12px;width:auto;position:relative;vertical-align:middle;top:-1px;fill:white;"
+                  viewBox="0 0 32 32"
+                >
                   <title>unsplash-logo</title>
-                  <path d="M20.8 18.1c0 2.7-2.2 4.8-4.8 4.8s-4.8-2.1-4.8-4.8c0-2.7 2.2-4.8 4.8-4.8 2.7.1 4.8 2.2 4.8 4.8zm11.2-7.4v14.9c0 2.3-1.9 4.3-4.3 4.3h-23.4c-2.4 0-4.3-1.9-4.3-4.3v-15c0-2.3 1.9-4.3 4.3-4.3h3.7l.8-2.3c.4-1.1 1.7-2 2.9-2h8.6c1.2 0 2.5.9 2.9 2l.8 2.4h3.7c2.4 0 4.3 1.9 4.3 4.3zm-8.6 7.5c0-4.1-3.3-7.5-7.5-7.5-4.1 0-7.5 3.4-7.5 7.5s3.3 7.5 7.5 7.5c4.2-.1 7.5-3.4 7.5-7.5z"></path>
+                  <path
+                    d="M20.8 18.1c0 2.7-2.2 4.8-4.8 4.8s-4.8-2.1-4.8-4.8c0-2.7 2.2-4.8 4.8-4.8 2.7.1 4.8 2.2 4.8 4.8zm11.2-7.4v14.9c0 2.3-1.9 4.3-4.3 4.3h-23.4c-2.4 0-4.3-1.9-4.3-4.3v-15c0-2.3 1.9-4.3 4.3-4.3h3.7l.8-2.3c.4-1.1 1.7-2 2.9-2h8.6c1.2 0 2.5.9 2.9 2l.8 2.4h3.7c2.4 0 4.3 1.9 4.3 4.3zm-8.6 7.5c0-4.1-3.3-7.5-7.5-7.5-4.1 0-7.5 3.4-7.5 7.5s3.3 7.5 7.5 7.5c4.2-.1 7.5-3.4 7.5-7.5z"
+                  ></path>
                 </svg>
               </span>
               <span style="display:inline-block;padding:2px 3px;">Zara Walker</span>
@@ -82,15 +108,21 @@
             <span class="icon-bar"></span>
           </button>
           <a href="/" class="navbar-brand">
-            <img class="navbar-brand-icon" src="/static/logo-light.png" alt="" />
+            <img class="navbar-brand-icon" src="/static/logo-light.png" alt>
             <p class="navbar-brand-name">{{appName}}</p>
           </a>
         </div>
         <nav class="collapse navbar-collapse">
           <ul class="nav navbar-nav navbar-right navbar-iconic navbar-utility">
-
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle nav-item-iconic" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+              <a
+                href="#"
+                class="dropdown-toggle nav-item-iconic"
+                id="dropdownMenu2"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="true"
+              >
                 <p class="login-main-name">{{ user.info.name }}</p>
                 <p class="login-main-type">
                   <span v-bind:class="[getLoginIcon(user.info.type), 'login-main-icon']"></span>
@@ -108,7 +140,14 @@
               </ul>
             </li>
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle nav-item-iconic" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+              <a
+                href="#"
+                class="dropdown-toggle nav-item-iconic"
+                id="dropdownMenu1"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="true"
+              >
                 <span :title="$t('help')" class="fa pficon-help"></span>
                 <span class="caret"></span>
               </a>
@@ -123,14 +162,11 @@
             </li>
           </ul>
         </nav>
-
       </nav>
       <!-- end top bar -->
-
       <!-- left menu -->
       <div class="nav-pf-vertical nav-pf-vertical-with-sub-menus nav-pf-persistent-secondary">
         <ul class="list-group">
-
           <li v-bind:class="[getCurrentPath('') ? 'active' : '', 'list-group-item']">
             <a href="#/">
               <span class="fa fa-dashboard"></span>
@@ -141,12 +177,19 @@
           <li></li>
 
           <li v-bind:class="[getCurrentPath('hotspots') ? 'active' : '', 'list-group-item']">
-            <a :href="user.info.type == 'admin' || user.info.type == 'reseller' ? '#/hotspots' : '#/hotspots/'+user.info.hotspot_id">
+            <a
+              :href="user.info.type == 'admin' || user.info.type == 'reseller' ? '#/hotspots' : '#/hotspots/'+user.info.hotspot_id"
+            >
               <span class="fa fa-wifi"></span>
-              <span class="list-group-item-value">{{ user.info.type == 'admin' || user.info.type == 'reseller' ? $t('menu.hotspots') : $t('menu.hotspot') }}</span>
+              <span
+                class="list-group-item-value"
+              >{{ user.info.type == 'admin' || user.info.type == 'reseller' ? $t('menu.hotspots') : $t('menu.hotspot') }}</span>
             </a>
           </li>
-          <li v-bind:class="[getCurrentPath('units') ? 'active' : '', 'list-group-item']" v-if="(user.info.type == 'admin') || (user.info.type == 'reseller') ||  (user.info.type == 'customer')">
+          <li
+            v-bind:class="[getCurrentPath('units') ? 'active' : '', 'list-group-item']"
+            v-if="(user.info.type == 'admin') || (user.info.type == 'reseller') ||  (user.info.type == 'customer')"
+          >
             <a href="#/units">
               <span class="fa pficon-connected" data-toggle="tooltip" title="Adipscing"></span>
               <span class="list-group-item-value">{{ $t("menu.units") }}</span>
@@ -156,17 +199,21 @@
             <a href="#/users">
               <span class="fa fa-users"></span>
               <span class="list-group-item-value">{{ $t("menu.users") }}</span>
-
             </a>
           </li>
-          <li v-bind:class="[getCurrentPath('devices') ? 'active' : '', 'list-group-item']" v-if="(user.info.type == 'admin') || (user.info.type == 'reseller') ||  (user.info.type == 'customer')">
+          <li
+            v-bind:class="[getCurrentPath('devices') ? 'active' : '', 'list-group-item']"
+            v-if="(user.info.type == 'admin') || (user.info.type == 'reseller') ||  (user.info.type == 'customer')"
+          >
             <a href="#/devices">
               <span class="fa fa-laptop"></span>
               <span class="list-group-item-value">{{ $t("menu.devices") }}</span>
-
             </a>
           </li>
-          <li v-bind:class="[getCurrentPath('sessions') ? 'active' : '', 'list-group-item']" v-if="(user.info.type == 'admin') || (user.info.type == 'reseller') ||  (user.info.type == 'customer')">
+          <li
+            v-bind:class="[getCurrentPath('sessions') ? 'active' : '', 'list-group-item']"
+            v-if="(user.info.type == 'admin') || (user.info.type == 'reseller') ||  (user.info.type == 'customer')"
+          >
             <a href="#/sessions">
               <span class="fa fa-list" data-toggle="tooltip" title="Adipscing"></span>
               <span class="list-group-item-value">{{ $t("menu.sessions") }}</span>
@@ -181,22 +228,47 @@
           </li>
           <li></li>
 
-          <li v-bind:class="[getCurrentPath('accounts') ? 'active' : '', 'list-group-item']" v-if="(user.info.type == 'admin') || (user.info.type == 'reseller')">
+          <li
+            v-bind:class="[getCurrentPath('marketing') ? 'active' : '', 'list-group-item']"
+            v-if="(user.info.type == 'admin') || (user.info.type == 'reseller')"
+          >
+            <a href="#/marketing">
+              <span class="fa fa-bullhorn" data-toggle="tooltip" title="Adipscing"></span>
+              <span class="list-group-item-value">{{ $t("menu.marketing") }}</span>
+            </a>
+          </li>
+          <li></li>
+
+          <li
+            v-bind:class="[getCurrentPath('accounts') ? 'active' : '', 'list-group-item']"
+            v-if="(user.info.type == 'admin') || (user.info.type == 'reseller')"
+          >
             <a href="#/accounts">
               <span class="fa pficon-users"></span>
               <span class="list-group-item-value">{{ $t("menu.accounts") }}</span>
-
             </a>
           </li>
 
-          <li class="list-group-item secondary-nav-item-pf mobile-nav-item-pf visible-xs-block" data-target="#user-secondary">
+          <li
+            class="list-group-item secondary-nav-item-pf mobile-nav-item-pf visible-xs-block"
+            data-target="#user-secondary"
+          >
             <a href="#">
-              <span class="pficon pficon-user" data-toggle="tooltip" title="" data-original-title="User"></span>
+              <span
+                class="pficon pficon-user"
+                data-toggle="tooltip"
+                title
+                data-original-title="User"
+              ></span>
               <span class="list-group-item-value">{{ user.info.name }}</span>
             </a>
             <div id="user-secondary" class="nav-pf-secondary-nav">
               <div class="nav-item-pf-header">
-                <a href="#" class="secondary-collapse-toggle-pf" data-toggle="collapse-secondary-nav"></a>
+                <a
+                  href="#"
+                  class="secondary-collapse-toggle-pf"
+                  data-toggle="collapse-secondary-nav"
+                ></a>
                 <span>{{ user.info.name }}</span>
               </div>
 
@@ -215,14 +287,26 @@
               </ul>
             </div>
           </li>
-          <li class="list-group-item secondary-nav-item-pf mobile-nav-item-pf visible-xs-block" data-target="#help-secondary">
+          <li
+            class="list-group-item secondary-nav-item-pf mobile-nav-item-pf visible-xs-block"
+            data-target="#help-secondary"
+          >
             <a href="#">
-              <span class="pficon pficon-help" data-toggle="tooltip" title="" data-original-title="Help"></span>
+              <span
+                class="pficon pficon-help"
+                data-toggle="tooltip"
+                title
+                data-original-title="Help"
+              ></span>
               <span class="list-group-item-value">{{ $t("menu.help") }}</span>
             </a>
             <div id="help-secondary" class="nav-pf-secondary-nav">
               <div class="nav-item-pf-header">
-                <a href="#" class="secondary-collapse-toggle-pf" data-toggle="collapse-secondary-nav"></a>
+                <a
+                  href="#"
+                  class="secondary-collapse-toggle-pf"
+                  data-toggle="collapse-secondary-nav"
+                ></a>
                 <span>{{ $t("help") }}</span>
               </div>
               <ul class="list-group">
@@ -234,22 +318,27 @@
               </ul>
             </div>
           </li>
-
         </ul>
-
       </div>
       <!-- end left menu -->
-
       <!-- main view -->
-      <div class="container-fluid container-cards-pf container-pf-nav-pf-vertical nav-pf-persistent-secondary">
+      <div
+        class="container-fluid container-cards-pf container-pf-nav-pf-vertical nav-pf-persistent-secondary"
+      >
         <router-view></router-view>
       </div>
       <!-- end main view -->
     </div>
     <!-- end logged view -->
-
     <!-- modals -->
-    <div class="modal fade" id="about-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div
+      class="modal fade"
+      id="about-modal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="myModalLabel"
+      aria-hidden="true"
+    >
       <div class="modal-dialog">
         <div class="modal-content about-modal-pf">
           <div class="modal-header">
@@ -263,11 +352,17 @@
               <ul class="list-unstyled">
                 <li>
                   <strong>Sun UI</strong>
-                  <a target="blank" href="https://github.com/nethesis/icaro/tree/master/sun/sun-ui">GitHub</a>
+                  <a
+                    target="blank"
+                    href="https://github.com/nethesis/icaro/tree/master/sun/sun-ui"
+                  >GitHub</a>
                 </li>
                 <li>
                   <strong>Sun API</strong>
-                  <a target="blank" href="https://github.com/nethesis/icaro/tree/master/sun/sun-api">GitHub</a>
+                  <a
+                    target="blank"
+                    href="https://github.com/nethesis/icaro/tree/master/sun/sun-api"
+                  >GitHub</a>
                 </li>
                 <li>
                   <strong>Wax</strong>
@@ -275,11 +370,17 @@
                 </li>
                 <li>
                   <strong>Wings</strong>
-                  <a target="blank" href="https://github.com/nethesis/icaro/tree/master/wings">GitHub</a>
+                  <a
+                    target="blank"
+                    href="https://github.com/nethesis/icaro/tree/master/wings"
+                  >GitHub</a>
                 </li>
                 <li>
                   <strong>Dedalo</strong>
-                  <a target="blank" href="https://github.com/nethesis/icaro/tree/master/dedalo">GitHub</a>
+                  <a
+                    target="blank"
+                    href="https://github.com/nethesis/icaro/tree/master/dedalo"
+                  >GitHub</a>
                 </li>
               </ul>
             </div>
@@ -459,5 +560,4 @@ export default {
 </script>
 
 <style src="./styles/main.css">
-
 </style>

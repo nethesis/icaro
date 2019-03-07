@@ -14,13 +14,13 @@ import Accounts from "../components/Accounts.vue";
 import Profile from "../components/Profile.vue";
 import Units from "../components/Units.vue";
 import Reports from "../components/Reports.vue";
+import Marketing from "../components/Marketing.vue";
 import Devices from "../components/Devices.vue";
 
 Vue.use(Router);
 
 const router = new Router({
-  routes: [
-    {
+  routes: [{
       path: "/",
       name: "Dashboard",
       component: Dashboard,
@@ -138,6 +138,14 @@ const router = new Router({
       component: Reports,
       meta: {
         roles: ["admin", "reseller", "customer", "desk"]
+      }
+    },
+    {
+      path: "/marketing",
+      name: "Marketing",
+      component: Marketing,
+      meta: {
+        roles: ["admin", "reseller"]
       }
     }
   ]
