@@ -16,6 +16,8 @@ a {
 input[type="checkbox"],
 input[type="radio"].form-control {
   height: 15px;
+  text-align: left;
+  width: 20px !important;
 }
 
 input {
@@ -41,6 +43,7 @@ input {
   #badge img {
     height: 47px !important;
   }
+
   .login-pf #brand {
     text-align: center;
   }
@@ -339,7 +342,7 @@ a {
 
 .btn-primary {
   background-color: #007a87 !important;
-  background-image: linear-gradient( to bottom, #26a9a3 0, #007a87 100%) !important;
+  background-image: linear-gradient(to bottom, #26a9a3 0, #007a87 100%) !important;
 }
 
 .unsplash {

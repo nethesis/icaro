@@ -318,6 +318,23 @@
       "sent_last_month": "Inviati nell'ultimo mese",
       "sent_this_period": "Inviati in questo periodo"
     },
+    "marketing": {
+      "enable_service": "Abilita invio automatico di richiesta  feedback",
+      "email_feedback": "Indirizzo email per le segnalazioni",
+      "email_first": "Invia email richiesta assistenza",
+      "email_second": "Invia email richiesta valutazione",
+      "email_first_after": "Invia email dopo (ore)",
+      "email_second_after": "Invia email",
+      "after_days": "Trascorsi N giorni dalla registrazione",
+      "after_expiration": "Alla scadenza dell'account",
+      "sms": "Invia richiesta feedback anche tramite SMS (tariffe applicate)",
+      "save": "Salva",
+      "threshold": "Richiedi recensione se numero di stelle maggiore di ",
+      "first_external_url": "Link alla pagina su sito di recensioni 1",
+      "second_external_url": "Link alla pagina su sito di recensioni 2",
+      "third_external_url": "Link alla pagina su sito di recensioni 3",
+      "preferences": "Preferenze"
+    },
     "sessions": "Connessioni",
     "help": "Aiuto",
     "admin": "Admin",
