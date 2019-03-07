@@ -3,6 +3,7 @@ package utils
 import (
 	"fmt"
 	"strconv"
+	"time"
 
 	gomail "gopkg.in/gomail.v2"
 
@@ -42,13 +43,26 @@ func GetAdeTokenFromToken(token string) models.AdeToken {
 	return adeToken
 }
 
-func SendFeedBackMessage(hotspotId int, message string) bool {
-	return SendEmail(hotspotId, "User Feedback", message)
+func SendFeedBackMessage(adeToken models.AdeToken, message string) bool {
+	status := SendEmail(adeToken.HotspotId, "User Feedback", message)
+
+	db := database.Instance()
+	adeToken.FeedbackSendTime = time.Now()
+	db.Save(&adeToken)
+
+	return status
 }
 
-func SendReviewMessage(hotspotId int, stars int, message string) bool {
+func SendReviewMessage(adeToken models.AdeToken, stars int, message string) bool {
 	stars_s := strconv.Itoa(stars)
-	return SendEmail(hotspotId, "Review: "+stars_s+"/5", message)
+
+	status := SendEmail(adeToken.HotspotId, "Review: "+stars_s+"/5", message)
+
+	db := database.Instance()
+	adeToken.ReviewSendTime = time.Now()
+	db.Save(&adeToken)
+
+	return status
 }
 
 func SendEmail(hotspotId int, subject string, message string) bool {

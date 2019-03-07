@@ -56,7 +56,10 @@ func PostFeedbackResult(c *gin.Context) {
 	}
 
 	if feedbackResult.Message != "" {
-		utils.SendFeedBackMessage(adeToken.HotspotId, feedbackResult.Message)
+		if !utils.SendFeedBackMessage(adeToken, feedbackResult.Message) {
+			c.JSON(http.StatusBadRequest, gin.H{"message": "Feedback submission failed."})
+			return
+		}
 	}
 
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
