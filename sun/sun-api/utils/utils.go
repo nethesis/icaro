@@ -55,6 +55,20 @@ func SetDefaultHotspotPreferences(hotspotId int) {
 	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "captive_6_description", Value: configuration.Config.CaptivePortal.Description})
 	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "captive_7_background", Value: configuration.Config.CaptivePortal.Background})
 
+	// set marketing defaults
+	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "marketing_1_enabled", Value: "false"})
+	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "marketing_2_feedback_email", Value: ""})
+	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "marketing_3_first_email", Value: "false"})
+	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "marketing_4_second_email", Value: "false"})
+	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "marketing_5_sms", Value: "false"})
+	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "marketing_6_first_after", Value: ""})
+	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "marketing_7_second_after", Value: "days"})
+	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "marketing_8_second_after_days", Value: ""})
+	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "marketing_9_threshold", Value: "3"})
+	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "marketing_10_first_url", Value: ""})
+	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "marketing_11_second_url", Value: ""})
+	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "marketing_12_third_url", Value: ""})
+
 }
 
 func OffsetCalc(page string, limit string) [2]int {

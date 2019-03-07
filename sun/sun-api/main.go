@@ -77,6 +77,12 @@ func DefineAPI(router *gin.Engine) {
 			hotspots.DELETE("/:hotspot_id", methods.DeleteHotspot)
 		}
 
+		marketings := api.Group("/marketing")
+		{
+			marketings.GET("/:hotspot_id", methods.GetHotspotMarketing)
+			marketings.PUT("/:hotspot_id", methods.UpdateHotspotMarketing)
+		}
+
 		preferences := api.Group("/preferences")
 		{
 			resellersPref := preferences.Group("/accounts")
