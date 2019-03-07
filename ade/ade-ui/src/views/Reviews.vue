@@ -35,7 +35,11 @@
     <h4
       v-show="!reviewLeave && stars > 0"
       class="ui header center aligned"
-    >{{$t('review_text_after')}}</h4>
+    >{{$t('review_text_after_1')}}</h4>
+    <h5
+      v-show="!reviewLeave && stars > 0"
+      class="ui header center aligned no-mg-top"
+    >{{$t('review_text_after_2')}}</h5>
     <div v-show="!reviewLeave && stars > 0" class="ui form">
       <div class="ui field">
         <textarea :placeholder="$t('leave_blank_optional')" v-model="message"></textarea>
@@ -130,6 +134,9 @@ export default {
       var sld = parsed.sld;
 
       if (name) {
+        if (sld == "tripadvisor") {
+          sld = "TripAdvisor";
+        }
         return sld;
       } else {
         switch (sld) {
@@ -158,7 +165,9 @@ export default {
         function(success) {
           this.reviewLeave = true;
         },
-        function(error) {}
+        function(error) {
+          this.reviewLeave = true;
+        }
       );
     }
   }
