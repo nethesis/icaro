@@ -67,5 +67,24 @@ func GetReviewPage(c *gin.Context) {
 }
 
 func PostReviewResult(c *gin.Context) {
+	var reviewResult models.ReviewResult
+
+	token := c.Param("token")
+	adeToken := utils.GetAdeTokenFromToken(token)
+
+	if adeToken.Id <= 0 {
+		c.JSON(http.StatusNotFound, gin.H{"message": "No token found!"})
+		return
+	}
+
+	if err := c.BindJSON(&reviewResult); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Request fields malformed", "error": err.Error()})
+		return
+	}
+
+	if reviewResult.Stars > 0 && reviewResult.Stars <= 5 {
+		utils.SendReviewMessage(adeToken.HotspotId, reviewResult.Stars, reviewResult.Message)
+	}
+
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }

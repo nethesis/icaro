@@ -29,5 +29,25 @@ func GetFeedbackPage(c *gin.Context) {
 }
 
 func PostFeedbackResult(c *gin.Context) {
+
+	var feedbackResult models.FeedbackResult
+
+	token := c.Param("token")
+	adeToken := utils.GetAdeTokenFromToken(token)
+
+	if adeToken.Id <= 0 {
+		c.JSON(http.StatusNotFound, gin.H{"message": "No token found!"})
+		return
+	}
+
+	if err := c.BindJSON(&feedbackResult); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Request fields malformed", "error": err.Error()})
+		return
+	}
+
+	if feedbackResult.Message != "" {
+		utils.SendFeedBackMessage(adeToken.HotspotId, feedbackResult.Message)
+	}
+
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }

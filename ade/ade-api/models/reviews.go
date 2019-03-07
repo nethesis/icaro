@@ -29,3 +29,8 @@ type ReviewPage struct {
 	Urls        []string `json:"urls"`
 	Threshold   int      `json:"threshold"`
 }
+
+type ReviewResult struct {
+	Stars   int    `json:"stars"`
+	Message string `json:"message"`
+}
