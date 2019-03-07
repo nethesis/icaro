@@ -336,4 +336,25 @@ CREATE TABLE `short_urls` (
   `long_url` varchar(2000) NOT NULL,
   KEY `hash` (`hash`)
 );
+
+/* ------ */
+
+/* ADE */
+
+CREATE TABLE `ade_tokens` (
+  `id` serial,
+  `token` varchar(250) NOT NULL,
+  `feedback_sent_time` datetime NOT NULL,
+  `feedback_send_time` datetime,
+  `review_sent_time` datetime NOT NULL,
+  `review_send_time` datetime,
+  `user_id` bigint unsigned NOT NULL,
+  `hotspot_id`  bigint unsigned NOT NULL,
+  `created` datetime NOT NULL,
+  FOREIGN KEY (`hotspot_id`) REFERENCES hotspots(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  UNIQUE KEY (`hotspot_id`, `user_id`),
+  KEY `token` (`token`),
+  PRIMARY KEY(`id`)
+);
+
 /* ------ */
