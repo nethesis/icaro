@@ -78,8 +78,14 @@ func DefineAPI(router *gin.Engine) {
 		// handle wings preferences
 		wax.GET("/preferences", methods.GetWingsPrefs)
 
+		// handle additional
+		wax.PUT("/additional/:user_id", methods.AdditionalInfo)
+
 		// handle marketings
 		wax.DELETE("/marketings/:user_id", methods.DeleteMarketing)
+
+		// handle surveys
+		wax.DELETE("/surveys/:user_id", methods.DeleteSurvey)
 	}
 
 	// handle missing endpoint

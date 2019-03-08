@@ -24,11 +24,13 @@ package methods
 
 import (
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 
 	"github.com/nethesis/icaro/sun/sun-api/configuration"
+	"github.com/nethesis/icaro/sun/sun-api/database"
 	"github.com/nethesis/icaro/sun/sun-api/models"
 	"github.com/nethesis/icaro/wax/utils"
 )
@@ -77,4 +79,34 @@ func GetWingsPrefs(c *gin.Context) {
 	wingsPrefs.Disclaimers.MarketingUse = marketings
 
 	c.JSON(http.StatusOK, wingsPrefs)
+}
+
+func AdditionalInfo(c *gin.Context) {
+	userId := c.Param("user_id")
+	userIdInt, err := strconv.Atoi(userId)
+	if err != nil {
+		userIdInt = 0
+	}
+
+	var json models.UserAdditional
+	if err := c.BindJSON(&json); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Request fields malformed", "error": err.Error()})
+		return
+	}
+
+	db := database.Instance()
+
+	// update fields
+	user := utils.GetUserById(userIdInt)
+
+	if user.Id == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"message": "No user found!"})
+		return
+	}
+
+	user.Reason = json.Reason
+	user.Country = json.Country
+	db.Save(&user)
+
+	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }
