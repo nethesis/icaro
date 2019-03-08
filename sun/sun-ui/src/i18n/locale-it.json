@@ -173,7 +173,13 @@
       "traffic_limit": "Traffico massimo giornaliero (MB)",
       "time_limit": "Durata massima giornaliera in Minuti (0= senza limiti)",
       "show_marketing_auth": "Mosta solo account con consenso marketing",
-      "marketing_auth": "Marketing"
+      "marketing_auth": "Marketing",
+      "survey_auth": "Sondaggio",
+      "reason": "Ragione",
+      "country": "Paese",
+      "business": "Business",
+      "family": "Famiglia",
+      "other": "Altro"
     },
     "account": {
       "uuid": "ID",
@@ -260,6 +266,7 @@
       "devices": "Dispositivi",
       "sessions": "Connessioni",
       "reports": "Report",
+      "marketing": "Marketing",
       "help": "Help",
       "profile": "Profilo",
       "about": "About",
@@ -319,6 +326,7 @@
       "sent_this_period": "Inviati in questo periodo"
     },
     "marketing": {
+      "ask_for_reason_country": "Chiedi nazionalità e motivo del soggiorno",
       "enable_service": "Abilita invio automatico di richiesta  feedback",
       "email_feedback": "Indirizzo email per le segnalazioni",
       "email_first": "Invia email richiesta assistenza",

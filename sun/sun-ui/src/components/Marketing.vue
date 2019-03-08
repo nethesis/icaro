@@ -28,6 +28,22 @@
           <div class="spinner spinner-sm"></div>
         </label>
       </div>
+
+      <div v-if="!isLoadingMarketing" class="form-group">
+        <label
+          v-if="!isLoadingMarketing"
+          class="col-sm-3 control-label"
+          for="textInput-markup"
+        >{{$t('marketing.ask_for_reason_country')}}</label>
+        <div v-if="!isLoadingMarketing" class="col-sm-4">
+          <input
+            v-model="marketingPrefs.marketing_0_reason_country"
+            class="form-control"
+            type="checkbox"
+          >
+        </div>
+      </div>
+
       <div v-if="!isLoadingMarketing" class="form-group">
         <label
           v-if="!isLoadingMarketing"
@@ -42,7 +58,7 @@
       <div v-if="!isLoadingMarketing && marketingPrefs.marketing_1_enabled" class="form-group">
         <label v-if="!isLoadingMarketing" class="col-sm-3 control-label" for="textInput-markup">
           {{$t('marketing.email_feedback')}}
-          <span class="fa fa-facebook-square login-pref-option"></span>
+          <span class="fa fa-envelope-square login-pref-option"></span>
         </label>
         <div v-if="!isLoadingMarketing" class="col-sm-4">
           <input
@@ -55,11 +71,10 @@
       </div>
 
       <div v-if="!isLoadingMarketing && marketingPrefs.marketing_1_enabled" class="form-group">
-        <label
-          v-if="!isLoadingMarketing"
-          class="col-sm-3 control-label"
-          for="textInput-markup"
-        >{{$t('marketing.email_first')}}</label>
+        <label v-if="!isLoadingMarketing" class="col-sm-3 control-label" for="textInput-markup">
+          {{$t('marketing.email_first')}}
+          <span class="fa fa-send login-pref-option"></span>
+        </label>
         <div v-if="!isLoadingMarketing" class="col-sm-4">
           <input
             v-model="marketingPrefs.marketing_3_first_email_enabled"
@@ -88,11 +103,10 @@
       </div>
 
       <div v-if="!isLoadingMarketing && marketingPrefs.marketing_1_enabled" class="form-group">
-        <label
-          v-if="!isLoadingMarketing"
-          class="col-sm-3 control-label"
-          for="textInput-markup"
-        >{{$t('marketing.email_second')}}</label>
+        <label v-if="!isLoadingMarketing" class="col-sm-3 control-label" for="textInput-markup">
+          {{$t('marketing.email_second')}}
+          <span class="fa fa-send login-pref-option"></span>
+        </label>
         <div v-if="!isLoadingMarketing" class="col-sm-4">
           <input
             v-model="marketingPrefs.marketing_4_second_email_enabled"
@@ -157,11 +171,10 @@
       </div>
 
       <div v-if="!isLoadingMarketing && marketingPrefs.marketing_1_enabled" class="form-group">
-        <label
-          v-if="!isLoadingMarketing"
-          class="col-sm-3 control-label"
-          for="textInput-markup"
-        >{{$t('marketing.sms')}}</label>
+        <label v-if="!isLoadingMarketing" class="col-sm-3 control-label" for="textInput-markup">
+          {{$t('marketing.sms')}}
+          <span class="fa fa-commenting login-pref-option"></span>
+        </label>
         <div v-if="!isLoadingMarketing" class="col-sm-4">
           <input
             v-model="marketingPrefs.marketing_5_sms_enabled"
@@ -178,7 +191,26 @@
           for="textInput-markup"
         >{{$t('marketing.threshold')}}</label>
         <div v-if="!isLoadingMarketing" class="col-sm-4">
-          <input v-model="marketingPrefs.marketing_9_threshold" class="form-control" type="number">
+          <span
+            @click="setStars(1)"
+            :class="['fa', marketingPrefs.marketing_9_threshold >= 1 ? 'fa-star star-filled' :  'fa-star-o star']"
+          ></span>
+          <span
+            @click="setStars(2)"
+            :class="['fa', marketingPrefs.marketing_9_threshold >= 2 ? 'fa-star star-filled' :  'fa-star-o star']"
+          ></span>
+          <span
+            @click="setStars(3)"
+            :class="['fa', marketingPrefs.marketing_9_threshold >= 3 ? 'fa-star star-filled' :  'fa-star-o star']"
+          ></span>
+          <span
+            @click="setStars(4)"
+            :class="['fa', marketingPrefs.marketing_9_threshold >= 4 ? 'fa-star star-filled' :  'fa-star-o star']"
+          ></span>
+          <span
+            @click="setStars(5)"
+            :class="['fa', marketingPrefs.marketing_9_threshold >= 5 ? 'fa-star star-filled' :  'fa-star-o star']"
+          ></span>
         </div>
       </div>
 
@@ -282,6 +314,9 @@ export default {
     });
   },
   methods: {
+    setStars(value) {
+      this.marketingPrefs.marketing_9_threshold = value;
+    },
     getAllHotspots(callback) {
       this.hotspotGetAll(
         null,
@@ -337,9 +372,7 @@ export default {
         if (pref.key != "isLoading") {
           promises.push(
             new Promise((resolve, reject) => {
-              if (typeof pref.value == "boolean") {
-                pref.value = pref.value.toString();
-              }
+              pref.value = pref.value.toString();
 
               this.marketingPrefModify(
                 this.hotspotSearchId,
@@ -369,5 +402,20 @@ export default {
 <style scoped>
 .subtitle {
   padding-left: 15px !important;
+}
+.star {
+  font-size: 20px;
+}
+.star:hover {
+  color: #f5c12e;
+  cursor: pointer;
+}
+.star-filled {
+  font-size: 20px;
+  color: #f0ab00;
+}
+.star-filled:hover {
+  cursor: pointer;
+  color: #f5c12e;
 }
 </style>

@@ -22,6 +22,7 @@
     "vue-bootstrap-datetimepicker": "^4.1.2",
     "vue-chart-js": "^1.4.1",
     "vue-color": "^2.4.4",
+    "vue-flag-icon": "^1.0.6",
     "vue-good-table": "^1.21.0",
     "vue-i18n": "^7.4.1",
     "vue-picture-input": "^2.1.1",
