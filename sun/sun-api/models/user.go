@@ -33,7 +33,10 @@ type User struct {
 	Email                string    `db:"email" json:"email"`
 	EmailVerified        bool      `db:"email_verified" json:"email_verified"`
 	AccountType          string    `db:"account_type" json:"account_type"`
+	Reason               string    `db:"reason" json:"reason"`
+	Country              string    `db:"country" json:"country"`
 	MarketingAuth        bool      `db:"marketing_auth" json:"marketing_auth"`
+	SurveyAuth           bool      `db:"survey_auth" json:"survey_auth"`
 	KbpsDown             int       `db:"kbps_down" json:"kbps_down"`
 	KbpsUp               int       `db:"kbps_up" json:"kbps_up"`
 	MaxNavigationTraffic int       `db:"max_navigation_traffic" json:"max_navigation_traffic"`
