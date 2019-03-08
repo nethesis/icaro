@@ -108,11 +108,13 @@
           <strong>{{ props.row.account_type }}</strong>
         </td>
         <td
+          :title="props.row.reason.length > 0 ? $t('user.'+props.row.reason) : '-'"
           :class="[isExpired(props.row.valid_until) ? 'disabled' : '', 'fancy']"
-        >{{ props.row.reason.length > 0 ? $t('user.'+props.row.reason) : '-'}}</td>
+        >
+          <span :class="getReasonIcon(props.row.reason)"></span>
+        </td>
         <td :class="[isExpired(props.row.valid_until) ? 'disabled' : '', 'fancy']">
-          <flag class="adjust-flag" :iso="props.row.country"/>
-          {{ props.row.country.length > 0 ? props.row.country : '-' }}
+          <flag class="adjust-flag adjust-size-icon" :iso="props.row.country"/>
         </td>
         <td class="fancy">
           <span
@@ -298,6 +300,19 @@ export default {
     });
   },
   methods: {
+    getReasonIcon(reason) {
+      switch (reason) {
+        case "business":
+          return "fa fa-briefcase adjust-size-icon";
+          break;
+        case "family":
+          return "fa fa-child adjust-size-icon";
+          break;
+        case "other":
+          return "fa fa-question adjust-size-icon";
+          break;
+      }
+    },
     handlePerPage(evt) {
       this.set("users_per_page", evt.currentPerPage);
     },
@@ -495,5 +510,9 @@ export default {
 }
 .adjust-flag {
   margin-right: 5px !important;
+}
+.adjust-size-icon {
+  font-size: 20px !important;
+  margin-top: 8px;
 }
 </style>
