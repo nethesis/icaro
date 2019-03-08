@@ -20,7 +20,14 @@
             "back": "Indietro",
             "code": "Voucher",
             "navigate": "Naviga",
-            "disclaimer_privacy_accept": "Acconsento all'invio di offerte promozionali"
+            "disclaimer_privacy_accept": "Acconsento all'invio di offerte promozionali",
+            "disclaimer_survey_accept": "Acconsento all'invio di sondaggi",
+            "additional_info": "Informazioni aggiuntive",
+            "country": "Paese",
+            "reason": "Ragione",
+            "business": "Business",
+            "family": "Famiglia",
+            "other": "Altro"
         },
         "social": {
             "auth_progress": "Autorizzazione in corso",

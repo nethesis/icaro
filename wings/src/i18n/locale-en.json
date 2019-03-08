@@ -20,7 +20,14 @@
             "back": "Back",
             "code": "Voucher",
             "navigate": "Navigate",
-            "disclaimer_privacy_accept": "I accept sending promotional offers"
+            "disclaimer_privacy_accept": "I accept sending promotional offers",
+            "disclaimer_survey_accept": "I accept sending surveys",
+            "additional_info": "Addtional info",
+            "country": "Country",
+            "reason": "Reason",
+            "business": "Business",
+            "family": "Family",
+            "other": "Other"
         },
         "social": {
             "auth_progress": "Authorization in progress",
@@ -45,8 +52,8 @@
             "auth_success_sub": "In a few seconds you will be redirected",
             "auth_error": "Access Denied",
             "auth_error_sub": "Something went wrong, the reasons could be the following: 1)The data entered may not be correct. 2)The voucher you are using could be expired. 3)You could have reached your maximum daily time. 4)You could have reached your maximum daily traffic.",
-            "wait":"Please wait few seconds",
-            "we_are_sending_email_code":"If you are not receiving the email, please disconnect from the WiFi network and then reconnect, then access your email and click on the link in the message to browse. Pay attention to the SPAM box!",
+            "wait": "Please wait few seconds",
+            "we_are_sending_email_code": "If you are not receiving the email, please disconnect from the WiFi network and then reconnect, then access your email and click on the link in the message to browse. Pay attention to the SPAM box!",
             "not_code_explain": "Is it the first time you are connecting to this Wi-Fi?"
         },
         "sms": {
@@ -68,8 +75,8 @@
             "auth_error_sub": "Something went wrong, the reasons could be the following: 1)The data entered may not be correct. 2)The voucher you are using could be expired. 3)You could have reached your maximum daily time. 4)You could have reached your maximum daily traffic.",
             "select_state": "Select state",
             "prefix": "Prefix",
-            "wait":"Sending SMS...",
-            "we_are_sending_sms_code":"Use the same password also at the next access by clicking on the 'Enter with your password' button.",
+            "wait": "Sending SMS...",
+            "we_are_sending_sms_code": "Use the same password also at the next access by clicking on the 'Enter with your password' button.",
             "not_code_explain": "Is it the first time you are connecting to this Wi-Fi?"
         }
     }
