@@ -43,6 +43,7 @@
     <div v-show="!reviewLeave && stars > 0" class="ui form">
       <div class="ui field">
         <textarea :placeholder="$t('leave_blank_optional')" v-model="message"></textarea>
+        <span class="counter">{{message.length}}/400</span>
       </div>
     </div>
     <!-- END TEXTAREA -->
@@ -54,7 +55,11 @@
         class="ui one column stackable center aligned page grid"
       >
         <div class="column twelve wide">
-          <button @click="setReview()" class="ui button large green">{{$t('submit')}}</button>
+          <button
+            :disabled="message.length > 400"
+            @click="setReview()"
+            class="ui button large green"
+          >{{$t('submit')}}</button>
         </div>
       </div>
     </div>
@@ -96,7 +101,7 @@ export default {
     return {
       loading: true,
       stars: 0,
-      message: null,
+      message: "",
       reviewLeave: false,
       urls: [],
       threshold: 3
@@ -177,5 +182,10 @@ export default {
 <style scoped>
 .star:hover {
   color: #ffdc77 !important;
+}
+.counter {
+  text-align: right;
+  display: block;
+  color: #777777;
 }
 </style>

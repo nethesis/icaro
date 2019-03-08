@@ -12,11 +12,16 @@
     <h4 v-show="!feedbackLeave" class="ui header center aligned">{{$t('feedback_text')}}</h4>
     <div v-show="!feedbackLeave" class="ui form">
       <div class="field">
-        <textarea v-model="message"></textarea>
+        <textarea :placeholder="$t('leave_blank_mandatory')" v-model="message"></textarea>
+        <span class="counter">{{message.length}}/400</span>
       </div>
       <div class="ui one column stackable center aligned page grid">
         <div class="column twelve wide">
-          <button @click="setFeedback()" class="ui button large green">{{$t('submit')}}</button>
+          <button
+            :disabled="message.length < 5 || message.length > 400"
+            @click="setFeedback()"
+            class="ui button large green"
+          >{{$t('submit')}}</button>
         </div>
       </div>
     </div>
@@ -29,7 +34,7 @@ export default {
   data() {
     return {
       loading: false,
-      message: null,
+      message: "",
       feedbackLeave: false
     };
   },
@@ -73,4 +78,9 @@ export default {
 </script>
 
 <style scoped>
+.counter {
+  text-align: right;
+  display: block;
+  color: #777777;
+}
 </style>
