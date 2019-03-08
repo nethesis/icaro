@@ -29,13 +29,10 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/nethesis/icaro/sun/sun-api/database"
-	"github.com/nethesis/icaro/sun/sun-api/models"
 	"github.com/nethesis/icaro/wax/utils"
 )
 
-func DeleteMarketing(c *gin.Context) {
-	var userMarketing models.UserMarketing
-
+func DeleteSurvey(c *gin.Context) {
 	userId := c.Param("user_id")
 	userIdInt, err := strconv.Atoi(userId)
 	if err != nil {
@@ -43,16 +40,8 @@ func DeleteMarketing(c *gin.Context) {
 	}
 
 	db := database.Instance()
-	db.Where("user_id = ?", userId).First(&userMarketing)
 
-	if userMarketing.Id == 0 {
-		c.JSON(http.StatusNotFound, gin.H{"message": "No marketing info found!"})
-		return
-	}
-
-	db.Delete(&userMarketing)
-
-	// remove marketing auth
+	// remove survey auth
 	user := utils.GetUserById(userIdInt)
 
 	if user.Id == 0 {
@@ -60,7 +49,7 @@ func DeleteMarketing(c *gin.Context) {
 		return
 	}
 
-	user.MarketingAuth = false
+	user.SurveyAuth = false
 	db.Save(&user)
 
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
