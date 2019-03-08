@@ -173,7 +173,13 @@
       "traffic_limit": "Daily traffic limit (MB) (0 = limitless)",
       "time_limit": "Daily time limit (Minutes) (0 = limitless)",
       "show_marketing_auth": "Marketing consent",
-      "marketing_auth": "Marketing"
+      "marketing_auth": "Marketing",
+      "survey_auth": "Survey",
+      "reason": "Reason",
+      "country": "Country",
+      "business": "Business",
+      "family": "Family",
+      "other": "Other"
     },
     "account": {
       "uuid": "Unique ID",
@@ -320,6 +326,7 @@
       "sent_this_period": "Sent this period"
     },
     "marketing": {
+      "ask_for_reason_country": "Ask for reason and nationality",
       "enable_service": "Enable service",
       "email_feedback": "Feedback email",
       "email_first": "Send first email",

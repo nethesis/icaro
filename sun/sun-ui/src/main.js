@@ -5,6 +5,7 @@ import Vue from "vue";
 import VueResource from "vue-resource";
 import VueI18n from "vue-i18n";
 import VueGoodTable from "vue-good-table";
+import FlagIcon from 'vue-flag-icon'
 
 import App from "./App.vue";
 import router from "./routes/router";
@@ -21,6 +22,7 @@ Vue.config.productionTip = true;
 Vue.use(VueResource);
 Vue.use(VueI18n);
 Vue.use(VueGoodTable);
+Vue.use(FlagIcon);
 
 // configure i18n
 var langConf = languages.initLang();

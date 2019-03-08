@@ -2,26 +2,46 @@
   <div>
     <h2>{{ msg }}</h2>
     <div v-if="isLoading" class="spinner spinner-lg"></div>
-    <div v-if="(user.account_type == 'admin') || (user.account_type == 'reseller') && !isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div
+      v-if="(user.account_type == 'admin') || (user.account_type == 'reseller') && !isLoading"
+      class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12"
+    >
       <label v-if="!isLoading" class="col-sm-2 control-label" for="textInput-markup">Hotspot</label>
       <div v-if="!isLoading" class="col-sm-4">
         <select v-on:change="getAll(true)" v-model="hotspotSearchId" class="form-control">
-          <option v-for="hotspot in hotspots" v-bind:key="hotspot.id" v-bind:value="hotspot.id">
-            {{ hotspot.name }} - {{ hotspot.description}}
-          </option>
+          <option
+            v-for="hotspot in hotspots"
+            v-bind:key="hotspot.id"
+            v-bind:value="hotspot.id"
+          >{{ hotspot.name }} - {{ hotspot.description}}</option>
         </select>
       </div>
     </div>
     <div v-if="!isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
       <label class="col-sm-2 control-label" for="textInput-markup">{{$t('user.show_expired')}}</label>
       <div class="col-sm-4">
-        <input @click="toggleExpire()" v-model="hotspotShowExpired" type="checkbox" id="textInput2-modal-markup" class="form-control">
+        <input
+          @click="toggleExpire()"
+          v-model="hotspotShowExpired"
+          type="checkbox"
+          id="textInput2-modal-markup"
+          class="form-control"
+        >
       </div>
     </div>
     <div v-if="!isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
-      <label class="col-sm-2 control-label" for="textInput-markup">{{$t('user.show_marketing_auth')}}</label>
+      <label
+        class="col-sm-2 control-label"
+        for="textInput-markup"
+      >{{$t('user.show_marketing_auth')}}</label>
       <div class="col-sm-4">
-        <input @click="toggleMarketing()" v-model="hotspotShowMarketing" type="checkbox" id="textInput2-modal-markup" class="form-control">
+        <input
+          @click="toggleMarketing()"
+          v-model="hotspotShowMarketing"
+          type="checkbox"
+          id="textInput2-modal-markup"
+          class="form-control"
+        >
       </div>
     </div>
     <div v-if="!isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -31,69 +51,140 @@
     </div>
     <div v-if="!isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
       <div class="col-sm-12">
-        <button @click="exportCSVUsers()" class="btn btn-primary export-btn">{{$t('session.export_csv')}}</button>
+        <button
+          @click="exportCSVUsers()"
+          class="btn btn-primary export-btn"
+        >{{$t('session.export_csv')}}</button>
       </div>
-      <div class="result-list adjust-results">{{total}} {{total == 1 ? $t('result') : $t('results')}}</div>
+      <div
+        class="result-list adjust-results"
+      >{{total}} {{total == 1 ? $t('result') : $t('results')}}</div>
     </div>
     <div v-if="!isLoading">
       <form v-on:submit.prevent="searchFn($event)">
-        <input class="form-control input-lg search-table-input" type="text" :placeholder="tableLangsTexts.globalSearchPlaceholder">
+        <input
+          class="form-control input-lg search-table-input"
+          type="text"
+          :placeholder="tableLangsTexts.globalSearchPlaceholder"
+        >
       </form>
     </div>
     <div v-if="!isLoading && isLoadingTable" class="spinner spinner-lg spinner-adjust"></div>
-    <div v-if="!isLoadingTable && !isLoading && exportError" class="alert alert-danger alert-dismissable alert-export">
+    <div
+      v-if="!isLoadingTable && !isLoading && exportError"
+      class="alert alert-danger alert-dismissable alert-export"
+    >
       <span class="pficon pficon-error-circle-o"></span>
-      <strong>{{$t('session.export_error')}}</strong>. {{$t('session.export_error_details')}}.
+      <strong>{{$t('session.export_error')}}</strong>
+      . {{$t('session.export_error_details')}}.
     </div>
-    <vue-good-table v-if="!isLoadingTable && !isLoading" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]"
-      :perPage="hotspotPerPage" :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'username', type: 'asc'}"
-      :globalSearch="true" :globalSearchFn="searchFn" :paginate="false" styleClass="table" :nextText="tableLangsTexts.nextText"
-      :prevText="tableLangsTexts.prevText" :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
-      :ofText="tableLangsTexts.ofText">
+    <vue-good-table
+      v-if="!isLoadingTable && !isLoading"
+      @perPageChanged="handlePerPage"
+      :customRowsPerPageDropdown="[25,50,100]"
+      :perPage="hotspotPerPage"
+      :columns="columns"
+      :rows="rows"
+      :lineNumbers="false"
+      :defaultSortBy="{field: 'username', type: 'asc'}"
+      :globalSearch="true"
+      :globalSearchFn="searchFn"
+      :paginate="false"
+      styleClass="table"
+      :nextText="tableLangsTexts.nextText"
+      :prevText="tableLangsTexts.prevText"
+      :rowsPerPageText="tableLangsTexts.rowsPerPageText"
+      :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
+      :ofText="tableLangsTexts.ofText"
+    >
       <template slot="table-row" slot-scope="props">
-        <td :class="[isExpired(props.row.valid_until) ? 'disabled' : '', 'fancy']">{{ props.row.name }}</td>
-        <td :class="[isExpired(props.row.valid_until) ? 'disabled' : '', 'fancy']">{{ props.row.email || '-' }}</td>
+        <td
+          :class="[isExpired(props.row.valid_until) ? 'disabled' : '', 'fancy']"
+        >{{ props.row.name }}</td>
+        <td
+          :class="[isExpired(props.row.valid_until) ? 'disabled' : '', 'fancy']"
+        >{{ props.row.email || '-' }}</td>
         <td :class="[isExpired(props.row.valid_until) ? 'disabled' : '', 'fancy']">
           <strong>{{ props.row.account_type }}</strong>
         </td>
+        <td
+          :class="[isExpired(props.row.valid_until) ? 'disabled' : '', 'fancy']"
+        >{{ props.row.reason.length > 0 ? $t('user.'+props.row.reason) : '-'}}</td>
+        <td :class="[isExpired(props.row.valid_until) ? 'disabled' : '', 'fancy']">
+          <flag class="adjust-flag" :iso="props.row.country"/>
+          {{ props.row.country.length > 0 ? props.row.country : '-' }}
+        </td>
         <td class="fancy">
-          <span :class="['pficon', props.row.marketing_auth ? 'pficon-ok' : 'pficon-error-circle-o']"></span>
+          <span
+            :class="['pficon', props.row.marketing_auth ? 'pficon-ok' : 'pficon-error-circle-o']"
+          ></span>
+        </td>
+        <td class="fancy">
+          <span :class="['pficon', props.row.survey_auth ? 'pficon-ok' : 'pficon-error-circle-o']"></span>
         </td>
         <td class="fancy">
           <span :class="['pficon', props.row.auto_login ? 'pficon-ok' : 'pficon-error-circle-o']"></span>
         </td>
         <td :class="[isExpired(props.row.valid_until) ? 'disabled' : '', 'fancy']">
           <div>
-            <strong>{{ $t('user.kbps_down') }}</strong>: {{ props.row.kbps_down || '-' }}</div>
+            <strong>{{ $t('user.kbps_down') }}</strong>
+            : {{ props.row.kbps_down || '-' }}
+          </div>
           <div>
-            <strong>{{ $t('user.kbps_up') }}</strong>: {{ props.row.kbps_up || '-' }}</div>
-        </td>
-        <td :class="[isExpired(props.row.valid_until) ? 'disabled' : '', 'fancy']">
-          <div>
-            <strong>{{ $t('user.traffic') }}</strong>: {{ props.row.max_navigation_traffic | byteFormat }}</div>
-          <div>
-            <strong>{{ $t('user.time') }}</strong>: {{ props.row.max_navigation_time | secondsInHour }}
+            <strong>{{ $t('user.kbps_up') }}</strong>
+            : {{ props.row.kbps_up || '-' }}
           </div>
         </td>
         <td :class="[isExpired(props.row.valid_until) ? 'disabled' : '', 'fancy']">
           <div>
-            <strong>{{ $t('user.from') }}</strong>: {{ props.row.valid_from | formatDate }}</div>
+            <strong>{{ $t('user.traffic') }}</strong>
+            : {{ props.row.max_navigation_traffic | byteFormat }}
+          </div>
           <div>
-            <strong>{{ $t('user.until') }}</strong>: {{ props.row.valid_until | formatDate }}
-            <span :class="['pficon', isExpired(props.row.valid_until) ? 'pficon-error-circle-o': 'pficon-ok']"></span>
+            <strong>{{ $t('user.time') }}</strong>
+            : {{ props.row.max_navigation_time | secondsInHour }}
+          </div>
+        </td>
+        <td :class="[isExpired(props.row.valid_until) ? 'disabled' : '', 'fancy']">
+          <div>
+            <strong>{{ $t('user.from') }}</strong>
+            : {{ props.row.valid_from | formatDate }}
+          </div>
+          <div>
+            <strong>{{ $t('user.until') }}</strong>
+            : {{ props.row.valid_until | formatDate }}
+            <span
+              :class="['pficon', isExpired(props.row.valid_until) ? 'pficon-error-circle-o': 'pficon-ok']"
+            ></span>
           </div>
         </td>
         <td>
-          <user-action :expired="hotspotShowExpired" details="false" :obj="props.row" :update="getAll"></user-action>
+          <user-action
+            :expired="hotspotShowExpired"
+            details="false"
+            :obj="props.row"
+            :update="getAll"
+          ></user-action>
         </td>
       </template>
     </vue-good-table>
     <div v-if="!isLoadingTable && !isLoading" class="right paginator">
       <span class="page-count">
-        <b>{{hotspotPage}}</b> {{tableLangsTexts.ofText}} {{total / hotspotPerPage | adjustPage}} (
-        <b>{{hotspotPerPage}}</b> {{tableLangsTexts.rowsPerPageText}})</span>
-      <button :disabled="availablePrevPage()" @click="prevPage()" class="btn btn-default">{{tableLangsTexts.prevText}}</button>
-      <button :disabled="availableNextPage()" @click="nextPage()" class="btn btn-default">{{tableLangsTexts.nextText}}</button>
+        <b>{{hotspotPage}}</b>
+        {{tableLangsTexts.ofText}} {{total / hotspotPerPage | adjustPage}} (
+        <b>{{hotspotPerPage}}</b>
+        {{tableLangsTexts.rowsPerPageText}})
+      </span>
+      <button
+        :disabled="availablePrevPage()"
+        @click="prevPage()"
+        class="btn btn-default"
+      >{{tableLangsTexts.prevText}}</button>
+      <button
+        :disabled="availableNextPage()"
+        @click="nextPage()"
+        class="btn btn-default"
+      >{{tableLangsTexts.nextText}}</button>
     </div>
   </div>
 </template>
@@ -134,8 +225,23 @@ export default {
           filterable: true
         },
         {
+          label: this.$i18n.t("user.reason"),
+          field: "account_reason",
+          filterable: true
+        },
+        {
+          label: this.$i18n.t("user.country"),
+          field: "account_country",
+          filterable: true
+        },
+        {
           label: this.$i18n.t("user.marketing_auth"),
           field: "marketing_auth",
+          filterable: true
+        },
+        {
+          label: this.$i18n.t("user.survey_auth"),
+          field: "survey_auth",
           filterable: true
         },
         {
@@ -386,5 +492,8 @@ export default {
 .adjust-results {
   right: 45px !important;
   top: 0px;
+}
+.adjust-flag {
+  margin-right: 5px !important;
 }
 </style>
