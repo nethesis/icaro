@@ -27,13 +27,12 @@ import "time"
 type AdeToken struct {
 	Id               int       `db:"id" json:"id"`
 	Token            string    `db:"token" json:"token"`
-	Type             string    `db:"type" json:"type"`
-	Contact          string    `db:"contact" json:"contact"`
+	Contact          string    `db:"contact" json:"contact00"`
+	ContactType      string    `db:"contact_type" json:"contact_type"`
 	FeedbackSentTime time.Time `db:"feedback_sent_time" json:"feedback_sent_time"`
 	FeedbackLeftTime time.Time `db:"feedback_left_time" json:"feedback_left_time"`
 	ReviewSentTime   time.Time `db:"review_sent_time" json:"review_sent_time"`
 	ReviewLeftTime   time.Time `db:"review_left_time" json:"review_left_time"`
 	UserId           int       `db:"user_id" json:"user_id"`
 	HotspotId        int       `db:"hotspot_id" json:"hotspot_id"`
-	Created          time.Time `db:"created" json:"created"`
 }
