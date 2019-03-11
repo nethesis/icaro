@@ -110,18 +110,23 @@
         <td
           :title="props.row.reason.length > 0 ? $t('user.'+props.row.reason) : '-'"
           :class="[isExpired(props.row.valid_until) ? 'disabled' : '', 'fancy']"
+          v-if="reasonView"
         >
-          <span :class="getReasonIcon(props.row.reason)"></span>
+          <span :class="getReasonIcon(props.row.reason)">{{props.row.reason ? '' : '-'}}</span>
         </td>
-        <td :class="[isExpired(props.row.valid_until) ? 'disabled' : '', 'fancy']">
+        <td
+          :class="[isExpired(props.row.valid_until) ? 'disabled' : '', 'fancy']"
+          v-if="reasonView"
+        >
           <flag class="adjust-flag adjust-size-icon" :iso="props.row.country"/>
+          <span>{{props.row.country ? '' : '-'}}</span>
         </td>
         <td class="fancy">
           <span
             :class="['pficon', props.row.marketing_auth ? 'pficon-ok' : 'pficon-error-circle-o']"
           ></span>
         </td>
-        <td class="fancy">
+        <td v-if="surveyView" class="fancy">
           <span :class="['pficon', props.row.survey_auth ? 'pficon-ok' : 'pficon-error-circle-o']"></span>
         </td>
         <td class="fancy">
@@ -196,12 +201,19 @@ import UserService from "../services/user";
 import StorageService from "../services/storage";
 import HotspotService from "../services/hotspot";
 import UtilService from "../services/util";
+import MarketingService from "../services/marketing";
 
 import UserAction from "../directives/UserAction.vue";
 
 export default {
   name: "Users",
-  mixins: [UserService, StorageService, UtilService, HotspotService],
+  mixins: [
+    UserService,
+    StorageService,
+    UtilService,
+    HotspotService,
+    MarketingService
+  ],
   components: {
     userAction: UserAction
   },
@@ -286,7 +298,9 @@ export default {
       total: 0,
       user: this.get("loggedUser") || null,
       searchString: "",
-      exportError: false
+      exportError: false,
+      reasonView: true,
+      surveyView: true
     };
   },
   mounted() {
@@ -297,6 +311,7 @@ export default {
     var context = this;
     this.getAllHotspots(function() {
       context.getAll();
+      context.getMarketingInfo();
     });
   },
   methods: {
@@ -352,6 +367,33 @@ export default {
           callback();
         }
       );
+    },
+    getMarketingInfo() {
+      if (
+        this.$parent.user.info.type == "customer" ||
+        this.$parent.user.info.type == "desk"
+      ) {
+        this.marketingPrefGet(
+          this.$parent.user.info.hotspot_id,
+          success => {
+            var reasonView = success.body.filter(function(p) {
+              return p.key == "marketing_0_reason_country";
+            })[0];
+            var surveyView = success.body.filter(function(p) {
+              return p.key == "marketing_1_enabled";
+            })[0];
+            this.columns[3].hidden = reasonView.value == "false";
+            this.columns[4].hidden = reasonView.value == "false";
+            this.columns[6].hidden = surveyView.value == "false";
+            this.reasonView = reasonView.value == "true";
+            this.surveyView = surveyView.value == "true";
+            this.$forceUpdate();
+          },
+          error => {
+            console.error(error.body);
+          }
+        );
+      }
     },
     toggleExpire() {
       this.isLoading = true;
@@ -512,7 +554,7 @@ export default {
   margin-right: 5px !important;
 }
 .adjust-size-icon {
-  font-size: 20px !important;
+  font-size: 18px !important;
   margin-top: 8px;
 }
 </style>
