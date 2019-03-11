@@ -76,6 +76,7 @@ func PostReviewResult(c *gin.Context) {
 
 	token := c.Param("token")
 	adeToken := utils.GetAdeTokenFromToken(token)
+	hotspotPrefs := utils.GetHotspotPrefs(adeToken.HotspotId)
 
 	if adeToken.Id <= 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No token found!"})
@@ -93,7 +94,7 @@ func PostReviewResult(c *gin.Context) {
 	}
 
 	if reviewResult.Stars > 0 && reviewResult.Stars <= 5 {
-		if !utils.SendReviewMessage(adeToken, reviewResult.Stars, reviewResult.Message) {
+		if !utils.SendReviewMessage(adeToken, reviewResult.Stars, reviewResult.Message, hotspotPrefs["captive_7_background"]) {
 			c.JSON(http.StatusBadRequest, gin.H{"message": "Feedback submission failed."})
 			return
 		}

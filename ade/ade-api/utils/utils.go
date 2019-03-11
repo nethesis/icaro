@@ -1,7 +1,9 @@
 package utils
 
 import (
+	"bytes"
 	"fmt"
+	"html/template"
 	"strconv"
 	"time"
 
@@ -12,6 +14,17 @@ import (
 	"github.com/nethesis/icaro/sun/sun-api/database"
 	wax_utils "github.com/nethesis/icaro/wax/utils"
 )
+
+type reviewResponse struct {
+	Message string
+	Stars   []int
+	BgColor string
+}
+
+type feedbackResponse struct {
+	Message string
+	BgColor string
+}
 
 func GetHotspotPrefs(hotspotId int) map[string]string {
 	hotspotPerfs := []string{"captive_2_title",
@@ -43,8 +56,27 @@ func GetAdeTokenFromToken(token string) models.AdeToken {
 	return adeToken
 }
 
-func SendFeedBackMessage(adeToken models.AdeToken, message string) bool {
-	status := SendEmail(adeToken.HotspotId, "User Feedback", message)
+func SendFeedBackMessage(adeToken models.AdeToken, message string, bgColor string) bool {
+	var userMessage bytes.Buffer
+
+	rp := feedbackResponse{
+		Message: message,
+		BgColor: bgColor,
+	}
+
+	t, err := template.ParseFiles("templates/feedback_owner.tpl")
+	if err != nil {
+		fmt.Println(err)
+		return false
+	}
+
+	err = t.Execute(&userMessage, &rp)
+	if err != nil {
+		fmt.Println(err)
+		return false
+	}
+
+	status := SendEmail(adeToken.HotspotId, "User Feedback", userMessage.String())
 
 	db := database.Instance()
 	adeToken.FeedbackLeftTime = time.Now()
@@ -53,10 +85,33 @@ func SendFeedBackMessage(adeToken models.AdeToken, message string) bool {
 	return status
 }
 
-func SendReviewMessage(adeToken models.AdeToken, stars int, message string) bool {
+func SendReviewMessage(adeToken models.AdeToken, stars int, message string, bgColor string) bool {
+	var userMessage bytes.Buffer
 	stars_s := strconv.Itoa(stars)
 
-	status := SendEmail(adeToken.HotspotId, "Review: "+stars_s+"/5", message)
+	starsFill := make([]int, stars)
+	for i := range starsFill {
+		starsFill[i] = 0
+	}
+	rp := reviewResponse{
+		Message: message,
+		Stars:   starsFill,
+		BgColor: bgColor,
+	}
+
+	t, err := template.ParseFiles("templates/review_owner.tpl")
+	if err != nil {
+		fmt.Println(err)
+		return false
+	}
+
+	err = t.Execute(&userMessage, &rp)
+	if err != nil {
+		fmt.Println(err)
+		return false
+	}
+
+	status := SendEmail(adeToken.HotspotId, "Review: "+stars_s+"/5", userMessage.String())
 
 	db := database.Instance()
 	adeToken.ReviewLeftTime = time.Now()
@@ -75,7 +130,7 @@ func SendEmail(hotspotId int, subject string, message string) bool {
 
 	m.SetHeader("To", mail_to)
 	m.SetHeader("Subject", subject)
-	m.SetBody("text/plain", message)
+	m.SetBody("text/html", message)
 
 	d := gomail.NewDialer(
 		configuration.Config.Endpoints.Email.SMTPHost,
