@@ -48,22 +48,22 @@ func GetReviewPage(c *gin.Context) {
 		return
 	}
 
-	hotspotPerfs := utils.GetHotspotPrefs(adeToken.HotspotId)
+	hotspotPrefs := utils.GetHotspotPrefs(adeToken.HotspotId)
 
-	reviewPage.HotspotName = hotspotPerfs["captive_2_title"]
-	reviewPage.HotspotLogo = hotspotPerfs["captive_3_logo"]
-	reviewPage.BgColor = hotspotPerfs["captive_7_background"]
+	reviewPage.HotspotName = hotspotPrefs["captive_2_title"]
+	reviewPage.HotspotLogo = hotspotPrefs["captive_3_logo"]
+	reviewPage.BgColor = hotspotPrefs["captive_7_background"]
 
-	reviewPage.Threshold, _ = strconv.Atoi(hotspotPerfs["marketing_9_threshold"])
+	reviewPage.Threshold, _ = strconv.Atoi(hotspotPrefs["marketing_9_threshold"])
 
-	if hotspotPerfs["marketing_10_first_url"] != "" {
-		urls = append(urls, hotspotPerfs["marketing_10_first_url"])
+	if hotspotPrefs["marketing_10_first_url"] != "" {
+		urls = append(urls, hotspotPrefs["marketing_10_first_url"])
 	}
-	if hotspotPerfs["marketing_11_second_url"] != "" {
-		urls = append(urls, hotspotPerfs["marketing_11_second_url"])
+	if hotspotPrefs["marketing_11_second_url"] != "" {
+		urls = append(urls, hotspotPrefs["marketing_11_second_url"])
 	}
-	if hotspotPerfs["marketing_12_third_url"] != "" {
-		urls = append(urls, hotspotPerfs["marketing_12_third_url"])
+	if hotspotPrefs["marketing_12_third_url"] != "" {
+		urls = append(urls, hotspotPrefs["marketing_12_third_url"])
 	}
 
 	reviewPage.Urls = urls

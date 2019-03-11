@@ -24,11 +24,11 @@ func GetFeedbackPage(c *gin.Context) {
 		return
 	}
 
-	hotspotPerfs := utils.GetHotspotPrefs(adeToken.HotspotId)
+	hotspotPrefs := utils.GetHotspotPrefs(adeToken.HotspotId)
 
-	FeedbackPage.HotspotName = hotspotPerfs["captive_2_title"]
-	FeedbackPage.HotspotLogo = hotspotPerfs["captive_3_logo"]
-	FeedbackPage.BgColor = hotspotPerfs["captive_7_background"]
+	FeedbackPage.HotspotName = hotspotPrefs["captive_2_title"]
+	FeedbackPage.HotspotLogo = hotspotPrefs["captive_3_logo"]
+	FeedbackPage.BgColor = hotspotPrefs["captive_7_background"]
 
 	c.JSON(http.StatusOK, FeedbackPage)
 }
