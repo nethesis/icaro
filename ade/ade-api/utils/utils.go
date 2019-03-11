@@ -27,7 +27,7 @@ type feedbackResponse struct {
 }
 
 func GetHotspotPrefs(hotspotId int) map[string]string {
-	hotspotPerfs := []string{"captive_2_title",
+	hotspotPrefs := []string{"captive_2_title",
 		"captive_3_logo",
 		"captive_7_background",
 		"marketing_9_threshold",
@@ -38,7 +38,7 @@ func GetHotspotPrefs(hotspotId int) map[string]string {
 
 	prefsMap := make(map[string]string)
 
-	prefs := wax_utils.GetHotspotPreferencesByKeys(hotspotId, hotspotPerfs)
+	prefs := wax_utils.GetHotspotPreferencesByKeys(hotspotId, hotspotPrefs)
 
 	for i := 0; i < len(prefs); i++ {
 		prefsMap[prefs[i].Key] = prefs[i].Value
