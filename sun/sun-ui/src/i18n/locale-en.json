@@ -331,7 +331,7 @@
       "email_feedback": "Feedback email",
       "email_first": "Send first email",
       "email_second": "Send second email",
-      "email_first_after": "1st email after",
+      "email_first_after": "1st email after (hours)",
       "email_second_after": "2nd email after",
       "after_days": "Days",
       "after_expiration": "Expiration",
