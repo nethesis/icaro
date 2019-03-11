@@ -55,6 +55,8 @@ func DefineAPI(router *gin.Engine) {
 	reviews.GET("/:token", methods.GetReviewPage)
 	reviews.POST("/:token", methods.PostReviewResult)
 
+	api.GET("/short/:hash", methods.GetLongUrl)
+
 	// handle missing endpoint
 	router.NoRoute(func(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{"message": "API not found"})

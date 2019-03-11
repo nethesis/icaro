@@ -2,6 +2,7 @@ package utils
 
 import (
 	"bytes"
+	"crypto/sha256"
 	"fmt"
 	"html/template"
 	"strconv"
@@ -9,11 +10,27 @@ import (
 
 	gomail "gopkg.in/gomail.v2"
 
-	"github.com/nethesis/icaro/ade/ade-api/models"
 	"github.com/nethesis/icaro/sun/sun-api/configuration"
 	"github.com/nethesis/icaro/sun/sun-api/database"
+	"github.com/nethesis/icaro/sun/sun-api/models"
 	wax_utils "github.com/nethesis/icaro/wax/utils"
 )
+
+type reviewSend struct {
+	HotspotName    string
+	HotspotLogo    string
+	HotspotDetails string
+	BgColor        string
+	Url            string
+}
+
+type feedbackSend struct {
+	HotspotName    string
+	HotspotLogo    string
+	HotspotDetails string
+	BgColor        string
+	Url            string
+}
 
 type reviewResponse struct {
 	Message string
@@ -56,8 +73,83 @@ func GetAdeTokenFromToken(token string) models.AdeToken {
 	return adeToken
 }
 
-func SendFeedBackMessage(adeToken models.AdeToken, message string, bgColor string) bool {
+func CreateAdeToken(user models.User) models.AdeToken {
+	h := sha256.New()
+	h.Write([]byte(time.Now().UTC().String() + user.Username + user.Password))
+	token := fmt.Sprintf("%x", h.Sum(nil))
+
+	adeToken := models.AdeToken{
+		Token:     token,
+		UserId:    user.Id,
+		HotspotId: user.HotspotId,
+	}
+
+	db := database.Instance()
+	db.Save(&adeToken)
+
+	return adeToken
+}
+
+func SendFeedBackMessageToUser(adeToken models.AdeToken, user models.User, hotspotName string, hotspotLogo string, bgColor string, hotspot models.Hotspot) bool {
 	var userMessage bytes.Buffer
+
+	rp := feedbackSend{
+		HotspotName:    hotspotName,
+		HotspotLogo:    hotspotLogo[22:],
+		BgColor:        bgColor,
+		Url:            wax_utils.GenerateShortURL(configuration.Config.Survey.Url + "feedbacks/" + adeToken.Token),
+		HotspotDetails: hotspot.BusinessName + " • " + hotspot.BusinessAddress + " • " + hotspot.BusinessEmail,
+	}
+
+	t := template.Must(template.ParseFiles("templates/feedback_user.tpl"))
+
+	err := t.Execute(&userMessage, &rp)
+	if err != nil {
+		fmt.Println(err)
+		return false
+	}
+
+	status := SendEmail("Feedback", userMessage.String(), user.Email)
+
+	db := database.Instance()
+	db.Model(&adeToken).Update("feedback_sent_time", time.Now())
+
+	return status
+}
+
+func SendReviewMessageToUser(adeToken models.AdeToken, user models.User, hotspotName string, hotspotLogo string, bgColor string, hotspot models.Hotspot) bool {
+	var userMessage bytes.Buffer
+
+	rp := reviewSend{
+		HotspotName:    hotspotName,
+		HotspotLogo:    hotspotLogo[22:],
+		BgColor:        bgColor,
+		Url:            wax_utils.GenerateShortURL(configuration.Config.Survey.Url + "reviews/" + adeToken.Token),
+		HotspotDetails: hotspot.BusinessName + " • " + hotspot.BusinessAddress + " • " + hotspot.BusinessEmail,
+	}
+
+	t, err := template.ParseFiles("templates/review_user.tpl")
+	if err != nil {
+		fmt.Println(err)
+		return false
+	}
+
+	err = t.Execute(&userMessage, &rp)
+	if err != nil {
+		fmt.Println(err)
+		return false
+	}
+
+	status := SendEmail("Review", userMessage.String(), user.Email)
+
+	db := database.Instance()
+	db.Model(&adeToken).Update("review_sent_time", time.Now())
+
+	return status
+}
+
+func SendFeedBackMessageToOwner(adeToken models.AdeToken, message string, bgColor string) bool {
+	var ownerMessage bytes.Buffer
 
 	rp := feedbackResponse{
 		Message: message,
@@ -70,13 +162,14 @@ func SendFeedBackMessage(adeToken models.AdeToken, message string, bgColor strin
 		return false
 	}
 
-	err = t.Execute(&userMessage, &rp)
+	err = t.Execute(&ownerMessage, &rp)
 	if err != nil {
 		fmt.Println(err)
 		return false
 	}
 
-	status := SendEmail(adeToken.HotspotId, "User Feedback", userMessage.String())
+	mailTo := wax_utils.GetHotspotPreferencesByKey(adeToken.HotspotId, "marketing_2_feedback_email").Value
+	status := SendEmail("User Feedback", ownerMessage.String(), mailTo)
 
 	db := database.Instance()
 	adeToken.FeedbackLeftTime = time.Now()
@@ -85,8 +178,8 @@ func SendFeedBackMessage(adeToken models.AdeToken, message string, bgColor strin
 	return status
 }
 
-func SendReviewMessage(adeToken models.AdeToken, stars int, message string, bgColor string) bool {
-	var userMessage bytes.Buffer
+func SendReviewMessageToOwner(adeToken models.AdeToken, stars int, message string, bgColor string) bool {
+	var ownerMessage bytes.Buffer
 	stars_s := strconv.Itoa(stars)
 
 	starsFill := make([]int, stars)
@@ -105,13 +198,14 @@ func SendReviewMessage(adeToken models.AdeToken, stars int, message string, bgCo
 		return false
 	}
 
-	err = t.Execute(&userMessage, &rp)
+	err = t.Execute(&ownerMessage, &rp)
 	if err != nil {
 		fmt.Println(err)
 		return false
 	}
 
-	status := SendEmail(adeToken.HotspotId, "Review: "+stars_s+"/5", userMessage.String())
+	mailTo := wax_utils.GetHotspotPreferencesByKey(adeToken.HotspotId, "marketing_2_feedback_email").Value
+	status := SendEmail("Review: "+stars_s+"/5", ownerMessage.String(), mailTo)
 
 	db := database.Instance()
 	adeToken.ReviewLeftTime = time.Now()
@@ -120,15 +214,13 @@ func SendReviewMessage(adeToken models.AdeToken, stars int, message string, bgCo
 	return status
 }
 
-func SendEmail(hotspotId int, subject string, message string) bool {
+func SendEmail(subject string, message string, mailTo string) bool {
 
 	status := true
 	m := gomail.NewMessage()
 	m.SetHeader("From", configuration.Config.Endpoints.Email.From)
 
-	mail_to := wax_utils.GetHotspotPreferencesByKey(hotspotId, "marketing_2_feedback_email").Value
-
-	m.SetHeader("To", mail_to)
+	m.SetHeader("To", mailTo)
 	m.SetHeader("Subject", subject)
 	m.SetBody("text/html", message)
 
