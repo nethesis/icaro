@@ -344,8 +344,6 @@ CREATE TABLE `short_urls` (
 CREATE TABLE `ade_tokens` (
   `id` serial,
   `token` varchar(250) NOT NULL,
-  `contact` varchar(250) NOT NULL,
-  `contact_type` varchar(250) NOT NULL,
   `feedback_sent_time` datetime NOT NULL,
   `feedback_left_time` datetime,
   `review_sent_time` datetime NOT NULL,
