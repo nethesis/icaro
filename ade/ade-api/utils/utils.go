@@ -47,7 +47,7 @@ func SendFeedBackMessage(adeToken models.AdeToken, message string) bool {
 	status := SendEmail(adeToken.HotspotId, "User Feedback", message)
 
 	db := database.Instance()
-	adeToken.FeedbackSendTime = time.Now()
+	adeToken.FeedbackLeftTime = time.Now()
 	db.Save(&adeToken)
 
 	return status
@@ -59,7 +59,7 @@ func SendReviewMessage(adeToken models.AdeToken, stars int, message string) bool
 	status := SendEmail(adeToken.HotspotId, "Review: "+stars_s+"/5", message)
 
 	db := database.Instance()
-	adeToken.ReviewSendTime = time.Now()
+	adeToken.ReviewLeftTime = time.Now()
 	db.Save(&adeToken)
 
 	return status
