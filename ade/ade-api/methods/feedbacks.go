@@ -19,7 +19,7 @@ func GetFeedbackPage(c *gin.Context) {
 		return
 	}
 
-	if !adeToken.FeedbackSendTime.IsZero() {
+	if !adeToken.FeedbackLeftTime.IsZero() {
 		c.JSON(http.StatusForbidden, gin.H{"message": "Token expired"})
 		return
 	}
@@ -45,7 +45,7 @@ func PostFeedbackResult(c *gin.Context) {
 		return
 	}
 
-	if !adeToken.FeedbackSendTime.IsZero() {
+	if !adeToken.FeedbackLeftTime.IsZero() {
 		c.JSON(http.StatusForbidden, gin.H{"message": "Token expired"})
 		return
 	}

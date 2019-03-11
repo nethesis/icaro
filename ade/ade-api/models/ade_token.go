@@ -30,9 +30,9 @@ type AdeToken struct {
 	Type             string    `db:"type" json:"type"`
 	Contact          string    `db:"contact" json:"contact"`
 	FeedbackSentTime time.Time `db:"feedback_sent_time" json:"feedback_sent_time"`
-	FeedbackSendTime time.Time `db:"feedback_send_time" json:"feedback_send_time"`
+	FeedbackLeftTime time.Time `db:"feedback_left_time" json:"feedback_left_time"`
 	ReviewSentTime   time.Time `db:"review_sent_time" json:"review_sent_time"`
-	ReviewSendTime   time.Time `db:"review_send_time" json:"review_send_time"`
+	ReviewLeftTime   time.Time `db:"review_left_time" json:"review_left_time"`
 	UserId           int       `db:"user_id" json:"user_id"`
 	HotspotId        int       `db:"hotspot_id" json:"hotspot_id"`
 	Created          time.Time `db:"created" json:"created"`

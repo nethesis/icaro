@@ -43,7 +43,7 @@ func GetReviewPage(c *gin.Context) {
 		return
 	}
 
-	if !adeToken.ReviewSendTime.IsZero() {
+	if !adeToken.ReviewLeftTime.IsZero() {
 		c.JSON(http.StatusForbidden, gin.H{"message": "Token expired"})
 		return
 	}
@@ -82,7 +82,7 @@ func PostReviewResult(c *gin.Context) {
 		return
 	}
 
-	if !adeToken.ReviewSendTime.IsZero() {
+	if !adeToken.ReviewLeftTime.IsZero() {
 		c.JSON(http.StatusForbidden, gin.H{"message": "Token expired"})
 		return
 	}
