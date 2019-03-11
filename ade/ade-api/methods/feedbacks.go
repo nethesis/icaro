@@ -39,6 +39,7 @@ func PostFeedbackResult(c *gin.Context) {
 
 	token := c.Param("token")
 	adeToken := utils.GetAdeTokenFromToken(token)
+	hotspotPrefs := utils.GetHotspotPrefs(adeToken.HotspotId)
 
 	if adeToken.Id <= 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No token found!"})
@@ -56,7 +57,7 @@ func PostFeedbackResult(c *gin.Context) {
 	}
 
 	if feedbackResult.Message != "" {
-		if !utils.SendFeedBackMessage(adeToken, feedbackResult.Message) {
+		if !utils.SendFeedBackMessage(adeToken, feedbackResult.Message, hotspotPrefs["captive_7_background"]) {
 			c.JSON(http.StatusBadRequest, gin.H{"message": "Feedback submission failed."})
 			return
 		}
