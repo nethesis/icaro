@@ -29,7 +29,7 @@ export default {
     getInfo() {
       this.loading = true;
       this.getTokenInfo(
-        "feedbacks",
+        this.$route.name,
         this.$route.params.token,
         function(success) {
           this.loading = false;
