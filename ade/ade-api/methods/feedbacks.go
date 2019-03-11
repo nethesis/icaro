@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/nethesis/icaro/ade/ade-api/models"
 	"github.com/nethesis/icaro/ade/ade-api/utils"
+	"github.com/nethesis/icaro/sun/sun-api/models"
 )
 
 func GetFeedbackPage(c *gin.Context) {
@@ -57,7 +57,7 @@ func PostFeedbackResult(c *gin.Context) {
 	}
 
 	if feedbackResult.Message != "" {
-		if !utils.SendFeedBackMessage(adeToken, feedbackResult.Message, hotspotPrefs["captive_7_background"]) {
+		if !utils.SendFeedBackMessageToOwner(adeToken, feedbackResult.Message, hotspotPrefs["captive_7_background"]) {
 			c.JSON(http.StatusBadRequest, gin.H{"message": "Feedback submission failed."})
 			return
 		}

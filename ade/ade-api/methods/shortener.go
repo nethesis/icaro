@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Nethesis S.r.l.
+ * Copyright (C) 2017 Nethesis S.r.l.
  * http://www.nethesis.it - info@nethesis.it
  *
  * This file is part of Icaro project.
@@ -17,17 +17,29 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with Icaro.  If not, see COPYING.
  *
- * author: Matteo Valentinit <matteo.valentini@nethesis.it>
+ * author: Matteo Valentini <matteo.valentini@nethesis.it>
  */
 
-package models
+package methods
 
-type FeedbackPage struct {
-	HotspotName string `json:"hotspot_name"`
-	HotspotLogo string `json:"hotspot_logo"`
-	BgColor     string `json:"bg_color"`
-}
+import (
+	"net/http"
 
-type FeedbackResult struct {
-	Message string `json:"message"`
+	"github.com/gin-gonic/gin"
+
+	wax_utils "github.com/nethesis/icaro/wax/utils"
+)
+
+func GetLongUrl(c *gin.Context) {
+	hash := c.Param("hash")
+
+	shortUrl := wax_utils.GetShortUrlByHash(hash)
+
+	if shortUrl.Id > 0 {
+		c.Redirect(http.StatusFound, shortUrl.LongUrl)
+		return
+	} else {
+		c.JSON(http.StatusNotFound, gin.H{"message": "Shortener hash not found!"})
+		return
+	}
 }

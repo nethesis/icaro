@@ -7,8 +7,11 @@
         body {
             background-color: {{ .BgColor }};
             text-align: center;
-            font-family: Lato, 'Helvetica Neue', Arial, Helvetica,
-sans-serif;
+            font-family: Lato,
+            'Helvetica Neue',
+            Arial,
+            Helvetica,
+            sans-serif;
         }
 
         h1 {

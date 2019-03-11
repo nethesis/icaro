@@ -27,8 +27,8 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/nethesis/icaro/ade/ade-api/models"
 	"github.com/nethesis/icaro/ade/ade-api/utils"
+	"github.com/nethesis/icaro/sun/sun-api/models"
 )
 
 func GetReviewPage(c *gin.Context) {
@@ -94,7 +94,7 @@ func PostReviewResult(c *gin.Context) {
 	}
 
 	if reviewResult.Stars > 0 && reviewResult.Stars <= 5 {
-		if !utils.SendReviewMessage(adeToken, reviewResult.Stars, reviewResult.Message, hotspotPrefs["captive_7_background"]) {
+		if !utils.SendReviewMessageToOwner(adeToken, reviewResult.Stars, reviewResult.Message, hotspotPrefs["captive_7_background"]) {
 			c.JSON(http.StatusBadRequest, gin.H{"message": "Feedback submission failed."})
 			return
 		}

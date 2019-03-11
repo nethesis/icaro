@@ -7,8 +7,11 @@
         body {
             background-color: {{ .BgColor }};
             text-align: center;
-            font-family: Lato, 'Helvetica Neue', Arial, Helvetica,
-sans-serif;
+            font-family: Lato,
+            'Helvetica Neue',
+            Arial,
+            Helvetica,
+            sans-serif;
         }
 
         h1 {
@@ -84,9 +87,8 @@ sans-serif;
     <div class="title">
         <div class="container">
             <h2>Hai ricevuto una nuova recensione!</h2>
-{{ range .Stars }}
-            <img class="star"
-src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAYAAAD0eNT6
+            {{ range .Stars }}
+            <img class="star" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAYAAAD0eNT6
 AAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOg
 AAHUwAADqYAAAOpgAABdwnLpRPAAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACx
 MBAJqcGAAAXw1JREFUeNrt3XmcHGWdP/DPt7pnMtOTg4QjAyIi97lcCWQmM5NEE5GAgDe6H
@@ -549,7 +551,7 @@ DehQtFa73eQI8ePXr06NFrqicoXEaQEAuXlFkOhh49evTo0aPXYC+dHtTQ9wDM5Ifp0aNHj
 x49emZ5/x8X6z2uaUX1SgAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxOC0xMC0yNVQwMTozNjo1
 Ny0wNTowMC2S414AAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTgtMTAtMjVUMDE6MzY6NTctMDU
 6MDBcz1viAAAAAElFTkSuQmCC">
-{{ end }}
+            {{ end }}
             <h3>Questo è il messaggio dell'utente</h3>
             <div>
                 {{ .Message }}
@@ -559,9 +561,8 @@ Ny0wNTowMC2S414AAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTgtMTAtMjVUMDE6MzY6NTctMDU
         <div class="divider"></div>
         <div class="container">
             <h2>You have received a new review!</h2>
-{{ range .Stars }}
-            <img class="star"
-src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAYAAAD0eNT6
+            {{ range .Stars }}
+            <img class="star" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAYAAAD0eNT6
 AAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOg
 AAHUwAADqYAAAOpgAABdwnLpRPAAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACx
 MBAJqcGAAAXw1JREFUeNrt3XmcHGWdP/DPt7pnMtOTg4QjAyIi97lcCWQmM5NEE5GAgDe6H
@@ -1024,7 +1025,7 @@ DehQtFa73eQI8ePXr06NFrqicoXEaQEAuXlFkOhh49evTo0aPXYC+dHtTQ9wDM5Ifp0aNHj
 x49emZ5/x8X6z2uaUX1SgAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxOC0xMC0yNVQwMTozNjo1
 Ny0wNTowMC2S414AAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTgtMTAtMjVUMDE6MzY6NTctMDU
 6MDBcz1viAAAAAElFTkSuQmCC">
-{{ end }}
+            {{ end }}
             <h3>This is the user's message</h3>
             <div>
                 {{ .Message }}
