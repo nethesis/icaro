@@ -5,7 +5,10 @@ import (
 	"crypto/sha256"
 	"fmt"
 	"html/template"
+	"net/http"
+	"net/url"
 	"strconv"
+	"strings"
 	"time"
 
 	gomail "gopkg.in/gomail.v2"
@@ -238,4 +241,69 @@ func SendEmail(subject string, message string, mailTo string) bool {
 	}
 
 	return status
+}
+
+func SendSMS(adeToken models.AdeToken, message string, survey string, smsTo string, hotspotId int) bool {
+	// get account sms count
+	db := database.Instance()
+	hotspot := wax_utils.GetHotspotById(hotspotId)
+	accountSMS := wax_utils.GetAccountSMSByAccountId(hotspot.AccountId)
+
+	// check if exists an account for sms
+	if accountSMS.Id == 0 {
+		return false
+	}
+
+	if accountSMS.SmsCount <= accountSMS.SmsMaxCount {
+		// retrieve account info and token
+		accountSid := configuration.Config.Endpoints.Sms.AccountSid
+		authToken := configuration.Config.Endpoints.Sms.AuthToken
+		urlAPI := "https://api.twilio.com/2010-04-01/Accounts/" + accountSid + "/Messages.json"
+
+		// compose message data
+		msgData := url.Values{}
+		msgData.Set("To", smsTo)
+		msgData.Set("MessagingServiceSid", configuration.Config.Endpoints.Sms.ServiceSid)
+		msgData.Set("Body",
+			hotspot.BusinessName+"\n"+
+				message+"\n"+"Link: "+
+				wax_utils.GenerateShortURL(configuration.Config.Survey.Url+survey+"/"+adeToken.Token))
+		msgDataReader := *strings.NewReader(msgData.Encode())
+
+		// create HTTP request client
+		client := &http.Client{
+			Timeout: time.Second * 30,
+		}
+		req, _ := http.NewRequest("POST", urlAPI, &msgDataReader)
+		req.SetBasicAuth(accountSid, authToken)
+		req.Header.Add("Accept", "application/json")
+		req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+
+		// make HTTP POST request
+		resp, err := client.Do(req)
+
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+
+		defer resp.Body.Close()
+
+		// update sms accounting table
+		if resp.StatusCode == 201 {
+			accountSMS.SmsCount = accountSMS.SmsCount + 1
+			db.Save(&accountSMS)
+		}
+
+		return true
+
+	} else {
+
+		if configuration.Config.Endpoints.Sms.SendQuotaAlert {
+			resellerAccount := wax_utils.GetAccountByAccountId(hotspot.AccountId)
+			wax_utils.SendSmsQuotaLimitAlert(resellerAccount)
+		}
+
+		return false
+	}
+
 }

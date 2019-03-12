@@ -114,6 +114,16 @@ func sendSurveys() {
 				if adeToken.FeedbackSentTime.IsZero() && u.Created.Add(time.Duration(marketingFirstAfterInt)*time.Hour).Before(time.Now()) {
 					// send mail
 					utils.SendFeedBackMessageToUser(adeToken, u, hotspotName.Value, hotspotLogo.Value, hotspotBg.Value, hotspot)
+
+					// check if sms is enabled
+					if marketingSMS.Value == "true" {
+						if u.AccountType == "sms" {
+							status := utils.SendSMS(adeToken, "Leave feedback", "feedbacks", u.Username, u.HotspotId)
+							if !status {
+								fmt.Println("Feedback SMS not sent")
+							}
+						}
+					}
 				}
 
 			}
@@ -127,21 +137,37 @@ func sendSurveys() {
 					if adeToken.ReviewSentTime.IsZero() && u.Created.AddDate(0, 0, marketingSecondAfterDaysInt).Before(time.Now()) {
 						// send mail
 						utils.SendReviewMessageToUser(adeToken, u, hotspotName.Value, hotspotLogo.Value, hotspotBg.Value, hotspot)
+
+						// check if sms is enabled
+						if marketingSMS.Value == "true" {
+							if u.AccountType == "sms" {
+								status := utils.SendSMS(adeToken, "Leave review", "reviews", u.Username, u.HotspotId)
+								if !status {
+									fmt.Println("Review SMS not sent")
+								}
+							}
+						}
 					}
 
 				case "expiration":
 					if adeToken.ReviewSentTime.IsZero() && u.ValidUntil.Before(time.Now()) {
 						// send mail
 						utils.SendReviewMessageToUser(adeToken, u, hotspotName.Value, hotspotLogo.Value, hotspotBg.Value, hotspot)
+
+						// check if sms is enabled
+						if marketingSMS.Value == "true" {
+							if u.AccountType == "sms" {
+								status := utils.SendSMS(adeToken, "Leave review", "reviews", u.Username, u.HotspotId)
+								if !status {
+									fmt.Println("Review SMS not sent")
+								}
+							}
+						}
 					}
 				}
 
 			}
 
-			// check if sm is enabled
-			if marketingSMS.Value == "true" {
-
-			}
 		}
 	}
 }
