@@ -86,7 +86,7 @@ matrix:
         - NAME=ade-iu
         - DEPLOY_FILES=ade/ade-iu/ade-iu.tar.gz
       script:
-        - cd $TRAVIS_BUILD_DIR/ade-iu
+        - cd $TRAVIS_BUILD_DIR/ade/ade-ui
         - npm install && npm run build
       after_success:
         - cd dist/ && tar cvzf ../ade-iu.tar.gz .
