@@ -111,7 +111,7 @@ func sendSurveys() {
 			if marketingFirstEmail.Value == "true" {
 				// check if time to send
 				marketingFirstAfterInt, _ := strconv.Atoi(marketingFirstAfter.Value)
-				if adeToken.FeedbackSentTime.IsZero() && u.Created.Add(time.Duration(marketingFirstAfterInt)*time.Hour).After(time.Now()) {
+				if adeToken.FeedbackSentTime.IsZero() && u.Created.Add(time.Duration(marketingFirstAfterInt)*time.Hour).Before(time.Now()) {
 					// send mail
 					utils.SendFeedBackMessageToUser(adeToken, u, hotspotName.Value, hotspotLogo.Value, hotspotBg.Value, hotspot)
 				}
@@ -124,13 +124,13 @@ func sendSurveys() {
 				switch marketingSecondAfter.Value {
 				case "days":
 					marketingSecondAfterDaysInt, _ := strconv.Atoi(marketingSecondAfterDays.Value)
-					if adeToken.ReviewSentTime.IsZero() && u.Created.AddDate(0, 0, marketingSecondAfterDaysInt).After(time.Now()) {
+					if adeToken.ReviewSentTime.IsZero() && u.Created.AddDate(0, 0, marketingSecondAfterDaysInt).Before(time.Now()) {
 						// send mail
 						utils.SendReviewMessageToUser(adeToken, u, hotspotName.Value, hotspotLogo.Value, hotspotBg.Value, hotspot)
 					}
 
 				case "expiration":
-					if adeToken.ReviewSentTime.IsZero() && u.ValidUntil.After(time.Now()) {
+					if adeToken.ReviewSentTime.IsZero() && u.ValidUntil.Before(time.Now()) {
 						// send mail
 						utils.SendReviewMessageToUser(adeToken, u, hotspotName.Value, hotspotLogo.Value, hotspotBg.Value, hotspot)
 					}
