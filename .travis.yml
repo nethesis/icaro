@@ -83,13 +83,13 @@ matrix:
     - language: node_js
       node_js: 8
       env:
-        - NAME=ade-iu
-        - DEPLOY_FILES=ade/ade-iu/ade-iu.tar.gz
+        - NAME=ade-ui
+        - DEPLOY_FILES=ade/ade-ui/ade-ui.tar.gz
       script:
         - cd $TRAVIS_BUILD_DIR/ade/ade-ui
         - npm install && npm run build
       after_success:
-        - cd dist/ && tar cvzf ../ade-iu.tar.gz .
+        - cd dist/ && tar cvzf ../ade-ui.tar.gz .
 
     - language: minimal
       sevices:
