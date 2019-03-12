@@ -14,7 +14,3 @@
 - hosts: icarodb
   roles:
     - role: icarodb
-
-- hosts: backends
-  roles:
-     - role: caddy-backend
