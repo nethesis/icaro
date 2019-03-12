@@ -38,6 +38,26 @@ matrix:
         - cd $TRAVIS_BUILD_DIR/wax && go test
         - cd $TRAVIS_BUILD_DIR/wax && go build
 
+    - language: go
+      go:
+        - 1.11
+      env:
+        - NAME=ade-api
+        - DEPLOY_FILES=ade/ade-api/ade-api
+        - GO111MODULE=on
+      script:
+        - cd $TRAVIS_BUILD_DIR/ade/ade-api && go build
+
+    - language: go
+      go:
+        - 1.11
+      env:
+        - NAME=ade-task
+        - DEPLOY_FILES=ade/ade-tasks/ade-tasks
+        - GO111MODULE=on
+      script:
+        - cd $TRAVIS_BUILD_DIR/ade/ade-tasks && go build
+
     - language: node_js
       node_js: 8
       env:
@@ -59,6 +79,17 @@ matrix:
         - npm install && npm run build
       after_success:
         - cd dist/ && tar cvzf ../wings.tar.gz .
+
+    - language: node_js
+      node_js: 8
+      env:
+        - NAME=ade-iu
+        - DEPLOY_FILES=ade/ade-iu/ade-iu.tar.gz
+      script:
+        - cd $TRAVIS_BUILD_DIR/ade-iu
+        - npm install && npm run build
+      after_success:
+        - cd dist/ && tar cvzf ../ade-iu.tar.gz .
 
     - language: minimal
       sevices:
