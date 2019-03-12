@@ -75,7 +75,7 @@
             padding: 5px;
         }
     </style>
-    <title>Feedback</title>
+    <title>Review</title>
 </head>
 
 <body>
@@ -84,13 +84,13 @@
         <img src="data:image/png;base64,{{ .HotspotLogo }}">
     </div>
     <div class="container">
-        <h2>Benvenuto e grazie per averci scelto!</h2>
+        <h2>Grazie per averci scelto!</h2>
         <h3>Per noi la tua soddisfazione è la cosa più importante.</h3>
         <div>
-            Se hai qualche necessità o vuoi fare una segnalazione non esitare.
+            Se ti va di lasciaci una recensione, clicca il link qui sotto.
             <br>
             <br>
-            Invia segnalazione <a href="{{ .Url }}">QUI</a>.
+            Lascia recensione <a href="{{ .Url }}">QUI</a>.
             <br>
             <br>
             <b>Grazie</b>. Un cordiale saluto
@@ -101,13 +101,13 @@
     </div>
     <div class="divider"></div>
     <div class="container">
-        <h2>Welcome and thank you for choosing us!</h2>
+        <h2>Thank you for choosing us!</h2>
         <h3>Your satisfaction is the most important thing for us.</h3>
         <div>
-            If you have any need or want to report, do not hesitate.
+            If you'd like leave us a review, click the link below.
             <br>
             <br>
-            Send feedback <a href="{{ .Url }}">HERE</a>.
+            Leave review <a href="{{ .Url }}">HERE</a>.
             <br>
             <br>
             <b>Thank you</b>. Regards
