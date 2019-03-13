@@ -53,7 +53,7 @@
 					},
 					"response": [
 						{
-							"id": "2bab424a-8153-4fbe-9679-e429af73b03b",
+							"id": "b55c4dc2-a80b-4499-b29b-949ddfa0b86b",
 							"name": "/accounts",
 							"originalRequest": {
 								"method": "GET",
@@ -134,7 +134,7 @@
 					},
 					"response": [
 						{
-							"id": "ce354df7-eaf0-4d46-b15f-41b059f79b4f",
+							"id": "5ff1f98e-9bd4-4a7e-aeff-b8ec56248879",
 							"name": "/accounts/:id",
 							"originalRequest": {
 								"method": "GET",
@@ -204,7 +204,7 @@
 					},
 					"response": [
 						{
-							"id": "79fad1ad-bc95-4490-bdd8-bcee56193eae",
+							"id": "116ed671-6cb2-4ed2-81e5-180047613905",
 							"name": "/accounts",
 							"originalRequest": {
 								"method": "POST",
@@ -243,7 +243,7 @@
 							"body": "{\n    \"id\": 1,\n    \"status\": \"success\"\n}"
 						},
 						{
-							"id": "e4903fd6-59f4-4e31-9e7f-f96591f7260b",
+							"id": "f93ac878-81e4-466a-b1bb-01a9b62e27cf",
 							"name": "/accounts customer",
 							"originalRequest": {
 								"method": "POST",
@@ -323,7 +323,7 @@
 					},
 					"response": [
 						{
-							"id": "9b8d687e-c9cf-4ad5-8a19-3818f3d24a41",
+							"id": "815359aa-48df-4618-9eb9-ffb82c277e8f",
 							"name": "/accounts/:id",
 							"originalRequest": {
 								"method": "PUT",
@@ -400,7 +400,7 @@
 					},
 					"response": [
 						{
-							"id": "2de8f7d9-d347-42f0-a74b-28e1637ec41d",
+							"id": "0183c378-a0b2-48c1-849b-9cc8ec9443e1",
 							"name": "/accounts/:id",
 							"originalRequest": {
 								"method": "DELETE",
@@ -484,7 +484,7 @@
 					},
 					"response": [
 						{
-							"id": "6d57fd57-7dae-46e6-b0a8-08c098a7dc2e",
+							"id": "87caa47f-7044-4cfb-9d62-2773fedb9eb0",
 							"name": "devices",
 							"originalRequest": {
 								"method": "GET",
@@ -568,7 +568,7 @@
 					},
 					"response": [
 						{
-							"id": "f43f10bc-e443-4379-a9aa-6b0665f26a80",
+							"id": "31fc64f9-7ba9-45f2-9c0a-243faa94050c",
 							"name": "device",
 							"originalRequest": {
 								"method": "GET",
@@ -651,7 +651,7 @@
 					},
 					"response": [
 						{
-							"id": "9d97a361-3fb5-49c4-b447-f3cc96dcf26c",
+							"id": "ec369e05-7202-447d-97f8-fac0e4a71159",
 							"name": "sessions history",
 							"originalRequest": {
 								"method": "GET",
@@ -735,7 +735,7 @@
 					},
 					"response": [
 						{
-							"id": "0053ed87-14bf-46b4-8b07-a91a5f7f7bd4",
+							"id": "3809f87b-55a9-417e-a83a-02e3b14d9129",
 							"name": "session history",
 							"originalRequest": {
 								"method": "GET",
@@ -813,7 +813,7 @@
 					},
 					"response": [
 						{
-							"id": "e23fe933-fc39-42e0-b50f-a407f509970c",
+							"id": "78223e61-6e2b-438a-a155-660bd8e81a37",
 							"name": "/hotspots",
 							"originalRequest": {
 								"method": "GET",
@@ -897,7 +897,7 @@
 					},
 					"response": [
 						{
-							"id": "b6a4ee2e-6b72-49c3-bcba-bc996e00a29b",
+							"id": "d456d76f-2616-4d6c-9f12-c43ba3d0bb4e",
 							"name": "/hotspots",
 							"originalRequest": {
 								"method": "GET",
@@ -967,7 +967,7 @@
 					},
 					"response": [
 						{
-							"id": "5fd010bc-b7fb-4b75-99aa-b235e4a39451",
+							"id": "e5558c14-ae34-4653-ae39-c9f45bb1ee60",
 							"name": "/hotspots",
 							"originalRequest": {
 								"method": "POST",
@@ -1047,7 +1047,7 @@
 					},
 					"response": [
 						{
-							"id": "a4d702a4-a503-4366-98e9-08aa3d3116d5",
+							"id": "c886bb93-54fd-4382-8003-42cf84f32144",
 							"name": "/hotspots/:id",
 							"originalRequest": {
 								"method": "PUT",
@@ -1124,7 +1124,7 @@
 					},
 					"response": [
 						{
-							"id": "58174b1e-8e86-49d6-ad2a-c01ff16e67aa",
+							"id": "7c97ada4-1759-4aa4-a573-f8d304a0c798",
 							"name": "/hotspots/:id",
 							"originalRequest": {
 								"method": "DELETE",
@@ -1191,7 +1191,7 @@
 					},
 					"response": [
 						{
-							"id": "075aa2ef-c796-442a-92ba-32ba4fc7682f",
+							"id": "130698f5-df90-44de-adb9-ebb97c863c05",
 							"name": "/login Invalid username",
 							"originalRequest": {
 								"method": "POST",
@@ -1226,7 +1226,7 @@
 							"body": "{\"message\":\"No username found!\"}"
 						},
 						{
-							"id": "e036bae5-8a02-45d5-9cde-511ff5ee1ccf",
+							"id": "c4d60a5c-c47f-4bad-923d-6b4df369b8fe",
 							"name": "/login OK",
 							"originalRequest": {
 								"method": "POST",
@@ -1261,7 +1261,7 @@
 							"body": "{\n    \"status\": \"success\",\n    \"account_type\": \"desk\",\n    \"token\": \"c1b5ebd45281f0480cb9c6de963e5dd420c577d8b5abdc0e45944fddc988c67d\",\n    \"expires\": \"2017-12-21 11:13:05.377926455 +0000 UTC\",\n    \"id\": 1,\n\n            \"subscription\": {\n                \"id\": 1,\n                \"valid_from\": \"0001-01-01T00:00:00Z\",\n                \"valid_until\": \"0001-01-01T00:00:00Z\",\n                \"created\": \"0001-01-01T00:00:00Z\",\n                \"account_id\": 1,\n                \"subscription_plan\": {\n                    \"id\": 1,\n                    \"code\": \"free\",\n                    \"name\": \"test\",\n                    \"description\": \"my plan\",\n                    \"price\": 0,\n                    \"period\": 365,\n                    \"included_sms\": 300,\n                    \"max_units\": 10,\n                    \"advanced_report\": false,\n                    \"wings_customization\": false,\n                    \"social_analytics\": false\n                },\n                \"expired\": true\n            }\n        \n}"
 						},
 						{
-							"id": "4bf0a4f6-c39a-48c9-a375-d238cb9968ad",
+							"id": "08f409af-a9db-4a97-bf44-b983fe2baee8",
 							"name": "/login Invalid password",
 							"originalRequest": {
 								"method": "POST",
@@ -1326,7 +1326,7 @@
 					},
 					"response": [
 						{
-							"id": "05529f48-92f1-4c6d-9154-c99281c35ef7",
+							"id": "58eb57aa-2524-4978-b788-d32124227a54",
 							"name": "/logout",
 							"originalRequest": {
 								"method": "POST",
@@ -1389,7 +1389,7 @@
 					},
 					"response": [
 						{
-							"id": "c6825616-77a4-4dc1-ab38-97e6101c89f1",
+							"id": "3145c157-e318-4434-af37-85b247dba8b3",
 							"name": "/preferences/accounts",
 							"originalRequest": {
 								"method": "GET",
@@ -1458,7 +1458,7 @@
 					},
 					"response": [
 						{
-							"id": "411ea2f0-1e4d-4058-bb80-93924deb0a6c",
+							"id": "da169f4a-68b0-4688-b6d4-557c8c95dc9f",
 							"name": "/preferences/accounts",
 							"originalRequest": {
 								"method": "PUT",
@@ -1533,7 +1533,7 @@
 					},
 					"response": [
 						{
-							"id": "535828ef-9040-447c-8732-09b37d4ba594",
+							"id": "f3462532-8a77-445d-b809-05a57fd1e593",
 							"name": "/preferences/hotspots",
 							"originalRequest": {
 								"method": "GET",
@@ -1609,7 +1609,7 @@
 					},
 					"response": [
 						{
-							"id": "7aed0f4b-6a0a-4601-93c5-b5b44b4c2dc4",
+							"id": "cbcf2ccd-40bf-4898-8533-9ab7d9dd5e4d",
 							"name": "/preferences/hotspots",
 							"originalRequest": {
 								"method": "PUT",
@@ -1697,7 +1697,7 @@
 					},
 					"response": [
 						{
-							"id": "ede8c372-4fb2-40fa-8b5e-9bb9fa8a5d14",
+							"id": "289cffc9-5765-404c-87b5-3d16acdd10a0",
 							"name": "sessions",
 							"originalRequest": {
 								"method": "GET",
@@ -1781,7 +1781,7 @@
 					},
 					"response": [
 						{
-							"id": "88a2c9ac-008d-4407-9a7b-72deadb9b80f",
+							"id": "0ef9eca6-fb1e-4dd6-b09a-5e554f87f48e",
 							"name": "session",
 							"originalRequest": {
 								"method": "GET",
@@ -1847,7 +1847,7 @@
 					},
 					"response": [
 						{
-							"id": "49bb15dd-216a-4ee9-b4cc-1a63971e9c2e",
+							"id": "63df18af-ea8f-4ea8-a1e7-df439e210402",
 							"name": "/subscription_plans",
 							"originalRequest": {
 								"method": "GET",
@@ -1926,7 +1926,7 @@
 					},
 					"response": [
 						{
-							"id": "383b1460-0eec-4962-bb78-472b7c19208e",
+							"id": "7567f5ee-a6ee-4cf1-a859-2074dbe584a9",
 							"name": "units",
 							"originalRequest": {
 								"method": "GET",
@@ -2010,7 +2010,7 @@
 					},
 					"response": [
 						{
-							"id": "f49a535f-ef07-4658-8366-96e6b82e4a23",
+							"id": "1eed8580-2f91-46e3-b556-fbd1fb6c91eb",
 							"name": "unit",
 							"originalRequest": {
 								"method": "GET",
@@ -2080,7 +2080,7 @@
 					},
 					"response": [
 						{
-							"id": "46a8983a-0e57-4e9b-954e-a1f22486355f",
+							"id": "bd920f16-2da1-4dee-82ad-c2a080e6f7ec",
 							"name": "/units",
 							"originalRequest": {
 								"method": "POST",
@@ -2156,7 +2156,7 @@
 					},
 					"response": [
 						{
-							"id": "b7e301af-7663-42a6-98d3-dd63893259a2",
+							"id": "c2038108-9b35-46c7-9c76-29dccdbf2b17",
 							"name": "/units/:id",
 							"originalRequest": {
 								"method": "DELETE",
@@ -2245,7 +2245,7 @@
 					},
 					"response": [
 						{
-							"id": "a995012a-5fdf-46e4-9845-11e27f412749",
+							"id": "8bd35a88-0ede-4a4e-903c-9a3e80f7d3d7",
 							"name": "users",
 							"originalRequest": {
 								"method": "GET",
@@ -2329,7 +2329,7 @@
 					},
 					"response": [
 						{
-							"id": "ff36bab2-38c0-4e82-a89b-92f39528975a",
+							"id": "7f75d1e4-d257-4fca-9489-cb93857908c8",
 							"name": "user",
 							"originalRequest": {
 								"method": "GET",
@@ -2406,7 +2406,7 @@
 					},
 					"response": [
 						{
-							"id": "c437fb10-8833-4380-93b5-0228104a3373",
+							"id": "7319d706-ac56-48f2-bd8f-2d3f00853488",
 							"name": "users/:id",
 							"originalRequest": {
 								"method": "PUT",
@@ -2483,7 +2483,7 @@
 					},
 					"response": [
 						{
-							"id": "5bc8ba18-6d3f-4209-919c-fa92c98e3fdf",
+							"id": "36f6c878-cf04-4a3d-99dc-ae785112a94d",
 							"name": "users",
 							"originalRequest": {
 								"method": "DELETE",
@@ -2562,7 +2562,7 @@
 					},
 					"response": [
 						{
-							"id": "79698213-e5ac-4483-bb14-c71f81e91b6d",
+							"id": "1ee470b1-8870-4b57-8a26-316516dc67e7",
 							"name": "vouchers",
 							"originalRequest": {
 								"method": "GET",
@@ -2643,7 +2643,7 @@
 					},
 					"response": [
 						{
-							"id": "d4c3177d-8ce4-4a98-b0ac-64390c1d95d3",
+							"id": "77d10940-38c1-4363-89c3-b3ae3ffd3459",
 							"name": "/vouchers",
 							"originalRequest": {
 								"method": "POST",
@@ -2725,7 +2725,7 @@
 					},
 					"response": [
 						{
-							"id": "7de268b1-784e-4ef7-91f6-61a6a9c6f8d8",
+							"id": "6bb8441a-5a8d-4c85-b167-f53fbe8f46b2",
 							"name": "/vouchers/:id",
 							"originalRequest": {
 								"method": "PUT",
@@ -2803,7 +2803,7 @@
 					},
 					"response": [
 						{
-							"id": "3ae52cc7-7ea6-4e4e-a159-1cd0a95187ca",
+							"id": "b56fe566-d026-43f5-ba89-83ff7ecf6be3",
 							"name": "/vouchers/:id",
 							"originalRequest": {
 								"method": "DELETE",
@@ -2899,7 +2899,7 @@
 					},
 					"response": [
 						{
-							"id": "70fd6309-262f-43da-8677-087a0782dbf8",
+							"id": "15d7e8f4-67c8-4834-9de9-09cbe563803c",
 							"name": "/wax/marketings/:user_id",
 							"originalRequest": {
 								"method": "DELETE",
@@ -2991,7 +2991,7 @@
 					},
 					"response": [
 						{
-							"id": "abf13a41-b11f-429d-84f0-39d42fc76508",
+							"id": "ad867d22-38ca-4c37-917b-d14c5f048951",
 							"name": "/wax/preferences",
 							"originalRequest": {
 								"method": "GET",
@@ -3078,7 +3078,7 @@
 					},
 					"response": [
 						{
-							"id": "b0b3f862-fe1e-487d-b155-810de7c9ad92",
+							"id": "75acc594-384d-4e4c-9148-c25efa4694a7",
 							"name": "/register/social/facebook",
 							"originalRequest": {
 								"method": "GET",
@@ -3168,7 +3168,7 @@
 					},
 					"response": [
 						{
-							"id": "3d9d88fc-0056-497d-a573-97a36940ab30",
+							"id": "79c64072-83cd-476e-af87-4a58395d26d8",
 							"name": "/register/social/google",
 							"originalRequest": {
 								"method": "GET",
@@ -3258,7 +3258,7 @@
 					},
 					"response": [
 						{
-							"id": "fcef229d-0c42-4dfd-9a52-efad93cbc940",
+							"id": "f0a0620e-c36b-48f7-96ed-a7f56a2db4ad",
 							"name": "/register/social/linkedin",
 							"originalRequest": {
 								"method": "GET",
@@ -3330,7 +3330,7 @@
 					},
 					"response": [
 						{
-							"id": "7db4d958-6797-496a-bc04-b53be4a44214",
+							"id": "eba208ff-2fab-4675-8709-2665931af18e",
 							"name": "/register/sms",
 							"originalRequest": {
 								"method": "GET",
@@ -3418,7 +3418,7 @@
 					},
 					"response": [
 						{
-							"id": "a6867480-ca9d-41b2-a9c3-12656d39c442",
+							"id": "cd33858f-d578-4228-bafd-a96211bbe7d5",
 							"name": "/register/voucher",
 							"originalRequest": {
 								"method": "GET",
@@ -3506,7 +3506,7 @@
 					},
 					"response": [
 						{
-							"id": "2c1af3df-4383-412c-8010-f9b458ebc939",
+							"id": "b1337ec7-285a-4170-b5e3-7b68a00f8e0a",
 							"name": "/register/email",
 							"originalRequest": {
 								"method": "GET",
@@ -3557,7 +3557,7 @@
 			]
 		},
 		{
-			"name": "Feedback",
+			"name": "Surveys",
 			"description": "",
 			"item": [
 				{
@@ -3591,7 +3591,48 @@
 						},
 						"description": "Get list of all account"
 					},
-					"response": []
+					"response": [
+						{
+							"id": "7e91621d-14a3-40cd-8465-691843d954ef",
+							"name": "/feedbacks/:token",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Token",
+										"value": "c1b5ebd45281f0480cb9c6de963e5dd420c577d8b5abdc0e45944fddc988c67d"
+									}
+								],
+								"body": {},
+								"url": {
+									"raw": "https://{{hostname}}/ade/feedbacks/:token",
+									"protocol": "https",
+									"host": [
+										"{{hostname}}"
+									],
+									"path": [
+										"ade",
+										"feedbacks",
+										":token"
+									],
+									"variable": [
+										{
+											"key": "token",
+											"value": ""
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "parsed",
+							"header": [],
+							"cookie": [],
+							"responseTime": 0,
+							"body": "{\n    \"logo\": \"base64_hotspot_logo\",\n    \"color\": \"hex_hotspot_color\",\n    \"name\": \"hotspot_name\"\n}"
+						}
+					]
 				},
 				{
 					"name": "/feedbacks/:token",
@@ -3609,7 +3650,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"message\": \"\"\n}"
+							"raw": "{\n\t\"message\": \"string\"\n}"
 						},
 						"url": {
 							"raw": "https://{{hostname}}/ade/feedbacks/:token",
@@ -3631,7 +3672,55 @@
 						},
 						"description": "Get list of all account"
 					},
-					"response": []
+					"response": [
+						{
+							"id": "7bd26484-8527-4ff7-b5c6-b39b9f870f52",
+							"name": "/feedbacks/:token",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Token",
+										"value": "c1b5ebd45281f0480cb9c6de963e5dd420c577d8b5abdc0e45944fddc988c67d"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"message\": \"string\"\n}"
+								},
+								"url": {
+									"raw": "https://{{hostname}}/ade/feedbacks/:token",
+									"protocol": "https",
+									"host": [
+										"{{hostname}}"
+									],
+									"path": [
+										"ade",
+										"feedbacks",
+										":token"
+									],
+									"variable": [
+										{
+											"key": "token",
+											"value": ""
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "parsed",
+							"header": [],
+							"cookie": [],
+							"responseTime": 0,
+							"body": "{\n\t\"state\": \"success\"\n}"
+						}
+					]
 				},
 				{
 					"name": "/reviews/:token",
@@ -3664,7 +3753,48 @@
 						},
 						"description": "Get list of all account"
 					},
-					"response": []
+					"response": [
+						{
+							"id": "2ed44313-4052-41bc-a99b-ffc387fdbe3e",
+							"name": "/reviews/:token",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Token",
+										"value": "c1b5ebd45281f0480cb9c6de963e5dd420c577d8b5abdc0e45944fddc988c67d"
+									}
+								],
+								"body": {},
+								"url": {
+									"raw": "https://{{hostname}}/ade/reviews/:token",
+									"protocol": "https",
+									"host": [
+										"{{hostname}}"
+									],
+									"path": [
+										"ade",
+										"reviews",
+										":token"
+									],
+									"variable": [
+										{
+											"key": "token",
+											"value": ""
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "parsed",
+							"header": [],
+							"cookie": [],
+							"responseTime": 0,
+							"body": "{\n  \"logo\":\"base64_hotspot_logo\",\n  \"color\":\"hex_hotspot_color\",\n  \"name\": \"hotspot_name\",\n  \"urls\": [\"https://tripdavisor.com\",\"...\", \"...\"],\n  \"threshold\": 3\n}"
+						}
+					]
 				},
 				{
 					"name": "/reviews/:token",
@@ -3682,7 +3812,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"stars\": \"integer\",\n\t\"message\": \"optional | if stars <= 3\"\n}"
+							"raw": "{\n\t\"stars\": \"integer\",\n\t\"message\": \"optional\"\n}"
 						},
 						"url": {
 							"raw": "https://{{hostname}}/ade/reviews/:token",
@@ -3704,7 +3834,55 @@
 						},
 						"description": "Get list of all account"
 					},
-					"response": []
+					"response": [
+						{
+							"id": "85260635-bd1e-4d24-bf06-93f2a420aeb7",
+							"name": "/reviews/:token",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Token",
+										"value": "c1b5ebd45281f0480cb9c6de963e5dd420c577d8b5abdc0e45944fddc988c67d"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"stars\": \"integer\",\n\t\"message\": \"optional\"\n}"
+								},
+								"url": {
+									"raw": "https://{{hostname}}/ade/reviews/:token",
+									"protocol": "https",
+									"host": [
+										"{{hostname}}"
+									],
+									"path": [
+										"ade",
+										"reviews",
+										":token"
+									],
+									"variable": [
+										{
+											"key": "token",
+											"value": ""
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "parsed",
+							"header": [],
+							"cookie": [],
+							"responseTime": 0,
+							"body": "{\n    \"state\": \"success\"\n}"
+						}
+					]
 				}
 			]
 		}
