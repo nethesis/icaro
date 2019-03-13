@@ -12,11 +12,14 @@ Icaro is divided in 4 parts:
 - Sun: Hotspot Manager applications which is dived in 3 parts
   - [Sun UI](https://github.com/nethesis/icaro/tree/master/sun/sun-ui): web interface written in [Vue.js](https://vuejs.org/) respecting [Patternfly](http://www.patternfly.org) design
   - [Sun API](https://github.com/nethesis/icaro/tree/master/sun/sun-api): [APIs]({{site.api_url}}) used by Sun UI, implemented using [Golang ](https://golang.org/)
-  - [Sun Tasks](https://github.com/nethesis/icaro/tree/master/sun/sun-tasks): Golang applications to terminated sessions and cleanup invalid tokens 
+  - [Sun Tasks](https://github.com/nethesis/icaro/tree/master/sun/sun-tasks): Golang applications to terminated sessions and cleanup invalid tokens
+  - [Ade UI](https://github.com/nethesis/icaro/tree/master/ade/ade-ui): web interface written with VueJs that handles the feedbacks and reviews using tokens for each user.
+  - [Ade API](https://github.com/nethesis/icaro/tree/master/ade/ade-api): used by Ade UI, implemented in [Golang ](https://golang.org/), handles the requests and send email to hotspot's owner
+  - [Ade tasks](https://github.com/nethesis/icaro/tree/master/ade/ade-tasks): a cronjob that check if users need to receive surveys (feedbacks or reviews)
 
-Both Wax and Sun use the same MariaDB (or MySQL) database.
+Wax, Sun and Ade use the same MariaDB (or MySQL) database.
 
-Wax, Wings and Sun are considered server-side componentes, while Dedalo is considered the client one.
+Wax, Wings, Ade and Sun are considered server-side componentes, while Dedalo is considered the client one.
 All techincal documentation can be found in the links above.
 
 ## How it works
@@ -34,10 +37,14 @@ This is an high-level overview of the whole architecture:
 
 - Dedalo talks to Wax and checks if the user is already authorized to access Internet.
   If not, the smartphone client is redirect to Wings captive portal (**2** in figure)
-  
+
 - The user is forced to login using one of the available methods.
 
 - When the authentication is done, Wings sends an authorization message to Dedalo using [JSON interface](http://coova.github.io/CoovaChilli/JSON/) (**3** in figure)
 
 - Dedalo asks authorization confirmation to Wax, if the authorization is granted (**4** in figure)
 
+### Secondary interactions
+- After hours or days, if the hotspot's owners have enabled the surveys, an email or sms are sent to the users
+- The users click on the link inside the email or sms and fill the feedbacks or reviews
+- When survey has finished a recap email is sent to the hotspot owner

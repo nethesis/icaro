@@ -180,3 +180,8 @@ This variables are common to all backends:
 * `SMS_AUTH_TOKEN` Twilio auth token
 * `SMS_SERVICE_SID` Twilio messaging service sid
 * `SMS_SEND_QUOTA_ALERT` `true | false` Enable/Disable SMS quota limit alert.
+
+### Ade specific variables
+
+##### Survey
+* `SURVEY_URL` Url to host the Ade UI componente
