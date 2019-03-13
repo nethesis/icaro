@@ -1,0 +1,45 @@
+---
+- name: Create Ade-tasks working directory
+  file:
+    path: /opt/icaro/ade-tasks/
+    state: directory
+    recurse: yes
+
+- name: Create Ade-tasks templates directory
+  file:
+    path: /opt/icaro/ade-tasks/templates
+    state: directory
+    recurse: yes
+
+- name: Download Ade-tasks templates
+  get_url:
+    url: "{{ icaro.url }}/raw/{{ icaro.version }}/ade/ade-tasks/templates/{{ item }}"
+    force: true
+    dest: /opt/icaro/ade-tasks/templates
+    mode: 0644
+  with_items:
+    - feedback_user.tpl
+    - review_user.tpl
+
+- name: Copy ade-tasks configuration file
+  template:
+    src: ade-tasks-conf.j2
+    dest: /opt/icaro/ade-tasks/conf.json
+
+- name: Download and install Ade-tasks executable
+  get_url:
+    url: "{{ icaro.url }}/releases/download/{{ icaro.version }}/ade-tasks"
+    force: true
+    dest: /opt/icaro/ade-tasks
+    mode: 0755
+
+- name: Copy Ade-tasks sytemd unit
+  copy:
+    src: usr/lib/systemd/system/ade-tasks@.service
+    dest: /usr/lib/systemd/system/ade-tasks@.service
+
+- name: Enable ade-tasks send-surveys service
+  systemd:
+    name: ade-tasks@send-surveys
+    daemon_reload: yes
+    enabled: yes

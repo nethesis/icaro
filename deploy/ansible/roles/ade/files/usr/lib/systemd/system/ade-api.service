@@ -1,0 +1,17 @@
+[Unit]
+Description=Surveys server
+After=network.target cloud-init.service
+
+[Service]
+Type=simple
+User=root
+Environment=PORT=8082
+EnvironmentFile=-/opt/icaro/ade-api/conf.env
+WorkingDirectory=/opt/icaro/ade-api/
+Environment=GIN_MODE=release
+ExecStart=/opt/icaro/ade-api/ade-api
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

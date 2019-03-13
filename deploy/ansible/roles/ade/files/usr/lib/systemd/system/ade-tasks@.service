@@ -1,0 +1,14 @@
+[Unit]
+Description=Exec tasks immediatly or in a background jobs
+After=network.target cloud-init.service
+
+[Service]
+Type=simple
+PrivateTmp=true
+EnvironmentFile=-/opt/icaro/ade-tasks/conf.env
+ExecStart=/opt/icaro/ade-tasks/ade-tasks -a %i -w
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

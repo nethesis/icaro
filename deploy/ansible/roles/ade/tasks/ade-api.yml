@@ -1,0 +1,45 @@
+---
+- name: Create Ade-api working directory
+  file:
+    path: /opt/icaro/ade-api/
+    state: directory
+    recurse: yes
+
+- name: Create Ade-api templates directory
+  file:
+    path: /opt/icaro/ade-api/templates
+    state: directory
+    recurse: yes
+
+- name: Download Ade-api templates
+  get_url:
+    url: "{{ icaro.url }}/raw/{{ icaro.version }}/ade/ade-api/templates/{{ item }}"
+    force: true
+    dest: /opt/icaro/ade-api/templates
+    mode: 0644
+  with_items:
+    - feedback_owner.tpl
+    - review_owner.tpl
+
+- name: Copy ade-api configuration file
+  template:
+    src: ade-api-conf.j2
+    dest: /opt/icaro/ade-api/conf.json
+
+- name: Download and install Ade-api executable
+  get_url:
+    url: "{{ icaro.url }}/releases/download/{{ icaro.version }}/ade-api"
+    force: true
+    dest: /opt/icaro/ade-api/
+    mode: 0755
+
+- name: Copy Ade-api sytemd unit
+  copy:
+    src: usr/lib/systemd/system/ade-api.service
+    dest: /usr/lib/systemd/system/ade-api.service
+
+- name: Enable Ade-api service
+  systemd:
+    name: ade-api
+    daemon_reload: yes
+    enabled: yes

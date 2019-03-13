@@ -1,0 +1,30 @@
+{
+    "database": {
+        "host":"{{ icaro.ade_api.db_hostname }}",
+
+        "port":"3306",
+        "name":"icaro",
+        "user": "{{ icaro.ade_api.db_username }}",
+        "password": "{{ icaro.ade_api.db_password }}"
+    },
+    "cors": {
+        "origins": ["http://{{ icaro.hostname }}"],
+        "headers": ["Token", "Content-Type"],
+        "methods": ["GET", "PUT", "POST", "DELETE"]
+    },
+    "endpoints": {
+        "email": {
+{% if icaro.ade_api.email_from is defined and
+icaro.ade_api.email_smtp_host is defined and
+icaro.ade_api.email_smtp_port is defined and
+icaro.ade_api.email_smtp_user is defined and
+icaro.ade_api.email_smtp_password is defined %}
+            "from": "{{ icaro.ade_api.email_from }}",
+            "smtp_host": "{{ icaro.ade_api.email_smtp_host }}",
+            "smtp_port": {{ icaro.ade_api.email_smtp_port }},
+            "smtp_user": "{{ icaro.ade_api.email_smtp_user }}",
+            "smtp_password": "{{ icaro.ade_api.email_smtp_password }}"
+{% endif %}
+        }
+    }
+}

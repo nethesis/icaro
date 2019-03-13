@@ -1,0 +1,42 @@
+{
+    "database": {
+        "host":"{{ icaro.ade_tasks.db_hostname }}",
+
+        "port":"3306",
+        "name":"icaro",
+        "user": "{{ icaro.ade_tasks.db_username }}",
+        "password": "{{ icaro.ade_tasks.db_password }}"
+    },
+    "survey": {
+        "url":"https://{{ icaro.hostname }}/ade/#/"
+    },
+    "endpoints": {
+        "email": {
+{% if icaro.ade_tasks.email_from is defined and
+icaro.ade_tasks.email_smtp_host is defined and
+icaro.ade_tasks.email_smtp_port is defined and
+icaro.ade_tasks.email_smtp_user is defined and
+icaro.ade_tasks.email_smtp_password is defined %}
+            "from": "{{ icaro.ade_tasks.email_from }}",
+            "smtp_host": "{{ icaro.ade_tasks.email_smtp_host }}",
+            "smtp_port": {{ icaro.ade_tasks.email_smtp_port }},
+            "smtp_user": "{{ icaro.ade_tasks.email_smtp_user }}",
+            "smtp_password": "{{ icaro.ade_tasks.email_smtp_password }}"
+{% endif %}
+        },
+        "sms": {
+{% if icaro.ade_tasks.twilio_account_sid is defined and
+icaro.ade_tasks.twilio_auth_token is defined and
+icaro.ade_tasks.twilio_service_sid is defined %}
+            "account_sid": "{{ icaro.ade_tasks.twilio_account_sid }}",
+            "auth_token": "{{ icaro.ade_tasks.twilio_auth_token }}",
+            "service_sid": "{{ icaro.ade_tasks.twilio_service_sid }}"
+
+{% endif %}
+        }
+    },
+    "shortener": {
+        "base_url": "https://{{ icaro.hostname }}/ade/short/"
+    }
+
+}
