@@ -13,6 +13,7 @@ Icaro is divided in 4 parts:
   - [Sun UI](https://github.com/nethesis/icaro/tree/master/sun/sun-ui): web interface written in [Vue.js](https://vuejs.org/) respecting [Patternfly](http://www.patternfly.org) design
   - [Sun API](https://github.com/nethesis/icaro/tree/master/sun/sun-api): [APIs]({{site.api_url}}) used by Sun UI, implemented using [Golang ](https://golang.org/)
   - [Sun Tasks](https://github.com/nethesis/icaro/tree/master/sun/sun-tasks): Golang applications to terminated sessions and cleanup invalid tokens
+- Ade: Surveys applications which is dived in 3 parts
   - [Ade UI](https://github.com/nethesis/icaro/tree/master/ade/ade-ui): web interface written with VueJs that handles the feedbacks and reviews using tokens for each user.
   - [Ade API](https://github.com/nethesis/icaro/tree/master/ade/ade-api): used by Ade UI, implemented in [Golang ](https://golang.org/), handles the requests and send email to hotspot's owner
   - [Ade tasks](https://github.com/nethesis/icaro/tree/master/ade/ade-tasks): a cronjob that check if users need to receive surveys (feedbacks or reviews)

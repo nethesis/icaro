@@ -184,4 +184,4 @@ This variables are common to all backends:
 ### Ade specific variables
 
 ##### Survey
-* `SURVEY_URL` Url to host the Ade UI componente
+* `SURVEY_URL` Url to host the Ade UI component
