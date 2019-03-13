@@ -47,6 +47,22 @@
     host: "%"
     state: present
 
+- name: Create Ade-Api's user
+  mysql_user:
+    name: "{{ icaro.ade_api.db_username }}"
+    password: "{{ icaro.ade_api.db_password }}"
+    priv: "icaro.*:INSERT,SELECT,UPDATE,DELETE"
+    host: "%"
+    state: present
+
+- name: Create Ade-Tasks's user
+  mysql_user:
+    name: "{{ icaro.ade_tasks.db_username }}"
+    password: "{{ icaro.ade_tasks.db_password }}"
+    priv: "icaro.*:INSERT,SELECT,UPDATE,DELETE"
+    host: "%"
+    state: present
+
 - stat:
     path: /root/.my.cnf
   register: mariadb_pass
