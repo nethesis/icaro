@@ -33,3 +33,9 @@ http://{$ICARO_HOSTNAME}/wings {
   }
   log / stdout {combined}
 }
+
+{$ICARO_HOSTNAME}/survey {
+  root /opt/icaro/ade-ui
+  gzip
+  log / stdout {combined}
+}

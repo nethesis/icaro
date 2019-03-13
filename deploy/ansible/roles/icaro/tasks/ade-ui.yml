@@ -1,0 +1,24 @@
+---
+- name: Create Ade-ui root directory
+  file:
+    path: /opt/icaro/ade-ui/
+    state: directory
+    recurse: yes
+
+- name: Download Ade-ui package
+  get_url:
+    url: "{{ icaro.url }}/releases/download/{{ icaro.version }}/ade-ui.tar.gz"
+    force: yes
+    dest: /tmp/ade-ui.tar.gz
+
+- name: Unpack Ade-ui package
+  unarchive:
+    src: /tmp/ade-ui.tar.gz
+    dest: /opt/icaro/ade-ui/
+    remote_src: yes
+
+- name: Remove temp files
+  file:
+    path:
+      - /tmp/ade-ui.tar.gz
+    state: absent

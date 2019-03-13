@@ -1,4 +1,5 @@
 ---
 - import_tasks: sun-ui.yml
+- import_tasks: ade-ui.yml
 - import_tasks: wings.yml
 - import_tasks: caddy.yml
