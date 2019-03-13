@@ -3,6 +3,7 @@ https://{$ICARO_HOSTNAME} {
   gzip
   proxy /api {$SUN_API_ORIGIN}
   proxy /wax {$WAX_ORIGIN}
+  proxy /ade {$ADE_API_ORIGIN}
 {% if icaro.tls is defined and icaro.tls == "self_signed" %}
   tls self_signed
 {% elif icaro.tls is defined and icaro.tls == "manual" %}

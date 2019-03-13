@@ -11,6 +11,10 @@
   roles:
     - role: sun
 
+- hosts: ade
+  roles:
+    - role: ade
+
 - hosts: icarodb
   roles:
     - role: icarodb

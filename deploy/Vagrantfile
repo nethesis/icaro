@@ -33,6 +33,7 @@ Vagrant.configure("2") do |config|
       "icaro" => ["icaro"],
       "sun" => ["icaro"],
       "wax" => ["icaro"],
+      "ade" => ["icaro"],
       "icarodb" => ["icaro"]
     }
   end
