@@ -70,7 +70,7 @@ type Configuration struct {
 	} `json:"captive_portal"`
 	Survey struct {
 		Url string `json:"url"`
-	}
+	} `json:"survey"`
 }
 
 var Config = Configuration{}
@@ -194,6 +194,10 @@ func Init(ConfigFilePtr *string) {
 	}
 	if os.Getenv("CAPTIVE_BANNER") != "" {
 		Config.CaptivePortal.Banner = os.Getenv("CAPTIVE_BANNER")
+	}
+
+	if os.Getenv("SURVEY_URL") != "" {
+		Config.Survey.Url = os.Getenv("SURVEY_URL")
 	}
 
 	Config.CaptivePortal.LogoContents = ""
