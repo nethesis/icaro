@@ -2,46 +2,71 @@
   <div>
     <h2>{{ msg }}</h2>
     <div v-if="isLoading" class="spinner spinner-lg"></div>
-    <button v-if="rows.length > 0 && !isLoading && !isAdmin" data-toggle="modal" data-target="#HScreateModal" class="btn btn-primary btn-lg create-hotspot">
-      {{ $t('hotspot.create_new') }} </button>
-    <div v-if="rows.length == 0 && !isLoading && !isAdmin" class="blank-slate-pf " id="">
+    <button
+      v-if="rows.length > 0 && !isLoading && !isAdmin"
+      data-toggle="modal"
+      data-target="#HScreateModal"
+      class="btn btn-primary btn-lg create-hotspot"
+    >{{ $t('hotspot.create_new') }}</button>
+    <div v-if="rows.length == 0 && !isLoading && !isAdmin" class="blank-slate-pf" id>
       <div class="blank-slate-pf-icon">
         <span class="fa fa-wifi"></span>
       </div>
-      <h1>
-        {{ $t('hotspot.no_hotspot_found') }}
-      </h1>
-      <p>
-        {{ $t('hotspot.no_hotspot_found_sub') }}.
-      </p>
+      <h1>{{ $t('hotspot.no_hotspot_found') }}</h1>
+      <p>{{ $t('hotspot.no_hotspot_found_sub') }}.</p>
       <div class="blank-slate-pf-main-action">
-        <button data-toggle="modal" data-target="#HScreateModal" class="btn btn-primary btn-lg"> {{ $t('hotspot.create_new') }} </button>
+        <button
+          data-toggle="modal"
+          data-target="#HScreateModal"
+          class="btn btn-primary btn-lg"
+        >{{ $t('hotspot.create_new') }}</button>
       </div>
     </div>
-    <div v-if="rows.length > 0 && !isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div
+      v-if="rows.length > 0 && !isLoading"
+      class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12"
+    >
       <div class="col-sm-3">
         <button class="btn btn-primary" @click="getAll()">{{$t('session.refresh')}}</button>
       </div>
     </div>
-    <div v-if="!isLoading && rows.length > 0" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div
+      v-if="!isLoading && rows.length > 0"
+      class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12"
+    >
       <div class="result-list">{{total}} {{total == 1 ? $t('result') : $t('results')}}</div>
     </div>
     <div v-if="!isLoading">
       <form v-on:submit.prevent="searchFn($event)">
-        <input class="form-control input-lg search-table-input" type="text" :placeholder="tableLangsTexts.globalSearchPlaceholder">
+        <input
+          class="form-control input-lg search-table-input"
+          type="text"
+          :placeholder="tableLangsTexts.globalSearchPlaceholder"
+        >
       </form>
     </div>
     <div v-if="!isLoading && isLoadingTable" class="spinner spinner-lg spinner-adjust"></div>
-    <vue-good-table v-if="rows.length > 0 && !isLoading && !isLoadingTable" @perPageChanged="handlePerPage" :customRowsPerPageDropdown="[25,50,100]"
-      :perPage="hotspotPerPage" :columns="columns" :rows="rows" :lineNumbers="false" :defaultSortBy="{field: 'name', type: 'asc'}"
-      :globalSearch="true" :paginate="false" styleClass="table" :nextText="tableLangsTexts.nextText"
-      :prevText="tableLangsTexts.prevText" :rowsPerPageText="tableLangsTexts.rowsPerPageText" :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
-      :ofText="tableLangsTexts.ofText">
+    <vue-good-table
+      v-if="!isLoading && !isLoadingTable"
+      @perPageChanged="handlePerPage"
+      :customRowsPerPageDropdown="[25,50,100]"
+      :perPage="hotspotPerPage"
+      :columns="columns"
+      :rows="rows"
+      :lineNumbers="false"
+      :defaultSortBy="{field: 'name', type: 'asc'}"
+      :globalSearch="true"
+      :paginate="false"
+      styleClass="table"
+      :nextText="tableLangsTexts.nextText"
+      :prevText="tableLangsTexts.prevText"
+      :rowsPerPageText="tableLangsTexts.rowsPerPageText"
+      :globalSearchPlaceholder="tableLangsTexts.globalSearchPlaceholder"
+      :ofText="tableLangsTexts.ofText"
+    >
       <template slot="table-row" slot-scope="props">
         <td>
-          <a :href="'#/hotspots/'+ props.row.id">
-            {{ props.row.name }}
-          </a>
+          <a :href="'#/hotspots/'+ props.row.id">{{ props.row.name }}</a>
         </td>
         <td class="fancy">{{ props.row.description }}</td>
         <td v-if="props.row.business_name.length > 0" class="fancy">{{ props.row.business_name }}</td>
@@ -54,7 +79,10 @@
           <span class="pficon pficon-error-circle-o"></span>
           <span class="red">{{$t('hotspot.missing_business_vat')}}</span>
         </td>
-        <td v-if="props.row.business_address.length > 0" class="fancy">{{ props.row.business_address }}</td>
+        <td
+          v-if="props.row.business_address.length > 0"
+          class="fancy"
+        >{{ props.row.business_address }}</td>
         <td v-if="props.row.business_address.length == 0" class="fancy">
           <span class="pficon pficon-error-circle-o"></span>
           <span class="red">{{$t('hotspot.missing_business_address')}}</span>
@@ -70,15 +98,33 @@
         </td>
       </template>
     </vue-good-table>
-    <div v-if="!isLoadingTable && !isLoading" class="right paginator">
+    <div v-if="!isLoadingTable && !isLoading && rows.length > 0" class="right paginator">
       <span class="page-count">
-        <b>{{hotspotPage}}</b> {{tableLangsTexts.ofText}} {{total / hotspotPerPage | adjustPage}} (
-        <b>{{hotspotPerPage}}</b> {{tableLangsTexts.rowsPerPageText}})</span>
-      <button :disabled="availablePrevPage()" @click="prevPage()" class="btn btn-default">{{tableLangsTexts.prevText}}</button>
-      <button :disabled="availableNextPage()" @click="nextPage()" class="btn btn-default">{{tableLangsTexts.nextText}}</button>
+        <b>{{hotspotPage}}</b>
+        {{tableLangsTexts.ofText}} {{total / hotspotPerPage | adjustPage}} (
+        <b>{{hotspotPerPage}}</b>
+        {{tableLangsTexts.rowsPerPageText}})
+      </span>
+      <button
+        :disabled="availablePrevPage()"
+        @click="prevPage()"
+        class="btn btn-default"
+      >{{tableLangsTexts.prevText}}</button>
+      <button
+        :disabled="availableNextPage()"
+        @click="nextPage()"
+        class="btn btn-default"
+      >{{tableLangsTexts.nextText}}</button>
     </div>
 
-    <div class="modal fade" id="HScreateModal" tabindex="-1" role="dialog" aria-labelledby="HScreateModalLabel" aria-hidden="true">
+    <div
+      class="modal fade"
+      id="HScreateModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="HScreateModalLabel"
+      aria-hidden="true"
+    >
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -90,45 +136,106 @@
           <form class="form-horizontal" role="form" v-on:submit.prevent="createHotspot()">
             <div class="modal-body">
               <div class="form-group">
-                <label class="col-sm-4 control-label" for="textInput-modal-markup">{{ $t("hotspot.name") }}</label>
+                <label
+                  class="col-sm-4 control-label"
+                  for="textInput-modal-markup"
+                >{{ $t("hotspot.name") }}</label>
                 <div class="col-sm-8">
-                  <input required v-model="newObj.name" pattern="^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$"
-                    type="text" id="textInput-modal-markup" class="form-control" :placeholder="$t('hotspot.hostname_hotspot')">
+                  <input
+                    required
+                    v-model="newObj.name"
+                    pattern="^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$"
+                    type="text"
+                    id="textInput-modal-markup"
+                    class="form-control"
+                    :placeholder="$t('hotspot.hostname_hotspot')"
+                  >
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-4 control-label" for="textInput2-modal-markup">{{ $t("hotspot.description") }}</label>
+                <label
+                  class="col-sm-4 control-label"
+                  for="textInput2-modal-markup"
+                >{{ $t("hotspot.description") }}</label>
                 <div class="col-sm-8">
-                  <input required v-model="newObj.description" type="text" id="textInput2-modal-markup" class="form-control" :placeholder="$t('hotspot.description')">
+                  <input
+                    required
+                    v-model="newObj.description"
+                    type="text"
+                    id="textInput2-modal-markup"
+                    class="form-control"
+                    :placeholder="$t('hotspot.description')"
+                  >
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-4 control-label" for="textInput2-modal-markup">{{ $t("hotspot.business_name") }}</label>
+                <label
+                  class="col-sm-4 control-label"
+                  for="textInput2-modal-markup"
+                >{{ $t("hotspot.business_name") }}</label>
                 <div class="col-sm-8">
-                  <input required v-model="newObj.business_name" type="text" id="textInput2-modal-markup" class="form-control" :placeholder="$t('hotspot.business_name')">
+                  <input
+                    required
+                    v-model="newObj.business_name"
+                    type="text"
+                    id="textInput2-modal-markup"
+                    class="form-control"
+                    :placeholder="$t('hotspot.business_name')"
+                  >
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-4 control-label" for="textInput2-modal-markup">{{ $t("hotspot.business_vat") }}</label>
+                <label
+                  class="col-sm-4 control-label"
+                  for="textInput2-modal-markup"
+                >{{ $t("hotspot.business_vat") }}</label>
                 <div class="col-sm-8">
-                  <input required v-model="newObj.business_vat" type="text" id="textInput2-modal-markup" class="form-control" :placeholder="$t('hotspot.business_vat')">
+                  <input
+                    required
+                    v-model="newObj.business_vat"
+                    type="text"
+                    id="textInput2-modal-markup"
+                    class="form-control"
+                    :placeholder="$t('hotspot.business_vat')"
+                  >
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-4 control-label" for="textInput2-modal-markup">{{ $t("hotspot.business_address") }}</label>
+                <label
+                  class="col-sm-4 control-label"
+                  for="textInput2-modal-markup"
+                >{{ $t("hotspot.business_address") }}</label>
                 <div class="col-sm-8">
-                  <input required v-model="newObj.business_address" type="text" id="textInput2-modal-markup" class="form-control" :placeholder="$t('hotspot.business_address')">
+                  <input
+                    required
+                    v-model="newObj.business_address"
+                    type="text"
+                    id="textInput2-modal-markup"
+                    class="form-control"
+                    :placeholder="$t('hotspot.business_address')"
+                  >
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-4 control-label" for="textInput2-modal-markup">{{ $t("hotspot.business_email") }}</label>
+                <label
+                  class="col-sm-4 control-label"
+                  for="textInput2-modal-markup"
+                >{{ $t("hotspot.business_email") }}</label>
                 <div class="col-sm-8">
-                  <input required v-model="newObj.business_email" type="email" id="textInput2-modal-markup" class="form-control" :placeholder="$t('hotspot.business_email')">
+                  <input
+                    required
+                    v-model="newObj.business_email"
+                    type="email"
+                    id="textInput2-modal-markup"
+                    class="form-control"
+                    :placeholder="$t('hotspot.business_email')"
+                  >
                 </div>
               </div>
               <div v-if="errors.create" class="alert alert-danger alert-dismissable">
                 <span class="pficon pficon-error-circle-o"></span>
-                <strong>{{ $t("hotspot.create_error_title") }}</strong>. {{ $t("hotspot.create_error_sub") }}.
+                <strong>{{ $t("hotspot.create_error_title") }}</strong>
+                . {{ $t("hotspot.create_error_sub") }}.
               </div>
             </div>
             <div class="modal-footer">
