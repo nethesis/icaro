@@ -113,7 +113,9 @@ func sendSurveys() {
 				marketingFirstAfterInt, _ := strconv.Atoi(marketingFirstAfter.Value)
 				if adeToken.FeedbackSentTime.IsZero() && u.Created.Add(time.Duration(marketingFirstAfterInt)*time.Hour).Before(time.Now()) {
 					// send mail
-					utils.SendFeedBackMessageToUser(adeToken, u, hotspotName.Value, hotspotLogo.Value, hotspotBg.Value, hotspot)
+					if len(u.Email) > 0 {
+						utils.SendFeedBackMessageToUser(adeToken, u, hotspotName.Value, hotspotLogo.Value, hotspotBg.Value, hotspot)
+					}
 
 					// check if sms is enabled
 					if marketingSMS.Value == "true" {
@@ -136,7 +138,9 @@ func sendSurveys() {
 					marketingSecondAfterDaysInt, _ := strconv.Atoi(marketingSecondAfterDays.Value)
 					if adeToken.ReviewSentTime.IsZero() && u.Created.AddDate(0, 0, marketingSecondAfterDaysInt).Before(time.Now()) {
 						// send mail
-						utils.SendReviewMessageToUser(adeToken, u, hotspotName.Value, hotspotLogo.Value, hotspotBg.Value, hotspot)
+						if len(u.Email) > 0 {
+							utils.SendReviewMessageToUser(adeToken, u, hotspotName.Value, hotspotLogo.Value, hotspotBg.Value, hotspot)
+						}
 
 						// check if sms is enabled
 						if marketingSMS.Value == "true" {
@@ -152,7 +156,9 @@ func sendSurveys() {
 				case "expiration":
 					if adeToken.ReviewSentTime.IsZero() && u.ValidUntil.Before(time.Now()) {
 						// send mail
-						utils.SendReviewMessageToUser(adeToken, u, hotspotName.Value, hotspotLogo.Value, hotspotBg.Value, hotspot)
+						if len(u.Email) > 0 {
+							utils.SendReviewMessageToUser(adeToken, u, hotspotName.Value, hotspotLogo.Value, hotspotBg.Value, hotspot)
+						}
 
 						// check if sms is enabled
 						if marketingSMS.Value == "true" {
