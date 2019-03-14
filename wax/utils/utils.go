@@ -329,11 +329,15 @@ func GenerateShortURL(longURL string) string {
 	//Encode the first 7 digits in Base64 without padding and url safe
 	encoded := base64.URLEncoding.WithPadding(base64.NoPadding).EncodeToString([]byte(s))
 
-	shortUrl.Hash = encoded
-	shortUrl.CreatedAt = time.Now().UTC()
-	shortUrl.LongUrl = longURL
+	db.Where("hash = ? ", encoded).First(&shortUrl)
 
-	db.Save(&shortUrl)
+	if shortUrl.Id == 0 {
+		shortUrl.Hash = encoded
+		shortUrl.CreatedAt = time.Now().UTC()
+		shortUrl.LongUrl = longURL
+
+		db.Save(&shortUrl)
+	}
 
 	return configuration.Config.Shortener.BaseUrl + encoded
 }
