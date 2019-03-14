@@ -11,7 +11,7 @@
         <p>{{ $t("social.auth_success_sub") }}...</p>
       </div>
     </div>
-    <div v-if="authorized && hotspot.preferences.marketing_0_reason_country == 'true'">
+    <div v-if="authorized && hotspot.preferences.marketing_0_reason_country == 'true' && userId != 0">
       <h3>{{ $t("login.additional_info") }}</h3>
       <div class="inline field">
         <label>{{ $t("login.country") }}</label>
