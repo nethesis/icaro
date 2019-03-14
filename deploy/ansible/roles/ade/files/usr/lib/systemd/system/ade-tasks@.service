@@ -6,6 +6,7 @@ After=network.target cloud-init.service
 Type=simple
 PrivateTmp=true
 EnvironmentFile=-/opt/icaro/ade-tasks/conf.env
+WorkingDirectory=/opt/icaro/ade-tasks/
 ExecStart=/opt/icaro/ade-tasks/ade-tasks -a %i -w
 Restart=on-failure
 RestartSec=10
