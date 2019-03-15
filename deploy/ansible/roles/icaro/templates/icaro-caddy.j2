@@ -37,6 +37,11 @@ http://{$ICARO_HOSTNAME}/wings {
 {$ICARO_HOSTNAME}/survey {
   root /opt/icaro/ade-ui
   gzip
+{% if icaro.tls is defined and icaro.tls == "self_signed" %}
+  tls self_signed
+{% elif icaro.tls is defined and icaro.tls == "manual" %}
+  tls /opt/icaro/{$ICARO_HOSTNAME}_cert.pem /opt/icaro/{$ICARO_HOSTNAME}_private_key.pem
+{% endif %}
   log / stdout {combined}
 }
 
