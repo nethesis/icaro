@@ -13,7 +13,7 @@
     </div>
     <div v-if="authorized && hotspot.preferences.marketing_0_reason_country == 'true' && userId != 0">
       <h3>{{ $t("login.additional_info") }}</h3>
-      <div class="inline field">
+      <div class="field">
         <label>{{ $t("login.country") }}</label>
         <div class="ui big left icon input">
           <select v-model="additionalCountry">
@@ -21,7 +21,7 @@
           </select>
         </div>
       </div>
-      <div class="inline field">
+      <div class="field">
         <label>{{ $t("login.reason") }}</label>
         <div class="ui big left icon input">
           <select v-model="additionalReason">

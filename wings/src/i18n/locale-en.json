@@ -39,7 +39,7 @@
         "email": {
             "insert_email": "Insert your email",
             "insert_your_code": "Insert password",
-            "code": "password",
+            "code": "Password",
             "have_code": "Enter with your password",
             "not_have_code": "Request a password",
             "get_code": "Request a password",
@@ -60,7 +60,7 @@
             "number": "Number",
             "insert_number": "Insert your number",
             "insert_your_code": "Insert password",
-            "code": "password",
+            "code": "Password",
             "have_code": "Enter with your password",
             "not_have_code": "Request a password",
             "get_code": "Request a password",

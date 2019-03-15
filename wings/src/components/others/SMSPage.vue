@@ -3,7 +3,7 @@
     <div v-if="!dedaloRequested">
       <div
         v-if="choosedMode && !this.$route.query.num"
-        class="inline field"
+        class="field"
         v-bind:class="{ error: errors.badInput }"
       >
         <label>{{ $t("sms.prefix") }}</label>
@@ -16,7 +16,7 @@
           </select>
         </div>
       </div>
-      <div v-if="choosedMode" class="inline field">
+      <div v-if="choosedMode" class="field">
         <label>{{ $t("sms.number") }}</label>
         <div class="ui big left icon input">
           <input v-model="authSMS" type="tel" :placeholder="$t('sms.insert_number')">
@@ -56,7 +56,7 @@
         </div>
       </div>
       <div v-if="codeRequested">
-        <div class="inline field">
+        <div class="field">
           <label>{{ $t("sms.code") }}</label>
           <div class="ui big left icon input">
             <input v-model="authCode" type="number" :placeholder="$t('sms.insert_your_code')">
@@ -90,9 +90,11 @@
           <p>{{ $t("sms.auth_success_sub") }}...</p>
         </div>
       </div>
-      <div v-if="authorized && hotspot.preferences.marketing_0_reason_country == 'true'  && userId != 0">
+      <div
+        v-if="authorized && hotspot.preferences.marketing_0_reason_country == 'true'  && userId != 0"
+      >
         <h3>{{ $t("login.additional_info") }}</h3>
-        <div class="inline field">
+        <div class="field">
           <label>{{ $t("login.country") }}</label>
           <div class="ui big left icon input">
             <select v-model="additionalCountry">
@@ -100,7 +102,7 @@
             </select>
           </div>
         </div>
-        <div class="inline field">
+        <div class="field">
           <label>{{ $t("login.reason") }}</label>
           <div class="ui big left icon input">
             <select v-model="additionalReason">
@@ -162,7 +164,7 @@ export default {
     );
 
     var countries = require("./../../i18n/countries.json");
-    var authPrefix = !this.$route.query.num ? countries[0].dial_code : "";
+    var authPrefix = !this.$route.query.num ? "+39" : "";
 
     return {
       authorized: false,

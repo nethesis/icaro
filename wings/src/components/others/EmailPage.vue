@@ -1,7 +1,7 @@
 <template>
   <div class="ui segment form">
     <div v-if="!dedaloRequested">
-      <div v-if="choosedMode" class="inline field" v-bind:class="{ error: errors.badInput }">
+      <div v-if="choosedMode" class="field" v-bind:class="{ error: errors.badInput }">
         <label>Email</label>
         <div class="ui big left icon input">
           <input v-model="authEmail" type="email" :placeholder="$t('email.insert_email')">
@@ -42,7 +42,7 @@
         </div>
       </div>
       <div v-if="codeRequested">
-        <div class="inline field">
+        <div class="field">
           <label>{{ $t("email.code") }}</label>
           <div class="ui big left icon input">
             <input v-model="authCode" type="number" :placeholder="$t('email.insert_your_code')">
@@ -76,9 +76,11 @@
           <p>{{ $t("email.auth_success_sub") }}...</p>
         </div>
       </div>
-      <div v-if="authorized && hotspot.preferences.marketing_0_reason_country == 'true' && userId != 0">
+      <div
+        v-if="authorized && hotspot.preferences.marketing_0_reason_country == 'true' && userId != 0"
+      >
         <h3>{{ $t("login.additional_info") }}</h3>
-        <div class="inline field">
+        <div class="field">
           <label>{{ $t("login.country") }}</label>
           <div class="ui big left icon input">
             <select v-model="additionalCountry">
@@ -86,7 +88,7 @@
             </select>
           </div>
         </div>
-        <div class="inline field">
+        <div class="field">
           <label>{{ $t("login.reason") }}</label>
           <div class="ui big left icon input">
             <select v-model="additionalReason">
@@ -152,7 +154,7 @@ export default {
       choosedMode:
         this.$route.query.email && this.$route.query.code ? true : false,
       codeRequested: this.$route.query.code || false,
-      bannerShow: false,
+      bannerShow: this.$route.query.code || false,
       dedaloRequested: false,
       authEmail: this.$route.query.email || "",
       authCode: this.$route.query.code || "",
@@ -218,6 +220,28 @@ export default {
             this.doTempSession(
               this.authEmail,
               function(responseTmp) {
+                // if apple
+                var origin = "http://conncheck." + window.location.host;
+                var pathname = window.location.pathname;
+                var query =
+                  "?digest=" +
+                  params.digest +
+                  "&uuid=" +
+                  params.uuid +
+                  "&sessionid=" +
+                  params.sessionid +
+                  "&uamip=" +
+                  params.uamip +
+                  "&uamport=" +
+                  params.uamport +
+                  "&user=" +
+                  this.userId +
+                  "&code=.&email=" +
+                  this.authEmail;
+
+                window.location.replace(origin + pathname + query);
+
+                // else
                 this.codeRequested = true;
               },
               function(error) {

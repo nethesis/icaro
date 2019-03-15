@@ -43,7 +43,6 @@ var AuthMixin = {
             var sessionid = this.$root.$options.hotspot.sessionid || null
             var uamip = this.$root.$options.hotspot.uamip || null
             var uamport = this.$root.$options.hotspot.uamport || null
-            var uamport = this.$root.$options.hotspot.uamport || null
             var voucher = this.$root.$options.session && this.$root.$options.session['voucherCode'] ? this.$root.$options.session['voucherCode'] : null
 
             return {
