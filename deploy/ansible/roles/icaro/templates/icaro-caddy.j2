@@ -12,7 +12,7 @@ https://{$ICARO_HOSTNAME} {
   log / stdout {combined}
     redir {
     if {path} starts_with /wings
-    / http://{host}{uri}/
+    / http://{host}{uri}
   }
 
 }
@@ -20,7 +20,7 @@ https://{$ICARO_HOSTNAME} {
 http://{$ICARO_HOSTNAME} {
   redir {
     if {path} not_starts_with /wings
-    / https://{host}{uri}/
+    / https://{host}{uri}
   }
 }
 
