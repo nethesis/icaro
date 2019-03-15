@@ -39,3 +39,7 @@ http://{$ICARO_HOSTNAME}/wings {
   gzip
   log / stdout {combined}
 }
+
+http://conncheck.{$ICARO_HOSTNAME} {
+  redir http://{$ICARO_HOSTNAME}{uri}
+}
