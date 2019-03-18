@@ -140,15 +140,6 @@
               <button
                 type="button"
                 class="btn btn-default space-btn"
-                :class="{ 'is-active': isActive.paragraph() }"
-                @click="commands.paragraph"
-              >
-                <span class="fa fa-paragraph"/>
-              </button>
-
-              <button
-                type="button"
-                class="btn btn-default space-btn"
                 :class="{ 'is-active': isActive.heading({ level: 1 }) }"
                 @click="commands.heading({ level: 1 })"
               >H1</button>
@@ -184,7 +175,8 @@
         <div v-if="!isLoadingMarketing" class="col-sm-6">
           <editor-preview :id="'feedback'" :hotspot="hotspot" :html="feedbackEditorHTML"></editor-preview>
           <button
-            @click="testMail('feedback')"
+            type="button"
+            @click="sendTestMail('feedback')"
             class="btn btn-primary test-mail"
           >{{$t('marketing.test_mail')}}</button>
           <p
@@ -302,15 +294,6 @@
               <button
                 type="button"
                 class="btn btn-default space-btn"
-                :class="{ 'is-active': isActive.paragraph() }"
-                @click="commands.paragraph"
-              >
-                <span class="fa fa-paragraph"/>
-              </button>
-
-              <button
-                type="button"
-                class="btn btn-default space-btn"
                 :class="{ 'is-active': isActive.heading({ level: 1 }) }"
                 @click="commands.heading({ level: 1 })"
               >H1</button>
@@ -346,7 +329,8 @@
         <div v-if="!isLoadingMarketing" class="col-sm-6">
           <editor-preview :id="'review'" :hotspot="hotspot" :html="reviewEditorHTML"></editor-preview>
           <button
-            @click="testMail('review')"
+            type="button"
+            @click="sendTestMail('review')"
             class="btn btn-primary test-mail"
           >{{$t('marketing.test_mail')}}</button>
           <p
@@ -737,8 +721,8 @@ export default {
         context.getMarketingInfo();
       });
     },
-    testMail(type) {
-      this.marketingPrefModify(
+    sendTestMail(type) {
+      this.testMail(
         type,
         {
           body: this[type + "EditorHTML"]

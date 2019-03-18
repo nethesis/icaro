@@ -34,7 +34,7 @@ var MarketingService = {
         .post(
           this.$root.$options.api_scheme +
           this.$root.$options.api_host +
-          "/api/marketing/" +
+          "/api/marketing/testmail/" +
           type,
           body, {
             headers: {
