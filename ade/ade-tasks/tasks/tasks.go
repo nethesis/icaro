@@ -100,6 +100,12 @@ func sendSurveys() {
 		var adeToken models.AdeToken
 		db.Where("hotspot_id = ? AND user_id = ?", u.HotspotId, u.Id).First(&adeToken)
 
+		var hotspotFeedbackBodyText models.HotspotPreference
+		db.Where("hotspot_id = ? AND `key` = 'marketing_13_feedback_body_text'", u.HotspotId).Find(&marketingSecondAfterDays)
+
+		var hotspotReviewBodyText models.HotspotPreference
+		db.Where("hotspot_id = ? AND `key` = 'marketing_14_review_body_text'", u.HotspotId).Find(&marketingSecondAfterDays)
+
 		// if token not exists create token
 		if adeToken.Id == 0 {
 			adeToken = utils.CreateAdeToken(u)
@@ -114,7 +120,7 @@ func sendSurveys() {
 				if adeToken.FeedbackSentTime.IsZero() && u.Created.Add(time.Duration(marketingFirstAfterInt)*time.Hour).Before(time.Now()) {
 					// send mail
 					if len(u.Email) > 0 {
-						utils.SendFeedBackMessageToUser(adeToken, u, hotspotName.Value, hotspotLogo.Value, hotspotBg.Value, hotspot)
+						utils.SendFeedBackMessageToUser(adeToken, u, hotspotName.Value, hotspotLogo.Value, hotspotBg.Value, hotspot, hotspotFeedbackBodyText.Value)
 					}
 
 					// check if sms is enabled
@@ -139,7 +145,7 @@ func sendSurveys() {
 					if adeToken.ReviewSentTime.IsZero() && u.Created.AddDate(0, 0, marketingSecondAfterDaysInt).Before(time.Now()) {
 						// send mail
 						if len(u.Email) > 0 {
-							utils.SendReviewMessageToUser(adeToken, u, hotspotName.Value, hotspotLogo.Value, hotspotBg.Value, hotspot)
+							utils.SendReviewMessageToUser(adeToken, u, hotspotName.Value, hotspotLogo.Value, hotspotBg.Value, hotspot, hotspotReviewBodyText.Value)
 						}
 
 						// check if sms is enabled
@@ -157,7 +163,7 @@ func sendSurveys() {
 					if adeToken.ReviewSentTime.IsZero() && u.ValidUntil.Before(time.Now()) {
 						// send mail
 						if len(u.Email) > 0 {
-							utils.SendReviewMessageToUser(adeToken, u, hotspotName.Value, hotspotLogo.Value, hotspotBg.Value, hotspot)
+							utils.SendReviewMessageToUser(adeToken, u, hotspotName.Value, hotspotLogo.Value, hotspotBg.Value, hotspot, hotspotReviewBodyText.Value)
 						}
 
 						// check if sms is enabled

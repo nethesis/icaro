@@ -20,19 +20,19 @@ import (
 )
 
 type reviewSend struct {
-	HotspotName    string
-	HotspotLogo    string
-	HotspotDetails string
-	BgColor        string
-	Url            string
+	HotspotName           string
+	HotspotLogo           string
+	HotspotDetails        string
+	BgColor               string
+	HotspotReviewBodyText string
 }
 
 type feedbackSend struct {
-	HotspotName    string
-	HotspotLogo    string
-	HotspotDetails string
-	BgColor        string
-	Url            string
+	HotspotName             string
+	HotspotLogo             string
+	HotspotDetails          string
+	BgColor                 string
+	HotspotFeedbackBodyText string
 }
 
 type reviewResponse struct {
@@ -93,15 +93,17 @@ func CreateAdeToken(user models.User) models.AdeToken {
 	return adeToken
 }
 
-func SendFeedBackMessageToUser(adeToken models.AdeToken, user models.User, hotspotName string, hotspotLogo string, bgColor string, hotspot models.Hotspot) bool {
+func SendFeedBackMessageToUser(adeToken models.AdeToken, user models.User, hotspotName string, hotspotLogo string, bgColor string, hotspot models.Hotspot, feedbackBodyText string) bool {
 	var userMessage bytes.Buffer
 
+	url := wax_utils.GenerateShortURL(configuration.Config.Survey.Url + "feedbacks/" + adeToken.Token)
+
 	rp := feedbackSend{
-		HotspotName:    hotspotName,
-		HotspotLogo:    hotspotLogo[22:],
-		BgColor:        bgColor,
-		Url:            wax_utils.GenerateShortURL(configuration.Config.Survey.Url + "feedbacks/" + adeToken.Token),
-		HotspotDetails: hotspot.BusinessName + " • " + hotspot.BusinessAddress + " • " + hotspot.BusinessEmail,
+		HotspotName:             hotspotName,
+		HotspotLogo:             hotspotLogo[22:],
+		BgColor:                 bgColor,
+		HotspotDetails:          hotspot.BusinessName + " • " + hotspot.BusinessAddress + " • " + hotspot.BusinessEmail,
+		HotspotFeedbackBodyText: strings.Replace(feedbackBodyText, "$$URL$$", url, -1),
 	}
 
 	t := template.Must(template.ParseFiles("templates/feedback_user.tpl"))
@@ -120,15 +122,17 @@ func SendFeedBackMessageToUser(adeToken models.AdeToken, user models.User, hotsp
 	return status
 }
 
-func SendReviewMessageToUser(adeToken models.AdeToken, user models.User, hotspotName string, hotspotLogo string, bgColor string, hotspot models.Hotspot) bool {
+func SendReviewMessageToUser(adeToken models.AdeToken, user models.User, hotspotName string, hotspotLogo string, bgColor string, hotspot models.Hotspot, reviewBodyText string) bool {
 	var userMessage bytes.Buffer
 
+	url := wax_utils.GenerateShortURL(configuration.Config.Survey.Url + "reviews/" + adeToken.Token)
+
 	rp := reviewSend{
-		HotspotName:    hotspotName,
-		HotspotLogo:    hotspotLogo[22:],
-		BgColor:        bgColor,
-		Url:            wax_utils.GenerateShortURL(configuration.Config.Survey.Url + "reviews/" + adeToken.Token),
-		HotspotDetails: hotspot.BusinessName + " • " + hotspot.BusinessAddress + " • " + hotspot.BusinessEmail,
+		HotspotName:           hotspotName,
+		HotspotLogo:           hotspotLogo[22:],
+		BgColor:               bgColor,
+		HotspotDetails:        hotspot.BusinessName + " • " + hotspot.BusinessAddress + " • " + hotspot.BusinessEmail,
+		HotspotReviewBodyText: strings.Replace(reviewBodyText, "$$URL$$", url, -1),
 	}
 
 	t, err := template.ParseFiles("templates/review_user.tpl")
