@@ -84,34 +84,7 @@
         <img src="data:image/png;base64,{{ .HotspotLogo }}">
     </div>
     <div class="container">
-        <h2>Benvenuto e grazie per averci scelto!</h2>
-        <h3>Per noi la tua soddisfazione è la cosa più importante.</h3>
-        <div>
-            Se hai qualche necessità o vuoi fare una segnalazione non esitare.
-            <br>
-            <br>
-            Invia segnalazione <a href="{{ .Url }}">QUI</a>.
-            <br>
-            <br>
-            <b>Grazie</b>. Un cordiale saluto
-        </div>
-        <h5>
-            {{ .HotspotDetails }}
-        </h5>
-    </div>
-    <div class="divider"></div>
-    <div class="container">
-        <h2>Welcome and thank you for choosing us!</h2>
-        <h3>Your satisfaction is the most important thing for us.</h3>
-        <div>
-            If you have any need or want to report, do not hesitate.
-            <br>
-            <br>
-            Send feedback <a href="{{ .Url }}">HERE</a>.
-            <br>
-            <br>
-            <b>Thank you</b>. Regards
-        </div>
+        {{ .HotspotFeedbackBodyText}}
         <h5>
             {{ .HotspotDetails }}
         </h5>

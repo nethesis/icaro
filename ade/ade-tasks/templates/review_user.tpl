@@ -84,34 +84,7 @@
         <img src="data:image/png;base64,{{ .HotspotLogo }}">
     </div>
     <div class="container">
-        <h2>Grazie per averci scelto!</h2>
-        <h3>Per noi la tua soddisfazione è la cosa più importante.</h3>
-        <div>
-            Se ti va di lasciaci una recensione, clicca il link qui sotto.
-            <br>
-            <br>
-            Lascia recensione <a href="{{ .Url }}">QUI</a>.
-            <br>
-            <br>
-            <b>Grazie</b>. Un cordiale saluto
-        </div>
-        <h5>
-            {{ .HotspotDetails }}
-        </h5>
-    </div>
-    <div class="divider"></div>
-    <div class="container">
-        <h2>Thank you for choosing us!</h2>
-        <h3>Your satisfaction is the most important thing for us.</h3>
-        <div>
-            If you'd like leave us a review, click the link below.
-            <br>
-            <br>
-            Leave review <a href="{{ .Url }}">HERE</a>.
-            <br>
-            <br>
-            <b>Thank you</b>. Regards
-        </div>
+        {{ .HotspotReviewBodyText}}
         <h5>
             {{ .HotspotDetails }}
         </h5>

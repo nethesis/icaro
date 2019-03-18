@@ -69,6 +69,8 @@ func SetDefaultHotspotPreferences(hotspotId int) {
 	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "marketing_10_first_url", Value: ""})
 	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "marketing_11_second_url", Value: ""})
 	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "marketing_12_third_url", Value: ""})
+	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "marketing_13_feedback_body_text", Value: configuration.Config.Survey.FeedbackBodyText})
+	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "marketing_14_review_body_text", Value: configuration.Config.Survey.ReviewBodyText})
 
 }
 
