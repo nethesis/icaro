@@ -45,6 +45,7 @@
         }
 
         h5 {
+            color: white;
             border: none;
             padding: 0 0;
             font-weight: 700;
@@ -85,10 +86,10 @@
     </div>
     <div class="container">
         {{ .HotspotFeedbackBodyText}}
-        <h5>
-            {{ .HotspotDetails }}
-        </h5>
     </div>
+    <h5>
+        {{ .HotspotDetails }}
+    </h5>
 
 </body>
 
