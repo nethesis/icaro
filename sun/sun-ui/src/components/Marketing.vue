@@ -78,6 +78,7 @@
         <div v-if="!isLoadingMarketing" class="col-sm-4">
           <input
             v-model="marketingPrefs.marketing_3_first_email_enabled"
+            @change="handleFeedbackEditor()"
             class="form-control"
             type="checkbox"
           >
@@ -102,6 +103,99 @@
         </div>
       </div>
 
+      <br
+        v-show="!isLoadingMarketing && marketingPrefs.marketing_3_first_email_enabled && marketingPrefs.marketing_1_enabled"
+      >
+
+      <div
+        v-show="!isLoadingMarketing && marketingPrefs.marketing_3_first_email_enabled && marketingPrefs.marketing_1_enabled"
+        class="form-group"
+      >
+        <label
+          v-show="!isLoadingMarketing"
+          class="col-sm-3 control-label"
+          for="textInput-markup"
+        >{{$t('marketing.email_first_template')}}</label>
+        <div v-show="!isLoadingMarketing" class="col-sm-6">
+          <editor-menu-bar :editor="feedbackEditor">
+            <div class="menubar" slot-scope="{ commands, isActive }">
+              <button
+                type="button"
+                class="btn btn-default"
+                :class="{ 'is-active': isActive.bold() }"
+                @click="commands.bold"
+              >
+                <span class="fa fa-bold"/>
+              </button>
+
+              <button
+                type="button"
+                class="btn btn-default"
+                :class="{ 'is-active': isActive.italic() }"
+                @click="commands.italic"
+              >
+                <span class="fa fa-italic"/>
+              </button>
+
+              <button
+                type="button"
+                class="btn btn-default space-btn"
+                :class="{ 'is-active': isActive.paragraph() }"
+                @click="commands.paragraph"
+              >
+                <span class="fa fa-paragraph"/>
+              </button>
+
+              <button
+                type="button"
+                class="btn btn-default space-btn"
+                :class="{ 'is-active': isActive.heading({ level: 1 }) }"
+                @click="commands.heading({ level: 1 })"
+              >H1</button>
+
+              <button
+                type="button"
+                class="btn btn-default"
+                :class="{ 'is-active': isActive.heading({ level: 2 }) }"
+                @click="commands.heading({ level: 2 })"
+              >H2</button>
+
+              <button
+                type="button"
+                class="btn btn-default"
+                :class="{ 'is-active': isActive.heading({ level: 3 }) }"
+                @click="commands.heading({ level: 3 })"
+              >H3</button>
+            </div>
+          </editor-menu-bar>
+          <editor-content id="feedbackEditorContent" :editor="feedbackEditor"/>
+        </div>
+      </div>
+
+      <div
+        v-show="!isLoadingMarketing && marketingPrefs.marketing_3_first_email_enabled && marketingPrefs.marketing_1_enabled"
+        class="form-group"
+      >
+        <label
+          v-if="!isLoadingMarketing"
+          class="col-sm-3 control-label"
+          for="textInput-markup"
+        >{{$t('marketing.email_first_template_preview')}}</label>
+        <div v-if="!isLoadingMarketing" class="col-sm-6">
+          <editor-preview :id="'feedback'" :hotspot="hotspot" :html="feedbackEditorHTML"></editor-preview>
+          <button
+            @click="testMail('feedback')"
+            class="btn btn-primary test-mail"
+          >{{$t('marketing.test_mail')}}</button>
+          <p
+            class="test-mail"
+          >{{$t('marketing.test_mail_to')}}: {{marketingPrefs.marketing_2_feedback_email}}</p>
+        </div>
+      </div>
+
+      <br v-if="marketingPrefs.marketing_3_first_email_enabled">
+      <br v-if="marketingPrefs.marketing_3_first_email_enabled">
+
       <div v-if="!isLoadingMarketing && marketingPrefs.marketing_1_enabled" class="form-group">
         <label v-if="!isLoadingMarketing" class="col-sm-3 control-label" for="textInput-markup">
           {{$t('marketing.email_second')}}
@@ -110,6 +204,7 @@
         <div v-if="!isLoadingMarketing" class="col-sm-4">
           <input
             v-model="marketingPrefs.marketing_4_second_email_enabled"
+            @change="handleReviewEditor()"
             class="form-control"
             type="checkbox"
           >
@@ -169,6 +264,99 @@
           >
         </div>
       </div>
+
+      <br
+        v-show="!isLoadingMarketing && marketingPrefs.marketing_4_second_email_enabled && marketingPrefs.marketing_1_enabled"
+      >
+
+      <div
+        v-show="!isLoadingMarketing && marketingPrefs.marketing_4_second_email_enabled && marketingPrefs.marketing_1_enabled"
+        class="form-group"
+      >
+        <label
+          v-show="!isLoadingMarketing"
+          class="col-sm-3 control-label"
+          for="textInput-markup"
+        >{{$t('marketing.email_second_template')}}</label>
+        <div v-show="!isLoadingMarketing" class="col-sm-6">
+          <editor-menu-bar :editor="reviewEditor">
+            <div class="menubar" slot-scope="{ commands, isActive }">
+              <button
+                type="button"
+                class="btn btn-default"
+                :class="{ 'is-active': isActive.bold() }"
+                @click="commands.bold"
+              >
+                <span class="fa fa-bold"/>
+              </button>
+
+              <button
+                type="button"
+                class="btn btn-default"
+                :class="{ 'is-active': isActive.italic() }"
+                @click="commands.italic"
+              >
+                <span class="fa fa-italic"/>
+              </button>
+
+              <button
+                type="button"
+                class="btn btn-default space-btn"
+                :class="{ 'is-active': isActive.paragraph() }"
+                @click="commands.paragraph"
+              >
+                <span class="fa fa-paragraph"/>
+              </button>
+
+              <button
+                type="button"
+                class="btn btn-default space-btn"
+                :class="{ 'is-active': isActive.heading({ level: 1 }) }"
+                @click="commands.heading({ level: 1 })"
+              >H1</button>
+
+              <button
+                type="button"
+                class="btn btn-default"
+                :class="{ 'is-active': isActive.heading({ level: 2 }) }"
+                @click="commands.heading({ level: 2 })"
+              >H2</button>
+
+              <button
+                type="button"
+                class="btn btn-default"
+                :class="{ 'is-active': isActive.heading({ level: 3 }) }"
+                @click="commands.heading({ level: 3 })"
+              >H3</button>
+            </div>
+          </editor-menu-bar>
+          <editor-content id="reviewEditorContent" :editor="reviewEditor"/>
+        </div>
+      </div>
+
+      <div
+        v-show="!isLoadingMarketing && marketingPrefs.marketing_4_second_email_enabled && marketingPrefs.marketing_1_enabled"
+        class="form-group"
+      >
+        <label
+          v-if="!isLoadingMarketing"
+          class="col-sm-3 control-label"
+          for="textInput-markup"
+        >{{$t('marketing.email_second_template_preview')}}</label>
+        <div v-if="!isLoadingMarketing" class="col-sm-6">
+          <editor-preview :id="'review'" :hotspot="hotspot" :html="reviewEditorHTML"></editor-preview>
+          <button
+            @click="testMail('review')"
+            class="btn btn-primary test-mail"
+          >{{$t('marketing.test_mail')}}</button>
+          <p
+            class="test-mail"
+          >{{$t('marketing.test_mail_to')}}: {{marketingPrefs.marketing_2_feedback_email}}</p>
+        </div>
+      </div>
+
+      <br v-if="marketingPrefs.marketing_4_second_email_enabled">
+      <br v-if="marketingPrefs.marketing_4_second_email_enabled">
 
       <div v-if="!isLoadingMarketing && marketingPrefs.marketing_1_enabled" class="form-group">
         <label v-if="!isLoadingMarketing" class="col-sm-3 control-label" for="textInput-markup">
@@ -277,10 +465,39 @@ import MarketingService from "../services/marketing";
 import UtilService from "../services/util";
 import StorageService from "../services/storage";
 import HotspotService from "../services/hotspot";
+import PreferenceService from "../services/preference";
+
+import EditorPreview from "../directives/EditorPreview.vue";
+
+import { Editor, EditorContent, EditorMenuBar } from "tiptap";
+import { Heading, Bold, Italic } from "tiptap-extensions";
 
 export default {
   name: "Unit",
-  mixins: [HotspotService, UtilService, MarketingService, StorageService],
+  mixins: [
+    HotspotService,
+    UtilService,
+    MarketingService,
+    StorageService,
+    PreferenceService
+  ],
+  components: {
+    EditorContent,
+    EditorMenuBar,
+    EditorPreview
+  },
+  beforeRouteLeave(to, from, next) {
+    if (this.feedbackEditor) {
+      this.feedbackEditor.destroy();
+      this.feedbackEditor = null;
+    }
+
+    if (this.reviewEditor) {
+      this.reviewEditor.destroy();
+      this.reviewEditor = null;
+    }
+    next();
+  },
   data() {
     return {
       msg: this.$i18n.t("menu.marketing"),
@@ -303,7 +520,12 @@ export default {
       },
       hotspotSearchId: 0,
       hotspots: [],
-      user: this.get("loggedUser") || null
+      hotspot: {},
+      user: this.get("loggedUser") || null,
+      feedbackEditor: null,
+      reviewEditor: null,
+      feedbackEditorHTML: "",
+      reviewEditorHTML: ""
     };
   },
   mounted() {
@@ -314,6 +536,44 @@ export default {
     });
   },
   methods: {
+    handleFeedbackEditor() {
+      if (this.marketingPrefs.marketing_3_first_email_enabled) {
+        this.feedbackEditor = new Editor({
+          extensions: [
+            new Heading({ levels: [1, 2, 3] }),
+            new Bold(),
+            new Italic()
+          ],
+          content: this.marketingPrefs.marketing_13_feedback_body_text,
+          onUpdate: ({ getJSON, getHTML }) => {
+            this.feedbackEditorHTML = getHTML();
+          }
+        });
+        this.feedbackEditorHTML = this.marketingPrefs.marketing_13_feedback_body_text;
+      } else {
+        this.feedbackEditor.destroy();
+        this.feedbackEditor = null;
+      }
+    },
+    handleReviewEditor() {
+      if (this.marketingPrefs.marketing_4_second_email_enabled) {
+        this.reviewEditor = new Editor({
+          extensions: [
+            new Heading({ levels: [1, 2, 3] }),
+            new Bold(),
+            new Italic()
+          ],
+          content: this.marketingPrefs.marketing_14_review_body_text,
+          onUpdate: ({ getJSON, getHTML }) => {
+            this.reviewEditorHTML = getHTML();
+          }
+        });
+        this.reviewEditorHTML = this.marketingPrefs.marketing_14_review_body_text;
+      } else {
+        this.reviewEditor.destroy();
+        this.reviewEditor = null;
+      }
+    },
     setStars(value) {
       this.marketingPrefs.marketing_9_threshold = value;
     },
@@ -337,25 +597,93 @@ export default {
       );
     },
     getMarketingInfo() {
+      //get hotspot
+      var hsId = this.hotspotSearchId;
+      this.hotspot = this.hotspots.filter(function(h) {
+        return h.id == hsId;
+      })[0];
+
       this.isLoadingMarketing = true;
-      this.marketingPrefGet(
+      if (this.feedbackEditor) {
+        this.feedbackEditor.destroy();
+        this.feedbackEditor = null;
+      }
+
+      if (this.reviewEditor) {
+        this.reviewEditor.destroy();
+        this.reviewEditor = null;
+      }
+
+      this.hsPrefGet(
         this.hotspotSearchId,
         success => {
-          for (var i in success.body) {
-            var pref = success.body[i];
-            if (pref.value == "true") pref.value = true;
+          for (var p in success.body) {
+            var pref = success.body[p];
 
-            if (pref.value == "false") pref.value = false;
-            this.marketingPrefs[pref.key] = pref.value;
+            if (pref.key == "captive_2_title") {
+              this.hotspot.title = pref.value;
+            }
+            if (pref.key == "captive_3_logo") {
+              this.hotspot.logo = pref.value;
+            }
+            if (pref.key == "captive_7_background") {
+              this.hotspot.color = pref.value;
+            }
           }
 
-          this.marketingPrefs.isLoading = false;
-          this.isLoadingMarketing = false;
-          this.set("marketing_hotspot_id", this.hotspotSearchId);
+          this.marketingPrefGet(
+            this.hotspotSearchId,
+            success => {
+              for (var i in success.body) {
+                var pref = success.body[i];
+                if (pref.value == "true") pref.value = true;
+
+                if (pref.value == "false") pref.value = false;
+                this.marketingPrefs[pref.key] = pref.value;
+              }
+
+              this.marketingPrefs.isLoading = false;
+              this.isLoadingMarketing = false;
+              this.set("marketing_hotspot_id", this.hotspotSearchId);
+
+              if (this.marketingPrefs.marketing_3_first_email_enabled) {
+                this.feedbackEditor = new Editor({
+                  extensions: [
+                    new Heading({ levels: [1, 2, 3] }),
+                    new Bold(),
+                    new Italic()
+                  ],
+                  content: this.marketingPrefs.marketing_13_feedback_body_text,
+                  onUpdate: ({ getJSON, getHTML }) => {
+                    this.feedbackEditorHTML = getHTML();
+                  }
+                });
+                this.feedbackEditorHTML = this.marketingPrefs.marketing_13_feedback_body_text;
+              }
+
+              if (this.marketingPrefs.marketing_4_second_email_enabled) {
+                this.reviewEditor = new Editor({
+                  extensions: [
+                    new Heading({ levels: [1, 2, 3] }),
+                    new Bold(),
+                    new Italic()
+                  ],
+                  content: this.marketingPrefs.marketing_14_review_body_text,
+                  onUpdate: ({ getJSON, getHTML }) => {
+                    this.reviewEditorHTML = getHTML();
+                  }
+                });
+                this.reviewEditorHTML = this.marketingPrefs.marketing_14_review_body_text;
+              }
+            },
+            error => {
+              console.error(error.body);
+              this.isLoadingMarketing = false;
+            }
+          );
         },
         error => {
           console.error(error.body);
-          this.isLoadingMarketing = false;
         }
       );
     },
@@ -364,6 +692,19 @@ export default {
 
       var promises = [];
       for (var i in this.marketingPrefs) {
+        if (
+          i == "marketing_13_feedback_body_text" &&
+          this.marketingPrefs["marketing_3_first_email_enabled"]
+        ) {
+          this.marketingPrefs[i] = this.feedbackEditorHTML;
+        }
+        if (
+          i == "marketing_14_review_body_text" &&
+          this.marketingPrefs["marketing_4_second_email_enabled"]
+        ) {
+          this.marketingPrefs[i] = this.reviewEditorHTML;
+        }
+
         var pref = {
           key: i,
           value: this.marketingPrefs[i]
@@ -395,6 +736,20 @@ export default {
         context.marketingPrefs.isLoading = true;
         context.getMarketingInfo();
       });
+    },
+    testMail(type) {
+      this.marketingPrefModify(
+        type,
+        {
+          body: this[type + "EditorHTML"]
+        },
+        success => {
+          console.log(success);
+        },
+        error => {
+          console.error(error);
+        }
+      );
     }
   }
 };
@@ -417,5 +772,25 @@ export default {
 .star-filled:hover {
   cursor: pointer;
   color: #f5c12e;
+}
+
+.menubar {
+  margin-bottom: 8px;
+}
+.space-btn {
+  margin-left: 5px;
+}
+#feedbackEditorContent {
+  padding: 5px;
+  border: 1px solid #bbbbbb;
+  background: white;
+}
+#reviewEditorContent {
+  padding: 5px;
+  border: 1px solid #bbbbbb;
+  background: white;
+}
+.test-mail {
+  margin-top: 8px;
 }
 </style>

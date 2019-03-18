@@ -28,6 +28,21 @@ var MarketingService = {
           }
         )
         .then(success, error);
+    },
+    testMail(type, body, success, error) {
+      this.$http
+        .post(
+          this.$root.$options.api_scheme +
+          this.$root.$options.api_host +
+          "/api/marketing/" +
+          type,
+          body, {
+            headers: {
+              Token: (this.get("loggedUser") && this.get("loggedUser").token) || ""
+            }
+          }
+        )
+        .then(success, error);
     }
   }
 };
