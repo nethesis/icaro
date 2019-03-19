@@ -24,7 +24,7 @@ type surveySend struct {
 	HotspotLogo           string
 	HotspotDetails        string
 	BgColor               string
-	HotspotSurveyBodyText string
+	HotspotSurveyBodyText template.HTML
 }
 
 type reviewResponse struct {
@@ -105,7 +105,7 @@ func compileUserEmailTemplate(Type string, adeToken models.AdeToken, hotspotName
 		HotspotLogo:           hotspotLogo[22:],
 		BgColor:               bgColor,
 		HotspotDetails:        hotspot.BusinessName + " • " + hotspot.BusinessAddress + " • " + hotspot.BusinessEmail,
-		HotspotSurveyBodyText: strings.Replace(BodyText, "$$URL$$", Url, -1),
+		HotspotSurveyBodyText: template.HTML(strings.Replace(BodyText, "$$URL$$", "<a href=\""+Url+"\">Link</a>", -1)),
 	}
 
 	err := t.Execute(&userMessage, &rp)
