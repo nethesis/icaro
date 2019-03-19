@@ -52,10 +52,6 @@
             text-transform: none;
         }
 
-        p {
-            color: red;
-        }
-
         img {
             width: 150px;
         }
