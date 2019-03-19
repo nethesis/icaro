@@ -120,7 +120,7 @@ func sendSurveys() {
 				if adeToken.FeedbackSentTime.IsZero() && u.Created.Add(time.Duration(marketingFirstAfterInt)*time.Hour).Before(time.Now()) {
 					// send mail
 					if len(u.Email) > 0 {
-						utils.SendFeedBackMessageToUser(adeToken, u, hotspotName.Value, hotspotLogo.Value, hotspotBg.Value, hotspot, hotspotFeedbackBodyText.Value)
+						utils.SendFeedBackMessageToUser(adeToken, u.Email, hotspotName.Value, hotspotLogo.Value, hotspotBg.Value, hotspot, hotspotFeedbackBodyText.Value)
 					}
 
 					// check if sms is enabled
@@ -145,7 +145,7 @@ func sendSurveys() {
 					if adeToken.ReviewSentTime.IsZero() && u.Created.AddDate(0, 0, marketingSecondAfterDaysInt).Before(time.Now()) {
 						// send mail
 						if len(u.Email) > 0 {
-							utils.SendReviewMessageToUser(adeToken, u, hotspotName.Value, hotspotLogo.Value, hotspotBg.Value, hotspot, hotspotReviewBodyText.Value)
+							utils.SendReviewMessageToUser(adeToken, u.Email, hotspotName.Value, hotspotLogo.Value, hotspotBg.Value, hotspot, hotspotReviewBodyText.Value)
 						}
 
 						// check if sms is enabled
@@ -163,7 +163,7 @@ func sendSurveys() {
 					if adeToken.ReviewSentTime.IsZero() && u.ValidUntil.Before(time.Now()) {
 						// send mail
 						if len(u.Email) > 0 {
-							utils.SendReviewMessageToUser(adeToken, u, hotspotName.Value, hotspotLogo.Value, hotspotBg.Value, hotspot, hotspotReviewBodyText.Value)
+							utils.SendReviewMessageToUser(adeToken, u.Email, hotspotName.Value, hotspotLogo.Value, hotspotBg.Value, hotspot, hotspotReviewBodyText.Value)
 						}
 
 						// check if sms is enabled

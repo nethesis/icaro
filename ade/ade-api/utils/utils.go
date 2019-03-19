@@ -19,20 +19,12 @@ import (
 	wax_utils "github.com/nethesis/icaro/wax/utils"
 )
 
-type reviewSend struct {
+type surveySend struct {
 	HotspotName           string
 	HotspotLogo           string
 	HotspotDetails        string
 	BgColor               string
-	HotspotReviewBodyText string
-}
-
-type feedbackSend struct {
-	HotspotName             string
-	HotspotLogo             string
-	HotspotDetails          string
-	BgColor                 string
-	HotspotFeedbackBodyText string
+	HotspotSurveyBodyText string
 }
 
 type reviewResponse struct {
@@ -93,64 +85,65 @@ func CreateAdeToken(user models.User) models.AdeToken {
 	return adeToken
 }
 
-func SendFeedBackMessageToUser(adeToken models.AdeToken, user models.User, hotspotName string, hotspotLogo string, bgColor string, hotspot models.Hotspot, feedbackBodyText string) bool {
+func compileUserEmailTemplate(Type string, adeToken models.AdeToken, hotspotName string, hotspotLogo string, bgColor string, hotspot models.Hotspot, BodyText string) (string, bool) {
 	var userMessage bytes.Buffer
+	var templateFile string
+	var Url string
 
-	url := wax_utils.GenerateShortURL(configuration.Config.Survey.Url + "feedbacks/" + adeToken.Token)
-
-	rp := feedbackSend{
-		HotspotName:             hotspotName,
-		HotspotLogo:             hotspotLogo[22:],
-		BgColor:                 bgColor,
-		HotspotDetails:          hotspot.BusinessName + " • " + hotspot.BusinessAddress + " • " + hotspot.BusinessEmail,
-		HotspotFeedbackBodyText: strings.Replace(feedbackBodyText, "$$URL$$", url, -1),
+	switch Type {
+	case "feedback":
+		Url = wax_utils.GenerateShortURL(configuration.Config.Survey.Url + "feedbacks/" + adeToken.Token)
+		templateFile = "templates/feedback_user.tpl"
+	case "review":
+		Url = wax_utils.GenerateShortURL(configuration.Config.Survey.Url + "reviews/" + adeToken.Token)
+		templateFile = "templates/review_user.tpl"
+	default:
+		return "", false
 	}
 
-	t := template.Must(template.ParseFiles("templates/feedback_user.tpl"))
-
-	err := t.Execute(&userMessage, &rp)
-	if err != nil {
-		fmt.Println(err)
-		return false
-	}
-
-	status := SendEmail("Feedback", userMessage.String(), user.Email)
-
-	db := database.Instance()
-	db.Model(&adeToken).Update("feedback_sent_time", time.Now())
-
-	return status
-}
-
-func SendReviewMessageToUser(adeToken models.AdeToken, user models.User, hotspotName string, hotspotLogo string, bgColor string, hotspot models.Hotspot, reviewBodyText string) bool {
-	var userMessage bytes.Buffer
-
-	url := wax_utils.GenerateShortURL(configuration.Config.Survey.Url + "reviews/" + adeToken.Token)
-
-	rp := reviewSend{
+	rp := surveySend{
 		HotspotName:           hotspotName,
 		HotspotLogo:           hotspotLogo[22:],
 		BgColor:               bgColor,
 		HotspotDetails:        hotspot.BusinessName + " • " + hotspot.BusinessAddress + " • " + hotspot.BusinessEmail,
-		HotspotReviewBodyText: strings.Replace(reviewBodyText, "$$URL$$", url, -1),
+		HotspotSurveyBodyText: strings.Replace(BodyText, "$$URL$$", Url, -1),
 	}
 
-	t, err := template.ParseFiles("templates/review_user.tpl")
+	t, _ := template.ParseFiles(templateFile)
+
+	err := t.Execute(&userMessage, &rp)
 	if err != nil {
 		fmt.Println(err)
-		return false
+		return "", false
 	}
 
-	err = t.Execute(&userMessage, &rp)
-	if err != nil {
-		fmt.Println(err)
-		return false
+	return userMessage.String(), true
+}
+
+func SendFeedBackMessageToUser(adeToken models.AdeToken, userEmail string, hotspotName string, hotspotLogo string, bgColor string, hotspot models.Hotspot, BodyText string) bool {
+
+	userMessage, status := compileUserEmailTemplate("feedback", adeToken, hotspotName, hotspotLogo, bgColor, hotspot, BodyText)
+
+	if status {
+		status = SendEmail("Feedback", userMessage, userEmail)
+
+		db := database.Instance()
+		db.Model(&adeToken).Update("feedback_sent_time", time.Now())
 	}
 
-	status := SendEmail("Review", userMessage.String(), user.Email)
+	return status
+}
 
-	db := database.Instance()
-	db.Model(&adeToken).Update("review_sent_time", time.Now())
+func SendReviewMessageToUser(adeToken models.AdeToken, userEmail string, hotspotName string, hotspotLogo string, bgColor string, hotspot models.Hotspot, BodyText string) bool {
+
+	userMessage, status := compileUserEmailTemplate("review", adeToken, hotspotName, hotspotLogo, bgColor, hotspot, BodyText)
+
+	if status {
+		status = SendEmail("Review", userMessage, userEmail)
+
+		db := database.Instance()
+		db.Model(&adeToken).Update("review_sent_time", time.Now())
+	}
 
 	return status
 }

@@ -85,7 +85,7 @@
         <img src="data:image/png;base64,{{ .HotspotLogo }}">
     </div>
     <div class="container">
-        {{ .HotspotFeedbackBodyText}}
+        {{ .HotspotSurveyBodyText }}
     </div>
     <h5>
         {{ .HotspotDetails }}
