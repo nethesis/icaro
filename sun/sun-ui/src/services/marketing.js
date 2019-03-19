@@ -29,12 +29,12 @@ var MarketingService = {
         )
         .then(success, error);
     },
-    testMail(type, body, success, error) {
+    testMail(id, type, body, success, error) {
       this.$http
         .post(
           this.$root.$options.api_scheme +
           this.$root.$options.api_host +
-          "/api/marketing/testmail/" +
+          "/api/marketing/testmail/" + id + "/" +
           type,
           body, {
             headers: {

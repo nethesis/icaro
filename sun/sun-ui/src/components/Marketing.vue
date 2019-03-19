@@ -423,7 +423,7 @@
           for="textInput-markup"
         >{{$t('marketing.third_external_url')}}</label>
         <div v-if="!isLoadingMarketing" class="col-sm-4">
-          <input v-model="marketingPrefs.marketing_12_third_url" class="form-control" type="url">
+          <input placeholder="https://www.facebook.com/MYHOTEL" v-model="marketingPrefs.marketing_12_third_url" class="form-control" type="url">
         </div>
       </div>
 
@@ -723,9 +723,11 @@ export default {
     },
     sendTestMail(type) {
       this.testMail(
+        this.hotspot.id,
         type,
         {
-          body: this[type + "EditorHTML"]
+          body: this[type + "EditorHTML"],
+          to: this.marketingPrefs.marketing_2_feedback_email
         },
         success => {
           console.log(success);
