@@ -6,6 +6,12 @@
     state: directory
     recurse: yes
 
+- name: Create Sun-api templates directory
+  file:
+    path: /opt/icaro/sun-api/templates
+    state: directory
+    recurse: yes
+
 - name: Download default logo
   get_url:
     url: "{{ icaro.sun_api.captive_portal_logo }}"
@@ -28,6 +34,16 @@
   template:
     src: sun-api-conf.j2
     dest: /opt/icaro/sun-api/conf.json
+
+- name: Download Ade-tasks templates
+  get_url:
+    url: "{{ icaro.url }}/raw/{{ icaro.version }}/ade/ade-tasks/templates/{{ item }}"
+    force: true
+    dest: /opt/icaro/sun-api/templates
+    mode: 0644
+  with_items:
+    - feedback_user.tpl
+    - review_user.tpl
 
 - name: Download and install Sun-api executable
   get_url:

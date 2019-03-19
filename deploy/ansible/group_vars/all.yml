@@ -23,6 +23,11 @@ icaro:
     captive_portal_background: "#2a87be"
     captive_portal_logo: "https://raw.githubusercontent.com/nethesis/icaro/master/logo/logo.png"
     captive_portal_banner: "https://raw.githubusercontent.com/nethesis/icaro/master/logo/logo-light.png"
+    email_from: "admin@example.com"
+    email_smtp_host: "EmailSMTPHost"
+    email_smtp_port: "25"
+    email_smtp_user: "EmailSMTPUser"
+    email_smtp_password: "EmailSMTPPassword"
   wax:
     db_hostname: "localhost"
     db_username: "wax"

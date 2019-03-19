@@ -21,6 +21,26 @@
         "logo": "/opt/icaro/static/logo.png",
         "banner": "/opt/icaro/static/banner.png"
     },
+    "survey": {
+        "feedback_body_text": {{ lookup('file', 'files/feedback_body') | to_json }},
+        "review_body_text":  {{ lookup('file', 'files/review_body') | to_json }}
+     },
+    "endpoints": {
+        "email": {
+{% if icaro.sun_api.email_from is defined and
+icaro.sun_api.email_smtp_host is defined and
+icaro.sun_api.email_smtp_port is defined and
+icaro.aun_api.email_smtp_user is defined and
+icaro.sun_api.email_smtp_password is defined %}
+            "from": "{{ icaro.sun_api.email_from }}",
+            "smtp_host": "{{ icaro.sun_api.email_smtp_host }}",
+            "smtp_port": {{ icaro.sun_api.email_smtp_port }},
+            "smtp_user": "{{ icaro.sun_api.email_smtp_user }}",
+            "smtp_password": "{{ icaro.sun_api.email_smtp_password }}",
+{% endif %}
+        }
+    },
+
     "route_blocked": {
     "admin": [{}],
     "customer": [{
