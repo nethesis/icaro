@@ -81,6 +81,8 @@ func DefineAPI(router *gin.Engine) {
 		{
 			marketings.GET("/:hotspot_id", methods.GetHotspotMarketing)
 			marketings.PUT("/:hotspot_id", methods.UpdateHotspotMarketing)
+			marketings.POST("/testmail/:hotspot_id/feedback", methods.SendTestFeedbackEmail)
+			marketings.POST("/testmail/:hotspot_id/review", methods.SendTestReviewEmail)
 		}
 
 		preferences := api.Group("/preferences")

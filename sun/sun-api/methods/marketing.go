@@ -29,6 +29,7 @@ import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 
+	ade_utils "github.com/nethesis/icaro/ade/ade-api/utils"
 	"github.com/nethesis/icaro/sun/sun-api/database"
 	"github.com/nethesis/icaro/sun/sun-api/models"
 	"github.com/nethesis/icaro/sun/sun-api/utils"
@@ -97,4 +98,78 @@ func GetHotspotMarketing(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, preferences)
+}
+
+func SendTestFeedbackEmail(c *gin.Context) {
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
+
+	hotspotId := c.Param("hotspot_id")
+
+	var json models.SurveyTestEmail
+	if err := c.BindJSON(&json); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Request fields malformed", "error": err.Error()})
+		return
+	}
+
+	// convert hotspot id to int
+	hotspotIdInt, err := strconv.Atoi(hotspotId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Hotspot id error", "error": err.Error()})
+		return
+	}
+
+	// check hotspot ownership
+	if utils.Contains(utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt), hotspotIdInt) {
+		prefs := ade_utils.GetHotspotPrefs(hotspotIdInt)
+		hotspot := utils.GetHotspotById(hotspotId)
+
+		status := ade_utils.SendFeedBackMessageToUser(models.AdeToken{}, json.To, prefs["captive_2_title"], prefs["captive_3_logo"], prefs["captive_7_background"], hotspot, json.Body)
+
+		if status {
+			c.JSON(http.StatusOK, gin.H{"status": "success"})
+		} else {
+
+			c.JSON(http.StatusBadRequest, gin.H{"message": "Email send failed."})
+		}
+
+	} else {
+		c.JSON(http.StatusUnauthorized, gin.H{"message": "This hotspot is not yours"})
+	}
+}
+
+func SendTestReviewEmail(c *gin.Context) {
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
+
+	hotspotId := c.Param("hotspot_id")
+
+	var json models.SurveyTestEmail
+	if err := c.BindJSON(&json); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Request fields malformed", "error": err.Error()})
+		return
+	}
+
+	// convert hotspot id to int
+	hotspotIdInt, err := strconv.Atoi(hotspotId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Hotspot id error", "error": err.Error()})
+		return
+	}
+
+	// check hotspot ownership
+	if utils.Contains(utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt), hotspotIdInt) {
+		prefs := ade_utils.GetHotspotPrefs(hotspotIdInt)
+		hotspot := utils.GetHotspotById(hotspotId)
+
+		status := ade_utils.SendReviewMessageToUser(models.AdeToken{}, json.To, prefs["captive_2_title"], prefs["captive_3_logo"], prefs["captive_7_background"], hotspot, json.Body)
+
+		if status {
+			c.JSON(http.StatusOK, gin.H{"status": "success"})
+		} else {
+
+			c.JSON(http.StatusBadRequest, gin.H{"message": "Email send failed."})
+		}
+
+	} else {
+		c.JSON(http.StatusUnauthorized, gin.H{"message": "This hotspot is not yours"})
+	}
 }
