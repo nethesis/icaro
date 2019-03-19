@@ -90,16 +90,15 @@ func compileUserEmailTemplate(Type string, adeToken models.AdeToken, hotspotName
 	var templateFile string
 	var Url string
 
-	switch Type {
-	case "feedback":
-		Url = wax_utils.GenerateShortURL(configuration.Config.Survey.Url + "feedbacks/" + adeToken.Token)
-		templateFile = "templates/feedback_user.tpl"
-	case "review":
-		Url = wax_utils.GenerateShortURL(configuration.Config.Survey.Url + "reviews/" + adeToken.Token)
-		templateFile = "templates/review_user.tpl"
-	default:
-		return "", false
+	if adeToken.Id != 0 {
+		Url = wax_utils.GenerateShortURL(configuration.Config.Survey.Url + Type + "s/" + adeToken.Token)
+	} else {
+		Url = "https://example.org/"
 	}
+
+	templateFile = "templates/" + Type + "_user.tpl"
+
+	t, _ := template.ParseFiles(templateFile)
 
 	rp := surveySend{
 		HotspotName:           hotspotName,
@@ -108,8 +107,6 @@ func compileUserEmailTemplate(Type string, adeToken models.AdeToken, hotspotName
 		HotspotDetails:        hotspot.BusinessName + " • " + hotspot.BusinessAddress + " • " + hotspot.BusinessEmail,
 		HotspotSurveyBodyText: strings.Replace(BodyText, "$$URL$$", Url, -1),
 	}
-
-	t, _ := template.ParseFiles(templateFile)
 
 	err := t.Execute(&userMessage, &rp)
 	if err != nil {
@@ -127,8 +124,10 @@ func SendFeedBackMessageToUser(adeToken models.AdeToken, userEmail string, hotsp
 	if status {
 		status = SendEmail("Feedback", userMessage, userEmail)
 
-		db := database.Instance()
-		db.Model(&adeToken).Update("feedback_sent_time", time.Now())
+		if adeToken.Id != 0 {
+			db := database.Instance()
+			db.Model(&adeToken).Update("feedback_sent_time", time.Now())
+		}
 	}
 
 	return status
@@ -141,8 +140,10 @@ func SendReviewMessageToUser(adeToken models.AdeToken, userEmail string, hotspot
 	if status {
 		status = SendEmail("Review", userMessage, userEmail)
 
-		db := database.Instance()
-		db.Model(&adeToken).Update("review_sent_time", time.Now())
+		if adeToken.Id != 0 {
+			db := database.Instance()
+			db.Model(&adeToken).Update("review_sent_time", time.Now())
+		}
 	}
 
 	return status
