@@ -1,5 +1,5 @@
 Name: dedalo
-Version: 0.2.1
+Version: 0.2.2
 Release: 1%{?dist}
 Summary: Network Access Controller, runs on the firewall and intercepts all guest connections
 
@@ -64,6 +64,9 @@ touch %{buildroot}/opt/icaro/dedalo/walled_gardens/local.conf
 
 
 %changelog
+* Mon Mar 25 2019 Matteo Valentini <matteo.valentini@nethesis.it> - 0.2.2-1
+  - dedalo. add dhcp range support
+
 * Tue Jun 05 2018 Matteo Valentini <matteo.valentini@nethesis.it> - 0.2.1-1
 - sun, wax & dedalo. implemented traffic and time limit for users, api side
 
