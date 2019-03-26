@@ -101,10 +101,10 @@ func sendSurveys() {
 		db.Where("hotspot_id = ? AND user_id = ?", u.HotspotId, u.Id).First(&adeToken)
 
 		var hotspotFeedbackBodyText models.HotspotPreference
-		db.Where("hotspot_id = ? AND `key` = 'marketing_13_feedback_body_text'", u.HotspotId).Find(&marketingSecondAfterDays)
+		db.Where("hotspot_id = ? AND `key` = 'marketing_13_feedback_body_text'", u.HotspotId).Find(&hotspotFeedbackBodyText)
 
 		var hotspotReviewBodyText models.HotspotPreference
-		db.Where("hotspot_id = ? AND `key` = 'marketing_14_review_body_text'", u.HotspotId).Find(&marketingSecondAfterDays)
+		db.Where("hotspot_id = ? AND `key` = 'marketing_14_review_body_text'", u.HotspotId).Find(&hotspotReviewBodyText)
 
 		// if token not exists create token
 		if adeToken.Id == 0 {
