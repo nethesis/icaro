@@ -127,6 +127,10 @@ func sendSurveys() {
 					if marketingSMS.Value == "true" {
 						if u.AccountType == "sms" {
 							status := utils.SendSMS(adeToken, "Leave feedback", "feedbacks", u.Username, u.HotspotId)
+
+							adeToken.FeedbackSentTime = time.Now()
+							db.Save(&adeToken)
+
 							if !status {
 								fmt.Println("Feedback SMS not sent")
 							}
@@ -152,6 +156,10 @@ func sendSurveys() {
 						if marketingSMS.Value == "true" {
 							if u.AccountType == "sms" {
 								status := utils.SendSMS(adeToken, "Leave review", "reviews", u.Username, u.HotspotId)
+
+								adeToken.ReviewSentTime = time.Now()
+								db.Save(&adeToken)
+
 								if !status {
 									fmt.Println("Review SMS not sent")
 								}
@@ -170,6 +178,10 @@ func sendSurveys() {
 						if marketingSMS.Value == "true" {
 							if u.AccountType == "sms" {
 								status := utils.SendSMS(adeToken, "Leave review", "reviews", u.Username, u.HotspotId)
+
+								adeToken.ReviewSentTime = time.Now()
+								db.Save(&adeToken)
+
 								if !status {
 									fmt.Println("Review SMS not sent")
 								}
