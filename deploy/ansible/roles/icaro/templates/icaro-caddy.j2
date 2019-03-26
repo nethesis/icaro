@@ -34,7 +34,7 @@ http://{$ICARO_HOSTNAME}/wings {
   log / stdout {combined}
 }
 
-{$ICARO_HOSTNAME}/survey {
+https://{$ICARO_HOSTNAME}/survey {
   root /opt/icaro/ade-ui
   gzip
 {% if icaro.tls is defined and icaro.tls == "self_signed" %}
