@@ -134,7 +134,7 @@ import { setTimeout } from "timers";
 export default {
   name: "EmailPage",
   mixins: [AuthMixin],
-  data: function() {
+  mounted() {
     var params = this.extractParams();
 
     this.getPreferences(
@@ -143,12 +143,14 @@ export default {
         this.$parent.hotspot.disclaimers = success.body.disclaimers;
         this.$root.$options.hotspot.disclaimers = success.body.disclaimers;
         this.hotspot.disclaimers = success.body.disclaimers;
+        this.hotspot.preferences = success.body.preferences;
       },
       function(error) {
         console.error(error);
       }
     );
-
+  },
+  data: function() {
     return {
       authorized: false,
       choosedMode:

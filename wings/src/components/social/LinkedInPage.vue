@@ -4,7 +4,9 @@
       {{
       $t("social.auth_progress") }}...
     </div>
-    <div v-if="authorized && hotspot.preferences.marketing_0_reason_country == 'true' && userId != 0">
+    <div
+      v-if="authorized && $parent.hotspot.preferences.marketing_0_reason_country == 'true' && userId != 0"
+    >
       <h3>{{ $t("login.additional_info") }}</h3>
       <div class="field">
         <label>{{ $t("login.country") }}</label>
@@ -33,7 +35,7 @@
       </div>
     </div>
     <div
-      :class="hotspot.preferences.marketing_0_reason_country == 'true' ? 'adjust-top-big' : ''"
+      :class="$parent.hotspot.preferences.marketing_0_reason_country == 'true' ? 'adjust-top-big' : ''"
       v-if="authorized"
     >
       <h3>{{ $t("login.disclaimer_marketing") }}</h3>
@@ -44,7 +46,7 @@
         <input id="conditions" v-model="conditions" type="checkbox" class="ui checkbox field">
         <label for="conditions">{{ $t("login.disclaimer_privacy_accept") }}</label>
       </div>
-      <div v-if="hotspot.preferences.marketing_1_enabled == 'true'" class="ui inline">
+      <div v-if="$parent.hotspot.preferences.marketing_1_enabled == 'true'" class="ui inline">
         <input id="surveys" v-model="surveys" type="checkbox" class="ui checkbox field">
         <label for="surveys">{{ $t("login.disclaimer_survey_accept") }}</label>
       </div>
@@ -167,7 +169,7 @@ export default {
       if (!this.conditions) {
         this.deleteMarketingInfo(
           this.userId,
-          params,
+          this.parseState(params.state),
           function(success) {
             context.accept();
           },
@@ -183,7 +185,7 @@ export default {
       if (!this.surveys) {
         this.deleteSurveyInfo(
           this.userId,
-          params,
+          this.parseState(params.state),
           function(success) {
             context.accept();
           },
@@ -202,10 +204,12 @@ export default {
       // extract code and state
       var params = this.extractParams();
 
-      if (this.hotspot.preferences.marketing_0_reason_country == "true") {
+      if (
+        this.$parent.hotspot.preferences.marketing_0_reason_country == "true"
+      ) {
         this.addAdditionalInfo(
           this.userId,
-          params,
+          this.parseState(params.state),
           {
             reason: this.additionalReason,
             country: this.additionalCountry
