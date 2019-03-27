@@ -117,7 +117,7 @@ func sendSurveys() {
 			if marketingFirstEmail.Value == "true" {
 				// check if time to send
 				marketingFirstAfterInt, _ := strconv.Atoi(marketingFirstAfter.Value)
-				if adeToken.FeedbackSentTime.IsZero() && u.Created.Add(time.Duration(marketingFirstAfterInt)*time.Hour).Before(time.Now()) {
+				if adeToken.FeedbackSentTime.IsZero() && u.ValidFrom.Add(time.Duration(marketingFirstAfterInt)*time.Hour).Before(time.Now()) {
 					// send mail
 					if len(u.Email) > 0 {
 						utils.SendFeedBackMessageToUser(adeToken, u.Email, hotspotName.Value, hotspotLogo.Value, hotspotBg.Value, hotspot, hotspotFeedbackBodyText.Value)
@@ -146,7 +146,7 @@ func sendSurveys() {
 				switch marketingSecondAfter.Value {
 				case "days":
 					marketingSecondAfterDaysInt, _ := strconv.Atoi(marketingSecondAfterDays.Value)
-					if adeToken.ReviewSentTime.IsZero() && u.Created.AddDate(0, 0, marketingSecondAfterDaysInt).Before(time.Now()) {
+					if adeToken.ReviewSentTime.IsZero() && u.ValidFrom.AddDate(0, 0, marketingSecondAfterDaysInt).Before(time.Now()) {
 						// send mail
 						if len(u.Email) > 0 {
 							utils.SendReviewMessageToUser(adeToken, u.Email, hotspotName.Value, hotspotLogo.Value, hotspotBg.Value, hotspot, hotspotReviewBodyText.Value)
