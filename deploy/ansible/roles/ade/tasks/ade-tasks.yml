@@ -43,3 +43,9 @@
     name: ade-tasks@send-surveys
     daemon_reload: yes
     enabled: yes
+
+- name: Enable ade-tasks send-surveys-expired service
+  systemd:
+    name: ade-tasks@send-surveys-expired
+    daemon_reload: yes
+    enabled: yes
