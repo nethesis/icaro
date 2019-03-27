@@ -41,8 +41,11 @@ func Init(action string, worker bool) {
 	switch action {
 
 	case "send-surveys":
-		c.AddFunc("@every 1h", sendSurveys)
-		sendSurveys()
+		c.AddFunc("@every 1h", sendSurveysActive)
+		sendSurveysActive()
+	case "send-surveys-expired":
+		c.AddFunc("@every 1h", sendSurveysExpired)
+		sendSurveysExpired()
 
 	default:
 		fmt.Println("Specify a valid action to execute, see -h option")
@@ -54,13 +57,68 @@ func Init(action string, worker bool) {
 	}
 }
 
-func sendSurveys() {
+type User struct {
+	Id          int
+	HotspotId   int
+	Username    string
+	Email       string
+	AccountType string
+	ValidUntil  time.Time
+	ValidFrom   time.Time
+	IsActive    bool
+}
+
+func sendSurveysActive() {
 	var users []models.User
 
 	db := database.Instance()
 
-	// get users with survey auth
 	db.Where("survey_auth = 1").Find(&users)
+
+	usersList := make([]User, len(users))
+
+	for i, u := range users {
+		usersList[i].Id = u.Id
+		usersList[i].HotspotId = u.HotspotId
+		usersList[i].HotspotId = u.HotspotId
+		usersList[i].Username = u.Username
+		usersList[i].Email = u.Email
+		usersList[i].AccountType = u.AccountType
+		usersList[i].ValidUntil = u.ValidUntil
+		usersList[i].ValidFrom = u.ValidFrom
+		usersList[i].IsActive = true
+	}
+
+	sendSurveys(usersList)
+}
+
+func sendSurveysExpired() {
+
+	var users []models.UserHistory
+
+	db := database.Instance()
+
+	db.Where("survey_auth = 1").Find(&users)
+
+	usersList := make([]User, len(users))
+
+	for i, u := range users {
+		usersList[i].Id = u.UserId
+		usersList[i].HotspotId = u.HotspotId
+		usersList[i].Username = u.Username
+		usersList[i].Email = u.Email
+		usersList[i].AccountType = u.AccountType
+		usersList[i].ValidUntil = u.ValidUntil
+		usersList[i].ValidFrom = u.ValidFrom
+		usersList[i].IsActive = false
+	}
+
+	sendSurveys(usersList)
+}
+
+func sendSurveys(users []User) {
+
+	db := database.Instance()
 
 	for _, u := range users {
 		// get hotspot preferences
@@ -107,91 +165,95 @@ func sendSurveys() {
 		db.Where("hotspot_id = ? AND `key` = 'marketing_14_review_body_text'", u.HotspotId).Find(&hotspotReviewBodyText)
 
 		// if token not exists create token
-		if adeToken.Id == 0 {
-			adeToken = utils.CreateAdeToken(u)
+		if adeToken.Id == 0 && u.IsActive {
+			var user models.User
+			db.Where("id = ?", u.Id).First(&user)
+			adeToken = utils.CreateAdeToken(user)
 		}
 
-		// check if marketing is enabled
-		if marketingEnabled.Value == "true" {
-			// check if first mail is enabled
-			if marketingFirstEmail.Value == "true" {
-				// check if time to send
-				marketingFirstAfterInt, _ := strconv.Atoi(marketingFirstAfter.Value)
-				if adeToken.FeedbackSentTime.IsZero() && u.ValidFrom.Add(time.Duration(marketingFirstAfterInt)*time.Hour).Before(time.Now()) {
-					// send mail
-					if len(u.Email) > 0 {
-						utils.SendFeedBackMessageToUser(adeToken, u.Email, hotspotName.Value, hotspotLogo.Value, hotspotBg.Value, hotspot, hotspotFeedbackBodyText.Value)
-					}
-
-					// check if sms is enabled
-					if marketingSMS.Value == "true" {
-						if u.AccountType == "sms" {
-							status := utils.SendSMS(adeToken, "Leave feedback", "feedbacks", u.Username, u.HotspotId)
-
-							adeToken.FeedbackSentTime = time.Now()
-							db.Save(&adeToken)
-
-							if !status {
-								fmt.Println("Feedback SMS not sent")
-							}
-						}
-					}
-				}
-
-			}
-
-			// check if second mail is enabled
-			if marketingSecondEmail.Value == "true" {
-				// check if time to send
-				switch marketingSecondAfter.Value {
-				case "days":
-					marketingSecondAfterDaysInt, _ := strconv.Atoi(marketingSecondAfterDays.Value)
-					if adeToken.ReviewSentTime.IsZero() && u.ValidFrom.AddDate(0, 0, marketingSecondAfterDaysInt).Before(time.Now()) {
+		if adeToken.Id != 0 {
+			// check if marketing is enabled
+			if marketingEnabled.Value == "true" {
+				// check if first mail is enabled
+				if marketingFirstEmail.Value == "true" {
+					// check if time to send
+					marketingFirstAfterInt, _ := strconv.Atoi(marketingFirstAfter.Value)
+					if adeToken.FeedbackSentTime.IsZero() && u.ValidFrom.Add(time.Duration(marketingFirstAfterInt)*time.Hour).Before(time.Now()) {
 						// send mail
 						if len(u.Email) > 0 {
-							utils.SendReviewMessageToUser(adeToken, u.Email, hotspotName.Value, hotspotLogo.Value, hotspotBg.Value, hotspot, hotspotReviewBodyText.Value)
+							utils.SendFeedBackMessageToUser(adeToken, u.Email, hotspotName.Value, hotspotLogo.Value, hotspotBg.Value, hotspot, hotspotFeedbackBodyText.Value)
 						}
 
 						// check if sms is enabled
 						if marketingSMS.Value == "true" {
 							if u.AccountType == "sms" {
-								status := utils.SendSMS(adeToken, "Leave review", "reviews", u.Username, u.HotspotId)
+								status := utils.SendSMS(adeToken, "Leave feedback", "feedbacks", u.Username, u.HotspotId)
 
-								adeToken.ReviewSentTime = time.Now()
+								adeToken.FeedbackSentTime = time.Now()
 								db.Save(&adeToken)
 
 								if !status {
-									fmt.Println("Review SMS not sent")
+									fmt.Println("Feedback SMS not sent")
 								}
 							}
 						}
 					}
 
-				case "expiration":
-					if adeToken.ReviewSentTime.IsZero() && u.ValidUntil.Before(time.Now()) {
-						// send mail
-						if len(u.Email) > 0 {
-							utils.SendReviewMessageToUser(adeToken, u.Email, hotspotName.Value, hotspotLogo.Value, hotspotBg.Value, hotspot, hotspotReviewBodyText.Value)
+				}
+
+				// check if second mail is enabled
+				if marketingSecondEmail.Value == "true" {
+					// check if time to send
+					switch marketingSecondAfter.Value {
+					case "days":
+						marketingSecondAfterDaysInt, _ := strconv.Atoi(marketingSecondAfterDays.Value)
+						if adeToken.ReviewSentTime.IsZero() && u.ValidFrom.AddDate(0, 0, marketingSecondAfterDaysInt).Before(time.Now()) {
+							// send mail
+							if len(u.Email) > 0 {
+								utils.SendReviewMessageToUser(adeToken, u.Email, hotspotName.Value, hotspotLogo.Value, hotspotBg.Value, hotspot, hotspotReviewBodyText.Value)
+							}
+
+							// check if sms is enabled
+							if marketingSMS.Value == "true" {
+								if u.AccountType == "sms" {
+									status := utils.SendSMS(adeToken, "Leave review", "reviews", u.Username, u.HotspotId)
+
+									adeToken.ReviewSentTime = time.Now()
+									db.Save(&adeToken)
+
+									if !status {
+										fmt.Println("Review SMS not sent")
+									}
+								}
+							}
 						}
 
-						// check if sms is enabled
-						if marketingSMS.Value == "true" {
-							if u.AccountType == "sms" {
-								status := utils.SendSMS(adeToken, "Leave review", "reviews", u.Username, u.HotspotId)
+					case "expiration":
+						if adeToken.ReviewSentTime.IsZero() && u.ValidUntil.Before(time.Now()) {
+							// send mail
+							if len(u.Email) > 0 {
+								utils.SendReviewMessageToUser(adeToken, u.Email, hotspotName.Value, hotspotLogo.Value, hotspotBg.Value, hotspot, hotspotReviewBodyText.Value)
+							}
 
-								adeToken.ReviewSentTime = time.Now()
-								db.Save(&adeToken)
+							// check if sms is enabled
+							if marketingSMS.Value == "true" {
+								if u.AccountType == "sms" {
+									status := utils.SendSMS(adeToken, "Leave review", "reviews", u.Username, u.HotspotId)
 
-								if !status {
-									fmt.Println("Review SMS not sent")
+									adeToken.ReviewSentTime = time.Now()
+									db.Save(&adeToken)
+
+									if !status {
+										fmt.Println("Review SMS not sent")
+									}
 								}
 							}
 						}
 					}
+
 				}
 
 			}
-
 		}
 	}
 }
