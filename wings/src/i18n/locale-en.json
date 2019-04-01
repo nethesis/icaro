@@ -22,9 +22,9 @@
             "navigate": "Navigate",
             "disclaimer_privacy_accept": "I accept sending promotional offers",
             "disclaimer_survey_accept": "I accept sending surveys",
-            "additional_info": "Addtional info",
+            "additional_info": "",
             "country": "Country",
-            "reason": "Reason",
+            "reason": "Reason of the Visit",
             "business": "Business",
             "family": "Family",
             "other": "Other"
