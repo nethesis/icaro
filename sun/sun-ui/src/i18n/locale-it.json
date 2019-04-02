@@ -336,7 +336,7 @@
       "email_first_template_preview": "Anteprima",
       "email_second_template": "Testo email di richiesta recensione",
       "email_second_template_preview": "Anteprima",      
-      "email_second_after": "Invia email",
+      "email_second_after": "Quando:",
       "after_days": "Trascorsi N giorni dalla registrazione",
       "after_expiration": "Alla scadenza dell'account",
       "sms": "Invia richiesta feedback anche tramite SMS (tariffe applicate)",
