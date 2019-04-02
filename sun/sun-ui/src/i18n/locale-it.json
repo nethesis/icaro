@@ -341,7 +341,7 @@
       "after_expiration": "Alla scadenza dell'account",
       "sms": "Invia richiesta feedback anche tramite SMS (tariffe applicate)",
       "save": "Salva",
-      "threshold": "Richiedi recensione se numero di stelle maggiore di ",
+      "threshold": "Numero di stelle minimo per richiedere la recensione",
       "first_external_url": "Link alla pagina su sito di recensioni 1",
       "second_external_url": "Link alla pagina su sito di recensioni 2",
       "third_external_url": "Link alla pagina su sito di recensioni 3",
