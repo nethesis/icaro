@@ -336,7 +336,7 @@
       "email_first_template_preview": "Feedback email preview",
       "email_second_template": "Review email text",
       "email_second_template_preview": "Review email preview",
-      "email_second_after": "Send review email after",
+      "email_second_after": "When:",
       "after_days": "Days",
       "after_expiration": "Expiration",
       "sms": "Send SMS",
