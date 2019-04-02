@@ -341,7 +341,7 @@
       "after_expiration": "Expiration",
       "sms": "Send SMS",
       "save": "Save",
-      "threshold": "Threshold for good review",
+      "threshold": "Minimum number of stars to request the review",
       "first_external_url": "First review URL",
       "second_external_url": "Second review URL",
       "third_external_url": "Third review URL",
