@@ -548,10 +548,12 @@ x49emZ5/x8X6z2uaUX1SgAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxOC0xMC0yNVQwMTozNjo1
 Ny0wNTowMC2S414AAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTgtMTAtMjVUMDE6MzY6NTctMDU
 6MDBcz1viAAAAAElFTkSuQmCC">
             {{ end }}
+	{{if .Message}}
             <h3>Questo è il messaggio dell'utente</h3>
             <div>
                 {{ .Message }}
             </div>
+	{{end}}
             <h5>Questa è una mail automatica. Non rispondere</h5>
         </div>
         <div class="divider"></div>
@@ -1022,10 +1024,12 @@ x49emZ5/x8X6z2uaUX1SgAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxOC0xMC0yNVQwMTozNjo1
 Ny0wNTowMC2S414AAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTgtMTAtMjVUMDE6MzY6NTctMDU
 6MDBcz1viAAAAAElFTkSuQmCC">
             {{ end }}
+	{{if .Message}}
             <h3>This is the user's message</h3>
             <div>
                 {{ .Message }}
             </div>
+	{{end}}
             <h5>This is an automatic email. Do not reply</h5>
         </div>
 </body>
