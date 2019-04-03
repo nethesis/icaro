@@ -328,7 +328,7 @@
     "marketing": {
       "ask_for_reason_country": "Chiedi nazionalità e motivo del soggiorno",
       "enable_service": "Invio automatico di richiesta feedback e sondaggio",
-      "email_feedback": "Indirizzo email responsabile interno",
+      "email_feedback": "Indirizzo email per le segnalazioni",
       "email_first": "Invia richiesta assistenza",
       "email_second": "Invia richiesta recensione",
       "email_first_after": "Invia richiesta dopo (ore)",
