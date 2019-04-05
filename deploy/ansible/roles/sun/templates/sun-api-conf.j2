@@ -23,7 +23,9 @@
     },
     "survey": {
         "feedback_body_text": {{ lookup('file', 'files/feedback_body') | to_json }},
-        "review_body_text":  {{ lookup('file', 'files/review_body') | to_json }}
+        "review_body_text":  {{ lookup('file', 'files/review_body') | to_json }},
+	"feedback_subject_text": "[$$HOTSPOT$$] Welcome! Benvenuto!",
+	"review_subject_text": "[$$HOTSPOT$$] Enjoyed your stay? Leave us a review! Ti è piaciuto il tuo soggiorno? Lasciaci una recensione!"
      },
     "endpoints": {
         "email": {
