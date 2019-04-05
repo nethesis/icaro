@@ -548,12 +548,14 @@ x49emZ5/x8X6z2uaUX1SgAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxOC0xMC0yNVQwMTozNjo1
 Ny0wNTowMC2S414AAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTgtMTAtMjVUMDE6MzY6NTctMDU
 6MDBcz1viAAAAAElFTkSuQmCC">
             {{ end }}
+  {{if .Message}}
             <h4>Il cliente ha lasciato anche un messaggio:</h4>
             <p>
                 <div><em>
                     "{{ .Message }}"
                 </em></div>
             </p>
+  {{end}}
             <small>Questa è una mail automatica. Non rispondere</small>
         </div>
         <div class="divider"></div>
@@ -1024,12 +1026,14 @@ x49emZ5/x8X6z2uaUX1SgAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxOC0xMC0yNVQwMTozNjo1
 Ny0wNTowMC2S414AAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTgtMTAtMjVUMDE6MzY6NTctMDU
 6MDBcz1viAAAAAElFTkSuQmCC">
             {{ end }}
+  {{if .Message}}
             <h4>The customer also left a message:</h4>
             <p>
                 <div><em>
                     "{{ .Message }}"
                 </em></div>
-            </p>            
+            </p>
+  {{end}}
             <small>This is an automatic email. Do not reply</small>
         </div>
 </body>

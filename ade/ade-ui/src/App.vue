@@ -21,6 +21,9 @@ export default {
       hotspot_logo: ""
     };
   },
+  created() {
+    document.title = CONFIG.APP_NAME;
+  },
   mounted() {
     $("body").css("background-color", "rgba(0,0,0,.85)");
     this.getInfo();

@@ -193,8 +193,8 @@ export default {
       conditions: false,
       surveys: false,
       countries: require("./../../i18n/countries.json"),
-      additionalCountry: "IT",
-      additionalReason: "business"
+      additionalCountry: "-",
+      additionalReason: "-"
     };
   },
   methods: {

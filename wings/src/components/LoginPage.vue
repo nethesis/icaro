@@ -96,6 +96,7 @@
         <label>{{ $t("login.country") }}</label>
         <div class="ui big left icon input">
           <select v-model="additionalCountry">
+            <option value="-">--</option>
             <option :value="c.code" v-for="c in countries" v-bind:key="c.code">{{c.name}}</option>
           </select>
         </div>
@@ -104,6 +105,7 @@
         <label>{{ $t("login.reason") }}</label>
         <div class="ui big left icon input">
           <select v-model="additionalReason">
+            <option value="-">--</option>
             <option value="business">{{$t("login.business")}}</option>
             <option value="family">{{$t("login.family")}}</option>
             <option value="other">{{$t("login.other")}}</option>
@@ -166,8 +168,8 @@ export default {
       conditions: false,
       surveys: false,
       countries: require("./../i18n/countries.json"),
-      additionalCountry: "IT",
-      additionalReason: "business"
+      additionalCountry: "-",
+      additionalReason: "-"
     };
   },
   methods: {

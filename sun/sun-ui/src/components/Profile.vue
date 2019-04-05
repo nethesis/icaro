@@ -29,7 +29,7 @@
               <dd>{{$t(user.info.type)}}</dd>
             </div>
           </div>
-          <div class="card-pf-footer">
+          <div v-if="user.info.type != 'customer' && user.info.type != 'desk'" class="card-pf-footer">
             <div class="dropdown card-pf-time-frame-filter">
               <button class="btn btn-default" data-toggle="modal" data-target="#changePassModal">{{ $t("profile.change_password") }}</button>
             </div>

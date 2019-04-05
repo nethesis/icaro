@@ -112,6 +112,20 @@
         class="form-group"
       >
         <label
+          v-if="!isLoadingMarketing"
+          class="col-sm-3 control-label"
+          for="textInput-markup"
+        >{{$t('marketing.email_first_subject')}}</label>
+        <div v-if="!isLoadingMarketing" class="col-sm-6">
+          <input class="form-control" v-model="marketingPrefs.marketing_15_feedback_subject_text">
+        </div>
+      </div>
+
+      <div
+        v-show="!isLoadingMarketing && marketingPrefs.marketing_3_first_email_enabled && marketingPrefs.marketing_1_enabled"
+        class="form-group"
+      >
+        <label
           v-show="!isLoadingMarketing"
           class="col-sm-3 control-label"
           for="textInput-markup"
@@ -159,6 +173,14 @@
               >H3</button>
             </div>
           </editor-menu-bar>
+
+          <div class="alert alert-warning alert-dismissable mg-bottom-5">
+            <span class="pficon pficon-warning-triangle-o"></span>
+            <strong>{{$t('marketing.warning')}}</strong>.
+            <b>$$URL$$</b>
+            {{$t('marketing.url_mandatory')}}.
+          </div>
+
           <editor-content id="feedbackEditorContent" :editor="feedbackEditor"/>
         </div>
       </div>
@@ -262,6 +284,20 @@
       >
 
       <div
+        v-show="!isLoadingMarketing && marketingPrefs.marketing_3_first_email_enabled && marketingPrefs.marketing_1_enabled"
+        class="form-group"
+      >
+        <label
+          v-if="!isLoadingMarketing"
+          class="col-sm-3 control-label"
+          for="textInput-markup"
+        >{{$t('marketing.email_second_subject')}}</label>
+        <div v-if="!isLoadingMarketing" class="col-sm-6">
+          <input class="form-control" v-model="marketingPrefs.marketing_16_review_subject_text">
+        </div>
+      </div>
+
+      <div
         v-show="!isLoadingMarketing && marketingPrefs.marketing_4_second_email_enabled && marketingPrefs.marketing_1_enabled"
         class="form-group"
       >
@@ -313,6 +349,14 @@
               >H3</button>
             </div>
           </editor-menu-bar>
+
+          <div class="alert alert-warning alert-dismissable mg-bottom-5">
+            <span class="pficon pficon-warning-triangle-o"></span>
+            <strong>{{$t('marketing.warning')}}</strong>.
+            <b>$$URL$$</b>
+            {{$t('marketing.url_mandatory')}}.
+          </div>
+
           <editor-content id="reviewEditorContent" :editor="reviewEditor"/>
         </div>
       </div>
@@ -347,12 +391,19 @@
           {{$t('marketing.sms')}}
           <span class="fa fa-commenting login-pref-option"></span>
         </label>
-        <div v-if="!isLoadingMarketing" class="col-sm-4">
+        <div v-if="!isLoadingMarketing" class="col-sm-1">
           <input
             v-model="marketingPrefs.marketing_5_sms_enabled"
             class="form-control"
             type="checkbox"
           >
+        </div>
+        <div class="col-sm-5">
+          <div class="alert alert-info alert-dismissable">
+            <span class="pficon pficon-info"></span>
+            <strong>{{$t('marketing.info')}}.</strong>
+            {{$t('marketing.sms_info')}}.
+          </div>
         </div>
       </div>
 
@@ -423,7 +474,12 @@
           for="textInput-markup"
         >{{$t('marketing.third_external_url')}}</label>
         <div v-if="!isLoadingMarketing" class="col-sm-4">
-          <input placeholder="https://www.facebook.com/MYHOTEL" v-model="marketingPrefs.marketing_12_third_url" class="form-control" type="url">
+          <input
+            placeholder="https://www.facebook.com/MYHOTEL"
+            v-model="marketingPrefs.marketing_12_third_url"
+            class="form-control"
+            type="url"
+          >
         </div>
       </div>
 
@@ -778,5 +834,9 @@ export default {
 }
 .test-mail {
   margin-top: 8px;
+}
+
+.mg-bottom-5 {
+  margin-bottom: 5px !important;
 }
 </style>
