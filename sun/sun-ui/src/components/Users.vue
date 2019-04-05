@@ -240,12 +240,12 @@ export default {
         },
         {
           label: this.$i18n.t("user.reason"),
-          field: "account_reason",
+          field: "reason",
           filterable: true
         },
         {
           label: this.$i18n.t("user.country"),
-          field: "account_country",
+          field: "country",
           filterable: true
         },
         {
@@ -499,11 +499,12 @@ export default {
 
             var columns = this.columns.slice();
 
-            delete columns[3];
-            delete columns[4];
             delete columns[5];
             delete columns[6];
             delete columns[7];
+            delete columns[8];
+            delete columns[9];
+            delete columns[10];
 
             var csv = this.createCSV(columns, usersRows);
             this.isLoadingTable = false;

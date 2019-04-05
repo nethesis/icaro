@@ -1,7 +1,12 @@
 <template>
   <div>
     <div class="dropup">
-      <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+      <button
+        class="btn btn-default dropdown-toggle"
+        type="button"
+        id="dropdownMenu1"
+        data-toggle="dropdown"
+      >
         {{ $t('action') }}
         <span class="caret"></span>
       </button>
@@ -13,21 +18,42 @@
           </a>
         </li>
         <li role="presentation">
-          <a v-on:click="setCurrentObj(obj)" role="menuitem" tabindex="-1" href="" data-toggle="modal" :data-target="'#UsmodifyModal'+obj.id">
+          <a
+            v-on:click="setCurrentObj(obj)"
+            role="menuitem"
+            tabindex="-1"
+            href
+            data-toggle="modal"
+            :data-target="'#UsmodifyModal'+obj.id"
+          >
             <span class="fa fa-edit action-icon-menu"></span>
             {{ $t('modify') }}
           </a>
         </li>
         <li role="presentation" class="divider"></li>
         <li role="presentation">
-          <a v-on:click="setCurrentObj(obj)" role="menuitem" tabindex="-1" href="" data-toggle="modal" :data-target="'#UsdeleteModal'+obj.id">
+          <a
+            v-on:click="setCurrentObj(obj)"
+            role="menuitem"
+            tabindex="-1"
+            href
+            data-toggle="modal"
+            :data-target="'#UsdeleteModal'+obj.id"
+          >
             <span class="fa fa-remove action-icon-menu"></span>
             {{ $t('delete') }}
           </a>
         </li>
       </ul>
     </div>
-    <div class="modal fade" :id="'UsmodifyModal'+obj.id" tabindex="-1" role="dialog" aria-labelledby="UsmodifyModalLabel" aria-hidden="true">
+    <div
+      class="modal fade"
+      :id="'UsmodifyModal'+obj.id"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="UsmodifyModalLabel"
+      aria-hidden="true"
+    >
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -39,59 +65,129 @@
           <form class="form-horizontal" role="form" v-on:submit.prevent="modifyUser(currentObj)">
             <div class="modal-body">
               <div class="form-group">
-                <label class="col-sm-4 control-label" for="textInput-modal-markup">{{ $t("user.name") }}</label>
+                <label
+                  class="col-sm-4 control-label"
+                  for="textInput-modal-markup"
+                >{{ $t("user.name") }}</label>
                 <div class="col-sm-8">
-                  <input required v-model="currentObj.name" type="text" id="textInput-modal-markup" class="form-control" :placeholder="$t('user.name')">
+                  <input
+                    required
+                    v-model="currentObj.name"
+                    type="text"
+                    id="textInput-modal-markup"
+                    class="form-control"
+                    :placeholder="$t('user.name')"
+                  >
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-4 control-label" for="textInput2-modal-markup">{{ $t("user.email") }}</label>
+                <label
+                  class="col-sm-4 control-label"
+                  for="textInput2-modal-markup"
+                >{{ $t("user.email") }}</label>
                 <div class="col-sm-8">
-                  <input v-model="currentObj.email" type="text" id="textInput2-modal-markup" class="form-control" :placeholder="$t('user.email')">
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label class="col-sm-4 control-label" for="textInput2-modal-markup">{{ $t("user.kbps_down") }}</label>
-                <div class="col-sm-8">
-                  <input v-model="currentObj.kbps_down" type="number" id="textInput2-modal-markup" class="form-control" :placeholder="$t('user.kbps_down')">
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-sm-4 control-label" for="textInput2-modal-markup">{{ $t("user.kbps_up") }}</label>
-                <div class="col-sm-8">
-                  <input v-model="currentObj.kbps_up" type="number" id="textInput2-modal-markup" class="form-control" :placeholder="$t('user.kbps_up')">
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label class="col-sm-4 control-label" for="textInput2-modal-markup">{{ $t("user.traffic_limit") }}</label>
-                <div class="col-sm-8">
-                  <input v-model="currentObj.max_navigation_traffic" type="number" id="textInput2-modal-markup" class="form-control" :placeholder="$t('user.traffic_limit')">
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-sm-4 control-label" for="textInput2-modal-markup">{{ $t("user.time_limit") }}</label>
-                <div class="col-sm-8">
-                  <input v-model="currentObj.max_navigation_time" type="number" id="textInput2-modal-markup" class="form-control" :placeholder="$t('user.time_limit')">
+                  <input
+                    v-model="currentObj.email"
+                    type="text"
+                    id="textInput2-modal-markup"
+                    class="form-control"
+                    :placeholder="$t('user.email')"
+                  >
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="col-sm-4 control-label" for="textInput2-modal-markup">{{ $t("user.auto_login") }}</label>
+                <label
+                  class="col-sm-4 control-label"
+                  for="textInput2-modal-markup"
+                >{{ $t("user.kbps_down") }}</label>
                 <div class="col-sm-8">
-                  <input v-model="currentObj.auto_login" type="checkbox" id="textInput2-modal-markup" class="form-control" :placeholder="$t('user.auto_login')">
+                  <input
+                    v-model="currentObj.kbps_down"
+                    type="number"
+                    id="textInput2-modal-markup"
+                    class="form-control"
+                    :placeholder="$t('user.kbps_down')"
+                  >
+                </div>
+              </div>
+              <div class="form-group">
+                <label
+                  class="col-sm-4 control-label"
+                  for="textInput2-modal-markup"
+                >{{ $t("user.kbps_up") }}</label>
+                <div class="col-sm-8">
+                  <input
+                    v-model="currentObj.kbps_up"
+                    type="number"
+                    id="textInput2-modal-markup"
+                    class="form-control"
+                    :placeholder="$t('user.kbps_up')"
+                  >
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="col-sm-4 control-label" for="textInput2-modal-markup">{{ $t("user.valid_from") }}</label>
+                <label
+                  class="col-sm-4 control-label"
+                  for="textInput2-modal-markup"
+                >{{ $t("user.traffic_limit") }}</label>
+                <div class="col-sm-8">
+                  <input
+                    v-model="currentObj.max_navigation_traffic"
+                    type="number"
+                    id="textInput2-modal-markup"
+                    class="form-control"
+                    :placeholder="$t('user.traffic_limit')"
+                  >
+                </div>
+              </div>
+              <div class="form-group">
+                <label
+                  class="col-sm-4 control-label"
+                  for="textInput2-modal-markup"
+                >{{ $t("user.time_limit") }}</label>
+                <div class="col-sm-8">
+                  <input
+                    v-model="currentObj.max_navigation_time"
+                    type="number"
+                    id="textInput2-modal-markup"
+                    class="form-control"
+                    :placeholder="$t('user.time_limit')"
+                  >
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label
+                  class="col-sm-4 control-label"
+                  for="textInput2-modal-markup"
+                >{{ $t("user.auto_login") }}</label>
+                <div class="col-sm-8">
+                  <input
+                    v-model="currentObj.auto_login"
+                    type="checkbox"
+                    id="textInput2-modal-markup"
+                    class="form-control"
+                    :placeholder="$t('user.auto_login')"
+                  >
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label
+                  class="col-sm-4 control-label"
+                  for="textInput2-modal-markup"
+                >{{ $t("user.valid_from") }}</label>
                 <div class="col-sm-8">
                   <date-picker v-model="currentObj.valid_from" :config="dateConfig"></date-picker>
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-4 control-label" for="textInput2-modal-markup">{{ $t("user.valid_until") }}</label>
+                <label
+                  class="col-sm-4 control-label"
+                  for="textInput2-modal-markup"
+                >{{ $t("user.valid_until") }}</label>
                 <div class="col-sm-8">
                   <date-picker v-model="currentObj.valid_until" :config="dateConfig"></date-picker>
                 </div>
@@ -99,11 +195,15 @@
 
               <div v-if="errors.update" class="alert alert-danger alert-dismissable">
                 <span class="pficon pficon-error-circle-o"></span>
-                <strong>{{ $t("user.update_error_title") }}</strong>. {{ $t("user.update_error_sub") }}.
+                <strong>{{ $t("user.update_error_title") }}</strong>
+                . {{ $t("user.update_error_sub") }}.
               </div>
             </div>
             <div class="modal-footer">
-              <span v-if="currentObj.onAction" class="spinner spinner-sm spinner-inline modal-spinner"></span>
+              <span
+                v-if="currentObj.onAction"
+                class="spinner spinner-sm spinner-inline modal-spinner"
+              ></span>
               <button type="button" class="btn btn-default" data-dismiss="modal">{{ $t("cancel") }}</button>
               <button type="submit" class="btn btn-primary">{{ $t("update") }}</button>
             </div>
@@ -111,7 +211,14 @@
         </div>
       </div>
     </div>
-    <div class="modal fade" :id="'UsdeleteModal'+obj.id" tabindex="-1" role="dialog" aria-labelledby="UsdeleteModalLabel" aria-hidden="true">
+    <div
+      class="modal fade"
+      :id="'UsdeleteModal'+obj.id"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="UsdeleteModalLabel"
+      aria-hidden="true"
+    >
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -124,15 +231,20 @@
             <div class="modal-body">
               <div class="alert alert-warning alert-dismissable">
                 <span class="pficon pficon-warning-triangle-o"></span>
-                <strong>{{ $t("user.warning_delete_title") }}</strong>. {{ $t("user.warning_delete_sub") }}
+                <strong>{{ $t("user.warning_delete_title") }}</strong>
+                . {{ $t("user.warning_delete_sub") }}
               </div>
               <div v-if="errors.delete" class="alert alert-danger alert-dismissable">
                 <span class="pficon pficon-error-circle-o"></span>
-                <strong>{{ $t("user.delete_error_title") }}</strong>. {{ $t("user.delete_error_sub") }}.
+                <strong>{{ $t("user.delete_error_title") }}</strong>
+                . {{ $t("user.delete_error_sub") }}.
               </div>
             </div>
             <div class="modal-footer">
-              <span v-if="currentObj.onAction" class="spinner spinner-sm spinner-inline modal-spinner"></span>
+              <span
+                v-if="currentObj.onAction"
+                class="spinner spinner-sm spinner-inline modal-spinner"
+              ></span>
               <button type="button" class="btn btn-default" data-dismiss="modal">{{ $t("cancel") }}</button>
               <button type="submit" class="btn btn-danger">{{ $t("delete") }}</button>
             </div>
@@ -147,6 +259,8 @@ import UserService from "../services/user";
 import StorageService from "../services/storage";
 
 import datePicker from "vue-bootstrap-datetimepicker";
+
+var moment = require("moment");
 
 export default {
   name: "UserAction",
@@ -176,8 +290,12 @@ export default {
   methods: {
     setCurrentObj(obj) {
       this.currentObj = Object.assign({}, obj);
-      this.currentObj.max_navigation_time = this.currentObj.max_navigation_time / 60
-      this.currentObj.max_navigation_traffic = this.currentObj.max_navigation_traffic / 1024 / 1024
+      this.currentObj.max_navigation_time =
+        this.currentObj.max_navigation_time / 60;
+      this.currentObj.max_navigation_traffic =
+        this.currentObj.max_navigation_traffic / 1024 / 1024;
+      this.currentObj.valid_from = moment(String(this.currentObj.valid_from));
+      this.currentObj.valid_until = moment(String(this.currentObj.valid_until));
     },
     modifyUser(obj) {
       this.currentObj.onAction = true;
@@ -189,7 +307,8 @@ export default {
           kbps_down: parseInt(obj.kbps_down),
           kbps_up: parseInt(obj.kbps_up),
           max_navigation_time: parseInt(obj.max_navigation_time) * 60,
-          max_navigation_traffic: parseInt(obj.max_navigation_traffic) * 1024 * 1024,
+          max_navigation_traffic:
+            parseInt(obj.max_navigation_traffic) * 1024 * 1024,
           auto_login: obj.auto_login || false,
           valid_from: new Date(obj.valid_from).toISOString(),
           valid_until: new Date(obj.valid_until).toISOString()
@@ -228,5 +347,4 @@ export default {
 };
 </script>
 <style>
-
 </style>
