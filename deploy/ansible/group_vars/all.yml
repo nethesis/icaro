@@ -52,6 +52,7 @@ icaro:
     db_username: "ape-api"
     db_password: "AdeApiMariaDBPassWordHere"
     email_from: "admin@example.com"
+    email_from_name: "Icaro Hotspot Manager"
     email_smtp_host: "EmailSMTPHost"
     email_smtp_port: "25"
     email_smtp_user: "EmailSMTPUser"
