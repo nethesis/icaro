@@ -15,11 +15,13 @@
     "endpoints": {
         "email": {
 {% if icaro.ade_api.email_from is defined and
+icaro.ade_api.email_from_mame is defined and
 icaro.ade_api.email_smtp_host is defined and
 icaro.ade_api.email_smtp_port is defined and
 icaro.ade_api.email_smtp_user is defined and
 icaro.ade_api.email_smtp_password is defined %}
             "from": "{{ icaro.ade_api.email_from }}",
+            "from_name": "{{ icaro.ade_tasks.email_from_name }}",
             "smtp_host": "{{ icaro.ade_api.email_smtp_host }}",
             "smtp_port": {{ icaro.ade_api.email_smtp_port }},
             "smtp_user": "{{ icaro.ade_api.email_smtp_user }}",

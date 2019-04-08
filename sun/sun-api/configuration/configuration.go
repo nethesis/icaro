@@ -69,9 +69,11 @@ type Configuration struct {
 		BannerContents string `json:"-"`      //base64 content of Banner
 	} `json:"captive_portal"`
 	Survey struct {
-		Url              string `json:"url"`
-		FeedbackBodyText string `json:"feedback_body_text"`
-		ReviewBodyText   string `json:"review_body_text"`
+		Url                 string `json:"url"`
+		FeedbackBodyText    string `json:"feedback_body_text"`
+		ReviewBodyText      string `json:"review_body_text"`
+		FeedbackSubjectText string `json:"feedback_subject_text"`
+		ReviewSubjectText   string `json:"review_subject_text"`
 	} `json:"survey"`
 }
 
@@ -155,6 +157,9 @@ func Init(ConfigFilePtr *string) {
 
 	if os.Getenv("EMAIL_FROM") != "" {
 		Config.Endpoints.Email.From = os.Getenv("EMAIL_FROM")
+	}
+	if os.Getenv("EMAIL_FROM_NAME") != "" {
+		Config.Endpoints.Email.From = os.Getenv("EMAIL_FROM_NAME")
 	}
 	if os.Getenv("EMAIL_SMTP_HOST") != "" {
 		Config.Endpoints.Email.SMTPHost = os.Getenv("EMAIL_SMTP_HOST")

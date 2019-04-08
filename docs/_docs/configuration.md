@@ -170,6 +170,7 @@ This variables are common to all backends:
 
 ##### Email
 * `EMAIL_FORM` Email from address
+* `EMAIL_FORM_NAME` Email from name
 * `EMAIL_SMTP_HOST` SMTP server address/hostanme
 * `EMAIL_SMTP_PORT` Port where the SMTP server is listening
 * `EMAIL_SMTP_USER` User to use for connection to SMTP server

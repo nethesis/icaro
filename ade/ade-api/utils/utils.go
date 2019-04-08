@@ -122,7 +122,12 @@ func SendFeedBackMessageToUser(adeToken models.AdeToken, userEmail string, hotsp
 	userMessage, status := compileUserEmailTemplate("feedback", adeToken, hotspotName, hotspotLogo, bgColor, hotspot, BodyText)
 
 	if status {
-		status = SendEmail("Feedback", userMessage, userEmail)
+		mailFrom := wax_utils.GetHotspotPreferencesByKey(adeToken.HotspotId, "captive_2_title").Value + " <" + configuration.Config.Endpoints.Email.From + ">"
+		mailSubject := strings.Replace(
+			wax_utils.GetHotspotPreferencesByKey(adeToken.HotspotId, "marketing_15_feedback_subject_text").Value,
+			"$$HOTSPOT$$",
+			wax_utils.GetHotspotPreferencesByKey(adeToken.HotspotId, "captive_2_title").Value, -1)
+		status = SendEmail(mailFrom, mailSubject, userMessage, userEmail)
 
 		if adeToken.Id != 0 {
 			db := database.Instance()
@@ -138,7 +143,12 @@ func SendReviewMessageToUser(adeToken models.AdeToken, userEmail string, hotspot
 	userMessage, status := compileUserEmailTemplate("review", adeToken, hotspotName, hotspotLogo, bgColor, hotspot, BodyText)
 
 	if status {
-		status = SendEmail("Review", userMessage, userEmail)
+		mailFrom := wax_utils.GetHotspotPreferencesByKey(adeToken.HotspotId, "captive_2_title").Value + " <" + configuration.Config.Endpoints.Email.From + ">"
+		mailSubject := strings.Replace(
+			wax_utils.GetHotspotPreferencesByKey(adeToken.HotspotId, "marketing_16_review_subject_text").Value,
+			"$$HOTSPOT$$",
+			wax_utils.GetHotspotPreferencesByKey(adeToken.HotspotId, "captive_2_title").Value, -1)
+		status = SendEmail(mailFrom, mailSubject, userMessage, userEmail)
 
 		if adeToken.Id != 0 {
 			db := database.Instance()
@@ -170,7 +180,8 @@ func SendFeedBackMessageToOwner(adeToken models.AdeToken, message string, bgColo
 	}
 
 	mailTo := wax_utils.GetHotspotPreferencesByKey(adeToken.HotspotId, "marketing_2_feedback_email").Value
-	status := SendEmail("User Feedback", ownerMessage.String(), mailTo)
+	mailFrom := configuration.Config.Endpoints.Email.FromName + " <" + configuration.Config.Endpoints.Email.From + ">"
+	status := SendEmail(mailFrom, "User Feedback", ownerMessage.String(), mailTo)
 
 	db := database.Instance()
 	adeToken.FeedbackLeftTime = time.Now()
@@ -206,7 +217,8 @@ func SendReviewMessageToOwner(adeToken models.AdeToken, stars int, message strin
 	}
 
 	mailTo := wax_utils.GetHotspotPreferencesByKey(adeToken.HotspotId, "marketing_2_feedback_email").Value
-	status := SendEmail("Review: "+stars_s+"/5", ownerMessage.String(), mailTo)
+	mailFrom := configuration.Config.Endpoints.Email.FromName + " <" + configuration.Config.Endpoints.Email.From + ">"
+	status := SendEmail(mailFrom, "Review: "+stars_s+"/5", ownerMessage.String(), mailTo)
 
 	db := database.Instance()
 	adeToken.ReviewLeftTime = time.Now()
@@ -215,11 +227,11 @@ func SendReviewMessageToOwner(adeToken models.AdeToken, stars int, message strin
 	return status
 }
 
-func SendEmail(subject string, message string, mailTo string) bool {
+func SendEmail(mailFrom string, subject string, message string, mailTo string) bool {
 
 	status := true
 	m := gomail.NewMessage()
-	m.SetHeader("From", configuration.Config.Endpoints.Email.From)
+	m.SetHeader("From", mailFrom)
 
 	m.SetHeader("To", mailTo)
 	m.SetHeader("Subject", subject)

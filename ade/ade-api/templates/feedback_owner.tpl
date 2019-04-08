@@ -4,16 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <style>
-        body {
-            background-color: {{ .BgColor }};
-            text-align: center;
-            font-family: Lato,
-            'Helvetica Neue',
-            Arial,
-            Helvetica,
-            sans-serif;
-        }
-
         h1 {
             color: white;
             border: none;
@@ -79,25 +69,34 @@
     <title>Review</title>
 </head>
 
-<body>
-    <div class="title">
-        <div class="container">
-            <h2>Hai ricevuto un nuovo feedback!</h2>
-            <h3>Questo è il messaggio dell'utente</h3>
-            <div>
-                {{ .Message }}
-            </div>
-            <h5>Questa è una mail automatica. Non rispondere</h5>
-        </div>
-        <div class="divider"></div>
-        <div class="container">
-            <h2>You have received new feedback!</h2>
-            <h3>This is the user's message</h3>
-            <div>
-                {{ .Message }}
-            </div>
-            <h5>This is an automatic email. Do not reply</h5>
-        </div>
+<body style="margin: 0;text-align: center;font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;">
+    <table style="width: 100%; border-collapse: collapse; background-color: {{ .BgColor }};">
+        <tbody>
+            <tr>
+                <td style="width: 100%;">
+                    <div class="title">
+                        <div class="container">
+                            <h2>Hai ricevuto un nuovo feedback!</h2>
+                            <h3>Questo è il messaggio dell'utente</h3>
+                            <div>
+                                {{ .Message }}
+                            </div>
+                            <h5>Questa è una mail automatica. Non rispondere</h5>
+                        </div>
+                        <div class="divider"></div>
+                        <div class="container">
+                            <h2>You have received new feedback!</h2>
+                            <h3>This is the user's message</h3>
+                            <div>
+                                {{ .Message }}
+                            </div>
+                            <h5>This is an automatic email. Do not reply</h5>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </body>
 
 </html>

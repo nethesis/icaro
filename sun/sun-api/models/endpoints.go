@@ -32,6 +32,7 @@ type Endpoints struct {
 	} `json:"sms"`
 	Email struct {
 		From         string `json:"from"`
+		FromName     string `json:from_name`
 		SMTPHost     string `json:"smtp_host"`
 		SMTPPort     int    `json:"smtp_port"`
 		SMTPUser     string `json:"smtp_user"`
