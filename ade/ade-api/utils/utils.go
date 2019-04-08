@@ -101,8 +101,9 @@ func compileUserEmailTemplate(Type string, adeToken models.AdeToken, hotspotName
 	t, _ := template.ParseFiles(templateFile)
 
 	rp := surveySend{
-		HotspotName:           hotspotName,
-		HotspotLogo:           hotspotLogo[22:],
+		HotspotName: hotspotName,
+		//Skip the "data:image/" of image base64 encoded, workaround for golang html template limitation.
+		HotspotLogo:           hotspotLogo[11:],
 		BgColor:               bgColor,
 		HotspotDetails:        hotspot.BusinessName + " • " + hotspot.BusinessAddress + " • " + hotspot.BusinessEmail,
 		HotspotSurveyBodyText: template.HTML(strings.Replace(BodyText, "$$URL$$", "<a href=\""+Url+"\">Link</a>", -1)),
