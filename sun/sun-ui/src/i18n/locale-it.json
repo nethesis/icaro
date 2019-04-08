@@ -335,7 +335,9 @@
       "email_first_template": "Testo email di richiesta assistenza",
       "email_first_template_preview": "Anteprima",
       "email_second_template": "Testo email di richiesta recensione",
-      "email_second_template_preview": "Anteprima",      
+      "email_second_template_preview": "Anteprima",
+      "email_first_subject": "Oggetto email richiesta assistenza",
+      "email_second_subject": "Oggetto email recensione",
       "email_second_after": "Quando:",
       "after_days": "Trascorsi N giorni dalla registrazione",
       "after_expiration": "Alla scadenza dell'account",
@@ -347,7 +349,11 @@
       "third_external_url": "Link alla pagina su sito di recensioni 3",
       "preferences": "Preferenze",
       "test_mail": "Email di test",
-      "test_mail_to": "Invia a "
+      "test_mail_to": "Invia a ",
+      "warning": "Attenzione",
+      "info": "Info",
+      "sms_info": "Gli SMS hanno un numero di caratteri limitati, per questo motivo il testo degli SMS è generato automaticamente e non è modificabile",
+      "url_mandatory": " definisce il link da cliccare per accedere al sondaggio, NON eliminare"
     },
     "sessions": "Connessioni",
     "help": "Aiuto",
