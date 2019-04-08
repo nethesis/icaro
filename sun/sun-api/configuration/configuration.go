@@ -69,11 +69,13 @@ type Configuration struct {
 		BannerContents string `json:"-"`      //base64 content of Banner
 	} `json:"captive_portal"`
 	Survey struct {
-		Url                 string `json:"url"`
-		FeedbackBodyText    string `json:"feedback_body_text"`
-		ReviewBodyText      string `json:"review_body_text"`
-		FeedbackSubjectText string `json:"feedback_subject_text"`
-		ReviewSubjectText   string `json:"review_subject_text"`
+		Url                         string `json:"url"`
+		FeedbackBodyText            string `json:"feedback_body_text"`
+		ReviewBodyText              string `json:"review_body_text"`
+		FeedbackSubjectText         string `json:"feedback_subject_text"`
+		ReviewSubjectText           string `json:"review_subject_text"`
+		FeedbackResponseSubjectText string `json:"feedback_response_subject_text"`
+		ReviewResponseSubjectText   string `json:"review_response_subject_text"`
 	} `json:"survey"`
 }
 

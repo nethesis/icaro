@@ -182,7 +182,7 @@ func SendFeedBackMessageToOwner(adeToken models.AdeToken, message string, bgColo
 
 	mailTo := wax_utils.GetHotspotPreferencesByKey(adeToken.HotspotId, "marketing_2_feedback_email").Value
 	mailFrom := configuration.Config.Endpoints.Email.FromName + " <" + configuration.Config.Endpoints.Email.From + ">"
-	status := SendEmail(mailFrom, "User Feedback", ownerMessage.String(), mailTo)
+	status := SendEmail(mailFrom, configuration.Config.Survey.FeedbackResponseSubjectText, ownerMessage.String(), mailTo)
 
 	db := database.Instance()
 	adeToken.FeedbackLeftTime = time.Now()
@@ -219,7 +219,7 @@ func SendReviewMessageToOwner(adeToken models.AdeToken, stars int, message strin
 
 	mailTo := wax_utils.GetHotspotPreferencesByKey(adeToken.HotspotId, "marketing_2_feedback_email").Value
 	mailFrom := configuration.Config.Endpoints.Email.FromName + " <" + configuration.Config.Endpoints.Email.From + ">"
-	status := SendEmail(mailFrom, "Review: "+stars_s+"/5", ownerMessage.String(), mailTo)
+	status := SendEmail(mailFrom, configuration.Config.Survey.ReviewResponseSubjectText+stars_s+"/5", ownerMessage.String(), mailTo)
 
 	db := database.Instance()
 	adeToken.ReviewLeftTime = time.Now()
