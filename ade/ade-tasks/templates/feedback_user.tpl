@@ -68,7 +68,7 @@
                 <td style="width: 100%;">
                     <div class="title">
                         <h1>{{ .HotspotName }}</h1>
-                        <img style="width: 150px;" src="{{ .Base64Type }},{{ .HotspotLogo }}">
+                        <img style="width: 150px;" src="data:image/{{ .HotspotLogo }}">
                     </div>
                     <div class="container">
                         {{ .HotspotSurveyBodyText }}
