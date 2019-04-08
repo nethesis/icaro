@@ -76,8 +76,7 @@
                 <td style="width: 100%;">
                     <div class="title">
                         <div class="container">
-                            <h2>Hai ricevuto un nuovo feedback!</h2>
-                            <h4>Questo è il messaggio dell'utente</h4>
+                            <h3>Un cliente ha inviato una segnalazione:</h3>
                             <p>
                                 <div><em>
                                     {{ .Message }}
@@ -87,8 +86,7 @@
                         </div>
                         <div class="divider"></div>
                         <div class="container">
-                            <h2>You have received new feedback!</h2>
-                            <h4>This is the user's message</h4>
+                            <h3>A customer sent a report:</h3>
                             <p>
                                 <div><em>
                                     {{ .Message }}
