@@ -42,10 +42,6 @@
             text-transform: none;
         }
 
-        img {
-            width: 150px;
-        }
-
         .title {
             margin: 20px;
         }
@@ -72,7 +68,7 @@
                 <td style="width: 100%;">
                     <div class="title">
                         <h1>{{ .HotspotName }}</h1>
-                        <img src="{{ .Base64Type }},{{ .HotspotLogo }}">
+                        <img style="width: 150px;" src="{{ .Base64Type }},{{ .HotspotLogo }}">
                     </div>
                     <div class="container">
                         {{ .HotspotSurveyBodyText }}
