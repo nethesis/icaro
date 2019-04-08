@@ -70,7 +70,7 @@
 </head>
 
 <body style="margin: 0;text-align: center;font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;">
-    <table style="width: 100%; border-collapse: collapse; background-color: {{ .BgColor }};">
+    <table style="width: 100%; text-align: center; border-collapse: collapse; background-color: {{ .BgColor }};">
         <tbody>
             <tr>
                 <td style="width: 100%;">
