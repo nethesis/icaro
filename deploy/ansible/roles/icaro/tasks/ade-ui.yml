@@ -16,9 +16,22 @@
     src: /tmp/ade-ui.tar.gz
     dest: /opt/icaro/ade-ui/
     remote_src: yes
+- block:
+    - name: Download Ade-ui assets
+      get_url:
+        url: "{{ icaro.ade_ui.assets_url }}"
+        force: yes
+        dest: /tmp/ade-ui-assets.tar
+    - name: Unpack Ade-ui assets
+      unarchive:
+        src: /tmp/ade-ui-assets.tar
+        dest: /opt/icaro/ade-ui/static/
+        remote_src: yes
+  when: icaro.ade_ui is defined and icaro.ade_ui.assets_url is defined
 
 - name: Remove temp files
   file:
     path:
       - /tmp/ade-ui.tar.gz
+      - /tmp/ade-ui-assets.tar
     state: absent
