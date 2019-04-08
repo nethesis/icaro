@@ -30,6 +30,7 @@ import (
 	"github.com/robfig/cron"
 
 	"github.com/nethesis/icaro/ade/ade-api/utils"
+	"github.com/nethesis/icaro/sun/sun-api/configuration"
 	"github.com/nethesis/icaro/sun/sun-api/database"
 	"github.com/nethesis/icaro/sun/sun-api/models"
 )
@@ -187,7 +188,7 @@ func sendSurveys(users []User) {
 						// check if sms is enabled
 						if marketingSMS.Value == "true" {
 							if u.AccountType == "sms" {
-								status := utils.SendSMS(adeToken, "Leave feedback", "feedbacks", u.Username, u.HotspotId)
+								status := utils.SendSMS(adeToken, configuration.Config.Survey.FeedbackSmsBodyText, "feedbacks", u.Username, u.HotspotId)
 
 								adeToken.FeedbackSentTime = time.Now()
 								db.Save(&adeToken)
@@ -216,7 +217,7 @@ func sendSurveys(users []User) {
 							// check if sms is enabled
 							if marketingSMS.Value == "true" {
 								if u.AccountType == "sms" {
-									status := utils.SendSMS(adeToken, "Leave review", "reviews", u.Username, u.HotspotId)
+									status := utils.SendSMS(adeToken, configuration.Config.Survey.ReviewSmsBodyText, "reviews", u.Username, u.HotspotId)
 
 									adeToken.ReviewSentTime = time.Now()
 									db.Save(&adeToken)
@@ -238,7 +239,7 @@ func sendSurveys(users []User) {
 							// check if sms is enabled
 							if marketingSMS.Value == "true" {
 								if u.AccountType == "sms" {
-									status := utils.SendSMS(adeToken, "Leave review", "reviews", u.Username, u.HotspotId)
+									status := utils.SendSMS(adeToken, configuration.Config.Survey.ReviewSmsBodyText, "reviews", u.Username, u.HotspotId)
 
 									adeToken.ReviewSentTime = time.Now()
 									db.Save(&adeToken)

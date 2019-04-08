@@ -76,6 +76,8 @@ type Configuration struct {
 		ReviewSubjectText           string `json:"review_subject_text"`
 		FeedbackResponseSubjectText string `json:"feedback_response_subject_text"`
 		ReviewResponseSubjectText   string `json:"review_response_subject_text"`
+		FeedbackSmsBodyText         string `json:"feedback_sms_body_text"`
+		ReviewSmsBodyText           string `json:"review_sms_body_text"`
 	} `json:"survey"`
 }
 
