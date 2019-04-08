@@ -77,20 +77,24 @@
                     <div class="title">
                         <div class="container">
                             <h2>Hai ricevuto un nuovo feedback!</h2>
-                            <h3>Questo è il messaggio dell'utente</h3>
-                            <div>
-                                {{ .Message }}
-                            </div>
-                            <h5>Questa è una mail automatica. Non rispondere</h5>
+                            <h4>Questo è il messaggio dell'utente</h4>
+                            <p>
+                                <div><em>
+                                    {{ .Message }}
+                                </em></div>
+                            </p>
+                            <small>Questa è una mail automatica. Non rispondere</small>
                         </div>
                         <div class="divider"></div>
                         <div class="container">
                             <h2>You have received new feedback!</h2>
-                            <h3>This is the user's message</h3>
-                            <div>
-                                {{ .Message }}
-                            </div>
-                            <h5>This is an automatic email. Do not reply</h5>
+                            <h4>This is the user's message</h4>
+                            <p>
+                                <div><em>
+                                    {{ .Message }}
+                                </em></div>
+                            </p>
+                            <small>This is an automatic email. Do not reply</small>
                         </div>
                     </div>
                 </td>

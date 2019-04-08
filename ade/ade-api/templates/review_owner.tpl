@@ -543,12 +543,14 @@
                 6MDBcz1viAAAAAElFTkSuQmCC">
                             {{ end }}
                     {{if .Message}}
-                            <h3>Questo è il messaggio dell'utente</h3>
-                            <div>
-                                {{ .Message }}
-                            </div>
+                            <h4>Il cliente ha lasciato anche un messaggio:</h4>
+                            <p>
+                                <div><em>
+                                    {{ .Message }}
+                                </em></div>
+                            </p>
                     {{end}}
-                            <h5>Questa è una mail automatica. Non rispondere</h5>
+                            <small>Questa è una mail automatica. Non rispondere</small>
                         </div>
                         <div class="divider"></div>
                         <div class="container">
@@ -1019,12 +1021,14 @@
                 6MDBcz1viAAAAAElFTkSuQmCC">
                             {{ end }}
                     {{if .Message}}
-                            <h3>This is the user's message</h3>
-                            <div>
-                                {{ .Message }}
-                            </div>
+                            <h4>The customer also left a message:</h4>
+                            <p>
+                                <div><em>
+                                    {{ .Message }}
+                                </em></div>
+                            </p>
                     {{end}}
-                            <h5>This is an automatic email. Do not reply</h5>
+                            <small>This is an automatic email. Do not reply</small>
                         </div>
                     </div>
                 </td>
