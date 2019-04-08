@@ -12,6 +12,8 @@ icaro:
     title: "Icaro Hotspot Manager"
     company_name: "Icaro, Inc."
     help_url: "https://nethesis.github.io/icaro/docs/home/"
+  ade_ui:
+    title: "Icaro Hotspot Manager"
   sun_api:
     db_hostname: "localhost"
     db_username: "sun-api"

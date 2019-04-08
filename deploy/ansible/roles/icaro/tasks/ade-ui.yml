@@ -29,6 +29,12 @@
         remote_src: yes
   when: icaro.ade_ui is defined and icaro.ade_ui.assets_url is defined
 
+- name: Copy Ade-ui config
+  template:
+    src: ade-ui_config.js.j2
+    dest: /opt/icaro/ade-ui/static/config/config.js
+  when: icaro.ade_ui is defined
+
 - name: Remove temp files
   file:
     path:
