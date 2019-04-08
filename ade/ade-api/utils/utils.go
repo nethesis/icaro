@@ -123,11 +123,11 @@ func SendFeedBackMessageToUser(adeToken models.AdeToken, userEmail string, hotsp
 	userMessage, status := compileUserEmailTemplate("feedback", adeToken, hotspotName, hotspotLogo, bgColor, hotspot, BodyText)
 
 	if status {
-		mailFrom := wax_utils.GetHotspotPreferencesByKey(adeToken.HotspotId, "captive_2_title").Value + " <" + configuration.Config.Endpoints.Email.From + ">"
+		mailFrom := wax_utils.GetHotspotPreferencesByKey(hotspot.Id, "captive_2_title").Value + " <" + configuration.Config.Endpoints.Email.From + ">"
 		mailSubject := strings.Replace(
-			wax_utils.GetHotspotPreferencesByKey(adeToken.HotspotId, "marketing_15_feedback_subject_text").Value,
+			wax_utils.GetHotspotPreferencesByKey(hotspot.Id, "marketing_15_feedback_subject_text").Value,
 			"$$HOTSPOT$$",
-			wax_utils.GetHotspotPreferencesByKey(adeToken.HotspotId, "captive_2_title").Value, -1)
+			wax_utils.GetHotspotPreferencesByKey(hotspot.Id, "captive_2_title").Value, -1)
 		status = SendEmail(mailFrom, mailSubject, userMessage, userEmail)
 
 		if adeToken.Id != 0 {
@@ -144,11 +144,11 @@ func SendReviewMessageToUser(adeToken models.AdeToken, userEmail string, hotspot
 	userMessage, status := compileUserEmailTemplate("review", adeToken, hotspotName, hotspotLogo, bgColor, hotspot, BodyText)
 
 	if status {
-		mailFrom := wax_utils.GetHotspotPreferencesByKey(adeToken.HotspotId, "captive_2_title").Value + " <" + configuration.Config.Endpoints.Email.From + ">"
+		mailFrom := wax_utils.GetHotspotPreferencesByKey(hotspot.Id, "captive_2_title").Value + " <" + configuration.Config.Endpoints.Email.From + ">"
 		mailSubject := strings.Replace(
-			wax_utils.GetHotspotPreferencesByKey(adeToken.HotspotId, "marketing_16_review_subject_text").Value,
+			wax_utils.GetHotspotPreferencesByKey(hotspot.Id, "marketing_16_review_subject_text").Value,
 			"$$HOTSPOT$$",
-			wax_utils.GetHotspotPreferencesByKey(adeToken.HotspotId, "captive_2_title").Value, -1)
+			wax_utils.GetHotspotPreferencesByKey(hotspot.Id, "captive_2_title").Value, -1)
 		status = SendEmail(mailFrom, mailSubject, userMessage, userEmail)
 
 		if adeToken.Id != 0 {
