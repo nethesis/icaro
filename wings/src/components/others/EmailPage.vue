@@ -222,28 +222,6 @@ export default {
             this.doTempSession(
               this.authEmail,
               function(responseTmp) {
-                // if apple
-                var origin = "http://conncheck." + window.location.host;
-                var pathname = window.location.pathname;
-                var query =
-                  "?digest=" +
-                  params.digest +
-                  "&uuid=" +
-                  params.uuid +
-                  "&sessionid=" +
-                  params.sessionid +
-                  "&uamip=" +
-                  params.uamip +
-                  "&uamport=" +
-                  params.uamport +
-                  "&user=" +
-                  this.userId +
-                  "&code=.&email=" +
-                  this.authEmail;
-
-                window.location.replace(origin + pathname + query);
-
-                // else
                 this.codeRequested = true;
               },
               function(error) {
