@@ -163,7 +163,7 @@ func Init(ConfigFilePtr *string) {
 		Config.Endpoints.Email.From = os.Getenv("EMAIL_FROM")
 	}
 	if os.Getenv("EMAIL_FROM_NAME") != "" {
-		Config.Endpoints.Email.From = os.Getenv("EMAIL_FROM_NAME")
+		Config.Endpoints.Email.FromName = os.Getenv("EMAIL_FROM_NAME")
 	}
 	if os.Getenv("EMAIL_SMTP_HOST") != "" {
 		Config.Endpoints.Email.SMTPHost = os.Getenv("EMAIL_SMTP_HOST")
