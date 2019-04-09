@@ -5,7 +5,7 @@
     <div v-show="feedbackLeave" class="ui message success">
       <div class="content text-center">
         <div class="header">{{$t('thank_you_feedback')}}</div>
-        <p>{{$t('thank_you_feedback_text')}}.</p>
+        <p>{{$t('thank_you_feedback_text')}}</p>
       </div>
     </div>
 
