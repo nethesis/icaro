@@ -175,8 +175,8 @@
       "show_marketing_auth": "Mosta solo account con consenso marketing",
       "marketing_auth": "Marketing",
       "survey_auth": "Sondaggio",
-      "reason": "Ragione",
-      "country": "Paese",
+      "reason": "Motivo Visita",
+      "country": "Nazione",
       "business": "Business",
       "family": "Famiglia",
       "other": "Altro"
