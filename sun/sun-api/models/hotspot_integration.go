@@ -18,12 +18,16 @@
  * along with Icaro.  If not, see COPYING.
  *
  * author: Edoardo Spadoni <edoardo.spadoni@nethesis.it>
+ * author: Matteo  Valentini <matteo.valentini@nethesis.it>
  */
 
 package models
 
+import "time"
+
 type HotspotIntegration struct {
-	Id            int `db:"id" json:"-"`
-	HotspotId     int `db:"hotspot_id" json:"-"`
-	IntegrationId int `db:"integration_id" json:"-"`
+	Id            int       `db:"id" json:"-"`
+	HotspotId     int       `db:"hotspot_id" json:"-"`
+	IntegrationId int       `db:"integration_id" json:"-"`
+	LastSync      time.Time `db:"last_sync" json:"last_sync"`
 }
