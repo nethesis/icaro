@@ -14,6 +14,7 @@ import Accounts from "../components/Accounts.vue";
 import Profile from "../components/Profile.vue";
 import Units from "../components/Units.vue";
 import Reports from "../components/Reports.vue";
+import Integration from "../components/Integration.vue";
 import Marketing from "../components/Marketing.vue";
 import Devices from "../components/Devices.vue";
 
@@ -144,6 +145,14 @@ const router = new Router({
       path: "/marketing",
       name: "Marketing",
       component: Marketing,
+      meta: {
+        roles: ["admin", "reseller"]
+      }
+    },
+    {
+      path: "/integrations",
+      name: "Integration",
+      component: Integration,
       meta: {
         roles: ["admin", "reseller"]
       }

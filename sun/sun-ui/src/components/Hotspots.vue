@@ -36,7 +36,7 @@
     >
       <div class="result-list">{{total}} {{total == 1 ? $t('result') : $t('results')}}</div>
     </div>
-    <div v-if="!isLoading">
+    <div v-if="!isLoading && rows.length > 0">
       <form v-on:submit.prevent="searchFn($event)">
         <input
           class="form-control input-lg search-table-input"
@@ -47,7 +47,7 @@
     </div>
     <div v-if="!isLoading && isLoadingTable" class="spinner spinner-lg spinner-adjust"></div>
     <vue-good-table
-      v-if="!isLoading && !isLoadingTable"
+      v-if="!isLoading && !isLoadingTable && rows.length > 0"
       @perPageChanged="handlePerPage"
       :customRowsPerPageDropdown="[25,50,100]"
       :perPage="hotspotPerPage"

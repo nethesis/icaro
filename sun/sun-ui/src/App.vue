@@ -191,7 +191,7 @@
             v-if="(user.info.type == 'admin') || (user.info.type == 'reseller') ||  (user.info.type == 'customer')"
           >
             <a href="#/units">
-              <span class="fa pficon-connected" data-toggle="tooltip" title="Adipscing"></span>
+              <span class="fa pficon-connected" data-toggle="tooltip"></span>
               <span class="list-group-item-value">{{ $t("menu.units") }}</span>
             </a>
           </li>
@@ -215,14 +215,14 @@
             v-if="(user.info.type == 'admin') || (user.info.type == 'reseller') ||  (user.info.type == 'customer')"
           >
             <a href="#/sessions">
-              <span class="fa fa-list" data-toggle="tooltip" title="Adipscing"></span>
+              <span class="fa fa-list" data-toggle="tooltip"></span>
               <span class="list-group-item-value">{{ $t("menu.sessions") }}</span>
             </a>
           </li>
 
           <li v-bind:class="[getCurrentPath('reports') ? 'active' : '', 'list-group-item']">
             <a href="#/reports">
-              <span class="fa fa-area-chart" data-toggle="tooltip" title="Adipscing"></span>
+              <span class="fa fa-area-chart" data-toggle="tooltip"></span>
               <span class="list-group-item-value">{{ $t("menu.reports") }}</span>
             </a>
           </li>
@@ -233,8 +233,17 @@
             v-if="(user.info.type == 'admin') || (user.info.type == 'reseller')"
           >
             <a href="#/marketing">
-              <span class="fa fa-bullhorn" data-toggle="tooltip" title="Adipscing"></span>
+              <span class="fa fa-bullhorn" data-toggle="tooltip"></span>
               <span class="list-group-item-value">{{ $t("menu.marketing") }}</span>
+            </a>
+          </li>
+          <li
+            v-bind:class="[getCurrentPath('integrations') ? 'active' : '', 'list-group-item']"
+            v-if="(user.info.type == 'admin') || (user.info.type == 'reseller')"
+          >
+            <a href="#/integrations">
+              <span class="fa fa-cubes" data-toggle="tooltip"></span>
+              <span class="list-group-item-value">{{ $t("menu.integrations") }}</span>
             </a>
           </li>
           <li></li>
