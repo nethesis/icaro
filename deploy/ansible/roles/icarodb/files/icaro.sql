@@ -360,3 +360,27 @@ CREATE TABLE `ade_tokens` (
 );
 
 /* ------ */
+
+/* INTEGRATIONS */
+CREATE TABLE `integrations` (
+  `id` serial,
+  `name` varchar(250) NOT NULL,
+  `description` varchar(250) NOT NULL,
+  `site` varchar(250) NOT NULL,
+  `logo` mediumtext NOT NULL,
+  `webhook_url` varchar(250) NOT NULL,
+  `webhook_token` varchar(250) NOT NULL,
+  `pre_auth_redirect_url` varchar(250) NOT NULL,
+  `post_auth_redirect_url` varchar(250) NOT NULL,
+  PRIMARY KEY(`id`)
+);
+
+CREATE TABLE `hotspot_integrations` (
+  `id` serial,
+  `hotspot_id` bigint unsigned NOT NULL,
+  `integration_id` bigint unsigned NOT NULL,
+  FOREIGN KEY (`hotspot_id`) REFERENCES hotspots(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  FOREIGN KEY (`integration_id`) REFERENCES integrations(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  PRIMARY KEY(`id`)
+);
+/* ------------ */
