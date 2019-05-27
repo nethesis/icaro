@@ -43,12 +43,12 @@ type Session struct {
 	Unit   Unit `json:"unit"`
 	UnitId int  `db:"unit_id" json:"unit_id"`
 
-	Hotspot   Hotspot `json:"hotspot"`
+	Hotspot   Hotspot `json:"-"`
 	HotspotId int     `db:"hotspot_id" json:"hotspot_id"`
 
-	Device   Device `json:"device"`
+	Device   Device `json:"-"`
 	DeviceId int    `db:"device_id" json:"device_id"`
 
-	User   User `json:"user"`
+	User   User `json:"-"`
 	UserId int  `db:"user_id" json:"user_id"`
 }
