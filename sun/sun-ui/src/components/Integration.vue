@@ -24,9 +24,17 @@
       </div>
     </div>
 
+    <div v-if="!isLoading" class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <div class="alert alert-info alert-dismissable">
+        <span class="pficon pficon-info"></span>
+        <strong>{{$t('integrations.info')}}:</strong>
+        {{$t('integrations.info_desc')}}.
+      </div>
+    </div>
+
     <div
       v-if="!isLoading && hotspotSearchId > 0"
-      class="list-group list-view-pf list-view-pf-view col-xs-12 col-sm-12 col-md-12 col-lg-12 adjust-list-view"
+      class="list-group list-view-pf list-view-pf-view col-xs-12 col-sm-12 col-md-12 col-lg-12 adjust-list-view adjust-margin-top"
     >
       <div
         v-for="(i,ik) in integrations"
@@ -221,5 +229,9 @@ export default {
 .adjust-main-info {
   padding-bottom: 0px !important;
   padding-top: 10px !important;
+}
+
+.adjust-margin-top {
+  margin-top: 0px;
 }
 </style>
