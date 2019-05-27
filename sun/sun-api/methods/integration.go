@@ -61,15 +61,22 @@ func GetHotspotIntegrations(c *gin.Context) {
 		return
 	}
 
-	db := database.Instance()
-	db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt)).Find(&integrations)
+	if utils.Contains(utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt), hotspotIdInt) {
 
-	if len(integrations) <= 0 {
-		c.JSON(http.StatusNotFound, gin.H{"message": "No integrations found!"})
-		return
+		db := database.Instance()
+
+		db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt)).Find(&integrations)
+
+		if len(integrations) <= 0 {
+			c.JSON(http.StatusNotFound, gin.H{"message": "No integrations found!"})
+			return
+		}
+
+		c.JSON(http.StatusOK, integrations)
+
+	} else {
+		c.JSON(http.StatusUnauthorized, gin.H{"message": "This hotspot is not yours"})
 	}
-
-	c.JSON(http.StatusOK, integrations)
 }
 
 func UpdateHotspotIntegrations(c *gin.Context) {
@@ -121,16 +128,21 @@ func DeleteHotspotIntegrations(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "Hotspot id error", "error": err.Error()})
 		return
 	}
+	// check hotspot ownership
+	if utils.Contains(utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt), hotspotIdInt) {
 
-	db := database.Instance()
-	db.Where("integration_id = ? AND hotspot_id in (?)", integrationId, utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt)).First(&integration)
+		db := database.Instance()
+		db.Where("integration_id = ? AND hotspot_id in (?)", integrationId, utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt)).First(&integration)
 
-	if integration.Id == 0 {
-		c.JSON(http.StatusNotFound, gin.H{"message": "No integration found!"})
-		return
+		if integration.Id == 0 {
+			c.JSON(http.StatusNotFound, gin.H{"message": "No integration found!"})
+			return
+		}
+
+		db.Delete(&integration)
+
+		c.JSON(http.StatusOK, gin.H{"status": "success"})
+	} else {
+		c.JSON(http.StatusUnauthorized, gin.H{"message": "This hotspot is not yours"})
 	}
-
-	db.Delete(&integration)
-
-	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }
