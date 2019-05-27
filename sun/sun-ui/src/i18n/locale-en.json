@@ -270,6 +270,7 @@
       "sessions": "Sessions",
       "reports": "Reports",
       "marketing": "Feedback",
+      "integrations": "Integrations",
       "help": "Help",
       "profile": "Profile",
       "about": "About",
@@ -357,6 +358,13 @@
       "info": "Info",
       "sms_info": "The SMS have a limited number of characters, for this reason the text of the SMS is generated automatically and cannot be changed",
       "url_mandatory": " is a special placeholder that is used to dynamically create the feedback or review URL for user. DON'T delete it"
+    },
+    "integrations": {
+      "disable": "Disable",
+      "enable": "Enable",
+      "refresh": "Refresh",
+      "list": "List",
+      "force_sync": "Force Sync"
     },
     "sessions": "Sessions",
     "help": "Help",
