@@ -48,19 +48,44 @@ func GetIntegrations(c *gin.Context) {
 	c.JSON(http.StatusOK, integrations)
 }
 
-func UpdateHotspotIntegrations(c *gin.Context) {
+func GetHotspotIntegrations(c *gin.Context) {
+	var integrations []models.HotspotIntegration
 	accountId := c.MustGet("token").(models.AccessToken).AccountId
 
 	hotspotId := c.Param("hotspot_id")
 
-	var json models.HotspotIntegration
-	if err := c.BindJSON(&json); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"message": "Request fields malformed", "error": err.Error()})
+	// convert hotspot id to int
+	hotspotIdInt, err := strconv.Atoi(hotspotId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Hotspot id error", "error": err.Error()})
 		return
 	}
 
+	db := database.Instance()
+	db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt)).Find(&integrations)
+
+	if len(integrations) <= 0 {
+		c.JSON(http.StatusNotFound, gin.H{"message": "No integrations found!"})
+		return
+	}
+
+	c.JSON(http.StatusOK, integrations)
+}
+
+func UpdateHotspotIntegrations(c *gin.Context) {
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
+
+	hotspotId := c.Param("hotspot_id")
+	integrationId := c.Param("integration_id")
+
 	// convert hotspot id to int
 	hotspotIdInt, err := strconv.Atoi(hotspotId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Hotspot id error", "error": err.Error()})
+		return
+	}
+
+	integrationIdInt, err := strconv.Atoi(integrationId)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "Hotspot id error", "error": err.Error()})
 		return
@@ -70,8 +95,8 @@ func UpdateHotspotIntegrations(c *gin.Context) {
 	if utils.Contains(utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt), hotspotIdInt) {
 
 		integration := models.HotspotIntegration{
-			HotspotId:     json.HotspotId,
-			IntegrationId: json.IntegrationId,
+			HotspotId:     hotspotIdInt,
+			IntegrationId: integrationIdInt,
 		}
 
 		db := database.Instance()
@@ -81,4 +106,31 @@ func UpdateHotspotIntegrations(c *gin.Context) {
 	} else {
 		c.JSON(http.StatusUnauthorized, gin.H{"message": "This hotspot is not yours"})
 	}
+}
+
+func DeleteHotspotIntegrations(c *gin.Context) {
+	var integration models.HotspotIntegration
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
+
+	hotspotId := c.Param("hotspot_id")
+	integrationId := c.Param("integration_id")
+
+	// convert hotspot id to int
+	hotspotIdInt, err := strconv.Atoi(hotspotId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Hotspot id error", "error": err.Error()})
+		return
+	}
+
+	db := database.Instance()
+	db.Where("integration_id = ? AND hotspot_id in (?)", integrationId, utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt)).First(&integration)
+
+	if integration.Id == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"message": "No integration found!"})
+		return
+	}
+
+	db.Delete(&integration)
+
+	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }
