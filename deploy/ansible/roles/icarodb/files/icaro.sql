@@ -379,6 +379,7 @@ CREATE TABLE `hotspot_integrations` (
   `id` serial,
   `hotspot_id` bigint unsigned NOT NULL,
   `integration_id` bigint unsigned NOT NULL,
+  `last_sync` datetime,
   FOREIGN KEY (`hotspot_id`) REFERENCES hotspots(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   FOREIGN KEY (`integration_id`) REFERENCES integrations(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   UNIQUE KEY (`hotspot_id`, `integration_id`),
