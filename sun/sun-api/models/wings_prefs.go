@@ -22,6 +22,11 @@
 
 package models
 
+type IntegrationWings struct {
+	PreAuthRedirectUrl  string `db:"pre_auth_redirect_url" json:"pre_auth_redirect_url"`
+	PostAuthRedirectUrl string `db:"post_auth_redirect_url" json:"post_auth_redirect_url"`
+}
+
 type WingsPrefs struct {
 	HotspotId   int               `json:"hotspot_id"`
 	HotspotName string            `json:"hotspot_name"`
@@ -35,5 +40,5 @@ type WingsPrefs struct {
 		LinkedInClientId  string `json:"linkedin_client_id"`
 		InstagramClientId string `json:"instagram_client_id"`
 	} `json:"socials"`
-	Integrations []Integration `json:"integrations"`
+	Integrations []IntegrationWings `json:"integrations"`
 }

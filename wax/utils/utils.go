@@ -67,8 +67,8 @@ func GetHotspotPreferencesByKeys(hotspotId int, keys []string) []models.HotspotP
 	return prefs
 }
 
-func GetHotspotIntegrations(hotspotId int) []models.Integration {
-	var integrations []models.Integration
+func GetHotspotIntegrations(hotspotId int) []models.IntegrationWings {
+	var integrations []models.IntegrationWings
 	var hotspotIntegrations []models.HotspotIntegration
 
 	db := database.Instance()
@@ -80,7 +80,10 @@ func GetHotspotIntegrations(hotspotId int) []models.Integration {
 		db := database.Instance()
 		db.Where("id = ?", i.Id).Find(&integration)
 
-		integrations = append(integrations, integration)
+		integrations = append(integrations, models.IntegrationWings{
+			PreAuthRedirectUrl:  integration.PreAuthRedirectUrl,
+			PostAuthRedirectUrl: integration.PostAuthRedirectUrl,
+		})
 	}
 
 	return integrations
