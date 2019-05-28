@@ -78,6 +78,9 @@ func GetWingsPrefs(c *gin.Context) {
 	wingsPrefs.Disclaimers.TermsOfUse = terms
 	wingsPrefs.Disclaimers.MarketingUse = marketings
 
+	// integrations
+	wingsPrefs.Integrations = utils.GetHotspotIntegrations(hotspot.Id)
+
 	c.JSON(http.StatusOK, wingsPrefs)
 }
 

@@ -67,6 +67,25 @@ func GetHotspotPreferencesByKeys(hotspotId int, keys []string) []models.HotspotP
 	return prefs
 }
 
+func GetHotspotIntegrations(hotspotId int) []models.Integration {
+	var integrations []models.Integration
+	var hotspotIntegrations []models.HotspotIntegration
+
+	db := database.Instance()
+	db.Where("hotspot_id = ?", hotspotId).Find(&hotspotIntegrations)
+
+	for _, i := range hotspotIntegrations {
+		var integration models.Integration
+
+		db := database.Instance()
+		db.Where("id = ?", i.Id).Find(&integration)
+
+		integrations = append(integrations, integration)
+	}
+
+	return integrations
+}
+
 func CreateUserSession(userId int, sessionKey string) {
 	userSession := models.UserSession{
 		UserId:     userId,
