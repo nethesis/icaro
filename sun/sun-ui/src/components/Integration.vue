@@ -24,7 +24,10 @@
       </div>
     </div>
 
-    <div v-if="!isLoading" class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div
+      v-if="!isLoading && hotspotSearchId > 0"
+      class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12"
+    >
       <div class="alert alert-info alert-dismissable">
         <span class="pficon pficon-info"></span>
         <strong>{{$t('integrations.info')}}:</strong>
@@ -65,12 +68,17 @@
                   <a target="_blank" :href="i.site">{{i.site}}</a>
                 </div>
                 <div class="list-view-pf-additional-info-item">
-                  <span class="fa fa-refresh"></span>
-                  {{maps[i.id] && maps[i.id].last_sync | formatDate(true,true)}}
+                  <span
+                    :class="[maps[i.id] && maps[i.id].last_sync ? 'fa fa-refresh' : 'pficon pficon-warning-triangle-o']"
+                  ></span>
+                  <span
+                    v-if="maps[i.id] && maps[i.id].last_sync"
+                  >{{maps[i.id] && maps[i.id].last_sync | formatDate(false,true)}}</span>
+                  <span v-else>{{$t('integrations.failed')}}</span>
                   <button
                     :disabled="!maps[i.id]"
                     @click="createMap(i.id)"
-                    class="btn btn-sm btn-default"
+                    class="btn btn-sm btn-default adjust-space"
                   >{{$t('integrations.force_sync')}}</button>
                 </div>
               </div>
@@ -171,7 +179,8 @@ export default {
 
           for (var i in result) {
             maps[result[i].integration_id] = {
-              last_sync: result[i].last_sync
+              last_sync:
+                +new Date(result[i].last_sync) > 0 ? result[i].last_sync : false
             };
           }
 
@@ -227,11 +236,15 @@ export default {
 }
 
 .adjust-main-info {
-  padding-bottom: 0px !important;
-  padding-top: 10px !important;
+  padding-bottom: 8px !important;
+  padding-top: 8px !important;
 }
 
 .adjust-margin-top {
   margin-top: 0px;
+}
+
+.adjust-space {
+  margin-left: 8px;
 }
 </style>
