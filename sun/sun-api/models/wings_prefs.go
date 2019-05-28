@@ -35,4 +35,5 @@ type WingsPrefs struct {
 		LinkedInClientId  string `json:"linkedin_client_id"`
 		InstagramClientId string `json:"instagram_client_id"`
 	} `json:"socials"`
+	Integrations []Integration `json:"integrations"`
 }
