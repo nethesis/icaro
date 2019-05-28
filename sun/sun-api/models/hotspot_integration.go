@@ -28,6 +28,6 @@ import "time"
 type HotspotIntegration struct {
 	Id            int       `db:"id" json:"-"`
 	HotspotId     int       `db:"hotspot_id" json:"-"`
-	IntegrationId int       `db:"integration_id" json:"-"`
+	IntegrationId int       `db:"integration_id" json:"integration_id"`
 	LastSync      time.Time `db:"last_sync" json:"last_sync"`
 }
