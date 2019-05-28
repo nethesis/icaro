@@ -78,7 +78,7 @@
                   <button
                     :disabled="!maps[i.id]"
                     @click="createMap(i.id)"
-                    class="btn btn-sm btn-default adjust-space"
+                    class="btn btn-sm btn-primary adjust-space"
                   >{{$t('integrations.force_sync')}}</button>
                 </div>
               </div>
