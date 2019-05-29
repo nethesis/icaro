@@ -76,7 +76,9 @@ func Login(c *gin.Context) {
 				AccountId: account.Id,
 				Token:     token,
 				Role:      account.Type,
+				Type:      "login",
 				Expires:   expires,
+				ACLs:      "full",
 			}
 
 			db.Save(&accessToken)
