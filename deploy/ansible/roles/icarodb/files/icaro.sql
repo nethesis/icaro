@@ -34,9 +34,10 @@ CREATE TABLE `access_tokens` (
   `account_id` bigint unsigned NOT NULL,
   `token` varchar(200) NOT NULL,
   `role` varchar(200) NOT NULL,
-  `type` varchar(150) default "login",
+  `type` varchar(200) default "login",
   `expires` datetime NOT NULL,
-  `acls` varchar(150) default "full",
+  `acls` varchar(200) default "full",
+  `description` varchar(200),
   FOREIGN KEY (`account_id`) REFERENCES accounts(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   UNIQUE KEY (`account_id`, `id`),
   PRIMARY KEY(`id`)
