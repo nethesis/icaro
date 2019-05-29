@@ -101,6 +101,14 @@ func UpdateHotspotIntegrations(c *gin.Context) {
 	// check hotspot ownership
 	if utils.Contains(utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt), hotspotIdInt) {
 
+		integration := utils.GetIntegrationById(integrationIdInt)
+
+		if integration.Id <= 0 {
+
+			c.JSON(http.StatusNotFound, gin.H{"message": "Integration not found"})
+			return
+		}
+
 		hotspotIntegration := models.HotspotIntegration{
 			HotspotId:     hotspotIdInt,
 			IntegrationId: integrationIdInt,
@@ -128,11 +136,18 @@ func DeleteHotspotIntegrations(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "Hotspot id error", "error": err.Error()})
 		return
 	}
+
+	integrationIdInt, err := strconv.Atoi(integrationId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Integration id error", "error": err.Error()})
+		return
+	}
+
 	// check hotspot ownership
 	if utils.Contains(utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt), hotspotIdInt) {
 
 		db := database.Instance()
-		db.Where("integration_id = ? AND hotspot_id in (?)", integrationId, utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt)).First(&hotspotIntegration)
+		db.Where("integration_id = ? AND hotspot_id in (?)", integrationIdInt, utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt)).First(&hotspotIntegration)
 		if hotspotIntegration.Id == 0 {
 			c.JSON(http.StatusNotFound, gin.H{"message": "No integration found!"})
 			return
