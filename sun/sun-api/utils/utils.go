@@ -272,20 +272,31 @@ func CreateWebHookPayload(hostspotId int, status bool) []byte {
 	var accountsWebHook []models.AccountWebHook
 	var unitsWebHook []models.UnitWebHook
 	var hotspotWebHook models.HotspotWebHook
+	var token models.AccessToken
 
 	accountIds := ExtractAccountIdsByHotspotId(hostspotId)
 
 	db := database.Instance()
-
 	db.Where("id = ?", hostspotId).First(&hotspotWebHook)
 
 	if status {
 		db.Where("id in (?) AND (type = 'customer' OR type = 'desk')", accountIds).Find(&accountsWebHook)
 		db.Where("hotspot_id = ?", hostspotId).Find(&unitsWebHook)
+
+		// find first valid customer access token
+		customerId := 0
+		for _, a := range accountsWebHook {
+			if a.Type == "customer" {
+				customerId = a.Id
+				break
+			}
+		}
+		db.Where("type = 'api' AND role = 'customer' AND account_id = ?", customerId).First(&token)
 	}
 
 	webHook := models.WebHook{
 		Status:   status,
+		Token:    token.Token,
 		Hotspot:  hotspotWebHook,
 		Accounts: accountsWebHook,
 		Units:    unitsWebHook,
