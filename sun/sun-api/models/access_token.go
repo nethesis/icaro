@@ -29,5 +29,7 @@ type AccessToken struct {
 	AccountId int       `db:"account_id" json:"account_id"`
 	Token     string    `db:"token" json:"token"`
 	Role      string    `db:"role" json:"role"`
+	Type      string    `db:"type" json:"type"`
 	Expires   time.Time `db:"expires" json:"expires"`
+	ACLs      string    `gorm:"column:acls" json:"acls"`
 }
