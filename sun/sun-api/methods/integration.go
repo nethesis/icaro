@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Nethesis S.r.l.
+ * Copyright (C) 2019 Nethesis S.r.l.
  * http://www.nethesis.it - info@nethesis.it
  *
  * This file is part of Icaro project.
@@ -18,6 +18,7 @@
  * along with Icaro.  If not, see COPYING.
  *
  * author: Edoardo Spadoni <edoardo.spadoni@nethesis.it>
+ * author: Matteo Valentini <matteo.valentini@nethesis.it>
  */
 
 package methods
@@ -25,6 +26,7 @@ package methods
 import (
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
@@ -35,6 +37,7 @@ import (
 )
 
 func GetIntegrations(c *gin.Context) {
+
 	var integrations []models.Integration
 
 	db := database.Instance()
@@ -115,9 +118,19 @@ func UpdateHotspotIntegrations(c *gin.Context) {
 		}
 
 		db := database.Instance()
-		db.Save(&hotspotIntegration)
 
-		c.JSON(http.StatusOK, gin.H{"status": "success"})
+		db.Where(hotspotIntegration).FirstOrCreate(&hotspotIntegration)
+
+		if utils.CallIntegrationWebHook(integration, hotspotIdInt, true) {
+
+			hotspotIntegration.LastSync = time.Now()
+			db.Save(&hotspotIntegration)
+			c.JSON(http.StatusOK, gin.H{"status": "success"})
+
+		} else {
+			c.JSON(http.StatusInternalServerError, gin.H{"message": "Call to WebHook failed!"})
+		}
+
 	} else {
 		c.JSON(http.StatusUnauthorized, gin.H{"message": "This hotspot is not yours"})
 	}
@@ -153,9 +166,15 @@ func DeleteHotspotIntegrations(c *gin.Context) {
 			return
 		}
 
-		db.Delete(&hotspotIntegration)
+		if utils.CallIntegrationWebHook(utils.GetIntegrationById(integrationIdInt), hotspotIdInt, true) {
 
-		c.JSON(http.StatusOK, gin.H{"status": "success"})
+			db.Delete(&hotspotIntegration)
+			c.JSON(http.StatusOK, gin.H{"status": "success"})
+
+		} else {
+			c.JSON(http.StatusInternalServerError, gin.H{"message": "Call to WebHook failed!"})
+		}
+
 	} else {
 		c.JSON(http.StatusUnauthorized, gin.H{"message": "This hotspot is not yours"})
 	}
