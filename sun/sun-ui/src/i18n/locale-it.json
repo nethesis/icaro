@@ -212,7 +212,8 @@
       "add_sms": "Carica SMS",
       "sms_sent": "SMS Inviati",
       "sms_total": "SMS Totali",
-      "sms_to_add": "Numero di SMS da caricare"
+      "sms_to_add": "Numero di SMS da caricare",
+      "warning_tokens_found": "Se elimini questo utente, anche questi token verranno eliminati"
     },
     "unit": {
       "unit": "Unità",
@@ -354,6 +355,18 @@
       "info": "Info",
       "sms_info": "Gli SMS hanno un numero di caratteri limitati, per questo motivo il testo degli SMS è generato automaticamente e non è modificabile",
       "url_mandatory": " definisce il link da cliccare per accedere al sondaggio, NON eliminare"
+    },
+    "integrations": {
+      "disable": "Disabilita",
+      "enable": "Abilita",
+      "refresh": "Aggiorna",
+      "list": "Lista",
+      "force_sync": "Forza Sync",
+      "info": "Info",
+      "error": "Errore",
+      "info_desc": "Se abiliti una di queste integrazioni, gli account associati all'hotspot erediteranno le credenziali per loggarsi nella piattaforma esterna",
+      "error_desc": "C'è stato un errore temporaneo nell'integrazione. Riprova più tardi",
+      "failed": "Sync fallito"
     },
     "sessions": "Connessioni",
     "help": "Aiuto",
