@@ -241,6 +241,10 @@ func GetAccounts(c *gin.Context) {
 		db.Preload("SubscriptionPlan").Where("account_id = ?", account.Id).First(&subscription)
 		accounts[i].Subscription = subscription
 		accounts[i].Subscription.Expired = subscription.IsExpired()
+
+		var tokens []models.AccessToken
+		db.Where("account_id = ? AND type = 'api'", account.Id).Find(&tokens)
+		accounts[i].Tokens = tokens
 	}
 
 	c.JSON(http.StatusOK, gin.H{"data": accounts, "total": total})
@@ -249,6 +253,8 @@ func GetAccounts(c *gin.Context) {
 func GetAccount(c *gin.Context) {
 	var account models.AccountJSON
 	var subscription models.Subscription
+	var tokens []models.AccessToken
+
 	creatorId := c.MustGet("token").(models.AccessToken).AccountId
 
 	accountId := c.Param("account_id")
@@ -279,6 +285,9 @@ func GetAccount(c *gin.Context) {
 	db.Preload("SubscriptionPlan").Where("account_id = ?", account.Id).First(&subscription)
 	account.Subscription = subscription
 	account.Subscription.Expired = subscription.IsExpired()
+
+	db.Where("account_id = ? AND type = 'api'", account.Id).Find(&tokens)
+	account.Tokens = tokens
 
 	c.JSON(http.StatusOK, account)
 }

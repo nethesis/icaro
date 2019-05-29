@@ -215,7 +215,8 @@
       "add_sms": "Add SMS pack",
       "sms_sent": "SMS Sent",
       "sms_total": "SMS Total",
-      "sms_to_add": "SMS to add"
+      "sms_to_add": "SMS to add",
+      "warning_tokens_found": "If you delete this user, also these tokens will be deleted"
     },
     "unit": {
       "unit": "Unit",

@@ -93,6 +93,12 @@
               <div class="alert alert-warning alert-dismissable">
                 <span class="pficon pficon-warning-triangle-o"></span>
                 <strong>{{ $t("account.warning_delete_title") }}</strong>. {{ $t("account.warning_delete_sub") }}
+                <div v-if="currentObj.tokens.length > 0">
+                  <br>{{$t('account.warning_tokens_found')}}:
+                  <li v-for="(t,tk) in currentObj.tokens" :key="tk">
+                    <code>{{t.token}}</code> <span>(<b>{{t.description}}</b>)</span>
+                  </li>
+                </div>
               </div>
               <div v-if="errors.delete" class="alert alert-danger alert-dismissable">
                 <span class="pficon pficon-error-circle-o"></span>
@@ -164,7 +170,9 @@ export default {
   props: ["details", "obj", "update"],
   mixins: [AccountService, StorageService],
   data() {
-    var currentObj = {};
+    var currentObj = {
+      tokens: []
+    };
     var newPassword,
       confirmPassword = "";
 
