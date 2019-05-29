@@ -73,12 +73,13 @@ func Login(c *gin.Context) {
 			expires := time.Now().UTC().AddDate(0, 0, configuration.Config.TokenExpiresDays)
 
 			accessToken := models.AccessToken{
-				AccountId: account.Id,
-				Token:     token,
-				Role:      account.Type,
-				Type:      "login",
-				Expires:   expires,
-				ACLs:      "full",
+				AccountId:   account.Id,
+				Token:       token,
+				Role:        account.Type,
+				Type:        "login",
+				Expires:     expires,
+				ACLs:        "full",
+				Description: "",
 			}
 
 			db.Save(&accessToken)
