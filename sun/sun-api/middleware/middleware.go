@@ -41,7 +41,27 @@ func respondWithError(code int, message string, c *gin.Context) {
 	c.Abort()
 }
 
-func Authorization(role string, route models.Route) bool {
+func Authorization(role string, route models.Route, tokenType string, acls string) bool {
+
+	// check if access_token is role token
+	if tokenType == "api" {
+		if acls == "full" {
+			return true
+		}
+
+		if acls == "write" {
+			if route.Verb == "GET" || route.Verb == "POST" || route.Verb == "PUT" {
+				return true
+			}
+		}
+
+		if acls == "read" {
+			if route.Verb == "GET" {
+				return true
+			}
+		}
+		return false
+	}
 
 	// extract authorizations from configs
 	auths := reflect.ValueOf(configuration.Config.RouteBlocked)
@@ -61,8 +81,8 @@ func Authorization(role string, route models.Route) bool {
 			}
 		}
 	}
-
 	return true
+
 }
 
 func AAWall(c *gin.Context) {
@@ -83,7 +103,7 @@ func AAWall(c *gin.Context) {
 		return
 	}
 
-	if accessToken.Expires.Before(time.Now().UTC()) {
+	if accessToken.Type != "api" && accessToken.Expires.Before(time.Now().UTC()) {
 		respondWithError(http.StatusUnauthorized, "API token is expired", c)
 		return
 	}
@@ -94,7 +114,7 @@ func AAWall(c *gin.Context) {
 		Endpoint: c.Request.URL.Path,
 	}
 
-	authorized := Authorization(accessToken.Role, route)
+	authorized := Authorization(accessToken.Role, route, accessToken.Type, accessToken.ACLs)
 	if !authorized {
 		respondWithError(http.StatusForbidden, "Unauthorized action", c)
 		return
