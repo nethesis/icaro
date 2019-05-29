@@ -69,7 +69,7 @@ func Init(action string, worker bool) {
 
 func cleanTokens() {
 	db := database.Instance()
-	db.Where("expires < ?", time.Now().UTC()).Delete(models.AccessToken{})
+	db.Where("expires < ? AND type = 'login", time.Now().UTC()).Delete(models.AccessToken{})
 }
 
 func storeSessions() {
