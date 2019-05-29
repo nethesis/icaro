@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Nethesis S.r.l.
+ * Copyright (C) 2019 Nethesis S.r.l.
  * http://www.nethesis.it - info@nethesis.it
  *
  * This file is part of Icaro project.
@@ -18,6 +18,7 @@
  * along with Icaro.  If not, see COPYING.
  *
  * author: Edoardo Spadoni <edoardo.spadoni@nethesis.it>
+ * author: Matteo Valentini <matteo.valentini@nethesis.it>
  */
 
 package utils
