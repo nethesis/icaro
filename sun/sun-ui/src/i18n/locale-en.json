@@ -366,7 +366,9 @@
       "list": "List",
       "force_sync": "Force Sync",
       "info": "Info",
+      "error": "Error",
       "info_desc": "If you enable one of theese integrations, the accounts associated on the hotspot inherit the credentials to login in the external platform",
+      "error_desc": "There was a temporary error in integration sync. Try again later",
       "failed": "Sync failed"
     },
     "sessions": "Sessions",

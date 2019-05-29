@@ -28,10 +28,21 @@
       v-if="!isLoading && hotspotSearchId > 0"
       class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12"
     >
-      <div class="alert alert-info alert-dismissable">
+      <div class="alert alert-info">
         <span class="pficon pficon-info"></span>
         <strong>{{$t('integrations.info')}}:</strong>
         {{$t('integrations.info_desc')}}.
+      </div>
+    </div>
+
+    <div v-if="!isLoading && isError" class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span class="pficon pficon-close"></span>
+        </button>
+        <span class="pficon pficon-error-circle-o"></span>
+        <strong>{{$t('integrations.error')}}.</strong>
+        {{$t('integrations.error_desc')}}.
       </div>
     </div>
 
@@ -104,11 +115,10 @@ export default {
     return {
       msg: this.$i18n.t("menu.integrations"),
       isLoading: true,
-      accountType: this.get("loggedUser").account_type,
+      isError: false,
       hotspots: [],
       integrations: [],
       maps: {},
-      isAdmin: this.get("loggedUser").account_type == "admin",
       hotspotSearchId: 0,
       user: this.get("loggedUser") || null
     };
@@ -200,11 +210,13 @@ export default {
         this.hotspotSearchId,
         integrationId,
         success => {
+          this.isError = false;
           this.getMaps();
         },
         error => {
           console.error(error);
           this.isLoading = false;
+          this.isError = true;
         }
       );
     },
@@ -214,11 +226,13 @@ export default {
         this.hotspotSearchId,
         integrationId,
         success => {
+          this.isError = false;
           this.getMaps();
         },
         error => {
           console.error(error);
           this.isLoading = false;
+          this.isError = true;
         }
       );
     }
@@ -241,10 +255,10 @@ export default {
 }
 
 .adjust-margin-top {
-  margin-top: 0px;
+  margin-top: 0px !important;
 }
 
 .adjust-space {
-  margin-left: 8px;
+  margin-left: 8px !important;
 }
 </style>
