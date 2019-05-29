@@ -97,7 +97,7 @@ func UpdateHotspotIntegrations(c *gin.Context) {
 
 	integrationIdInt, err := strconv.Atoi(integrationId)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"message": "Hotspot id error", "error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Integration id error", "error": err.Error()})
 		return
 	}
 
