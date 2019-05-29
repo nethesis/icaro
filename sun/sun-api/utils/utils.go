@@ -23,7 +23,10 @@
 package utils
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
+	"net/http"
 	"strconv"
 	"time"
 
@@ -236,4 +239,85 @@ func Contains(intSlice []int, searchInt int) bool {
 		}
 	}
 	return false
+}
+
+func GetIntegrationById(id int) models.Integration {
+	var integration models.Integration
+	db := database.Instance()
+	db.Where("id = ?", id).First(&integration)
+
+	return integration
+}
+
+func ExtractAccountIdsByHotspotId(hotspotId int) []int {
+
+	var accountsHotspot []models.AccountsHotspot
+
+	db := database.Instance()
+
+	db.Select("account_id").Where("hotspot_id = ?", hotspotId).Find(&accountsHotspot)
+
+	result := []int{}
+
+	for _, accountHotspot := range accountsHotspot {
+		result = append(result, accountHotspot.AccountId)
+	}
+
+	return result
+}
+
+func CreateWebHookPayload(hostspotId int, status bool) []byte {
+
+	var accountsWebHook []models.AccountWebHook
+	var unitsWebHook []models.UnitWebHook
+	var hotspotWebHook models.HotspotWebHook
+
+	accountIds := ExtractAccountIdsByHotspotId(hostspotId)
+
+	db := database.Instance()
+
+	db.Where("id = ?", hostspotId).First(&hotspotWebHook)
+
+	if status {
+		db.Where("id in (?) AND (type = 'customer' OR type = 'desk')", accountIds).Find(&accountsWebHook)
+		db.Where("hotspot_id = ?", hostspotId).Find(&unitsWebHook)
+	}
+
+	webHook := models.WebHook{
+		Status:   status,
+		Hotspot:  hotspotWebHook,
+		Accounts: accountsWebHook,
+		Units:    unitsWebHook,
+	}
+
+	webHookPayload, _ := json.Marshal(webHook)
+
+	return webHookPayload
+
+}
+
+func CallIntegrationWebHook(integration models.Integration, hostspotId int, status bool) bool {
+
+	var client = &http.Client{
+		Timeout: time.Second * 30,
+	}
+
+	req, _ := http.NewRequest("POST", integration.WebHookUrl,
+		bytes.NewBuffer(CreateWebHookPayload(hostspotId, status)))
+	req.Header.Set("X-Icaro-WebHook-Token", integration.WebHookToken)
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := client.Do(req)
+
+	if err != nil {
+		return false
+	}
+
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return false
+	}
+	return true
+
 }
