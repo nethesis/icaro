@@ -307,7 +307,7 @@ func ExtractAccountIdsByHotspotId(hotspotId int, accountTypeFilter ...string) []
 	return result
 }
 
-func CreateWebHookPayload(hostspotId int, status bool) []byte {
+func CreateWebHookPayload(integration models.Integration, hostspotId int, status bool) []byte {
 
 	var accountsWebHook []models.AccountWebHook
 	var unitsWebHook []models.UnitWebHook
@@ -323,15 +323,8 @@ func CreateWebHookPayload(hostspotId int, status bool) []byte {
 		db.Where("id in (?) AND (type = 'customer' OR type = 'desk')", accountIds).Find(&accountsWebHook)
 		db.Where("hotspot_id = ?", hostspotId).Find(&unitsWebHook)
 
-		// find first valid customer access token
-		customerId := 0
-		for _, a := range accountsWebHook {
-			if a.Type == "customer" {
-				customerId = a.Id
-				break
-			}
-		}
-		db.Where("type = 'api' AND role = 'customer' AND account_id = ?", customerId).First(&token)
+		customersIds := ExtractAccountIdsByHotspotId(hostspotId, "customer")
+		db.Where("type = 'api' AND description = ? AND account_id in (?)", "integration: "+integration.Name, customersIds).First(&token)
 	}
 
 	webHook := models.WebHook{
@@ -355,7 +348,7 @@ func CallIntegrationWebHook(integration models.Integration, hostspotId int, stat
 	}
 
 	req, _ := http.NewRequest("POST", integration.WebHookUrl,
-		bytes.NewBuffer(CreateWebHookPayload(hostspotId, status)))
+		bytes.NewBuffer(CreateWebHookPayload(integration, hostspotId, status)))
 	req.Header.Set("X-Icaro-WebHook-Token", integration.WebHookToken)
 	req.Header.Set("Content-Type", "application/json")
 

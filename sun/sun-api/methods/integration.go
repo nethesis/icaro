@@ -112,12 +112,32 @@ func UpdateHotspotIntegrations(c *gin.Context) {
 			return
 		}
 
+		customersIds := utils.ExtractAccountIdsByHotspotId(hotspotIdInt, "customer")
+
+		if len(customersIds) <= 0 {
+			c.JSON(http.StatusInternalServerError, gin.H{"message": "No customer account associate to hotspot found!"})
+			return
+		}
+
+		db := database.Instance()
+
+		var tokens []models.AccessToken
+		db.Where("type = 'api' AND account_id in (?) AND description = ?",
+			customersIds, "integration: "+integration.Name).Find(&tokens)
+
+		if len(tokens) <= 0 {
+			token := utils.GenerateApiToken(customersIds[0], "read", "integration: "+integration.Name)
+			if token.Id <= 0 {
+				c.JSON(http.StatusInternalServerError, gin.H{"message": "Can't create api token!"})
+				return
+
+			}
+		}
+
 		hotspotIntegration := models.HotspotIntegration{
 			HotspotId:     hotspotIdInt,
 			IntegrationId: integrationIdInt,
 		}
-
-		db := database.Instance()
 
 		db.Where(hotspotIntegration).FirstOrCreate(&hotspotIntegration)
 
@@ -166,9 +186,17 @@ func DeleteHotspotIntegrations(c *gin.Context) {
 			return
 		}
 
-		if utils.CallIntegrationWebHook(utils.GetIntegrationById(integrationIdInt), hotspotIdInt, true) {
+		integration := utils.GetIntegrationById(integrationIdInt)
+
+		if utils.CallIntegrationWebHook(integration, hotspotIdInt, false) {
+
+			customersIds := utils.ExtractAccountIdsByHotspotId(hotspotIdInt, "customer")
+
+			db.Where("type = 'api' AND account_id in (?) AND description = ?",
+				customersIds, "integration: "+integration.Name).Delete(models.AccessToken{})
 
 			db.Delete(&hotspotIntegration)
+
 			c.JSON(http.StatusOK, gin.H{"status": "success"})
 
 		} else {
