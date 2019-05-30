@@ -152,6 +152,31 @@ export default {
       voucherAvailable = true;
     }
 
+    var params = this.extractParams();
+
+    this.getPreferences(
+      params,
+      function(success) {
+        this.$parent.hotspot.disclaimers = success.body.disclaimers;
+        this.$root.$options.hotspot.disclaimers = success.body.disclaimers;
+        this.$root.$options.hotspot.integrations = success.body.integrations;
+        this.hotspot.disclaimers = success.body.disclaimers;
+        this.hotspot.preferences = success.body.preferences;
+
+        if (this.$route.query.integration_done && this.$route.query.code) {
+          this.voucherAvailable = true;
+          this.voucherValidated = false;
+          this.authorized = false;
+          this.dedaloError = false;
+          this.authCode = this.$route.query.code;
+          this.validateCode();
+        }
+      },
+      function(error) {
+        console.error(error);
+      }
+    );
+
     return {
       hotspot: {
         preferences: this.$root.$options.hotspot.preferences,
@@ -219,30 +244,70 @@ export default {
           ) {
             // do login immediately
             var context = this;
-            this.doDedaloLogin(
-              {
-                id: responseAuth.body.code,
-                password: responseAuth.body.code || ""
-              },
-              function(responseDedalo) {
-                if (
-                  responseDedalo &&
-                  responseDedalo.body &&
-                  responseDedalo.body.clientState == 1
-                ) {
-                  context.authorized = true;
-                  context.dedaloError = false;
-                } else {
-                  context.authorized = false;
-                  context.dedaloError = true;
+
+            // check integrations
+            if (
+              this.$root.$options.hotspot.integrations &&
+              this.$root.$options.hotspot.integrations[0] &&
+              this.$root.$options.hotspot.integrations[0]
+                .post_auth_redirect_url &&
+              this.$root.$options.hotspot.integrations[0].post_auth_redirect_url
+                .length > 0 &&
+              !this.$route.query.integration_done
+            ) {
+              // go to post_auth_redirect_url
+              var redirectUrl = this.$root.$options.hotspot.integrations[0]
+                .post_auth_redirect_url;
+
+              var query =
+                "?digest=" +
+                params.digest +
+                "&uuid=" +
+                params.uuid +
+                "&sessionid=" +
+                params.sessionid +
+                "&uamip=" +
+                params.uamip +
+                "&uamport=" +
+                params.uamport +
+                "&user=" +
+                this.userId +
+                "&nasid=" +
+                params.nasid +
+                "&code=" +
+                this.authCode +
+                "&validated=true";
+
+              var pathname = window.location.pathname;
+
+              window.location.replace(redirectUrl + pathname + query);
+            } else {
+              this.doDedaloLogin(
+                {
+                  id: responseAuth.body.code,
+                  password: responseAuth.body.code || ""
+                },
+                function(responseDedalo) {
+                  if (
+                    responseDedalo &&
+                    responseDedalo.body &&
+                    responseDedalo.body.clientState == 1
+                  ) {
+                    context.authorized = true;
+                    context.dedaloError = false;
+                    context.$forceUpdate();
+                  } else {
+                    context.authorized = false;
+                    context.dedaloError = true;
+                  }
+                },
+                function(error) {
+                  this.authorized = false;
+                  this.dedaloError = true;
+                  console.error(error);
                 }
-              },
-              function(error) {
-                this.authorized = false;
-                this.dedaloError = true;
-                console.error(error);
-              }
-            );
+              );
+            }
           } else if (
             responseAuth.body.type == "auth" &&
             this.hotspot.preferences.temp_code_login == "false"
