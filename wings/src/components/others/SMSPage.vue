@@ -156,7 +156,13 @@ export default {
       function(success) {
         this.$parent.hotspot.disclaimers = success.body.disclaimers;
         this.$root.$options.hotspot.disclaimers = success.body.disclaimers;
+        this.$root.$options.hotspot.integrations = success.body.integrations;
         this.hotspot.disclaimers = success.body.disclaimers;
+        this.hotspot.preferences = success.body.preferences;
+
+        if (this.$route.query.integration_done) {
+          this.execLogin();
+        }
       },
       function(error) {
         console.error(error);
@@ -256,28 +262,67 @@ export default {
       this.errors.dedaloError = false;
       this.errors.badCode = false;
 
-      // exec dedalo login
-      this.doDedaloLogin(
-        {
-          id: this.authPrefix + this.authSMS,
-          password: this.authCode || ""
-        },
-        function(responseDedalo) {
-          if (responseDedalo.body.clientState == 1) {
-            this.authorized = true;
-            this.errors.dedaloError = false;
-          } else {
+      if (
+        this.$root.$options.hotspot.integrations &&
+        this.$root.$options.hotspot.integrations[0] &&
+        this.$root.$options.hotspot.integrations[0].post_auth_redirect_url &&
+        this.$root.$options.hotspot.integrations[0].post_auth_redirect_url
+          .length > 0 &&
+        !this.$route.query.integration_done
+      ) {
+        // go to post_auth_redirect_url
+        var redirectUrl = this.$root.$options.hotspot.integrations[0]
+          .post_auth_redirect_url;
+
+        var params = this.extractParams();
+
+        var query =
+          "?digest=" +
+          params.digest +
+          "&uuid=" +
+          params.uuid +
+          "&sessionid=" +
+          params.sessionid +
+          "&uamip=" +
+          params.uamip +
+          "&uamport=" +
+          params.uamport +
+          "&user=" +
+          this.userId +
+          "&nasid=" +
+          params.nasid +
+          "&code=" +
+          this.authCode +
+          "&num=" +
+          this.authSMS;
+
+        var pathname = window.location.pathname;
+
+        window.location.replace(redirectUrl + pathname + query);
+      } else {
+        // exec dedalo login
+        this.doDedaloLogin(
+          {
+            id: this.authPrefix + this.authSMS,
+            password: this.authCode || ""
+          },
+          function(responseDedalo) {
+            if (responseDedalo.body.clientState == 1) {
+              this.authorized = true;
+              this.errors.dedaloError = false;
+            } else {
+              this.authorized = false;
+              this.errors.dedaloError = true;
+              this.errors.badCode = true;
+            }
+          },
+          function(error) {
             this.authorized = false;
             this.errors.dedaloError = true;
-            this.errors.badCode = true;
+            console.error(error);
           }
-        },
-        function(error) {
-          this.authorized = false;
-          this.errors.dedaloError = true;
-          console.error(error);
-        }
-      );
+        );
+      }
     },
     navigate() {
       if (this.conditions && this.surveys) {

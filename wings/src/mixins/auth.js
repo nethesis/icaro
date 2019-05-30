@@ -41,6 +41,7 @@ var AuthMixin = {
             var digest = this.$root.$options.hotspot.digest || null
             var uuid = this.$root.$options.hotspot.uuid || null
             var sessionid = this.$root.$options.hotspot.sessionid || null
+            var nasid = this.$root.$options.hotspot.nasid || null
             var uamip = this.$root.$options.hotspot.uamip || null
             var uamport = this.$root.$options.hotspot.uamport || null
             var voucher = this.$root.$options.session && this.$root.$options.session['voucherCode'] ? this.$root.$options.session['voucherCode'] : null
@@ -53,7 +54,8 @@ var AuthMixin = {
                 sessionid: sessionid,
                 uamip: uamip,
                 uamport: uamport,
-                voucher: voucher
+                voucher: voucher,
+                nasid: nasid
             }
         },
         parseState: function (state) {
@@ -63,16 +65,18 @@ var AuthMixin = {
             var uamip = state.split('&')[3]
             var uamport = state.split('&')[4]
             var voucher = state.split('&')[5]
+            var nasid = state.split('&')[6]
             return {
                 digest: digest,
                 uuid: uuid,
                 sessionid: sessionid,
                 uamip: uamip,
                 uamport: uamport,
-                voucher: voucher
+                voucher: voucher,
+                nasid: nasid
             }
         },
-        createWaxURL: function (code, params, endpoint, reset) {
+        createWaxURL: function (code, params, endpoint, reset, user) {
             var host = window.location.host
             var url = 'https://' + host + '/wax/register/' + endpoint + '/' + encodeURIComponent(code) +
                 '?digest=' + params.digest +
@@ -81,7 +85,9 @@ var AuthMixin = {
                 '&reset=' + reset +
                 '&uamip=' + params.uamip +
                 '&uamport=' + params.uamport +
-                '&voucher_code=' + params.voucher
+                '&voucher_code=' + params.voucher +
+                '&nasid=' + params.nasid +
+                '&user=' + user
             return url
         },
         getSocialLoginURL: function (params, social) {

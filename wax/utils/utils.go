@@ -77,7 +77,7 @@ func GetHotspotIntegrations(hotspotId int) []models.IntegrationWings {
 		var integration models.Integration
 
 		db := database.Instance()
-		db.Where("id = ?", i.Id).Find(&integration)
+		db.Where("id = ?", i.IntegrationId).Find(&integration)
 
 		integrations = append(integrations, models.IntegrationWings{
 			PreAuthRedirectUrl:  integration.PreAuthRedirectUrl,
