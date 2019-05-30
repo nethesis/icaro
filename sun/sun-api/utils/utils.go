@@ -25,6 +25,7 @@ package utils
 
 import (
 	"bytes"
+	"crypto/sha256"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -106,6 +107,33 @@ func OffsetCalc(page string, limit string) [2]int {
 
 	result := [2]int{resOffset, resLimit}
 	return result
+}
+
+func GenerateApiToken(accountId int, acls string, description string) models.AccessToken {
+
+	var accessToken models.AccessToken
+
+	account := GetAccountById(accountId)
+
+	if account.Id <= 0 {
+		return accessToken
+	}
+
+	accessToken.AccountId = account.Id
+	accessToken.Role = account.Type
+	accessToken.ACLs = acls
+	accessToken.Description = description
+	accessToken.Type = "api"
+
+	// create authorization token
+	h := sha256.New()
+	h.Write([]byte(time.Now().UTC().String() + account.Username + account.Password))
+	accessToken.Token = fmt.Sprintf("%x", h.Sum(nil))
+
+	db := database.Instance()
+	db.Save(&accessToken)
+
+	return accessToken
 }
 
 func ExtractToken(token string) models.AccessToken {
