@@ -25,7 +25,7 @@ package models
 
 type WebHook struct {
 	Status   bool             `json:"status"`
-	Token    string           `json:"token"`
+	Token    string           `json:"token,omitempty"`
 	Hotspot  HotspotWebHook   `json:"hotspot"`
 	Accounts []AccountWebHook `json:"accounts,omitempty"`
 	Units    []UnitWebHook    `json:"units,omitempty"`
