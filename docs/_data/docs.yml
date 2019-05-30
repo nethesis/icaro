@@ -13,3 +13,8 @@
   - client_installation
   - network
   - configuration
+
+- title: Integrations
+  docs:
+  - home_integration
+  - api_token
