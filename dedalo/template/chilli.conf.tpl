@@ -29,6 +29,9 @@ include /opt/icaro/dedalo/walled_gardens/facebook.conf
 include /opt/icaro/dedalo/walled_gardens/linkedin.conf
 include /opt/icaro/dedalo/walled_gardens/instagram.conf
 
+# list of integrations walled garden
+${HS_WALLED_GARDEN_INTEGRATIONS}
+
 ${USE_UPDOWN_SCRIPTS:+"ipup=/opt/icaro/dedalo/up.sh"}
 ${USE_UPDOWN_SCRIPTS:+"ipdown=/opt/icaro/dedalo/down.sh"}
 

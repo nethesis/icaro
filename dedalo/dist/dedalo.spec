@@ -35,13 +35,17 @@ mkdir -p %{buildroot}/opt/icaro/dedalo
 install -D -m644 dedalo/dedalo.service %{buildroot}/%{_unitdir}/dedalo.service
 install -D -m644 dedalo/config %{buildroot}/opt/icaro/dedalo/config
 install -D -m755 dedalo/dedalo %{buildroot}/%{_bindir}/dedalo
+
 mkdir -p %{buildroot}/opt/icaro/dedalo/template
 install -D -m644 dedalo/template/chilli.conf.tpl %{buildroot}/opt/icaro/dedalo/template/chilli.conf.tpl
 install -D -m775 dedalo/template/engine %{buildroot}/opt/icaro/dedalo/template/engine
+
 mkdir -p %{buildroot}/opt/icaro/dedalo/walled_gardens
+mkdir -p %{buildroot}/opt/icaro/dedalo/walled_gardens/integrations
 install -D -m644 dedalo/walled_gardens/facebook.conf %{buildroot}/opt/icaro/dedalo/walled_gardens/facebook.conf
 install -D -m644 dedalo/walled_gardens/linkedin.conf %{buildroot}/opt/icaro/dedalo/walled_gardens/linkedin.conf
 install -D -m644 dedalo/walled_gardens/instagram.conf %{buildroot}/opt/icaro/dedalo/walled_gardens/instagram.conf
+
 mkdir -p %{buildroot}/opt/icaro/dedalo/www
 install -D -m755 dedalo/www/temporary.chi  %{buildroot}/opt/icaro/dedalo/www/temporary.chi
 touch %{buildroot}/opt/icaro/dedalo/local.conf
