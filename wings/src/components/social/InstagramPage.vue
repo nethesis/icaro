@@ -85,6 +85,7 @@ export default {
           this.$parent.hotspot.preferences = success.body.preferences;
           this.$root.$options.hotspot.disclaimers = success.body.disclaimers;
           this.$root.$options.hotspot.preferences = success.body.preferences;
+          this.$root.$options.hotspot.integrations = success.body.integrations;
           this.hotspot.disclaimers = success.body.disclaimers;
           $("body").css(
             "background-color",
@@ -101,34 +102,78 @@ export default {
       var url = this.createWaxURL(
         params.code,
         this.parseState(params.state),
-        "social/instagram"
+        "social/instagram",
+        false,
+        this.$route.query.integration_done ? this.$route.query.user : ""
       );
 
       // get user id
       this.$http.get(url).then(
         function(responseAuth) {
           this.userId = responseAuth.body.user_db_id;
-          // exec dedalo login
-          this.doDedaloLogin(
-            {
-              id: responseAuth.body.user_id,
-              password: responseAuth.password || ""
-            },
-            function(responseDedalo) {
-              if (responseDedalo.body.clientState == 1) {
-                this.authorized = true;
-                this.dedaloError = false;
-              } else {
+
+          // check integrations
+          if (
+            this.$root.$options.hotspot.integrations &&
+            this.$root.$options.hotspot.integrations[0] &&
+            this.$root.$options.hotspot.integrations[0]
+              .post_auth_redirect_url &&
+            this.$root.$options.hotspot.integrations[0].post_auth_redirect_url
+              .length > 0 &&
+            !this.$route.query.integration_done
+          ) {
+            // go to post_auth_redirect_url
+            var redirectUrl = this.$root.$options.hotspot.integrations[0]
+              .post_auth_redirect_url;
+
+            var appendParams = this.parseState(params.state);
+
+            var query =
+              "?digest=" +
+              appendParams.digest +
+              "&uuid=" +
+              appendParams.uuid +
+              "&sessionid=" +
+              appendParams.sessionid +
+              "&uamip=" +
+              appendParams.uamip +
+              "&uamport=" +
+              appendParams.uamport +
+              "&user=" +
+              this.userId +
+              "&nasid=" +
+              appendParams.nasid;
+
+            var search = window.location.search.includes("?")
+              ? window.location.search.replace("?", "&")
+              : "";
+
+            var pathname = window.location.pathname;
+
+            window.location.replace(redirectUrl + pathname + query + search);
+          } else {
+            // exec dedalo login
+            this.doDedaloLogin(
+              {
+                id: responseAuth.body.user_id,
+                password: responseAuth.password || ""
+              },
+              function(responseDedalo) {
+                if (responseDedalo.body.clientState == 1) {
+                  this.authorized = true;
+                  this.dedaloError = false;
+                } else {
+                  this.authorized = false;
+                  this.dedaloError = true;
+                }
+              },
+              function(error) {
                 this.authorized = false;
                 this.dedaloError = true;
+                console.error(error);
               }
-            },
-            function(error) {
-              this.authorized = false;
-              this.dedaloError = true;
-              console.error(error);
-            }
-          );
+            );
+          }
         },
         function(error) {
           this.authorized = false;

@@ -73,6 +73,7 @@
             this.$root.$options.hotspot.sessionid = this.$route.query.sessionid
             this.$root.$options.hotspot.uamip = this.$route.query.uamip
             this.$root.$options.hotspot.uamport = this.$route.query.uamport
+            this.$root.$options.hotspot.nasid = this.$route.query.nasid
             state = true
           }
         } else {

@@ -47,6 +47,27 @@ func FacebookAuth(c *gin.Context) {
 	uuid := c.Query("uuid")
 	sessionId := c.Query("sessionid")
 	voucherCode := c.Query("voucher_code")
+	userExistId := c.Query("user")
+
+	// check if user already exists
+	if len(userExistId) > 0 {
+		// convert user id to int
+		userExistIdInt, err := strconv.Atoi(userExistId)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"message": "User id error", "error": err.Error()})
+			return
+		}
+
+		user := utils.GetUserById(userExistIdInt)
+
+		if user.Id == 0 {
+			c.JSON(http.StatusNotFound, gin.H{"message": "No user found!"})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"user_id": user.Username, "user_db_id": user.Id})
+		return
+	}
 
 	clientId := configuration.Config.AuthSocial.Facebook.ClientId
 	clientSecret := configuration.Config.AuthSocial.Facebook.ClientSecret
@@ -219,6 +240,27 @@ func LinkedInAuth(c *gin.Context) {
 	uuid := c.Query("uuid")
 	sessionId := c.Query("sessionid")
 	voucherCode := c.Query("voucher_code")
+	userExistId := c.Query("user")
+
+	// check if user already exists
+	if len(userExistId) > 0 {
+		// convert user id to int
+		userExistIdInt, err := strconv.Atoi(userExistId)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"message": "User id error", "error": err.Error()})
+			return
+		}
+
+		user := utils.GetUserById(userExistIdInt)
+
+		if user.Id == 0 {
+			c.JSON(http.StatusNotFound, gin.H{"message": "No user found!"})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"user_id": user.Username, "user_db_id": user.Id})
+		return
+	}
 
 	clientId := configuration.Config.AuthSocial.LinkedIn.ClientId
 	clientSecret := configuration.Config.AuthSocial.LinkedIn.ClientSecret
@@ -404,6 +446,27 @@ func InstagramAuth(c *gin.Context) {
 	uuid := c.Query("uuid")
 	sessionId := c.Query("sessionid")
 	voucherCode := c.Query("voucher_code")
+	userExistId := c.Query("user")
+
+	// check if user already exists
+	if len(userExistId) > 0 {
+		// convert user id to int
+		userExistIdInt, err := strconv.Atoi(userExistId)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"message": "User id error", "error": err.Error()})
+			return
+		}
+
+		user := utils.GetUserById(userExistIdInt)
+
+		if user.Id == 0 {
+			c.JSON(http.StatusNotFound, gin.H{"message": "No user found!"})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"user_id": user.Username, "user_db_id": user.Id})
+		return
+	}
 
 	clientId := configuration.Config.AuthSocial.Instagram.ClientId
 	clientSecret := configuration.Config.AuthSocial.Instagram.ClientSecret
