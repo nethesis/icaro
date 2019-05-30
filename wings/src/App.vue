@@ -29,6 +29,7 @@
           this.$root.$options.hotspot.disclaimers = success.body.disclaimers
           this.$root.$options.hotspot.preferences = success.body.preferences
           this.$root.$options.hotspot.socials = success.body.socials
+          this.$root.$options.hotspot.integrations = success.body.integrations
           this.$root.$options.session = {}
           this.hotspot.name = success.body.hotspot_name
           this.hotspot.preferences = success.body.preferences
