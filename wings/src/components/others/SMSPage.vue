@@ -161,7 +161,13 @@ export default {
         this.hotspot.preferences = success.body.preferences;
 
         if (this.$route.query.integration_done) {
-          this.execLogin();
+          var context = this;
+          context.dedaloRequested = true;
+          context.authorized = false;
+          context.errors.dedaloError = false;
+          setTimeout(function() {
+            context.execLogin();
+          }, 1000);
         }
       },
       function(error) {
@@ -294,7 +300,7 @@ export default {
           "&code=" +
           this.authCode +
           "&num=" +
-          this.authSMS;
+          encodeURIComponent(this.authPrefix + this.authSMS);
 
         var pathname = window.location.pathname;
 

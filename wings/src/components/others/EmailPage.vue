@@ -147,7 +147,13 @@ export default {
         this.hotspot.preferences = success.body.preferences;
 
         if (this.$route.query.integration_done) {
-          this.execLogin();
+          var context = this;
+          context.dedaloRequested = true;
+          context.authorized = false;
+          context.errors.dedaloError = false;
+          setTimeout(function() {
+            context.execLogin();
+          }, 1000);
         }
       },
       function(error) {
@@ -182,7 +188,8 @@ export default {
       surveys: false,
       countries: require("./../../i18n/countries.json"),
       additionalCountry: "-",
-      additionalReason: "-"
+      additionalReason: "-",
+      iOS: /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
     };
   },
   methods: {
@@ -227,7 +234,29 @@ export default {
             this.doTempSession(
               this.authEmail,
               function(responseTmp) {
-                this.codeRequested = true;
+                // if apple
+                if (this.iOS) {
+                  var origin = "http://conncheck." + window.location.host;
+                  var pathname = window.location.pathname;
+                  var query =
+                    "?digest=" +
+                    params.digest +
+                    "&uuid=" +
+                    params.uuid +
+                    "&sessionid=" +
+                    params.sessionid +
+                    "&uamip=" +
+                    params.uamip +
+                    "&uamport=" +
+                    params.uamport +
+                    "&user=" +
+                    this.userId +
+                    "&code=.&email=" +
+                    this.authEmail;
+                  window.location.replace(origin + pathname + query);
+                } else {
+                  this.codeRequested = true;
+                }
               },
               function(error) {
                 this.codeRequested = false;
@@ -286,7 +315,16 @@ export default {
 
         var pathname = window.location.pathname;
 
-        window.location.replace(redirectUrl + pathname + query);
+        this.doDedaloLogout(
+          function(responseDedaloLogout) {
+            window.location.replace(redirectUrl + pathname + query);
+          },
+          function(error) {
+            this.authorized = false;
+            this.errors.dedaloError = true;
+            console.error(error);
+          }
+        );
       } else {
         // exec logout
         this.doDedaloLogout(

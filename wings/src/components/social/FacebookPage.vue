@@ -152,27 +152,32 @@ export default {
 
             window.location.replace(redirectUrl + pathname + query + search);
           } else {
-            // exec dedalo login
-            this.doDedaloLogin(
-              {
-                id: responseAuth.body.user_id,
-                password: responseAuth.password || ""
-              },
-              function(responseDedalo) {
-                if (responseDedalo.body.clientState == 1) {
-                  this.authorized = true;
-                  this.dedaloError = false;
-                } else {
-                  this.authorized = false;
-                  this.dedaloError = true;
+            var context = this;
+            setTimeout(function() {
+              context.authorized = false;
+              context.dedaloError = false;
+              // exec dedalo login
+              context.doDedaloLogin(
+                {
+                  id: responseAuth.body.user_id,
+                  password: responseAuth.password || ""
+                },
+                function(responseDedalo) {
+                  if (responseDedalo.body.clientState == 1) {
+                    context.authorized = true;
+                    context.dedaloError = false;
+                  } else {
+                    context.authorized = false;
+                    context.dedaloError = true;
+                  }
+                },
+                function(error) {
+                  context.authorized = false;
+                  context.dedaloError = true;
+                  console.error(error);
                 }
-              },
-              function(error) {
-                this.authorized = false;
-                this.dedaloError = true;
-                console.error(error);
-              }
-            );
+              );
+            }, 1000);
           }
         },
         function(error) {
