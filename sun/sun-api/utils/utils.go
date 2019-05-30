@@ -284,7 +284,7 @@ func ExtractAccountIdsByHotspotId(hotspotId int) []int {
 
 	db := database.Instance()
 
-	db.Select("account_id").Where("hotspot_id = ?", hotspotId).Find(&accountsHotspot)
+	db.Select("account_id").Where("hotspot_id = ?", hotspotId).Order("account_id").Find(&accountsHotspot)
 
 	result := []int{}
 
