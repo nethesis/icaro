@@ -278,7 +278,7 @@ func GetIntegrationById(id int) models.Integration {
 	return integration
 }
 
-func ExtractAccountIdsByHotspotId(hotspotId int) []int {
+func ExtractAccountIdsByHotspotId(hotspotId int, accountTypeFilter ...string) []int {
 
 	var accountsHotspot []models.AccountsHotspot
 
@@ -290,6 +290,18 @@ func ExtractAccountIdsByHotspotId(hotspotId int) []int {
 
 	for _, accountHotspot := range accountsHotspot {
 		result = append(result, accountHotspot.AccountId)
+	}
+
+	if len(accountTypeFilter) > 0 {
+		var accounts []models.Account
+
+		db.Select("id").Where("type = ? AND id in (?)", accountTypeFilter[0], result).Order("id").Find(&accounts)
+
+		result = nil
+		for _, account := range accounts {
+			result = append(result, account.Id)
+		}
+
 	}
 
 	return result
