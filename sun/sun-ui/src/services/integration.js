@@ -31,6 +31,22 @@ var IntegrationService = {
         )
         .then(success, error);
     },
+    mapAccountsGetAll(accountId, success, error) {
+      this.$http
+        .get(
+          this.$root.$options.api_scheme +
+            this.$root.$options.api_host +
+            "/api/account_integrations/" +
+            accountId,
+          {
+            headers: {
+              Token:
+                (this.get("loggedUser") && this.get("loggedUser").token) || ""
+            }
+          }
+        )
+        .then(success, error);
+    },
     mapCreate(hotspotId, integrationId, success, error) {
       this.$http
         .put(
@@ -50,6 +66,25 @@ var IntegrationService = {
         )
         .then(success, error);
     },
+    mapAccountsCreate(accountId, integrationId, success, error) {
+      this.$http
+        .post(
+          this.$root.$options.api_scheme +
+            this.$root.$options.api_host +
+            "/api/account_integrations/" +
+            accountId +
+            "/" +
+            integrationId,
+          null,
+          {
+            headers: {
+              Token:
+                (this.get("loggedUser") && this.get("loggedUser").token) || ""
+            }
+          }
+        )
+        .then(success, error);
+    },
     mapDelete(hotspotId, integrationId, success, error) {
       this.$http
         .delete(
@@ -57,6 +92,24 @@ var IntegrationService = {
             this.$root.$options.api_host +
             "/api/hotspot_integrations/" +
             hotspotId +
+            "/" +
+            integrationId,
+          {
+            headers: {
+              Token:
+                (this.get("loggedUser") && this.get("loggedUser").token) || ""
+            }
+          }
+        )
+        .then(success, error);
+    },
+    mapAccountsDelete(accountId, integrationId, success, error) {
+      this.$http
+        .delete(
+          this.$root.$options.api_scheme +
+            this.$root.$options.api_host +
+            "/api/account_integrations/" +
+            accountId +
             "/" +
             integrationId,
           {

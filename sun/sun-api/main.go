@@ -82,6 +82,13 @@ func DefineAPI(router *gin.Engine) {
 			integrations.GET("", methods.GetIntegrations)
 		}
 
+		account_integrations := api.Group("/account_integrations")
+		{
+			account_integrations.GET("/:account_id", methods.GetAccountIntegrations)
+			account_integrations.POST("/:account_id/:integration_id", methods.CreateAccountIntegrations)
+			account_integrations.DELETE("/:account_id/:integration_id", methods.DeleteAccountIntegrations)
+		}
+
 		hotspot_integrations := api.Group("/hotspot_integrations")
 		{
 			hotspot_integrations.GET("/:hotspot_id", methods.GetHotspotIntegrations)

@@ -378,6 +378,16 @@ CREATE TABLE `integrations` (
   PRIMARY KEY(`id`)
 );
 
+CREATE TABLE `account_integrations` (
+  `id` serial,
+  `account_id` bigint unsigned NOT NULL,
+  `integration_id` bigint unsigned NOT NULL,
+  FOREIGN KEY (`account_id`) REFERENCES accounts(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  FOREIGN KEY (`integration_id`) REFERENCES integrations(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  UNIQUE KEY (`account_id`, `integration_id`),
+  PRIMARY KEY(`id`)
+);
+
 CREATE TABLE `hotspot_integrations` (
   `id` serial,
   `hotspot_id` bigint unsigned NOT NULL,
