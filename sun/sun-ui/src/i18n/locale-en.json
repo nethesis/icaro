@@ -216,7 +216,12 @@
       "sms_sent": "SMS Sent",
       "sms_total": "SMS Total",
       "sms_to_add": "SMS to add",
-      "warning_tokens_found": "If you delete this user, also these tokens will be deleted"
+      "warning_tokens_found": "If you delete this user, also these tokens will be deleted",
+      "description": "Description",
+      "site": "Site",
+      "enable": "Enable",
+      "disable": "Disable",
+      "integration": "Integration"
     },
     "unit": {
       "unit": "Unit",
@@ -370,7 +375,9 @@
       "error": "Error",
       "info_desc": "If you enable one of theese integrations, the accounts associated on the hotspot inherit the credentials to login in the external platform",
       "error_desc": "There was a temporary error in integration sync. Try again later",
-      "failed": "Sync failed"
+      "failed": "Sync failed",
+      "not_found": "No integrations found",
+      "not_found_desc": "There is no integrations available or you are not able to view them"
     },
     "sessions": "Sessions",
     "help": "Help",

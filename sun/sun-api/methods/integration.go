@@ -41,7 +41,7 @@ func GetIntegrations(c *gin.Context) {
 	var integrations []models.Integration
 
 	db := database.Instance()
-	db.Find(&integrations)
+	db.Joins("JOIN account_integrations on account_integrations.integration_id = integrations.id").Find(&integrations)
 
 	if len(integrations) <= 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No integrations found!"})
@@ -67,7 +67,6 @@ func GetHotspotIntegrations(c *gin.Context) {
 	if utils.Contains(utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt), hotspotIdInt) {
 
 		db := database.Instance()
-
 		db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt)).Find(&integrations)
 
 		if len(integrations) <= 0 {
@@ -205,5 +204,91 @@ func DeleteHotspotIntegrations(c *gin.Context) {
 
 	} else {
 		c.JSON(http.StatusUnauthorized, gin.H{"message": "This hotspot is not yours"})
+	}
+}
+
+func GetAccountIntegrations(c *gin.Context) {
+	var integrations []models.AccountIntegration
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
+
+	resellerId := c.Param("account_id")
+
+	if accountId == 1 {
+		db := database.Instance()
+		db.Where("account_id = ?", resellerId).Find(&integrations)
+
+		if len(integrations) <= 0 {
+			c.JSON(http.StatusNotFound, gin.H{"message": "No integrations found!"})
+			return
+		}
+
+		c.JSON(http.StatusOK, integrations)
+	} else {
+		c.JSON(http.StatusForbidden, gin.H{"message": "Operation not permitted!"})
+	}
+}
+
+func CreateAccountIntegrations(c *gin.Context) {
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
+
+	resellerId := c.Param("account_id")
+	integrationId := c.Param("integration_id")
+
+	// convert reseller id to int
+	resellerIdInt, err := strconv.Atoi(resellerId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Reseller id error", "error": err.Error()})
+		return
+	}
+
+	// convert integration id to int
+	integrationIdInt, err := strconv.Atoi(integrationId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Integration id error", "error": err.Error()})
+		return
+	}
+
+	accountIntegration := models.AccountIntegration{
+		AccountId:     resellerIdInt,
+		IntegrationId: integrationIdInt,
+	}
+
+	// check hotspot ownership
+	if accountId == 1 {
+		db := database.Instance()
+		db.Save(&accountIntegration)
+
+		if accountIntegration.Id == 0 {
+			c.JSON(http.StatusConflict, gin.H{"id": accountIntegration.Id, "status": "integration already exists"})
+		} else {
+			c.JSON(http.StatusCreated, gin.H{"id": accountIntegration.Id, "status": "success"})
+		}
+	} else {
+		c.JSON(http.StatusUnauthorized, gin.H{"message": "Operation not permitted"})
+	}
+}
+
+func DeleteAccountIntegrations(c *gin.Context) {
+	var integration models.AccountIntegration
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
+
+	resellerId := c.Param("account_id")
+	integrationId := c.Param("integration_id")
+
+	if accountId == 1 {
+
+		db := database.Instance()
+		db.Where("account_id = ? AND integration_id = ?", resellerId, integrationId).First(&integration)
+
+		if integration.Id == 0 {
+			c.JSON(http.StatusNotFound, gin.H{"message": "No integration found!"})
+			return
+		}
+
+		db.Delete(&integration)
+
+		c.JSON(http.StatusOK, gin.H{"status": "success"})
+	} else {
+		c.JSON(http.StatusForbidden, gin.H{"message": "Operation not permitted!"})
 	}
 }

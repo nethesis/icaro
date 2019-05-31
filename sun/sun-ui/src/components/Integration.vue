@@ -2,8 +2,15 @@
   <div>
     <h2>{{ msg }}</h2>
     <div v-if="isLoading" class="spinner spinner-lg"></div>
+    <div v-if="integrations.length == 0" class="blank-slate-pf" id>
+      <div class="blank-slate-pf-icon">
+        <span class="fa fa-cubes"></span>
+      </div>
+      <h1>{{$t('integrations.not_found')}}</h1>
+      <p>{{$t('integrations.not_found_desc')}}.</p>
+    </div>
     <div
-      v-if="(user.account_type == 'admin') || (user.account_type == 'reseller') && !isLoading"
+      v-if="(user.account_type == 'admin' || user.account_type == 'reseller') && !isLoading && integrations.length > 0"
       class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12"
     >
       <label v-if="!isLoading" class="col-sm-2 control-label" for="textInput-markup">Hotspot</label>
@@ -18,14 +25,17 @@
         </select>
       </div>
     </div>
-    <div v-if="!isLoading" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div
+      v-if="!isLoading && integrations.length > 0"
+      class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12"
+    >
       <div class="col-sm-3">
         <button class="btn btn-primary" @click="getMaps()">{{$t('integrations.refresh')}}</button>
       </div>
     </div>
 
     <div
-      v-if="!isLoading && hotspotSearchId > 0"
+      v-if="!isLoading && hotspotSearchId > 0 && integrations.length > 0"
       class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12"
     >
       <div class="alert alert-info">

@@ -1,6 +1,7 @@
 <template>
   <div>
-    <h2>Manager
+    <h2>
+      Manager
       <strong class="soft">{{ info.data.username }}</strong>
     </h2>
 
@@ -10,8 +11,13 @@
           <div class="card-pf-heading">
             <h2 class="card-pf-title">
               {{info.data.name}}
-              <div v-if="!info.isLoading" :class="[getLoginIcon(info.data.type), 'right']" data-toggle="tooltip" data-placement="left"
-                :title="$t(info.data.type)"></div>
+              <div
+                v-if="!info.isLoading"
+                :class="[getLoginIcon(info.data.type), 'right']"
+                data-toggle="tooltip"
+                data-placement="left"
+                :title="$t(info.data.type)"
+              ></div>
               <div v-if="info.isLoading" class="spinner spinner-sm right"></div>
             </h2>
           </div>
@@ -40,8 +46,7 @@
               <account-action details="false" :obj="info.data" :update="getInfo"></account-action>
             </div>
             <p>
-              <a href="#" class="card-pf-link-with-icon">
-              </a>
+              <a href="#" class="card-pf-link-with-icon"></a>
             </p>
           </div>
         </div>
@@ -52,7 +57,12 @@
           <div class="card-pf-heading">
             <h2 class="card-pf-title">
               {{$t("account.add_sms")}}
-              <div v-if="!sms.isLoading" class="fa fa-commenting right" data-toggle="tooltip" data-placement="left"></div>
+              <div
+                v-if="!sms.isLoading"
+                class="fa fa-commenting right"
+                data-toggle="tooltip"
+                data-placement="left"
+              ></div>
               <div v-if="sms.isLoading" class="spinner spinner-sm right"></div>
             </h2>
           </div>
@@ -76,8 +86,49 @@
                 <button class="btn btn-primary">{{$t('update')}}</button>
               </div>
               <p>
-                <a href="#" class="card-pf-link-with-icon">
-                </a>
+                <a href="#" class="card-pf-link-with-icon"></a>
+              </p>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div
+        v-if="isAdmin && info.data.type == 'reseller'"
+        v-for="(i,ik) in integrations"
+        :key="ik"
+        class="col-xs-12 col-sm-12 col-md-6"
+      >
+        <div class="card-pf card-pf-accented">
+          <div class="card-pf-heading">
+            <h2 class="card-pf-title">
+              {{$t('account.integration')}}:
+              <b>{{i.name}}</b>
+              <div class="right">
+                <img class="img-int" :src="i.logo">
+              </div>
+            </h2>
+          </div>
+          <form role="form" v-on:submit.prevent="updateSMSCount()">
+            <div class="card-pf-body">
+              <div class="list-details">
+                <dt>{{ $t("account.description") }}</dt>
+                <dd>{{i.description}}</dd>
+              </div>
+              <div class="list-details">
+                <dt>{{ $t("account.site") }}</dt>
+                <dd>{{i.site}}</dd>
+              </div>
+            </div>
+            <div class="card-pf-footer">
+              <div class="dropdown card-pf-time-frame-filter">
+                <button
+                  :class="['btn', maps[i.id] ? 'btn-default' : 'btn-primary']"
+                  @click="maps[i.id] ? deleteIntegration(i.id) : createIntegration(i.id)"
+                >{{maps[i.id] ? $t('account.disable') : $t('account.enable')}}</button>
+              </div>
+              <p>
+                <a href="#" class="card-pf-link-with-icon"></a>
               </p>
             </div>
           </form>
@@ -92,11 +143,18 @@ import AccountService from "../../services/account";
 import StorageService from "../../services/storage";
 import StatsService from "../../services/stats";
 import UtilService from "../../services/util";
+import IntegrationService from "../../services/integration";
 import AccountAction from "../../directives/AccountAction.vue";
 
 export default {
   name: "AccountsDetails",
-  mixins: [AccountService, StatsService, StorageService, UtilService],
+  mixins: [
+    AccountService,
+    StatsService,
+    StorageService,
+    UtilService,
+    IntegrationService
+  ],
   components: {
     accountAction: AccountAction
   },
@@ -107,6 +165,10 @@ export default {
     // get sms info
     this.getActualSMSCount();
 
+    // integrations
+    this.getIntegrations();
+    this.getMaps();
+
     return {
       info: {
         isLoading: true,
@@ -116,6 +178,8 @@ export default {
         isLoading: true,
         data: {}
       },
+      integrations: [],
+      maps: {},
       isAdmin: this.get("loggedUser").account_type == "admin"
     };
   },
@@ -134,6 +198,36 @@ export default {
         error => {
           this.info.isLoading = false;
           console.error(error.body);
+        }
+      );
+    },
+    getIntegrations() {
+      this.integrationGetAll(
+        success => {
+          this.integrations = success.body;
+        },
+        error => {
+          console.error(error);
+          this.integrations = [];
+        }
+      );
+    },
+    getMaps() {
+      this.mapAccountsGetAll(
+        this.$route.params.id,
+        success => {
+          var result = success.body;
+          var maps = {};
+
+          for (var i in result) {
+            maps[result[i].integration_id] = true;
+          }
+
+          this.maps = maps;
+        },
+        error => {
+          console.error(error);
+          this.maps = [];
         }
       );
     },
@@ -161,10 +255,34 @@ export default {
         success => {
           this.sms.isLoading = false;
           this.sms.data = success.body;
-          this.getActualSMSCount()
+          this.getActualSMSCount();
         },
         error => {
           this.sms.isLoading = false;
+          console.error(error.body);
+        }
+      );
+    },
+    createIntegration(integrationId) {
+      this.mapAccountsCreate(
+        this.$route.params.id,
+        integrationId,
+        success => {
+          this.getMaps();
+        },
+        error => {
+          console.error(error.body);
+        }
+      );
+    },
+    deleteIntegration(integrationId) {
+      this.mapAccountsDelete(
+        this.$route.params.id,
+        integrationId,
+        success => {
+          this.getMaps();
+        },
+        error => {
           console.error(error.body);
         }
       );
@@ -172,3 +290,10 @@ export default {
   }
 };
 </script>
+
+<style>
+.img-int {
+  width: 20px;
+  height: 20px;
+}
+</style>
