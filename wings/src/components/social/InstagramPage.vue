@@ -1,8 +1,15 @@
 <template>
-  <div class="ui segment">
+  <div class="ui segment form">
     <div v-if="!authorized && !dedaloError" class="ui active centered inline text loader">
       {{
       $t("social.auth_progress") }}...
+    </div>
+    <div v-if="authorized" class="ui icon positive message">
+      <i class="check icon"></i>
+      <div class="content">
+        <div class="header">{{ $t("social.auth_success") }}</div>
+        <p>{{ $t("social.auth_success_sub") }}...</p>
+      </div>
     </div>
     <div
       v-if="authorized && $parent.hotspot.preferences.marketing_0_reason_country == 'true' && userId != 0"

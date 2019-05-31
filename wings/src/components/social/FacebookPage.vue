@@ -160,22 +160,6 @@ export default {
     };
   },
   methods: {
-    accept: function() {
-      // open redir url
-      if (
-        this.$root.$options.hotspot.preferences.facebook_login_page &&
-        this.$root.$options.hotspot.preferences.facebook_login_page.length > 0
-      ) {
-        window.location.replace(
-          this.$root.$options.hotspot.preferences.facebook_login_page
-        );
-      } else {
-        window.location.replace(
-          this.$root.$options.hotspot.preferences.captive_1_redir
-        );
-      }
-    },
-
     navigate() {
       if (this.conditions && this.surveys) {
         this.accept();

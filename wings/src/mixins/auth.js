@@ -99,7 +99,7 @@ var AuthMixin = {
                     url = 'https://www.linkedin.com/oauth/v2/authorization?' +
                         'client_id=' + params.li_client_id +
                         '&state=' + encodeURIComponent(params.digest + "&" + params.uuid + "&" + params.sessionid + "&" + params.uamip + "&" + params.uamport + "&" + params.voucher) +
-                        '&scope=' + escape('r_basicprofile r_emailaddress w_share') +
+                        '&scope=' + escape('r_liteprofile r_emailaddress w_member_social') +
                         '&redirect_uri=' + escape('http://' + window.location.host + '/wings/login/linkedin') +
                         '&response_type=code'
                     break

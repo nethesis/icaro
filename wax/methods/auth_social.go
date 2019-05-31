@@ -254,7 +254,7 @@ func LinkedInAuth(c *gin.Context) {
 	}
 
 	// extract user info
-	urlAPI := "https://api.linkedin.com/v1/people/~:(id,first-name,last-name,email-address,headline,current-share,num-connections,location,positions)?format=json"
+	urlAPI := "https://api.linkedin.com/v2/me"
 
 	req, err := http.NewRequest("GET", urlAPI, nil)
 	if err != nil {
@@ -271,6 +271,28 @@ func LinkedInAuth(c *gin.Context) {
 
 	var liUserDetail models.LinkedInUserDetail
 	err = json.Unmarshal(body, &liUserDetail)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	// extract email info
+	urlAPIEmail := "https://api.linkedin.com/v2/emailAddress?q=members&projection=(elements*(handle~))"
+
+	req, err = http.NewRequest("GET", urlAPIEmail, nil)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	req.Header.Add("Authorization", "Bearer "+liRespToken.AccessToken)
+	resp, err = client.Do(req)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	defer resp.Body.Close()
+	body, err = ioutil.ReadAll(resp.Body)
+
+	var liEmailDetail models.LinkedinEmailDetail
+	err = json.Unmarshal(body, &liEmailDetail)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
@@ -321,7 +343,7 @@ func LinkedInAuth(c *gin.Context) {
 			Name:                 liUserDetail.FirstName + " " + liUserDetail.LastName,
 			Username:             liUserDetail.Id,
 			Password:             "",
-			Email:                liUserDetail.Email,
+			Email:                liEmailDetail.Elements[0].HandleDetails.EmailAddress,
 			AccountType:          "linkedin",
 			Reason:               "",
 			Country:              "",
