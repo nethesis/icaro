@@ -24,6 +24,10 @@
 package methods
 
 import (
+	"crypto/aes"
+	"crypto/cipher"
+	"crypto/rand"
+	"encoding/base64"
 	"net/http"
 	"strconv"
 	"time"
@@ -37,15 +41,55 @@ import (
 )
 
 func GetIntegrations(c *gin.Context) {
+	var integrations []models.IntegrationJSON
+	var account models.Account
 
-	var integrations []models.Integration
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
 
 	db := database.Instance()
-	db.Joins("JOIN account_integrations on account_integrations.integration_id = integrations.id").Find(&integrations)
+
+	if accountId == 1 {
+		db.Find(&integrations)
+	} else {
+		db.Where("id = ?", accountId).First(&account)
+
+		if account.Type == "customer" || account.Type == "desk" {
+			accountId = account.CreatorId
+		}
+
+		db.Joins("JOIN account_integrations on account_integrations.integration_id = integrations.id").Where("account_integrations.account_id = ?", accountId).Find(&integrations)
+
+	}
 
 	if len(integrations) <= 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No integrations found!"})
 		return
+	}
+
+	// calculate and crypt login url for account
+	for i, integration := range integrations {
+		text := "username=" + account.Username + "&password=" + account.Password
+		key := integration.WebHookToken
+
+		block, err := aes.NewCipher([]byte(key))
+		if err != nil {
+			panic(err)
+		}
+
+		iv := make([]byte, 16)
+		_, err = rand.Read(iv)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err})
+			return
+		}
+
+		plaintext := []byte(text)
+		cfb := cipher.NewCFBEncrypter(block, iv)
+		ciphertext := make([]byte, len(plaintext))
+		cfb.XORKeyStream(ciphertext, plaintext)
+
+		integrations[i].AuthLoginURL = base64.StdEncoding.EncodeToString(ciphertext)
+		integrations[i].IV = base64.StdEncoding.EncodeToString(iv)
 	}
 
 	c.JSON(http.StatusOK, integrations)
