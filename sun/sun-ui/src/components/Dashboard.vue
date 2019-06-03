@@ -153,7 +153,10 @@
       </div>
     </div>
 
-    <div v-if="integrations.length > 0" class="row row-cards-pf">
+    <div
+      v-if="integrations.length > 0 && (user.account_type == 'customer' || user.account_type == 'desk')"
+      class="row row-cards-pf"
+    >
       <h2>{{$t('dashboard.integrations')}}</h2>
       <div
         v-for="(i,ik) in integrations"
