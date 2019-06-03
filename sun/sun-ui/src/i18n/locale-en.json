@@ -19,7 +19,9 @@
       "devices": "Devices",
       "accounts": "Managers",
       "hotspots": "Hotspots",
-      "sms_sent": "SMS Sent"
+      "sms_sent": "SMS Sent",
+      "integrations": "Integrations",
+      "link": "Link"
     },
     "profile": {
       "info": "Information",

@@ -29,7 +29,25 @@ type Integration struct {
 	Site                string `db:"site" json:"site"`
 	Logo                string `db:"logo" json:"logo"`
 	WebHookUrl          string `gorm:"column:webhook_url" json:"webhook_url"`
-	WebHookToken        string `gorm:"column:webhook_token" json:"webhook_token"`
+	WebHookToken        string `gorm:"column:webhook_token" json:"-"`
 	PreAuthRedirectUrl  string `db:"pre_auth_redirect_url" json:"pre_auth_redirect_url"`
 	PostAuthRedirectUrl string `db:"post_auth_redirect_url" json:"post_auth_redirect_url"`
+}
+
+type IntegrationJSON struct {
+	Id                  int    `db:"id" json:"id"`
+	Name                string `db:"name" json:"name"`
+	Description         string `db:"description" json:"description"`
+	Site                string `db:"site" json:"site"`
+	Logo                string `db:"logo" json:"logo"`
+	WebHookUrl          string `gorm:"column:webhook_url" json:"webhook_url"`
+	WebHookToken        string `gorm:"column:webhook_token" json:"-"`
+	PreAuthRedirectUrl  string `db:"pre_auth_redirect_url" json:"pre_auth_redirect_url"`
+	PostAuthRedirectUrl string `db:"post_auth_redirect_url" json:"post_auth_redirect_url"`
+	AuthLoginURL        string `json:"auth_login_url"`
+	IV                  string `json:"iv_array"`
+}
+
+func (IntegrationJSON) TableName() string {
+	return "integrations"
 }
