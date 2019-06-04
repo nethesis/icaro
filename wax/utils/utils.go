@@ -375,7 +375,7 @@ func SendSMSCode(number string, code string, unit models.Unit, auth string) int 
 
 	if accountSMS.SmsCount <= accountSMS.SmsMaxCount {
 
-		if hotspotCount <= hotspotMaxCountInt {
+		if hotspotCount <= hotspotMaxCountInt || hotspotMaxCountInt == 0 {
 			// retrieve account info and token
 			accountSid := configuration.Config.Endpoints.Sms.AccountSid
 			authToken := configuration.Config.Endpoints.Sms.AuthToken

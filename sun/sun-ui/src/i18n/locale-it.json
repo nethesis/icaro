@@ -144,7 +144,7 @@
       "user_mail": "Email",
       "expiration": "Scadenza (data)",
       "validity": "Validità",
-      "sms_login_max": "Numero massimo di SMS",
+      "sms_login_max": "Numero massimo di SMS (0 = illimitato)",
       "add_sms_count": "Aggiungi SMS",
       "add": "Aggiungi"
     },
