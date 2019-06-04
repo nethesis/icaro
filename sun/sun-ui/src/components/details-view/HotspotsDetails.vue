@@ -1445,7 +1445,7 @@ export default {
       return this.getPrefTypeIcon(pref);
     },
     addSMSCount(pref, amount) {
-      pref.value = parseInt(pref.value) + parseInt(amount);
+      pref.value = (parseInt(pref.value) + parseInt(amount)).toString();
     },
     getSmsCount() {
       this.statsSMSSentByHotspot(

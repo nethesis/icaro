@@ -455,5 +455,5 @@ a {
 }
 
 .special-input{
-  width: 38%;
+  width: 38% !important;
 }

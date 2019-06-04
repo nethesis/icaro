@@ -143,7 +143,10 @@
       "user_name": "Nome",
       "user_mail": "Email",
       "expiration": "Scadenza (data)",
-      "validity": "Validità"
+      "validity": "Validità",
+      "sms_login_max": "Numero massimo di SMS",
+      "add_sms_count": "Aggiungi SMS",
+      "add": "Aggiungi"
     },
     "user": {
       "username": "Utente",
