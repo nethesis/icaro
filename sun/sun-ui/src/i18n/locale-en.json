@@ -144,7 +144,9 @@
       "user_mail": "User email",
       "expiration": "Expiration (date)",
       "validity": "Validity",
-      "sms_login_max": "Max SMS sent"
+      "sms_login_max": "Max SMS sent",
+      "add_sms_count": "Add SMS",
+      "add": "Add"
     },
     "user": {
       "username": "Username",

@@ -30,7 +30,7 @@ var HotspotPreferences = map[string]string{
 	"linkedin_login":                  "true",
 	"instagram_login":                 "true",
 	"sms_login":                       "true",
-	"sms_login_max":                   "250",
+	"sms_login_max":                   "0",
 	"email_login":                     "true",
 	"voucher_login":                   "false",
 	"temp_code_login":                 "false",
