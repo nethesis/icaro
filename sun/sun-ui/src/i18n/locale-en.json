@@ -143,7 +143,8 @@
       "user_name": "User name",
       "user_mail": "User email",
       "expiration": "Expiration (date)",
-      "validity": "Validity"
+      "validity": "Validity",
+      "sms_login_max": "Max SMS sent"
     },
     "user": {
       "username": "Username",

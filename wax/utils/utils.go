@@ -32,6 +32,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 	"time"
 
@@ -356,62 +357,74 @@ func SendSMSCode(number string, code string, unit models.Unit, auth string) int 
 	hotspot := GetHotspotById(unit.HotspotId)
 	accountSMS := GetAccountSMSByAccountId(hotspot.AccountId)
 
+	// count sms by hotspot
+	var hotspotSmsCount []models.HotspotSmsCount
+	db.Where("hotspot_id in (?)", hotspot.Id).Find(&hotspotSmsCount)
+
+	hotspotCount := len(hotspotSmsCount)
+	hotspotMaxCount := GetHotspotPreferencesByKey(hotspot.Id, "sms_login_max")
+	hotspotMaxCountInt, err := strconv.Atoi(hotspotMaxCount.Value)
+	if err != nil {
+		hotspotMaxCountInt = 0
+	}
+
 	// check if exists an account for sms
 	if accountSMS.Id == 0 {
 		return http.StatusPaymentRequired
 	}
 
 	if accountSMS.SmsCount <= accountSMS.SmsMaxCount {
-		// retrieve account info and token
-		accountSid := configuration.Config.Endpoints.Sms.AccountSid
-		authToken := configuration.Config.Endpoints.Sms.AuthToken
-		urlAPI := "https://api.twilio.com/2010-04-01/Accounts/" + accountSid + "/Messages.json"
 
-		// compose message data
-		msgData := url.Values{}
-		msgData.Set("To", number)
-		msgData.Set("MessagingServiceSid", configuration.Config.Endpoints.Sms.ServiceSid)
-		msgData.Set("Body", "Password: "+code+
-			"\n\nLogin Link: "+GenerateShortURL(configuration.Config.Endpoints.Sms.Link+
-			"?"+auth+"&code="+code+"&num="+url.QueryEscape(number))+
-			"\n\nLogout Link: http://logout")
-		msgDataReader := *strings.NewReader(msgData.Encode())
+		if hotspotCount <= hotspotMaxCountInt {
+			// retrieve account info and token
+			accountSid := configuration.Config.Endpoints.Sms.AccountSid
+			authToken := configuration.Config.Endpoints.Sms.AuthToken
+			urlAPI := "https://api.twilio.com/2010-04-01/Accounts/" + accountSid + "/Messages.json"
 
-		// create HTTP request client
-		client := &http.Client{
-			Timeout: time.Second * 30,
+			// compose message data
+			msgData := url.Values{}
+			msgData.Set("To", number)
+			msgData.Set("MessagingServiceSid", configuration.Config.Endpoints.Sms.ServiceSid)
+			msgData.Set("Body", "Password: "+code+
+				"\n\nLogin Link: "+GenerateShortURL(configuration.Config.Endpoints.Sms.Link+
+				"?"+auth+"&code="+code+"&num="+url.QueryEscape(number))+
+				"\n\nLogout Link: http://logout")
+			msgDataReader := *strings.NewReader(msgData.Encode())
+
+			// create HTTP request client
+			client := &http.Client{
+				Timeout: time.Second * 30,
+			}
+			req, _ := http.NewRequest("POST", urlAPI, &msgDataReader)
+			req.SetBasicAuth(accountSid, authToken)
+			req.Header.Add("Accept", "application/json")
+			req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+
+			// make HTTP POST request
+			resp, err := client.Do(req)
+
+			if err != nil {
+				fmt.Println(err.Error())
+			}
+
+			defer resp.Body.Close()
+
+			// update sms accounting table
+			if resp.StatusCode == 201 {
+				accountSMS.SmsCount = accountSMS.SmsCount + 1
+				db.Save(&accountSMS)
+			}
+
+			return resp.StatusCode
 		}
-		req, _ := http.NewRequest("POST", urlAPI, &msgDataReader)
-		req.SetBasicAuth(accountSid, authToken)
-		req.Header.Add("Accept", "application/json")
-		req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
-
-		// make HTTP POST request
-		resp, err := client.Do(req)
-
-		if err != nil {
-			fmt.Println(err.Error())
-		}
-
-		defer resp.Body.Close()
-
-		// update sms accounting table
-		if resp.StatusCode == 201 {
-			accountSMS.SmsCount = accountSMS.SmsCount + 1
-			db.Save(&accountSMS)
-		}
-
-		return resp.StatusCode
-
-	} else {
-
-		if configuration.Config.Endpoints.Sms.SendQuotaAlert {
-			resellerAccount := GetAccountByAccountId(hotspot.AccountId)
-			SendSmsQuotaLimitAlert(resellerAccount)
-		}
-
-		return 500
 	}
+
+	if configuration.Config.Endpoints.Sms.SendQuotaAlert {
+		resellerAccount := GetAccountByAccountId(hotspot.AccountId)
+		SendSmsQuotaLimitAlert(resellerAccount)
+	}
+
+	return 500
 
 }
 
