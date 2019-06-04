@@ -1446,6 +1446,7 @@ export default {
     },
     addSMSCount(pref, amount) {
       pref.value = (parseInt(pref.value) + parseInt(amount)).toString();
+      this.updatePreferences();
     },
     getSmsCount() {
       this.statsSMSSentByHotspot(
