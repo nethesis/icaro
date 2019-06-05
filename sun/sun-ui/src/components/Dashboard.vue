@@ -167,12 +167,11 @@
           <h2 class="card-pf-title">
             <a target="_blank" :href="i.site+'?auth='+i.auth_login_url" class="card-link">
               <img :src="i.logo" class="int-img-logo">
-
-              <b>{{ i.name }}</b>
             </a>
           </h2>
           <div class="card-pf-body">
-            {{i.description}}
+            <b>{{ i.name }}</b>
+            | {{i.description}}
             <div class="card-pf-aggregate-status-notifications">
               <span class="fa fa-external-link"></span>
               <a
@@ -334,7 +333,6 @@ export default {
 }
 
 .int-img-logo {
-  width: 25px;
-  height: 25px;
+  height: 25px !important;
 }
 </style>

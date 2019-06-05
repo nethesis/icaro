@@ -117,7 +117,9 @@
               </div>
               <div class="list-details">
                 <dt>{{ $t("account.site") }}</dt>
-                <dd>{{i.site}}</dd>
+                <dd>
+                  <a target="_blank" :href="i.site">{{i.site}}</a>
+                </dd>
               </div>
             </div>
             <div class="card-pf-footer">
@@ -293,7 +295,6 @@ export default {
 
 <style>
 .img-int {
-  width: 20px;
-  height: 20px;
+  height: 20px !important;
 }
 </style>
