@@ -1,9 +1,9 @@
 ---
-title: Integrations
+title: Tokens
 permalink: /docs/api_token/
 ---
 
-# API tokens
+## API tokens
 If you want to grant access to the Icaro platform to external applications or users, you can create an access token with particulary **ACL** and **Role**.
 
 The `access_tokens` table is:

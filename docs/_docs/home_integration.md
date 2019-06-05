@@ -1,9 +1,7 @@
 ---
-title: Integrations
+title: Introduction
 permalink: /docs/home_integration/
 ---
-
-# Integrations
 
 ## General
 Icaro functionalities can be extended using external integrations, to add new features or demand particulary operations in different platforms.
