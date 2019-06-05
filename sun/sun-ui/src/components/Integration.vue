@@ -2,7 +2,7 @@
   <div>
     <h2>{{ msg }}</h2>
     <div v-if="isLoading" class="spinner spinner-lg"></div>
-    <div v-if="integrations.length == 0" class="blank-slate-pf" id>
+    <div v-if="!isLoading && integrations.length == 0" class="blank-slate-pf" id>
       <div class="blank-slate-pf-icon">
         <span class="fa fa-cubes"></span>
       </div>
