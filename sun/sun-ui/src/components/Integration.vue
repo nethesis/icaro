@@ -252,8 +252,7 @@ export default {
 
 <style>
 .logo-int {
-  width: 50px;
-  height: 50px;
+  height: 50px !important;
 }
 
 .adjust-list-view {
