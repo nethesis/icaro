@@ -111,9 +111,11 @@
                 v-if="!totals.sms.isLoading"
                 class="right"
               >
-                <strong :class="totals.sms.count < smsMaxCount ? 'soft' : 'red'">
+                <strong
+                  :class="totals.sms.count < smsMaxCount || smsMaxCount == 0 ? 'soft' : 'red'"
+                >
                   {{ totals.sms.count}} /
-                  <b>{{smsMaxCount}}</b>
+                  <b>{{smsMaxCount == 0 ? '-' : smsMaxCount}}</b>
                 </strong>
               </span>
               <div v-if="totals.sms.isLoading" class="spinner spinner-sm right"></div>
