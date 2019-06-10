@@ -12,7 +12,6 @@ matrix:
       script:
         - cp $TRAVIS_BUILD_DIR/wax/testdata/config.json $TRAVIS_BUILD_DIR/sun/sun-api
         - cp $TRAVIS_BUILD_DIR/wax/testdata/*png $TRAVIS_BUILD_DIR/sun/sun-api
-        - cd $TRAVIS_BUILD_DIR/sun/sun-api && go test
         - cd $TRAVIS_BUILD_DIR/sun/sun-api && go build
 
     - language: go
@@ -35,7 +34,6 @@ matrix:
       script:
         - cp $TRAVIS_BUILD_DIR/wax/testdata/config.json $TRAVIS_BUILD_DIR/wax
         - cp $TRAVIS_BUILD_DIR/wax/testdata/*png $TRAVIS_BUILD_DIR/wax
-        - cd $TRAVIS_BUILD_DIR/wax && go test
         - cd $TRAVIS_BUILD_DIR/wax && go build
 
     - language: go
