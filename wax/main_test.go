@@ -32,7 +32,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/appleboy/gofight"
+	"github.com/appleboy/gofight/v2"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 
