@@ -1,5 +1,7 @@
 if: tag != autobuild
 
+dist: trusty
+
 matrix:
   include:
     - language: go
