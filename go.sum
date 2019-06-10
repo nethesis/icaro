@@ -1,5 +1,3 @@
-github.com/appleboy/gofight v2.0.0+incompatible h1:ECVMVpNJFBztDbnA7ead4Ffm6mizKKb6QyR78F+j4eY=
-github.com/appleboy/gofight v2.0.0+incompatible/go.mod h1:H/tvof1oZHnZdlBd+AeODZGkk1C+D2na0NXr0iXuZHA=
 github.com/avct/uasurfer v0.0.0-20180817072212-dc0ec4fd1e87 h1:TUuuMI5Sxsw5IVVu3LR4ByWxCAJ/Yb8vvJLZyr9KS0s=
 github.com/avct/uasurfer v0.0.0-20180817072212-dc0ec4fd1e87/go.mod h1:noBAuukeYOXa0aXGqxr24tADqkwDO2KRD15FsuaZ5a8=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=

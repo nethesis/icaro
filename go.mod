@@ -1,7 +1,6 @@
 module github.com/nethesis/icaro
 
 require (
-	github.com/appleboy/gofight v2.0.0+incompatible
 	github.com/avct/uasurfer v0.0.0-20180817072212-dc0ec4fd1e87
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/gin-contrib/cors v0.0.0-20180926132136-4f98e8b8e930
