@@ -19,7 +19,9 @@
       "devices": "Dispositivi",
       "accounts": "Amministratori",
       "hotspots": "Hotspot",
-      "sms_sent": "SMS Inviati"
+      "sms_sent": "SMS Inviati",
+      "integrations": "Integrazioni",
+      "link": "Link"
     },
     "profile": {
       "info": "Informazioni",
@@ -216,7 +218,12 @@
       "sms_sent": "SMS Inviati",
       "sms_total": "SMS Totali",
       "sms_to_add": "Numero di SMS da caricare",
-      "warning_tokens_found": "Se elimini questo utente, anche questi token verranno eliminati"
+      "warning_tokens_found": "Se elimini questo utente, anche questi token verranno eliminati",
+      "description": "Descrizione",
+      "site": "Sito",
+      "enable": "Abilita",
+      "disable": "Disabilita",
+      "integration": "Integrazione"
     },
     "unit": {
       "unit": "Unità",
@@ -271,6 +278,7 @@
       "sessions": "Connessioni",
       "reports": "Report",
       "marketing": "Feedback",
+      "integrations": "Integrazioni",
       "help": "Help",
       "profile": "Profilo",
       "about": "About",
@@ -369,7 +377,9 @@
       "error": "Errore",
       "info_desc": "Se abiliti una di queste integrazioni, gli account associati all'hotspot erediteranno le credenziali per loggarsi nella piattaforma esterna",
       "error_desc": "C'è stato un errore temporaneo nell'integrazione. Riprova più tardi",
-      "failed": "Sync fallito"
+      "failed": "Sync fallito",
+      "not_found": "Nessuna integrazinoe trovata",
+      "not_found_desc": "Non ci sono integrazioni disponibili"
     },
     "sessions": "Connessioni",
     "help": "Aiuto",
