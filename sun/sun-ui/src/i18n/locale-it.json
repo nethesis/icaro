@@ -378,7 +378,7 @@
       "info_desc": "Se abiliti una di queste integrazioni, gli account associati all'hotspot erediteranno le credenziali per loggarsi nella piattaforma esterna",
       "error_desc": "C'è stato un errore temporaneo nell'integrazione. Riprova più tardi",
       "failed": "Sync fallito",
-      "not_found": "Nessuna integrazinoe trovata",
+      "not_found": "Nessuna integrazione trovata",
       "not_found_desc": "Non ci sono integrazioni disponibili"
     },
     "sessions": "Connessioni",
