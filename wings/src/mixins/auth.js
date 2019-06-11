@@ -96,7 +96,7 @@ var AuthMixin = {
                 case 'facebook':
                     url = 'https://www.facebook.com/v2.11/dialog/oauth?' +
                         'client_id=' + params.fb_client_id +
-                        '&state=' + encodeURIComponent(params.digest + "&" + params.uuid + "&" + params.sessionid + "&" + params.uamip + "&" + params.uamport + "&" + params.voucher) +
+                        '&state=' + encodeURIComponent(params.digest + "&" + params.uuid + "&" + params.sessionid + "&" + params.uamip + "&" + params.uamport + "&" + params.voucher + "&" + params.nasid) +
                         '&scope=email,public_profile,user_birthday,user_likes,user_location' +
                         '&redirect_uri=' + escape('https://' + window.location.host + '/wings/login/facebook')
                     break
@@ -104,7 +104,7 @@ var AuthMixin = {
                 case 'linkedin':
                     url = 'https://www.linkedin.com/oauth/v2/authorization?' +
                         'client_id=' + params.li_client_id +
-                        '&state=' + encodeURIComponent(params.digest + "&" + params.uuid + "&" + params.sessionid + "&" + params.uamip + "&" + params.uamport + "&" + params.voucher) +
+                        '&state=' + encodeURIComponent(params.digest + "&" + params.uuid + "&" + params.sessionid + "&" + params.uamip + "&" + params.uamport + "&" + params.voucher + "&" + params.nasid) +
                         '&scope=' + escape('r_liteprofile r_emailaddress w_member_social') +
                         '&redirect_uri=' + escape('http://' + window.location.host + '/wings/login/linkedin') +
                         '&response_type=code'
@@ -113,7 +113,7 @@ var AuthMixin = {
                 case 'instagram':
                     url = 'https://api.instagram.com/oauth/authorize/?' +
                         'client_id=' + params.in_client_id +
-                        '&state=' + encodeURIComponent(params.digest + "&" + params.uuid + "&" + params.sessionid + "&" + params.uamip + "&" + params.uamport + "&" + params.voucher) +
+                        '&state=' + encodeURIComponent(params.digest + "&" + params.uuid + "&" + params.sessionid + "&" + params.uamip + "&" + params.uamport + "&" + params.voucher + "&" + params.nasid) +
                         '&scope=' + escape('basic') +
                         '&redirect_uri=' + escape('http://' + window.location.host + '/wings/login/instagram') +
                         '&response_type=code'
