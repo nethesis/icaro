@@ -159,8 +159,20 @@ deploy:
     on:
       repo: ${TRAVIS_REPO_SLUG}
       tags: true
-      condition: $TRAVIS_TAG != "autobuild"
+      condition: $TRAVIS_TAG != "autobuild" && $TRAVIS_TAG =~ ^v[0-9].*
     file: ${TRAVIS_BUILD_DIR}/deploy_files/*
+
+  - provider: releases
+    api_key: ${GITHUB_TOKEN}
+    file_glob: true
+    skip_cleanup: true
+    on:
+      repo: ${TRAVIS_REPO_SLUG}
+      tags: true
+      condition: $TRAVIS_TAG != "autobuild" && ! $TRAVIS_TAG =~ ^v[0-9].*
+    file: ${TRAVIS_BUILD_DIR}/deploy_files/*
+    prerelease: true
+
 
 after_deploy:
   - if test "$TRAVIS_TAG" == "autobuild" -a "$TRAVIS_BRANCH" == "master" ; then git push -f https://$GITHUB_TOKEN@github.com/$TRAVIS_REPO_SLUG autobuild;  else true; fi
