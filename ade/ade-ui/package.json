@@ -7,7 +7,7 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
-    "jquery": "^3.3.1",
+    "jquery": "^3.4.0",
     "psl": "^1.1.31",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-vue": "^0.8.1",
