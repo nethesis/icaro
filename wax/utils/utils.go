@@ -587,7 +587,7 @@ func CalculateRemainTime(user models.User, timezone string) int {
 
 	loc, _ := time.LoadLocation(timezone)
 	now := time.Now().In(loc)
-	midnightNow := time.Date(now.Year(), now.Month(), now.Add(time.Hour*24).Day(), 0, 0, 0, 0, now.Location())
+	midnightNow := time.Date(now.Year(), now.Month(), now.Day(), 23, 59, 59, 0, now.Location())
 	secondsToMidnight := int(midnightNow.Sub(now).Seconds()) // Session-Timeout
 
 	if user.MaxNavigationTime == 0 && user.MaxNavigationTraffic == 0 {
