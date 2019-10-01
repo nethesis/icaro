@@ -11,16 +11,16 @@
             :placeholder="$t('login.insert_voucher')"
           >
           <i class="braille icon"></i>
+          <!-- toggle voucher visibility -->
+          <button
+            tabindex="-1"
+            type="button"
+            :class="['ui', 'button', voucherVisible ? '' : 'button-dark' ]"
+            @click="toggleVoucherVisibility()"
+          >
+            <i class="eye icon no-margin"></i>
+          </button>
         </div>
-        <!-- toggle voucher visibility -->
-        <button
-          tabindex="-1"
-          type="button"
-          class="ui button"
-          @click="toggleVoucherVisibility()"
-        >
-          <i class="eye icon no-margin"></i>
-        </button>
       </div>
       <button v-on:click="validateCode()" class="ui big button">{{ $t("login.validate_code") }}</button>
       <div v-if="badCode" class="ui tiny icon negative message">
@@ -208,7 +208,7 @@ export default {
       countries: require("./../i18n/countries.json"),
       additionalCountry: "-",
       additionalReason: "-",
-      voucherVisible: false,
+      voucherVisible: true,
     };
   },
   methods: {
@@ -472,9 +472,5 @@ a {
 }
 .adjust-button {
   margin-top: 0px !important;
-}
-
-.no-margin {
-  margin: 0 !important;
 }
 </style>
