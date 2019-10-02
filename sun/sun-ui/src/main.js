@@ -38,6 +38,8 @@ Vue.filter("byteFormat", filters.byteFormat);
 Vue.filter("secondsInHour", filters.secondsInHour);
 Vue.filter("formatDate", filters.formatDate);
 Vue.filter("adjustPage", filters.adjustPage);
+Vue.filter("uppercase", filters.uppercase);
+Vue.filter("truncate", filters.truncate);
 
 // init Vue app
 new Vue({

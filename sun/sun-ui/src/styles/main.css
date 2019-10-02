@@ -457,3 +457,14 @@ a {
 .special-input{
   width: 38% !important;
 }
+
+@media print {
+  .layout-pf.layout-pf-fixed body {
+    padding-top: 0 !important;
+  }
+}
+
+.go-back-to-hotspot-manager {
+  text-align: center;
+  margin-bottom: 60px;
+}
