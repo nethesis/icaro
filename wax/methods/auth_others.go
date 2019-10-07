@@ -425,8 +425,20 @@ func VoucherAuth(c *gin.Context) {
 	if voucher.Id == 0 {
 		c.JSON(http.StatusUnauthorized, gin.H{"message": "Voucher is invalid"})
 	} else {
-		// check if is expired
-		if !voucher.Expires.IsZero() && voucher.Expires.Before(time.Now().UTC()) {
+		// check if it's expired, considering end of day
+		voucherExpired := false
+
+		if !voucher.Expires.IsZero() {
+			// consider end of day
+			y, m, d := voucher.Expires.Date()
+			expirationDate := time.Date(y, m, d, 23, 59, 59, int(time.Second-time.Nanosecond), time.UTC)
+
+			if expirationDate.Before(time.Now().UTC()) {
+				voucherExpired = true
+			}
+		}
+
+		if voucherExpired {
 			// delete voucher
 			db := database.Instance()
 			db.Delete(&voucher)

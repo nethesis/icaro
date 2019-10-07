@@ -79,6 +79,7 @@ var HotspotService = {
         .then(success, error);
     },
     hotspotGetVouchers(filters, hotspotId, success, error) {
+      var moment = require("patternfly/node_modules/moment/moment.js");
       this.$http
         .get(
           this.$root.$options.api_scheme +
@@ -91,7 +92,11 @@ var HotspotService = {
           (filters && filters.used ? "&used=" + filters.used : "") +
           (filters && filters.reusable ? "&reusable=" + filters.reusable : "") +
           (filters && filters.printed ? "&printed=" + filters.printed : "") +
-          (filters && filters.type ? "&type=" + filters.type : ""), {
+          (filters && filters.type ? "&type=" + filters.type : "") +
+          (filters && filters.expiredStart ? "&expiredStart=" + moment(filters.expiredStart).utc().startOf("day").toISOString() : "") +
+          (filters && filters.expiredEnd ? "&expiredEnd=" + moment(filters.expiredEnd).utc().endOf("day").toISOString() : "") +
+          (filters && filters.createdStart ? "&createdStart=" + moment(filters.createdStart).utc().startOf("day").toISOString() : "") +
+          (filters && filters.createdEnd ? "&createdEnd=" + moment(filters.createdEnd).utc().endOf("day").toISOString() : ""), {
             headers: {
               Token:
                 (this.get("loggedUser") && this.get("loggedUser").token) || ""

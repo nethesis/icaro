@@ -457,3 +457,7 @@ a {
 .special-input{
   width: 38% !important;
 }
+
+.datepicker-input {
+  width: 100%;
+}

@@ -37,6 +37,7 @@ moment.locale(langConf.locale);
 Vue.filter("byteFormat", filters.byteFormat);
 Vue.filter("secondsInHour", filters.secondsInHour);
 Vue.filter("formatDate", filters.formatDate);
+Vue.filter("formatDateShort", filters.formatDateShort);
 Vue.filter("adjustPage", filters.adjustPage);
 
 // init Vue app
