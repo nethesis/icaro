@@ -292,7 +292,7 @@
             >
               <template slot="table-row" slot-scope="props">
                 <td :class="['fancy', 'td-voucher-'+props.row.type]">
-                  <strong>{{ props.row.code }}</strong>
+                  <strong>{{ props.row.code | uppercase }}</strong>
                   <br>
                   {{ props.row.user_name}} ({{ props.row.user_mail }})
                 </td>
@@ -1164,7 +1164,7 @@
       <h3 class="card-pf-title voucher-desc">{{info.data.description}}</h3>
       <div class="card-pf-body voucher-main">
         <p>
-          <strong class="voucher-code">{{voucher.code}}</strong>
+          <strong class="voucher-code">{{voucher.code | uppercase}}</strong>
         </p>
       </div>
       <div class="card-pf-footer voucher-details">
