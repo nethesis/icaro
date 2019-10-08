@@ -77,7 +77,7 @@ func CreateVoucher(c *gin.Context) {
 	}
 
 	if json.Time == "expiration" {
-		hotspotVoucher.Expires = time.Now().UTC().AddDate(0, 0, json.Expiration+1)
+		hotspotVoucher.Expires = time.Now().UTC().AddDate(0, 0, json.Expiration)
 	}
 
 	hotspotVoucher.HotspotId = json.HotspotId
@@ -169,6 +169,10 @@ func GetVouchers(c *gin.Context) {
 	reusable := c.Query("reusable")
 	printed := c.Query("printed")
 	voucherType := c.Query("type")
+	expiredStart := c.Query("expiredStart")
+	expiredEnd := c.Query("expiredEnd")
+	createdStart := c.Query("createdStart")
+	createdEnd := c.Query("createdEnd")
 
 	hotspotId := c.Param("hotspot_id")
 
@@ -178,6 +182,7 @@ func GetVouchers(c *gin.Context) {
 	}
 
 	offsets := utils.OffsetCalc(page, limit)
+	timeLayout := "2006-01-02T15:04:05.000Z"
 
 	db := database.Instance()
 	chain := db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt))
@@ -221,6 +226,26 @@ func GetVouchers(c *gin.Context) {
 
 	if len(voucherType) > 0 {
 		chain = chain.Where("type = ?", voucherType)
+	}
+
+	if len(expiredStart) > 0 {
+		t, _ := time.Parse(timeLayout, expiredStart)
+		chain = chain.Where("expires >= ?", t)
+	}
+
+	if len(expiredEnd) > 0 {
+		t, _ := time.Parse(timeLayout, expiredEnd)
+		chain = chain.Where("expires <= ?", t)
+	}
+
+	if len(createdStart) > 0 {
+		t, _ := time.Parse(timeLayout, createdStart)
+		chain = chain.Where("created >= ?", t)
+	}
+
+	if len(createdEnd) > 0 {
+		t, _ := time.Parse(timeLayout, createdEnd)
+		chain = chain.Where("created <= ?", t)
 	}
 
 	chain.Order("created desc").Offset(offsets[0]).Limit(offsets[1]).Find(&hotspotVouchers)
