@@ -42,10 +42,10 @@ func Init(action string, worker bool) {
 	switch action {
 
 	case "send-surveys":
-		c.AddFunc("@every 1h", sendSurveysActive)
+		c.AddFunc("@every 1m", sendSurveysActive)
 		sendSurveysActive()
 	case "send-surveys-expired":
-		c.AddFunc("@every 1h", sendSurveysExpired)
+		c.AddFunc("@every 1m", sendSurveysExpired)
 		sendSurveysExpired()
 
 	default:
@@ -179,7 +179,7 @@ func sendSurveys(users []User) {
 				if marketingFirstEmail.Value == "true" {
 					// check if time to send
 					marketingFirstAfterInt, _ := strconv.Atoi(marketingFirstAfter.Value)
-					if adeToken.FeedbackSentTime.IsZero() && u.ValidFrom.Add(time.Duration(marketingFirstAfterInt)*time.Hour).Before(time.Now()) {
+					if adeToken.FeedbackSentTime.IsZero() && u.ValidFrom.Add(time.Duration(marketingFirstAfterInt)*time.Minute).Before(time.Now()) {
 						// send mail
 						if len(u.Email) > 0 {
 							utils.SendFeedBackMessageToUser(adeToken, u.Email, hotspotName.Value, hotspotLogo.Value, hotspotBg.Value, hotspot, hotspotFeedbackBodyText.Value)
