@@ -161,7 +161,12 @@ func SMSAuth(c *gin.Context) {
 			voucher := utils.GetVoucherByCode(voucherCode, user.HotspotId)
 
 			if voucher.Id > 0 {
-				user.ValidUntil = time.Now().UTC().AddDate(0, 0, voucher.Duration)
+				duration := voucher.Duration
+
+				if duration == 0 {
+					duration = int(voucher.Expires.Sub(time.Now().UTC()).Hours()/24) + 1
+				}
+				user.ValidUntil = time.Now().UTC().AddDate(0, 0, duration)
 				user.KbpsDown = voucher.BandwidthDown
 				user.KbpsUp = voucher.BandwidthUp
 				user.AutoLogin = voucher.AutoLogin
@@ -316,7 +321,12 @@ func EmailAuth(c *gin.Context) {
 			voucher := utils.GetVoucherByCode(voucherCode, user.HotspotId)
 
 			if voucher.Id > 0 {
-				user.ValidUntil = time.Now().UTC().AddDate(0, 0, voucher.Duration)
+				duration := voucher.Duration
+
+				if duration == 0 {
+					duration = int(voucher.Expires.Sub(time.Now().UTC()).Hours()/24) + 1
+				}
+				user.ValidUntil = time.Now().UTC().AddDate(0, 0, duration)
 				user.KbpsDown = voucher.BandwidthDown
 				user.KbpsUp = voucher.BandwidthUp
 				user.AutoLogin = voucher.AutoLogin
