@@ -59,8 +59,21 @@
         <div class="field">
           <label>{{ $t("sms.code") }}</label>
           <div class="ui big left icon input">
-            <input v-model="authCode" type="number" :placeholder="$t('sms.insert_your_code')">
+            <input
+              v-model="authCode"
+              :type="passwordVisible ? 'number' : 'password'"
+              :placeholder="$t('sms.insert_your_code')"
+            >
             <i class="braille icon"></i>
+            <!-- toggle password visibility -->
+            <button
+              tabindex="-1"
+              type="button"
+              :class="['ui', 'button', passwordVisible ? '' : 'button-dark' ]"
+              @click="togglePasswordVisibility()"
+            >
+              <i class="eye icon no-margin"></i>
+            </button>
           </div>
         </div>
         <div v-if="bannerShow" class="ui compact message info no-margin-top">
@@ -206,7 +219,8 @@ export default {
       surveys: false,
       countries: require("./../../i18n/countries.json"),
       additionalCountry: "-",
-      additionalReason: "-"
+      additionalReason: "-",
+      passwordVisible: true
     };
   },
   methods: {
@@ -411,6 +425,9 @@ export default {
           context.$root.$options.hotspot.preferences.captive_1_redir
         );
       }
+    },
+    togglePasswordVisibility: function() {
+      this.passwordVisible = !this.passwordVisible;
     }
   }
 };
