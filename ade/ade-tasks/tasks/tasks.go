@@ -42,10 +42,10 @@ func Init(action string, worker bool) {
 	switch action {
 
 	case "send-surveys":
-		c.AddFunc("@every 1m", sendSurveysActive)
+		c.AddFunc("@every 15m", sendSurveysActive)
 		sendSurveysActive()
 	case "send-surveys-expired":
-		c.AddFunc("@every 1m", sendSurveysExpired)
+		c.AddFunc("@every 15m", sendSurveysExpired)
 		sendSurveysExpired()
 
 	default:
