@@ -4,7 +4,6 @@
       Hotspot
       <strong class="soft">{{ info.data.name }} - {{info.data.description}}</strong>
     </h2>
-
     <div class="row row-cards-pf">
       <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
         <div class="card-pf card-pf-accented">
@@ -1208,6 +1207,127 @@
         </div>
       </div>
     </div>
+    <div
+      id="voucherPrint"
+      v-show="showVoucherPrint"
+      class="voucherPrintContainer"
+    >
+      <div
+        v-for="index in Math.ceil(vouchersToPrint.length / 2)"
+        :key="index"
+        :class="[ index % 5 == 0 && index != 0 ? 'pagebreak' : '']"
+      >
+        <!-- two vouchers columns -->
+        <div
+          v-for="i in [ (index*2-2), (index*2-1) ]"
+          :key="i"
+          class="voucher-print"
+        >
+          <div v-if="i < vouchersToPrint.length">
+            <table class="width-100">
+              <tr>
+                <td class="voucher-print-q1">
+                </td>
+                <td class="voucher-print-q2">
+                  <img :src="preferences.captive[2].value" class="voucher-print-logo">
+                  <div class="voucher-print-hs-title">{{ info.data.description }}</div>
+                  <table class="width-75">
+                    <tr>
+                      <td class="padding-left-2 border-left">
+                        <div class="voucher-print-code">{{ vouchersToPrint[i].code | uppercase }}</div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="padding-left-2 border-left line-height-5">
+                        <div class="voucher-print-data">
+                          <span class="fa fa-clock-o"></span>
+                          <span v-if="vouchersToPrint[i].duration > 0">
+                            {{ vouchersToPrint[i].duration }} {{ $t("hotspot.days") }}
+                          </span>
+                          <span v-else>
+                            {{ vouchersToPrint[i].expires | formatDate(true) }}
+                          </span>
+                        </div>
+                        <div class="voucher-print-data">
+                          <span
+                            v-show="vouchersToPrint[i].user_name"
+                            class="pficon pficon-user"
+                          ></span>
+                          {{ vouchersToPrint[i].user_name | truncate(12) }}
+                        </div>
+                        <div class="voucher-print-data">
+                          <span class="pficon pficon-history"></span>
+                          <span v-if="vouchersToPrint[i].remain_use != -1">
+                            {{ vouchersToPrint[i].remain_use }} {{ $t("hotspot.max_use") }}
+                          </span>
+                          <span v-else>
+                            {{ $t("hotspot.reusable") }}
+                          </span>
+                        </div>
+                        <div class="voucher-print-data">
+                        </div>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                </td>
+                <td class="voucher-print-q4">
+                  <table class="width-75">
+                    <tr>
+                      <td class="padding-left-2 border-left">
+                        <div class="voucher-print-data">
+                          <span class="fa fa-arrow-circle-o-down"></span>
+                          <span v-if="vouchersToPrint[i].bandwidth_down != 0">
+                            {{ vouchersToPrint[i].bandwidth_down }} Kbps
+                          </span>
+                          <span v-else>
+                            {{ $t("hotspot.unlimited") }}
+                          </span>
+                        </div>
+                        <div class="voucher-print-data">
+                          <span class="fa fa-tachometer"></span>
+                          <span v-if="vouchersToPrint[i].max_traffic != 0">
+                            {{ vouchersToPrint[i].max_traffic | byteFormat}}
+                          </span>
+                          <span v-else>
+                            {{ $t("hotspot.unlimited") }}
+                          </span>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="padding-left-2-2">
+                        <div class="voucher-print-data align-top">
+                        <span class="fa fa-arrow-circle-o-up"></span>
+                        <span v-if="vouchersToPrint[i].bandwidth_up != 0">
+                          {{ vouchersToPrint[i].bandwidth_up }} Kbps
+                        </span>
+                        <span v-else>
+                          {{ $t("hotspot.unlimited") }}
+                        </span>
+                      </div>
+                      <div class="voucher-print-data align-top">
+                        <span class="pficon pficon-pending"></span>
+                        <span v-if="vouchersToPrint[i].max_time != 0">
+                          {{ vouchersToPrint[i].max_time | secondsInHour }}
+                        </span>
+                        <span v-else>
+                          {{ $t("hotspot.unlimited") }}
+                        </span>
+                      </div>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -1502,7 +1622,9 @@ export default {
       },
       locale: this.$root.$options.currentLocale,
       smsMaxCount: 0,
-      smsMaxCountAdd: 0
+      smsMaxCountAdd: 0,
+      showVoucherPrint: false,
+      vouchersToPrint: []
     };
   },
   methods: {
@@ -1931,323 +2053,79 @@ export default {
         context.getPreferences();
       });
     },
-    printVoucher(voucher) {
-      let index;
-      for (let i = 0; i < this.vouchers.usable.length; i++) {
-        if (this.vouchers.usable[i].id === voucher.id) {
-          index = i;
-        }
-      }
-
-      // update voucher status
-      this.hotspotUpdateVoucher(
-        voucher.id,
-        {
-          printed: true
-        },
-        success => {
-          var doc = new jsPDF("portrait", "mm", "a4");
-          var halfWidth = Math.round(doc.internal.pageSize.width / 2);
-          var fifthHeight = Math.round(doc.internal.pageSize.height / 5);
-
-          doc.setDrawColor(17, 17, 17);
-          doc.line(0, fifthHeight, halfWidth, fifthHeight);
-          doc.line(halfWidth, 0, halfWidth, fifthHeight);
-
-          var image = new Image();
-          var context = this;
-          image.onload = function() {
-            var values = context.resizeImage(image, 20, 20);
-            doc.addImage(
-              context.preferences.captive[2].value,
-              2,
-              2,
-              values.width,
-              values.height
-            );
-            doc.fromHTML(
-              document.getElementsByClassName("voucher-desc")[index],
-              50,
-              -3,
-              {
-                width: 55
-              }
-            );
-            doc.fromHTML(
-              document.getElementsByClassName("voucher-main")[index],
-              65,
-              21
-            );
-            doc.fromHTML(
-              document.getElementsByClassName("voucher-valid")[index],
-              1,
-              21
-            );
-            doc.fromHTML(
-              document.getElementsByClassName("voucher-max-use")[index],
-              1,
-              29
-            );
-
-            doc.setLineWidth(0.3);
-            doc.setDrawColor(158, 160, 163);
-            doc.line(5, 41, halfWidth - 5, +41);
-            doc.addImage(arrow.down, 4, 45, 3, 3);
-            doc.fromHTML(
-              document.getElementsByClassName("voucher-download")[index],
-              8,
-              40
-            );
-            doc.addImage(arrow.up, 4, 50, 3, 3);
-            doc.fromHTML(
-              document.getElementsByClassName("voucher-upload")[index],
-              8,
-              45
-            );
-
-            doc.fromHTML(
-              document.getElementsByClassName("voucher-traffic")[index],
-              65,
-              40
-            );
-            doc.fromHTML(
-              document.getElementsByClassName("voucher-time")[index],
-              65,
-              45
-            );
-
-            doc.autoPrint();
-            window.open(doc.output("bloburl"), "_blank");
-          };
-          image.src = this.preferences.captive[2].value;
-        },
-        error => {
-          console.error(error);
-        }
-      );
-    },
-    printAllVoucher() {
-      var doc = new jsPDF("portrait", "mm", "a4");
-      var width = doc.internal.pageSize.width;
-      var height = doc.internal.pageSize.height;
-      var halfWidth = Math.round(width / 2);
-      var fifthHeight = Math.round(height / 5);
-      var pageNumber = 15 % 8 !== 0 ? Math.floor(15 / 8) + 1 : 15 / 8;
-      var row = 0;
-      var cordinates = {
-        y: 0,
-        x: 0,
-        width: 0,
-        height: 0
-      };
-
-      var image = new Image();
+    printVouchers(voucherList) {
       var context = this;
       var promises = [];
-      image.onload = function() {
-        var values = context.resizeImage(image, 20, 20);
 
-        for (var index = 0; index < context.vouchers.usable.length; index++) {
-          promises.push(
-            new Promise(function(resolve, reject) {
-              context.hotspotUpdateVoucher(
-                context.vouchers.usable[index].id,
-                {
-                  printed: true
-                },
-                success => {
-                  resolve(success);
-                },
-                error => {
-                  reject(error);
-                }
-              );
-            })
-          );
-
-          if (index % 10 === 0 && index !== 0) {
-            doc.addPage();
-            row = 0;
-            cordinates = {
-              y: 0,
-              x: 0,
-              width: 0,
-              height: 0
-            };
-          }
-          doc.setLineWidth(0.3);
-          doc.setDrawColor(17, 17, 17);
-          // Left column
-          if (index % 2 === 0) {
-            doc.addImage(
-              context.preferences.captive[2].value,
-              2,
-              cordinates.y + 2,
-              values.width,
-              values.height
-            );
-            doc.fromHTML(
-              document.getElementsByClassName("voucher-desc")[index],
-              50,
-              cordinates.y + -3,
+      for (var index = 0; index < voucherList.length; index++) {
+        promises.push(
+          new Promise(function(resolve, reject) {
+            context.hotspotUpdateVoucher(
+              voucherList[index].id,
               {
-                width: 55
+                printed: true
+              },
+              success => {
+                resolve(success);
+              },
+              error => {
+                reject(error);
               }
             );
-            doc.fromHTML(
-              document.getElementsByClassName("voucher-main")[index],
-              65,
-              cordinates.y + 21
-            );
-            doc.fromHTML(
-              document.getElementsByClassName("voucher-valid")[index],
-              1,
-              cordinates.y + 21
-            );
-            doc.fromHTML(
-              document.getElementsByClassName("voucher-max-use")[index],
-              1,
-              cordinates.y + 29
-            );
+          })
+        );
 
-            doc.setLineWidth(0.3);
-            doc.setDrawColor(158, 160, 163);
-            doc.line(5, cordinates.y + 41, halfWidth - 5, cordinates.y + 41);
-            doc.addImage(arrow.down, 4, cordinates.y + 45, 3, 3);
-            doc.fromHTML(
-              document.getElementsByClassName("voucher-download")[index],
-              8,
-              cordinates.y + 40
-            );
-            doc.addImage(arrow.up, 4, cordinates.y + 50, 3, 3);
-            doc.fromHTML(
-              document.getElementsByClassName("voucher-upload")[index],
-              8,
-              cordinates.y + 45
-            );
+        Promise.all(promises)
+          .then(function() {
+            console.log("done");
+          })
+          .catch(function(err) {
+            console.error(err);
+          });
+      }
+      this.vouchersToPrint = voucherList;
+      this.showVoucherPrint = true;
 
-            doc.fromHTML(
-              document.getElementsByClassName("voucher-traffic")[index],
-              65,
-              cordinates.y + 40
-            );
-            doc.fromHTML(
-              document.getElementsByClassName("voucher-time")[index],
-              65,
-              cordinates.y + 45
-            );
+      setTimeout(async function() {
+        context.printDiv('voucherPrint');
+      }, 500);
+    },
+    printDiv(div_id) {
+      $('body').html($("#"+div_id).html());
+      scroll(0, 0);
+      var context = this;
 
-            doc.setDrawColor(17, 17, 17);
+      window.onafterprint = function(event) {
+        // show "Go back to Hotspot Manager" button in Firefox
+        var browser = navigator.userAgent.toLowerCase();
+        if (browser.indexOf('firefox') > -1) {
+          $("body").prepend('<div class="go-back-to-hotspot-manager"><button id="goBack" class="btn btn-primary btn-lg" type="button"><span class="fa fa-arrow-left"></span></button></div>');
 
-            if (index % 10 === 8) {
-              doc.line(
-                halfWidth,
-                cordinates.y,
-                halfWidth,
-                cordinates.y + fifthHeight
-              );
-            } else {
-              doc.line(
-                0,
-                cordinates.y + fifthHeight,
-                halfWidth,
-                cordinates.y + fifthHeight
-              );
-              doc.line(
-                halfWidth,
-                cordinates.y,
-                halfWidth,
-                cordinates.y + fifthHeight
-              );
-            }
+          $("#goBack").click(function(){
+            location.reload();
+          });
 
-            // Right column
-          } else {
-            cordinates.x = halfWidth;
-            doc.addImage(
-              context.preferences.captive[2].value,
-              cordinates.x + 2,
-              cordinates.y + 2,
-              values.width,
-              values.height
-            );
-            doc.fromHTML(
-              document.getElementsByClassName("voucher-desc")[index],
-              cordinates.x + 50,
-              cordinates.y + -3,
-              {
-                width: 55
-              }
-            );
-            doc.fromHTML(
-              document.getElementsByClassName("voucher-main")[index],
-              cordinates.x + 65,
-              cordinates.y + 21
-            );
-            doc.fromHTML(
-              document.getElementsByClassName("voucher-valid")[index],
-              cordinates.x + 1,
-              cordinates.y + 21
-            );
-            doc.fromHTML(
-              document.getElementsByClassName("voucher-max-use")[index],
-              cordinates.x + 1,
-              cordinates.y + 29
-            );
-            doc.setLineWidth(0.3);
-            doc.setDrawColor(158, 160, 163);
-            doc.line(
-              cordinates.x + 5,
-              cordinates.y + 41,
-              cordinates.x * 2 - 5,
-              cordinates.y + 41
-            );
-            doc.addImage(arrow.down, cordinates.x + 4, cordinates.y + 45, 3, 3);
-            doc.fromHTML(
-              document.getElementsByClassName("voucher-download")[index],
-              cordinates.x + 8,
-              cordinates.y + 40
-            );
-            doc.addImage(arrow.up, cordinates.x + 4, cordinates.y + 50, 3, 3);
-            doc.fromHTML(
-              document.getElementsByClassName("voucher-upload")[index],
-              cordinates.x + 8,
-              cordinates.y + 45
-            );
-
-            doc.fromHTML(
-              document.getElementsByClassName("voucher-traffic")[index],
-              cordinates.x + 65,
-              cordinates.y + 40
-            );
-            doc.fromHTML(
-              document.getElementsByClassName("voucher-time")[index],
-              cordinates.x + 65,
-              cordinates.y + 45
-            );
-
-            row++;
-            cordinates.width = cordinates.y;
-            cordinates.y = fifthHeight * row;
-            doc.setDrawColor(17, 17, 17);
-
-            if (!(index % 10 === 9)) {
-              doc.line(halfWidth, cordinates.y, width, cordinates.y);
-            }
-          }
-
-          Promise.all(promises)
-            .then(function() {
-              console.log("done");
-            })
-            .catch(function(err) {
-              console.error(err);
-            });
+          setTimeout(function () {
+            location.reload();
+          }, 2000);
+        } else {
+          location.reload();
         }
-        doc.autoPrint();
-        window.open(doc.output("bloburl"), "_blank");
       };
-      image.src = this.preferences.captive[2].value;
+
+      window.print();
+    },
+    printVoucher(voucher) {
+      for (let i = 0; i < this.vouchers.usable.length; i++) {
+        // print vocuher only if it's usable
+        if (this.vouchers.usable[i].id === voucher.id) {
+          this.printVouchers([ voucher ]);
+          break;
+        }
+      }
+    },
+    printAllVoucher() {
+      this.printVouchers(this.vouchers.usable);
     },
     exportCSVVoucher() {
       var voucherRows = JSON.parse(JSON.stringify(this.vouchers.usable));
@@ -2515,6 +2393,93 @@ textarea {
 
 .td-voucher-auth {
   background: #c8eb79;
+}
+
+@media print {
+  @page {
+    margin: 15mm 10mm;
+  }
+
+  .pagebreak {
+    break-after: always !important;
+    page-break-after: always !important;
+  }
+}
+
+.voucherPrintContainer {
+  width: 210mm;
+  padding: 5mm;
+}
+
+.voucher-print {
+  display: inline-block;
+  width: 49%;
+  border: 0.2mm dashed gray;
+  padding: 2mm;
+  vertical-align: top;
+}
+
+.voucher-print-logo {
+  width: 22%;
+  float: right;
+}
+
+.voucher-print-hs-title {
+  font-weight: 400;
+  font-size: 5mm;
+  margin-bottom: 3mm;
+}
+
+.voucher-print-code {
+  font-weight: 800;
+  font-size: 6mm;
+}
+
+.voucher-print-data {
+  display: inline-block;
+  width: 30mm;
+  font-size: 3mm;
+}
+
+.width-100 {
+  width: 100%;
+}
+
+.width-75 {
+  width: 75%;
+}
+
+.voucher-print-q1 {
+  width: 3mm;
+  border-bottom: 0.3mm solid black;
+}
+
+.voucher-print-q2 {
+  padding: 0;
+}
+
+.voucher-print-q4 {
+  border-top: 0.3mm solid black;
+}
+
+.padding-left-2 {
+  padding-left: 2mm;
+}
+
+.padding-left-2-2 {
+  padding-left: 2.2mm;
+}
+
+.border-left {
+  border-left: 0.3mm solid black;
+}
+
+.line-height-5 {
+  line-height: 5.5mm;
+}
+
+.align-top {
+  vertical-align: top;
 }
 
 .label-dateFilter {

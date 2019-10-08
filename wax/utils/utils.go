@@ -306,7 +306,7 @@ func HotspotHasValidSubscription(hotspotId int) bool {
 func GetVoucherByCode(code string, hotspotId int) models.HotspotVoucher {
 	var hotspotVoucher models.HotspotVoucher
 	db := database.Instance()
-	db.Where("binary code = ? AND hotspot_id = ?", code, hotspotId).First(&hotspotVoucher)
+	db.Where("binary code = ? AND hotspot_id = ?", strings.ToLower(code), hotspotId).First(&hotspotVoucher)
 
 	return hotspotVoucher
 }

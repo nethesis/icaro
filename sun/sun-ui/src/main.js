@@ -39,6 +39,8 @@ Vue.filter("secondsInHour", filters.secondsInHour);
 Vue.filter("formatDate", filters.formatDate);
 Vue.filter("formatDateShort", filters.formatDateShort);
 Vue.filter("adjustPage", filters.adjustPage);
+Vue.filter("uppercase", filters.uppercase);
+Vue.filter("truncate", filters.truncate);
 
 // init Vue app
 new Vue({

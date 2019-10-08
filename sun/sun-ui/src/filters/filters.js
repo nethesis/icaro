@@ -69,6 +69,16 @@ var Filters = {
   },
   adjustPage: function(value) {
     return Math.ceil(value);
+  },
+  uppercase: function (value) {
+    return value && value.toUpperCase()
+  },
+  truncate(value, maxLength) {
+    if (value.length > maxLength) {
+      return value.substring(0, maxLength) + '...';
+    } else {
+      return value;
+    }
   }
 };
 
