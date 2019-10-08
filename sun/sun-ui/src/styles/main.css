@@ -468,3 +468,7 @@ a {
   text-align: center;
   margin-bottom: 60px;
 }
+
+.datepicker-input {
+  width: 100%;
+}

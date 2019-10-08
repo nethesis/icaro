@@ -120,4 +120,12 @@
   .ui.small.image {
     width: 450px !important;
   }
+
+  .no-margin {
+    margin: 0 !important;
+  }
+
+  .button-dark {
+    background-color: #999999 !important;
+  }
 </style>

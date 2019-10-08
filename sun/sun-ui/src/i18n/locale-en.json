@@ -148,7 +148,10 @@
       "validity": "Validity",
       "sms_login_max": "Max SMS sent (0 = limitless)",
       "add_sms_count": "Add SMS",
-      "add": "Add"
+      "add": "Add",
+      "from": "From",
+      "to": "To",
+      "clear": "Clear"
     },
     "user": {
       "username": "Username",
@@ -343,7 +346,7 @@
       "email_feedback": "Service manager email address",
       "email_first": "Request support feedback",
       "email_second": "Request review feedback",
-      "email_first_after": "Request feedback after (hours)",
+      "email_first_after": "Request feedback after (minutes)",
       "email_first_template": "Feedback email text",
       "email_first_template_preview": "Feedback email preview",
       "email_second_template": "Review email text",

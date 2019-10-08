@@ -156,6 +156,62 @@
               </div>
             </div>
             <div class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
+              <label class="col-sm-3 control-label centered" for="textInput-markup">
+                {{$t('hotspot.expires')}}
+              </label>
+              <div class="width-p50 flex">
+                <label class="label-dateFilter">
+                  {{$t('hotspot.from')}}
+                </label>
+                <datepicker
+                  :format="dateFormatter"
+                  v-model="vouchers.filters.expiredStart"
+                  :language="locale"
+                  class="dateFilter"
+                  input-class="datepicker-input"
+                ></datepicker>
+                <label class="label-dateFilter mg-left-20">
+                  {{$t('hotspot.to')}}
+                </label>
+                <datepicker
+                  :format="dateFormatter"
+                  v-model="vouchers.filters.expiredEnd"
+                  :language="locale"
+                  class="dateFilter"
+                  input-class="datepicker-input"
+                ></datepicker>
+                <button @click="clearExpiredFilters()" class="btn btn-default mg-left-20">{{$t('hotspot.clear')}}</button>
+              </div>
+            </div>
+            <div class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
+              <label class="col-sm-3 control-label centered" for="textInput-markup">
+                {{$t('hotspot.created')}}
+              </label>
+              <div class="width-p50 flex">
+                <label class="label-dateFilter">
+                  {{$t('hotspot.from')}}
+                </label>
+                <datepicker
+                  :format="dateFormatter"
+                  v-model="vouchers.filters.createdStart"
+                  :language="locale"
+                  class="dateFilter"
+                  input-class="datepicker-input"
+                ></datepicker>
+                <label class="label-dateFilter mg-left-20">
+                  {{$t('hotspot.to')}}
+                </label>
+                <datepicker
+                  :format="dateFormatter"
+                  v-model="vouchers.filters.createdEnd"
+                  :language="locale"
+                  class="dateFilter"
+                  input-class="datepicker-input"
+                ></datepicker>
+                <button @click="clearCreatedFilters()" class="btn btn-default mg-left-20">{{$t('hotspot.clear')}}</button>
+              </div>
+            </div>
+            <div class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
               <label
                 class="col-sm-3 control-label centered"
                 for="textInput-markup"
@@ -226,7 +282,7 @@
               :columns="columns"
               :rows="vouchers.data"
               :lineNumbers="false"
-              :defaultSortBy="{field: 'created', type: 'asc'}"
+              :defaultSortBy="{field: 'created', type: 'desc'}"
               styleClass="table"
               :nextText="tableLangsTexts.nextText"
               :prevText="tableLangsTexts.prevText"
@@ -269,12 +325,15 @@
                   </div>
                 </td>
                 <td :class="['fancy', 'td-voucher-'+props.row.type]">
+                  {{ props.row.created | formatDateShort(true) }}
+                </td>
+                <td :class="['fancy', 'td-voucher-'+props.row.type]">
                   <span v-if="props.row.duration > 0">{{ props.row.duration }}</span>
                   <span v-if="props.row.duration == 0">-</span>
                 </td>
                 <td :class="['fancy', 'td-voucher-'+props.row.type]">
                   <span :class="['fa', checkVoucherUse(props.row.expires) ? 'fa-check green' : '']"></span>
-                  {{props.row.expires | formatDate}}
+                  {{ props.row.expires | formatDateShort(true) }}
                 </td>
                 <td :class="['fancy', 'td-voucher-'+props.row.type]">
                   {{props.row.remain_use == -1 ? $t('hotspot.limitless') : $t('hotspot.max_use') + ': ' }}
@@ -1355,6 +1414,10 @@ export default {
         filters: {
           code: "",
           duration: 0,
+          expiredStart: "",
+          expiredEnd: "",
+          createdStart: "",
+          createdEnd: "",
           auto_login: "",
           used: "",
           reusable: "",
@@ -1455,6 +1518,12 @@ export default {
           field: "limit",
           filterable: false,
           sortable: false
+        },
+        {
+          label: this.$i18n.t("hotspot.created"),
+          field: "created",
+          filterable: false,
+          sortable: true
         },
         {
           label: this.$i18n.t("hotspot.duration"),
@@ -1706,7 +1775,11 @@ export default {
           used: this.vouchers.filters.used,
           reusable: this.vouchers.filters.reusable,
           printed: this.vouchers.filters.printed,
-          type: this.vouchers.filters.type
+          type: this.vouchers.filters.type,
+          expiredStart: this.vouchers.filters.expiredStart,
+          expiredEnd: this.vouchers.filters.expiredEnd,
+          createdStart: this.vouchers.filters.createdStart,
+          createdEnd: this.vouchers.filters.createdEnd
         },
         this.$route.params.id,
         success => {
@@ -2208,6 +2281,14 @@ export default {
       link.setAttribute("href", encodedUri);
       link.setAttribute("download", "tos" + ".txt");
       link.click();
+    },
+    clearExpiredFilters() {
+      this.vouchers.filters.expiredStart = "";
+      this.vouchers.filters.expiredEnd = "";
+    },
+    clearCreatedFilters() {
+      this.vouchers.filters.createdStart = "";
+      this.vouchers.filters.createdEnd = "";
     }
   }
 };
@@ -2399,5 +2480,28 @@ textarea {
 
 .align-top {
   vertical-align: top;
+}
+
+.label-dateFilter {
+  margin-right: 10px;
+}
+
+.dateFilter {
+  display: inline-block;
+  vertical-align: middle;
+  flex-grow: 1;
+}
+
+.flex {
+  display: flex;
+}
+
+.mg-left-20 {
+  margin-left: 20px;
+}
+
+.width-p50 {
+  width: 50%;
+  padding-left: 20px;
 }
 </style>

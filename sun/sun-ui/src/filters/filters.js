@@ -48,11 +48,22 @@ var Filters = {
 
     return returnString;
   },
-  formatDate: function(value, withHour, empty) {
+  formatDate: function(value, withoutHour, empty) {
     var moment = require("patternfly/node_modules/moment/moment.js");
     if (+new Date(value) > 0)
       return moment(String(value)).format(
-        withHour ? "DD MMMM YYYY" : "DD MMMM YYYY, HH:mm"
+        withoutHour ? "DD MMMM YYYY" : "DD MMMM YYYY, HH:mm"
+      );
+    else return empty ? "" : "-";
+  },
+  adjustPage: function(value) {
+    return Math.ceil(value);
+  },
+  formatDateShort: function(value, withoutHour, empty) {
+    var moment = require("patternfly/node_modules/moment/moment.js");
+    if (+new Date(value) > 0)
+      return moment(String(value)).format(
+        withoutHour ? "DD MMM YYYY" : "DD MMM YYYY, HH:mm"
       );
     else return empty ? "" : "-";
   },

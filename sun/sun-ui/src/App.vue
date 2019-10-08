@@ -401,6 +401,7 @@
       </div>
     </div>
     <!-- end modals -->
+    <a id="download-csv" style="display: none;"></a>
   </div>
 </template>
 

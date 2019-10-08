@@ -148,7 +148,10 @@
       "validity": "Validità",
       "sms_login_max": "Numero massimo di SMS (0 = illimitato)",
       "add_sms_count": "Aggiungi SMS",
-      "add": "Aggiungi"
+      "add": "Aggiungi",
+      "from": "Da",
+      "to": "A",
+      "clear": "Pulisci"
     },
     "user": {
       "username": "Utente",
@@ -343,7 +346,7 @@
       "email_feedback": "Indirizzo email per le segnalazioni",
       "email_first": "Invia richiesta assistenza",
       "email_second": "Invia richiesta recensione",
-      "email_first_after": "Invia richiesta dopo (ore)",
+      "email_first_after": "Invia richiesta dopo (minuti)",
       "email_first_template": "Testo email di richiesta assistenza",
       "email_first_template_preview": "Anteprima",
       "email_second_template": "Testo email di richiesta recensione",

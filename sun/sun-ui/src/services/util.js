@@ -238,7 +238,7 @@ var UtilService = {
       }
       var finalCSV = "data:text/csv;charset=utf-8," + header + body;
       var encodedUri = encodeURI(finalCSV);
-      var link = document.createElement("a");
+      var link = document.getElementById('download-csv');
       link.setAttribute("href", encodedUri);
       var now = new Date();
       var date =

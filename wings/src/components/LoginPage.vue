@@ -5,8 +5,21 @@
       <div class="inline field" v-bind:class="{ error: badInput }">
         <label>Voucher</label>
         <div class="ui big left icon input">
-          <input v-model="authCode" type="email" :placeholder="$t('login.insert_voucher')">
+          <input
+            v-model="authCode"
+            :type="voucherVisible ? 'email' : 'password'"
+            :placeholder="$t('login.insert_voucher')"
+          >
           <i class="braille icon"></i>
+          <!-- toggle voucher visibility -->
+          <button
+            tabindex="-1"
+            type="button"
+            :class="['ui', 'button', voucherVisible ? '' : 'button-dark' ]"
+            @click="toggleVoucherVisibility()"
+          >
+            <i class="eye icon no-margin"></i>
+          </button>
         </div>
       </div>
       <button v-on:click="validateCode()" class="ui big button">{{ $t("login.validate_code") }}</button>
@@ -194,7 +207,8 @@ export default {
       surveys: false,
       countries: require("./../i18n/countries.json"),
       additionalCountry: "-",
-      additionalReason: "-"
+      additionalReason: "-",
+      voucherVisible: true,
     };
   },
   methods: {
@@ -410,6 +424,9 @@ export default {
           context.$root.$options.hotspot.preferences.captive_1_redir
         );
       }
+    },
+    toggleVoucherVisibility: function() {
+      this.voucherVisible = !this.voucherVisible;
     }
   }
 };
