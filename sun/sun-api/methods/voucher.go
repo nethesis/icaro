@@ -25,6 +25,7 @@ package methods
 import (
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -91,8 +92,8 @@ func CreateVoucher(c *gin.Context) {
 		if hotspotVoucher.Type == "auth" {
 			newUser := models.User{
 				HotspotId:            json.HotspotId,
-				Name:                 hotspotVoucher.UserName + " (" + hotspotVoucher.Code + ")",
-				Username:             hotspotVoucher.Code,
+				Name:                 hotspotVoucher.UserName + " (" + strings.ToUpper(hotspotVoucher.Code) + ")",
+				Username:             strings.ToUpper(hotspotVoucher.Code),
 				Password:             hotspotVoucher.Code,
 				Email:                hotspotVoucher.UserMail,
 				AccountType:          "voucher",
