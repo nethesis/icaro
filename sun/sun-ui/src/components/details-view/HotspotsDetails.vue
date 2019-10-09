@@ -146,129 +146,146 @@
                 <input v-model="vouchers.filters.code" type="text" class="form-control">
               </div>
             </div>
-            <div class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
-              <label class="col-sm-3 control-label centered" for="textInput-markup">
-                {{$t('hotspot.duration')}}
-                ({{$t('hotspot.0_all')}})
-              </label>
-              <div class="col-sm-9">
-                <input v-model="vouchers.filters.duration" type="number" class="form-control">
-              </div>
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12 no-padding mg-left-20">
+              <legend
+                class="fields-section-header-pf"
+                aria-expanded="true"
+              >
+                <span
+                  :class="['fa fa-angle-right field-section-toggle-pf', advancedFilters ? 'fa-angle-down' : '']"
+                  @click="toggleAdvancedFilters()"
+                ></span>
+                <a
+                  class="field-section-toggle-pf pointer"
+                  @click="toggleAdvancedFilters()"
+                >{{$t('hotspot.advanced_filters')}}</a>
+              </legend>
             </div>
-            <div class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
-              <label class="col-sm-3 control-label centered" for="textInput-markup">
-                {{$t('hotspot.expires')}}
-              </label>
-              <div class="width-p50 flex">
-                <label class="label-dateFilter">
-                  {{$t('hotspot.from')}}
+            <div v-show="advancedFilters">
+              <div class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <label class="col-sm-3 control-label centered" for="textInput-markup">
+                  {{$t('hotspot.duration')}}
+                  ({{$t('hotspot.0_all')}})
                 </label>
-                <datepicker
-                  :format="dateFormatter"
-                  v-model="vouchers.filters.expiredStart"
-                  :language="locale"
-                  class="dateFilter"
-                  input-class="datepicker-input"
-                ></datepicker>
-                <label class="label-dateFilter mg-left-20">
-                  {{$t('hotspot.to')}}
+                <div class="col-sm-9">
+                  <input v-model="vouchers.filters.duration" type="number" class="form-control">
+                </div>
+              </div>
+              <div class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <label class="col-sm-3 control-label centered" for="textInput-markup">
+                  {{$t('hotspot.expires')}}
                 </label>
-                <datepicker
-                  :format="dateFormatter"
-                  v-model="vouchers.filters.expiredEnd"
-                  :language="locale"
-                  class="dateFilter"
-                  input-class="datepicker-input"
-                ></datepicker>
-                <button @click="clearExpiredFilters()" class="btn btn-default mg-left-20">{{$t('hotspot.clear')}}</button>
+                <div class="width-p50 flex">
+                  <label class="label-dateFilter">
+                    {{$t('hotspot.from')}}
+                  </label>
+                  <datepicker
+                    :format="dateFormatter"
+                    v-model="vouchers.filters.expiredStart"
+                    :language="locale"
+                    class="dateFilter"
+                    input-class="datepicker-input"
+                  ></datepicker>
+                  <label class="label-dateFilter mg-left-20">
+                    {{$t('hotspot.to')}}
+                  </label>
+                  <datepicker
+                    :format="dateFormatter"
+                    v-model="vouchers.filters.expiredEnd"
+                    :language="locale"
+                    class="dateFilter"
+                    input-class="datepicker-input"
+                  ></datepicker>
+                  <button @click="clearExpiredFilters()" class="btn btn-default mg-left-20">{{$t('hotspot.clear')}}</button>
+                </div>
               </div>
-            </div>
-            <div class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
-              <label class="col-sm-3 control-label centered" for="textInput-markup">
-                {{$t('hotspot.created')}}
-              </label>
-              <div class="width-p50 flex">
-                <label class="label-dateFilter">
-                  {{$t('hotspot.from')}}
+              <div class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <label class="col-sm-3 control-label centered" for="textInput-markup">
+                  {{$t('hotspot.created')}}
                 </label>
-                <datepicker
-                  :format="dateFormatter"
-                  v-model="vouchers.filters.createdStart"
-                  :language="locale"
-                  class="dateFilter"
-                  input-class="datepicker-input"
-                ></datepicker>
-                <label class="label-dateFilter mg-left-20">
-                  {{$t('hotspot.to')}}
-                </label>
-                <datepicker
-                  :format="dateFormatter"
-                  v-model="vouchers.filters.createdEnd"
-                  :language="locale"
-                  class="dateFilter"
-                  input-class="datepicker-input"
-                ></datepicker>
-                <button @click="clearCreatedFilters()" class="btn btn-default mg-left-20">{{$t('hotspot.clear')}}</button>
+                <div class="width-p50 flex">
+                  <label class="label-dateFilter">
+                    {{$t('hotspot.from')}}
+                  </label>
+                  <datepicker
+                    :format="dateFormatter"
+                    v-model="vouchers.filters.createdStart"
+                    :language="locale"
+                    class="dateFilter"
+                    input-class="datepicker-input"
+                  ></datepicker>
+                  <label class="label-dateFilter mg-left-20">
+                    {{$t('hotspot.to')}}
+                  </label>
+                  <datepicker
+                    :format="dateFormatter"
+                    v-model="vouchers.filters.createdEnd"
+                    :language="locale"
+                    class="dateFilter"
+                    input-class="datepicker-input"
+                  ></datepicker>
+                  <button @click="clearCreatedFilters()" class="btn btn-default mg-left-20">{{$t('hotspot.clear')}}</button>
+                </div>
               </div>
-            </div>
-            <div class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
-              <label
-                class="col-sm-3 control-label centered"
-                for="textInput-markup"
-              >{{$t('hotspot.auto_login')}}</label>
-              <div class="col-sm-3 list-details">
-                <select v-model="vouchers.filters.auto_login" class="form-control">
-                  <option value>-</option>
-                  <option value="1">{{$t('hotspot.yes')}}</option>
-                  <option value="0">{{$t('hotspot.no')}}</option>
-                </select>
-              </div>
-              <label
-                class="col-sm-3 control-label centered"
-                for="textInput-markup"
-              >{{$t('hotspot.used')}}</label>
-              <div class="col-sm-3 list-details">
-                <select v-model="vouchers.filters.used" class="form-control">
-                  <option value>-</option>
-                  <option value="1">{{$t('hotspot.yes')}}</option>
-                  <option value="0">{{$t('hotspot.no')}}</option>
-                </select>
-              </div>
+              <div class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <label
+                  class="col-sm-3 control-label centered"
+                  for="textInput-markup"
+                >{{$t('hotspot.auto_login')}}</label>
+                <div class="col-sm-3 list-details">
+                  <select v-model="vouchers.filters.auto_login" class="form-control">
+                    <option value>-</option>
+                    <option value="1">{{$t('hotspot.yes')}}</option>
+                    <option value="0">{{$t('hotspot.no')}}</option>
+                  </select>
+                </div>
+                <label
+                  class="col-sm-3 control-label centered"
+                  for="textInput-markup"
+                >{{$t('hotspot.used')}}</label>
+                <div class="col-sm-3 list-details">
+                  <select v-model="vouchers.filters.used" class="form-control">
+                    <option value>-</option>
+                    <option value="1">{{$t('hotspot.yes')}}</option>
+                    <option value="0">{{$t('hotspot.no')}}</option>
+                  </select>
+                </div>
 
-              <label
-                class="col-sm-3 control-label centered"
-                for="textInput-markup"
-              >{{$t('hotspot.reusable')}}</label>
-              <div class="col-sm-3 list-details">
-                <select v-model="vouchers.filters.reusable" class="form-control">
-                  <option value>-</option>
-                  <option value="1">{{$t('hotspot.yes')}}</option>
-                  <option value="0">{{$t('hotspot.no')}}</option>
-                </select>
-              </div>
+                <label
+                  class="col-sm-3 control-label centered"
+                  for="textInput-markup"
+                >{{$t('hotspot.reusable')}}</label>
+                <div class="col-sm-3 list-details">
+                  <select v-model="vouchers.filters.reusable" class="form-control">
+                    <option value>-</option>
+                    <option value="1">{{$t('hotspot.yes')}}</option>
+                    <option value="0">{{$t('hotspot.no')}}</option>
+                  </select>
+                </div>
 
-              <label
-                class="col-sm-3 control-label centered"
-                for="textInput-markup"
-              >{{$t('hotspot.printed')}}</label>
-              <div class="col-sm-3 list-details">
-                <select v-model="vouchers.filters.printed" class="form-control">
-                  <option value>-</option>
-                  <option value="1">{{$t('hotspot.yes')}}</option>
-                  <option value="0">{{$t('hotspot.no')}}</option>
-                </select>
-              </div>
+                <label
+                  class="col-sm-3 control-label centered"
+                  for="textInput-markup"
+                >{{$t('hotspot.printed')}}</label>
+                <div class="col-sm-3 list-details">
+                  <select v-model="vouchers.filters.printed" class="form-control">
+                    <option value>-</option>
+                    <option value="1">{{$t('hotspot.yes')}}</option>
+                    <option value="0">{{$t('hotspot.no')}}</option>
+                  </select>
+                </div>
 
-              <label
-                class="col-sm-3 control-label centered"
-                for="textInput-markup"
-              >{{$t('hotspot.type')}}</label>
-              <div class="col-sm-3 list-details">
-                <select v-model="vouchers.filters.type" class="form-control">
-                  <option value>-</option>
-                  <option value="normal">{{$t('hotspot.normal')}}</option>
-                  <option value="auth">{{$t('hotspot.auth')}}</option>
-                </select>
+                <label
+                  class="col-sm-3 control-label centered"
+                  for="textInput-markup"
+                >{{$t('hotspot.type')}}</label>
+                <div class="col-sm-3 list-details">
+                  <select v-model="vouchers.filters.type" class="form-control">
+                    <option value>-</option>
+                    <option value="normal">{{$t('hotspot.normal')}}</option>
+                    <option value="auth">{{$t('hotspot.auth')}}</option>
+                  </select>
+                </div>
               </div>
             </div>
 
@@ -1624,7 +1641,8 @@ export default {
       smsMaxCount: 0,
       smsMaxCountAdd: 0,
       showVoucherPrint: false,
-      vouchersToPrint: []
+      vouchersToPrint: [],
+      advancedFilters: false
     };
   },
   methods: {
@@ -2289,6 +2307,10 @@ export default {
     clearCreatedFilters() {
       this.vouchers.filters.createdStart = "";
       this.vouchers.filters.createdEnd = "";
+    },
+    toggleAdvancedFilters() {
+      this.advancedFilters = !this.advancedFilters;
+      this.$forceUpdate();
     }
   }
 };
@@ -2503,5 +2525,13 @@ textarea {
 .width-p50 {
   width: 50%;
   padding-left: 20px;
+}
+
+.no-padding {
+  padding: 0;
+}
+
+.pointer {
+  cursor: pointer;
 }
 </style>
