@@ -143,7 +143,7 @@
                 for="textInput-markup"
               >{{$t('hotspot.code')}}</label>
               <div class="col-sm-9">
-                <input v-model="vouchers.filters.code" type="text" class="form-control">
+                <input v-model="vouchers.filters.code" type="text" class="form-control" />
               </div>
             </div>
             <div class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -152,17 +152,16 @@
                 ({{$t('hotspot.0_all')}})
               </label>
               <div class="col-sm-9">
-                <input v-model="vouchers.filters.duration" type="number" class="form-control">
+                <input v-model="vouchers.filters.duration" type="number" class="form-control" />
               </div>
             </div>
             <div class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
-              <label class="col-sm-3 control-label centered" for="textInput-markup">
-                {{$t('hotspot.expires')}}
-              </label>
+              <label
+                class="col-sm-3 control-label centered"
+                for="textInput-markup"
+              >{{$t('hotspot.expires')}}</label>
               <div class="width-p50 flex">
-                <label class="label-dateFilter">
-                  {{$t('hotspot.from')}}
-                </label>
+                <label class="label-dateFilter">{{$t('hotspot.from')}}</label>
                 <datepicker
                   :format="dateFormatter"
                   v-model="vouchers.filters.expiredStart"
@@ -170,9 +169,7 @@
                   class="dateFilter"
                   input-class="datepicker-input"
                 ></datepicker>
-                <label class="label-dateFilter mg-left-20">
-                  {{$t('hotspot.to')}}
-                </label>
+                <label class="label-dateFilter mg-left-20">{{$t('hotspot.to')}}</label>
                 <datepicker
                   :format="dateFormatter"
                   v-model="vouchers.filters.expiredEnd"
@@ -180,17 +177,19 @@
                   class="dateFilter"
                   input-class="datepicker-input"
                 ></datepicker>
-                <button @click="clearExpiredFilters()" class="btn btn-default mg-left-20">{{$t('hotspot.clear')}}</button>
+                <button
+                  @click="clearExpiredFilters()"
+                  class="btn btn-default mg-left-20"
+                >{{$t('hotspot.clear')}}</button>
               </div>
             </div>
             <div class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
-              <label class="col-sm-3 control-label centered" for="textInput-markup">
-                {{$t('hotspot.created')}}
-              </label>
+              <label
+                class="col-sm-3 control-label centered"
+                for="textInput-markup"
+              >{{$t('hotspot.created')}}</label>
               <div class="width-p50 flex">
-                <label class="label-dateFilter">
-                  {{$t('hotspot.from')}}
-                </label>
+                <label class="label-dateFilter">{{$t('hotspot.from')}}</label>
                 <datepicker
                   :format="dateFormatter"
                   v-model="vouchers.filters.createdStart"
@@ -198,9 +197,7 @@
                   class="dateFilter"
                   input-class="datepicker-input"
                 ></datepicker>
-                <label class="label-dateFilter mg-left-20">
-                  {{$t('hotspot.to')}}
-                </label>
+                <label class="label-dateFilter mg-left-20">{{$t('hotspot.to')}}</label>
                 <datepicker
                   :format="dateFormatter"
                   v-model="vouchers.filters.createdEnd"
@@ -208,7 +205,10 @@
                   class="dateFilter"
                   input-class="datepicker-input"
                 ></datepicker>
-                <button @click="clearCreatedFilters()" class="btn btn-default mg-left-20">{{$t('hotspot.clear')}}</button>
+                <button
+                  @click="clearCreatedFilters()"
+                  class="btn btn-default mg-left-20"
+                >{{$t('hotspot.clear')}}</button>
               </div>
             </div>
             <div class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -293,7 +293,7 @@
               <template slot="table-row" slot-scope="props">
                 <td :class="['fancy', 'td-voucher-'+props.row.type]">
                   <strong>{{ props.row.code | uppercase }}</strong>
-                  <br>
+                  <br />
                   {{ props.row.user_name}} ({{ props.row.user_mail }})
                 </td>
                 <td :class="['fancy', 'td-voucher-'+props.row.type]">
@@ -324,9 +324,9 @@
                     : {{ props.row.max_time || '-' | secondsInHour }}
                   </div>
                 </td>
-                <td :class="['fancy', 'td-voucher-'+props.row.type]">
-                  {{ props.row.created | formatDateShort(true) }}
-                </td>
+                <td
+                  :class="['fancy', 'td-voucher-'+props.row.type]"
+                >{{ props.row.created | formatDateShort(true) }}</td>
                 <td :class="['fancy', 'td-voucher-'+props.row.type]">
                   <span v-if="props.row.duration > 0">{{ props.row.duration }}</span>
                   <span v-if="props.row.duration == 0">-</span>
@@ -439,7 +439,7 @@
                     :type="getInputType(pref.key, pref.value)"
                     id="textInput-markup"
                     class="form-control"
-                  >
+                  />
                 </div>
                 <div v-if="pref.key == 'sms_login_max'" class="col-sm-4">
                   <label class="control-label col-sm-5">{{$t('hotspot.add_sms_count')}}:</label>
@@ -448,7 +448,7 @@
                     type="number"
                     id="textInput-markup"
                     class="form-control col-sm-5 special-input"
-                  >
+                  />
                   <button
                     type="button"
                     @click="addSMSCount(pref, smsMaxCountAdd)"
@@ -530,7 +530,7 @@
                     v-model="pref.value"
                     :type="getInputType(pref.key, pref.value)"
                     class="form-control"
-                  >
+                  />
                 </div>
               </div>
               <div class="form-group">
@@ -760,7 +760,7 @@
                       name="voucherType"
                       id="voucherType1"
                       value="normal"
-                    >
+                    />
                     <span class="voucher-type-span-normal"></span>
                     <label class="form-check-label" for="voucherType1">{{$t('hotspot.normal')}}</label>
                   </span>
@@ -773,7 +773,7 @@
                       name="voucherType"
                       id="voucherType2"
                       value="auth"
-                    >
+                    />
                     <span class="voucher-type-span-auth"></span>
                     <label class="form-check-label" for="voucherType2">{{$t('hotspot.auth')}}</label>
                   </span>
@@ -792,7 +792,7 @@
                     type="text"
                     id="textInput-modal-markup"
                     class="form-control"
-                  >
+                  />
                 </div>
               </div>
 
@@ -807,7 +807,7 @@
                     type="checkbox"
                     id="textInput-modal-markup"
                     class="form-control"
-                  >
+                  />
                 </div>
               </div>
               <div class="form-group">
@@ -821,7 +821,7 @@
                     type="number"
                     id="textInput-modal-markup"
                     class="form-control"
-                  >
+                  />
                 </div>
               </div>
               <div class="form-group">
@@ -835,7 +835,7 @@
                     type="number"
                     id="textInput-modal-markup"
                     class="form-control"
-                  >
+                  />
                 </div>
               </div>
               <div class="form-group">
@@ -849,7 +849,7 @@
                     type="number"
                     id="textInput-modal-markup"
                     class="form-control"
-                  >
+                  />
                 </div>
               </div>
               <div class="form-group">
@@ -863,7 +863,7 @@
                     type="number"
                     id="textInput-modal-markup"
                     class="form-control"
-                  >
+                  />
                 </div>
               </div>
               <div class="form-group">
@@ -881,7 +881,7 @@
                       name="timeExpiration"
                       id="timeExpiration1"
                       value="duration"
-                    >
+                    />
                     <label class="form-check-label" for="timeExpiration1">{{$t('hotspot.duration')}}</label>
                   </span>
                   <span class="span-radio">
@@ -893,7 +893,7 @@
                       name="timeExpiration"
                       id="timeExpiration2"
                       value="expiration"
-                    >
+                    />
                     <label
                       class="form-check-label"
                       for="timeExpiration2"
@@ -909,7 +909,7 @@
                     type="number"
                     id="textInput-modal-markup"
                     class="form-control"
-                  >
+                  />
                 </div>
               </div>
               <div v-if="newVoucher.time == 'expiration'" class="form-group">
@@ -937,7 +937,7 @@
                       name="exampleRadios"
                       id="exampleRadios1"
                       value="true"
-                    >
+                    />
                     <label class="form-check-label" for="exampleRadios1">{{$t('hotspot.limitless')}}</label>
                   </span>
                   <span class="span-radio">
@@ -949,7 +949,7 @@
                       name="exampleRadios"
                       id="exampleRadios2"
                       value="false"
-                    >
+                    />
                     <label
                       class="form-check-label"
                       for="exampleRadios2"
@@ -968,7 +968,7 @@
                     type="number"
                     id="textInput-modal-markup"
                     class="form-control"
-                  >
+                  />
                 </div>
               </div>
               <div v-if="newVoucher.type == 'auth'" class="divider"></div>
@@ -984,7 +984,7 @@
                     type="text"
                     id="textInput-modal-markup"
                     class="form-control"
-                  >
+                  />
                 </div>
               </div>
               <div v-if="newVoucher.type == 'auth'" class="form-group">
@@ -998,7 +998,7 @@
                     type="email"
                     id="textInput-modal-markup"
                     class="form-control"
-                  >
+                  />
                 </div>
               </div>
             </div>
@@ -1101,7 +1101,7 @@
                     id="textInput-modal-markup"
                     class="form-control"
                     :placeholder="$t('unit.description')"
-                  >
+                  />
                 </div>
               </div>
               <div class="form-group">
@@ -1118,7 +1118,7 @@
                     id="textInput2-modal-markup"
                     class="form-control"
                     placeholder="00:11:22:AA:BB:CC"
-                  >
+                  />
                 </div>
               </div>
               <div class="form-group">
@@ -1127,7 +1127,7 @@
                   for="textInput-modal-markup"
                 >{{$t('hotspot.bandwidth_down')}}</label>
                 <div class="col-sm-7">
-                  <input v-model="newMACAuth.kbps_down" type="number" class="form-control">
+                  <input v-model="newMACAuth.kbps_down" type="number" class="form-control" />
                 </div>
               </div>
               <div class="form-group">
@@ -1136,7 +1136,7 @@
                   for="textInput-modal-markup"
                 >{{$t('hotspot.bandwidth_up')}}</label>
                 <div class="col-sm-7">
-                  <input v-model="newMACAuth.kbps_up" type="number" class="form-control">
+                  <input v-model="newMACAuth.kbps_up" type="number" class="form-control" />
                 </div>
               </div>
             </div>
@@ -1159,7 +1159,7 @@
       class="card-pf"
       id="voucher-coupon"
     >
-      <img class="voucher-logo" src="/static/logo.png">
+      <img class="voucher-logo" src="/static/logo.png" />
       <h2 class="card-pf-title voucher-name" id="test">{{info.data.name}}</h2>
       <h3 class="card-pf-title voucher-desc">{{info.data.description}}</h3>
       <div class="card-pf-body voucher-main">
@@ -1207,29 +1207,20 @@
         </div>
       </div>
     </div>
-    <div
-      id="voucherPrint"
-      v-show="showVoucherPrint"
-      class="voucherPrintContainer"
-    >
+    <div id="voucherPrint" v-show="showVoucherPrint" class="voucherPrintContainer">
       <div
         v-for="index in Math.ceil(vouchersToPrint.length / 2)"
         :key="index"
         :class="[ index % 5 == 0 && index != 0 ? 'pagebreak' : '']"
       >
         <!-- two vouchers columns -->
-        <div
-          v-for="i in [ (index*2-2), (index*2-1) ]"
-          :key="i"
-          class="voucher-print"
-        >
+        <div v-for="i in [ (index*2-2), (index*2-1) ]" :key="i" class="voucher-print">
           <div v-if="i < vouchersToPrint.length">
             <table class="width-100">
               <tr>
-                <td class="voucher-print-q1">
-                </td>
+                <td class="voucher-print-q1"></td>
                 <td class="voucher-print-q2">
-                  <img :src="preferences.captive[2].value" class="voucher-print-logo">
+                  <img :src="preferences.captive[2].value" class="voucher-print-logo" />
                   <div class="voucher-print-hs-title">{{ info.data.description }}</div>
                   <table class="width-75">
                     <tr>
@@ -1241,83 +1232,66 @@
                       <td class="padding-left-2 border-left line-height-5">
                         <div class="voucher-print-data">
                           <span class="fa fa-clock-o"></span>
-                          <span v-if="vouchersToPrint[i].duration > 0">
-                            {{ vouchersToPrint[i].duration }} {{ $t("hotspot.days") }}
-                          </span>
-                          <span v-else>
-                            {{ vouchersToPrint[i].expires | formatDate(true) }}
-                          </span>
+                          <span
+                            v-if="vouchersToPrint[i].duration > 0"
+                          >{{ vouchersToPrint[i].duration }} {{ $t("hotspot.days") }}</span>
+                          <span v-else>{{ vouchersToPrint[i].expires | formatDate(true) }}</span>
                         </div>
                         <div class="voucher-print-data">
-                          <span
-                            v-show="vouchersToPrint[i].user_name"
-                            class="pficon pficon-user"
-                          ></span>
+                          <span v-show="vouchersToPrint[i].user_name" class="pficon pficon-user"></span>
                           {{ vouchersToPrint[i].user_name | truncate(12) }}
                         </div>
                         <div class="voucher-print-data">
                           <span class="pficon pficon-history"></span>
-                          <span v-if="vouchersToPrint[i].remain_use != -1">
-                            {{ vouchersToPrint[i].remain_use }} {{ $t("hotspot.max_use") }}
-                          </span>
-                          <span v-else>
-                            {{ $t("hotspot.reusable") }}
-                          </span>
+                          <span
+                            v-if="vouchersToPrint[i].remain_use != -1"
+                          >{{ vouchersToPrint[i].remain_use }} {{ $t("hotspot.max_use") }}</span>
+                          <span v-else>{{ $t("hotspot.reusable") }}</span>
                         </div>
-                        <div class="voucher-print-data">
-                        </div>
+                        <div class="voucher-print-data"></div>
                       </td>
                     </tr>
                   </table>
                 </td>
               </tr>
               <tr>
-                <td>
-                </td>
+                <td></td>
                 <td class="voucher-print-q4">
                   <table class="width-75">
                     <tr>
                       <td class="padding-left-2 border-left">
                         <div class="voucher-print-data">
                           <span class="fa fa-arrow-circle-o-down"></span>
-                          <span v-if="vouchersToPrint[i].bandwidth_down != 0">
-                            {{ vouchersToPrint[i].bandwidth_down }} Kbps
-                          </span>
-                          <span v-else>
-                            {{ $t("hotspot.unlimited") }}
-                          </span>
+                          <span
+                            v-if="vouchersToPrint[i].bandwidth_down != 0"
+                          >{{ vouchersToPrint[i].bandwidth_down }} Kbps</span>
+                          <span v-else>{{ $t("hotspot.unlimited") }}</span>
                         </div>
                         <div class="voucher-print-data">
                           <span class="fa fa-tachometer"></span>
-                          <span v-if="vouchersToPrint[i].max_traffic != 0">
-                            {{ vouchersToPrint[i].max_traffic | byteFormat}}
-                          </span>
-                          <span v-else>
-                            {{ $t("hotspot.unlimited") }}
-                          </span>
+                          <span
+                            v-if="vouchersToPrint[i].max_traffic != 0"
+                          >{{ vouchersToPrint[i].max_traffic | byteFormat}}</span>
+                          <span v-else>{{ $t("hotspot.unlimited") }}</span>
                         </div>
                       </td>
                     </tr>
                     <tr>
                       <td class="padding-left-2-2">
                         <div class="voucher-print-data align-top">
-                        <span class="fa fa-arrow-circle-o-up"></span>
-                        <span v-if="vouchersToPrint[i].bandwidth_up != 0">
-                          {{ vouchersToPrint[i].bandwidth_up }} Kbps
-                        </span>
-                        <span v-else>
-                          {{ $t("hotspot.unlimited") }}
-                        </span>
-                      </div>
-                      <div class="voucher-print-data align-top">
-                        <span class="pficon pficon-pending"></span>
-                        <span v-if="vouchersToPrint[i].max_time != 0">
-                          {{ vouchersToPrint[i].max_time | secondsInHour }}
-                        </span>
-                        <span v-else>
-                          {{ $t("hotspot.unlimited") }}
-                        </span>
-                      </div>
+                          <span class="fa fa-arrow-circle-o-up"></span>
+                          <span
+                            v-if="vouchersToPrint[i].bandwidth_up != 0"
+                          >{{ vouchersToPrint[i].bandwidth_up }} Kbps</span>
+                          <span v-else>{{ $t("hotspot.unlimited") }}</span>
+                        </div>
+                        <div class="voucher-print-data align-top">
+                          <span class="pficon pficon-pending"></span>
+                          <span
+                            v-if="vouchersToPrint[i].max_time != 0"
+                          >{{ vouchersToPrint[i].max_time | secondsInHour }}</span>
+                          <span v-else>{{ $t("hotspot.unlimited") }}</span>
+                        </div>
                       </td>
                     </tr>
                   </table>
@@ -2087,25 +2061,27 @@ export default {
       this.showVoucherPrint = true;
 
       setTimeout(async function() {
-        context.printDiv('voucherPrint');
+        context.printDiv("voucherPrint");
       }, 500);
     },
     printDiv(div_id) {
-      $('body').html($("#"+div_id).html());
+      $("body").html($("#" + div_id).html());
       scroll(0, 0);
       var context = this;
 
       window.onafterprint = function(event) {
         // show "Go back to Hotspot Manager" button in Firefox
         var browser = navigator.userAgent.toLowerCase();
-        if (browser.indexOf('firefox') > -1) {
-          $("body").prepend('<div class="go-back-to-hotspot-manager"><button id="goBack" class="btn btn-primary btn-lg" type="button"><span class="fa fa-arrow-left"></span></button></div>');
+        if (browser.indexOf("firefox") > -1) {
+          $("body").prepend(
+            '<div class="go-back-to-hotspot-manager"><button id="goBack" class="btn btn-primary btn-lg" type="button"><span class="fa fa-arrow-left"></span></button></div>'
+          );
 
-          $("#goBack").click(function(){
+          $("#goBack").click(function() {
             location.reload();
           });
 
-          setTimeout(function () {
+          setTimeout(function() {
             location.reload();
           }, 2000);
         } else {
@@ -2119,7 +2095,7 @@ export default {
       for (let i = 0; i < this.vouchers.usable.length; i++) {
         // print vocuher only if it's usable
         if (this.vouchers.usable[i].id === voucher.id) {
-          this.printVouchers([ voucher ]);
+          this.printVouchers([voucher]);
           break;
         }
       }
