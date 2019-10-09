@@ -151,7 +151,8 @@
       "add": "Add",
       "from": "From",
       "to": "To",
-      "clear": "Clear"
+      "clear": "Clear",
+      "advanced_filters": "Advanced filters"
     },
     "user": {
       "username": "Username",
