@@ -151,7 +151,8 @@
       "add": "Aggiungi",
       "from": "Da",
       "to": "A",
-      "clear": "Pulisci"
+      "clear": "Pulisci",
+      "advanced_filters": "Filtri avanzati"
     },
     "user": {
       "username": "Utente",
