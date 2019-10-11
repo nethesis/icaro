@@ -194,7 +194,7 @@ func GetVouchers(c *gin.Context) {
 	}
 
 	if len(code) > 0 {
-		chain = chain.Where("code LIKE ?", "%"+code+"%")
+		chain = chain.Where("code LIKE ?", "%"+strings.ToLower(code)+"%")
 	}
 
 	if len(duration) > 0 {
