@@ -1238,7 +1238,7 @@
                 <td class="voucher-print-q1"></td>
                 <td class="voucher-print-q2">
                   <img :src="preferences.captive[2].value" class="voucher-print-logo" />
-                  <div class="voucher-print-hs-title">{{ info.data.description }}</div>
+                  <div class="voucher-print-hs-title">{{ info.data.description | truncate(21) }}</div>
                   <table class="width-75">
                     <tr>
                       <td class="padding-left-2 border-left">
