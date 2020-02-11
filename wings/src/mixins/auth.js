@@ -1,34 +1,33 @@
 import CryptoJS from 'crypto-js'
 
+var protocol = "https://";
+var host = window.location.host;
+
 var AuthMixin = {
     methods: {
         getPreferences: function (params, success, error) {
-            var host = window.location.host
-            this.$http.get("https://" + host + '/wax/preferences' +
+            this.$http.get(protocol + host + '/wax/preferences' +
                 '?digest=' + params.digest +
                 '&uuid=' + params.uuid +
                 '&sessionid=' + params.sessionid
             ).then(success, error);
         },
         deleteMarketingInfo: function (userId, params, success, error) {
-            var host = window.location.host
-            this.$http.delete("https://" + host + '/wax/marketings/' + userId +
+            this.$http.delete(protocol + host + '/wax/marketings/' + userId +
                 '?digest=' + params.digest +
                 '&uuid=' + params.uuid +
                 '&sessionid=' + params.sessionid
             ).then(success, error);
         },
         deleteSurveyInfo: function (userId, params, success, error) {
-            var host = window.location.host
-            this.$http.delete("https://" + host + '/wax/surveys/' + userId +
+            this.$http.delete(protocol + host + '/wax/surveys/' + userId +
                 '?digest=' + params.digest +
                 '&uuid=' + params.uuid +
                 '&sessionid=' + params.sessionid
             ).then(success, error);
         },
         addAdditionalInfo: function (userId, params, body, success, error) {
-            var host = window.location.host
-            this.$http.put("https://" + host + '/wax/additional/' + userId +
+            this.$http.put(protocol + host + '/wax/additional/' + userId +
                 '?digest=' + params.digest +
                 '&uuid=' + params.uuid +
                 '&sessionid=' + params.sessionid, body
@@ -78,7 +77,7 @@ var AuthMixin = {
         },
         createWaxURL: function (code, params, endpoint, reset, user) {
             var host = window.location.host
-            var url = 'https://' + host + '/wax/register/' + endpoint + '/' + encodeURIComponent(code) +
+            var url = protocol + host + '/wax/register/' + endpoint + '/' + encodeURIComponent(code) +
                 '?digest=' + params.digest +
                 '&uuid=' + params.uuid +
                 '&sessionid=' + params.sessionid +
