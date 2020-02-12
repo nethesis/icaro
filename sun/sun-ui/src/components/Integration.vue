@@ -136,6 +136,9 @@ export default {
   mounted() {
     if (this.$route.params.hotspotId !== undefined) {
       this.hotspotSearchId = this.$route.params.hotspotId;
+    } else {
+      var hsId = this.get("selected_hotspot_id");
+      this.hotspotSearchId = hsId;
     }
 
     // get account list
@@ -153,7 +156,7 @@ export default {
         null,
         success => {
           this.hotspots = success.body.data;
-          var hsId = this.get("integrations_hotspot_id") || this.hotspots[0].id;
+          var hsId = this.get("selected_hotspot_id") || this.hotspots[0].id;
           this.hotspotSearchId = hsId;
           if (
             this.$parent.user.info.type == "customer" ||
@@ -189,7 +192,7 @@ export default {
     },
     getMaps() {
       this.isLoading = true;
-      this.set("integrations_hotspot_id", this.hotspotSearchId);
+      this.set("selected_hotspot_id", this.hotspotSearchId);
 
       this.mapGetAll(
         this.hotspotSearchId,

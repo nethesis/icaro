@@ -306,6 +306,11 @@ export default {
   mounted() {
     if (this.$route.params.hotspotId !== undefined) {
       this.hotspotSearchId = this.$route.params.hotspotId;
+    } else {
+      var hotspotId = this.get("selected_hotspot_id");
+      if (hotspotId) {
+        this.hotspotSearchId = hotspotId;
+      }
     }
     // get user list
     var context = this;
@@ -346,7 +351,7 @@ export default {
         null,
         success => {
           this.hotspots = success.body.data;
-          var hsId = this.get("users_hotspot_id") || this.hotspots[0].id;
+          var hsId = this.get("selected_hotspot_id") || this.hotspots[0].id;
           if (
             this.$parent.user.info.type == "customer" ||
             this.$parent.user.info.type == "desk"
@@ -416,8 +421,8 @@ export default {
       }
 
       this.set(
-        "users_hotspot_id",
-        this.hotspotSearchId || this.get("users_hotspot_id") || 0
+        "selected_hotspot_id",
+        this.hotspotSearchId || this.get("selected_hotspot_id") || 0
       );
 
       this.userGetAll(

@@ -268,6 +268,9 @@ export default {
   mounted() {
     if (this.$route.params.hotspotId !== undefined) {
       this.hotspotSearchId = this.$route.params.hotspotId;
+    } else {
+      var hsId = this.get("selected_hotspot_id");
+      this.hotspotSearchId = hsId;
     }
 
     // get account list
@@ -323,7 +326,7 @@ export default {
         null,
         success => {
           this.hotspots = success.body.data;
-          var hsId = this.get("users_hotspot_id") || this.hotspots[0].id;
+          var hsId = this.get("selected_hotspot_id") || this.hotspots[0].id;
           if (
             this.$parent.user.info.type == "customer" ||
             this.$parent.user.info.type == "desk"
@@ -357,6 +360,7 @@ export default {
     },
     getAll(reset) {
       this.isLoadingTable = true;
+      this.set("selected_hotspot_id", this.hotspotSearchId);
 
       if (reset) {
         this.hotspotPage = 1;
