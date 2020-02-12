@@ -40,6 +40,7 @@ type HotspotWebHook struct {
 	BusinessVAT     string `db:"business_vat" json:"business_vat"`
 	BusinessAddress string `db:"business_address" json:"business_address"`
 	BusinessEmail   string `db:"business_email" json:"business_email"`
+	BusinessDPO     string `db:"business_dpo" json:"business_dpo"`
 }
 
 func (HotspotWebHook) TableName() string {
