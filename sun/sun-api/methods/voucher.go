@@ -59,7 +59,7 @@ func CreateVoucher(c *gin.Context) {
 	}
 
 	hotspotVoucher := models.HotspotVoucher{
-		Code:          json.Code,
+		Code:          strings.ToLower(json.Code),
 		AutoLogin:     json.AutoLogin,
 		BandwidthUp:   json.BandwidthUp,
 		BandwidthDown: json.BandwidthDown,

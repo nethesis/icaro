@@ -76,7 +76,6 @@ var AuthMixin = {
             }
         },
         createWaxURL: function (code, params, endpoint, reset, user) {
-            var host = window.location.host
             var url = protocol + host + '/wax/register/' + endpoint + '/' + encodeURIComponent(code) +
                 '?digest=' + params.digest +
                 '&uuid=' + params.uuid +

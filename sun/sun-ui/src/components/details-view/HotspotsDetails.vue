@@ -147,10 +147,7 @@
               </div>
             </div>
             <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12 no-padding mg-left-20">
-              <legend
-                class="fields-section-header-pf"
-                aria-expanded="true"
-              >
+              <legend class="fields-section-header-pf" aria-expanded="true">
                 <span
                   :class="['fa fa-angle-right field-section-toggle-pf', advancedFilters ? 'fa-angle-down' : '']"
                   @click="toggleAdvancedFilters()"
@@ -384,6 +381,15 @@
           </div>
           <div v-if="!vouchers.isLoading" class="card-pf-footer">
             <div class="dropdown card-pf-time-frame-filter">
+              <button
+                data-toggle="modal"
+                data-target="#voucherModalCustom"
+                class="btn btn-primary orange"
+                type="button"
+              >
+                {{
+                $t("hotspot.create_voucher_custom") }}
+              </button>
               <button
                 data-toggle="modal"
                 data-target="#voucherModal"
@@ -760,7 +766,7 @@
             </button>
             <h4 class="modal-title" id="myModalLabel">{{$t('hotspot.voucher_creation')}}</h4>
           </div>
-          <form class="form-horizontal" v-on:submit.prevent="createVoucher()">
+          <form class="form-horizontal" v-on:submit.prevent="createVoucher(false)">
             <div class="modal-body">
               <div v-if="vouchers.typesAvailable == 'all'" class="form-group">
                 <label
@@ -809,6 +815,295 @@
                     type="text"
                     id="textInput-modal-markup"
                     class="form-control"
+                  />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label
+                  class="col-sm-5 control-label"
+                  for="textInput-modal-markup"
+                >{{$t('hotspot.auto_login')}}</label>
+                <div class="col-sm-7">
+                  <input
+                    v-model="newVoucher.auto_login"
+                    type="checkbox"
+                    id="textInput-modal-markup"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+              <div class="form-group">
+                <label
+                  class="col-sm-5 control-label"
+                  for="textInput-modal-markup"
+                >{{$t('hotspot.bandwidth_down')}}</label>
+                <div class="col-sm-7">
+                  <input
+                    v-model="newVoucher.bandwidth_down"
+                    type="number"
+                    id="textInput-modal-markup"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+              <div class="form-group">
+                <label
+                  class="col-sm-5 control-label"
+                  for="textInput-modal-markup"
+                >{{$t('hotspot.bandwidth_up')}}</label>
+                <div class="col-sm-7">
+                  <input
+                    v-model="newVoucher.bandwidth_up"
+                    type="number"
+                    id="textInput-modal-markup"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+              <div class="form-group">
+                <label
+                  class="col-sm-5 control-label"
+                  for="textInput-modal-markup"
+                >{{$t('hotspot.daily_traffic_limit')}}</label>
+                <div class="col-sm-7">
+                  <input
+                    v-model="newVoucher.max_traffic"
+                    type="number"
+                    id="textInput-modal-markup"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+              <div class="form-group">
+                <label
+                  class="col-sm-5 control-label"
+                  for="textInput-modal-markup"
+                >{{$t('hotspot.daily_time_limit')}}</label>
+                <div class="col-sm-7">
+                  <input
+                    v-model="newVoucher.max_time"
+                    type="number"
+                    id="textInput-modal-markup"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+              <div class="form-group">
+                <label
+                  class="col-sm-5 control-label"
+                  for="textInput-modal-markup"
+                >{{$t('hotspot.validity')}}</label>
+                <div class="col-sm-7">
+                  <span class="span-radio">
+                    <input
+                      required
+                      v-model="newVoucher.time"
+                      class="form-check-input"
+                      type="radio"
+                      name="timeExpiration"
+                      id="timeExpiration1"
+                      value="duration"
+                    />
+                    <label class="form-check-label" for="timeExpiration1">{{$t('hotspot.duration')}}</label>
+                  </span>
+                  <span class="span-radio">
+                    <input
+                      required
+                      v-model="newVoucher.time"
+                      class="form-check-input"
+                      type="radio"
+                      name="timeExpiration"
+                      id="timeExpiration2"
+                      value="expiration"
+                    />
+                    <label
+                      class="form-check-label"
+                      for="timeExpiration2"
+                    >{{$t('hotspot.expiration')}}</label>
+                  </span>
+                </div>
+              </div>
+              <div v-if="newVoucher.time == 'duration'" class="form-group">
+                <label class="col-sm-5 control-label" for="textInput-modal-markup"></label>
+                <div class="col-sm-7">
+                  <input
+                    v-model="newVoucher.duration"
+                    type="number"
+                    id="textInput-modal-markup"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+              <div v-if="newVoucher.time == 'expiration'" class="form-group">
+                <label class="col-sm-5 control-label" for="textInput-modal-markup"></label>
+                <div class="col-sm-7">
+                  <datepicker
+                    :format="dateFormatter"
+                    v-model="newVoucher.expiration"
+                    :language="locale"
+                  ></datepicker>
+                </div>
+              </div>
+              <div class="form-group">
+                <label
+                  class="col-sm-5 control-label"
+                  for="textInput-modal-markup"
+                >{{$t('hotspot.mode')}}</label>
+                <div class="col-sm-7">
+                  <span class="span-radio">
+                    <input
+                      required
+                      v-model="newVoucher.limitless"
+                      class="form-check-input"
+                      type="radio"
+                      name="exampleRadios"
+                      id="exampleRadios1"
+                      value="true"
+                    />
+                    <label class="form-check-label" for="exampleRadios1">{{$t('hotspot.limitless')}}</label>
+                  </span>
+                  <span class="span-radio">
+                    <input
+                      required
+                      v-model="newVoucher.limitless"
+                      class="form-check-input"
+                      type="radio"
+                      name="exampleRadios"
+                      id="exampleRadios2"
+                      value="false"
+                    />
+                    <label
+                      class="form-check-label"
+                      for="exampleRadios2"
+                    >{{$t('hotspot.with_limit')}}</label>
+                  </span>
+                </div>
+              </div>
+              <div v-if="newVoucher.limitless == 'false'" class="form-group">
+                <label
+                  class="col-sm-5 control-label"
+                  for="textInput-modal-markup"
+                >{{$t('hotspot.max_use')}}</label>
+                <div class="col-sm-7">
+                  <input
+                    v-model="newVoucher.remain_use"
+                    type="number"
+                    id="textInput-modal-markup"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+              <div v-if="newVoucher.type == 'auth'" class="divider"></div>
+              <div v-if="newVoucher.type == 'auth'" class="form-group">
+                <label
+                  class="col-sm-5 control-label"
+                  for="textInput-modal-markup"
+                >{{$t('hotspot.user_name')}}</label>
+                <div class="col-sm-7">
+                  <input
+                    :required="newVoucher.type == 'auth' ? true : false"
+                    v-model="newVoucher.user_name"
+                    type="text"
+                    id="textInput-modal-markup"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+              <div v-if="newVoucher.type == 'auth'" class="form-group">
+                <label
+                  class="col-sm-5 control-label"
+                  for="textInput-modal-markup"
+                >{{$t('hotspot.user_mail')}}</label>
+                <div class="col-sm-7">
+                  <input
+                    v-model="newVoucher.user_mail"
+                    type="email"
+                    id="textInput-modal-markup"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <span
+                v-if="vouchers.isCreating"
+                class="spinner spinner-sm spinner-inline modal-spinner"
+              ></span>
+              <button type="button" class="btn btn-default" data-dismiss="modal">{{$t('cancel')}}</button>
+              <button type="submit" class="btn btn-primary">{{$t('save')}}</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="voucherModalCustom"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="myModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              <span class="pficon pficon-close"></span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel">{{$t('hotspot.voucher_creation')}}</h4>
+          </div>
+          <form class="form-horizontal" v-on:submit.prevent="createVoucher(true)">
+            <div class="modal-body">
+              <div v-if="vouchers.typesAvailable == 'all'" class="form-group">
+                <label
+                  class="col-sm-5 control-label"
+                  for="textInput-modal-markup"
+                >{{$t('hotspot.type')}}</label>
+                <div class="col-sm-7">
+                  <span class="span-radio">
+                    <input
+                      required
+                      v-model="newVoucher.type"
+                      class="form-check-input"
+                      type="radio"
+                      name="voucherType"
+                      id="voucherType1"
+                      value="normal"
+                    />
+                    <span class="voucher-type-span-normal"></span>
+                    <label class="form-check-label" for="voucherType1">{{$t('hotspot.normal')}}</label>
+                  </span>
+                  <span class="span-radio">
+                    <input
+                      required
+                      v-model="newVoucher.type"
+                      class="form-check-input"
+                      type="radio"
+                      name="voucherType"
+                      id="voucherType2"
+                      value="auth"
+                    />
+                    <span class="voucher-type-span-auth"></span>
+                    <label class="form-check-label" for="voucherType2">{{$t('hotspot.auth')}}</label>
+                  </span>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label
+                  class="col-sm-5 control-label"
+                  for="textInput-modal-markup"
+                >{{$t('hotspot.voucher_custom_code')}}</label>
+                <div class="col-sm-7">
+                  <input
+                    required
+                    v-model="newVoucher.code"
+                    type="text"
+                    id="textInput-modal-markup"
+                    class="form-control"
+                    value="1"
                   />
                 </div>
               </div>
@@ -1097,11 +1392,10 @@
                 >{{ $t("unit.unit") }}</label>
                 <div class="col-sm-7">
                   <select v-model="newMACAuth.unit" class="form-control">
-                    <option
-                      v-for="u in totals.units.data"
-                      v-bind:key="u.id"
-                      v-bind:value="u"
-                    >{{ u.name }} - {{ u.description }}</option>
+                    <option v-for="u in totals.units.data" v-bind:key="u.id" v-bind:value="u">
+                      {{ u.name }} -
+                      {{ u.description }}
+                    </option>
                   </select>
                 </div>
               </div>
@@ -1249,9 +1543,10 @@
                       <td class="padding-left-2 border-left line-height-5">
                         <div class="voucher-print-data">
                           <span class="fa fa-clock-o"></span>
-                          <span
-                            v-if="vouchersToPrint[i].duration > 0"
-                          >{{ vouchersToPrint[i].duration }} {{ $t("hotspot.days") }}</span>
+                          <span v-if="vouchersToPrint[i].duration > 0">
+                            {{ vouchersToPrint[i].duration }}
+                            {{ $t("hotspot.days") }}
+                          </span>
                           <span v-else>{{ vouchersToPrint[i].expires | formatDate(true) }}</span>
                         </div>
                         <div class="voucher-print-data">
@@ -1260,9 +1555,10 @@
                         </div>
                         <div class="voucher-print-data">
                           <span class="pficon pficon-history"></span>
-                          <span
-                            v-if="vouchersToPrint[i].remain_use != -1"
-                          >{{ vouchersToPrint[i].remain_use }} {{ $t("hotspot.max_use") }}</span>
+                          <span v-if="vouchersToPrint[i].remain_use != -1">
+                            {{ vouchersToPrint[i].remain_use }}
+                            {{ $t("hotspot.max_use") }}
+                          </span>
                           <span v-else>{{ $t("hotspot.reusable") }}</span>
                         </div>
                         <div class="voucher-print-data"></div>
@@ -1279,9 +1575,10 @@
                       <td class="padding-left-2 border-left">
                         <div class="voucher-print-data">
                           <span class="fa fa-arrow-circle-o-down"></span>
-                          <span
-                            v-if="vouchersToPrint[i].bandwidth_down != 0"
-                          >{{ vouchersToPrint[i].bandwidth_down }} Kbps</span>
+                          <span v-if="vouchersToPrint[i].bandwidth_down != 0">
+                            {{ vouchersToPrint[i].bandwidth_down }}
+                            Kbps
+                          </span>
                           <span v-else>{{ $t("hotspot.unlimited") }}</span>
                         </div>
                         <div class="voucher-print-data">
@@ -1297,9 +1594,10 @@
                       <td class="padding-left-2-2">
                         <div class="voucher-print-data align-top">
                           <span class="fa fa-arrow-circle-o-up"></span>
-                          <span
-                            v-if="vouchersToPrint[i].bandwidth_up != 0"
-                          >{{ vouchersToPrint[i].bandwidth_up }} Kbps</span>
+                          <span v-if="vouchersToPrint[i].bandwidth_up != 0">
+                            {{ vouchersToPrint[i].bandwidth_up }}
+                            Kbps
+                          </span>
                           <span v-else>{{ $t("hotspot.unlimited") }}</span>
                         </div>
                         <div class="voucher-print-data align-top">
@@ -1423,6 +1721,7 @@ export default {
       },
       vouchersCount: 1,
       newVoucher: {
+        code: "",
         auto_login: true,
         bandwidth_down: 0,
         bandwidth_up: 0,
@@ -1580,7 +1879,10 @@ export default {
           this.get("loggedUser").subscription.subscription_plan
             .wings_customization) ||
         this.get("loggedUser").account_type == "admin",
-      customToolbar: [["bold", "italic", "underline"], ["image", "code-block"]],
+      customToolbar: [
+        ["bold", "italic", "underline"],
+        ["image", "code-block"]
+      ],
       userLink: {
         name: "Users",
         params: {
@@ -1647,7 +1949,7 @@ export default {
         }
       );
     },
-    createVoucher() {
+    createVoucher(custom) {
       this.vouchers.isCreating = true;
 
       var promises = [];
@@ -1658,7 +1960,9 @@ export default {
             context.hotspotCreateVoucher(
               {
                 hotspot_id: parseInt(context.$route.params.id),
-                code: context.generateVoucher(),
+                code: custom
+                  ? context.newVoucher.code
+                  : context.generateVoucher(),
                 auto_login: context.newVoucher.auto_login,
                 bandwidth_down: parseInt(context.newVoucher.bandwidth_down),
                 bandwidth_up: parseInt(context.newVoucher.bandwidth_up),
@@ -1702,6 +2006,7 @@ export default {
           context.newVoucher.user_mail = "";
           context.getVouchers();
           $("#voucherModal").modal("hide");
+          $("#voucherModalCustom").modal("hide");
         })
         .catch(function(err) {
           console.error(err);
@@ -2509,5 +2814,15 @@ textarea {
 
 .pointer {
   cursor: pointer;
+}
+
+.orange {
+  background-color: #ec7a08 !important;
+  background-image: linear-gradient(
+    to bottom,
+    #f39d3c 0,
+    #ec7a08 100%
+  ) !important;
+  border-color: #b35c00 !important;
 }
 </style>
