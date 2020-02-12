@@ -94,11 +94,12 @@
             <a :href="'#/units/'+ props.row.unit_id">{{ props.row.unit.name || '-'}}</a>
           </td>
           <td class="fancy">
-            <a :href="'#/sessions/'+ props.row.id">{{ props.row.username || '-'}}</a>
+            <a :href="'#/sessions/'+ props.row.id">{{ props.row.user.name || props.row.user.email || props.row.username || '-'}}</a>
           </td>
+          <td class="fancy">{{ props.row.device_mac }}</td>
+          <td class="fancy">{{ props.row.ip_address }}</td>
           <td class="fancy">{{ props.row.bytes_down | byteFormat}}</td>
           <td class="fancy">{{ props.row.bytes_up | byteFormat }}</td>
-          <td class="fancy">{{ props.row.ip_address }}</td>
           <td class="fancy">{{ props.row.duration | secondsInHour }}</td>
           <td class="fancy">{{ props.row.start_time | formatDate }}</td>
           <td class="fancy">{{ props.row.update_time | formatDate }}</td>
@@ -144,11 +145,12 @@
             <a :href="'#/units/'+ props.row.unit_id">{{ props.row.unit.name || '-'}}</a>
           </td>
           <td class="fancy">
-            <a :href="'#/sessions/'+ props.row.id">{{ props.row.username || '-'}}</a>
+            <a :href="'#/sessions/'+ props.row.id">{{ props.row.user.name || props.row.user.email || props.row.username || '-'}}</a>
           </td>
+          <td class="fancy">{{ props.row.device_mac }}</td>
+          <td class="fancy">{{ props.row.ip_address }}</td>
           <td class="fancy">{{ props.row.bytes_down | byteFormat}}</td>
           <td class="fancy">{{ props.row.bytes_up | byteFormat }}</td>
-          <td class="fancy">{{ props.row.ip_address }}</td>
           <td class="fancy">{{ props.row.duration | secondsInHour }}</td>
           <td class="fancy">{{ props.row.start_time | formatDate }}</td>
           <td class="fancy">{{ props.row.stop_time | formatDate }}</td>
@@ -221,6 +223,16 @@ export default {
           sortable: false
         },
         {
+          label: this.$i18n.t("session.device_mac"),
+          field: "device_mac",
+          filterable: true
+        },
+        {
+          label: this.$i18n.t("session.ip_address"),
+          field: "ip_address",
+          filterable: true
+        },
+        {
           label: this.$i18n.t("session.bytes_down"),
           field: "bytes_down",
           type: "number",
@@ -230,11 +242,6 @@ export default {
           label: this.$i18n.t("session.bytes_up"),
           field: "bytes_up",
           type: "number",
-          filterable: true
-        },
-        {
-          label: this.$i18n.t("session.ip_address"),
-          field: "ip_address",
           filterable: true
         },
         {
@@ -274,6 +281,16 @@ export default {
           sortable: false
         },
         {
+          label: this.$i18n.t("session.device_mac"),
+          field: "device_mac",
+          filterable: true
+        },
+        {
+          label: this.$i18n.t("session.ip_address"),
+          field: "ip_address",
+          filterable: true
+        },
+        {
           label: this.$i18n.t("session.bytes_down"),
           field: "bytes_down",
           type: "number",
@@ -283,11 +300,6 @@ export default {
           label: this.$i18n.t("session.bytes_up"),
           field: "bytes_up",
           type: "number",
-          filterable: true
-        },
-        {
-          label: this.$i18n.t("session.ip_address"),
-          field: "ip_address",
           filterable: true
         },
         {

@@ -49,6 +49,6 @@ type Session struct {
 	Device   Device `json:"-"`
 	DeviceId int    `db:"device_id" json:"device_id"`
 
-	User   User `json:"-"`
+	User   User `json:"user"`
 	UserId int  `db:"user_id" json:"user_id"`
 }
