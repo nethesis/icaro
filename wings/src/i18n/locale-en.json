@@ -5,7 +5,8 @@
             "start_navigate": "Start Navigate",
             "main_error": "Some params are missing. Can't we go ahead",
             "main_error_sub": "Something gone wrong opening the page",
-            "agree_terms": "I agree to the general user conditions (ToS and Privacy)",
+            "i_agree": "I agree to the",
+            "agree_terms": "general user conditions (ToS and Privacy)",
             "modal_terms": "Terms of Service and Privacy",
             "tos": "Terms of Service",
             "privacy": "Privacy"

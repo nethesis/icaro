@@ -34,6 +34,7 @@ type Hotspot struct {
 	BusinessVAT     string    `db:"business_vat" json:"business_vat"`
 	BusinessAddress string    `db:"business_address" json:"business_address"`
 	BusinessEmail   string    `db:"business_email" json:"business_email"`
+	BusinessDPO     string    `db:"business_dpo" json:"business_dpo"`
 	Created         time.Time `db:"created" json:"created"`
 
 	Account Account `gorm:"PRELOAD:false json:"account"`
@@ -49,6 +50,7 @@ type HotspotJSON struct {
 	BusinessVAT     string    `db:"business_vat" json:"business_vat"`
 	BusinessAddress string    `db:"business_address" json:"business_address"`
 	BusinessEmail   string    `db:"business_email" json:"business_email"`
+	BusinessDPO     string    `db:"business_dpo" json:"business_dpo"`
 	Created         time.Time `db:"created" json:"created"`
 	AccountName     string    `db:"account_name" json:"account_name"`
 }

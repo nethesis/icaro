@@ -29,7 +29,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"github.com/satori/go.uuid"
+	uuid "github.com/satori/go.uuid"
 
 	"github.com/nethesis/icaro/sun/sun-api/database"
 	"github.com/nethesis/icaro/sun/sun-api/models"
@@ -54,6 +54,7 @@ func CreateHotspot(c *gin.Context) {
 		BusinessVAT:     json.BusinessVAT,
 		BusinessAddress: json.BusinessAddress,
 		BusinessEmail:   json.BusinessEmail,
+		BusinessDPO:     json.BusinessDPO,
 		Created:         time.Now().UTC(),
 	}
 
@@ -109,6 +110,9 @@ func UpdateHotspot(c *gin.Context) {
 	}
 	if len(json.BusinessEmail) > 0 {
 		hotspot.BusinessEmail = json.BusinessEmail
+	}
+	if len(json.BusinessDPO) > 0 {
+		hotspot.BusinessDPO = json.BusinessDPO
 	}
 
 	db.Save(&hotspot)

@@ -11,7 +11,8 @@
         <div class="ui checkbox">
           <input v-model="hotspot.agree" type="checkbox" name="example" />
           <label>
-            <a class="terms" @click="showModal()">{{$t('splash.agree_terms')}}</a>
+            <span class="terms-space">{{$t('splash.i_agree')}}</span><a class="terms"
+              @click="showModal()">{{$t('splash.agree_terms')}}</a>
           </label>
         </div>
         <div class="ui divider"></div>
@@ -110,5 +111,9 @@
 
   .terms {
     cursor: pointer;
+  }
+
+  .terms-space {
+    margin-right: 3px;
   }
 </style>
