@@ -137,10 +137,6 @@
         :class="hotspot.preferences.marketing_0_reason_country == 'true' ? 'adjust-top-big' : ''"
         v-if="authorized"
       >
-        <h3>{{ $t("login.disclaimer_marketing") }}</h3>
-        <div class="inline field">
-          <textarea readonly class="text-center" v-model="hotspot.disclaimers.marketing_use"></textarea>
-        </div>
         <div class="ui inline">
           <input id="conditions" v-model="conditions" type="checkbox" class="ui checkbox field">
           <label for="conditions">{{ $t("login.disclaimer_privacy_accept") }}</label>
