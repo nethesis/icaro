@@ -28,8 +28,10 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/http/httputil"
 	"net/url"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/nethesis/icaro/wax/utils"
@@ -41,6 +43,15 @@ import (
 	"github.com/nethesis/icaro/sun/sun-api/methods"
 	"github.com/nethesis/icaro/sun/sun-api/models"
 )
+
+func WhatsappAuth(c *gin.Context) {
+	requestDump, err := httputil.DumpRequest(c.Request, true)
+	if err != nil {
+		fmt.Println(err)
+	}
+	res1 := strings.Split(string(requestDump), "&")
+	fmt.Println(res1)
+}
 
 func FacebookAuth(c *gin.Context) {
 	code := c.Param("code")

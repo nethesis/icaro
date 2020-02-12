@@ -36,6 +36,12 @@
     >
       <h3>{{ $t("login.choose_login") }}</h3>
       <div class="ui relaxed list">
+        <div v-if="hotspot.preferences.whatsapp_login == 'true'" class="item">
+          <div @click="changeRoute('/login/whatsapp', false)" class="ui green button big fluid">
+            <i class="whatsapp icon"></i>
+            Whatsapp
+          </div>
+        </div>
         <div v-if="hotspot.preferences.facebook_login == 'true'" class="item">
           <div @click="changeRoute('/login/facebook', false)" class="ui facebook button big fluid">
             <i class="facebook icon"></i>

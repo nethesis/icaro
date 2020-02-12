@@ -56,7 +56,6 @@
       return {
         hotspot: {
           onError: this.$root.$options.hotspot.onError,
-          disclaimers: this.$root.$options.hotspot.disclaimers,
           preferences: {},
           loaded: loaded,
           agree: false
@@ -70,12 +69,12 @@
           text: [
             "<div>" + this.$i18n.t("splash.tos") + "</div>",
             '<textarea class="terms-text">' +
-            this.hotspot.disclaimers.terms_of_use +
+            this.$root.$options.hotspot.disclaimers.terms_of_use +
             "</textarea>",
             "<div></div>",
             "<div>" + this.$i18n.t("splash.privacy") + "</div>",
             '<textarea class="terms-text">' +
-            this.hotspot.disclaimers.marketing_use +
+            this.$root.$options.hotspot.disclaimers.marketing_use +
             "</textarea>"
           ].join(""),
           buttons: [{
