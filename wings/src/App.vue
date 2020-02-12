@@ -34,6 +34,14 @@
           this.hotspot.name = success.body.hotspot_name
           this.hotspot.preferences = success.body.preferences
           $("body").css("background-color", success.body.preferences.captive_7_background || '#2a87be');
+
+          // background image
+          if (success.body.preferences.captive_8_bg_image) {
+            $("body").css("height", "100vh");
+            $("body").css("background-size", "cover");
+            $("body").css("background-position", "center center");
+            $("body").css("background-image", 'url("' + success.body.preferences.captive_8_bg_image + '")');
+          }
           this.loading = false
         }, function (error) {
           console.error(error)

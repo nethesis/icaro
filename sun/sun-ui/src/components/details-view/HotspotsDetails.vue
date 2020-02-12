@@ -519,16 +519,18 @@
                 </label>
                 <div class="col-sm-6">
                   <picture-input
-                    v-if="pref.key == 'captive_3_logo' || pref.key == 'captive_5_banner'"
+                    v-if="pref.key == 'captive_3_logo' || pref.key == 'captive_5_banner' || pref.key == 'captive_8_bg_image'"
                     :ref="'prefInput-'+pref.key"
                     :prefill="urltoFile(pref.value, pref.key)"
                     :alertOnError="false"
                     @change="onChanged(pref)"
+                    @remove="onRemoved(pref)"
                     :width="100"
                     :height="100"
                     :crop="false"
                     :zIndex="1000"
                     :customStrings="uploadLangstexts"
+                    :removable="pref.key == 'captive_8_bg_image'"
                     removeButtonClass="btn btn-danger"
                     buttonClass="btn btn-default"
                   ></picture-input>
@@ -549,7 +551,7 @@
 
                   <input
                     required
-                    v-if="pref.key != 'captive_6_description' && pref.key != 'captive_3_logo' && pref.key != 'captive_5_banner' && pref.key != 'captive_7_background'"
+                    v-if="pref.key != 'captive_6_description' && pref.key != 'captive_3_logo' && pref.key != 'captive_5_banner' && pref.key != 'captive_7_background' && pref.key != 'captive_8_bg_image'"
                     v-model="pref.value"
                     :type="getInputType(pref.key, pref.value)"
                     class="form-control"
@@ -2202,7 +2204,6 @@ export default {
         success => {
           var globalPref = [];
           var captivePref = [];
-          var backgroundColor = "";
           var vouchersAvailable = false;
           var voucherFlag = 0;
 
@@ -2240,7 +2241,11 @@ export default {
             }
 
             if (pref.key == "captive_7_background") {
-              backgroundColor = pref.value;
+              this.preferences.backgroundColor = pref.value;
+            }
+
+            if (pref.key == "captive_8_bg_image") {
+              this.preferences.backgroundImage = pref.value;
             }
 
             if (pref.key == "sms_login_max") {
@@ -2266,16 +2271,26 @@ export default {
           this.preferences.global = globalPref;
           this.preferences.captive = captivePref;
           this.preferences.isLoading = false;
+          var context = this;
           setTimeout(function() {
-            window
-              .$("#captive-preview")
-              .css("background-color", backgroundColor);
+            context.updateCaptivePreview();
           }, 0);
         },
         error => {
           console.error(error.body);
         }
       );
+    },
+    updateCaptivePreview() {
+      window.$("#captive-preview").css("background-color", this.preferences.backgroundColor);
+
+      if (this.preferences.backgroundImage) {
+        window.$("#captive-preview").css("background-image", 'url("' + this.preferences.backgroundImage + '")');
+        window.$("#captive-preview").css("background-size", "cover");
+        window.$("#captive-preview").css("background-position", "center center");
+      } else {
+        window.$("#captive-preview").css("background-image", "none");
+      }
     },
     updatePreferences() {
       this.preferences.isLoading = true;
@@ -2485,6 +2500,14 @@ export default {
       var csv = this.createCSV(this.columns, voucherRows);
       this.downloadCSV(csv.cols, csv.rows, "vouchers");
     },
+    onRemoved(pref) {
+      if (pref.key == 'captive_8_bg_image') {
+        pref.value = "";
+        this.preferences.backgroundImage = pref.value;
+      }
+      this.updateCaptivePreview();
+      this.$forceUpdate();
+    },
     onChanged(pref) {
       if (this.$refs["prefInput-" + pref.key][0].image.length > 655360) {
         pref.onError = true;
@@ -2492,7 +2515,12 @@ export default {
       } else {
         pref.onError = false;
         pref.value = this.$refs["prefInput-" + pref.key][0].image;
+
+        if (pref.key == 'captive_8_bg_image') {
+          this.preferences.backgroundImage = pref.value;
+        }
       }
+      this.updateCaptivePreview();
       this.$forceUpdate();
     },
     onUpdate(value) {

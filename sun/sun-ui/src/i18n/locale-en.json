@@ -76,6 +76,7 @@
       "captive_5_banner": "Captive Portal banner",
       "captive_6_description": "Captive Portal description",
       "captive_7_background": "Captive Portal background",
+      "captive_8_bg_image": "Captive Portal background image",
       "voucher_expiration_days": "Voucher expiration (days)",
       "sms_login": "Captive Portal login with SMS",
       "email_login": "Captive Portal login with Email",
@@ -433,7 +434,7 @@
     "upload_remove": "Remove",
     "upload_drag": "Click or Drag",
     "upload_file_not_supported": "File not supported",
-    "upload_file_exceed": "File limit exceed (max 60kb)",
+    "upload_file_exceed": "File limit exceed (max 600kb)",
     "result": "result",
     "results": "results"
   }
