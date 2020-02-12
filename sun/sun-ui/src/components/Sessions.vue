@@ -588,7 +588,7 @@ export default {
             var newRows = JSON.parse(JSON.stringify(data_export));
             for (var r in newRows) {
               newRows[r].unit_id = newRows[r].unit.description || "-";
-              newRows[r].user_id = newRows[r].username || "-";
+              newRows[r].username = newRows[r].user.name || newRows[r].user.email || newRows[r].username || "-";
               newRows[r].bytes_up = this.$options.filters["byteFormat"](
                 newRows[r].bytes_up
               );
@@ -638,7 +638,7 @@ export default {
             var newRows = JSON.parse(JSON.stringify(data_export));
             for (var r in newRows) {
               newRows[r].unit_id = newRows[r].unit.description || "-";
-              newRows[r].user_id = newRows[r].username || "-";
+              newRows[r].username = newRows[r].user.name || newRows[r].user.email || newRows[r].username || "-";
               newRows[r].bytes_up = this.$options.filters["byteFormat"](
                 newRows[r].bytes_up
               );
