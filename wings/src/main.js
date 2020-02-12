@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import VueResource from 'vue-resource'
 import VueI18n from 'vue-i18n'
+import VModal from 'vue-js-modal'
 import App from './App'
 import router from './router'
 
@@ -12,6 +13,9 @@ import 'semantic'
 Vue.config.productionTip = true
 Vue.use(VueResource)
 Vue.use(VueI18n)
+Vue.use(VModal, {
+  dialog: true
+})
 
 // get browser lang and init locales
 var messages = {}
