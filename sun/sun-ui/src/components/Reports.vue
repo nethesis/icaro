@@ -2,20 +2,29 @@
   <div>
     <h2>{{msg}}</h2>
 
-    <div v-if="(user.account_type == 'admin') || (user.account_type == 'reseller')" class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div
+      v-if="(user.account_type == 'admin') || (user.account_type == 'reseller')"
+      class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12"
+    >
       <label class="col-sm-2 control-label" for="textInput-markup">Hotspot</label>
       <div class="col-sm-4">
         <select v-on:change="getCurrentStats()" v-model="hotspotSearchId" class="form-control">
-          <option v-for="hotspot in hotspots" v-bind:key="hotspot.id" v-bind:value="hotspot.id">
-            {{ hotspot.name }} - {{ hotspot.description}}
-          </option>
+          <option
+            v-for="hotspot in hotspots"
+            v-bind:key="hotspot.id"
+            v-bind:value="hotspot.id"
+          >{{ hotspot.name }} - {{ hotspot.description}}</option>
         </select>
       </div>
     </div>
 
     <div>
-      <h2 :class="['graphs-container',(user.account_type == 'admin') || (user.account_type == 'reseller') ? 'title-graphs' : '']">{{
-        $t('report.current_situation') }}</h2>
+      <h2
+        :class="['graphs-container',(user.account_type == 'admin') || (user.account_type == 'reseller') ? 'title-graphs' : '']"
+      >
+        {{
+        $t('report.current_situation') }}
+      </h2>
       <div class="row no-margin averages">
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 border-right avg-cont">
           <h3>{{ $t('report.users_currently_connected') }}</h3>
@@ -30,7 +39,13 @@
       <div class="row no-margin">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
           <div v-if="loaders.current" class="spinner spinner-lg"></div>
-          <vue-chart v-show="!loaders.current" :height="100" type="line" :options="charts.current.options" :data="charts.current"></vue-chart>
+          <vue-chart
+            v-show="!loaders.current"
+            :height="100"
+            type="line"
+            :options="charts.current.options"
+            :data="charts.current"
+          ></vue-chart>
         </div>
       </div>
     </div>
@@ -41,12 +56,16 @@
       <h2 class="graphs-container title-graphs">{{ $t('report.history_situation') }}</h2>
       <div class="form-group select-search col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <label class="col-sm-2 control-label" for="textInput-markup" id="lbl-date-range">
-          <p>{{dataPoints.to.format('DD MMM YYYY')}}</p> -
+          <p>{{dataPoints.to.format('DD MMM YYYY')}}</p>-
           <p>{{dataPoints.from.format('DD MMM YYYY')}}</p>
         </label>
         <div class="col-sm-4">
           <select v-on:change="getHistoryStats()" class="form-control" v-model="dateRangeSearchId">
-            <option v-for="dateRange in dateRanges" v-bind:key="dateRange.value" v-bind:value="dateRange.value">{{dateRange.display}}</option>
+            <option
+              v-for="dateRange in dateRanges"
+              v-bind:key="dateRange.value"
+              v-bind:value="dateRange.value"
+            >{{dateRange.display}}</option>
           </select>
         </div>
       </div>
@@ -90,38 +109,74 @@
       </div>
 
       <div class="row no-margin">
-        <h2 class="section-title col-xs-12 col-sm-12 col-md-12 col-lg-12">{{ $t('report.connection_traffic') }}</h2>
+        <h2
+          class="section-title col-xs-12 col-sm-12 col-md-12 col-lg-12"
+        >{{ $t('report.connection_traffic') }}</h2>
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
           <div v-if="loaders.sessions" class="spinner spinner-lg"></div>
-          <vue-chart v-show="!loaders.sessions" type="line" :options="charts.sessions.options" :data="charts.sessions"></vue-chart>
+          <vue-chart
+            v-show="!loaders.sessions"
+            type="line"
+            :options="charts.sessions.options"
+            :data="charts.sessions"
+          ></vue-chart>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
           <div v-if="loaders.traffic" class="spinner spinner-lg"></div>
-          <vue-chart v-show="!loaders.traffic" type="line" :options="charts.traffic.options" :data="charts.traffic"></vue-chart>
+          <vue-chart
+            v-show="!loaders.traffic"
+            type="line"
+            :options="charts.traffic.options"
+            :data="charts.traffic"
+          ></vue-chart>
         </div>
       </div>
 
       <div class="row no-margin">
-        <h2 class="section-title col-xs-12 col-sm-12 col-md-12 col-lg-12">{{ $t('report.user_statistics') }}</h2>
+        <h2
+          class="section-title col-xs-12 col-sm-12 col-md-12 col-lg-12"
+        >{{ $t('report.user_statistics') }}</h2>
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
           <div v-if="loaders.avg_user_traffic" class="spinner spinner-lg"></div>
-          <vue-chart v-show="!loaders.avg_user_traffic" type="line" :options="charts.avg_user_traffic.options" :data="charts.avg_user_traffic"></vue-chart>
+          <vue-chart
+            v-show="!loaders.avg_user_traffic"
+            type="line"
+            :options="charts.avg_user_traffic.options"
+            :data="charts.avg_user_traffic"
+          ></vue-chart>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
           <div v-if="loaders.avg_user_duration" class="spinner spinner-lg"></div>
-          <vue-chart v-show="!loaders.avg_user_duration" type="bar" :options="charts.avg_user_duration.options" :data="charts.avg_user_duration"></vue-chart>
+          <vue-chart
+            v-show="!loaders.avg_user_duration"
+            type="bar"
+            :options="charts.avg_user_duration.options"
+            :data="charts.avg_user_duration"
+          ></vue-chart>
         </div>
       </div>
 
       <div class="row no-margin">
-        <h2 class="section-title col-xs-12 col-sm-12 col-md-12 col-lg-12">{{ $t('report.connections_statistics') }}</h2>
+        <h2
+          class="section-title col-xs-12 col-sm-12 col-md-12 col-lg-12"
+        >{{ $t('report.connections_statistics') }}</h2>
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
           <div v-if="loaders.avg_conn_traffic" class="spinner spinner-lg"></div>
-          <vue-chart v-show="!loaders.avg_conn_traffic" type="line" :options="charts.avg_conn_traffic.options" :data="charts.avg_conn_traffic"></vue-chart>
+          <vue-chart
+            v-show="!loaders.avg_conn_traffic"
+            type="line"
+            :options="charts.avg_conn_traffic.options"
+            :data="charts.avg_conn_traffic"
+          ></vue-chart>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
           <div v-if="loaders.avg_conn_duration" class="spinner spinner-lg"></div>
-          <vue-chart v-show="!loaders.avg_conn_duration" type="bar" :options="charts.avg_conn_duration.options" :data="charts.avg_conn_duration"></vue-chart>
+          <vue-chart
+            v-show="!loaders.avg_conn_duration"
+            type="bar"
+            :options="charts.avg_conn_duration.options"
+            :data="charts.avg_conn_duration"
+          ></vue-chart>
         </div>
       </div>
     </div>
@@ -133,28 +188,47 @@
       <div class="row no-margin">
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
           <div v-if="loaders.sms_year" class="spinner spinner-lg"></div>
-          <vue-chart v-show="!loaders.sms_year" type="line" :options="charts.sms_year.options" :data="charts.sms_year"></vue-chart>
+          <vue-chart
+            v-show="!loaders.sms_year"
+            type="line"
+            :options="charts.sms_year.options"
+            :data="charts.sms_year"
+          ></vue-chart>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
           <div v-if="loaders.sms_history" class="spinner spinner-lg"></div>
-          <vue-chart v-show="!loaders.sms_history" type="line" :options="charts.sms_history.options" :data="charts.sms_history"></vue-chart>
+          <vue-chart
+            v-show="!loaders.sms_history"
+            type="line"
+            :options="charts.sms_history.options"
+            :data="charts.sms_history"
+          ></vue-chart>
         </div>
       </div>
     </div>
 
     <div class="graph-divider"></div>
     <h2 class="graphs-container title-graphs">{{ $t('report.account_type_reports') }}</h2>
-      <div class="row no-margin">
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-          <div v-if="loaders.account_types_pie" class="spinner spinner-lg"></div>
-          <vue-chart v-show="!loaders.account_types_pie" type="pie" :options="charts.account_types_pie.options" :data="charts.account_types_pie"></vue-chart>
-        </div>
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-          <div v-if="loaders.account_types_graph" class="spinner spinner-lg"></div>
-          <vue-chart v-show="!loaders.account_types_graph" type="line" :options="charts.account_types_graph.options" :data="charts.account_types_graph"></vue-chart>
-        </div>
+    <div class="row no-margin">
+      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        <div v-if="loaders.account_types_pie" class="spinner spinner-lg"></div>
+        <vue-chart
+          v-show="!loaders.account_types_pie"
+          type="pie"
+          :options="charts.account_types_pie.options"
+          :data="charts.account_types_pie"
+        ></vue-chart>
       </div>
-
+      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        <div v-if="loaders.account_types_graph" class="spinner spinner-lg"></div>
+        <vue-chart
+          v-show="!loaders.account_types_graph"
+          type="line"
+          :options="charts.account_types_graph.options"
+          :data="charts.account_types_graph"
+        ></vue-chart>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -186,8 +260,7 @@ export default {
         sms_year: true,
         sms_history: true,
         account_types_pie: true,
-        account_types_graph: true,
-
+        account_types_graph: true
       },
       msg: this.$i18n.t("report.reports"),
       user: this.get("loggedUser") || null,
@@ -329,22 +402,23 @@ export default {
 
           if (graph.includes("pie")) {
             var context = this;
-            this.charts[graph].datasets = [{
-              data: success.body.sets,
-              backgroundColor: success.body.labels.map(function(l){
-                return context.accountTypeColor(l)
-              })
-            }];
-            this.charts[graph].labels = success.body.labels.map(function(l){
-                return context.$i18n.t("report.account_types_" + l)
-              })
+            this.charts[graph].datasets = [
+              {
+                data: success.body.sets,
+                backgroundColor: success.body.labels.map(function(l) {
+                  return context.accountTypeColor(l);
+                })
+              }
+            ];
+            this.charts[graph].labels = success.body.labels.map(function(l) {
+              return context.$i18n.t("report.account_types_" + l);
+            });
           } else {
-            if(success.body.sets) {
+            if (success.body.sets) {
               for (var s in success.body.sets) {
                 var set = success.body.sets[s];
 
                 if (graph.includes("pie")) {
-
                 } else {
                   this.charts[graph].datasets.push({
                     label: this.$i18n.t("report.account_types_" + set.name),
@@ -357,9 +431,7 @@ export default {
                   for (var l in success.body.labels) {
                     var label = success.body.labels[l];
                     var indexSet =
-                      set &&
-                      set.labels &&
-                      set.labels.indexOf(label);
+                      set && set.labels && set.labels.indexOf(label);
 
                     if (indexSet == -1) {
                       this.charts[graph].datasets[s].data[l] = 0;
@@ -877,7 +949,7 @@ export default {
           };
           break;
 
-          case "account_types_pie":
+        case "account_types_pie":
           config = {
             labels: [],
             datasets: [],
@@ -893,7 +965,7 @@ export default {
           };
           break;
 
-          case "account_types_graph":
+        case "account_types_graph":
           config = {
             labels: [],
             datasets: [],
