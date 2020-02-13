@@ -569,6 +569,12 @@ export default {
     };
   },
   mounted() {
+    if (this.$route.params.hotspotId !== undefined) {
+      this.hotspotSearchId = this.$route.params.hotspotId;
+    } else {
+      var hsId = this.get("selected_hotspot_id");
+      this.hotspotSearchId = hsId;
+    }
     // get hotspots list
     var context = this;
     this.getAllHotspots(function() {
@@ -624,7 +630,7 @@ export default {
         null,
         success => {
           this.hotspots = success.body.data;
-          var hsId = this.get("marketing_hotspot_id") || this.hotspots[0].id;
+          var hsId = this.get("selected_hotspot_id") || this.hotspots[0].id;
           this.hotspotSearchId = hsId;
           this.isLoading = false;
 
@@ -684,7 +690,7 @@ export default {
 
               this.marketingPrefs.isLoading = false;
               this.isLoadingMarketing = false;
-              this.set("marketing_hotspot_id", this.hotspotSearchId);
+              this.set("selected_hotspot_id", this.hotspotSearchId);
 
               if (this.marketingPrefs.marketing_3_first_email_enabled) {
                 this.feedbackEditor = new Editor({

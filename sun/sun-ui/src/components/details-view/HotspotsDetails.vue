@@ -1385,6 +1385,9 @@ export default {
 
     // get sms count
     this.getSmsCount();
+
+    // set selected hotspot in local storage
+    this.set("selected_hotspot_id", parseInt(this.$route.params.id) || this.get("selected_hotspot_id") || 0);
   },
   data() {
     return {
