@@ -543,15 +543,15 @@
                   ></vue-editor>
 
                   <sketch-picker
-                    @input="onUpdate(pref.value)"
+                    @input="onUpdate(pref)"
                     class="absolute-center"
-                    v-if="pref.key == 'captive_7_background'"
+                    v-if="pref.key == 'captive_7_background' || pref.key == 'captive_9_container_bg_color'"
                     v-model="pref.value"
                   />
 
                   <input
                     required
-                    v-if="pref.key != 'captive_6_description' && pref.key != 'captive_3_logo' && pref.key != 'captive_5_banner' && pref.key != 'captive_7_background' && pref.key != 'captive_8_bg_image'"
+                    v-if="pref.key != 'captive_6_description' && pref.key != 'captive_3_logo' && pref.key != 'captive_5_banner' && pref.key != 'captive_7_background' && pref.key != 'captive_8_bg_image' && pref.key != 'captive_9_container_bg_color'"
                     v-model="pref.value"
                     :type="getInputType(pref.key, pref.value)"
                     class="form-control"
@@ -2248,6 +2248,10 @@ export default {
               this.preferences.backgroundImage = pref.value;
             }
 
+            if (pref.key == "captive_9_container_bg_color") {
+              this.preferences.containerBgColor = pref.value;
+            }
+
             if (pref.key == "sms_login_max") {
               this.smsMaxCount = pref.value;
             }
@@ -2283,6 +2287,7 @@ export default {
     },
     updateCaptivePreview() {
       window.$("#captive-preview").css("background-color", this.preferences.backgroundColor);
+      window.$("#captive-preview div.ui.segment").css("background-color", this.preferences.containerBgColor);
 
       if (this.preferences.backgroundImage) {
         window.$("#captive-preview").css("background-image", 'url("' + this.preferences.backgroundImage + '")');
@@ -2333,6 +2338,15 @@ export default {
         context.getPreferences();
       });
     },
+    getHexValue(value) {
+      if (typeof value === 'string' || value instanceof String) {
+        return value;
+      } else {
+        var rgb_hex = value.hex;
+        var a_hex = Math.floor(value.a * 255).toString(16);
+        return rgb_hex + a_hex;
+      }
+    },
     updatePreferencesCaptive() {
       this.preferences.isLoading = true;
       // create promises array
@@ -2344,8 +2358,8 @@ export default {
             if (typeof pref.value == "boolean") {
               pref.value = pref.value.toString();
             }
-            if (pref.key == "captive_7_background") {
-              pref.value = pref.value.hex || pref.value;
+            if (pref.key == "captive_7_background" || pref.key == "captive_9_container_bg_color") {
+              pref.value = this.getHexValue(pref.value);
             }
             this.hsPrefModify(
               this.$route.params.id,
@@ -2509,7 +2523,7 @@ export default {
       this.$forceUpdate();
     },
     onChanged(pref) {
-      if (this.$refs["prefInput-" + pref.key][0].image.length > 655360) {
+      if (this.$refs["prefInput-" + pref.key][0].image.length > 921083) {
         pref.onError = true;
         this.$refs["prefInput-" + pref.key][0].image = pref.value;
       } else {
@@ -2523,8 +2537,12 @@ export default {
       this.updateCaptivePreview();
       this.$forceUpdate();
     },
-    onUpdate(value) {
-      $("#captive-preview").css("background-color", value.hex);
+    onUpdate(pref) {
+      if (pref.key == 'captive_7_background') {
+        $("#captive-preview").css("background-color", this.getHexValue(pref.value));
+      } else if (pref.key == 'captive_9_container_bg_color') {
+        $("#captive-preview div.ui.segment").css("background-color", this.getHexValue(pref.value));
+      }
     },
     getAllMACAuth() {
       this.userGetAll(

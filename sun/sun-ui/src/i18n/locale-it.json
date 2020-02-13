@@ -77,6 +77,7 @@
       "captive_6_description": "Descrizione Captive Portal",
       "captive_7_background": "Colore Sfondo Captive Portal",
       "captive_8_bg_image": "Immagine Sfondo Captive Portal",
+      "captive_9_container_bg_color": "Colore e trasparenza container Captive Portal",
       "voucher_expiration_days": "Durata account con Voucher (giorni)",
       "sms_login": "SMS Login",
       "email_login": "Email Login",
@@ -414,7 +415,7 @@
     "upload_remove": "Rimuovi",
     "upload_drag": "Click or Drag",
     "upload_file_not_supported": "Tipo file non supportato, utilizzare file png, jpeg o jpg",
-    "upload_file_exceed": "File troppo grande (dimensione massima 600 kb)",
+    "upload_file_exceed": "File troppo grande (dimensione massima 700 KB)",
     "result": "Risultato",
     "results": "Risultati"
   }

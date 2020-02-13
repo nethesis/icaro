@@ -42,6 +42,11 @@
             $("body").css("background-position", "center center");
             $("body").css("background-image", 'url("' + success.body.preferences.captive_8_bg_image + '")');
           }
+
+          // container color and opacity
+          if (success.body.preferences.captive_9_container_bg_color) {
+            $("div.ui.segment").css("background-color", success.body.preferences.captive_9_container_bg_color || '#fff9');
+          }
           this.loading = false
         }, function (error) {
           console.error(error)
