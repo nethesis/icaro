@@ -51,12 +51,12 @@ export default {
 }
 
 h3 {
-  color: #5a5a5a !important;
+  color: #383838;
   font-size: 16px !important;
 }
 
 p {
-  color: #5a5a5a !important;
+  color: #383838;
   margin: 0 0 1em;
   line-height: 1.4285em;
   font-size: 12px;

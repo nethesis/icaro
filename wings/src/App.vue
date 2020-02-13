@@ -33,20 +33,30 @@
           this.$root.$options.session = {}
           this.hotspot.name = success.body.hotspot_name
           this.hotspot.preferences = success.body.preferences
+          this.loading = false
+
+          // background color
           $("body").css("background-color", success.body.preferences.captive_7_background || '#2a87be');
 
           // background image
           if (success.body.preferences.captive_8_bg_image) {
             $("body").css("height", "100vh");
             $("body").css("background-size", "cover");
-            $("body").css("background-position", "center center");
             $("body").css("background-image", 'url("' + success.body.preferences.captive_8_bg_image + '")');
           }
 
-          // container color and opacity
-          $("div.ui.segment").css("background-color", success.body.preferences.captive_9_container_bg_color || '#fff9');
-          this.loading = false
-        }, function (error) {
+          setTimeout(function() {
+            // container color and opacity
+            $("div.ui.segment").css("background-color", success.body.preferences.captive_9_container_bg_color || '#fff9');
+
+            // title color
+            $("h2").css("color", success.body.preferences.captive_10_title_color || '#fff');
+
+            // text color
+            $("div.ui.segment h3").css("color", success.body.preferences.captive_11_text_color || '#f00');
+            $("div.ui.segment p").css("color", success.body.preferences.captive_11_text_color || '#383838');
+          }, 300);
+        }, function(error) {
           console.error(error)
           $("body").css("background-color", '#fff');
           this.loading = false
@@ -122,10 +132,6 @@
 
   .route-container {
     margin-top: 30px !important;
-  }
-
-  .ui.segments {
-    color: #5a5a5a !important;
   }
 
   .ui.small.image {

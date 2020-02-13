@@ -70,6 +70,8 @@ type Configuration struct {
 		BgImage          string `json:"bgImage"`          // background image file name
 		ContainerBgColor string `json:"containerBgColor"` // container background color file name
 		BgImageContents  string `json:"-"`                // base64 content of background image
+		TitleColor       string `json:"titleColor"`
+		TextColor        string `json:"textColor"`
 	} `json:"captive_portal"`
 	Survey struct {
 		Url                         string `json:"url"`
@@ -214,6 +216,12 @@ func Init(ConfigFilePtr *string) {
 	}
 	if os.Getenv("CAPTIVE_CONTAINER_BG_COLOR") != "" {
 		Config.CaptivePortal.ContainerBgColor = os.Getenv("CAPTIVE_CONTAINER_BG_COLOR")
+	}
+	if os.Getenv("CAPTIVE_TITLE_COLOR") != "" {
+		Config.CaptivePortal.TitleColor = os.Getenv("CAPTIVE_TITLE_COLOR")
+	}
+	if os.Getenv("CAPTIVE_TEXT_COLOR") != "" {
+		Config.CaptivePortal.TextColor = os.Getenv("CAPTIVE_TEXT_COLOR")
 	}
 
 	if os.Getenv("SURVEY_URL") != "" {

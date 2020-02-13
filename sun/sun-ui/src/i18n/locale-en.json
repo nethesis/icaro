@@ -78,6 +78,8 @@
       "captive_7_background": "Captive Portal background",
       "captive_8_bg_image": "Captive Portal background image",
       "captive_9_container_bg_color": "Captive Portal container color and opacity",
+      "captive_10_title_color": "Captive Portal title color",
+      "captive_11_text_color": "Captive Portal text color",
       "voucher_expiration_days": "Voucher expiration (days)",
       "sms_login": "Captive Portal login with SMS",
       "email_login": "Captive Portal login with Email",
