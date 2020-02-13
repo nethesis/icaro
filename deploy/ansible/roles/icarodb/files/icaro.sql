@@ -376,6 +376,7 @@ CREATE TABLE `integrations` (
   `webhook_token` varchar(250) NOT NULL,
   `pre_auth_redirect_url` varchar(250) NOT NULL,
   `post_auth_redirect_url` varchar(250) NOT NULL,
+  `privacy` varchar(2048),
   PRIMARY KEY(`id`)
 );
 

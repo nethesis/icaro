@@ -135,7 +135,7 @@ func GetHotspots(c *gin.Context) {
 	chain := db.Order("name asc, description")
 
 	if len(q) > 0 {
-		chain = chain.Where("business_dpo LIKE ? OR business_address LIKE ? OR business_email LIKE ? OR business_name LIKE ? OR business_vat LIKE ? OR description LIKE ? OR name LIKE ?", "%"+q+"%", "%"+q+"%", "%"+q+"%", "%"+q+"%", "%"+q+"%", "%"+q+"%")
+		chain = chain.Where("business_dpo LIKE ? OR business_address LIKE ? OR business_email LIKE ? OR business_name LIKE ? OR business_vat LIKE ? OR description LIKE ? OR name LIKE ?", "%"+q+"%", "%"+q+"%", "%"+q+"%", "%"+q+"%", "%"+q+"%", "%"+q+"%", "%"+q+"%")
 	}
 
 	if accountId == 1 {

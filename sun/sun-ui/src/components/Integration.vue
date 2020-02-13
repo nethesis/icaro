@@ -74,7 +74,7 @@
           </div>
           <div class="list-view-pf-main-info adjust-main-info">
             <div class="list-view-pf-left">
-              <img class="logo-int" :src="i.logo">
+              <img class="logo-int" :src="i.logo" />
             </div>
             <div class="list-view-pf-body">
               <div class="list-view-pf-description">
@@ -87,6 +87,10 @@
                 <div class="list-view-pf-additional-info-item">
                   <span class="fa fa-globe"></span>
                   <a target="_blank" :href="i.site">{{i.site}}</a>
+                </div>
+                <div class="list-view-pf-additional-info-item">
+                  <span class="fa fa-lock"></span>
+                  <a data-toggle="modal" data-target="#privacyModal" data-backdrop="static" @click="setIntegration(i)">Privacy</a>
                 </div>
                 <div class="list-view-pf-additional-info-item">
                   <span
@@ -104,6 +108,36 @@
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="privacyModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="privacyModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="privacyModalLabel">Privacy</h4>
+          </div>
+          <div class="modal-body">
+            <form class="form-horizontal">
+              <div class="form-group">
+                <label class="col-sm-0 control-label" for="textInput-modal-markup"></label>
+                <div class="col-sm-12">
+                  <textarea type="text" class="form-control form-textarea" v-model="currentIntegration.privacy"></textarea>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
           </div>
         </div>
       </div>
@@ -128,6 +162,7 @@ export default {
       isError: false,
       hotspots: [],
       integrations: [],
+      currentIntegration: {},
       maps: {},
       hotspotSearchId: 0,
       user: this.get("loggedUser") || null
@@ -149,6 +184,9 @@ export default {
     });
   },
   methods: {
+    setIntegration(i) {
+      this.currentIntegration = i;
+    },
     getAllHotspots(callback) {
       this.hotspotGetAll(
         null,
@@ -273,5 +311,9 @@ export default {
 
 .adjust-space {
   margin-left: 8px !important;
+}
+
+.form-textarea {
+  resize: vertical;
 }
 </style>

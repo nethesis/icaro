@@ -36,6 +36,9 @@ import (
 )
 
 func GetWingsPrefs(c *gin.Context) {
+	var hotspotIntegration models.HotspotIntegration
+	var integration models.Integration
+
 	uuid := c.Query("uuid")
 
 	// extract unit info
@@ -76,6 +79,18 @@ func GetWingsPrefs(c *gin.Context) {
 	marketings = strings.Replace(marketings, "$$COMPANY_ADDRESS$$", hotspot.BusinessAddress, -1)
 	marketings = strings.Replace(marketings, "$$COMPANY_EMAIL$$", hotspot.BusinessEmail, -1)
 	marketings = strings.Replace(marketings, "$$COMPANY_DPO$$", hotspot.BusinessDPO, -1)
+
+	// get integration privacy text
+	db := database.Instance()
+	db.Where("hotspot_id in (?)", hotspot.Id).First(&hotspotIntegration)
+
+	if hotspotIntegration.Id != 0 {
+		db.Where("id = ?", hotspotIntegration.IntegrationId).First(&integration)
+
+		if integration.Id != 0 {
+			terms += "\n" + integration.Privacy
+		}
+	}
 
 	wingsPrefs.Disclaimers.TermsOfUse = terms
 	wingsPrefs.Disclaimers.MarketingUse = marketings
