@@ -41,12 +41,28 @@ type GraphResponse struct {
 	Set0   struct {
 		Labels []string `json:"labels"`
 		Data   []int    `db:"data" json:"data"`
+		Name   string   `json:"name"`
 	} `json:"set0"`
 	Set1 struct {
 		Labels []string `json:"labels"`
 		Data   []int    `json:"data"`
+		Name   string   `json:"name"`
 	} `json:"set1"`
 	Avg []int `json:"avg"`
+}
+
+type GraphResponses struct {
+	Labels []string `json:"labels"`
+	Sets   []struct {
+		Labels []string `json:"labels"`
+		Data   []int    `db:"data" json:"data"`
+		Name   string   `json:"name"`
+	} `json:"sets"`
+}
+
+type PieResponse struct {
+	Labels []string  `json:"labels"`
+	Sets   []float64 `json:"sets"`
 }
 
 func GetCurrentSessions(c *gin.Context) {
@@ -507,6 +523,89 @@ func GetHistorySMSHistory(c *gin.Context) {
 
 		response.Set0.Labels = append(response.Set0.Labels, label)
 		response.Set0.Data = append(response.Set0.Data, int(math.Round(data)))
+	}
+
+	c.JSON(http.StatusOK, response)
+}
+
+func GetAccountTypeGraph(c *gin.Context) {
+	var response GraphResponse
+	var responses GraphResponses
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
+
+	hotspotId := c.Query("hotspot")
+	hotspotIdInt, err := strconv.Atoi(hotspotId)
+	if err != nil {
+		hotspotIdInt = 0
+	}
+
+	rangeDate := c.Query("range")
+	rangeDateInt, err := strconv.Atoi(rangeDate)
+	if err != nil {
+		rangeDateInt = 0
+	}
+
+	for i := rangeDateInt; i >= 0; i-- {
+		now := time.Now().UTC()
+		responses.Labels = append(responses.Labels, now.AddDate(0, 0, -i).Format("02 Jan"))
+	}
+
+	db := database.Instance()
+	chainType := db.Table("users").Select("account_type as type").Where("created >= DATE_SUB(NOW(), INTERVAL ? DAY) AND created <= NOW()", rangeDateInt)
+	types, _ := chainType.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt)).Group("account_type").Rows()
+
+	for types.Next() {
+		var account = ""
+		types.Scan(&account)
+
+		chain := db.Table("users").Select("DATE_FORMAT(created, '%d %b') AS label, count(*) AS data").Where("created >= DATE_SUB(NOW(), INTERVAL ? DAY) AND created <= NOW() AND account_type = ?", rangeDateInt, account)
+		rows, _ := chain.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt)).Group("DATE(created)").Rows()
+
+		response.Set0.Name = account
+		for rows.Next() {
+			var label = ""
+			var data = 0.0
+			rows.Scan(&label, &data)
+
+			response.Set0.Labels = append(response.Set0.Labels, label)
+			response.Set0.Data = append(response.Set0.Data, int(math.Round(data)))
+		}
+
+		responses.Sets = append(responses.Sets, response.Set0)
+		response.Set0.Labels = nil
+		response.Set0.Data = nil
+	}
+
+	c.JSON(http.StatusOK, responses)
+}
+
+func GetAccountTypePie(c *gin.Context) {
+	var response PieResponse
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
+
+	hotspotId := c.Query("hotspot")
+	hotspotIdInt, err := strconv.Atoi(hotspotId)
+	if err != nil {
+		hotspotIdInt = 0
+	}
+
+	rangeDate := c.Query("range")
+	rangeDateInt, err := strconv.Atoi(rangeDate)
+	if err != nil {
+		rangeDateInt = 0
+	}
+
+	db := database.Instance()
+	chain := db.Table("users").Select("account_type as account, count(*) AS data").Where("created >= DATE_SUB(NOW(), INTERVAL ? DAY) AND created <= NOW()", rangeDateInt)
+	rows, err := chain.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt)).Group("account_type").Rows()
+
+	for rows.Next() {
+		var account = ""
+		var data = 0.0
+		rows.Scan(&account, &data)
+
+		response.Labels = append(response.Labels, account)
+		response.Sets = append(response.Sets, data)
 	}
 
 	c.JSON(http.StatusOK, response)

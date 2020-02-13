@@ -142,6 +142,19 @@
       </div>
     </div>
 
+    <div class="graph-divider"></div>
+    <h2 class="graphs-container title-graphs">{{ $t('report.account_type_reports') }}</h2>
+      <div class="row no-margin">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+          <div v-if="loaders.account_types_pie" class="spinner spinner-lg"></div>
+          <vue-chart v-show="!loaders.account_types_pie" type="pie" :options="charts.account_types_pie.options" :data="charts.account_types_pie"></vue-chart>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+          <div v-if="loaders.account_types_graph" class="spinner spinner-lg"></div>
+          <vue-chart v-show="!loaders.account_types_graph" type="line" :options="charts.account_types_graph.options" :data="charts.account_types_graph"></vue-chart>
+        </div>
+      </div>
+
   </div>
 </template>
 
@@ -149,6 +162,7 @@
 import StorageService from "../services/storage";
 import HotspotService from "../services/hotspot";
 import StatsService from "../services/stats";
+import UtilService from "../services/util";
 
 import VueChart from "vue-chart-js";
 import moment from "moment";
@@ -158,7 +172,7 @@ export default {
   components: {
     VueChart
   },
-  mixins: [StorageService, HotspotService, StatsService],
+  mixins: [StorageService, HotspotService, StatsService, UtilService],
   data() {
     return {
       loaders: {
@@ -170,7 +184,10 @@ export default {
         avg_conn_traffic: true,
         avg_conn_duration: true,
         sms_year: true,
-        sms_history: true
+        sms_history: true,
+        account_types_pie: true,
+        account_types_graph: true,
+
       },
       msg: this.$i18n.t("report.reports"),
       user: this.get("loggedUser") || null,
@@ -213,7 +230,9 @@ export default {
         avg_conn_traffic: this.chartConfig("avg_conn_traffic"),
         avg_conn_duration: this.chartConfig("avg_conn_duration"),
         sms_year: this.chartConfig("sms_year"),
-        sms_history: this.chartConfig("sms_history")
+        sms_history: this.chartConfig("sms_history"),
+        account_types_pie: this.chartConfig("account_types_pie"),
+        account_types_graph: this.chartConfig("account_types_graph")
       }
     };
   },
@@ -296,6 +315,8 @@ export default {
       this.reportGraph("avg_conn_duration");
       this.reportGraph("sms_year");
       this.reportGraph("sms_history");
+      this.reportGraph("account_types_pie");
+      this.reportGraph("account_types_graph");
     },
     reportGraph(graph) {
       this.loaders[graph] = true;
@@ -306,39 +327,86 @@ export default {
         success => {
           this.charts[graph].labels = success.body.labels || [];
 
-          for (var l in success.body.labels) {
-            var label = success.body.labels[l];
+          if (graph.includes("pie")) {
+            var context = this;
+            this.charts[graph].datasets = [{
+              data: success.body.sets,
+              backgroundColor: success.body.labels.map(function(l){
+                return context.accountTypeColor(l)
+              })
+            }];
+            this.charts[graph].labels = success.body.labels.map(function(l){
+                return context.$i18n.t("report.account_types_" + l)
+              })
+          } else {
+            if(success.body.sets) {
+              for (var s in success.body.sets) {
+                var set = success.body.sets[s];
 
-            var indexSet0 =
-              success.body.set0 &&
-              success.body.set0.labels &&
-              success.body.set0.labels.indexOf(label);
+                if (graph.includes("pie")) {
 
-            if (indexSet0 == -1) {
-              this.charts[graph].datasets[0].data[l] = 0;
+                } else {
+                  this.charts[graph].datasets.push({
+                    label: this.$i18n.t("report.account_types_" + set.name),
+                    data: [],
+                    backgroundColor: this.accountTypeColor(set.name),
+                    fill: false,
+                    borderColor: this.accountTypeColor(set.name)
+                  });
+
+                  for (var l in success.body.labels) {
+                    var label = success.body.labels[l];
+                    var indexSet =
+                      set &&
+                      set.labels &&
+                      set.labels.indexOf(label);
+
+                    if (indexSet == -1) {
+                      this.charts[graph].datasets[s].data[l] = 0;
+                    } else {
+                      if (indexSet != null)
+                        this.charts[graph].datasets[s].data[l] =
+                          set.data[indexSet];
+                    }
+                  }
+                }
+              }
             } else {
-              if (indexSet0 != null)
-                this.charts[graph].datasets[0].data[l] =
-                  success.body.set0.data[indexSet0];
-            }
+              for (var l in success.body.labels) {
+                var label = success.body.labels[l];
 
-            if (this.charts[graph].datasets[1]) {
-              var indexSet1 =
-                success.body.set1 &&
-                success.body.set1.labels &&
-                success.body.set1.labels.indexOf(label);
+                var indexSet0 =
+                  success.body.set0 &&
+                  success.body.set0.labels &&
+                  success.body.set0.labels.indexOf(label);
 
-              if (indexSet1 == -1) {
-                this.charts[graph].datasets[1].data[l] = 0;
-              } else {
-                if (indexSet1 != null)
-                  this.charts[graph].datasets[1].data[l] =
-                    success.body.set1.data[indexSet1];
+                if (indexSet0 == -1) {
+                  this.charts[graph].datasets[0].data[l] = 0;
+                } else {
+                  if (indexSet0 != null)
+                    this.charts[graph].datasets[0].data[l] =
+                      success.body.set0.data[indexSet0];
+                }
+
+                if (this.charts[graph].datasets[1]) {
+                  var indexSet1 =
+                    success.body.set1 &&
+                    success.body.set1.labels &&
+                    success.body.set1.labels.indexOf(label);
+
+                  if (indexSet1 == -1) {
+                    this.charts[graph].datasets[1].data[l] = 0;
+                  } else {
+                    if (indexSet1 != null)
+                      this.charts[graph].datasets[1].data[l] =
+                        success.body.set1.data[indexSet1];
+                  }
+                }
+
+                // averages
+                this.averages[graph] = success.body.avg || [];
               }
             }
-
-            // averages
-            this.averages[graph] = success.body.avg || [];
           }
           this.loaders[graph] = false;
         },
@@ -778,6 +846,66 @@ export default {
               title: {
                 display: true,
                 text: this.$i18n.t("report.sent_this_period")
+              },
+              scales: {
+                xAxes: [
+                  {
+                    gridLines: {
+                      zeroLineColor: "transparent"
+                    }
+                  }
+                ],
+                yAxes: [
+                  {
+                    ticks: {
+                      maxTicksLimit: 5,
+                      callback: function(item) {
+                        if (item % 1 === 0) {
+                          return item;
+                        }
+                      },
+                      beginAtZero: true
+                    },
+                    gridLines: {
+                      display: false,
+                      drawBorder: false
+                    }
+                  }
+                ]
+              }
+            }
+          };
+          break;
+
+          case "account_types_pie":
+          config = {
+            labels: [],
+            datasets: [],
+            options: {
+              elements: {},
+              title: {
+                display: true,
+                text: this.$i18n.t("report.distribution")
+              },
+              responsive: true,
+              scales: {}
+            }
+          };
+          break;
+
+          case "account_types_graph":
+          config = {
+            labels: [],
+            datasets: [],
+            options: {
+              elements: {
+                line: {
+                  tension: 0
+                }
+              },
+              title: {
+                display: true,
+                text: this.$i18n.t("report.in_this_period")
               },
               scales: {
                 xAxes: [
