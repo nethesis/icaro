@@ -19,7 +19,9 @@
         "redirect": "{{ icaro.sun_api.captive_portal_redirect }}",
         "background": "{{ icaro.sun_api.captive_portal_background }}",
         "logo": "/opt/icaro/static/logo.png",
-        "banner": "/opt/icaro/static/banner.png"
+        "banner": "/opt/icaro/static/banner.png",
+        "bgImage": "/opt/icaro/static/bgImage.jpg",
+        "containerBgColor": "{{ icaro.sun_api.captive_portal_container_bg_color }}"
     },
     "survey": {
         "feedback_body_text": {{ lookup('file', 'files/feedback_body') | to_json }},

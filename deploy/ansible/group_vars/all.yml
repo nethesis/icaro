@@ -25,6 +25,8 @@ icaro:
     captive_portal_background: "#2a87be"
     captive_portal_logo: "https://raw.githubusercontent.com/nethesis/icaro/master/logo/logo.png"
     captive_portal_banner: "https://raw.githubusercontent.com/nethesis/icaro/master/logo/logo-light.png"
+    bg_image: "https://raw.githubusercontent.com/nethesis/icaro/master/wallpaper/wallpaper.jpg"
+    captive_portal_container_bg_color: "#ffffff99"
     email_from: "admin@example.com"
     email_smtp_host: "EmailSMTPHost"
     email_smtp_port: "25"

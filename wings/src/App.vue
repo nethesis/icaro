@@ -44,9 +44,7 @@
           }
 
           // container color and opacity
-          if (success.body.preferences.captive_9_container_bg_color) {
-            $("div.ui.segment").css("background-color", success.body.preferences.captive_9_container_bg_color || '#fff9');
-          }
+          $("div.ui.segment").css("background-color", success.body.preferences.captive_9_container_bg_color || '#fff9');
           this.loading = false
         }, function (error) {
           console.error(error)

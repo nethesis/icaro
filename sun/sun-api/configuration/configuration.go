@@ -58,15 +58,18 @@ type Configuration struct {
 		MarketingUse string `json:"marketing_use"`
 	} `json:"disclaimers"`
 	CaptivePortal struct {
-		Redirect       string `json:"redirect"`
-		Title          string `json:"title"`
-		Subtitle       string `json:"subtitle"`
-		Description    string `json:"description"`
-		Background     string `json:"background"`
-		Logo           string `json:"logo"`   // Logo file name
-		Banner         string `json:"banner"` // Banner file name
-		LogoContents   string `json:"-"`      // base64 content of Logo
-		BannerContents string `json:"-"`      //base64 content of Banner
+		Redirect         string `json:"redirect"`
+		Title            string `json:"title"`
+		Subtitle         string `json:"subtitle"`
+		Description      string `json:"description"`
+		Background       string `json:"background"`
+		Logo             string `json:"logo"`             // Logo file name
+		Banner           string `json:"banner"`           // Banner file name
+		LogoContents     string `json:"-"`                // base64 content of Logo
+		BannerContents   string `json:"-"`                // base64 content of Banner
+		BgImage          string `json:"bgImage"`          // background image file name
+		ContainerBgColor string `json:"containerBgColor"` // container background color file name
+		BgImageContents  string `json:"-"`                // base64 content of background image
 	} `json:"captive_portal"`
 	Survey struct {
 		Url                         string `json:"url"`
@@ -206,6 +209,12 @@ func Init(ConfigFilePtr *string) {
 	if os.Getenv("CAPTIVE_BANNER") != "" {
 		Config.CaptivePortal.Banner = os.Getenv("CAPTIVE_BANNER")
 	}
+	if os.Getenv("CAPTIVE_BG_IMAGE") != "" {
+		Config.CaptivePortal.BgImage = os.Getenv("CAPTIVE_BG_IMAGE")
+	}
+	if os.Getenv("CAPTIVE_CONTAINER_BG_COLOR") != "" {
+		Config.CaptivePortal.ContainerBgColor = os.Getenv("CAPTIVE_CONTAINER_BG_COLOR")
+	}
 
 	if os.Getenv("SURVEY_URL") != "" {
 		Config.Survey.Url = os.Getenv("SURVEY_URL")
@@ -224,6 +233,14 @@ func Init(ConfigFilePtr *string) {
 		if data, errRead := ioutil.ReadFile(Config.CaptivePortal.Banner); errRead == nil {
 			mimeType := http.DetectContentType(data)
 			Config.CaptivePortal.BannerContents = "data:" + mimeType + ";base64," + b64.StdEncoding.EncodeToString([]byte(data))
+		}
+	}
+
+	Config.CaptivePortal.BgImageContents = ""
+	if _, err := os.Stat(Config.CaptivePortal.BgImage); err == nil {
+		if data, errRead := ioutil.ReadFile(Config.CaptivePortal.BgImage); errRead == nil {
+			mimeType := http.DetectContentType(data)
+			Config.CaptivePortal.BgImageContents = "data:" + mimeType + ";base64," + b64.StdEncoding.EncodeToString([]byte(data))
 		}
 	}
 

@@ -24,6 +24,12 @@
     force: true
     dest: /opt/icaro/static/banner.png
 
+- name: Download default background image
+  get_url:
+    url: "{{ icaro.sun_api.bg_image }}"
+    force: true
+    dest: /opt/icaro/static/bgImage.jpg
+
 - name: Create Sun-api working directory
   file:
     path: /opt/icaro/sun-api/
