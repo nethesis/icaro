@@ -72,6 +72,7 @@ func GetWingsPrefs(c *gin.Context) {
 	terms = strings.Replace(terms, "$$COMPANY_ADDRESS$$", hotspot.BusinessAddress, -1)
 	terms = strings.Replace(terms, "$$COMPANY_EMAIL$$", hotspot.BusinessEmail, -1)
 	terms = strings.Replace(terms, "$$COMPANY_DPO$$", hotspot.BusinessDPO, -1)
+	terms = strings.Replace(terms, "$$COMPANY_DPO_MAIL$$", hotspot.BusinessDPOMail, -1)
 
 	marketings := configuration.Config.Disclaimers.MarketingUse
 	marketings = strings.Replace(marketings, "$$COMPANY_NAME$$", hotspot.BusinessName, -1)
@@ -79,6 +80,7 @@ func GetWingsPrefs(c *gin.Context) {
 	marketings = strings.Replace(marketings, "$$COMPANY_ADDRESS$$", hotspot.BusinessAddress, -1)
 	marketings = strings.Replace(marketings, "$$COMPANY_EMAIL$$", hotspot.BusinessEmail, -1)
 	marketings = strings.Replace(marketings, "$$COMPANY_DPO$$", hotspot.BusinessDPO, -1)
+	marketings = strings.Replace(marketings, "$$COMPANY_DPO_MAIL$$", hotspot.BusinessDPOMail, -1)
 
 	// get integration privacy text
 	db := database.Instance()

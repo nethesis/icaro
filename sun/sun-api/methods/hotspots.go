@@ -55,6 +55,7 @@ func CreateHotspot(c *gin.Context) {
 		BusinessAddress: json.BusinessAddress,
 		BusinessEmail:   json.BusinessEmail,
 		BusinessDPO:     json.BusinessDPO,
+		BusinessDPOMail: json.BusinessDPOMail,
 		Created:         time.Now().UTC(),
 	}
 
@@ -114,6 +115,9 @@ func UpdateHotspot(c *gin.Context) {
 	if len(json.BusinessDPO) > 0 {
 		hotspot.BusinessDPO = json.BusinessDPO
 	}
+	if len(json.BusinessDPOMail) > 0 {
+		hotspot.BusinessDPOMail = json.BusinessDPOMail
+	}
 
 	db.Save(&hotspot)
 
@@ -135,7 +139,7 @@ func GetHotspots(c *gin.Context) {
 	chain := db.Order("name asc, description")
 
 	if len(q) > 0 {
-		chain = chain.Where("business_dpo LIKE ? OR business_address LIKE ? OR business_email LIKE ? OR business_name LIKE ? OR business_vat LIKE ? OR description LIKE ? OR name LIKE ?", "%"+q+"%", "%"+q+"%", "%"+q+"%", "%"+q+"%", "%"+q+"%", "%"+q+"%", "%"+q+"%")
+		chain = chain.Where("business_dpo_mail LIKE ? OR business_dpo LIKE ? OR business_address LIKE ? OR business_email LIKE ? OR business_name LIKE ? OR business_vat LIKE ? OR description LIKE ? OR name LIKE ?", "%"+q+"%", "%"+q+"%", "%"+q+"%", "%"+q+"%", "%"+q+"%", "%"+q+"%", "%"+q+"%", "%"+q+"%")
 	}
 
 	if accountId == 1 {

@@ -97,6 +97,11 @@
           <span class="pficon pficon-error-circle-o"></span>
           <span class="red">{{$t('hotspot.missing_business_dpo')}}</span>
         </td>
+        <td v-if="props.row.business_dpo_mail.length > 0" class="fancy">{{ props.row.business_dpo_mail }}</td>
+        <td v-if="props.row.business_dpo_mail.length == 0" class="fancy">
+          <span class="pficon pficon-error-circle-o"></span>
+          <span class="red">{{$t('hotspot.missing_business_dpo_mail')}}</span>
+        </td>
         <td class="fancy">{{ props.row.created | formatDate }}</td>
         <td>
           <hotspot-action details="true" :obj="props.row" :update="getAll"></hotspot-action>
@@ -253,6 +258,22 @@
                   >
                 </div>
               </div>
+              <div class="form-group">
+                <label
+                  class="col-sm-4 control-label"
+                  for="textInput2-modal-markup"
+                >{{ $t("hotspot.business_dpo_mail") }}</label>
+                <div class="col-sm-8">
+                  <input
+                    required
+                    v-model="newObj.business_dpo_mail"
+                    type="text"
+                    id="textInput2-modal-markup"
+                    class="form-control"
+                    :placeholder="$t('hotspot.business_dpo_mail')"
+                  >
+                </div>
+              </div>
               <div v-if="errors.create" class="alert alert-danger alert-dismissable">
                 <span class="pficon pficon-error-circle-o"></span>
                 <strong>{{ $t("hotspot.create_error_title") }}</strong>
@@ -323,6 +344,11 @@ export default {
         {
           label: this.$i18n.t("hotspot.business_dpo"),
           field: "business_dpo",
+          filterable: true
+        },
+        {
+          label: this.$i18n.t("hotspot.business_dpo_mail"),
+          field: "business_dpo_mail",
           filterable: true
         },
         {

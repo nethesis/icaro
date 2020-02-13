@@ -80,6 +80,12 @@
                   <input required v-model="currentObj.business_dpo" type="text" id="textInput2-modal-markup" class="form-control" :placeholder="$t('hotspot.business_dpo')">
                 </div>
               </div>
+              <div class="form-group">
+                <label class="col-sm-4 control-label" for="textInput2-modal-markup">{{ $t("hotspot.business_dpo_mail") }}</label>
+                <div class="col-sm-8">
+                  <input required v-model="currentObj.business_dpo_mail" type="email" id="textInput2-modal-markup" class="form-control" :placeholder="$t('hotspot.business_dpo_mail')">
+                </div>
+              </div>
               <div v-if="errors.update" class="alert alert-danger alert-dismissable">
                 <span class="pficon pficon-error-circle-o"></span>
                 <strong>{{ $t("hotspot.update_error_title") }}</strong>. {{ $t("hotspot.update_error_sub") }}.
@@ -158,7 +164,8 @@ export default {
           business_vat: obj.business_vat,
           business_address: obj.business_address,
           business_email: obj.business_email,
-          business_dpo: obj.business_dpo
+          business_dpo: obj.business_dpo,
+          business_dpo_mail: obj.business_dpo_mail
         },
         success => {
           this.currentObj.onAction = false;
