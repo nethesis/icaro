@@ -69,12 +69,12 @@
           title: this.$i18n.t("splash.modal_terms"),
           text: [
             "<div>" + this.$i18n.t("splash.tos") + "</div>",
-            '<textarea class="terms-text">' +
+            '<textarea readonly class="terms-text">' +
             this.$root.$options.hotspot.disclaimers.terms_of_use +
             "</textarea>",
             "<div></div>",
             "<div>" + this.$i18n.t("splash.privacy") + "</div>",
-            '<textarea class="terms-text">' +
+            '<textarea readonly class="terms-text">' +
             this.$root.$options.hotspot.disclaimers.marketing_use +
             "</textarea>"
           ].join(""),

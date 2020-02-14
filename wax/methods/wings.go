@@ -23,9 +23,11 @@
 package methods
 
 import (
+	"bytes"
+	"fmt"
+	"html/template"
 	"net/http"
 	"strconv"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 
@@ -67,20 +69,25 @@ func GetWingsPrefs(c *gin.Context) {
 
 	// disclaimers
 	terms := configuration.Config.Disclaimers.TermsOfUse
-	terms = strings.Replace(terms, "$$COMPANY_NAME$$", hotspot.BusinessName, -1)
-	terms = strings.Replace(terms, "$$COMPANY_VAT$$", hotspot.BusinessVAT, -1)
-	terms = strings.Replace(terms, "$$COMPANY_ADDRESS$$", hotspot.BusinessAddress, -1)
-	terms = strings.Replace(terms, "$$COMPANY_EMAIL$$", hotspot.BusinessEmail, -1)
-	terms = strings.Replace(terms, "$$COMPANY_DPO$$", hotspot.BusinessDPO, -1)
-	terms = strings.Replace(terms, "$$COMPANY_DPO_MAIL$$", hotspot.BusinessDPOMail, -1)
-
 	marketings := configuration.Config.Disclaimers.MarketingUse
-	marketings = strings.Replace(marketings, "$$COMPANY_NAME$$", hotspot.BusinessName, -1)
-	marketings = strings.Replace(marketings, "$$COMPANY_VAT$$", hotspot.BusinessVAT, -1)
-	marketings = strings.Replace(marketings, "$$COMPANY_ADDRESS$$", hotspot.BusinessAddress, -1)
-	marketings = strings.Replace(marketings, "$$COMPANY_EMAIL$$", hotspot.BusinessEmail, -1)
-	marketings = strings.Replace(marketings, "$$COMPANY_DPO$$", hotspot.BusinessDPO, -1)
-	marketings = strings.Replace(marketings, "$$COMPANY_DPO_MAIL$$", hotspot.BusinessDPOMail, -1)
+
+	var termsMessage bytes.Buffer
+	var marketingMessage bytes.Buffer
+
+	t := template.Must(template.New("terms").Parse(terms))
+	m := template.Must(template.New("marketings").Parse(marketings))
+
+	errT := t.Execute(&termsMessage, &hotspot)
+	if errT != nil {
+		fmt.Println(errT)
+	}
+	errM := m.Execute(&marketingMessage, &hotspot)
+	if errM != nil {
+		fmt.Println(errM)
+	}
+
+	terms = termsMessage.String()
+	marketings = marketingMessage.String()
 
 	// get integration privacy text
 	db := database.Instance()

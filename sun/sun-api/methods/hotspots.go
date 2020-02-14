@@ -112,12 +112,8 @@ func UpdateHotspot(c *gin.Context) {
 	if len(json.BusinessEmail) > 0 {
 		hotspot.BusinessEmail = json.BusinessEmail
 	}
-	if len(json.BusinessDPO) > 0 {
-		hotspot.BusinessDPO = json.BusinessDPO
-	}
-	if len(json.BusinessDPOMail) > 0 {
-		hotspot.BusinessDPOMail = json.BusinessDPOMail
-	}
+	hotspot.BusinessDPO = json.BusinessDPO
+	hotspot.BusinessDPOMail = json.BusinessDPOMail
 
 	db.Save(&hotspot)
 

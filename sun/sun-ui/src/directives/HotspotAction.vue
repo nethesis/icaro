@@ -77,13 +77,13 @@
               <div class="form-group">
                 <label class="col-sm-4 control-label" for="textInput2-modal-markup">{{ $t("hotspot.business_dpo") }}</label>
                 <div class="col-sm-8">
-                  <input required v-model="currentObj.business_dpo" type="text" id="textInput2-modal-markup" class="form-control" :placeholder="$t('hotspot.business_dpo')">
+                  <input v-model="currentObj.business_dpo" type="text" id="textInput2-modal-markup" class="form-control" :placeholder="$t('hotspot.business_dpo')">
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-4 control-label" for="textInput2-modal-markup">{{ $t("hotspot.business_dpo_mail") }}</label>
                 <div class="col-sm-8">
-                  <input required v-model="currentObj.business_dpo_mail" type="email" id="textInput2-modal-markup" class="form-control" :placeholder="$t('hotspot.business_dpo_mail')">
+                  <input v-model="currentObj.business_dpo_mail" type="email" id="textInput2-modal-markup" class="form-control" :placeholder="$t('hotspot.business_dpo_mail')">
                 </div>
               </div>
               <div v-if="errors.update" class="alert alert-danger alert-dismissable">
