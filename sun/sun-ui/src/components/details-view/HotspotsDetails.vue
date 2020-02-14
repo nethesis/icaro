@@ -556,6 +556,19 @@
                     :type="getInputType(pref.key, pref.value)"
                     class="form-control"
                   />
+
+                  <select
+                    v-on:change="textStyleChanged(pref)"
+                    v-model="pref.value"
+                    class="form-control"
+                    v-if="pref.key == 'captive_12_text_style'"
+                  >
+                    <optgroup
+                      v-for="textStyle in textStyles" v-bind:key="textStyle"
+                      :style="{ 'font-family': textStyle }">
+                      <option>{{ textStyle }}</option>
+                    </optgroup>
+                  </select>
                 </div>
               </div>
               <div class="form-group">
@@ -1923,7 +1936,16 @@ export default {
       smsMaxCountAdd: 0,
       showVoucherPrint: false,
       vouchersToPrint: [],
-      advancedFilters: false
+      advancedFilters: false,
+      textStyles: [
+        "Roboto",
+        "Hind",
+        "Fira Sans Extra Condensed",
+        "Dosis",
+        "EB Garamond",
+        "Playfair Display",
+        "Playfair Display SC",
+      ]
     };
   },
   methods: {
@@ -2260,6 +2282,10 @@ export default {
               this.preferences.textColor = pref.value;
             }
 
+            if (pref.key == "captive_12_text_style") {
+              this.preferences.textStyle = pref.value;
+            }
+
             if (pref.key == "sms_login_max") {
               this.smsMaxCount = pref.value;
             }
@@ -2306,6 +2332,12 @@ export default {
       } else {
         window.$("#captive-preview").css("background-image", "none");
       }
+
+      // font syle
+      window.$("#captive-preview h2").css("font-family", this.preferences.textStyle);
+      window.$("#captive-preview h3").css("font-family", this.preferences.textStyle);
+      window.$("#captive-preview p").css("font-family", this.preferences.textStyle);
+      window.$("#captive-preview a.green.button").css("font-family", this.preferences.textStyle);
     },
     updatePreferences() {
       this.preferences.isLoading = true;
@@ -2529,6 +2561,11 @@ export default {
         pref.value = "";
         this.preferences.backgroundImage = pref.value;
       }
+      this.updateCaptivePreview();
+      this.$forceUpdate();
+    },
+    textStyleChanged(pref) {
+      this.preferences.textStyle = pref.value;
       this.updateCaptivePreview();
       this.$forceUpdate();
     },

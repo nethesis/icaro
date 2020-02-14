@@ -55,6 +55,12 @@
             // text color
             $("div.ui.segment h3").css("color", success.body.preferences.captive_11_text_color || '#f00');
             $("div.ui.segment p").css("color", success.body.preferences.captive_11_text_color || '#383838');
+
+            // text syle
+            $("h2").css("font-family", success.body.preferences.captive_12_text_style || 'Roboto');
+            $("div.ui.segment h3").css("font-family", success.body.preferences.captive_12_text_style || 'Roboto');
+            $("div.ui.segment p").css("font-family", success.body.preferences.captive_12_text_style || 'Roboto');
+            $("div.ui.segment a.green.button").css("font-family", success.body.preferences.captive_12_text_style || 'Roboto');
           }, 300);
         }, function(error) {
           console.error(error)

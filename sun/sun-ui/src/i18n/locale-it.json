@@ -80,6 +80,7 @@
       "captive_9_container_bg_color": "Colore e trasparenza container Captive Portal",
       "captive_10_title_color": "Colore Titolo Captive Portal",
       "captive_11_text_color": "Colore Testo Captive Portal",
+      "captive_12_text_style": "Stile testo Captive Portal",
       "voucher_expiration_days": "Durata account con Voucher (giorni)",
       "sms_login": "SMS Login",
       "email_login": "Email Login",

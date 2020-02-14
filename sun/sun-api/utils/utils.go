@@ -63,6 +63,7 @@ func SetDefaultHotspotPreferences(hotspotId int) {
 	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "captive_9_container_bg_color", Value: configuration.Config.CaptivePortal.ContainerBgColor})
 	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "captive_10_title_color", Value: configuration.Config.CaptivePortal.TitleColor})
 	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "captive_11_text_color", Value: configuration.Config.CaptivePortal.TextColor})
+	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "captive_12_text_style", Value: configuration.Config.CaptivePortal.TextStyle})
 
 	// set marketing defaults
 	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "marketing_0_reason_country", Value: "false"})

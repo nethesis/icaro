@@ -23,7 +23,8 @@
         "bgImage": "/opt/icaro/static/bgImage.jpg",
         "containerBgColor": "{{ icaro.sun_api.captive_portal_container_bg_color }}",
         "titleColor": "{{ icaro.sun_api.captive_portal_title_color }}",
-        "textColor": "{{ icaro.sun_api.captive_portal_text_color }}"
+        "textColor": "{{ icaro.sun_api.captive_portal_text_color }}",
+        "textStyle": "{{ icaro.sun_api.captive_portal_text_style }}"
     },
     "survey": {
         "feedback_body_text": {{ lookup('file', 'files/feedback_body') | to_json }},
