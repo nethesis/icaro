@@ -39,8 +39,8 @@ func GetPrivacies(c *gin.Context) {
 	hotspotUuid := c.Param("hotspot_uuid")
 	hotspot := utils.GetHotspotByUuid(hotspotUuid)
 
-	var hotspotIntegration models.HotspotIntegration
-	var integration models.Integration
+	var hotspotIntegrations []models.HotspotIntegration
+	var integrations []models.Integration
 
 	if hotspot.Id == 0 {
 		c.JSON(http.StatusNotFound, gin.H{"id": hotspot.Id, "status": "hotspot not found"})
@@ -70,12 +70,12 @@ func GetPrivacies(c *gin.Context) {
 
 	// get integration privacy text
 	db := database.Instance()
-	db.Where("hotspot_id in (?)", hotspot.Id).First(&hotspotIntegration)
+	db.Where("hotspot_id in (?)", hotspot.Id).Find(&hotspotIntegrations)
 
-	if hotspotIntegration.Id != 0 {
-		db.Where("id = ?", hotspotIntegration.IntegrationId).First(&integration)
+	for _, hotspotIntegration := range hotspotIntegrations {
+		db.Where("id = ?", hotspotIntegration.IntegrationId).Find(&integrations)
 
-		if integration.Id != 0 {
+		for _, integration := range integrations {
 			terms += "\n" + integration.Privacy
 		}
 	}

@@ -38,8 +38,8 @@ import (
 )
 
 func GetWingsPrefs(c *gin.Context) {
-	var hotspotIntegration models.HotspotIntegration
-	var integration models.Integration
+	var hotspotIntegrations []models.HotspotIntegration
+	var integrations []models.Integration
 
 	uuid := c.Query("uuid")
 
@@ -91,12 +91,12 @@ func GetWingsPrefs(c *gin.Context) {
 
 	// get integration privacy text
 	db := database.Instance()
-	db.Where("hotspot_id in (?)", hotspot.Id).First(&hotspotIntegration)
+	db.Where("hotspot_id in (?)", hotspot.Id).Find(&hotspotIntegrations)
 
-	if hotspotIntegration.Id != 0 {
-		db.Where("id = ?", hotspotIntegration.IntegrationId).First(&integration)
+	for _, hotspotIntegration := range hotspotIntegrations {
+		db.Where("id = ?", hotspotIntegration.IntegrationId).Find(&integrations)
 
-		if integration.Id != 0 {
+		for _, integration := range integrations {
 			terms += "\n" + integration.Privacy
 		}
 	}

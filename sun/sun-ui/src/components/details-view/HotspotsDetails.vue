@@ -726,12 +726,12 @@
           <div v-if="!info.privacy.isLoading" class="card-pf-body">
             <div class="list-details">
               <dt>{{ $t("hotspot.marketing_info") }}</dt>
-              <textarea id="marketings-info" :value="info.privacy.data.marketings"></textarea>
+              <textarea readonly id="marketings-info" :value="info.privacy.data.marketings"></textarea>
             </div>
             <div class="list-details">
               <dt>{{ $t("hotspot.terms_info") }}</dt>
               <dd>
-                <textarea :value="info.privacy.data.terms"></textarea>
+                <textarea readonly :value="info.privacy.data.terms"></textarea>
               </dd>
             </div>
           </div>
