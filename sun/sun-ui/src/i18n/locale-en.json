@@ -342,7 +342,18 @@
       "sent_last_7_days": "Sent last 7 days",
       "sent_last_15_days": "Sent last 15 days",
       "sent_last_month": "Sent last month",
-      "sent_this_period": "Sent this period"
+      "sent_this_period": "Sent this period",
+      "account_type_reports": "Account types",
+      "account_types_whatsapp": "Whatsapp",
+      "account_types_facebook": "Facebook",
+      "account_types_instagram": "Instagram",
+      "account_types_linkedin": "LinkedIn",
+      "account_types_mac": "MAC Address",
+      "account_types_sms": "SMS",
+      "account_types_email": "Email",
+      "account_types_voucher": "Voucher",
+      "in_this_period": "In this period",
+      "distribution": "Distribution"
     },
     "marketing": {
       "ask_for_reason_country": "Ask for reason and nationality",

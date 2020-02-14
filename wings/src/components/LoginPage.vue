@@ -61,13 +61,13 @@
       <div class="ui divider"></div>
       <div class="ui relaxed list">
         <div v-if="hotspot.preferences.sms_login == 'true'" class="item">
-          <div @click="changeRoute('/login/sms', false)" class="ui button green big fluid">
+          <div @click="changeRoute('/login/sms', false)" class="ui button yellow big fluid">
             <i class="talk icon"></i>
             SMS
           </div>
         </div>
         <div v-if="hotspot.preferences.email_login == 'true'" class="item">
-          <div @click="changeRoute('/login/email', false)" class="ui button yellow big fluid">
+          <div @click="changeRoute('/login/email', false)" class="ui button red big fluid">
             <i class="mail icon"></i>
             Email
           </div>

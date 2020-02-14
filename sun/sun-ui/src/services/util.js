@@ -238,13 +238,40 @@ var UtilService = {
       }
       var finalCSV = "data:text/csv;charset=utf-8," + header + body;
       var encodedUri = encodeURI(finalCSV);
-      var link = document.getElementById('download-csv');
+      var link = document.getElementById("download-csv");
       link.setAttribute("href", encodedUri);
       var now = new Date();
       var date =
         now.getFullYear() + "_" + (now.getMonth() + 1) + "_" + now.getDate();
       link.setAttribute("download", name + date + ".csv");
       link.click();
+    },
+    accountTypeColor(account) {
+      switch (account) {
+        case "whatsapp":
+          return "#21ba45";
+
+        case "facebook":
+          return "#3b5998";
+
+        case "instagram":
+          return "#49769c";
+
+        case "linkedin":
+          return "#1f88be";
+
+        case "email":
+          return "#db2828";
+
+        case "sms":
+          return "#fbbd08";
+
+        case "mac":
+          return "#767676";
+
+        case "voucher":
+          return "#00b5ad";
+      }
     }
   }
 };

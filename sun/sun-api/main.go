@@ -164,6 +164,8 @@ func DefineAPI(router *gin.Engine) {
 			reportStats.GET("/avg_conn_duration/graph", methods.GetHistoryAvgConnDuration)
 			reportStats.GET("/sms_year/graph", methods.GetHistorySMSYear)
 			reportStats.GET("/sms_history/graph", methods.GetHistorySMSHistory)
+			reportStats.GET("/account_types_graph/graph", methods.GetAccountTypeGraph)
+			reportStats.GET("/account_types_pie/graph", methods.GetAccountTypePie)
 		}
 
 		units := api.Group("/units")
