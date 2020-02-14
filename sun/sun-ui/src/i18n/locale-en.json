@@ -254,6 +254,7 @@
       "unit": "Unit",
       "unit_uuid": "UUID",
       "mac_address": "MAC address",
+      "device_mac": "MAC address",
       "unit_name": "Name",
       "user": "User",
       "username": "Username",
