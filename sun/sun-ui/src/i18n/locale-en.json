@@ -152,7 +152,9 @@
       "from": "From",
       "to": "To",
       "clear": "Clear",
-      "advanced_filters": "Advanced filters"
+      "advanced_filters": "Advanced filters",
+      "create_voucher_custom": "Create custom voucher",
+      "voucher_custom_code": "Code"
     },
     "user": {
       "username": "Username",
