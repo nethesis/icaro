@@ -408,14 +408,14 @@ export default {
             this.charts[graph].datasets = [
               {
                 data: success.body.sets,
-                backgroundColor: success.body.labels.map(function(l) {
+                backgroundColor: success.body.labels && success.body.labels.map(function(l) {
                   return context.accountTypeColor(l);
-                })
+                }) || []
               }
             ];
-            this.charts[graph].labels = success.body.labels.map(function(l) {
+            this.charts[graph].labels = success.body.labels && success.body.labels.map(function(l) {
               return context.$i18n.t("report.account_types_" + l);
-            });
+            }) || [];
           } else {
             if (success.body.sets) {
               for (var s in success.body.sets) {
