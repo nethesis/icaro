@@ -452,7 +452,7 @@
           >
             <div v-if="!preferences.isLoading" class="card-pf-body">
               <div v-for="pref in preferences.global" :key="pref.key" class="form-group">
-                <label class="col-sm-4 control-label" for="textInput-markup">
+                <label class="col-sm-4 control-label">
                   {{$t('hotspot.'+pref.key)}}
                   <span :class="[getPrefIcon(pref.key)]"></span>
                 </label>
@@ -507,19 +507,53 @@
             role="form"
             v-on:submit.prevent="updatePreferencesCaptive(preferences.captive)"
           >
-            <div class="card-pf-body">
+            <div v-if="!preferences.isLoading" class="card-pf-body">
+              <!-- redirect preference: captive_1_redir -->
+              <div :class="[preferences.captive[0].onError ? 'has-error' : '', 'form-group', 'mg-bottom-3r']">
+                <label class="col-sm-4 control-label">
+                  {{$t('hotspot.'+preferences.captive[0].key)}}
+                  <span :class="[getPrefIcon(preferences.captive[0].key)]"></span>
+                </label>
+                <div class="col-sm-6">
+                  <input
+                    required
+                    v-model="preferences.captive[0].value"
+                    :type="getInputType(preferences.captive[0].key, preferences.captive[0].value)"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+              <!-- text preferences: captive_2_title, captive_4_subtitle, captive_6_description -->
               <div
-                v-for="pref in preferences.captive"
+                v-for="pref in [preferences.captive[1], preferences.captive[3], preferences.captive[5]]"
                 :key="pref.key"
-                :class="[pref.onError ? 'has-error' : '', 'form-group']"
+                :class="[pref.onError ? 'has-error' : '', 'form-group', 'col-sm-4', 'captive-portal-pref-inline', 'mg-bottom-3r']"
               >
-                <label class="col-sm-4 control-label" for="textInput-markup">
+                <label class="block control-label">
                   {{$t('hotspot.'+pref.key)}}
                   <span :class="[getPrefIcon(pref.key)]"></span>
                 </label>
-                <div class="col-sm-6">
+                <div>
+                  <input
+                    required
+                    v-model="pref.value"
+                    :type="getInputType(pref.key, pref.value)"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+              <!-- image preferences: captive_3_logo, captive_5_banner, captive_81_bg_image -->
+              <div
+                v-for="pref in [preferences.captive[2], preferences.captive[4], preferences.captive[7]]"
+                :key="pref.key"
+                :class="[pref.onError ? 'has-error' : '', 'form-group', 'col-sm-4', 'captive-portal-pref-inline', 'mg-bottom-3r']"
+              >
+                <label class="block-centered control-label">
+                  {{$t('hotspot.'+pref.key)}}
+                  <span :class="[getPrefIcon(pref.key)]"></span>
+                </label>
+                <div>
                   <picture-input
-                    v-if="pref.key == 'captive_3_logo' || pref.key == 'captive_5_banner' || pref.key == 'captive_8_bg_image'"
                     :ref="'prefInput-'+pref.key"
                     :prefill="urltoFile(pref.value, pref.key)"
                     :alertOnError="false"
@@ -530,53 +564,54 @@
                     :crop="false"
                     :zIndex="1000"
                     :customStrings="uploadLangstexts"
-                    :removable="pref.key == 'captive_8_bg_image'"
+                    :removable="pref.key == 'captive_81_bg_image'"
                     removeButtonClass="btn btn-danger"
                     buttonClass="btn btn-default"
                   ></picture-input>
                   <span v-if="pref.onError" class="help-block">{{$t('upload_file_exceed')}}</span>
-
-                  <vue-editor
-                    :editorToolbar="customToolbar"
-                    v-if="pref.key == 'captive_6_description'"
-                    v-model="pref.value"
-                  ></vue-editor>
-
+                </div>
+              </div>
+              <!-- color preferences: captive_7_background, captive_82_container_bg_color, captive_83_title_color, captive_84_text_color -->
+              <div
+                v-for="pref in [preferences.captive[6], preferences.captive[8], preferences.captive[9], preferences.captive[10]]"
+                :key="pref.key"
+                :class="[pref.onError ? 'has-error' : '', 'form-group', 'col-sm-3', 'captive-portal-pref-inline', 'mg-bottom-3r']"
+              >
+                <label class="block-centered control-label">
+                  {{$t('hotspot.'+pref.key)}}
+                  <span :class="[getPrefIcon(pref.key)]"></span>
+                </label>
+                <div>
                   <sketch-picker
                     @input="onUpdate(pref)"
                     class="absolute-center"
-                    v-if="pref.key == 'captive_7_background' || pref.key == 'captive_9_container_bg_color' || pref.key == 'captive_10_title_color' || pref.key == 'captive_11_text_color'"
                     v-model="pref.value"
                   />
-
-                  <input
-                    required
-                    v-if="pref.key == 'captive_1_redir' || pref.key == 'captive_2_title' || pref.key == 'captive_4_subtitle'"
-                    v-model="pref.value"
-                    :type="getInputType(pref.key, pref.value)"
-                    class="form-control"
-                  />
-
+                </div>
+              </div>
+              <!-- text style: captive_85_text_style -->
+              <div :class="[preferences.captive[11].onError ? 'has-error' : '', 'form-group', 'mg-bottom-3r']">
+                <label class="col-sm-4 control-label">
+                  {{$t('hotspot.'+preferences.captive[11].key)}}
+                  <span :class="[getPrefIcon(preferences.captive[11].key)]"></span>
+                </label>
+                <div class="col-sm-6">
                   <select
-                    v-on:change="textStyleChanged(pref)"
-                    v-model="pref.value"
+                    v-on:change="textStyleChanged(preferences.captive[11])"
+                    v-model="preferences.captive[11].value"
                     class="form-control"
-                    v-if="pref.key == 'captive_12_text_style'"
                   >
-                    <optgroup
-                      v-for="textStyle in textStyles" v-bind:key="textStyle"
-                      :style="{ 'font-family': textStyle }">
-                      <option>{{ textStyle }}</option>
-                    </optgroup>
+                    <option v-for="textStyle in textStyles" v-bind:key="textStyle">
+                      {{ textStyle }}
+                    </option>
                   </select>
                 </div>
               </div>
+              <!-- captive portal preview -->
               <div class="form-group">
-                <label
-                  class="col-sm-4 control-label"
-                  for="textInput-markup"
+                <label class="block-centered control-label"
                 >{{$t('hotspot.captive_preview')}}</label>
-                <div class="col-sm-6">
+                <div class="">
                   <div v-if="preferences.isLoading" class="captive-preview">
                     <div class="spinner spinner-lg absolute-center"></div>
                   </div>
@@ -1938,6 +1973,7 @@ export default {
       vouchersToPrint: [],
       advancedFilters: false,
       textStyles: [
+        "Lato",
         "Roboto",
         "Hind",
         "Fira Sans Extra Condensed",
@@ -2266,23 +2302,23 @@ export default {
               this.preferences.backgroundColor = pref.value;
             }
 
-            if (pref.key == "captive_8_bg_image") {
+            if (pref.key == "captive_81_bg_image") {
               this.preferences.backgroundImage = pref.value;
             }
 
-            if (pref.key == "captive_9_container_bg_color") {
+            if (pref.key == "captive_82_container_bg_color") {
               this.preferences.containerBgColor = pref.value;
             }
 
-            if (pref.key == "captive_10_title_color") {
+            if (pref.key == "captive_83_title_color") {
               this.preferences.titleColor = pref.value;
             }
 
-            if (pref.key == "captive_11_text_color") {
+            if (pref.key == "captive_84_text_color") {
               this.preferences.textColor = pref.value;
             }
 
-            if (pref.key == "captive_12_text_style") {
+            if (pref.key == "captive_85_text_style") {
               this.preferences.textStyle = pref.value;
             }
 
@@ -2329,6 +2365,7 @@ export default {
       if (this.preferences.backgroundImage) {
         window.$("#captive-preview").css("background-image", 'url("' + this.preferences.backgroundImage + '")');
         window.$("#captive-preview").css("background-size", "cover");
+        window.$("#captive-preview").css("background-position", "center");
       } else {
         window.$("#captive-preview").css("background-image", "none");
       }
@@ -2385,7 +2422,7 @@ export default {
         return value;
       } else {
         var rgb_hex = value.hex;
-        var a_hex = Math.floor(value.a * 255).toString(16);
+        var a_hex = Math.floor(value.a * 255).toString(16).padStart(2, '0');
         return rgb_hex + a_hex;
       }
     },
@@ -2400,7 +2437,7 @@ export default {
             if (typeof pref.value == "boolean") {
               pref.value = pref.value.toString();
             }
-            if (pref.key == "captive_7_background" || pref.key == "captive_9_container_bg_color" || pref.key == "captive_10_title_color" || pref.key == "captive_11_text_color") {
+            if (pref.key == "captive_7_background" || pref.key == "captive_82_container_bg_color" || pref.key == "captive_83_title_color" || pref.key == "captive_84_text_color") {
               pref.value = this.getHexValue(pref.value);
             }
             this.hsPrefModify(
@@ -2557,7 +2594,7 @@ export default {
       this.downloadCSV(csv.cols, csv.rows, "vouchers");
     },
     onRemoved(pref) {
-      if (pref.key == 'captive_8_bg_image') {
+      if (pref.key == 'captive_81_bg_image') {
         pref.value = "";
         this.preferences.backgroundImage = pref.value;
       }
@@ -2577,7 +2614,7 @@ export default {
         pref.onError = false;
         pref.value = this.$refs["prefInput-" + pref.key][0].image;
 
-        if (pref.key == 'captive_8_bg_image') {
+        if (pref.key == 'captive_81_bg_image') {
           this.preferences.backgroundImage = pref.value;
         }
       }
@@ -2587,11 +2624,11 @@ export default {
     onUpdate(pref) {
       if (pref.key == 'captive_7_background') {
         $("#captive-preview").css("background-color", this.getHexValue(pref.value));
-      } else if (pref.key == 'captive_9_container_bg_color') {
+      } else if (pref.key == 'captive_82_container_bg_color') {
         $("#captive-preview div.ui.segment").css("background-color", this.getHexValue(pref.value));
-      } else if (pref.key == 'captive_10_title_color') {
+      } else if (pref.key == 'captive_83_title_color') {
         $("#captive-preview h2").css("color", this.getHexValue(pref.value));
-      } else if (pref.key == 'captive_11_text_color') {
+      } else if (pref.key == 'captive_84_text_color') {
         $("#captive-preview h3").css("color", this.getHexValue(pref.value));
         $("#captive-preview p").css("color", this.getHexValue(pref.value));
       }
@@ -2926,4 +2963,25 @@ textarea {
   ) !important;
   border-color: #b35c00 !important;
 }
+
+label.block {
+  display: block;
+  text-align: left;
+}
+
+label.block-centered {
+  display: block;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.captive-portal-pref-inline {
+  padding-left: 4rem;
+  padding-right: 4rem;
+}
+
+.mg-bottom-3r {
+  margin-bottom: 3rem;
+}
+
 </style>

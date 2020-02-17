@@ -39,28 +39,29 @@
           $("body").css("background-color", success.body.preferences.captive_7_background || '#2a87be');
 
           // background image
-          if (success.body.preferences.captive_8_bg_image) {
+          if (success.body.preferences.captive_81_bg_image) {
             $("body").css("height", "100vh");
             $("body").css("background-size", "cover");
-            $("body").css("background-image", 'url("' + success.body.preferences.captive_8_bg_image + '")');
+            $("body").css("background-position", "center");
+            $("body").css("background-image", 'url("' + success.body.preferences.captive_81_bg_image + '")');
           }
 
           setTimeout(function() {
             // container color and opacity
-            $("div.ui.segment").css("background-color", success.body.preferences.captive_9_container_bg_color || '#fff9');
+            $("div.ui.segment").css("background-color", success.body.preferences.captive_82_container_bg_color || '#fff9');
 
             // title color
-            $("h2").css("color", success.body.preferences.captive_10_title_color || '#fff');
+            $("h2").css("color", success.body.preferences.captive_83_title_color || '#fff');
 
             // text color
-            $("div.ui.segment h3").css("color", success.body.preferences.captive_11_text_color || '#f00');
-            $("div.ui.segment p").css("color", success.body.preferences.captive_11_text_color || '#383838');
+            $("div.ui.segment h3").css("color", success.body.preferences.captive_84_text_color || '#f00');
+            $("div.ui.segment p").css("color", success.body.preferences.captive_84_text_color || '#383838');
 
             // text syle
-            $("h2").css("font-family", success.body.preferences.captive_12_text_style || 'Roboto');
-            $("div.ui.segment h3").css("font-family", success.body.preferences.captive_12_text_style || 'Roboto');
-            $("div.ui.segment p").css("font-family", success.body.preferences.captive_12_text_style || 'Roboto');
-            $("div.ui.segment a.green.button").css("font-family", success.body.preferences.captive_12_text_style || 'Roboto');
+            $("h2").css("font-family", success.body.preferences.captive_85_text_style || 'Lato');
+            $("div.ui.segment h3").css("font-family", success.body.preferences.captive_85_text_style || 'Lato');
+            $("div.ui.segment p").css("font-family", success.body.preferences.captive_85_text_style || 'Lato');
+            $("div.ui.segment a.green.button").css("font-family", success.body.preferences.captive_85_text_style || 'Lato');
           }, 300);
         }, function(error) {
           console.error(error)
@@ -157,5 +158,11 @@
     width: 100%;
     height: 86px;
     resize: vertical;
+  }
+  
+  .ui.segments {
+    border: none !important;
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
   }
 </style>

@@ -29,7 +29,7 @@ icaro:
     captive_portal_container_bg_color: "#ffffff99"
     titleColor: "#ffffff"
     textColor: "#383838"
-    textStyle: "Roboto"
+    textStyle: "Lato"
     email_from: "admin@example.com"
     email_smtp_host: "EmailSMTPHost"
     email_smtp_port: "25"

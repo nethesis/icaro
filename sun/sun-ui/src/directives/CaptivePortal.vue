@@ -45,7 +45,6 @@ export default {
   -moz-osx-font-smoothing: grayscale !important;
   text-align: center !important;
   color: #eff7fc !important;
-  margin-top: 30px !important;
   margin-bottom: 30px !important;
   padding: 25px;
 }
@@ -73,6 +72,12 @@ img {
 
 .ui.small.image {
   width: 450px !important;
+}
+
+.ui.segments {
+  border: none !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
 }
 </style>
 <style scoped src="semantic-ui-offline/semantic.min.css"></style>
