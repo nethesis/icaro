@@ -4,32 +4,38 @@
       <div v-if="choosedMode" class="field" v-bind:class="{ error: errors.badInput }">
         <label>Email</label>
         <div class="ui big left icon input">
-          <input v-model="authEmail" type="email" :placeholder="$t('email.insert_email')">
+          <input v-model="authEmail" type="email" :placeholder="$t('email.insert_email')" />
           <i class="mail icon"></i>
         </div>
       </div>
-      <button
-        v-if="!codeRequested && !choosedMode"
-        v-on:click="chooseMode(true)"
-        class="ui big button green request-code"
-      >
-        {{
-        $t("email.have_code") }}
-      </button>
-
       <p v-if="!codeRequested && !choosedMode" class="not-code-exp">
         <label>{{$t("email.not_code_explain") }}</label>
-        <br>
-        <button v-on:click="chooseMode()" class="ui small button request-code">
+        <br />
+        <br />
+        <button v-on:click="chooseMode()" class="ui big blue button request-code">
           {{
           $t("email.not_have_code") }}
+        </button>
+      </p>
+
+      <p v-if="!codeRequested && !choosedMode" class="not-code-exp">
+        <label>{{$t("email.not_code_explain_else") }}</label>
+        <br />
+        <br />
+        <button
+          v-if="!codeRequested && !choosedMode"
+          v-on:click="chooseMode(true)"
+          class="ui big blue button request-code"
+        >
+          {{
+          $t("email.have_code") }}
         </button>
       </p>
 
       <button
         v-if="!codeRequested && choosedMode"
         v-on:click="getCode(true)"
-        class="ui big button request-code"
+        class="ui blue button request-code"
       >
         {{
         $t("email.get_code") }}
@@ -49,7 +55,7 @@
               v-model="authCode"
               :type="passwordVisible ? 'number' : 'password'"
               :placeholder="$t('email.insert_your_code')"
-            >
+            />
             <i class="braille icon"></i>
             <!-- toggle password visibility -->
             <button
@@ -128,11 +134,11 @@
           <textarea readonly class="text-center" v-model="hotspot.disclaimers.marketing_use"></textarea>
         </div>
         <div class="ui inline">
-          <input id="conditions" v-model="conditions" type="checkbox" class="ui checkbox field">
+          <input id="conditions" v-model="conditions" type="checkbox" class="ui checkbox field" />
           <label for="conditions">{{ $t("login.disclaimer_privacy_accept") }}</label>
         </div>
         <div v-if="hotspot.preferences.marketing_1_enabled == 'true'" class="ui inline">
-          <input id="surveys" v-model="surveys" type="checkbox" class="ui checkbox field">
+          <input id="surveys" v-model="surveys" type="checkbox" class="ui checkbox field" />
           <label for="surveys">{{ $t("login.disclaimer_survey_accept") }}</label>
         </div>
         <button v-on:click="navigate()" class="ui big button green">{{ $t("login.navigate") }}</button>
@@ -504,12 +510,15 @@ a {
 .adjust-top {
   margin-top: 10px !important;
 }
+
 .adjust-top-big {
   margin-top: 20px !important;
 }
+
 .adjust-checkbox {
   display: block !important;
 }
+
 .adjust-button {
   margin-top: 0px !important;
 }
