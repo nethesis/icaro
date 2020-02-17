@@ -190,7 +190,9 @@
       "country": "Country",
       "business": "Business",
       "family": "Family",
-      "other": "Other"
+      "other": "Other",
+      "current_overflow_traffic": "Max traffic reached",
+      "current_overflow_time": "Max time reached"
     },
     "account": {
       "uuid": "Unique ID",

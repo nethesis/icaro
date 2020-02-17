@@ -52,3 +52,19 @@ type Session struct {
 	User   User `json:"user"`
 	UserId int  `db:"user_id" json:"user_id"`
 }
+
+type SessionLimit struct {
+	TrafficBytes    int `db:"traffic_bytes" json:"traffic_bytes"`
+	DurationSeconds int `db:"duration_seconds" json:"duration_seconds"`
+}
+type SessionHistoryLimit struct {
+	TrafficBytes    int `db:"traffic_bytes" json:"traffic_bytes"`
+	DurationSeconds int `db:"duration_seconds" json:"duration_seconds"`
+}
+
+func (SessionLimit) TableName() string {
+	return "sessions"
+}
+func (SessionHistoryLimit) TableName() string {
+	return "session_histories"
+}

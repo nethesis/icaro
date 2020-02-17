@@ -145,11 +145,27 @@
         <td :class="[isExpired(props.row.valid_until) ? 'disabled' : '', 'fancy']">
           <div>
             <strong>{{ $t('user.traffic') }}</strong>
-            : {{ props.row.max_navigation_traffic | byteFormat }}
+            :
+            <span
+              :class="[props.row.max_navigation_traffic != 0 && props.row.max_navigation_traffic_limit > props.row.max_navigation_traffic ? 'red-text' : '']"
+            >
+              {{ props.row.max_navigation_traffic | byteFormat }}
+              <span
+                v-show="props.row.max_navigation_traffic != 0 && props.row.max_navigation_traffic_limit > props.row.max_navigation_traffic"
+              > | {{$t('user.current_overflow_traffic')}}</span>
+            </span>
           </div>
           <div>
             <strong>{{ $t('user.time') }}</strong>
-            : {{ props.row.max_navigation_time | secondsInHour }}
+            :
+            <span
+              :class="[props.row.max_navigation_time != 0 && props.row.max_navigation_time_limit > props.row.max_navigation_time ? 'red-text' : '']"
+            >
+              {{ props.row.max_navigation_time | secondsInHour }}
+              <span
+                v-show="props.row.max_navigation_time != 0 && props.row.max_navigation_time_limit > props.row.max_navigation_time"
+              > | {{$t('user.current_overflow_time')}}</span>
+            </span>
           </div>
         </td>
         <td :class="[isExpired(props.row.valid_until) ? 'disabled' : '', 'fancy']">
@@ -446,7 +462,7 @@ export default {
           } else {
             for (var s in success.body.data) {
               var res = success.body.data[s];
-              this.rows.push(res);
+              this.getUser(res);
             }
           }
           this.total = success.body.total;
@@ -460,6 +476,25 @@ export default {
           console.error(error);
         },
         this.hotspotShowMarketing
+      );
+    },
+    getUser(user) {
+      this.userGet(
+        user.id,
+        success => {
+          user.max_navigation_traffic_limit =
+            success.data.max_navigation_traffic_limit;
+          user.max_navigation_time_limit =
+            success.data.max_navigation_time_limit;
+          this.rows.push(user);
+
+          setTimeout(function() {
+            $('[data-toggle="tooltip"]').tooltip();
+          }, 500);
+        },
+        error => {
+          console.error(error);
+        }
       );
     },
     exportCSVUsers() {
@@ -562,5 +597,8 @@ export default {
 .adjust-size-icon {
   font-size: 18px !important;
   margin-top: 8px;
+}
+.red-text {
+  color: #cc0000;
 }
 </style>

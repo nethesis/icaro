@@ -293,7 +293,9 @@ func GetUsersExpired(c *gin.Context) {
 }
 
 func GetUser(c *gin.Context) {
-	var user models.User
+	var user models.UserJSON
+	var sessionLimit models.SessionLimit
+	var sessionHistoryLimit models.SessionHistoryLimit
 	accountId := c.MustGet("token").(models.AccessToken).AccountId
 
 	userId := c.Param("user_id")
@@ -305,6 +307,13 @@ func GetUser(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No user found!"})
 		return
 	}
+
+	// calculate limits
+	db.Select("SUM(bytes_up) + SUM(bytes_down) as traffic_bytes, SUM(duration) as duration_seconds").Where("user_id = ?", userId).Find(&sessionLimit)
+	db.Select("SUM(bytes_up) + SUM(bytes_down) as traffic_bytes, SUM(duration) as duration_seconds").Where("user_id = ?", userId).Find(&sessionHistoryLimit)
+
+	user.MaxNavigationTrafficLimit = sessionLimit.TrafficBytes + sessionHistoryLimit.TrafficBytes
+	user.MaxNavigationTimeLimit = sessionLimit.DurationSeconds + sessionHistoryLimit.DurationSeconds
 
 	c.JSON(http.StatusOK, user)
 }
