@@ -62,5 +62,3 @@ Le credenziali di accesso al servizio, che l’utente ha l’obbligo di custodir
 
 Il Fornitore del servizio:
 {{ .BusinessName }} (P.IVA/C.F. : {{ .BusinessVAT }}) con sede legale in {{ .BusinessAddress }}.
-
-Integrazioni con Terze parti:

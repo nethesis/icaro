@@ -76,7 +76,7 @@ func GetPrivacies(c *gin.Context) {
 		db.Where("id = ?", hotspotIntegration.IntegrationId).Find(&integrations)
 
 		for _, integration := range integrations {
-			terms += "\n" + integration.Privacy
+			marketings += "\n" + integration.Privacy
 		}
 	}
 
