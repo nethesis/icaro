@@ -71,6 +71,18 @@ func GetWingsPrefs(c *gin.Context) {
 	terms := configuration.Config.Disclaimers.TermsOfUse
 	marketings := configuration.Config.Disclaimers.MarketingUse
 
+	// get integration privacy text
+	db := database.Instance()
+	db.Where("hotspot_id in (?)", hotspot.Id).Find(&hotspotIntegrations)
+
+	for _, hotspotIntegration := range hotspotIntegrations {
+		db.Where("id = ?", hotspotIntegration.IntegrationId).Find(&integrations)
+
+		for _, integration := range integrations {
+			hotspot.IntegrationTerms += integration.Privacy + " "
+		}
+	}
+
 	var termsMessage bytes.Buffer
 	var marketingMessage bytes.Buffer
 
@@ -88,18 +100,6 @@ func GetWingsPrefs(c *gin.Context) {
 
 	terms = termsMessage.String()
 	marketings = marketingMessage.String()
-
-	// get integration privacy text
-	db := database.Instance()
-	db.Where("hotspot_id in (?)", hotspot.Id).Find(&hotspotIntegrations)
-
-	for _, hotspotIntegration := range hotspotIntegrations {
-		db.Where("id = ?", hotspotIntegration.IntegrationId).Find(&integrations)
-
-		for _, integration := range integrations {
-			marketings += "\n" + integration.Privacy
-		}
-	}
 
 	wingsPrefs.Disclaimers.TermsOfUse = terms
 	wingsPrefs.Disclaimers.MarketingUse = marketings
