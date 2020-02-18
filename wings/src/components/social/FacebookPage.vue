@@ -1,22 +1,22 @@
 <template>
-  <div class="ui segment form">
-    <div v-if="!authorized && !dedaloError" class="ui active centered inline text loader">
+  <div class="ui form">
+    <div v-if="!authorized && !dedaloError" class="ui active centered inline text loader" :style="textStyle">
       {{
       $t("social.auth_progress") }}...
     </div>
     <div v-if="authorized" class="ui icon positive message">
       <i class="check icon"></i>
       <div class="content">
-        <div class="header">{{ $t("social.auth_success") }}</div>
-        <p>{{ $t("social.auth_success_sub") }}...</p>
+        <div class="header" :style="textStyle">{{ $t("social.auth_success") }}</div>
+        <p :style="textStyle">{{ $t("social.auth_success_sub") }}...</p>
       </div>
     </div>
     <div
       v-if="authorized && $parent.hotspot.preferences.marketing_0_reason_country == 'true' && userId != 0"
     >
-      <h3>{{ $t("login.additional_info") }}</h3>
+      <h3 :style="textStyle">{{ $t("login.additional_info") }}</h3>
       <div class="field">
-        <label>{{ $t("login.country") }}</label>
+        <label :style="textStyle">{{ $t("login.country") }}</label>
         <div class="ui big left icon input">
           <select v-model="additionalCountry">
             <option :value="c.code" v-for="c in countries" v-bind:key="c.code">{{c.name}}</option>
@@ -24,7 +24,7 @@
         </div>
       </div>
       <div class="field">
-        <label>{{ $t("login.reason") }}</label>
+        <label :style="textStyle">{{ $t("login.reason") }}</label>
         <div class="ui big left icon input">
           <select v-model="additionalReason">
             <option value="business">{{$t("login.business")}}</option>
@@ -37,8 +37,8 @@
     <div v-if="dedaloError" class="ui icon negative message">
       <i class="remove icon"></i>
       <div class="content">
-        <div class="header">{{ $t("social.auth_error") }}</div>
-        <p>{{ $t("social.auth_error_sub") }}</p>
+        <div class="header" :style="textStyle">{{ $t("social.auth_error") }}</div>
+        <p :style="textStyle">{{ $t("social.auth_error_sub") }}</p>
       </div>
     </div>
     <div
@@ -47,13 +47,13 @@
     >
       <div class="ui inline">
         <input id="conditions" v-model="conditions" type="checkbox" class="ui checkbox field">
-        <label for="conditions">{{ $t("login.disclaimer_privacy_accept") }}</label>
+        <label for="conditions" :style="textStyle">{{ $t("login.disclaimer_privacy_accept") }}</label>
       </div>
       <div v-if="$parent.hotspot.preferences.marketing_1_enabled == 'true'" class="ui inline">
         <input id="surveys" v-model="surveys" type="checkbox" class="ui checkbox field">
-        <label for="surveys">{{ $t("login.disclaimer_survey_accept") }}</label>
+        <label for="surveys" :style="textStyle">{{ $t("login.disclaimer_survey_accept") }}</label>
       </div>
-      <button v-on:click="navigate()" class="ui big button green">{{ $t("login.navigate") }}</button>
+      <button v-on:click="navigate()" class="ui big button green" :style="buttonStyle">{{ $t("login.navigate") }}</button>
     </div>
   </div>
 </template>
@@ -83,6 +83,8 @@ export default {
           this.$root.$options.hotspot.preferences = success.body.preferences;
           this.$root.$options.hotspot.integrations = success.body.integrations;
           this.hotspot.disclaimers = success.body.disclaimers;
+          this.textColor = success.body.preferences.captive_84_text_color || '#383838';
+          this.textFont = success.body.preferences.captive_85_text_style || 'Lato';
           $("body").css(
             "background-color",
             success.body.preferences.captive_7_background || "#2a87be"
@@ -202,8 +204,23 @@ export default {
       surveys: false,
       countries: require("./../../i18n/countries.json"),
       additionalCountry: "-",
-      additionalReason: "-"
+      additionalReason: "-",
+      textColor: '#383838',
+      textFont: 'Lato',
     };
+  },
+  computed: {
+    textStyle: function () {
+      return {
+        color: this.textColor,
+        'font-family': this.textFont
+      }
+    },
+    buttonStyle: function () {
+      return {
+        'font-family': this.textFont
+      }
+    }
   },
   methods: {
     navigate() {

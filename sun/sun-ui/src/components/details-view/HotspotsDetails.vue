@@ -535,7 +535,6 @@
                 </label>
                 <div>
                   <input
-                    required
                     v-model="pref.value"
                     :type="getInputType(pref.key, pref.value)"
                     class="form-control"
@@ -557,14 +556,14 @@
                     :ref="'prefInput-'+pref.key"
                     :prefill="urltoFile(pref.value, pref.key)"
                     :alertOnError="false"
-                    @change="onChanged(pref)"
-                    @remove="onRemoved(pref)"
+                    @change="onPictureChanged(pref)"
+                    @remove="onPictureRemoved(pref)"
                     :width="100"
                     :height="100"
                     :crop="false"
                     :zIndex="1000"
                     :customStrings="uploadLangstexts"
-                    :removable="pref.key == 'captive_81_bg_image'"
+                    :removable="true"
                     removeButtonClass="btn btn-danger"
                     buttonClass="btn btn-default"
                   ></picture-input>
@@ -583,7 +582,7 @@
                 </label>
                 <div>
                   <sketch-picker
-                    @input="onUpdate(pref)"
+                    @input="onColorUpdated(pref)"
                     class="absolute-center"
                     v-model="pref.value"
                   />
@@ -615,7 +614,7 @@
                   <div v-if="preferences.isLoading" class="captive-preview">
                     <div class="spinner spinner-lg absolute-center"></div>
                   </div>
-                  <captive-portal v-if="!preferences.isLoading" :obj="preferences.captive"></captive-portal>
+                  <captive-portal v-if="!preferences.isLoading" :obj="preferences.captive" class="captive-preview"></captive-portal>
                 </div>
               </div>
             </div>
@@ -2593,10 +2592,14 @@ export default {
       var csv = this.createCSV(this.columns, voucherRows);
       this.downloadCSV(csv.cols, csv.rows, "vouchers");
     },
-    onRemoved(pref) {
+    onPictureRemoved(pref) {
       if (pref.key == 'captive_81_bg_image') {
         pref.value = "";
         this.preferences.backgroundImage = pref.value;
+      } else if (pref.key == 'captive_3_logo') {
+        pref.value = "";
+      } else if (pref.key == 'captive_5_banner') {
+        pref.value = "";
       }
       this.updateCaptivePreview();
       this.$forceUpdate();
@@ -2606,7 +2609,7 @@ export default {
       this.updateCaptivePreview();
       this.$forceUpdate();
     },
-    onChanged(pref) {
+    onPictureChanged(pref) {
       if (this.$refs["prefInput-" + pref.key][0].image.length > 921083) {
         pref.onError = true;
         this.$refs["prefInput-" + pref.key][0].image = pref.value;
@@ -2621,17 +2624,18 @@ export default {
       this.updateCaptivePreview();
       this.$forceUpdate();
     },
-    onUpdate(pref) {
+    onColorUpdated(pref) {
       if (pref.key == 'captive_7_background') {
-        $("#captive-preview").css("background-color", this.getHexValue(pref.value));
+        this.preferences.backgroundColor = this.getHexValue(pref.value);
       } else if (pref.key == 'captive_82_container_bg_color') {
-        $("#captive-preview div.ui.segment").css("background-color", this.getHexValue(pref.value));
+        this.preferences.containerBgColor = this.getHexValue(pref.value);
       } else if (pref.key == 'captive_83_title_color') {
-        $("#captive-preview h2").css("color", this.getHexValue(pref.value));
+        this.preferences.titleColor = this.getHexValue(pref.value);
       } else if (pref.key == 'captive_84_text_color') {
-        $("#captive-preview h3").css("color", this.getHexValue(pref.value));
-        $("#captive-preview p").css("color", this.getHexValue(pref.value));
+        this.preferences.textColor = this.getHexValue(pref.value);
       }
+      this.updateCaptivePreview();
+      this.$forceUpdate();
     },
     getAllMACAuth() {
       this.userGetAll(
@@ -2982,6 +2986,11 @@ label.block-centered {
 
 .mg-bottom-3r {
   margin-bottom: 3rem;
+}
+
+.captive-preview {
+  width: 70%;
+  margin: auto;
 }
 
 </style>

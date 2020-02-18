@@ -1,31 +1,32 @@
 <template>
-  <div class="ui segment form">
+  <div class="ui form">
     <div v-if="!dedaloRequested">
       <div v-if="choosedMode" class="field" v-bind:class="{ error: errors.badInput }">
-        <label>Email</label>
+        <label :style="textStyle">Email</label>
         <div class="ui big left icon input">
           <input v-model="authEmail" type="email" :placeholder="$t('email.insert_email')" />
           <i class="mail icon"></i>
         </div>
       </div>
       <p v-if="!codeRequested && !choosedMode" class="not-code-exp">
-        <label>{{$t("email.not_code_explain") }}</label>
+        <label :style="textStyle">{{$t("email.not_code_explain") }}</label>
         <br />
         <br />
-        <button v-on:click="chooseMode()" class="ui big blue button request-code">
+        <button v-on:click="chooseMode()" class="ui big blue button request-code" :style="buttonStyle">
           {{
           $t("email.not_have_code") }}
         </button>
       </p>
 
       <p v-if="!codeRequested && !choosedMode" class="not-code-exp">
-        <label>{{$t("email.not_code_explain_else") }}</label>
+        <label :style="textStyle">{{$t("email.not_code_explain_else") }}</label>
         <br />
         <br />
         <button
           v-if="!codeRequested && !choosedMode"
           v-on:click="chooseMode(true)"
           class="ui big blue button request-code"
+          :style="buttonStyle"
         >
           {{
           $t("email.have_code") }}
@@ -36,6 +37,7 @@
         v-if="!codeRequested && choosedMode"
         v-on:click="getCode(true)"
         class="ui blue button request-code"
+        :style="buttonStyle"
       >
         {{
         $t("email.get_code") }}
@@ -43,13 +45,13 @@
       <div v-if="errors.badMail" class="ui tiny icon negative message">
         <i class="remove icon"></i>
         <div class="content">
-          <div class="header">{{ $t("email.error_code") }}</div>
-          <p>{{ $t("email.error_code_sub") }}</p>
+          <div class="header" :style="textStyle">{{ $t("email.error_code") }}</div>
+          <p :style="textStyle">{{ $t("email.error_code_sub") }}</p>
         </div>
       </div>
       <div v-if="codeRequested">
         <div class="field">
-          <label>{{ $t("email.code") }}</label>
+          <label :style="textStyle">{{ $t("email.code") }}</label>
           <div class="ui big left icon input">
             <input
               v-model="authCode"
@@ -70,37 +72,38 @@
         </div>
         <div v-if="bannerShow" class="ui compact message info no-margin-top">
           <div class="content">
-            <div class="header">{{$t('email.wait')}}</div>
-            <p>{{$t('email.we_are_sending_email_code')}}</p>
+            <div class="header" :style="textStyle">{{$t('email.wait')}}</div>
+            <p :style="textStyle">{{$t('email.we_are_sending_email_code')}}</p>
           </div>
         </div>
       </div>
       <div class="ui divider"></div>
-      <button v-on:click="back()" class="big ui red button">{{ $t("login.back") }}</button>
+      <button v-on:click="back()" class="big ui red button" :style="buttonStyle">{{ $t("login.back") }}</button>
       <button
         v-on:click="execLogin()"
         :disabled="isDisabled()"
         class="big ui green button"
+        :style="buttonStyle"
       >{{ $t("email.start_navigate") }}</button>
     </div>
     <div v-if="dedaloRequested">
-      <div v-if="!authorized && !errors.dedaloError" class="ui active centered inline text loader">
+      <div v-if="!authorized && !errors.dedaloError" class="ui active centered inline text loader" :style="textStyle">
         {{
         $t("email.auth_progress") }}...
       </div>
       <div v-if="authorized" class="ui icon positive message">
         <i class="check icon"></i>
         <div class="content">
-          <div class="header">{{ $t("email.auth_success") }}</div>
-          <p>{{ $t("email.auth_success_sub") }}...</p>
+          <div class="header" :style="textStyle">{{ $t("email.auth_success") }}</div>
+          <p :style="textStyle">{{ $t("email.auth_success_sub") }}...</p>
         </div>
       </div>
       <div
         v-if="authorized && hotspot.preferences.marketing_0_reason_country == 'true' && userId != 0"
       >
-        <h3>{{ $t("login.additional_info") }}</h3>
+        <h3 :style="textStyle">{{ $t("login.additional_info") }}</h3>
         <div class="field">
-          <label>{{ $t("login.country") }}</label>
+          <label :style="textStyle">{{ $t("login.country") }}</label>
           <div class="ui big left icon input">
             <select v-model="additionalCountry">
               <option :value="c.code" v-for="c in countries" v-bind:key="c.code">{{c.name}}</option>
@@ -108,7 +111,7 @@
           </div>
         </div>
         <div class="field">
-          <label>{{ $t("login.reason") }}</label>
+          <label :style="textStyle">{{ $t("login.reason") }}</label>
           <div class="ui big left icon input">
             <select v-model="additionalReason">
               <option value="business">{{$t("login.business")}}</option>
@@ -121,8 +124,8 @@
       <div v-if="errors.dedaloError" class="ui icon negative message">
         <i class="remove icon"></i>
         <div class="content">
-          <div class="header">{{ $t("email.auth_error") }}</div>
-          <p>{{ $t("email.auth_error_sub") }}</p>
+          <div class="header" :style="textStyle">{{ $t("email.auth_error") }}</div>
+          <p :style="textStyle">{{ $t("email.auth_error_sub") }}</p>
         </div>
       </div>
       <div
@@ -131,13 +134,13 @@
       >
         <div class="ui inline">
           <input id="conditions" v-model="conditions" type="checkbox" class="ui checkbox field" />
-          <label for="conditions">{{ $t("login.disclaimer_privacy_accept") }}</label>
+          <label :style="textStyle" for="conditions">{{ $t("login.disclaimer_privacy_accept") }}</label>
         </div>
         <div v-if="hotspot.preferences.marketing_1_enabled == 'true'" class="ui inline">
           <input id="surveys" v-model="surveys" type="checkbox" class="ui checkbox field" />
-          <label for="surveys">{{ $t("login.disclaimer_survey_accept") }}</label>
+          <label :style="textStyle" for="surveys">{{ $t("login.disclaimer_survey_accept") }}</label>
         </div>
-        <button v-on:click="navigate()" class="ui big button green">{{ $t("login.navigate") }}</button>
+        <button :style="buttonStyle" v-on:click="navigate()" class="ui big button green">{{ $t("login.navigate") }}</button>
       </div>
     </div>
   </div>
@@ -160,6 +163,8 @@ export default {
         this.$root.$options.hotspot.integrations = success.body.integrations;
         this.hotspot.disclaimers = success.body.disclaimers;
         this.hotspot.preferences = success.body.preferences;
+        this.textColor = success.body.preferences.captive_84_text_color || '#383838';
+        this.textFont = success.body.preferences.captive_85_text_style || 'Lato';
 
         if (this.$route.query.integration_done) {
           var context = this;
@@ -205,8 +210,23 @@ export default {
       additionalCountry: "-",
       additionalReason: "-",
       iOS: /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream,
-      passwordVisible: true
+      passwordVisible: true,
+      textColor: '#383838',
+      textFont: 'Lato',
     };
+  },
+  computed: {
+    textStyle: function () {
+      return {
+        color: this.textColor,
+        'font-family': this.textFont
+      }
+    },
+    buttonStyle: function () {
+      return {
+        'font-family': this.textFont
+      }
+    }
   },
   methods: {
     back() {

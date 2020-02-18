@@ -1,12 +1,12 @@
 <template>
-  <div class="ui segment">
+  <div class="ui">
     <div v-if="!hotspot.onError">
       <div v-if="!hotspot.loaded" class="ui active centered inline text loader">{{ $t("splash.retrieve_info") }}...
       </div>
       <div v-if="hotspot.loaded">
-        <h3>{{hotspot.preferences.captive_4_subtitle}}</h3>
+        <h3 :style="textStyle">{{hotspot.preferences.captive_4_subtitle}}</h3>
         <img class="ui centered small image" :src="hotspot.preferences.captive_5_banner" />
-        <p v-html="hotspot.preferences.captive_6_description"></p>
+        <p :style="textStyle" v-html="hotspot.preferences.captive_6_description"></p>
         <div class="ui divider"></div>
         <div class="ui checkbox">
           <input v-model="hotspot.agree" type="checkbox" name="example" />
@@ -17,7 +17,7 @@
         </div>
         <div class="ui divider"></div>
         <router-link :to="hotspot.agree ? '/login' : '/'"
-          :class="['big ui green button', !hotspot.agree ? 'disabled' : '']">{{ $t("splash.start_navigate") }}
+          :class="['big ui green button', !hotspot.agree ? 'disabled' : '']" :style="buttonStyle">{{ $t("splash.start_navigate") }}
         </router-link>
       </div>
     </div>
@@ -47,6 +47,8 @@
         },
         function (success) {
           this.hotspot.preferences = success.body.preferences;
+          this.textColor = success.body.preferences.captive_84_text_color || '#383838';
+          this.textFont = success.body.preferences.captive_85_text_style || 'Lato';
           this.hotspot.loaded = true;
         },
         function (error) {
@@ -59,9 +61,24 @@
           onError: this.$root.$options.hotspot.onError,
           preferences: {},
           loaded: loaded,
-          agree: false
+          agree: false,
+          textColor: '#383838',
+          textFont: 'Lato',
         }
-      };
+      }
+    },
+    computed: {
+      textStyle: function () {
+        return {
+          color: this.textColor,
+          'font-family': this.textFont
+        }
+      },
+      buttonStyle: function () {
+        return {
+          'font-family': this.textFont
+        }
+      }
     },
     methods: {
       showModal() {
