@@ -9,11 +9,10 @@
         <p :style="textStyle" v-html="hotspot.preferences.captive_6_description"></p>
         <div class="ui divider"></div>
         <div class="ui checkbox">
-          <input v-model="hotspot.agree" type="checkbox" name="example" />
-          <label>
-            <span class="terms-space">{{$t('splash.i_agree')}}</span><a class="terms"
-              @click="showModal()">{{$t('splash.agree_terms')}}</a>
-          </label>
+          <input v-model="hotspot.agree" type="checkbox" id="agree-terms" />
+          <label for="agree-terms" class="inline">
+            <span class="terms-space">{{$t('splash.i_agree')}}</span>
+          </label><a class="terms" @click="showModal()">{{$t('splash.agree_terms')}}</a>
         </div>
         <div class="ui divider"></div>
         <router-link :to="hotspot.agree ? '/login' : '/'"
@@ -29,7 +28,7 @@
       </div>
     </div>
 
-    <v-dialog />
+    <v-dialog class="terms-dialog"/>
   </div>
 </template>
 
@@ -131,5 +130,14 @@
 
   .terms-space {
     margin-right: 3px;
+    cursor: default;
+  }
+
+  .terms-dialog {
+    color: #383838;
+  }
+
+  label.inline {
+    display: inline;
   }
 </style>

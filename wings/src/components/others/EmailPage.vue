@@ -12,7 +12,7 @@
         <label :style="textStyle">{{$t("email.not_code_explain") }}</label>
         <br />
         <br />
-        <button v-on:click="chooseMode()" class="ui big blue button request-code" :style="buttonStyle">
+        <button v-on:click="chooseMode()" class="ui blue button request-code" :style="buttonStyle">
           {{
           $t("email.not_have_code") }}
         </button>
@@ -25,7 +25,7 @@
         <button
           v-if="!codeRequested && !choosedMode"
           v-on:click="chooseMode(true)"
-          class="ui big blue button request-code"
+          class="ui blue button request-code"
           :style="buttonStyle"
         >
           {{
