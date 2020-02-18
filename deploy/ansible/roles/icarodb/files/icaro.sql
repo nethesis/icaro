@@ -55,6 +55,9 @@ CREATE TABLE `hotspots` (
   `business_vat` varchar(512),
   `business_address` varchar(512),
   `business_email` varchar(512),
+  `business_dpo` varchar(512),
+  `business_dpo_mail` varchar(512),
+  `integration_terms` text,
   `created` datetime,
   FOREIGN KEY (`account_id`) REFERENCES accounts(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   KEY(`name`),
@@ -375,6 +378,7 @@ CREATE TABLE `integrations` (
   `webhook_token` varchar(250) NOT NULL,
   `pre_auth_redirect_url` varchar(250) NOT NULL,
   `post_auth_redirect_url` varchar(250) NOT NULL,
+  `privacy` varchar(2048),
   PRIMARY KEY(`id`)
 );
 

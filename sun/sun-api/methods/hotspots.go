@@ -29,7 +29,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"github.com/satori/go.uuid"
+	uuid "github.com/satori/go.uuid"
 
 	"github.com/nethesis/icaro/sun/sun-api/database"
 	"github.com/nethesis/icaro/sun/sun-api/models"
@@ -54,6 +54,8 @@ func CreateHotspot(c *gin.Context) {
 		BusinessVAT:     json.BusinessVAT,
 		BusinessAddress: json.BusinessAddress,
 		BusinessEmail:   json.BusinessEmail,
+		BusinessDPO:     json.BusinessDPO,
+		BusinessDPOMail: json.BusinessDPOMail,
 		Created:         time.Now().UTC(),
 	}
 
@@ -110,6 +112,8 @@ func UpdateHotspot(c *gin.Context) {
 	if len(json.BusinessEmail) > 0 {
 		hotspot.BusinessEmail = json.BusinessEmail
 	}
+	hotspot.BusinessDPO = json.BusinessDPO
+	hotspot.BusinessDPOMail = json.BusinessDPOMail
 
 	db.Save(&hotspot)
 
@@ -131,7 +135,7 @@ func GetHotspots(c *gin.Context) {
 	chain := db.Order("name asc, description")
 
 	if len(q) > 0 {
-		chain = chain.Where("business_address LIKE ? OR business_email LIKE ? OR business_name LIKE ? OR business_vat LIKE ? OR description LIKE ? OR name LIKE ?", "%"+q+"%", "%"+q+"%", "%"+q+"%", "%"+q+"%", "%"+q+"%", "%"+q+"%")
+		chain = chain.Where("business_dpo_mail LIKE ? OR business_dpo LIKE ? OR business_address LIKE ? OR business_email LIKE ? OR business_name LIKE ? OR business_vat LIKE ? OR description LIKE ? OR name LIKE ?", "%"+q+"%", "%"+q+"%", "%"+q+"%", "%"+q+"%", "%"+q+"%", "%"+q+"%", "%"+q+"%", "%"+q+"%")
 	}
 
 	if accountId == 1 {

@@ -1,5 +1,5 @@
 insert into accounts values (2, 1, "uuid-gen-12345", "reseller", "My Name", "firstuser",md5("password"),"firstuser@email.org",now());
-insert into hotspots values (1,"ee41e473-84e8-11e8-ab87-8e83d0816a52", 2,"HSTest","HS for development", "Development Ltd", "12345678900", "Street of Null", "dev@example.org",now());
+insert into hotspots values (1,"ee41e473-84e8-11e8-ab87-8e83d0816a52", 2,"HSTest","HS for development", "Development Ltd", "12345678900", "Street of Null", "dev@example.org", "My DPO", "dpo@dpo.it", "", now());
 insert into accounts values (3, 1, "uuid-gen-99999", "customer", "Customer Account", "cust1",md5("cust1"),"cust1@example.com",now());
 insert into accounts_hotspots values (1, 3, 1);
 insert into units values (1,1,'00-00-00-00-00-00','testunitname','testunitdesc','1234-uuid-aaaa','secret',NOW());

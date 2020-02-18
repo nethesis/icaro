@@ -32,6 +32,7 @@ type Integration struct {
 	WebHookToken        string `gorm:"column:webhook_token" json:"-"`
 	PreAuthRedirectUrl  string `db:"pre_auth_redirect_url" json:"pre_auth_redirect_url"`
 	PostAuthRedirectUrl string `db:"post_auth_redirect_url" json:"post_auth_redirect_url"`
+	Privacy             string `db:"privacy" json:"privacy"`
 }
 
 type IntegrationJSON struct {
@@ -46,6 +47,7 @@ type IntegrationJSON struct {
 	PostAuthRedirectUrl string `db:"post_auth_redirect_url" json:"post_auth_redirect_url"`
 	AuthLoginURL        string `json:"auth_login_url"`
 	IV                  string `json:"iv_array"`
+	Privacy             string `db:"privacy" json:"privacy"`
 }
 
 func (IntegrationJSON) TableName() string {

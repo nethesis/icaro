@@ -23,11 +23,15 @@
 package methods
 
 import (
+	"bytes"
+	"fmt"
+	"html/template"
 	"net/http"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/nethesis/icaro/sun/sun-api/configuration"
+	"github.com/nethesis/icaro/sun/sun-api/database"
+	"github.com/nethesis/icaro/sun/sun-api/models"
 	"github.com/nethesis/icaro/wax/utils"
 )
 
@@ -35,22 +39,46 @@ func GetPrivacies(c *gin.Context) {
 	hotspotUuid := c.Param("hotspot_uuid")
 	hotspot := utils.GetHotspotByUuid(hotspotUuid)
 
+	var hotspotIntegrations []models.HotspotIntegration
+	var integrations []models.Integration
+
 	if hotspot.Id == 0 {
 		c.JSON(http.StatusNotFound, gin.H{"id": hotspot.Id, "status": "hotspot not found"})
 		return
 	}
 
 	terms := configuration.Config.Disclaimers.TermsOfUse
-	terms = strings.Replace(terms, "$$COMPANY_NAME$$", hotspot.BusinessName, -1)
-	terms = strings.Replace(terms, "$$COMPANY_VAT$$", hotspot.BusinessVAT, -1)
-	terms = strings.Replace(terms, "$$COMPANY_ADDRESS$$", hotspot.BusinessAddress, -1)
-	terms = strings.Replace(terms, "$$COMPANY_EMAIL$$", hotspot.BusinessEmail, -1)
-
 	marketings := configuration.Config.Disclaimers.MarketingUse
-	marketings = strings.Replace(marketings, "$$COMPANY_NAME$$", hotspot.BusinessName, -1)
-	marketings = strings.Replace(marketings, "$$COMPANY_VAT$$", hotspot.BusinessVAT, -1)
-	marketings = strings.Replace(marketings, "$$COMPANY_ADDRESS$$", hotspot.BusinessAddress, -1)
-	marketings = strings.Replace(marketings, "$$COMPANY_EMAIL$$", hotspot.BusinessEmail, -1)
+
+	// get integration privacy text
+	db := database.Instance()
+	db.Where("hotspot_id in (?)", hotspot.Id).Find(&hotspotIntegrations)
+
+	for _, hotspotIntegration := range hotspotIntegrations {
+		db.Where("id = ?", hotspotIntegration.IntegrationId).Find(&integrations)
+
+		for _, integration := range integrations {
+			hotspot.IntegrationTerms += integration.Privacy + " "
+		}
+	}
+
+	var termsMessage bytes.Buffer
+	var marketingMessage bytes.Buffer
+
+	t := template.Must(template.New("terms").Parse(terms))
+	m := template.Must(template.New("marketings").Parse(marketings))
+
+	errT := t.Execute(&termsMessage, &hotspot)
+	if errT != nil {
+		fmt.Println(errT)
+	}
+	errM := m.Execute(&marketingMessage, &hotspot)
+	if errM != nil {
+		fmt.Println(errM)
+	}
+
+	terms = termsMessage.String()
+	marketings = marketingMessage.String()
 
 	c.JSON(http.StatusOK, gin.H{"terms": terms, "marketings": marketings})
 }

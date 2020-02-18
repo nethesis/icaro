@@ -18,14 +18,14 @@
   export default {
     name: 'App',
     mixins: [AuthMixin],
-    data: function() {
+    data: function () {
       var loading = true
       if (this.validateParams()) {
         this.getPreferences({
           digest: this.$root.$options.hotspot.digest,
           uuid: this.$root.$options.hotspot.uuid,
           sessionid: this.$root.$options.hotspot.sessionid,
-        }, function(success) {
+        }, function (success) {
           this.$root.$options.hotspot.disclaimers = success.body.disclaimers
           this.$root.$options.hotspot.preferences = success.body.preferences
           this.$root.$options.hotspot.socials = success.body.socials
@@ -35,7 +35,7 @@
           this.hotspot.preferences = success.body.preferences
           $("body").css("background-color", success.body.preferences.captive_7_background || '#2a87be');
           this.loading = false
-        }, function(error) {
+        }, function (error) {
           console.error(error)
           $("body").css("background-color", '#fff');
           this.loading = false
@@ -59,7 +59,7 @@
       }
     },
     methods: {
-      validateParams: function() {
+      validateParams: function () {
         var state = false
         if (Object.keys(this.$route.query).length > 0) {
           if (!this.$route.query.digest) {
@@ -127,5 +127,12 @@
 
   .button-dark {
     background-color: #999999 !important;
+  }
+
+  .terms-text {
+    margin: 0px;
+    width: 100%;
+    height: 86px;
+    resize: vertical;
   }
 </style>

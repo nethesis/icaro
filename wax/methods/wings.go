@@ -23,9 +23,11 @@
 package methods
 
 import (
+	"bytes"
+	"fmt"
+	"html/template"
 	"net/http"
 	"strconv"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 
@@ -36,6 +38,9 @@ import (
 )
 
 func GetWingsPrefs(c *gin.Context) {
+	var hotspotIntegrations []models.HotspotIntegration
+	var integrations []models.Integration
+
 	uuid := c.Query("uuid")
 
 	// extract unit info
@@ -64,16 +69,37 @@ func GetWingsPrefs(c *gin.Context) {
 
 	// disclaimers
 	terms := configuration.Config.Disclaimers.TermsOfUse
-	terms = strings.Replace(terms, "$$COMPANY_NAME$$", hotspot.BusinessName, -1)
-	terms = strings.Replace(terms, "$$COMPANY_VAT$$", hotspot.BusinessVAT, -1)
-	terms = strings.Replace(terms, "$$COMPANY_ADDRESS$$", hotspot.BusinessAddress, -1)
-	terms = strings.Replace(terms, "$$COMPANY_EMAIL$$", hotspot.BusinessEmail, -1)
-
 	marketings := configuration.Config.Disclaimers.MarketingUse
-	marketings = strings.Replace(marketings, "$$COMPANY_NAME$$", hotspot.BusinessName, -1)
-	marketings = strings.Replace(marketings, "$$COMPANY_VAT$$", hotspot.BusinessVAT, -1)
-	marketings = strings.Replace(marketings, "$$COMPANY_ADDRESS$$", hotspot.BusinessAddress, -1)
-	marketings = strings.Replace(marketings, "$$COMPANY_EMAIL$$", hotspot.BusinessEmail, -1)
+
+	// get integration privacy text
+	db := database.Instance()
+	db.Where("hotspot_id in (?)", hotspot.Id).Find(&hotspotIntegrations)
+
+	for _, hotspotIntegration := range hotspotIntegrations {
+		db.Where("id = ?", hotspotIntegration.IntegrationId).Find(&integrations)
+
+		for _, integration := range integrations {
+			hotspot.IntegrationTerms += integration.Privacy + " "
+		}
+	}
+
+	var termsMessage bytes.Buffer
+	var marketingMessage bytes.Buffer
+
+	t := template.Must(template.New("terms").Parse(terms))
+	m := template.Must(template.New("marketings").Parse(marketings))
+
+	errT := t.Execute(&termsMessage, &hotspot)
+	if errT != nil {
+		fmt.Println(errT)
+	}
+	errM := m.Execute(&marketingMessage, &hotspot)
+	if errM != nil {
+		fmt.Println(errM)
+	}
+
+	terms = termsMessage.String()
+	marketings = marketingMessage.String()
 
 	wingsPrefs.Disclaimers.TermsOfUse = terms
 	wingsPrefs.Disclaimers.MarketingUse = marketings

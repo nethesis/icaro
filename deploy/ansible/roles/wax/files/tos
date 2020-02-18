@@ -5,13 +5,13 @@ Le presenti condizioni generali definiscono e disciplinano le modalità ed i ter
 Il Fornitore del servizio ha attivato delle aree Hot Spot WiFi limitrofe alla propria sede. L’attivazione del servizio permette, previa registrazione di accedere alla rete Internet in modalità WI-FI nelle aree appositamente abilitate.
  
 2. CARATTERISTICHE DELLA RETE WIFI
-2.1 - Per accedere al servizio WiFi occorre registrarsi on-line; la password di accesso sarà inviata al telefono cellulare o all’indirizzo e-mail indicato in fase di registrazione, salva l’ipotesi di autenticazione con account social scelti dal fornitore del servizio. 
+2.1 - Per accedere al servizio WiFi occorre registrarsi on-line; la password di accesso sarà inviata al telefono cellulare o all’indirizzo e-mail indicato in fase di registrazione, salva l’ipotesi di autenticazione con account social scelti dal fornitore del servizio.
 2.2 - Per utilizzare il servizio è necessario: 
     • recarsi in un'area coperta dal servizio WiFi del fornitore;
     • eseguire una scansione delle reti disponibili e selezionare la rete WiFi del fornitore;
     • si aprirà in automatico il pannello del captive portal che permette di utilizzare il servizio;
     • se non si aprisse in automatico aprire il browser internet e collegarsi in http ad un qualsisi sito internet e la homepage di accesso al servizio apparirà automaticamente;
-    • accedere utilizzando una delle modalità di autenticazione disponibili: Facebook, Instagram o Linkedin oppure tramite email o ancora via SMS (con queste 2 ultime modalità si riceverà una password per email o SMS a seconda della scelta fatta).
+    • accedere utilizzando una delle modalità di autenticazione disponibili: Facebook, Instagram o Linkedin oppure tramite email, SMS, WhatsApp (con queste 3 ultime modalità si riceverà una password di accesso via email, SMS o WhatsApp a seconda della scelta fatta).
 2.3 - Il servizio WiFi non prevede un servizio di assistenza fornito dal Fornitore del servizio, contattare eventualmente il responsabile della struttura che ospita il servizio.
  
 3. DESCRIZIONE E CARATTERISTICHE DEL SERVIZIO
@@ -21,7 +21,7 @@ Il Fornitore del servizio ha attivato delle aree Hot Spot WiFi limitrofe alla pr
 3.4 - Con la richiesta di abilitazione l'utente deve dichiarare di aver attentamente letto ed espressamente accettato tutti i termini e le condizioni di utilizzo del servizio indicate nel presente documento oltre alla documentazione informativa sulla privacy. L’effettuazione del primo utilizzo del servizio costituirà ulteriore implicita accettazione da parte dell'utente delle condizioni contenute nel presente documento.
 3.5 - In nessun caso il Fornitore del servizio sarà ritenuta responsabile del mancato e/o inesatto adempimento o rispetto da parte dell'utente di ogni eventuale procedura di legge e regolamento in relazione all’uso del servizio.
 
-4. EROGAZIONE DEL SERVIZIO 
+4. EROGAZIONE DEL SERVIZIO
 4.1 – Il Fornitore del servizio non offre alcuna garanzia e non è obbligato in alcun modo circa la qualità del servizio, in particolare con riguardo alla tenuta, bontà e perdurare dei collegamenti.
 4.2 - Il Fornitore del servizio si riserva il diritto di sospendere e/o interrompere e/o variare, in qualsiasi momento e senza onere di preavviso, il servizio e non potrà comunque essere considerato responsabile nei confronti sia dell'utente che di terzi per la intervenuta sospensione ovvero interruzione. In tal caso, l’utente non potrà vantare diritti all'utilizzazione del servizio.
 4.3 - Il Fornitore del servizio potrà integrare e/o modificare unilateralmente, in qualsiasi momento e senza preavviso, le condizioni e i termini del presente documento. Le eventuali modifiche e/o integrazioni potranno essere comunicate all'utente, tramite comunicazione sulla pagina di login e opportunamente pubblicate nel sito web. La continuazione nell'utilizzo del servizio successivamente alla comunicazione implica di fatto l'accettazione delle nuove condizioni.
@@ -30,6 +30,7 @@ Il Fornitore del servizio ha attivato delle aree Hot Spot WiFi limitrofe alla pr
 5.1 - L'accesso al servizio può avvenire nelle seguenti modalità:
 a) Accesso tramite social network (Facebook, Instagram, Linkedin), in questo caso l’utente accede al sistema autenticandosi con le stesse credenziali con cui si collega allo specifico social network. L’autenticazione viene effettuata direttamente sul social e non coinvolge il sistema Hot Spot che pertanto non può disporre in alcun modo dei dati di accesso dell’utente.
 b) Accesso tramite indirizzo email o numero telefonico, in questo caso l’utente inserisce la propria email o il proprio numero telefonico e riceve un codice tramite il quale potrà autenticarsi. Il codice (password) sarà generata in automatico dal sistema, in caso di necessità l’utente può richiedere un nuovo codice.
+c) Accesso tramite WhatsApp, cliccando su questa modalità viene aperto automaticamente WhatsApp dove sarà presente un messaggio precompilato da inviare, appena inviato il messaggio si riceverà un codice d'accesso all'hotspot tramite WhatsApp. Il codice (password) sarà generata in automatico dal sistema, in caso di necessità l’utente può richiedere un nuovo codice.
 
 La durata del singolo account è variabile e dipende esclusivamente dalla configurazione del servizio.
 5.2 - Le credenziali di accesso sono strettamente personali e non cedibili a terzi, a titolo gratuito o oneroso, temporaneamente o definitivamente. L'utente è il solo ed unico responsabile della conservazione e della riservatezza delle proprie credenziali e, conseguentemente, rimane il solo ed unico responsabile per tutti gli usi ad essa connessi o correlati, (ivi compresi danni e conseguenze pregiudizievoli arrecati al Fornitore del servizio e/o a terzi). L'utente è informato del fatto che la conoscenza delle proprie credenziali da parte di terzi consentirebbe a questi ultimi l'utilizzo del servizio in nome dell'utente medesimo.
@@ -60,8 +61,5 @@ Le credenziali di accesso al servizio, che l’utente ha l’obbligo di custodir
 7.3 - L'utente s'impegna a tenere indenne il Fornitore del servizio da tutte le eventuali perdite, danni, costi e oneri, ivi comprese le eventuali spese legali, che dovessero essere sostenute dall’utente in conseguenza dell'utilizzo del servizio.
 7.4 - Il Fornitore del servizio non sarà responsabile verso l'utente e/o suoi aventi causa e verso terzi per i danni diretti, indiretti o consequenziali, comprese le perdite e i costi supportati in conseguenza a sospensioni o interruzioni del servizio.
 
-
 Il Fornitore del servizio:
-$$COMPANY_NAME$$ (P.IVA/C.F. : $$COMPANY_VAT$$) con sede legale in  $$COMPANY_ADDRESS$$.
-
-
+{{ .BusinessName }} (P.IVA/C.F. : {{ .BusinessVAT }}) con sede legale in {{ .BusinessAddress }}.
