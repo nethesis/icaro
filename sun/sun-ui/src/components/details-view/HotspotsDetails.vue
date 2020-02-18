@@ -524,68 +524,74 @@
                 </div>
               </div>
               <!-- text preferences: captive_2_title, captive_4_subtitle, captive_6_description -->
-              <div
-                v-for="pref in [preferences.captive[1], preferences.captive[3], preferences.captive[5]]"
-                :key="pref.key"
-                :class="[pref.onError ? 'has-error' : '', 'form-group', 'col-sm-4', 'captive-portal-pref-inline', 'mg-bottom-3r']"
-              >
-                <label class="block control-label">
-                  {{$t('hotspot.'+pref.key)}}
-                  <span :class="[getPrefIcon(pref.key)]"></span>
-                </label>
-                <div>
-                  <input
-                    v-model="pref.value"
-                    :type="getInputType(pref.key, pref.value)"
-                    class="form-control"
-                  />
+              <div class="row">
+                <div
+                  v-for="pref in [preferences.captive[1], preferences.captive[3], preferences.captive[5]]"
+                  :key="pref.key"
+                  :class="[pref.onError ? 'has-error' : '', 'col-md-4', 'captive-portal-pref-inline', 'mg-bottom-3r']"
+                >
+                  <label class="block control-label">
+                    {{$t('hotspot.'+pref.key)}}
+                    <span :class="[getPrefIcon(pref.key)]"></span>
+                  </label>
+                  <div>
+                    <input
+                      v-model="pref.value"
+                      :type="getInputType(pref.key, pref.value)"
+                      class="form-control"
+                    />
+                  </div>
                 </div>
               </div>
               <!-- image preferences: captive_3_logo, captive_5_banner, captive_81_bg_image -->
-              <div
-                v-for="pref in [preferences.captive[2], preferences.captive[4], preferences.captive[7]]"
-                :key="pref.key"
-                :class="[pref.onError ? 'has-error' : '', 'form-group', 'col-sm-4', 'captive-portal-pref-inline', 'mg-bottom-3r']"
-              >
-                <label class="block-centered control-label">
-                  {{$t('hotspot.'+pref.key)}}
-                  <span :class="[getPrefIcon(pref.key)]"></span>
-                </label>
-                <div>
-                  <picture-input
-                    :ref="'prefInput-'+pref.key"
-                    :prefill="urltoFile(pref.value, pref.key)"
-                    :alertOnError="false"
-                    @change="onPictureChanged(pref)"
-                    @remove="onPictureRemoved(pref)"
-                    :width="100"
-                    :height="100"
-                    :crop="false"
-                    :zIndex="1000"
-                    :customStrings="uploadLangstexts"
-                    :removable="true"
-                    removeButtonClass="btn btn-danger"
-                    buttonClass="btn btn-default"
-                  ></picture-input>
-                  <span v-if="pref.onError" class="help-block">{{$t('upload_file_exceed')}}</span>
+              <div class="row">
+                <div
+                  v-for="pref in [preferences.captive[2], preferences.captive[4], preferences.captive[7]]"
+                  :key="pref.key"
+                  :class="[pref.onError ? 'has-error' : '', 'col-md-4', 'captive-portal-pref-inline', 'mg-bottom-3r']"
+                >
+                  <label class="block-centered control-label">
+                    {{$t('hotspot.'+pref.key)}}
+                    <span :class="[getPrefIcon(pref.key)]"></span>
+                  </label>
+                  <div>
+                    <picture-input
+                      :ref="'prefInput-'+pref.key"
+                      :prefill="urltoFile(pref.value, pref.key)"
+                      :alertOnError="false"
+                      @change="onPictureChanged(pref)"
+                      @remove="onPictureRemoved(pref)"
+                      :width="100"
+                      :height="100"
+                      :crop="false"
+                      :zIndex="1000"
+                      :customStrings="uploadLangstexts"
+                      :removable="true"
+                      removeButtonClass="btn btn-danger"
+                      buttonClass="btn btn-default"
+                    ></picture-input>
+                    <span v-if="pref.onError" class="help-block">{{$t('upload_file_exceed')}}</span>
+                  </div>
                 </div>
               </div>
               <!-- color preferences: captive_7_background, captive_82_container_bg_color, captive_83_title_color, captive_84_text_color -->
-              <div
-                v-for="pref in [preferences.captive[6], preferences.captive[8], preferences.captive[9], preferences.captive[10]]"
-                :key="pref.key"
-                :class="[pref.onError ? 'has-error' : '', 'form-group', 'col-sm-3', 'captive-portal-pref-inline', 'mg-bottom-3r']"
-              >
-                <label class="block-centered control-label">
-                  {{$t('hotspot.'+pref.key)}}
-                  <span :class="[getPrefIcon(pref.key)]"></span>
-                </label>
-                <div>
-                  <sketch-picker
-                    @input="onColorUpdated(pref)"
-                    class="absolute-center"
-                    v-model="pref.value"
-                  />
+              <div class="row">
+                <div
+                  v-for="pref in [preferences.captive[6], preferences.captive[8], preferences.captive[9], preferences.captive[10]]"
+                  :key="pref.key"
+                  :class="[pref.onError ? 'has-error' : '', 'col-md-6', 'col-lg-3', 'captive-portal-pref-inline', 'mg-bottom-3r']"
+                >
+                  <label class="block-centered control-label">
+                    {{$t('hotspot.'+pref.key)}}
+                    <span :class="[getPrefIcon(pref.key)]"></span>
+                  </label>
+                  <div>
+                    <sketch-picker
+                      @input="onColorUpdated(pref)"
+                      class="absolute-center"
+                      v-model="pref.value"
+                    />
+                  </div>
                 </div>
               </div>
               <!-- text style: captive_85_text_style -->
@@ -2989,8 +2995,9 @@ label.block-centered {
 }
 
 .captive-preview {
-  width: 70%;
+  width: 75%;
   margin: auto;
+  border: none;
 }
 
 </style>
