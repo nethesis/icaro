@@ -76,7 +76,7 @@ img {
   width: 450px !important;
 }
 
-.ui.segments {
+.ui.segment {
   border: none !important;
   box-shadow: none !important;
   -webkit-box-shadow: none !important;
