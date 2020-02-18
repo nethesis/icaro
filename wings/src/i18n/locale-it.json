@@ -4,7 +4,12 @@
             "retrieve_info": "Recupero le informazioni",
             "start_navigate": "Naviga",
             "main_error": "Alcuni parametri mancanti.Impossibile procedere-",
-            "main_error_sub": "Errori durante l'apertura della pagina"
+            "main_error_sub": "Errori durante l'apertura della pagina",
+            "i_agree": "I acconsento alle",
+            "agree_terms": "condizioni generali di utilizzo (ToS e Privacy)",
+            "modal_terms": "Condizioni di utilizzo e trattamento dei dati",
+            "tos": "Condizioni di utilizzo",
+            "privacy": "Privacy"
         },
         "login": {
             "voucher_title": "Voucher",
@@ -40,9 +45,9 @@
             "insert_email": "Inserisci la tua email",
             "insert_your_code": "Inserisci password",
             "code": "Password",
-            "have_code": "Entra con password",
-            "not_have_code": "Richiedi una password",
-            "get_code": "Richiedi password",
+            "have_code": "Accedi",
+            "not_have_code": "Registrati",
+            "get_code": "Registrati",
             "reset_code": "Inviami una nuova password",
             "start_navigate": "Naviga",
             "error_code": "Errore nell'invio della password",
@@ -54,16 +59,17 @@
             "auth_error_sub": "Si è verificato un errore, i motivi potrebbero essere i seguenti: 1)I dati inseriti potrebbero non essere corretti. 2)Il voucher che stai usando potrebbe essere scaduto. 3)Potresti aver raggiunto il tempo massimo consentito giornaliero. 4)Potresti aver raggiunto il traffico massimo consentito giornaliero.",
             "wait": "Solo qualche secondo...",
             "we_are_sending_email_code": "Se non ricevi l'email disconnettiti dalla rete WiFi e poi riconnettiti.Accedi quindi alla tua email e clicca sul link presente nel messaggio per navigare. Attenzione alla casella SPAM!",
-            "not_code_explain": "È la prima volta che ti connetti alla nostra rete Wi-Fi?"
+            "not_code_explain": "È la prima volta che ti connetti alla nostra rete Wi-Fi?",
+            "not_code_explain_else": "Altrimenti"
         },
         "sms": {
             "number": "Numero telefonico",
             "insert_number": "Inserisci il tuo numero telefonico",
             "insert_your_code": "Inserisci la password",
             "code": "Password",
-            "have_code": "Entra con password",
-            "not_have_code": "Richiedi una password",
-            "get_code": "Richiedi password",
+            "have_code": "Accedi",
+            "not_have_code": "Registrati",
+            "get_code": "Registrati",
             "reset_code": "Inviami un nuova password",
             "start_navigate": "Naviga",
             "error_code": "Errore nell'invio della passowrd",
@@ -77,7 +83,8 @@
             "prefix": "Prefisso Internazionale",
             "wait": "Invio SMS in corso...",
             "we_are_sending_sms_code": "Riutilizza la stessa password anche per i prossimi accessi cliccando sul pulsante 'Entra con password'.",
-            "not_code_explain": "È la prima volta che ti connetti alla nostra rete Wi-Fi?"
+            "not_code_explain": "È la prima volta che ti connetti alla nostra rete Wi-Fi?",
+            "not_code_explain_else": "Altrimenti"
         }
     }
 }
