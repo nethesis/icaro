@@ -136,6 +136,10 @@
       "missing_business_address": "Inserisci un indirizzo valido",
       "business_email": "Email del Cliente",
       "missing_business_email": "Inserisci un indirizzo email valido",
+      "business_dpo": "Nome e cognome del DPO",
+      "missing_business_dpo": "Inserire nome e cognome del DPO",
+      "business_dpo_mail": "Indirizzo email deo DPO",
+      "missing_business_dpo_mail": "Inserire email del DPO",
       "show_all": "Mostra tutti (nessun filtro applicato)",
       "privacy": "Disclaimer",
       "marketing_info": "Privacy",
@@ -157,7 +161,9 @@
       "from": "Da",
       "to": "A",
       "clear": "Pulisci",
-      "advanced_filters": "Filtri avanzati"
+      "advanced_filters": "Filtri avanzati",
+      "create_voucher_custom": "Crea un voucher custom",
+      "voucher_custom_code": "Codice"
     },
     "user": {
       "username": "Utente",
@@ -193,7 +199,9 @@
       "country": "Nazione",
       "business": "Business",
       "family": "Famiglia",
-      "other": "Altro"
+      "other": "Altro",
+      "current_overflow_traffic": "Traffico esaurito",
+      "current_overflow_time": "Tempo esaurito"
     },
     "account": {
       "uuid": "ID",
@@ -259,6 +267,7 @@
       "unit": "Unità",
       "unit_uuid": "ID Unità",
       "mac_address": "MAC address",
+      "device_mac": "MAC address",
       "unit_name": "Nome",
       "user": "Utente",
       "username": "Utente",
@@ -344,7 +353,18 @@
       "sent_last_7_days": "Inviati negli ultimi 7 giorni",
       "sent_last_15_days": "Inviati negli ultimi 15 giorni",
       "sent_last_month": "Inviati nell'ultimo mese",
-      "sent_this_period": "Inviati in questo periodo"
+      "sent_this_period": "Inviati in questo periodo",
+      "account_type_reports": "Autenticazione",
+      "account_types_whatsapp": "Whatsapp",
+      "account_types_facebook": "Facebook",
+      "account_types_instagram": "Instagram",
+      "account_types_linkedin": "LinkedIn",
+      "account_types_mac": "MAC Address",
+      "account_types_sms": "SMS",
+      "account_types_email": "Email",
+      "account_types_voucher": "Voucher",
+      "in_this_period": "In questo periodo",
+      "distribution": "Distribuzinoe"
     },
     "marketing": {
       "ask_for_reason_country": "Chiedi nazionalità e motivo del soggiorno",
