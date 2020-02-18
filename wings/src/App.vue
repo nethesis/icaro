@@ -1,14 +1,14 @@
 <template>
-  <div id="app" class="ui container">
+  <div id="app" class="ui segment container" :style="containerStyle">
     <div v-show="loading" class="ui active dimmer">
       <div class="ui loader"></div>
     </div>
     <div v-show="!loading" class="ui center aligned">
-      <h2>{{hotspot.preferences.captive_2_title}}</h2>
+      <h2 :style="titleStyle">{{hotspot.preferences.captive_2_title}}</h2>
       <img :src="hotspot.preferences.captive_3_logo" class="ui centered image tiny">
     </div>
-    <div v-show="!loading" class="ui segments route-container">
-      <router-view class="ui segment"></router-view>
+    <div v-show="!loading" class="ui route-container">
+      <router-view class="ui"></router-view>
     </div>
   </div>
 </template>
@@ -33,11 +33,24 @@
           this.$root.$options.session = {}
           this.hotspot.name = success.body.hotspot_name
           this.hotspot.preferences = success.body.preferences
-          $("body").css("background-color", success.body.preferences.captive_7_background || '#2a87be');
           this.loading = false
-        }, function (error) {
+
+          // background color
+          $("body").css("background-color", success.body.preferences.captive_7_background || '#2a87be');
+
+          // background image
+          if (success.body.preferences.captive_81_bg_image) {
+            $("body").css("height", "100vh");
+            $("body").css("background-size", "cover");
+            $("body").css("background-position", "center");
+            $("body").css("background-image", 'url("' + success.body.preferences.captive_81_bg_image + '")');
+          }
+
+          this.titleColor = success.body.preferences.captive_83_title_color || '#383838'
+          this.textFont = success.body.preferences.captive_85_text_style || 'Lato';
+          this.containerBgColor = success.body.preferences.captive_82_container_bg_color || '#ffffff99';
+        }, function(error) {
           console.error(error)
-          $("body").css("background-color", '#fff');
           this.loading = false
         })
       } else {
@@ -55,6 +68,22 @@
         session: {
           loginDest: '',
           voucherCode: ''
+        },
+        titleColor: '#383838',
+        textFont: 'Lato',
+        containerBgColor: '#ffffff99'
+      }
+    },
+    computed: {
+      titleStyle: function () {
+        return {
+          color: this.titleColor,
+          'font-family': this.textFont
+        }
+      },
+      containerStyle: function () {
+        return {
+          'background-color': this.containerBgColor
         }
       }
     },
@@ -113,10 +142,6 @@
     margin-top: 30px !important;
   }
 
-  .ui.segments {
-    color: #5a5a5a !important;
-  }
-
   .ui.small.image {
     width: 450px !important;
   }
@@ -134,5 +159,11 @@
     width: 100%;
     height: 86px;
     resize: vertical;
+  }
+  
+  .ui.segments {
+    border: none !important;
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
   }
 </style>

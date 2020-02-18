@@ -1,9 +1,9 @@
 <template>
-  <div class="ui segment form">
+  <div class="ui form">
     <div v-if="voucherAvailable && !voucherValidated && !authorized && !dedaloError">
-      <h3>{{ $t("login.voucher_title") }}</h3>
+      <h3 :style="textStyle">{{ $t("login.voucher_title") }}</h3>
       <div class="inline field" v-bind:class="{ error: badInput }">
-        <label>Voucher</label>
+        <label :style="textStyle">Voucher</label>
         <div class="ui big left icon input">
           <input
             v-model="authCode"
@@ -17,27 +17,28 @@
             type="button"
             :class="['ui', 'button', voucherVisible ? '' : 'button-dark' ]"
             @click="toggleVoucherVisibility()"
+            :style="buttonStyle"
           >
             <i class="eye icon no-margin"></i>
           </button>
         </div>
       </div>
-      <button v-on:click="validateCode()" class="ui big button">{{ $t("login.validate_code") }}</button>
+      <button :style="buttonStyle" v-on:click="validateCode()" class="ui big button">{{ $t("login.validate_code") }}</button>
       <div v-if="badCode" class="ui tiny icon negative message">
         <i class="remove icon"></i>
         <div class="content">
-          <div class="header">{{ $t("login.error_voucher_code") }}</div>
-          <p>{{ $t("login.error_voucher_code_sub") }}</p>
+          <div class="header" :style="textStyle">{{ $t("login.error_voucher_code") }}</div>
+          <p :style="textStyle">{{ $t("login.error_voucher_code_sub") }}</p>
         </div>
       </div>
     </div>
     <div
       v-if="!voucherAvailable || (voucherAvailable && voucherValidated) && !authorized && !dedaloError"
     >
-      <h3>{{ $t("login.choose_login") }}</h3>
+      <h3 :style="textStyle">{{ $t("login.choose_login") }}</h3>
       <div class="ui relaxed list">
         <div v-if="hotspot.preferences.facebook_login == 'true'" class="item">
-          <div @click="changeRoute('/login/facebook', false)" class="ui facebook button big fluid">
+          <div @click="changeRoute('/login/facebook', false)" class="ui facebook button big fluid" :style="buttonStyle">
             <i class="facebook icon"></i>
             Facebook
           </div>
@@ -46,13 +47,14 @@
           <div
             @click="changeRoute('/login/instagram', false)"
             class="ui instagram button big fluid"
+            :style="buttonStyle"
           >
             <i class="instagram icon"></i>
             Instagram
           </div>
         </div>
         <div v-if="hotspot.preferences.linkedin_login == 'true'" class="item">
-          <div @click="changeRoute('/login/linkedin', false)" class="ui linkedin button big fluid">
+          <div @click="changeRoute('/login/linkedin', false)" class="ui linkedin button big fluid" :style="buttonStyle">
             <i class="linkedin icon"></i>
             LinkedIn
           </div>
@@ -61,13 +63,13 @@
       <div class="ui divider"></div>
       <div class="ui relaxed list">
         <div v-if="hotspot.preferences.sms_login == 'true'" class="item">
-          <div @click="changeRoute('/login/sms', false)" class="ui button yellow big fluid">
+          <div @click="changeRoute('/login/sms', false)" class="ui button yellow big fluid" :style="buttonStyle">
             <i class="talk icon"></i>
             SMS
           </div>
         </div>
         <div v-if="hotspot.preferences.email_login == 'true'" class="item">
-          <div @click="changeRoute('/login/email', false)" class="ui button red big fluid">
+          <div @click="changeRoute('/login/email', false)" class="ui button red big fluid" :style="buttonStyle">
             <i class="mail icon"></i>
             Email
           </div>
@@ -76,7 +78,7 @@
       <div v-if="hotspot.preferences.temp_code_login == 'true'" class="ui divider"></div>
       <div class="ui relaxed list">
         <div v-if="hotspot.preferences.temp_code_login == 'true'" class="item">
-          <div @click="changeRoute('/login', true)" class="ui button teal big fluid">
+          <div @click="changeRoute('/login', true)" class="ui button teal big fluid" :style="buttonStyle">
             <i class="barcode icon"></i>
             {{ $t("login.code") }}
           </div>
@@ -85,28 +87,29 @@
     </div>
     <div v-if="dedaloError" class="ui icon negative message">
       <div class="content">
-        <div class="header">{{ $t("social.auth_error") }}</div>
-        <p>{{ $t("social.auth_error_sub") }}</p>
+        <div class="header" :style="textStyle">{{ $t("social.auth_error") }}</div>
+        <p :style="textStyle">{{ $t("social.auth_error_sub") }}</p>
       </div>
     </div>
     <button
       v-if="dedaloError"
       v-on:click="back()"
       class="ui big button green"
+      :style="buttonStyle"
     >{{ $t("login.back") }}</button>
 
     <div v-if="authorized" class="ui icon positive message">
       <i class="check icon"></i>
       <div class="content">
-        <div class="header">{{ $t("social.auth_success") }}</div>
-        <p>{{ $t("social.auth_success_sub") }}...</p>
+        <div class="header" :style="textStyle">{{ $t("social.auth_success") }}</div>
+        <p :style="textStyle">{{ $t("social.auth_success_sub") }}...</p>
       </div>
     </div>
 
     <div v-if="authorized && hotspot.preferences.marketing_0_reason_country == 'true'">
-      <h3>{{ $t("login.additional_info") }}</h3>
+      <h3 :style="textStyle">{{ $t("login.additional_info") }}</h3>
       <div class="inline field">
-        <label>{{ $t("login.country") }}</label>
+        <label :style="textStyle">{{ $t("login.country") }}</label>
         <div class="ui big left icon input">
           <select v-model="additionalCountry">
             <option value="-">--</option>
@@ -115,7 +118,7 @@
         </div>
       </div>
       <div class="inline field">
-        <label>{{ $t("login.reason") }}</label>
+        <label :style="textStyle">{{ $t("login.reason") }}</label>
         <div class="ui big left icon input">
           <select v-model="additionalReason">
             <option value="-">--</option>
@@ -131,19 +134,19 @@
       :class="hotspot.preferences.marketing_0_reason_country == 'true' ? 'adjust-top-big' : ''"
       v-if="authorized"
     >
-      <h3>{{ $t("login.disclaimer_marketing") }}</h3>
+      <h3 :style="textStyle">{{ $t("login.disclaimer_marketing") }}</h3>
       <div class="inline field">
         <textarea readonly class="text-center" v-model="hotspot.disclaimers.marketing_use"></textarea>
       </div>
       <div class="ui inline">
         <input id="conditions" v-model="conditions" type="checkbox" class="ui checkbox field">
-        <label for="conditions">{{ $t("login.disclaimer_privacy_accept") }}</label>
+        <label :style="textStyle" for="conditions">{{ $t("login.disclaimer_privacy_accept") }}</label>
       </div>
       <div v-if="hotspot.preferences.marketing_1_enabled == 'true'" class="ui inline">
         <input id="surveys" v-model="surveys" type="checkbox" class="ui checkbox field">
-        <label for="surveys">{{ $t("login.disclaimer_survey_accept") }}</label>
+        <label :style="textStyle" for="surveys">{{ $t("login.disclaimer_survey_accept") }}</label>
       </div>
-      <button v-on:click="navigate()" class="ui big button green">{{ $t("login.navigate") }}</button>
+      <button :style="buttonStyle" v-on:click="navigate()" class="ui big button green">{{ $t("login.navigate") }}</button>
     </div>
   </div>
 </template>
@@ -175,6 +178,8 @@ export default {
         this.$root.$options.hotspot.integrations = success.body.integrations;
         this.hotspot.disclaimers = success.body.disclaimers;
         this.hotspot.preferences = success.body.preferences;
+        this.textColor = success.body.preferences.captive_84_text_color || '#383838';
+        this.textFont = success.body.preferences.captive_85_text_style || 'Lato';
 
         if (this.$route.query.integration_done && this.$route.query.code) {
           this.voucherAvailable = true;
@@ -209,7 +214,22 @@ export default {
       additionalCountry: "-",
       additionalReason: "-",
       voucherVisible: true,
+      textColor: '#383838',
+      textFont: 'Lato',
     };
+  },
+  computed: {
+    textStyle: function () {
+      return {
+        color: this.textColor,
+        'font-family': this.textFont
+      }
+    },
+    buttonStyle: function () {
+      return {
+        'font-family': this.textFont
+      }
+    }
   },
   methods: {
     back() {

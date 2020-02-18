@@ -59,6 +59,11 @@ func SetDefaultHotspotPreferences(hotspotId int) {
 	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "captive_5_banner", Value: configuration.Config.CaptivePortal.BannerContents})
 	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "captive_6_description", Value: configuration.Config.CaptivePortal.Description})
 	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "captive_7_background", Value: configuration.Config.CaptivePortal.Background})
+	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "captive_81_bg_image", Value: configuration.Config.CaptivePortal.BgImageContents})
+	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "captive_82_container_bg_color", Value: configuration.Config.CaptivePortal.ContainerBgColor})
+	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "captive_83_title_color", Value: configuration.Config.CaptivePortal.TitleColor})
+	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "captive_84_text_color", Value: configuration.Config.CaptivePortal.TextColor})
+	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "captive_85_text_style", Value: configuration.Config.CaptivePortal.TextStyle})
 
 	// set marketing defaults
 	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "marketing_0_reason_country", Value: "false"})

@@ -452,7 +452,7 @@
           >
             <div v-if="!preferences.isLoading" class="card-pf-body">
               <div v-for="pref in preferences.global" :key="pref.key" class="form-group">
-                <label class="col-sm-4 control-label" for="textInput-markup">
+                <label class="col-sm-4 control-label">
                   {{$t('hotspot.'+pref.key)}}
                   <span :class="[getPrefIcon(pref.key)]"></span>
                 </label>
@@ -507,65 +507,114 @@
             role="form"
             v-on:submit.prevent="updatePreferencesCaptive(preferences.captive)"
           >
-            <div class="card-pf-body">
+            <div v-if="!preferences.isLoading" class="card-pf-body">
+              <!-- redirect preference: captive_1_redir -->
+              <div :class="[preferences.captive[0].onError ? 'has-error' : '', 'form-group', 'mg-bottom-3r']">
+                <label class="col-sm-4 control-label">
+                  {{$t('hotspot.'+preferences.captive[0].key)}}
+                  <span :class="[getPrefIcon(preferences.captive[0].key)]"></span>
+                </label>
+                <div class="col-sm-6">
+                  <input
+                    required
+                    v-model="preferences.captive[0].value"
+                    :type="getInputType(preferences.captive[0].key, preferences.captive[0].value)"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+              <!-- text preferences: captive_2_title, captive_4_subtitle, captive_6_description -->
               <div
-                v-for="pref in preferences.captive"
+                v-for="pref in [preferences.captive[1], preferences.captive[3], preferences.captive[5]]"
                 :key="pref.key"
-                :class="[pref.onError ? 'has-error' : '', 'form-group']"
+                :class="[pref.onError ? 'has-error' : '', 'form-group', 'col-sm-4', 'captive-portal-pref-inline', 'mg-bottom-3r']"
               >
-                <label class="col-sm-4 control-label" for="textInput-markup">
+                <label class="block control-label">
                   {{$t('hotspot.'+pref.key)}}
                   <span :class="[getPrefIcon(pref.key)]"></span>
                 </label>
-                <div class="col-sm-6">
-                  <picture-input
-                    v-if="pref.key == 'captive_3_logo' || pref.key == 'captive_5_banner'"
-                    :ref="'prefInput-'+pref.key"
-                    :prefill="urltoFile(pref.value, pref.key)"
-                    :alertOnError="false"
-                    @change="onChanged(pref)"
-                    :width="100"
-                    :height="100"
-                    :crop="false"
-                    :zIndex="1000"
-                    :customStrings="uploadLangstexts"
-                    removeButtonClass="btn btn-danger"
-                    buttonClass="btn btn-default"
-                  ></picture-input>
-                  <span v-if="pref.onError" class="help-block">{{$t('upload_file_exceed')}}</span>
-
-                  <vue-editor
-                    :editorToolbar="customToolbar"
-                    v-if="pref.key == 'captive_6_description'"
-                    v-model="pref.value"
-                  ></vue-editor>
-
-                  <sketch-picker
-                    @input="onUpdate(pref.value)"
-                    class="absolute-center"
-                    v-if="pref.key == 'captive_7_background'"
-                    v-model="pref.value"
-                  />
-
+                <div>
                   <input
-                    required
-                    v-if="pref.key != 'captive_6_description' && pref.key != 'captive_3_logo' && pref.key != 'captive_5_banner' && pref.key != 'captive_7_background'"
                     v-model="pref.value"
                     :type="getInputType(pref.key, pref.value)"
                     class="form-control"
                   />
                 </div>
               </div>
-              <div class="form-group">
-                <label
-                  class="col-sm-4 control-label"
-                  for="textInput-markup"
-                >{{$t('hotspot.captive_preview')}}</label>
+              <!-- image preferences: captive_3_logo, captive_5_banner, captive_81_bg_image -->
+              <div
+                v-for="pref in [preferences.captive[2], preferences.captive[4], preferences.captive[7]]"
+                :key="pref.key"
+                :class="[pref.onError ? 'has-error' : '', 'form-group', 'col-sm-4', 'captive-portal-pref-inline', 'mg-bottom-3r']"
+              >
+                <label class="block-centered control-label">
+                  {{$t('hotspot.'+pref.key)}}
+                  <span :class="[getPrefIcon(pref.key)]"></span>
+                </label>
+                <div>
+                  <picture-input
+                    :ref="'prefInput-'+pref.key"
+                    :prefill="urltoFile(pref.value, pref.key)"
+                    :alertOnError="false"
+                    @change="onPictureChanged(pref)"
+                    @remove="onPictureRemoved(pref)"
+                    :width="100"
+                    :height="100"
+                    :crop="false"
+                    :zIndex="1000"
+                    :customStrings="uploadLangstexts"
+                    :removable="true"
+                    removeButtonClass="btn btn-danger"
+                    buttonClass="btn btn-default"
+                  ></picture-input>
+                  <span v-if="pref.onError" class="help-block">{{$t('upload_file_exceed')}}</span>
+                </div>
+              </div>
+              <!-- color preferences: captive_7_background, captive_82_container_bg_color, captive_83_title_color, captive_84_text_color -->
+              <div
+                v-for="pref in [preferences.captive[6], preferences.captive[8], preferences.captive[9], preferences.captive[10]]"
+                :key="pref.key"
+                :class="[pref.onError ? 'has-error' : '', 'form-group', 'col-sm-3', 'captive-portal-pref-inline', 'mg-bottom-3r']"
+              >
+                <label class="block-centered control-label">
+                  {{$t('hotspot.'+pref.key)}}
+                  <span :class="[getPrefIcon(pref.key)]"></span>
+                </label>
+                <div>
+                  <sketch-picker
+                    @input="onColorUpdated(pref)"
+                    class="absolute-center"
+                    v-model="pref.value"
+                  />
+                </div>
+              </div>
+              <!-- text style: captive_85_text_style -->
+              <div :class="[preferences.captive[11].onError ? 'has-error' : '', 'form-group', 'mg-bottom-3r']">
+                <label class="col-sm-4 control-label">
+                  {{$t('hotspot.'+preferences.captive[11].key)}}
+                  <span :class="[getPrefIcon(preferences.captive[11].key)]"></span>
+                </label>
                 <div class="col-sm-6">
+                  <select
+                    v-on:change="textStyleChanged(preferences.captive[11])"
+                    v-model="preferences.captive[11].value"
+                    class="form-control"
+                  >
+                    <option v-for="textStyle in textStyles" v-bind:key="textStyle">
+                      {{ textStyle }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <!-- captive portal preview -->
+              <div class="form-group">
+                <label class="block-centered control-label"
+                >{{$t('hotspot.captive_preview')}}</label>
+                <div class="">
                   <div v-if="preferences.isLoading" class="captive-preview">
                     <div class="spinner spinner-lg absolute-center"></div>
                   </div>
-                  <captive-portal v-if="!preferences.isLoading" :obj="preferences.captive"></captive-portal>
+                  <captive-portal v-if="!preferences.isLoading" :obj="preferences.captive" class="captive-preview"></captive-portal>
                 </div>
               </div>
             </div>
@@ -1921,7 +1970,17 @@ export default {
       smsMaxCountAdd: 0,
       showVoucherPrint: false,
       vouchersToPrint: [],
-      advancedFilters: false
+      advancedFilters: false,
+      textStyles: [
+        "Lato",
+        "Roboto",
+        "Hind",
+        "Fira Sans Extra Condensed",
+        "Dosis",
+        "EB Garamond",
+        "Playfair Display",
+        "Playfair Display SC",
+      ]
     };
   },
   methods: {
@@ -2202,7 +2261,6 @@ export default {
         success => {
           var globalPref = [];
           var captivePref = [];
-          var backgroundColor = "";
           var vouchersAvailable = false;
           var voucherFlag = 0;
 
@@ -2240,7 +2298,27 @@ export default {
             }
 
             if (pref.key == "captive_7_background") {
-              backgroundColor = pref.value;
+              this.preferences.backgroundColor = pref.value;
+            }
+
+            if (pref.key == "captive_81_bg_image") {
+              this.preferences.backgroundImage = pref.value;
+            }
+
+            if (pref.key == "captive_82_container_bg_color") {
+              this.preferences.containerBgColor = pref.value;
+            }
+
+            if (pref.key == "captive_83_title_color") {
+              this.preferences.titleColor = pref.value;
+            }
+
+            if (pref.key == "captive_84_text_color") {
+              this.preferences.textColor = pref.value;
+            }
+
+            if (pref.key == "captive_85_text_style") {
+              this.preferences.textStyle = pref.value;
             }
 
             if (pref.key == "sms_login_max") {
@@ -2266,16 +2344,36 @@ export default {
           this.preferences.global = globalPref;
           this.preferences.captive = captivePref;
           this.preferences.isLoading = false;
+          var context = this;
           setTimeout(function() {
-            window
-              .$("#captive-preview")
-              .css("background-color", backgroundColor);
+            context.updateCaptivePreview();
           }, 0);
         },
         error => {
           console.error(error.body);
         }
       );
+    },
+    updateCaptivePreview() {
+      window.$("#captive-preview").css("background-color", this.preferences.backgroundColor);
+      window.$("#captive-preview div.ui.segment").css("background-color", this.preferences.containerBgColor);
+      window.$("#captive-preview h2").css("color", this.preferences.titleColor);
+      window.$("#captive-preview h3").css("color", this.preferences.textColor);
+      window.$("#captive-preview p").css("color", this.preferences.textColor);
+
+      if (this.preferences.backgroundImage) {
+        window.$("#captive-preview").css("background-image", 'url("' + this.preferences.backgroundImage + '")');
+        window.$("#captive-preview").css("background-size", "cover");
+        window.$("#captive-preview").css("background-position", "center");
+      } else {
+        window.$("#captive-preview").css("background-image", "none");
+      }
+
+      // font syle
+      window.$("#captive-preview h2").css("font-family", this.preferences.textStyle);
+      window.$("#captive-preview h3").css("font-family", this.preferences.textStyle);
+      window.$("#captive-preview p").css("font-family", this.preferences.textStyle);
+      window.$("#captive-preview a.green.button").css("font-family", this.preferences.textStyle);
     },
     updatePreferences() {
       this.preferences.isLoading = true;
@@ -2318,6 +2416,15 @@ export default {
         context.getPreferences();
       });
     },
+    getHexValue(value) {
+      if (typeof value === 'string' || value instanceof String) {
+        return value;
+      } else {
+        var rgb_hex = value.hex;
+        var a_hex = Math.floor(value.a * 255).toString(16).padStart(2, '0');
+        return rgb_hex + a_hex;
+      }
+    },
     updatePreferencesCaptive() {
       this.preferences.isLoading = true;
       // create promises array
@@ -2329,8 +2436,8 @@ export default {
             if (typeof pref.value == "boolean") {
               pref.value = pref.value.toString();
             }
-            if (pref.key == "captive_7_background") {
-              pref.value = pref.value.hex || pref.value;
+            if (pref.key == "captive_7_background" || pref.key == "captive_82_container_bg_color" || pref.key == "captive_83_title_color" || pref.key == "captive_84_text_color") {
+              pref.value = this.getHexValue(pref.value);
             }
             this.hsPrefModify(
               this.$route.params.id,
@@ -2485,18 +2592,50 @@ export default {
       var csv = this.createCSV(this.columns, voucherRows);
       this.downloadCSV(csv.cols, csv.rows, "vouchers");
     },
-    onChanged(pref) {
-      if (this.$refs["prefInput-" + pref.key][0].image.length > 655360) {
+    onPictureRemoved(pref) {
+      if (pref.key == 'captive_81_bg_image') {
+        pref.value = "";
+        this.preferences.backgroundImage = pref.value;
+      } else if (pref.key == 'captive_3_logo') {
+        pref.value = "";
+      } else if (pref.key == 'captive_5_banner') {
+        pref.value = "";
+      }
+      this.updateCaptivePreview();
+      this.$forceUpdate();
+    },
+    textStyleChanged(pref) {
+      this.preferences.textStyle = pref.value;
+      this.updateCaptivePreview();
+      this.$forceUpdate();
+    },
+    onPictureChanged(pref) {
+      if (this.$refs["prefInput-" + pref.key][0].image.length > 921083) {
         pref.onError = true;
         this.$refs["prefInput-" + pref.key][0].image = pref.value;
       } else {
         pref.onError = false;
         pref.value = this.$refs["prefInput-" + pref.key][0].image;
+
+        if (pref.key == 'captive_81_bg_image') {
+          this.preferences.backgroundImage = pref.value;
+        }
       }
+      this.updateCaptivePreview();
       this.$forceUpdate();
     },
-    onUpdate(value) {
-      $("#captive-preview").css("background-color", value.hex);
+    onColorUpdated(pref) {
+      if (pref.key == 'captive_7_background') {
+        this.preferences.backgroundColor = this.getHexValue(pref.value);
+      } else if (pref.key == 'captive_82_container_bg_color') {
+        this.preferences.containerBgColor = this.getHexValue(pref.value);
+      } else if (pref.key == 'captive_83_title_color') {
+        this.preferences.titleColor = this.getHexValue(pref.value);
+      } else if (pref.key == 'captive_84_text_color') {
+        this.preferences.textColor = this.getHexValue(pref.value);
+      }
+      this.updateCaptivePreview();
+      this.$forceUpdate();
     },
     getAllMACAuth() {
       this.userGetAll(
@@ -2828,4 +2967,30 @@ textarea {
   ) !important;
   border-color: #b35c00 !important;
 }
+
+label.block {
+  display: block;
+  text-align: left;
+}
+
+label.block-centered {
+  display: block;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.captive-portal-pref-inline {
+  padding-left: 4rem;
+  padding-right: 4rem;
+}
+
+.mg-bottom-3r {
+  margin-bottom: 3rem;
+}
+
+.captive-preview {
+  width: 70%;
+  margin: auto;
+}
+
 </style>
