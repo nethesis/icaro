@@ -26,6 +26,7 @@ CREATE TABLE `integrations` (
   `webhook_token` varchar(250) NOT NULL,
   `pre_auth_redirect_url` varchar(250) NOT NULL,
   `post_auth_redirect_url` varchar(250) NOT NULL,
+  `privacy` varchar(2048),
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
 )
@@ -33,6 +34,7 @@ CREATE TABLE `integrations` (
 - `name`, `description`, `site`, `logo`: metadata of integration
 - `webhook_url` and `webhook_token`: url and authentication token of the external application call by `Sun-API` during the integration.
 - `pre_auth_redirect_url` and `post_auth_redirect_url`: external url called during authentication process in the `Wings` component.
+- `privacy`: contains privacy terms to using the integration
 
 # Hotspot manager (`Sun-API`)
 When an integration is enabled a payload like in the example below is created and sended to the `webhook_url` using the `webhook_token`. The `webhook_token` is added in the request with `X-Icaro-WebHook-Token` header.

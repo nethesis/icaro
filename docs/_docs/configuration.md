@@ -46,13 +46,14 @@ Terms of use and marketing disclaimers are visualized before the user chooses th
 - `{{ .BusinessEmail }}` for company email.
 - `{{ .BusinessDPO }}` for DPO name.
 - `{{ .BusinessDPOMail}}` for DPO mail.
+- `{{ .IntegrationTerms}}` for external integration privacies.
 
 inside the disclaimers JSON object:
 
 ```json
 "disclaimers": {
-	"terms_of_use": "This is a disclaimer test\n\n - chapter 1\n - chapter 2 provided by $$BUSINESS_NAME$$ located in {{ .BusinessAddress }}",
-	"marketing_use": "This is marketing informationt\n\n - chapter 1\n - chapter 2  provided by $$BUSINESS_NAME$$  located in {{ .BusinessAddress }}"
+	"terms_of_use": "This is a disclaimer test\n\n - chapter 1\n - chapter 2 provided by {{ .BusinessName }} located in {{ .BusinessAddress }}",
+	"marketing_use": "This is marketing informationt\n\n - chapter 1\n - chapter 2  provided by {{ .BusinessName }} located in {{ .BusinessAddress }}"
 }
 ```
 
