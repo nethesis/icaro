@@ -25,7 +25,6 @@ macauth
 uamdomain       "${HS_AAA_HOST}"
 
 include /opt/icaro/dedalo/walled_gardens/local.conf
-include /opt/icaro/dedalo/walled_gardens/fonts.conf
 include /opt/icaro/dedalo/walled_gardens/facebook.conf
 include /opt/icaro/dedalo/walled_gardens/linkedin.conf
 include /opt/icaro/dedalo/walled_gardens/instagram.conf
