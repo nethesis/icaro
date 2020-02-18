@@ -57,6 +57,7 @@ CREATE TABLE `hotspots` (
   `business_email` varchar(512),
   `business_dpo` varchar(512),
   `business_dpo_mail` varchar(512),
+  `integration_terms` text,
   `created` datetime,
   FOREIGN KEY (`account_id`) REFERENCES accounts(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   KEY(`name`),
