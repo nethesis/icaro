@@ -1,4 +1,5 @@
 # Icaro
+[![Build Status](https://travis-ci.org/nethesis/icaro.svg?branch=master)](https://travis-ci.org/nethesis/icaro)
 
 <p align="center">
    <img src ="https://github.com/nethesis/icaro/raw/master/logo/logo.png" />
