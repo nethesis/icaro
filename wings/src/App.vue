@@ -157,7 +157,7 @@
   .terms-text {
     margin: 0px;
     width: 100%;
-    height: 86px;
+    height: 200px;
     resize: vertical;
   }
 
