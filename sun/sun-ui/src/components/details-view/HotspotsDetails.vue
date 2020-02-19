@@ -753,6 +753,14 @@
               <dd>{{info.data.business_email || '-'}}</dd>
             </div>
             <div class="list-details">
+              <dt>{{ $t("hotspot.business_dpo") }}</dt>
+              <dd>{{info.data.business_dpo || '-'}}</dd>
+            </div>
+            <div class="list-details">
+              <dt>{{ $t("hotspot.business_dpo_mail") }}</dt>
+              <dd>{{info.data.business_dpo_mail || '-'}}</dd>
+            </div>
+            <div class="list-details">
               <dt>{{ $t("hotspot.created") }}</dt>
               <dd>{{info.data.created | formatDate}}</dd>
             </div>

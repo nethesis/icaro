@@ -9,11 +9,10 @@
       <label class="col-sm-2 control-label" for="textInput-markup">Hotspot</label>
       <div class="col-sm-4">
         <select v-on:change="getCurrentStats()" v-model="hotspotSearchId" class="form-control">
-          <option
-            v-for="hotspot in hotspots"
-            v-bind:key="hotspot.id"
-            v-bind:value="hotspot.id"
-          >{{ hotspot.name }} - {{ hotspot.description}}</option>
+          <option v-for="hotspot in hotspots" v-bind:key="hotspot.id" v-bind:value="hotspot.id">
+            {{ hotspot.name }} -
+            {{ hotspot.description}}
+          </option>
         </select>
       </div>
     </div>
@@ -108,6 +107,28 @@
         </div>
       </div>
 
+      <h2 class="graphs-container title-graphs">{{ $t('report.account_type_reports') }}</h2>
+      <div class="row no-margin">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+          <div v-if="loaders.account_types_pie" class="spinner spinner-lg"></div>
+          <vue-chart
+            v-show="!loaders.account_types_pie"
+            type="pie"
+            :options="charts.account_types_pie.options"
+            :data="charts.account_types_pie"
+          ></vue-chart>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+          <div v-if="loaders.account_types_graph" class="spinner spinner-lg"></div>
+          <vue-chart
+            v-show="!loaders.account_types_graph"
+            type="line"
+            :options="charts.account_types_graph.options"
+            :data="charts.account_types_graph"
+          ></vue-chart>
+        </div>
+      </div>
+
       <div class="row no-margin">
         <h2
           class="section-title col-xs-12 col-sm-12 col-md-12 col-lg-12"
@@ -181,8 +202,6 @@
       </div>
     </div>
 
-    <div class="graph-divider"></div>
-
     <div>
       <h2 class="graphs-container title-graphs">{{ $t('report.sms_reports') }}</h2>
       <div class="row no-margin">
@@ -204,29 +223,6 @@
             :data="charts.sms_history"
           ></vue-chart>
         </div>
-      </div>
-    </div>
-
-    <div class="graph-divider"></div>
-    <h2 class="graphs-container title-graphs">{{ $t('report.account_type_reports') }}</h2>
-    <div class="row no-margin">
-      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-        <div v-if="loaders.account_types_pie" class="spinner spinner-lg"></div>
-        <vue-chart
-          v-show="!loaders.account_types_pie"
-          type="pie"
-          :options="charts.account_types_pie.options"
-          :data="charts.account_types_pie"
-        ></vue-chart>
-      </div>
-      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-        <div v-if="loaders.account_types_graph" class="spinner spinner-lg"></div>
-        <vue-chart
-          v-show="!loaders.account_types_graph"
-          type="line"
-          :options="charts.account_types_graph.options"
-          :data="charts.account_types_graph"
-        ></vue-chart>
       </div>
     </div>
   </div>
@@ -408,14 +404,20 @@ export default {
             this.charts[graph].datasets = [
               {
                 data: success.body.sets,
-                backgroundColor: success.body.labels && success.body.labels.map(function(l) {
-                  return context.accountTypeColor(l);
-                }) || []
+                backgroundColor:
+                  (success.body.labels &&
+                    success.body.labels.map(function(l) {
+                      return context.accountTypeColor(l);
+                    })) ||
+                  []
               }
             ];
-            this.charts[graph].labels = success.body.labels && success.body.labels.map(function(l) {
-              return context.$i18n.t("report.account_types_" + l);
-            }) || [];
+            this.charts[graph].labels =
+              (success.body.labels &&
+                success.body.labels.map(function(l) {
+                  return context.$i18n.t("report.account_types_" + l);
+                })) ||
+              [];
           } else {
             if (success.body.sets) {
               for (var s in success.body.sets) {
