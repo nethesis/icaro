@@ -398,6 +398,19 @@ func SendSMSCode(number string, code string, unit models.Unit, auth string) int 
 	if accountSMS.SmsCount <= accountSMS.SmsMaxCount {
 
 		if hotspotCount <= hotspotMaxCountInt || hotspotMaxCountInt == 0 {
+			// check account and hotspot SMS thresholds
+			numSMSLeftAccount := accountSMS.SmsMaxCount - accountSMS.SmsCount
+			numSMSLeftHotspot := hotspotMaxCountInt - hotspotCount
+			hotspotSMSThreshold, err := strconv.Atoi(GetHotspotPreferencesByKey(hotspot.Id, "sms_login_threshold").Value)
+
+			if accountSMS.SmsThreshold > 0 && numSMSLeftAccount <= accountSMS.SmsThreshold {
+				resellerAccount := GetAccountByAccountId(hotspot.AccountId)
+				SendSmsAccountThresholdAlert(resellerAccount, numSMSLeftAccount)
+			} else if hotspotSMSThreshold > 0 && numSMSLeftHotspot <= hotspotSMSThreshold {
+				resellerAccount := GetAccountByAccountId(hotspot.AccountId)
+				SendSmsHotspotThresholdAlert(resellerAccount, hotspot, numSMSLeftHotspot)
+			}
+
 			// retrieve account info and token
 			accountSid := configuration.Config.Endpoints.Sms.AccountSid
 			authToken := configuration.Config.Endpoints.Sms.AuthToken
@@ -628,16 +641,34 @@ func FindAutoLoginUser(users []models.User) models.User {
 	return user
 }
 
+func SendSmsAccountThresholdAlert(reseller models.Account, remaining int) bool {
+	subject := "Hotspot Alert: SMS threshold reached"
+	body := fmt.Sprintf("You have left %d SMS in your account.\nPlease buy an additional SMS quota soon, or disable sms login/feedback from your hotspots.\n", remaining)
+	return SendSmsAlert(reseller, subject, body)
+}
+
+func SendSmsHotspotThresholdAlert(reseller models.Account, hotspot models.Hotspot, remaining int) bool {
+	subject := "Hotspot Alert: SMS threshold reached"
+	body := fmt.Sprintf("You have left %d SMS in your hotspot %s.\nPlease buy an additional SMS quota soon, or disable sms login/feedback from your hotspots.\n", remaining, hotspot.Name)
+	return SendSmsAlert(reseller, subject, body)
+}
+
 func SendSmsQuotaLimitAlert(reseller models.Account) bool {
+	subject := "Hotspot Alert: SMS quota limit exceeded"
+	body := "You do not have any more SMS to send in your account,\n" +
+		"please buy an additional SMS quota or disable sms login/feedback from your hotspots.\n"
+	return SendSmsAlert(reseller, subject, body)
+}
+
+func SendSmsAlert(reseller models.Account, subject string, body string) bool {
 	status := true
 
 	if reseller.Type == "reseller" {
 		m := gomail.NewMessage()
 		m.SetHeader("From", configuration.Config.Endpoints.Email.From)
 		m.SetHeader("To", reseller.Email)
-		m.SetHeader("Subject", "Hotspot Alert: SMS quota limit exceeded")
-		m.SetBody("text/plain", "You do not have any more SMS to send in your account,\n"+
-			"please buy an additional SMS quota or disable sms login from yours hotspots.\n")
+		m.SetHeader("Subject", subject)
+		m.SetBody("text/plain", body)
 
 		d := gomail.NewDialer(
 			configuration.Config.Endpoints.Email.SMTPHost,
