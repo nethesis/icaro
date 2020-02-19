@@ -34,7 +34,9 @@
       "confirm_password": "Conferma password",
       "change_password_error_title": "Cambio password non riuscito",
       "change_password_error_sub": "Ci sono stati problemi durante il cambio password, contatta il tuo amministratore.",
-      "sms": "SMS inviati"
+      "sms": "SMS",
+      "sms_login_threshold": "Soglia di avviso",
+      "sms_threshold_description": "Si riceverà una notifica email quando il numero di SMS rimanenti sarà inferiore alla soglia di avviso"
     },
     "hotspot": {
       "yes": "Sì",
@@ -156,6 +158,8 @@
       "expiration": "Scadenza (data)",
       "validity": "Validità",
       "sms_login_max": "Numero massimo di SMS (0 = illimitato)",
+      "sms_login_threshold": "Soglia avviso SMS rimanenti (0 = nessun avviso)",
+      "warn_sms": "Avviso",
       "add_sms_count": "Aggiungi SMS",
       "add": "Aggiungi",
       "from": "Da",

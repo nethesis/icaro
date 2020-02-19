@@ -266,6 +266,14 @@ func SendSMS(adeToken models.AdeToken, message string, survey string, smsTo stri
 	}
 
 	if accountSMS.SmsCount <= accountSMS.SmsMaxCount {
+		// check account SMS threshold
+		numSMSLeftAccount := accountSMS.SmsMaxCount - accountSMS.SmsCount
+
+		if accountSMS.SmsThreshold > 0 && numSMSLeftAccount <= accountSMS.SmsThreshold {
+			resellerAccount := wax_utils.GetAccountByAccountId(hotspot.AccountId)
+			wax_utils.SendSmsAccountThresholdAlert(resellerAccount, numSMSLeftAccount)
+		}
+
 		// retrieve account info and token
 		accountSid := configuration.Config.Endpoints.Sms.AccountSid
 		authToken := configuration.Config.Endpoints.Sms.AuthToken

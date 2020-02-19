@@ -52,6 +52,7 @@ type AccountJSON struct {
 	SubscriptionPlanName string        `json:"subscription_plan_name"`
 	Subscription         Subscription  `json:"subscription"`
 	Tokens               []AccessToken `json:"tokens"`
+	SmsThreshold         int           `json:"sms_threshold"`
 }
 
 func (AccountJSON) TableName() string {

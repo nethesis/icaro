@@ -34,7 +34,9 @@
       "confirm_password": "Confirm password",
       "change_password_error_title": "Change password error",
       "change_password_error_sub": "Something went wrong on changing password",
-      "sms": "SMS sent"
+      "sms": "SMS",
+      "sms_login_threshold": "Warning threshold",
+      "sms_threshold_description": "You'll receive an email when the number of remaining SMS will be lower than the warning threshold"
     },
     "hotspot": {
       "yes": "Yes",
@@ -156,6 +158,8 @@
       "expiration": "Expiration (date)",
       "validity": "Validity",
       "sms_login_max": "Max SMS sent (0 = limitless)",
+      "sms_login_threshold": "Warning threshold SMS remaining (0 = no warning)",
+      "warn_sms": "Warn",
       "add_sms_count": "Add SMS",
       "add": "Add",
       "from": "From",

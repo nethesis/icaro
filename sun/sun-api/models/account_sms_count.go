@@ -33,3 +33,7 @@ type AccountSmsCount struct {
 type AccountSmsCountJSON struct {
 	SmsToAdd int `json:"sms_to_add"`
 }
+
+type AccountSmsThresholdJSON struct {
+	SmsThreshold int `json:"sms_threshold"`
+}

@@ -170,6 +170,7 @@ var UtilService = {
           type = "checkbox";
           break;
         case "sms_login_max":
+        case "sms_login_threshold":
         case "temp_session_duration":
         case "user_expiration_days":
         case "voucher_expiration_days":
