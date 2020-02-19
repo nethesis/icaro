@@ -3050,13 +3050,13 @@ label.block-centered {
 }
 
 .smartphone {
-  width: 40%;
+  width: 400px;
   margin: auto;
   border: none;
 }
 
 .tablet {
-  width: 60%;
+  width: 750px;
   margin: auto;
   border: none;
 }
