@@ -614,13 +614,54 @@
               </div>
               <!-- captive portal preview -->
               <div class="form-group">
-                <label class="block-centered control-label"
-                >{{$t('hotspot.captive_preview')}}</label>
-                <div class="">
+                <label class="block-centered control-label">{{$t('hotspot.captive_preview')}}</label>
+                <div class="voucher-main">
+                  <span class="label-dateFilter">
+                    <input
+                      v-model="preferences.currentDevice"
+                      type="radio"
+                      id="smartphone"
+                      name="gender"
+                      value="smartphone"
+                    />
+                    <label for="smartphone">
+                      <span class="fa fa-mobile captive-mode"></span>
+                    </label>
+                  </span>
+                  <span class="label-dateFilter">
+                    <input
+                      v-model="preferences.currentDevice"
+                      type="radio"
+                      id="tablet"
+                      name="gender"
+                      value="tablet"
+                    />
+                    <label for="tablet">
+                      <span class="fa fa-tablet captive-mode"></span>
+                    </label>
+                  </span>
+                  <span class="label-dateFilter">
+                    <input
+                      v-model="preferences.currentDevice"
+                      type="radio"
+                      id="desktop"
+                      name="gender"
+                      value="desktop"
+                    />
+                    <label for="desktop">
+                      <span class="fa fa-desktop captive-mode"></span>
+                    </label>
+                  </span>
+                </div>
+                <div class>
                   <div v-if="preferences.isLoading" class="captive-preview">
                     <div class="spinner spinner-lg absolute-center"></div>
                   </div>
-                  <captive-portal v-if="!preferences.isLoading" :obj="preferences.captive" class="captive-preview"></captive-portal>
+                  <captive-portal
+                    v-if="!preferences.isLoading"
+                    :obj="preferences.captive"
+                    :class="['captive-preview', preferences.currentDevice]"
+                  ></captive-portal>
                 </div>
               </div>
             </div>
@@ -1814,6 +1855,7 @@ export default {
       },
       preferences: {
         isLoading: true,
+        currentDevice: "smartphone",
         global: {},
         captive: {}
       },
@@ -3003,9 +3045,29 @@ label.block-centered {
 }
 
 .captive-preview {
-  width: 75%;
   margin: auto;
   border: none;
 }
 
+.smartphone {
+  width: 40%;
+  margin: auto;
+  border: none;
+}
+
+.tablet {
+  width: 60%;
+  margin: auto;
+  border: none;
+}
+
+.desktop {
+  width: 90%;
+  margin: auto;
+  border: none;
+}
+
+.captive-mode {
+  font-size: 30px;
+}
 </style>
