@@ -249,7 +249,6 @@
                 >{{ $t("hotspot.business_dpo") }}</label>
                 <div class="col-sm-8">
                   <input
-                    required
                     v-model="newObj.business_dpo"
                     type="text"
                     id="textInput2-modal-markup"
@@ -265,7 +264,6 @@
                 >{{ $t("hotspot.business_dpo_mail") }}</label>
                 <div class="col-sm-8">
                   <input
-                    required
                     v-model="newObj.business_dpo_mail"
                     type="text"
                     id="textInput2-modal-markup"
