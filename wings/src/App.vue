@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="ui segment container" :style="containerStyle">
-    <div v-show="loading" class="ui active dimmer">
+    <div v-show="loading" class="ui active dimmer inverted">
       <div class="ui loader"></div>
     </div>
     <div v-show="!loading" class="ui center aligned">
@@ -160,8 +160,8 @@
     height: 86px;
     resize: vertical;
   }
-  
-  .ui.segments {
+
+  .ui.segment {
     border: none !important;
     box-shadow: none !important;
     -webkit-box-shadow: none !important;
