@@ -317,6 +317,7 @@ CREATE TABLE `account_sms_counts` (
   `account_id` bigint unsigned NOT NULL,
   `sms_max_count` bigint unsigned,
   `sms_count` bigint unsigned,
+  `sms_threshold` bigint DEFAULT 0,
   FOREIGN KEY (`account_id`) REFERENCES accounts(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   UNIQUE KEY (`account_id`),
   PRIMARY KEY(`id`)
