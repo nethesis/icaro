@@ -81,7 +81,7 @@
       "captive_81_bg_image": "Immagine sfondo",
       "captive_82_container_bg_color": "Colore e trasparenza box",
       "captive_83_title_color": "Colore titolo",
-      "captive_84_text_color": "Colore testo",
+      "captive_84_text_color": "Colore sottotitolo e descrizione",
       "captive_85_text_style": "Stile testo",
       "voucher_expiration_days": "Durata account con Voucher (giorni)",
       "sms_login": "SMS Login",
@@ -167,7 +167,9 @@
       "clear": "Pulisci",
       "advanced_filters": "Filtri avanzati",
       "create_voucher_custom": "Crea un voucher custom",
-      "voucher_custom_code": "Codice"
+      "voucher_custom_code": "Codice",
+      "i_agree": "Acconsento alle condizioni generali di utilizzo",
+      "tos_and_privacy": "(ToS e Privacy)"
     },
     "user": {
       "username": "Utente",

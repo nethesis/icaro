@@ -87,8 +87,8 @@
         </div>
         <div v-if="bannerShow" class="ui compact message info no-margin-top">
           <div class="content">
-            <div class="header" :style="textStyle">{{$t('sms.wait')}}</div>
-            <p :style="textStyle">{{$t('sms.we_are_sending_sms_code')}}</p>
+            <div class="header">{{$t('sms.wait')}}</div>
+            <p>{{$t('sms.we_are_sending_sms_code')}}</p>
           </div>
         </div>
       </div>
@@ -109,8 +109,7 @@
       <div v-if="authorized" class="ui icon positive message">
         <i class="check icon"></i>
         <div class="content">
-          <div class="header" :style="textStyle">{{ $t("sms.auth_success") }}</div>
-          <p :style="textStyle">{{ $t("sms.auth_success_sub") }}...</p>
+          <div class="header">{{ $t("sms.auth_success") }}</div>
         </div>
       </div>
       <div

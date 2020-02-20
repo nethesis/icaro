@@ -7,8 +7,7 @@
     <div v-if="authorized" class="ui icon positive message">
       <i class="check icon"></i>
       <div class="content">
-        <div class="header" :style="textStyle">{{ $t("social.auth_success") }}</div>
-        <p :style="textStyle">{{ $t("social.auth_success_sub") }}...</p>
+        <div class="header">{{ $t("social.auth_success") }}</div>
       </div>
     </div>
     <div

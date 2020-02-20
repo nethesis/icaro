@@ -27,8 +27,8 @@
       <div v-if="badCode" class="ui tiny icon negative message">
         <i class="remove icon"></i>
         <div class="content">
-          <div class="header" :style="textStyle">{{ $t("login.error_voucher_code") }}</div>
-          <p :style="textStyle">{{ $t("login.error_voucher_code_sub") }}</p>
+          <div class="header">{{ $t("login.error_voucher_code") }}</div>
+          <p>{{ $t("login.error_voucher_code_sub") }}</p>
         </div>
       </div>
     </div>
@@ -87,8 +87,8 @@
     </div>
     <div v-if="dedaloError" class="ui icon negative message">
       <div class="content">
-        <div class="header" :style="textStyle">{{ $t("social.auth_error") }}</div>
-        <p :style="textStyle">{{ $t("social.auth_error_sub") }}</p>
+        <div class="header">{{ $t("social.auth_error") }}</div>
+        <p>{{ $t("social.auth_error_sub") }}</p>
       </div>
     </div>
     <button
@@ -101,8 +101,7 @@
     <div v-if="authorized" class="ui icon positive message">
       <i class="check icon"></i>
       <div class="content">
-        <div class="header" :style="textStyle">{{ $t("social.auth_success") }}</div>
-        <p :style="textStyle">{{ $t("social.auth_success_sub") }}...</p>
+        <div class="header">{{ $t("social.auth_success") }}</div>
       </div>
     </div>
 

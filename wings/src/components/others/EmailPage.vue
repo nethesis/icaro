@@ -45,8 +45,8 @@
       <div v-if="errors.badMail" class="ui tiny icon negative message">
         <i class="remove icon"></i>
         <div class="content">
-          <div class="header" :style="textStyle">{{ $t("email.error_code") }}</div>
-          <p :style="textStyle">{{ $t("email.error_code_sub") }}</p>
+          <div class="header">{{ $t("email.error_code") }}</div>
+          <p>{{ $t("email.error_code_sub") }}</p>
         </div>
       </div>
       <div v-if="codeRequested">
@@ -72,8 +72,8 @@
         </div>
         <div v-if="bannerShow" class="ui compact message info no-margin-top">
           <div class="content">
-            <div class="header" :style="textStyle">{{$t('email.wait')}}</div>
-            <p :style="textStyle">{{$t('email.we_are_sending_email_code')}}</p>
+            <div class="header">{{$t('email.wait')}}</div>
+            <p>{{$t('email.we_are_sending_email_code')}}</p>
           </div>
         </div>
       </div>
@@ -94,8 +94,7 @@
       <div v-if="authorized" class="ui icon positive message">
         <i class="check icon"></i>
         <div class="content">
-          <div class="header" :style="textStyle">{{ $t("email.auth_success") }}</div>
-          <p :style="textStyle">{{ $t("email.auth_success_sub") }}...</p>
+          <div class="header">{{ $t("email.auth_success") }}</div>
         </div>
       </div>
       <div
