@@ -146,15 +146,19 @@
         :class="hotspot.preferences.marketing_0_reason_country == 'true' ? 'adjust-top-big' : ''"
         v-if="authorized"
       >
-        <div class="ui inline">
-          <input id="conditions" v-model="conditions" type="checkbox" class="ui checkbox field" />
-          <label :style="textStyle" for="conditions">{{ $t("login.disclaimer_privacy_accept") }}</label>
+        <div class="conditions-surveys">
+          <div class="ui inline">
+            <input id="conditions" v-model="conditions" type="checkbox" class="ui checkbox field" />
+            <label :style="textStyle" for="conditions">{{ $t("login.disclaimer_privacy_accept") }}</label>
+          </div>
+          <div v-if="hotspot.preferences.marketing_1_enabled == 'true'" class="ui inline">
+            <input id="surveys" v-model="surveys" type="checkbox" class="ui checkbox field" />
+            <label :style="textStyle" for="surveys">{{ $t("login.disclaimer_survey_accept") }}</label>
+          </div>
         </div>
-        <div v-if="hotspot.preferences.marketing_1_enabled == 'true'" class="ui inline">
-          <input id="surveys" v-model="surveys" type="checkbox" class="ui checkbox field" />
-          <label :style="textStyle" for="surveys">{{ $t("login.disclaimer_survey_accept") }}</label>
+        <div>
+          <button :style="buttonStyle" v-on:click="navigate()" class="ui big button green">{{ $t("login.navigate") }}</button>
         </div>
-        <button :style="buttonStyle" v-on:click="navigate()" class="ui big button green">{{ $t("login.navigate") }}</button>
       </div>
     </div>
   </div>
@@ -515,5 +519,10 @@ a {
 
 .adjust-button {
   margin-top: 0px !important;
+}
+
+.conditions-surveys {
+  display: inline-block !important;
+  text-align: left !important;
 }
 </style>

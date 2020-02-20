@@ -169,19 +169,19 @@
 
   @media (min-width: 723px) {
     .ui.container {
-      width: 60%;
+      width: 60% !important;
     }
   }
 
   @media (min-width: 933px) {
     .ui.container {
-      width: 50%;
+      width: 50% !important;
     }
   }
 
   @media (min-width: 1127px) {
     .ui.container {
-      width: 40%;
+      width: 40% !important;
     }
   }
 </style>
