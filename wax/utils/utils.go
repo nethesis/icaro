@@ -406,7 +406,9 @@ func SendSMSCode(number string, code string, unit models.Unit, auth string) int 
 			if accountSMS.SmsThreshold > 0 && numSMSLeftAccount <= accountSMS.SmsThreshold {
 				resellerAccount := GetAccountByAccountId(hotspot.AccountId)
 				SendSmsAccountThresholdAlert(resellerAccount, numSMSLeftAccount)
-			} else if hotspotSMSThreshold > 0 && numSMSLeftHotspot <= hotspotSMSThreshold {
+			}
+
+			if hotspotSMSThreshold > 0 && numSMSLeftHotspot <= hotspotSMSThreshold {
 				resellerAccount := GetAccountByAccountId(hotspot.AccountId)
 				SendSmsHotspotThresholdAlert(resellerAccount, hotspot, numSMSLeftHotspot)
 			}
