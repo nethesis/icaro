@@ -141,7 +141,7 @@
       "business_dpo_mail": "Customer's business DPO email (optional)",
       "missing_business_dpo_mail": "Add a valid customer's business DPO email",
       "business_dpo_recap": "Customer's business DPO",
-      "missing_business_dpo_mail_recap": "Customer's business DPO email",
+      "business_dpo_mail_recap": "Customer's business DPO email",
       "show_all": "Show all (with no filters)",
       "privacy": "Disclaimers",
       "marketing_info": "Privacy",

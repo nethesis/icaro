@@ -92,16 +92,8 @@
           <span class="pficon pficon-error-circle-o"></span>
           <span class="red">{{$t('hotspot.missing_business_email')}}</span>
         </td>
-        <td v-if="props.row.business_dpo.length > 0" class="fancy">{{ props.row.business_dpo }}</td>
-        <td v-if="props.row.business_dpo.length == 0" class="fancy">
-          <span class="pficon pficon-error-circle-o"></span>
-          <span class="red">{{$t('hotspot.missing_business_dpo')}}</span>
-        </td>
-        <td v-if="props.row.business_dpo_mail.length > 0" class="fancy">{{ props.row.business_dpo_mail }}</td>
-        <td v-if="props.row.business_dpo_mail.length == 0" class="fancy">
-          <span class="pficon pficon-error-circle-o"></span>
-          <span class="red">{{$t('hotspot.missing_business_dpo_mail')}}</span>
-        </td>
+        <td class="fancy">{{ props.row.business_dpo || '-' }}</td>
+        <td class="fancy">{{ props.row.business_dpo_mail || '-' }}</td>
         <td class="fancy">{{ props.row.created | formatDate }}</td>
         <td>
           <hotspot-action details="true" :obj="props.row" :update="getAll"></hotspot-action>
@@ -340,12 +332,12 @@ export default {
           filterable: true
         },
         {
-          label: this.$i18n.t("hotspot.business_dpo"),
+          label: this.$i18n.t("hotspot.business_dpo_recap"),
           field: "business_dpo",
           filterable: true
         },
         {
-          label: this.$i18n.t("hotspot.business_dpo_mail"),
+          label: this.$i18n.t("hotspot.business_dpo_mail_recap"),
           field: "business_dpo_mail",
           filterable: true
         },
