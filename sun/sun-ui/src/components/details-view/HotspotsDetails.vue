@@ -794,11 +794,11 @@
               <dd>{{info.data.business_email || '-'}}</dd>
             </div>
             <div class="list-details">
-              <dt>{{ $t("hotspot.business_dpo") }}</dt>
+              <dt>{{ $t("hotspot.business_dpo_recap") }}</dt>
               <dd>{{info.data.business_dpo || '-'}}</dd>
             </div>
             <div class="list-details">
-              <dt>{{ $t("hotspot.business_dpo_mail") }}</dt>
+              <dt>{{ $t("hotspot.business_dpo_mail_recap") }}</dt>
               <dd>{{info.data.business_dpo_mail || '-'}}</dd>
             </div>
             <div class="list-details">
