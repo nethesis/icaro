@@ -86,12 +86,20 @@ export default {
           this.$root.$options.hotspot.preferences = success.body.preferences;
           this.$root.$options.hotspot.integrations = success.body.integrations;
           this.hotspot.disclaimers = success.body.disclaimers;
-          this.textColor = success.body.preferences.captive_84_text_color || '#383838';
-          this.textFont = success.body.preferences.captive_85_text_style || 'Lato';
+          this.textColor = success.body.preferences.captive_84_text_color || '#4A4A4A';
+          this.textFont = success.body.preferences.captive_85_text_style || 'Roboto';
           $("body").css(
             "background-color",
             success.body.preferences.captive_7_background || "#2a87be"
           );
+
+          // background image
+          if (success.body.preferences.captive_81_bg_image) {
+            $("body").css("height", "100vh");
+            $("body").css("background-size", "cover");
+            $("body").css("background-position", "center");
+            $("body").css("background-image", 'url("' + success.body.preferences.captive_81_bg_image + '")');
+          }
         },
         function(error) {
           this.authorized = false;
@@ -208,8 +216,8 @@ export default {
       countries: require("./../../i18n/countries.json"),
       additionalCountry: "-",
       additionalReason: "-",
-      textColor: '#383838',
-      textFont: 'Lato',
+      textColor: '#4A4A4A',
+      textFont: 'Roboto',
     };
   },
   computed: {

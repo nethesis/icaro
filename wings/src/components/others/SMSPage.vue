@@ -182,8 +182,8 @@ export default {
         this.$root.$options.hotspot.integrations = success.body.integrations;
         this.hotspot.disclaimers = success.body.disclaimers;
         this.hotspot.preferences = success.body.preferences;
-        this.textColor = success.body.preferences.captive_84_text_color || '#383838';
-        this.textFont = success.body.preferences.captive_85_text_style || 'Lato';
+        this.textColor = success.body.preferences.captive_84_text_color || '#4A4A4A';
+        this.textFont = success.body.preferences.captive_85_text_style || 'Roboto';
 
         if (this.$route.query.integration_done) {
           var context = this;
@@ -233,8 +233,8 @@ export default {
       additionalCountry: "-",
       additionalReason: "-",
       passwordVisible: true,
-      textColor: '#383838',
-      textFont: 'Lato',
+      textColor: '#4A4A4A',
+      textFont: 'Roboto',
     };
   },
   computed: {
