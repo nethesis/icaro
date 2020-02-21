@@ -79,7 +79,7 @@
             "select_state": "Select state",
             "prefix": "Prefix",
             "wait": "Sending SMS...",
-            "we_are_sending_sms_code": "Use the same password also at the next access by clicking on the 'Enter with your password' button.",
+            "we_are_sending_sms_code": "Use the same password also at the next access by clicking on the 'Sign in' button.",
             "not_code_explain": "Is it the first time you are connecting to this Wi-Fi?",
             "not_code_explain_else": "Else"
         }
