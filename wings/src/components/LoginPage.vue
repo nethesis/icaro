@@ -134,10 +134,6 @@
       :class="hotspot.preferences.marketing_0_reason_country == 'true' ? 'adjust-top-big' : ''"
       v-if="authorized"
     >
-      <h3 :style="textStyle">{{ $t("login.disclaimer_marketing") }}</h3>
-      <div class="inline field">
-        <textarea readonly class="text-center" v-model="hotspot.disclaimers.marketing_use"></textarea>
-      </div>
       <div class="conditions-surveys">
         <div class="ui inline">
           <input id="conditions" v-model="conditions" type="checkbox" class="ui checkbox field">
@@ -182,8 +178,8 @@ export default {
         this.$root.$options.hotspot.integrations = success.body.integrations;
         this.hotspot.disclaimers = success.body.disclaimers;
         this.hotspot.preferences = success.body.preferences;
-        this.textColor = success.body.preferences.captive_84_text_color || '#383838';
-        this.textFont = success.body.preferences.captive_85_text_style || 'Lato';
+        this.textColor = success.body.preferences.captive_84_text_color || '#4A4A4A';
+        this.textFont = success.body.preferences.captive_85_text_style || 'Roboto';
 
         if (this.$route.query.integration_done && this.$route.query.code) {
           this.voucherAvailable = true;
@@ -218,8 +214,8 @@ export default {
       additionalCountry: "-",
       additionalReason: "-",
       voucherVisible: true,
-      textColor: '#383838',
-      textFont: 'Lato',
+      textColor: '#4A4A4A',
+      textFont: 'Roboto',
     };
   },
   computed: {

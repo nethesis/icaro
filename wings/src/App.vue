@@ -46,9 +46,9 @@
             $("body").css("background-image", 'url("' + success.body.preferences.captive_81_bg_image + '")');
           }
 
-          this.titleColor = success.body.preferences.captive_83_title_color || '#383838'
-          this.textFont = success.body.preferences.captive_85_text_style || 'Lato';
-          this.containerBgColor = success.body.preferences.captive_82_container_bg_color || '#ffffff99';
+          this.titleColor = success.body.preferences.captive_83_title_color || '#4A4A4A'
+          this.textFont = success.body.preferences.captive_85_text_style || 'Roboto';
+          this.containerBgColor = success.body.preferences.captive_82_container_bg_color || '#ffffffdb';
         }, function(error) {
           console.error(error)
           this.loading = false
@@ -69,9 +69,9 @@
           loginDest: '',
           voucherCode: ''
         },
-        titleColor: '#383838',
-        textFont: 'Lato',
-        containerBgColor: '#ffffff99'
+        titleColor: '#4A4A4A',
+        textFont: 'Roboto',
+        containerBgColor: '#ffffffdb'
       }
     },
     computed: {
