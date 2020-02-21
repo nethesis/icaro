@@ -1641,7 +1641,7 @@
                 <td class="voucher-print-q1"></td>
                 <td class="voucher-print-q2">
                   <img :src="preferences.captive[2].value" class="voucher-print-logo" />
-                  <div class="voucher-print-hs-title">{{ info.data.description | truncate(21) }}</div>
+                  <div class="voucher-print-hs-title" :style="{ 'font-size': voucherTitleSize + 'px' }">{{ info.data.description }}</div>
                   <table class="width-75">
                     <tr>
                       <td class="padding-left-2 border-left">
@@ -2060,6 +2060,16 @@ export default {
       captivePrefsSorted: []
     };
   },
+  computed: {
+    voucherTitleSize: function () {
+      var size = 450 / this.info.data.description.length;
+
+      if (size > 20) {
+        size = 20;
+      }
+      return size;
+    }
+  },
   methods: {
     dateFormatter(date) {
       return moment(date).format("DD MMMM YYYY");
@@ -2471,7 +2481,6 @@ export default {
       // set patterned background to captive images
       setTimeout(function() {
         $('div.preview-container canvas').css('background', 'repeating-linear-gradient(-45deg, LightGray, LightGray 5px, Gray 5px, Gray 10px)');
-        console.log('updated all bg')
       }, 500);
     },
     updatePreferences() {
@@ -2583,7 +2592,6 @@ export default {
 
         Promise.all(promises)
           .then(function() {
-            console.log("done");
           })
           .catch(function(err) {
             console.error(err);
