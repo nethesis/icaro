@@ -460,7 +460,7 @@
                   {{$t('hotspot.'+pref.key)}}
                   <span :class="[getPrefIcon(pref.key)]"></span>
                 </label>
-                <div :class="pref.key == 'sms_login_max' ? 'col-sm-2' : 'col-sm-6'">
+                <div :class="pref.key == 'facebook_login_page' ? ['col-sm-4', 'col-lg-3'] : ['col-sm-2', 'col-lg-1']">
                   <input
                     v-model="pref.value"
                     :type="getInputType(pref.key, pref.value)"
@@ -469,12 +469,12 @@
                   />
                 </div>
                 <div v-if="pref.key == 'sms_login_max'" class="col-sm-4">
-                  <label class="control-label col-sm-5">{{$t('hotspot.add_sms_count')}}:</label>
+                  <label class="control-label col-sm-3">{{$t('hotspot.add_sms_count')}}:</label>
                   <input
                     v-model="smsMaxCountAdd"
                     type="number"
                     id="textInput-markup"
-                    class="form-control col-sm-5 special-input"
+                    class="form-control col-sm-1 special-input"
                   />
                   <button
                     type="button"
@@ -513,16 +513,16 @@
           >
             <div v-if="!preferences.isLoading" class="card-pf-body">
               <!-- redirect preference: captive_1_redir -->
-              <div :class="[preferences.captive[0].onError ? 'has-error' : '', 'form-group', 'mg-bottom-3r']">
+              <div :class="[captivePrefsSorted[0].onError ? 'has-error' : '', 'form-group', 'mg-bottom-3r']">
                 <label class="col-sm-4 control-label">
-                  {{$t('hotspot.'+preferences.captive[0].key)}}
-                  <span :class="[getPrefIcon(preferences.captive[0].key)]"></span>
+                  {{$t('hotspot.'+captivePrefsSorted[0].key)}}
+                  <span :class="[getPrefIcon(captivePrefsSorted[0].key)]"></span>
                 </label>
                 <div class="col-sm-6">
                   <input
                     required
-                    v-model="preferences.captive[0].value"
-                    :type="getInputType(preferences.captive[0].key, preferences.captive[0].value)"
+                    v-model="captivePrefsSorted[0].value"
+                    :type="getInputType(captivePrefsSorted[0].key, captivePrefsSorted[0].value)"
                     class="form-control"
                   />
                 </div>
@@ -530,7 +530,7 @@
               <!-- text preferences: captive_2_title, captive_4_subtitle, captive_6_description -->
               <div class="row">
                 <div
-                  v-for="pref in [preferences.captive[1], preferences.captive[3], preferences.captive[5]]"
+                  v-for="pref in [captivePrefsSorted[1], captivePrefsSorted[3], captivePrefsSorted[5]]"
                   :key="pref.key"
                   :class="[pref.onError ? 'has-error' : '', 'col-md-4', 'captive-portal-pref-inline', 'mg-bottom-3r']"
                 >
@@ -550,7 +550,7 @@
               <!-- image preferences: captive_3_logo, captive_5_banner, captive_81_bg_image -->
               <div class="row">
                 <div
-                  v-for="pref in [preferences.captive[2], preferences.captive[4], preferences.captive[7]]"
+                  v-for="pref in [captivePrefsSorted[2], captivePrefsSorted[4], captivePrefsSorted[6]]"
                   :key="pref.key"
                   :class="[pref.onError ? 'has-error' : '', 'col-md-4', 'captive-portal-pref-inline', 'mg-bottom-3r']"
                 >
@@ -558,19 +558,20 @@
                     {{$t('hotspot.'+pref.key)}}
                     <span :class="[getPrefIcon(pref.key)]"></span>
                   </label>
-                  <div>
+                  <div :id="pref.key">
                     <picture-input
                       :ref="'prefInput-'+pref.key"
                       :prefill="urltoFile(pref.value, pref.key)"
                       :alertOnError="false"
                       @change="onPictureChanged(pref)"
                       @remove="onPictureRemoved(pref)"
+                      @prefill="onPicturePrefill(pref)"
                       :width="100"
                       :height="100"
                       :crop="false"
                       :zIndex="1000"
                       :customStrings="uploadLangstexts"
-                      :removable="true"
+                      :removable="pref.value ? true : false"
                       removeButtonClass="btn btn-danger"
                       buttonClass="btn btn-default"
                     ></picture-input>
@@ -578,10 +579,10 @@
                   </div>
                 </div>
               </div>
-              <!-- color preferences: captive_7_background, captive_82_container_bg_color, captive_83_title_color, captive_84_text_color -->
+              <!-- color preferences: captive_83_title_color, captive_84_text_color, captive_82_container_bg_color, captive_7_background -->
               <div class="row">
                 <div
-                  v-for="pref in [preferences.captive[6], preferences.captive[8], preferences.captive[9], preferences.captive[10]]"
+                  v-for="pref in [captivePrefsSorted[7], captivePrefsSorted[8], captivePrefsSorted[9], captivePrefsSorted[10]]"
                   :key="pref.key"
                   :class="[pref.onError ? 'has-error' : '', 'col-md-6', 'col-lg-3', 'captive-portal-pref-inline', 'mg-bottom-3r']"
                 >
@@ -599,15 +600,15 @@
                 </div>
               </div>
               <!-- text style: captive_85_text_style -->
-              <div :class="[preferences.captive[11].onError ? 'has-error' : '', 'form-group', 'mg-bottom-3r']">
+              <div :class="[captivePrefsSorted[11].onError ? 'has-error' : '', 'form-group', 'mg-bottom-3r']">
                 <label class="col-sm-4 control-label">
-                  {{$t('hotspot.'+preferences.captive[11].key)}}
-                  <span :class="[getPrefIcon(preferences.captive[11].key)]"></span>
+                  {{$t('hotspot.'+captivePrefsSorted[11].key)}}
+                  <span :class="[getPrefIcon(captivePrefsSorted[11].key)]"></span>
                 </label>
                 <div class="col-sm-6">
                   <select
-                    v-on:change="textStyleChanged(preferences.captive[11])"
-                    v-model="preferences.captive[11].value"
+                    v-on:change="textStyleChanged(captivePrefsSorted[11])"
+                    v-model="captivePrefsSorted[11].value"
                     class="form-control"
                   >
                     <option v-for="textStyle in textStyles" v-bind:key="textStyle">
@@ -2041,7 +2042,22 @@ export default {
         "EB Garamond",
         "Playfair Display",
         "Playfair Display SC",
-      ]
+      ],
+      captivePrefsSortMap: {
+        "captive_1_redir": 0,
+        "captive_2_title": 1,
+        "captive_3_logo": 2,
+        "captive_4_subtitle": 3,
+        "captive_5_banner": 4,
+        "captive_6_description": 5,
+        "captive_7_background": 10,
+        "captive_81_bg_image": 6,
+        "captive_82_container_bg_color": 9,
+        "captive_83_title_color": 7,
+        "captive_84_text_color": 8,
+        "captive_85_text_style": 11
+      },
+      captivePrefsSorted: []
     };
   },
   methods: {
@@ -2408,6 +2424,7 @@ export default {
           this.preferences.vouchersAvailable = vouchersAvailable;
           this.preferences.global = globalPref;
           this.preferences.captive = captivePref;
+          this.captivePrefsSorted = this.sortCaptivePreferences(captivePref),
           this.preferences.isLoading = false;
           var context = this;
           setTimeout(function() {
@@ -2419,12 +2436,22 @@ export default {
         }
       );
     },
+    sortCaptivePreferences(captivePrefs) {
+      var sortedPrefs = [];
+
+      for (var pref of captivePrefs) {
+        sortedPrefs[this.captivePrefsSortMap[pref.key]] = pref;
+      }
+      return sortedPrefs;
+    },
     updateCaptivePreview() {
       window.$("#captive-preview").css("background-color", this.preferences.backgroundColor);
       window.$("#captive-preview div.ui.segment").css("background-color", this.preferences.containerBgColor);
       window.$("#captive-preview h2").css("color", this.preferences.titleColor);
       window.$("#captive-preview h3").css("color", this.preferences.textColor);
       window.$("#captive-preview p").css("color", this.preferences.textColor);
+      window.$("#captive-preview .terms-space").css("color", this.preferences.textColor);
+      window.$("#captive-preview a.terms").css("color", this.preferences.textColor);
 
       if (this.preferences.backgroundImage) {
         window.$("#captive-preview").css("background-image", 'url("' + this.preferences.backgroundImage + '")');
@@ -2439,6 +2466,13 @@ export default {
       window.$("#captive-preview h3").css("font-family", this.preferences.textStyle);
       window.$("#captive-preview p").css("font-family", this.preferences.textStyle);
       window.$("#captive-preview a.green.button").css("font-family", this.preferences.textStyle);
+      window.$("#captive-preview .terms-space").css("font-family", this.preferences.textStyle);
+
+      // set patterned background to captive images
+      setTimeout(function() {
+        $('div.preview-container canvas').css('background', 'repeating-linear-gradient(-45deg, LightGray, LightGray 5px, Gray 5px, Gray 10px)');
+        console.log('updated all bg')
+      }, 500);
     },
     updatePreferences() {
       this.preferences.isLoading = true;
@@ -2657,6 +2691,12 @@ export default {
       var csv = this.createCSV(this.columns, voucherRows);
       this.downloadCSV(csv.cols, csv.rows, "vouchers");
     },
+    onPicturePrefill(pref) {
+      // set patterned background to captive images
+      setTimeout(function() {
+        $('div.preview-container canvas').css('background', 'repeating-linear-gradient(-45deg, LightGray, LightGray 5px, Gray 5px, Gray 10px)');
+      }, 20);
+    },
     onPictureRemoved(pref) {
       if (pref.key == 'captive_81_bg_image') {
         pref.value = "";
@@ -2685,6 +2725,10 @@ export default {
         if (pref.key == 'captive_81_bg_image') {
           this.preferences.backgroundImage = pref.value;
         }
+
+        setTimeout(function() {
+          $('div#' + pref.key + ' canvas').css('background', 'repeating-linear-gradient(-45deg, LightGray, LightGray 5px, Gray 5px, Gray 10px)');
+        }, 200);
       }
       this.updateCaptivePreview();
       this.$forceUpdate();

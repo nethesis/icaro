@@ -70,6 +70,7 @@
           <div class="ui big left icon input">
             <input
               v-model="authCode"
+              class="pw-input"
               :type="passwordVisible ? 'number' : 'password'"
               :placeholder="$t('sms.insert_your_code')"
             />
@@ -87,8 +88,8 @@
         </div>
         <div v-if="bannerShow" class="ui compact message info no-margin-top">
           <div class="content">
-            <div class="header" :style="textStyle">{{$t('sms.wait')}}</div>
-            <p :style="textStyle">{{$t('sms.we_are_sending_sms_code')}}</p>
+            <div class="header">{{$t('sms.wait')}}</div>
+            <p>{{$t('sms.we_are_sending_sms_code')}}</p>
           </div>
         </div>
       </div>
@@ -109,8 +110,7 @@
       <div v-if="authorized" class="ui icon positive message">
         <i class="check icon"></i>
         <div class="content">
-          <div class="header" :style="textStyle">{{ $t("sms.auth_success") }}</div>
-          <p :style="textStyle">{{ $t("sms.auth_success_sub") }}...</p>
+          <div class="header">{{ $t("sms.auth_success") }}</div>
         </div>
       </div>
       <div
@@ -147,15 +147,19 @@
         :class="hotspot.preferences.marketing_0_reason_country == 'true' ? 'adjust-top-big' : ''"
         v-if="authorized"
       >
-        <div class="ui inline">
-          <input id="conditions" v-model="conditions" type="checkbox" class="ui checkbox field" />
-          <label :style="textStyle" for="conditions">{{ $t("login.disclaimer_privacy_accept") }}</label>
+        <div class="conditions-surveys">
+          <div class="ui inline">
+            <input id="conditions" v-model="conditions" type="checkbox" class="ui checkbox field" />
+            <label :style="textStyle" for="conditions">{{ $t("login.disclaimer_privacy_accept") }}</label>
+          </div>
+          <div v-if="hotspot.preferences.marketing_1_enabled == 'true'" class="ui inline">
+            <input id="surveys" v-model="surveys" type="checkbox" class="ui checkbox field" />
+            <label :style="textStyle" for="surveys">{{ $t("login.disclaimer_survey_accept") }}</label>
+          </div>
         </div>
-        <div v-if="hotspot.preferences.marketing_1_enabled == 'true'" class="ui inline">
-          <input id="surveys" v-model="surveys" type="checkbox" class="ui checkbox field" />
-          <label :style="textStyle" for="surveys">{{ $t("login.disclaimer_survey_accept") }}</label>
+        <div>
+          <button :style="buttonStyle" v-on:click="navigate()" class="ui big button green">{{ $t("login.navigate") }}</button>
         </div>
-        <button :style="buttonStyle" v-on:click="navigate()" class="ui big button green">{{ $t("login.navigate") }}</button>
       </div>
     </div>
   </div>
@@ -516,5 +520,14 @@ a {
 
 .adjust-button {
   margin-top: 0px !important;
+}
+
+.conditions-surveys {
+  display: inline-block !important;
+  text-align: left !important;
+}
+
+.pw-input {
+  width: 75% !important;
 }
 </style>

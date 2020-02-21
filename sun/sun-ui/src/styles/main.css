@@ -404,6 +404,7 @@ a {
 
 .picture-preview {
   border: 1px solid #bcbcbc !important;
+  background: repeating-linear-gradient(-45deg, LightGray, LightGray 5px, Gray 5px, Gray 10px);
 }
 
 .result-list {
@@ -449,7 +450,7 @@ a {
 }
 
 .special-input{
-  width: 38% !important;
+  width: 18% !important;
 }
 
 @media print {

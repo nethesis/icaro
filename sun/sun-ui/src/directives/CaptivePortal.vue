@@ -13,6 +13,13 @@
               <img class="ui centered small image" :src="extractValue('captive_5_banner')">
               <p v-html="extractValue('captive_6_description')"></p>
               <div class="ui divider"></div>
+              <div class="ui checkbox">
+                <input type="checkbox" id="agree-terms" />
+                <label for="agree-terms" class="inline">
+                  <span class="terms-space">{{$t('hotspot.i_agree')}}</span>
+                </label><span class="terms-space">(<a class="terms">{{$t('hotspot.tos_and_privacy')}}</a>)</span>
+              </div>
+              <div class="ui divider"></div>
               <router-link to="/login" class="big ui green button">{{ $t("hotspot.start_navigate") }}</router-link>
             </div>
           </div>
@@ -63,6 +70,17 @@ p {
   font-size: 12px;
 }
 
+.terms-space {
+  margin-right: 3px;
+  cursor: default;
+}
+
+
+a.terms {
+  text-decoration: underline !important;
+  cursor: pointer;
+}
+
 img {
   margin-top: 20px !important;
   margin-bottom: 20px !important;
@@ -80,6 +98,10 @@ img {
   border: none !important;
   box-shadow: none !important;
   -webkit-box-shadow: none !important;
+}
+
+label.inline {
+  display: inline !important;
 }
 </style>
 <style scoped src="semantic-ui-offline/semantic.min.css"></style>

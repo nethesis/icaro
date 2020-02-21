@@ -81,7 +81,7 @@
       "captive_81_bg_image": "Background image",
       "captive_82_container_bg_color": "Box color and opacity",
       "captive_83_title_color": "Title color",
-      "captive_84_text_color": "Text color",
+      "captive_84_text_color": "Subtitle and description color",
       "captive_85_text_style": "Text style",
       "voucher_expiration_days": "Voucher expiration (days)",
       "sms_login": "Captive Portal login with SMS",
@@ -169,7 +169,9 @@
       "clear": "Clear",
       "advanced_filters": "Advanced filters",
       "create_voucher_custom": "Create custom voucher",
-      "voucher_custom_code": "Code"
+      "voucher_custom_code": "Code",
+      "i_agree": "I agree to the general user conditions",
+      "tos_and_privacy": "ToS and Privacy"
     },
     "user": {
       "username": "Username",

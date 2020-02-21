@@ -5,8 +5,8 @@
             "start_navigate": "Start Navigate",
             "main_error": "Some params are missing. Can't we go ahead",
             "main_error_sub": "Something gone wrong opening the page",
-            "i_agree": "I agree to the",
-            "agree_terms": "general user conditions (ToS and Privacy)",
+            "i_agree": "I agree to the general user conditions",
+            "tos_and_privacy": "ToS and Privacy",
             "modal_terms": "Terms of Service and Privacy",
             "tos": "Terms of Service",
             "privacy": "Privacy"
@@ -37,7 +37,6 @@
         "social": {
             "auth_progress": "Authorization in progress",
             "auth_success": "You are successfully authenticated",
-            "auth_success_sub": "Read the marketing disclaimer and in a few seconds you will be redirected",
             "auth_error": "Access Denied",
             "auth_error_sub": "Something went wrong, the reasons could be the following: 1)The data entered may not be correct. 2)The voucher you are using could be expired. 3)You could have reached your maximum daily time. 4)You could have reached your maximum daily traffic."
         },
@@ -54,7 +53,6 @@
             "error_code_sub": "Something went wrong, please check your email address",
             "auth_progress": "Authorization in progress",
             "auth_success": "You are successfully authenticated",
-            "auth_success_sub": "In a few seconds you will be redirected",
             "auth_error": "Access Denied",
             "auth_error_sub": "Something went wrong, the reasons could be the following: 1)The data entered may not be correct. 2)The voucher you are using could be expired. 3)You could have reached your maximum daily time. 4)You could have reached your maximum daily traffic.",
             "wait": "Please wait few seconds",
@@ -76,7 +74,6 @@
             "error_code_sub": "Something went wrong on sending password (please choose the right international prefix for your number or check you don't have reach the max sending SMS number)",
             "auth_progress": "Authorization in progress",
             "auth_success": "You are successfully authenticated",
-            "auth_success_sub": "In a few seconds you will be redirected",
             "auth_error": "Access Denied",
             "auth_error_sub": "Something went wrong, the reasons could be the following: 1)The data entered may not be correct. 2)The voucher you are using could be expired. 3)You could have reached your maximum daily time. 4)You could have reached your maximum daily traffic.",
             "select_state": "Select state",

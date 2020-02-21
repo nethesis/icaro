@@ -7,8 +7,7 @@
     <div v-if="authorized" class="ui icon positive message">
       <i class="check icon"></i>
       <div class="content">
-        <div class="header" :style="textStyle">{{ $t("social.auth_success") }}</div>
-        <p :style="textStyle">{{ $t("social.auth_success_sub") }}...</p>
+        <div class="header">{{ $t("social.auth_success") }}</div>
       </div>
     </div>
     <div
@@ -45,15 +44,19 @@
       :class="$parent.hotspot.preferences.marketing_0_reason_country == 'true' ? 'adjust-top-big' : ''"
       v-if="authorized"
     >
-      <div class="ui inline">
-        <input id="conditions" v-model="conditions" type="checkbox" class="ui checkbox field">
-        <label for="conditions" :style="textStyle">{{ $t("login.disclaimer_privacy_accept") }}</label>
+      <div class="conditions-surveys">
+        <div class="ui inline">
+          <input id="conditions" v-model="conditions" type="checkbox" class="ui checkbox field" />
+          <label :style="textStyle" for="conditions">{{ $t("login.disclaimer_privacy_accept") }}</label>
+        </div>
+        <div v-if="$parent.hotspot.preferences.marketing_1_enabled == 'true'" class="ui inline">
+          <input id="surveys" v-model="surveys" type="checkbox" class="ui checkbox field" />
+          <label :style="textStyle" for="surveys">{{ $t("login.disclaimer_survey_accept") }}</label>
+        </div>
       </div>
-      <div v-if="$parent.hotspot.preferences.marketing_1_enabled == 'true'" class="ui inline">
-        <input id="surveys" v-model="surveys" type="checkbox" class="ui checkbox field">
-        <label for="surveys" :style="textStyle">{{ $t("login.disclaimer_survey_accept") }}</label>
+      <div>
+        <button v-on:click="navigate()" class="ui big button green" :style="buttonStyle">{{ $t("login.navigate") }}</button>
       </div>
-      <button v-on:click="navigate()" class="ui big button green" :style="buttonStyle">{{ $t("login.navigate") }}</button>
     </div>
   </div>
 </template>
@@ -382,5 +385,10 @@ textarea {
 }
 .adjust-button {
   margin-top: 0px !important;
+}
+
+.conditions-surveys {
+  display: inline-block !important;
+  text-align: left !important;
 }
 </style>

@@ -7,6 +7,7 @@
         <div class="ui big left icon input">
           <input
             v-model="authCode"
+            class="pw-input"
             :type="voucherVisible ? 'email' : 'password'"
             :placeholder="$t('login.insert_voucher')"
           >
@@ -27,8 +28,8 @@
       <div v-if="badCode" class="ui tiny icon negative message">
         <i class="remove icon"></i>
         <div class="content">
-          <div class="header" :style="textStyle">{{ $t("login.error_voucher_code") }}</div>
-          <p :style="textStyle">{{ $t("login.error_voucher_code_sub") }}</p>
+          <div class="header">{{ $t("login.error_voucher_code") }}</div>
+          <p>{{ $t("login.error_voucher_code_sub") }}</p>
         </div>
       </div>
     </div>
@@ -87,8 +88,8 @@
     </div>
     <div v-if="dedaloError" class="ui icon negative message">
       <div class="content">
-        <div class="header" :style="textStyle">{{ $t("social.auth_error") }}</div>
-        <p :style="textStyle">{{ $t("social.auth_error_sub") }}</p>
+        <div class="header">{{ $t("social.auth_error") }}</div>
+        <p>{{ $t("social.auth_error_sub") }}</p>
       </div>
     </div>
     <button
@@ -101,8 +102,7 @@
     <div v-if="authorized" class="ui icon positive message">
       <i class="check icon"></i>
       <div class="content">
-        <div class="header" :style="textStyle">{{ $t("social.auth_success") }}</div>
-        <p :style="textStyle">{{ $t("social.auth_success_sub") }}...</p>
+        <div class="header">{{ $t("social.auth_success") }}</div>
       </div>
     </div>
 
@@ -138,15 +138,19 @@
       <div class="inline field">
         <textarea readonly class="text-center" v-model="hotspot.disclaimers.marketing_use"></textarea>
       </div>
-      <div class="ui inline">
-        <input id="conditions" v-model="conditions" type="checkbox" class="ui checkbox field">
-        <label :style="textStyle" for="conditions">{{ $t("login.disclaimer_privacy_accept") }}</label>
+      <div class="conditions-surveys">
+        <div class="ui inline">
+          <input id="conditions" v-model="conditions" type="checkbox" class="ui checkbox field">
+          <label :style="textStyle" for="conditions">{{ $t("login.disclaimer_privacy_accept") }}</label>
+        </div>
+        <div v-if="hotspot.preferences.marketing_1_enabled == 'true'" class="ui inline">
+          <input id="surveys" v-model="surveys" type="checkbox" class="ui checkbox field">
+          <label :style="textStyle" for="surveys">{{ $t("login.disclaimer_survey_accept") }}</label>
+        </div>
       </div>
-      <div v-if="hotspot.preferences.marketing_1_enabled == 'true'" class="ui inline">
-        <input id="surveys" v-model="surveys" type="checkbox" class="ui checkbox field">
-        <label :style="textStyle" for="surveys">{{ $t("login.disclaimer_survey_accept") }}</label>
+      <div>
+        <button :style="buttonStyle" v-on:click="navigate()" class="ui big button green">{{ $t("login.navigate") }}</button>
       </div>
-      <button :style="buttonStyle" v-on:click="navigate()" class="ui big button green">{{ $t("login.navigate") }}</button>
     </div>
   </div>
 </template>
@@ -492,5 +496,14 @@ a {
 }
 .adjust-button {
   margin-top: 0px !important;
+}
+
+.conditions-surveys {
+  display: inline-block !important;
+  text-align: left !important;
+}
+
+.pw-input {
+  width: 75% !important;
 }
 </style>
