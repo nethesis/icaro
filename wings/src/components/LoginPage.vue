@@ -7,6 +7,7 @@
         <div class="ui big left icon input">
           <input
             v-model="authCode"
+            class="pw-input"
             :type="voucherVisible ? 'email' : 'password'"
             :placeholder="$t('login.insert_voucher')"
           >
@@ -500,5 +501,9 @@ a {
 .conditions-surveys {
   display: inline-block !important;
   text-align: left !important;
+}
+
+.pw-input {
+  width: 75% !important;
 }
 </style>

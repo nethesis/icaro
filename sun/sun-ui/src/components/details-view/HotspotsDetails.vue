@@ -460,7 +460,7 @@
                   {{$t('hotspot.'+pref.key)}}
                   <span :class="[getPrefIcon(pref.key)]"></span>
                 </label>
-                <div :class="pref.key == 'sms_login_max' ? 'col-sm-2' : 'col-sm-6'">
+                <div :class="pref.key == 'facebook_login_page' ? ['col-sm-4', 'col-lg-3'] : ['col-sm-2', 'col-lg-1']">
                   <input
                     v-model="pref.value"
                     :type="getInputType(pref.key, pref.value)"
@@ -469,12 +469,12 @@
                   />
                 </div>
                 <div v-if="pref.key == 'sms_login_max'" class="col-sm-4">
-                  <label class="control-label col-sm-5">{{$t('hotspot.add_sms_count')}}:</label>
+                  <label class="control-label col-sm-3">{{$t('hotspot.add_sms_count')}}:</label>
                   <input
                     v-model="smsMaxCountAdd"
                     type="number"
                     id="textInput-markup"
-                    class="form-control col-sm-5 special-input"
+                    class="form-control col-sm-1 special-input"
                   />
                   <button
                     type="button"
@@ -558,19 +558,20 @@
                     {{$t('hotspot.'+pref.key)}}
                     <span :class="[getPrefIcon(pref.key)]"></span>
                   </label>
-                  <div>
+                  <div :id="pref.key">
                     <picture-input
                       :ref="'prefInput-'+pref.key"
                       :prefill="urltoFile(pref.value, pref.key)"
                       :alertOnError="false"
                       @change="onPictureChanged(pref)"
                       @remove="onPictureRemoved(pref)"
+                      @prefill="onPicturePrefill(pref)"
                       :width="100"
                       :height="100"
                       :crop="false"
                       :zIndex="1000"
                       :customStrings="uploadLangstexts"
-                      :removable="true"
+                      :removable="pref.value ? true : false"
                       removeButtonClass="btn btn-danger"
                       buttonClass="btn btn-default"
                     ></picture-input>
@@ -2466,6 +2467,12 @@ export default {
       window.$("#captive-preview p").css("font-family", this.preferences.textStyle);
       window.$("#captive-preview a.green.button").css("font-family", this.preferences.textStyle);
       window.$("#captive-preview .terms-space").css("font-family", this.preferences.textStyle);
+
+      // set patterned background to captive images
+      setTimeout(function() {
+        $('div.preview-container canvas').css('background', 'repeating-linear-gradient(-45deg, LightGray, LightGray 5px, Gray 5px, Gray 10px)');
+        console.log('updated all bg')
+      }, 500);
     },
     updatePreferences() {
       this.preferences.isLoading = true;
@@ -2684,6 +2691,12 @@ export default {
       var csv = this.createCSV(this.columns, voucherRows);
       this.downloadCSV(csv.cols, csv.rows, "vouchers");
     },
+    onPicturePrefill(pref) {
+      // set patterned background to captive images
+      setTimeout(function() {
+        $('div.preview-container canvas').css('background', 'repeating-linear-gradient(-45deg, LightGray, LightGray 5px, Gray 5px, Gray 10px)');
+      }, 20);
+    },
     onPictureRemoved(pref) {
       if (pref.key == 'captive_81_bg_image') {
         pref.value = "";
@@ -2712,6 +2725,10 @@ export default {
         if (pref.key == 'captive_81_bg_image') {
           this.preferences.backgroundImage = pref.value;
         }
+
+        setTimeout(function() {
+          $('div#' + pref.key + ' canvas').css('background', 'repeating-linear-gradient(-45deg, LightGray, LightGray 5px, Gray 5px, Gray 10px)');
+        }, 200);
       }
       this.updateCaptivePreview();
       this.$forceUpdate();

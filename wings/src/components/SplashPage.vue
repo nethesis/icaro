@@ -12,7 +12,7 @@
           <input v-model="hotspot.agree" type="checkbox" id="agree-terms" />
           <label for="agree-terms" class="inline">
             <span class="terms-space" :style="textStyle">{{$t('splash.i_agree')}}</span>
-          </label><a class="terms" @click="showModal()" :style="textStyle">{{$t('splash.tos_and_privacy')}}</a>
+          </label><span class="terms-space" :style="textStyle">(<a class="terms" @click="showModal()" :style="textStyle">{{$t('splash.tos_and_privacy')}}</a>)</span>
         </div>
         <div class="ui divider"></div>
         <router-link :to="hotspot.agree ? '/login' : '/'"

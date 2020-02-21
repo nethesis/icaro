@@ -55,6 +55,7 @@
           <div class="ui big left icon input">
             <input
               v-model="authCode"
+              class="pw-input"
               :type="passwordVisible ? 'number' : 'password'"
               :placeholder="$t('email.insert_your_code')"
             />
@@ -545,5 +546,9 @@ a {
 .conditions-surveys {
   display: inline-block !important;
   text-align: left !important;
+}
+
+.pw-input {
+  width: 75% !important;
 }
 </style>

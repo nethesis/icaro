@@ -17,7 +17,7 @@
                 <input type="checkbox" id="agree-terms" />
                 <label for="agree-terms" class="inline">
                   <span class="terms-space">{{$t('hotspot.i_agree')}}</span>
-                </label><a class="terms">{{$t('hotspot.tos_and_privacy')}}</a>
+                </label><span class="terms-space">(<a class="terms">{{$t('hotspot.tos_and_privacy')}}</a>)</span>
               </div>
               <div class="ui divider"></div>
               <router-link to="/login" class="big ui green button">{{ $t("hotspot.start_navigate") }}</router-link>
