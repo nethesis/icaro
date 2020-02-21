@@ -3103,19 +3103,22 @@ label.block-centered {
 }
 
 .smartphone {
-  width: 400px;
+  width: 350px;
+  min-height: 450px;
   margin: auto;
   border: none;
 }
 
 .tablet {
-  width: 750px;
+  width: 450px;
+  min-height: 500px;
   margin: auto;
   border: none;
 }
 
 .desktop {
-  width: 90%;
+  width: 750px;
+  min-height: 400px;
   margin: auto;
   border: none;
 }
