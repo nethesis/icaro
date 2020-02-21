@@ -117,6 +117,19 @@ var StatsService = {
         )
         .then(success, error);
     },
+    updateSMSThresholdForAccountByAccount(body, accountId, success, error) {
+      this.$http
+        .put(
+          this.$root.$options.api_scheme +
+          this.$root.$options.api_host +
+          "/api/stats/sms/accounts/" + accountId, body, {
+            headers: {
+              Token: (this.get("loggedUser") && this.get("loggedUser").token) || ""
+            }
+          }
+        )
+        .then(success, error);
+    },
     statsSMSSentByHotspot(hotspotId, success, error) {
       this.$http
         .get(

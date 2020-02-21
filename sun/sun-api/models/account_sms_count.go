@@ -23,12 +23,17 @@
 package models
 
 type AccountSmsCount struct {
-	Id          int `db:"id" json:"id"`
-	AccountId   int `db:"account_id" json:"account_id"`
-	SmsMaxCount int `db:"sms_max_count" json:"sms_max_count"`
-	SmsCount    int `db:"sms_count" json:"sms_count"`
+	Id           int `db:"id" json:"id"`
+	AccountId    int `db:"account_id" json:"account_id"`
+	SmsMaxCount  int `db:"sms_max_count" json:"sms_max_count"`
+	SmsCount     int `db:"sms_count" json:"sms_count"`
+	SmsThreshold int `db:"sms_threshold" json:"sms_threshold"`
 }
 
 type AccountSmsCountJSON struct {
 	SmsToAdd int `json:"sms_to_add"`
+}
+
+type AccountSmsThresholdJSON struct {
+	SmsThreshold int `json:"sms_threshold"`
 }

@@ -466,3 +466,7 @@ a {
 .datepicker-input {
   width: 100%;
 }
+
+.text-align-right {
+  text-align: right;
+}

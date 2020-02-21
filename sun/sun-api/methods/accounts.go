@@ -353,6 +353,25 @@ func StatsSMSTotalForAccount(c *gin.Context) {
 	c.JSON(http.StatusOK, accountSMS)
 }
 
+func UpdateSMSThresholdForAccount(c *gin.Context) {
+	var accountSMS models.AccountSmsCount
+
+	var json models.AccountSmsThresholdJSON
+	if err := c.BindJSON(&json); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Request fields malformed", "error": err.Error()})
+		return
+	}
+
+	db := database.Instance()
+
+	destAccountId := c.Param("account_id")
+	db.Where("account_id = ?", destAccountId).First(&accountSMS)
+
+	accountSMS.SmsThreshold = json.SmsThreshold
+
+	db.Save(&accountSMS)
+}
+
 func UpdateSMSTotalForAccount(c *gin.Context) {
 	var accountSMS models.AccountSmsCount
 	accountId := c.MustGet("token").(models.AccessToken).AccountId

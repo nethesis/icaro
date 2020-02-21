@@ -5,7 +5,7 @@
       <strong class="soft">{{ info.data.name }} - {{info.data.description}}</strong>
     </h2>
     <div class="row row-cards-pf">
-      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
+      <div class="col-xs-12 col-sm-4 col-md-4 col-lg-3 max-height-80">
         <div class="card-pf card-pf-accented">
           <div class="card-pf-heading">
             <h2 class="card-pf-title">
@@ -24,7 +24,7 @@
           </div>
         </div>
       </div>
-      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
+      <div class="col-xs-12 col-sm-4 col-md-4 col-lg-3 max-height-80">
         <div class="card-pf card-pf-accented">
           <div class="card-pf-heading">
             <h2 class="card-pf-title">
@@ -43,7 +43,7 @@
           </div>
         </div>
       </div>
-      <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2">
+      <div class="col-xs-12 col-sm-4 col-md-4 col-lg-3 max-height-80">
         <div class="card-pf card-pf-accented">
           <div class="card-pf-heading">
             <h2 class="card-pf-title">
@@ -62,7 +62,7 @@
           </div>
         </div>
       </div>
-      <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2">
+      <div class="col-xs-12 col-sm-4 col-md-4 col-lg-3 max-height-80">
         <div class="card-pf card-pf-accented">
           <div class="card-pf-heading">
             <h2 class="card-pf-title">
@@ -81,7 +81,7 @@
           </div>
         </div>
       </div>
-      <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2">
+      <div class="col-xs-12 col-sm-4 col-md-4 col-lg-3 max-height-80">
         <div class="card-pf card-pf-accented">
           <div class="card-pf-heading">
             <h2 class="card-pf-title">
@@ -100,23 +100,27 @@
           </div>
         </div>
       </div>
-      <div class="col-xs-12 col-sm-4 col-md-4 col-lg-2">
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3 max-height-80">
         <div class="card-pf card-pf-accented">
           <div class="card-pf-heading">
             <h2 class="card-pf-title">
               <span class="fa fa-commenting card-info-title"></span>
               {{ $t("dashboard.sms_sent") }}
-              <span
+              <div
                 v-if="!totals.sms.isLoading"
                 class="right"
               >
-                <strong
+                <div
+                  class="text-align-right"
                   :class="totals.sms.count < smsMaxCount || smsMaxCount == 0 ? 'soft' : 'red'"
                 >
                   {{ totals.sms.count}} /
                   <b>{{smsMaxCount == 0 ? '-' : smsMaxCount}}</b>
-                </strong>
-              </span>
+                </div>
+                <div v-if="smsThreshold > 0" class="small-text">
+                  {{ $t("hotspot.warn_sms") }}: <b>{{ smsThreshold }}</b>
+                </div>
+              </div>
               <div v-if="totals.sms.isLoading" class="spinner spinner-sm right"></div>
             </h2>
           </div>
@@ -2024,6 +2028,7 @@ export default {
       locale: this.$root.$options.currentLocale,
       smsMaxCount: 0,
       smsMaxCountAdd: 0,
+      smsThreshold: 0,
       showVoucherPrint: false,
       vouchersToPrint: [],
       advancedFilters: false,
@@ -2379,6 +2384,10 @@ export default {
 
             if (pref.key == "sms_login_max") {
               this.smsMaxCount = pref.value;
+            }
+
+            if (pref.key == "sms_login_threshold") {
+              this.smsThreshold = pref.value;
             }
 
             if (pref.key.startsWith("captive")) {
@@ -3070,4 +3079,13 @@ label.block-centered {
 .captive-mode {
   font-size: 30px;
 }
+
+.max-height-80 {
+  max-height: 80px;
+}
+
+.small-text {
+  font-size: 12px;
+}
+
 </style>
