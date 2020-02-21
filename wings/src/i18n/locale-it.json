@@ -79,7 +79,7 @@
             "select_state": "Seleziona Stato",
             "prefix": "Prefisso Internazionale",
             "wait": "Invio SMS in corso...",
-            "we_are_sending_sms_code": "Riutilizza la stessa password anche per i prossimi accessi cliccando sul pulsante 'Entra con password'.",
+            "we_are_sending_sms_code": "Riutilizza la stessa password anche per i prossimi accessi cliccando sul pulsante 'Accedi'.",
             "not_code_explain": "È la prima volta che ti connetti alla nostra rete Wi-Fi?",
             "not_code_explain_else": "Altrimenti"
         }

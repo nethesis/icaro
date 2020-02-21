@@ -139,9 +139,11 @@
       "business_email": "Email del Cliente",
       "missing_business_email": "Inserisci un indirizzo email valido",
       "business_dpo": "Nome e cognome del DPO",
-      "missing_business_dpo": "Inserire nome e cognome del DPO",
-      "business_dpo_mail": "Indirizzo email deo DPO",
+      "missing_business_dpo": "Inserire nome e cognome del DPO (opzionale)",
+      "business_dpo_mail": "Indirizzo email del DPO (opzionale)",
       "missing_business_dpo_mail": "Inserire email del DPO",
+      "business_dpo_recap": "Nome e cognome del DPO",
+      "business_dpo_mail_recap": "Indirizzo email del DPO",
       "show_all": "Mostra tutti (nessun filtro applicato)",
       "privacy": "Disclaimer",
       "marketing_info": "Privacy",
@@ -360,7 +362,7 @@
       "sent_last_15_days": "Inviati negli ultimi 15 giorni",
       "sent_last_month": "Inviati nell'ultimo mese",
       "sent_this_period": "Inviati in questo periodo",
-      "account_type_reports": "Autenticazione",
+      "account_type_reports": "Modalità di Autenticazione",
       "account_types_whatsapp": "Whatsapp",
       "account_types_facebook": "Facebook",
       "account_types_instagram": "Instagram",
@@ -369,8 +371,8 @@
       "account_types_sms": "SMS",
       "account_types_email": "Email",
       "account_types_voucher": "Voucher",
-      "in_this_period": "In questo periodo",
-      "distribution": "Distribuzinoe"
+      "in_this_period": "Andamento nel periodo selezionato",
+      "distribution": "Distribuzione"
     },
     "marketing": {
       "ask_for_reason_country": "Chiedi nazionalità e motivo del soggiorno",
