@@ -51,7 +51,6 @@ func GetReviewPage(c *gin.Context) {
 	hotspotPrefs := utils.GetHotspotPrefs(adeToken.HotspotId)
 
 	reviewPage.HotspotName = hotspotPrefs["captive_2_title"]
-	reviewPage.HotspotLogo = hotspotPrefs["captive_3_logo"]
 	reviewPage.BgColor = hotspotPrefs["captive_7_background"]
 
 	reviewPage.Threshold, _ = strconv.Atoi(hotspotPrefs["marketing_9_threshold"])
@@ -94,7 +93,7 @@ func PostReviewResult(c *gin.Context) {
 	}
 
 	if reviewResult.Stars > 0 && reviewResult.Stars <= 5 {
-		if !utils.SendReviewMessageToOwner(adeToken, reviewResult.Stars, reviewResult.Message, hotspotPrefs["captive_7_background"]) {
+		if !utils.SendReviewMessageToOwner(adeToken, reviewResult.Stars, reviewResult.Message, hotspotPrefs) {
 			c.JSON(http.StatusBadRequest, gin.H{"message": "Feedback submission failed."})
 			return
 		}

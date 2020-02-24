@@ -27,9 +27,10 @@ func GetFeedbackPage(c *gin.Context) {
 	hotspotPrefs := utils.GetHotspotPrefs(adeToken.HotspotId)
 
 	FeedbackPage.HotspotName = hotspotPrefs["captive_2_title"]
-	FeedbackPage.HotspotLogo = hotspotPrefs["captive_3_logo"]
 	FeedbackPage.BgColor = hotspotPrefs["captive_7_background"]
-
+	FeedbackPage.ContainerBgColor = hotspotPrefs["captive_82_container_bg_color"]
+	FeedbackPage.TitleColor = hotspotPrefs["captive_83_title_color"]
+	FeedbackPage.TextColor = hotspotPrefs["captive_84_text_color"]
 	c.JSON(http.StatusOK, FeedbackPage)
 }
 
@@ -57,7 +58,7 @@ func PostFeedbackResult(c *gin.Context) {
 	}
 
 	if feedbackResult.Message != "" {
-		if !utils.SendFeedBackMessageToOwner(adeToken, feedbackResult.Message, hotspotPrefs["captive_7_background"]) {
+		if !utils.SendFeedBackMessageToOwner(adeToken, feedbackResult.Message, hotspotPrefs) {
 			c.JSON(http.StatusBadRequest, gin.H{"message": "Feedback submission failed."})
 			return
 		}

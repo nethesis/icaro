@@ -1,12 +1,12 @@
 <template>
-  <div id="app" class="ui container">
+  <div id="app" class="ui segment container" :style="containerStyle">
     <div v-show="loading" class="ui active dimmer">
       <div class="ui loader"></div>
     </div>
-    <h1 v-show="!loading" class="ui header center aligned white">{{hotspot_name}}</h1>
+    <h1 v-show="!loading" class="ui header center aligned white" :style="titleStyle">{{hotspot_name}}</h1>
     <img v-show="!loading" :src="hotspot_logo" class="ui image centered small">
-    <div v-show="!loading" class="ui segments">
-      <router-view class="ui segment"></router-view>
+    <div v-show="!loading" class="ui">
+      <router-view class="ui"></router-view>
     </div>
   </div>
 </template>
@@ -18,7 +18,10 @@ export default {
     return {
       loading: false,
       hotspot_name: "",
-      hotspot_logo: ""
+      hotspot_logo: "",
+      titleColor: '#4A4A4A',
+      textFont: 'Roboto',
+      containerBgColor: '#ffffffdb'
     };
   },
   created() {
@@ -27,6 +30,19 @@ export default {
   mounted() {
     $("body").css("background-color", "rgba(0,0,0,.85)");
     this.getInfo();
+  },
+  computed: {
+    titleStyle: function () {
+      return {
+        color: this.titleColor,
+        'font-family': this.textFont
+      }
+    },
+    containerStyle: function () {
+      return {
+        'background-color': this.containerBgColor
+      }
+    },
   },
   methods: {
     getInfo() {
@@ -38,7 +54,18 @@ export default {
           this.loading = false;
           this.hotspot_name = success.body.hotspot_name;
           this.hotspot_logo = success.body.hotspot_logo;
-          $("body").css("background-color", success.body.bg_color);
+          $("body").css("background-color", success.body.bg_color || '#2a87be');
+
+          // background image
+          if (success.body.bg_image) {
+            $("body").css("height", "100vh");
+            $("body").css("background-size", "cover");
+            $("body").css("background-position", "center");
+            $("body").css("background-image", 'url("' + success.body.bg_image + '")');
+          }
+          this.titleColor = success.body.title_color || '#4A4A4A'
+          this.textFont = success.body.text_style || 'Roboto';
+          this.containerBgColor = success.body.container_bg_color || '#ffffffdb';
         },
         function(error) {
           this.loading = false;

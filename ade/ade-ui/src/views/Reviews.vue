@@ -1,9 +1,9 @@
 <template>
   <div>
-    <h2 class="ui header center aligned">{{$t('reviews')}}</h2>
+    <h2 class="ui header center aligned" :style="textStyle">{{$t('reviews')}}</h2>
 
     <!-- STARS -->
-    <h4 v-show="!reviewLeave" class="ui header center aligned">{{$t('review_text_before')}}</h4>
+    <h4 v-show="!reviewLeave" class="ui header center aligned" :style="textStyle">{{$t('review_text_before')}}</h4>
     <div v-show="!reviewLeave" class="ui form">
       <div class="ui one column stackable center aligned page grid field">
         <div class="ui column twelve wide">
@@ -35,10 +35,12 @@
     <h4
       v-show="!reviewLeave && stars > 0"
       class="ui header center aligned"
+      :style="textStyle"
     >{{$t('review_text_after_1')}}</h4>
     <h5
       v-show="!reviewLeave && stars > 0"
       class="ui header center aligned no-mg-top"
+      :style="textStyle"
     >{{$t('review_text_after_2')}}</h5>
     <div v-show="!reviewLeave && stars > 0" class="ui form">
       <div class="ui field">
@@ -59,6 +61,7 @@
             :disabled="message.length > 400"
             @click="setReview()"
             class="ui button large green"
+            :style="buttonStyle"
           >{{$t('submit')}}</button>
         </div>
       </div>
@@ -67,14 +70,14 @@
     <!-- THANKS -->
     <div v-show="reviewLeave" class="ui message success">
       <div class="content text-center">
-        <div class="header">{{$t('thank_you_review')}}</div>
-        <p>{{$t('thank_you_review_text')}}.</p>
+        <div class="header" :style="textStyle">{{$t('thank_you_review')}}</div>
+        <p :style="textStyle">{{$t('thank_you_review_text')}}.</p>
       </div>
     </div>
     <!-- END THANKS -->
     <!-- EXTERNAL -->
     <div v-show="reviewLeave && urls.length > 0 && stars > threshold" class="ui form">
-      <h4 class="ui header center aligned">{{$t('review_good_external')}}</h4>
+      <h4 class="ui header center aligned" :style="textStyle">{{$t('review_good_external')}}</h4>
       <div class="ui center aligned field grid">
         <a
           target="_blank"
@@ -82,6 +85,7 @@
           v-for="u in urls"
           :key="u"
           :class="['ui', parseUrl(u, true), 'button']"
+          :style="textStyle"
         >
           <i :class="[parseUrl(u, false), 'icon']"></i>
           {{parseUrl(u, false, true) | capitalize}}
@@ -104,8 +108,23 @@ export default {
       message: "",
       reviewLeave: false,
       urls: [],
-      threshold: 3
+      threshold: 3,
+      textColor: '#4A4A4A',
+      textFont: 'Roboto'
     };
+  },
+  computed: {
+    textStyle: function () {
+      return {
+        color: this.textColor,
+        'font-family': this.textFont
+      }
+    },
+    buttonStyle: function () {
+      return {
+        'font-family': this.textFont
+      }
+    }
   },
   mounted() {
     this.getInfo();
@@ -123,6 +142,8 @@ export default {
           this.urls = success.body.urls || [];
           this.threshold = success.body.threshold || 3;
           $("body").css("background-color", success.bg_color);
+          this.textColor = success.text_color || '#4A4A4A';
+          this.textFont = success.text_style || 'Roboto';
         },
         function(error) {
           this.loading = false;

@@ -675,6 +675,15 @@ export default {
             if (pref.key == "captive_7_background") {
               this.hotspot.color = pref.value;
             }
+            if (pref.key == "captive_83_title_color") {
+              this.hotspot.titleColor = pref.value;
+            }
+            if (pref.key == "captive_84_text_color") {
+              this.hotspot.textColor = pref.value;
+            }
+            if (pref.key == "captive_82_container_bg_color") {
+              this.hotspot.containerBgColor = pref.value;
+            }
           }
 
           this.marketingPrefGet(

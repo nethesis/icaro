@@ -23,9 +23,11 @@
 package models
 
 type FeedbackPage struct {
-	HotspotName string `json:"hotspot_name"`
-	HotspotLogo string `json:"hotspot_logo"`
-	BgColor     string `json:"bg_color"`
+	HotspotName      string `json:"hotspot_name"`
+	BgColor          string `json:"bg_color"`
+	ContainerBgColor string `json:"container_bg_color"`
+	TitleColor       string `json:"title_color"`
+	TextColor        string `json:"text_color"`
 }
 
 type FeedbackResult struct {

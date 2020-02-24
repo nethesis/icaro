@@ -129,11 +129,20 @@ func sendSurveys(users []User) {
 		var hotspotName models.HotspotPreference
 		db.Where("hotspot_id = ? AND `key` = 'captive_2_title'", u.HotspotId).Find(&hotspotName)
 
-		var hotspotLogo models.HotspotPreference
-		db.Where("hotspot_id = ? AND `key` = 'captive_3_logo'", u.HotspotId).Find(&hotspotLogo)
-
 		var hotspotBg models.HotspotPreference
 		db.Where("hotspot_id = ? AND `key` = 'captive_7_background'", u.HotspotId).Find(&hotspotBg)
+
+		var hotspotContainerBgColor models.HotspotPreference
+		db.Where("hotspot_id = ? AND `key` = 'captive_82_container_bg_color'", u.HotspotId).Find(&hotspotBg)
+
+		var hotspotTitleColor models.HotspotPreference
+		db.Where("hotspot_id = ? AND `key` = 'captive_83_title_color'", u.HotspotId).Find(&hotspotBg)
+
+		var hotspotTextColor models.HotspotPreference
+		db.Where("hotspot_id = ? AND `key` = 'captive_84_text_color'", u.HotspotId).Find(&hotspotBg)
+
+		var hotspotTextStyle models.HotspotPreference
+		db.Where("hotspot_id = ? AND `key` = 'captive_85_text_style'", u.HotspotId).Find(&hotspotBg)
 
 		var marketingEnabled models.HotspotPreference
 		db.Where("hotspot_id = ? AND `key` = 'marketing_1_enabled'", u.HotspotId).Find(&marketingEnabled)
@@ -182,7 +191,7 @@ func sendSurveys(users []User) {
 					if adeToken.FeedbackSentTime.IsZero() && u.ValidFrom.Add(time.Duration(marketingFirstAfterInt)*time.Minute).Before(time.Now()) {
 						// send mail
 						if len(u.Email) > 0 {
-							utils.SendFeedBackMessageToUser(adeToken, u.Email, hotspotName.Value, hotspotLogo.Value, hotspotBg.Value, hotspot, hotspotFeedbackBodyText.Value)
+							utils.SendFeedBackMessageToUser(adeToken, u.Email, hotspotName.Value, hotspotBg.Value, hotspotContainerBgColor.Value, hotspotTitleColor.Value, hotspotTextColor.Value, hotspotTextStyle.Value, hotspot, hotspotFeedbackBodyText.Value)
 						}
 
 						// check if sms is enabled
@@ -211,7 +220,7 @@ func sendSurveys(users []User) {
 						if adeToken.ReviewSentTime.IsZero() && u.ValidFrom.AddDate(0, 0, marketingSecondAfterDaysInt).Before(time.Now()) {
 							// send mail
 							if len(u.Email) > 0 {
-								utils.SendReviewMessageToUser(adeToken, u.Email, hotspotName.Value, hotspotLogo.Value, hotspotBg.Value, hotspot, hotspotReviewBodyText.Value)
+								utils.SendReviewMessageToUser(adeToken, u.Email, hotspotName.Value, hotspotBg.Value, hotspotContainerBgColor.Value, hotspotTitleColor.Value, hotspotTextColor.Value, hotspotTextStyle.Value, hotspot, hotspotReviewBodyText.Value)
 							}
 
 							// check if sms is enabled
@@ -233,7 +242,7 @@ func sendSurveys(users []User) {
 						if adeToken.ReviewSentTime.IsZero() && u.ValidUntil.Before(time.Now()) {
 							// send mail
 							if len(u.Email) > 0 {
-								utils.SendReviewMessageToUser(adeToken, u.Email, hotspotName.Value, hotspotLogo.Value, hotspotBg.Value, hotspot, hotspotReviewBodyText.Value)
+								utils.SendReviewMessageToUser(adeToken, u.Email, hotspotName.Value, hotspotBg.Value, hotspotContainerBgColor.Value, hotspotTitleColor.Value, hotspotTextColor.Value, hotspotTextStyle.Value, hotspot, hotspotReviewBodyText.Value)
 							}
 
 							// check if sms is enabled

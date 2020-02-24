@@ -1,11 +1,12 @@
 <template>
   <div :id="'editor-preview-'+id" class="editor-preview">
-    <div class="title">
-      <h1>{{hotspot.title}}</h1>
-      <img :src="hotspot.logo">
+    <div class="ui container">
+      <div class="title">
+        <h1>{{hotspot.title}}</h1>
+      </div>
+      <div v-html="html"></div>
+      <h5>{{ hotspot.business_name + " • " + hotspot.business_address + " • " + hotspot.business_email }}</h5>
     </div>
-    <div class="ui container" v-html="html"></div>
-    <h5>{{ hotspot.business_name + " • " + hotspot.business_address + " • " + hotspot.business_email }}</h5>
   </div>
 </template>
 <script>
@@ -17,6 +18,9 @@ export default {
   },
   mounted() {
     $("#editor-preview-" + this.id).css("background-color", this.hotspot.color);
+    $(".editor-preview").css("color", this.hotspot.textColor);
+    $("h1").css("color", this.hotspot.titleColor);
+    $(".ui.container").css("background-color", this.hotspot.containerBgColor);
   },
   methods: {
     extractValue(key) {
@@ -36,13 +40,11 @@ export default {
   -webkit-font-smoothing: antialiased !important;
   -moz-osx-font-smoothing: grayscale !important;
   text-align: center !important;
-  color: black !important;
   border: 1px solid #bbbbbb;
   padding: 15px;
 }
 
 h1 {
-  color: white;
   border: none;
   padding: 0 0;
   font-weight: 700;
@@ -50,12 +52,10 @@ h1 {
 }
 
 h3 {
-  color: #5a5a5a !important;
   font-size: 16px !important;
 }
 
 h5 {
-  color: white;
   border: none;
   padding: 0 0;
   font-weight: 700;
@@ -63,16 +63,9 @@ h5 {
 }
 
 p {
-  color: #5a5a5a !important;
   margin: 0 0 1em;
   line-height: 1.4285em;
   font-size: 12px;
-}
-
-img {
-  margin-top: 20px !important;
-  margin-bottom: 20px !important;
-  width: 150px;
 }
 
 .ui.button {
@@ -83,11 +76,13 @@ img {
   width: 450px !important;
 }
 .ui.container {
-  background: white;
-  margin-left: 10px !important;
-  margin-right: 10px !important;
+  margin-top: 20px !important;
+  margin-bottom: 20px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
   border-radius: 0.28571429rem;
   padding: 10px;
+  width: 70%;
 }
 </style>
 <style scoped src="semantic-ui-offline/semantic.min.css"></style>

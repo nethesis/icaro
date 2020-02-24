@@ -123,7 +123,7 @@ func SendTestFeedbackEmail(c *gin.Context) {
 		prefs := ade_utils.GetHotspotPrefs(hotspotIdInt)
 		hotspot := utils.GetHotspotById(hotspotId)
 
-		status := ade_utils.SendFeedBackMessageToUser(models.AdeToken{}, json.To, prefs["captive_2_title"], prefs["captive_3_logo"], prefs["captive_7_background"], hotspot, json.Body)
+		status := ade_utils.SendFeedBackMessageToUser(models.AdeToken{}, json.To, prefs["captive_2_title"], prefs["captive_7_background"], prefs["captive_82_container_bg_color"], prefs["captive_83_title_color"], prefs["captive_84_text_color"], prefs["captive_85_text_style"], hotspot, json.Body)
 
 		if status {
 			c.JSON(http.StatusOK, gin.H{"status": "success"})
@@ -160,7 +160,7 @@ func SendTestReviewEmail(c *gin.Context) {
 		prefs := ade_utils.GetHotspotPrefs(hotspotIdInt)
 		hotspot := utils.GetHotspotById(hotspotId)
 
-		status := ade_utils.SendReviewMessageToUser(models.AdeToken{}, json.To, prefs["captive_2_title"], prefs["captive_3_logo"], prefs["captive_7_background"], hotspot, json.Body)
+		status := ade_utils.SendReviewMessageToUser(models.AdeToken{}, json.To, prefs["captive_2_title"], prefs["captive_7_background"], prefs["captive_82_container_bg_color"], prefs["captive_83_title_color"], prefs["captive_84_text_color"], prefs["captive_85_text_style"], hotspot, json.Body)
 
 		if status {
 			c.JSON(http.StatusOK, gin.H{"status": "success"})
