@@ -165,6 +165,25 @@ func Init(ConfigFilePtr *string) {
 		Config.Endpoints.Sms.SendQuotaAlert, _ = strconv.ParseBool(os.Getenv("SMS_SEND_QUOTA_ALERT"))
 	}
 
+	if os.Getenv("WHATSAPP_NUMBER") != "" {
+		Config.Endpoints.Whatsapp.Number = os.Getenv("WHATSAPP_NUMBER")
+	}
+	if os.Getenv("WHATSAPP_ACCOUNT_SID") != "" {
+		Config.Endpoints.Whatsapp.AccountSid = os.Getenv("WHATSAPP_ACCOUNT_SID")
+	}
+	if os.Getenv("WHATSAPP_AUTH_TOKEN") != "" {
+		Config.Endpoints.Whatsapp.AuthToken = os.Getenv("WHATSAPP_AUTH_TOKEN")
+	}
+	if os.Getenv("WHATSAPP_SERVICE_SID") != "" {
+		Config.Endpoints.Whatsapp.ServiceSid = os.Getenv("WHATSAPP_SERVICE_SID")
+	}
+	if os.Getenv("WHATSAPP_LOGIN_LINK") != "" {
+		Config.Endpoints.Whatsapp.Link = os.Getenv("WHATSAPP_LOGIN_LINK")
+	}
+	if os.Getenv("WHATSAPP_SEND_QUOTA_ALERT") != "" {
+		Config.Endpoints.Whatsapp.SendQuotaAlert, _ = strconv.ParseBool(os.Getenv("WHATSAPP_SEND_QUOTA_ALERT"))
+	}
+
 	if os.Getenv("EMAIL_FROM") != "" {
 		Config.Endpoints.Email.From = os.Getenv("EMAIL_FROM")
 	}

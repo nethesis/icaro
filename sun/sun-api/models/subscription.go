@@ -34,6 +34,7 @@ type SubscriptionPlan struct {
 	Price              float64 `db:"price" json:"price"`
 	Period             int     `db:"period" json:"period"`
 	IncludedSMS        int     `db:"included_sms" json:"included_sms"`
+	IncludedWhatsapp   int     `db:"included_whatsapp" json:"included_whatsapp"`
 	MaxUnits           int     `db:"max_units" json:"max_units"`
 	AdvancedReport     bool    `db:"advanced_report" json:"advanced_report"`
 	WingsCustomization bool    `db:"wings_customization" json:"wings_customization"`

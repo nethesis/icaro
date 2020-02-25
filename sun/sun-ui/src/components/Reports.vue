@@ -225,6 +225,30 @@
         </div>
       </div>
     </div>
+
+    <div>
+      <h2 class="graphs-container title-graphs">{{ $t('report.whatsapp_reports') }}</h2>
+      <div class="row no-margin">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+          <div v-if="loaders.whatsapp_year" class="spinner spinner-lg"></div>
+          <vue-chart
+            v-show="!loaders.whatsapp_year"
+            type="line"
+            :options="charts.whatsapp_year.options"
+            :data="charts.whatsapp_year"
+          ></vue-chart>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+          <div v-if="loaders.whatsapp_history" class="spinner spinner-lg"></div>
+          <vue-chart
+            v-show="!loaders.whatsapp_history"
+            type="line"
+            :options="charts.whatsapp_history.options"
+            :data="charts.whatsapp_history"
+          ></vue-chart>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -255,6 +279,8 @@ export default {
         avg_conn_duration: true,
         sms_year: true,
         sms_history: true,
+        whatsapp_year: true,
+        whatsapp_history: true,
         account_types_pie: true,
         account_types_graph: true
       },
@@ -300,6 +326,8 @@ export default {
         avg_conn_duration: this.chartConfig("avg_conn_duration"),
         sms_year: this.chartConfig("sms_year"),
         sms_history: this.chartConfig("sms_history"),
+        whatsapp_year: this.chartConfig("whatsapp_year"),
+        whatsapp_history: this.chartConfig("whatsapp_history"),
         account_types_pie: this.chartConfig("account_types_pie"),
         account_types_graph: this.chartConfig("account_types_graph")
       }
@@ -387,6 +415,8 @@ export default {
       this.reportGraph("avg_conn_duration");
       this.reportGraph("sms_year");
       this.reportGraph("sms_history");
+      this.reportGraph("whatsapp_year");
+      this.reportGraph("whatsapp_history");
       this.reportGraph("account_types_pie");
       this.reportGraph("account_types_graph");
     },
@@ -912,6 +942,110 @@ export default {
                 backgroundColor: "#ec7a08",
                 fill: false,
                 borderColor: "#ec7a08"
+              }
+            ],
+            options: {
+              elements: {
+                line: {
+                  tension: 0
+                }
+              },
+              title: {
+                display: true,
+                text: this.$i18n.t("report.sent_this_period")
+              },
+              scales: {
+                xAxes: [
+                  {
+                    gridLines: {
+                      zeroLineColor: "transparent"
+                    }
+                  }
+                ],
+                yAxes: [
+                  {
+                    ticks: {
+                      maxTicksLimit: 5,
+                      callback: function(item) {
+                        if (item % 1 === 0) {
+                          return item;
+                        }
+                      },
+                      beginAtZero: true
+                    },
+                    gridLines: {
+                      display: false,
+                      drawBorder: false
+                    }
+                  }
+                ]
+              }
+            }
+          };
+          break;
+
+        case "whatsapp_year":
+          config = {
+            labels: [],
+            datasets: [
+              {
+                label: this.$i18n.t("report.whatsapp"),
+                data: [],
+                backgroundColor: "#1e4f18",
+                fill: false,
+                borderColor: "#1e4f18"
+              }
+            ],
+            options: {
+              elements: {
+                line: {
+                  tension: 0
+                }
+              },
+              title: {
+                display: true,
+                text: this.$i18n.t("report.sent_this_year")
+              },
+              scales: {
+                xAxes: [
+                  {
+                    gridLines: {
+                      zeroLineColor: "transparent"
+                    }
+                  }
+                ],
+                yAxes: [
+                  {
+                    ticks: {
+                      maxTicksLimit: 5,
+                      callback: function(item) {
+                        if (item % 1 === 0) {
+                          return item;
+                        }
+                      },
+                      beginAtZero: true
+                    },
+                    gridLines: {
+                      display: false,
+                      drawBorder: false
+                    }
+                  }
+                ]
+              }
+            }
+          };
+          break;
+
+        case "whatsapp_history":
+          config = {
+            labels: [],
+            datasets: [
+              {
+                label: this.$i18n.t("report.whatsapp"),
+                data: [],
+                backgroundColor: "#3f9c35",
+                fill: false,
+                borderColor: "#3f9c35"
               }
             ],
             options: {

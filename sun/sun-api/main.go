@@ -155,6 +155,14 @@ func DefineAPI(router *gin.Engine) {
 			smsStats.GET("/hotspots", methods.StatsSMSTotalSentForHotspot)
 			smsStats.GET("/hotspots/:hotspot_id", methods.StatsSMSTotalSentForHotspotByHotspot)
 
+			whatsappStats := stats.Group("/whatsapp")
+			whatsappStats.GET("/accounts", methods.StatsWhatsappTotalForAccount)
+			whatsappStats.GET("/accounts/:account_id", methods.StatsWhatsappTotalForAccount)
+			whatsappStats.POST("/accounts/:account_id", methods.UpdateWhatsappTotalForAccount)
+			whatsappStats.PUT("/accounts/:account_id", methods.UpdateWhatsappThresholdForAccount)
+			whatsappStats.GET("/hotspots", methods.StatsWhatsappTotalSentForHotspot)
+			whatsappStats.GET("/hotspots/:hotspot_id", methods.StatsWhatsappTotalSentForHotspotByHotspot)
+
 			reportStats := stats.Group("/reports")
 			reportStats.GET("/current/graph", methods.GetCurrentSessions)
 			reportStats.GET("/sessions/graph", methods.GetHistorySessions)
@@ -165,6 +173,8 @@ func DefineAPI(router *gin.Engine) {
 			reportStats.GET("/avg_conn_duration/graph", methods.GetHistoryAvgConnDuration)
 			reportStats.GET("/sms_year/graph", methods.GetHistorySMSYear)
 			reportStats.GET("/sms_history/graph", methods.GetHistorySMSHistory)
+			reportStats.GET("/whatsapp_year/graph", methods.GetHistoryWhatsappYear)
+			reportStats.GET("/whatsapp_history/graph", methods.GetHistoryWhatsappHistory)
 			reportStats.GET("/account_types_graph/graph", methods.GetAccountTypeGraph)
 			reportStats.GET("/account_types_pie/graph", methods.GetAccountTypePie)
 		}

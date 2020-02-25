@@ -76,6 +76,9 @@ var UtilService = {
     getUserTypeIcon(userType) {
       var icon = "fa fa-user";
       switch (userType) {
+        case "whatsapp":
+          icon = "fa fa-whatsapp";
+          break;
         case "facebook":
           icon = "fa fa-facebook";
           break;
@@ -97,6 +100,9 @@ var UtilService = {
     getPrefTypeIcon(prefType) {
       var icon = "";
       switch (prefType) {
+        case "whatsapp_login":
+          icon = "fa fa-whatsapp login-pref-option";
+          break;
         case "facebook_login":
           icon = "fa fa-facebook-square login-pref-option";
           break;
@@ -149,6 +155,7 @@ var UtilService = {
     getInputType(key, value) {
       var type = "text";
       switch (key) {
+        case "whatsapp_login":
         case "facebook_login":
         case "instagram_login":
         case "linkedin_login":
@@ -165,6 +172,8 @@ var UtilService = {
           break;
         case "sms_login_max":
         case "sms_login_threshold":
+        case "whatsapp_login_max":
+        case "whatsapp_login_threshold":
         case "temp_session_duration":
         case "user_expiration_days":
         case "voucher_expiration_days":

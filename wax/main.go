@@ -53,6 +53,8 @@ func DefineAPI(router *gin.Engine) {
 
 	wax.GET("/short/:hash", methods.GetLongUrl)
 
+	wax.POST("/register/social/whatsapp", methods.WhatsappAuth)
+
 	wax.Use(middleware.WaxWall)
 	{
 		// handle AAA requests

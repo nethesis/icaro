@@ -151,6 +151,35 @@
           </div>
         </div>
       </div>
+
+      <div
+        v-if="(user.account_type == 'admin') || (user.account_type == 'reseller')"
+        class="col-xs-12 col-sm-6 col-md-3 adjust-height"
+      >
+        <div class="card-pf card-pf-accented card-pf-aggregate-status">
+          <h2 class="card-pf-title">
+            <span class="fa fa-commenting"></span>
+            <span class>{{ $t("dashboard.whatsapp_sent") }}</span>
+          </h2>
+          <div class="card-pf-body">
+            <p class="card-pf-aggregate-status-notifications">
+              <span class="card-pf-aggregate-status-notification">
+                <div v-if="totals.whatsapp.isLoading" class="spinner spinner-sm"></div>
+                <div v-if="!totals.whatsapp.isLoading">
+                  <span
+                    :class="[totals.whatsapp.count >= totals.whatsapp.max_count ? 'red' : '']"
+                  >{{ totals.whatsapp.count }}</span> /
+                  <strong class="soft">
+                    <span
+                      :class="[totals.whatsapp.count >= totals.whatsapp.max_count ? 'red' : '']"
+                    >{{ totals.whatsapp.max_count }}</span>
+                  </strong>
+                </div>
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div
@@ -229,6 +258,11 @@ export default {
           count: 0
         },
         sms: {
+          isLoading: true,
+          count: 0,
+          max_count: 0
+        },
+        whatsapp: {
           isLoading: true,
           count: 0,
           max_count: 0
@@ -319,6 +353,17 @@ export default {
         error => {
           console.error(error.body);
           this.totals.sms.isLoading = false;
+        }
+      );
+      this.statsWhatsappTotalForAccount(
+        success => {
+          this.totals.whatsapp.count = success.body.whatsapp_count;
+          this.totals.whatsapp.max_count = success.body.whatsapp_max_count;
+          this.totals.whatsapp.isLoading = false;
+        },
+        error => {
+          console.error(error.body);
+          this.totals.whatsapp.isLoading = false;
         }
       );
     }

@@ -53,7 +53,7 @@ then
 			$HS_AAA_URL \
 			$HS_DIGEST \
 			$HS_UUID \
-			$FORM_username \
+			${FORM_username:-""} \
 			$REMOTE_MAC \
 			$CHI_SESSION_ID \
 			$AP_MAC \

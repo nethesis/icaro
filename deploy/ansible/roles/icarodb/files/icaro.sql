@@ -289,16 +289,17 @@ CREATE TABLE subscription_plans (
     price decimal(5,2),
     period integer default null,
     included_sms integer not null,
+    included_whatsapp integer not null,
     max_units integer not null,
     advanced_report boolean default false,
     wings_customization boolean default false,
     social_analytics boolean default false
 );
 
-INSERT INTO subscription_plans VALUES (1, 'free', 'Free', 'Free limited plan', 0.00, 365, 0, 1, false, false, false);
-INSERT INTO subscription_plans VALUES (2, 'basic', 'Basic', 'Basic plan', 0.00, 365, 500, 1, true, false, false);
-INSERT INTO subscription_plans VALUES (3, 'standard', 'Standard', 'Standard lan', 0.00, 365, 1000, 10, true, true, false);
-INSERT INTO subscription_plans VALUES (4, 'premium', 'Premium', 'Premium plan', 0.00, 3650, 2000, 100, true, true, true);
+INSERT INTO subscription_plans VALUES (1, 'free', 'Free', 'Free limited plan', 0.00, 365, 0, 0, 1, false, false, false);
+INSERT INTO subscription_plans VALUES (2, 'basic', 'Basic', 'Basic plan', 0.00, 365, 500, 500, 1, true, false, false);
+INSERT INTO subscription_plans VALUES (3, 'standard', 'Standard', 'Standard lan', 0.00, 365, 1000, 1000, 10, true, true, false);
+INSERT INTO subscription_plans VALUES (4, 'premium', 'Premium', 'Premium plan', 0.00, 3650, 2000, 2000, 100, true, true, true);
 
 CREATE TABLE subscriptions (
     id serial not null primary key,
@@ -323,7 +324,30 @@ CREATE TABLE `account_sms_counts` (
   PRIMARY KEY(`id`)
 );
 
+CREATE TABLE `account_whatsapp_counts` (
+  `id` serial,
+  `account_id` bigint unsigned NOT NULL,
+  `whatsapp_max_count` bigint unsigned,
+  `whatsapp_count` bigint unsigned,
+  `whatsapp_threshold` bigint DEFAULT 0,
+  FOREIGN KEY (`account_id`) REFERENCES accounts(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  UNIQUE KEY (`account_id`),
+  PRIMARY KEY(`id`)
+);
+
 CREATE TABLE `hotspot_sms_counts` (
+  `id` serial,
+  `hotspot_id` bigint unsigned NOT NULL,
+  `unit_id` bigint unsigned NOT NULL,
+  `number` varchar(200) NOT NULL,
+  `reset` tinyint NOT NULL,
+  `sent` datetime,
+  FOREIGN KEY (`hotspot_id`) REFERENCES hotspots(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  FOREIGN KEY (`unit_id`) REFERENCES units(`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  PRIMARY KEY(`id`)
+);
+
+CREATE TABLE `hotspot_whatsapp_counts` (
   `id` serial,
   `hotspot_id` bigint unsigned NOT NULL,
   `unit_id` bigint unsigned NOT NULL,
