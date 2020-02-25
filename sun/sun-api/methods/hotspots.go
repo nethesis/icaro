@@ -296,6 +296,21 @@ func StatsSMSTotalSentForHotspot(c *gin.Context) {
 	c.JSON(http.StatusOK, hotspotSmsCount)
 }
 
+func StatsWhatsappTotalSentForHotspot(c *gin.Context) {
+	var hotspotWhatsappCount []models.HotspotWhatsappCount
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
+
+	db := database.Instance()
+	db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), 0)).Find(&hotspotWhatsappCount)
+
+	if len(hotspotWhatsappCount) <= 0 {
+		c.JSON(http.StatusNotFound, gin.H{"message": "No Whatsapp stats found!"})
+		return
+	}
+
+	c.JSON(http.StatusOK, hotspotWhatsappCount)
+}
+
 func StatsSMSTotalSentForHotspotByHotspot(c *gin.Context) {
 	var hotspotSmsCount []models.HotspotSmsCount
 	accountId := c.MustGet("token").(models.AccessToken).AccountId
@@ -315,4 +330,25 @@ func StatsSMSTotalSentForHotspotByHotspot(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, hotspotSmsCount)
+}
+
+func StatsWhatsappTotalSentForHotspotByHotspot(c *gin.Context) {
+	var hotspotWhatsappCount []models.HotspotWhatsappCount
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
+
+	hotspotId := c.Param("hotspot_id")
+	hotspotIdInt, err := strconv.Atoi(hotspotId)
+	if err != nil {
+		hotspotIdInt = 0
+	}
+
+	db := database.Instance()
+	db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt)).Find(&hotspotWhatsappCount)
+
+	if len(hotspotWhatsappCount) <= 0 {
+		c.JSON(http.StatusNotFound, gin.H{"message": "No Whatsapp stats found!"})
+		return
+	}
+
+	c.JSON(http.StatusOK, hotspotWhatsappCount)
 }

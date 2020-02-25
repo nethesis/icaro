@@ -126,6 +126,32 @@
           </div>
         </div>
       </div>
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3 max-height-80">
+        <div class="card-pf card-pf-accented">
+          <div class="card-pf-heading">
+            <h2 class="card-pf-title">
+              <span class="fa fa-whatsapp card-info-title"></span>
+              {{ $t("dashboard.whatsapp_sent") }}
+              <div
+                v-if="!totals.whatsapp.isLoading"
+                class="right"
+              >
+                <div
+                  class="text-align-right"
+                  :class="totals.whatsapp.count < whatsappMaxCount || whatsappMaxCount == 0 ? 'soft' : 'red'"
+                >
+                  {{ totals.whatsapp.count}} /
+                  <b>{{whatsappMaxCount == 0 ? '-' : whatsappMaxCount}}</b>
+                </div>
+                <div v-if="whatsappThreshold > 0" class="small-text">
+                  {{ $t("hotspot.warn_whatsapp") }}: <b>{{ whatsappThreshold }}</b>
+                </div>
+              </div>
+              <div v-if="totals.whatsapp.isLoading" class="spinner spinner-sm right"></div>
+            </h2>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="row row-cards-pf">
       <div
@@ -482,6 +508,20 @@
                   <button
                     type="button"
                     @click="addSMSCount(pref, smsMaxCountAdd)"
+                    class="col-sm-2 btn btn-primary"
+                  >{{$t('hotspot.add')}}</button>
+                </div>
+                <div v-if="pref.key == 'whatsapp_login_max'" class="col-sm-4">
+                  <label class="control-label col-sm-3">{{$t('hotspot.add_whatsapp_count')}}:</label>
+                  <input
+                    v-model="whatsappMaxCountAdd"
+                    type="number"
+                    id="textInput-markup"
+                    class="form-control col-sm-1 special-input"
+                  />
+                  <button
+                    type="button"
+                    @click="addSMSCount(pref, whatsappMaxCountAdd)"
                     class="col-sm-2 btn btn-primary"
                   >{{$t('hotspot.add')}}</button>
                 </div>
@@ -1846,6 +1886,9 @@ export default {
     // get sms count
     this.getSmsCount();
 
+    // get whatsapp count
+    this.getWhatsappCount();
+
     // set selected hotspot in local storage
     this.set("selected_hotspot_id", parseInt(this.$route.params.id) || this.get("selected_hotspot_id") || 0);
   },
@@ -1941,6 +1984,10 @@ export default {
           count: 0
         },
         sms: {
+          isLoading: true,
+          count: 0
+        },
+        whatsapp: {
           isLoading: true,
           count: 0
         }
@@ -2084,6 +2131,9 @@ export default {
       smsMaxCount: 0,
       smsMaxCountAdd: 0,
       smsThreshold: 0,
+      whatsappMaxCount: 0,
+      whatsappMaxCountAdd: 0,
+      whatsappThreshold: 0,
       showVoucherPrint: false,
       vouchersToPrint: [],
       advancedFilters: false,
@@ -2173,6 +2223,20 @@ export default {
           console.error(error.body);
           this.totals.sms.data = 0;
           this.totals.sms.isLoading = false;
+        }
+      );
+    },
+    getWhatsappCount() {
+      this.statsWhatsappSentByHotspot(
+        this.$route.params.id,
+        success => {
+          this.totals.whatsapp.count = success.body.length;
+          this.totals.whatsapp.isLoading = false;
+        },
+        error => {
+          console.error(error.body);
+          this.totals.whatsapp.data = 0;
+          this.totals.whatsapp.isLoading = false;
         }
       );
     },
@@ -2477,6 +2541,14 @@ export default {
 
             if (pref.key == "sms_login_threshold") {
               this.smsThreshold = pref.value;
+            }
+
+            if (pref.key == "whatsapp_login_max") {
+              this.whatsappMaxCount = pref.value;
+            }
+
+            if (pref.key == "whatsapp_login_threshold") {
+              this.whatsappThreshold = pref.value;
             }
 
             if (pref.key.startsWith("captive")) {

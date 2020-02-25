@@ -27,6 +27,7 @@ import (
 	"net/url"
 
 	"github.com/gin-gonic/gin"
+	"github.com/nethesis/icaro/sun/sun-api/models"
 	"github.com/nethesis/icaro/wax/utils"
 )
 
@@ -36,6 +37,8 @@ func Temporary(c *gin.Context, parameters url.Values) {
 	sessionId := parameters.Get("sessionid")
 	unitMacAddress := parameters.Get("ap")
 
+	var user models.User
+
 	// check if unit exists
 	unit := utils.GetUnitByMacAddress(unitMacAddress)
 	if unit.Id <= 0 {
@@ -43,11 +46,13 @@ func Temporary(c *gin.Context, parameters url.Values) {
 		return
 	}
 
-	// check if user exists
-	user := utils.GetUserByUsernameAndHotspot(username, unit.HotspotId)
-	if user.Id <= 0 {
-		c.String(http.StatusForbidden, "user not found")
-		return
+	if len(username) > 0 {
+		// check if user exists
+		user = utils.GetUserByUsernameAndHotspot(username, unit.HotspotId)
+		if user.Id <= 0 {
+			c.String(http.StatusForbidden, "user not found")
+			return
+		}
 	}
 
 	// check if the user already has a temporary session

@@ -30,6 +30,14 @@ type Endpoints struct {
 		Link           string `json:"link"`
 		SendQuotaAlert bool   `json:"send_quota_alert"`
 	} `json:"sms"`
+	Whatsapp struct {
+		Number         string `json:"number"`
+		AccountSid     string `json:"account_sid"`
+		AuthToken      string `json:"auth_token"`
+		ServiceSid     string `json:"service_sid"`
+		Link           string `json:"link"`
+		SendQuotaAlert bool   `json:"send_quota_alert"`
+	} `json:"whatsapp"`
 	Email struct {
 		From         string `json:"from"`
 		FromName     string `json:from_name`
