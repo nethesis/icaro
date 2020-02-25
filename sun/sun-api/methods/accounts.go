@@ -42,6 +42,7 @@ func CreateAccount(c *gin.Context) {
 
 	var subscriptionPlan models.SubscriptionPlan
 	var accountSMS models.AccountSmsCount
+	var accountWhatsapp models.AccountWhatsappCount
 	var hotspot models.Hotspot
 
 	var json models.AccountJSON
@@ -119,6 +120,11 @@ func CreateAccount(c *gin.Context) {
 		accountSMS.AccountId = account.Id
 		accountSMS.SmsMaxCount = subscriptionPlan.IncludedSMS
 		db.Save(&accountSMS)
+
+		// create Whatsapp accounting
+		accountWhatsapp.AccountId = account.Id
+		accountWhatsapp.WhatsappMaxCount = subscriptionPlan.IncludedWhatsapp
+		db.Save(&accountWhatsapp)
 	}
 
 	if account.Id == 0 {
@@ -353,6 +359,27 @@ func StatsSMSTotalForAccount(c *gin.Context) {
 	c.JSON(http.StatusOK, accountSMS)
 }
 
+func StatsWhatsappTotalForAccount(c *gin.Context) {
+	var accountWhatsapp models.AccountWhatsappCount
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
+
+	db := database.Instance()
+
+	if accountId == 1 {
+		destAccountId := c.Param("account_id")
+		db.Where("account_id = ?", destAccountId).First(&accountWhatsapp)
+	} else {
+		db.Where("account_id = ?", accountId).First(&accountWhatsapp)
+	}
+
+	if accountWhatsapp.Id == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"message": "No Whatsapp account found!"})
+		return
+	}
+
+	c.JSON(http.StatusOK, accountWhatsapp)
+}
+
 func UpdateSMSThresholdForAccount(c *gin.Context) {
 	var accountSMS models.AccountSmsCount
 
@@ -370,6 +397,25 @@ func UpdateSMSThresholdForAccount(c *gin.Context) {
 	accountSMS.SmsThreshold = json.SmsThreshold
 
 	db.Save(&accountSMS)
+}
+
+func UpdateWhatsappThresholdForAccount(c *gin.Context) {
+	var accountWhatsapp models.AccountWhatsappCount
+
+	var json models.AccountWhatsappThresholdJSON
+	if err := c.BindJSON(&json); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Request fields malformed", "error": err.Error()})
+		return
+	}
+
+	db := database.Instance()
+
+	destAccountId := c.Param("account_id")
+	db.Where("account_id = ?", destAccountId).First(&accountWhatsapp)
+
+	accountWhatsapp.WhatsappThreshold = json.WhatsappThreshold
+
+	db.Save(&accountWhatsapp)
 }
 
 func UpdateSMSTotalForAccount(c *gin.Context) {
@@ -395,4 +441,29 @@ func UpdateSMSTotalForAccount(c *gin.Context) {
 	accountSMS.SmsMaxCount = accountSMS.SmsMaxCount + json.SmsToAdd
 
 	db.Save(&accountSMS)
+}
+
+func UpdateWhatsappTotalForAccount(c *gin.Context) {
+	var accountWhatsapp models.AccountWhatsappCount
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
+
+	if accountId != 1 {
+		c.JSON(http.StatusForbidden, gin.H{"message": "Operation not permitted!"})
+		return
+	}
+
+	var json models.AccountWhatsappCountJSON
+	if err := c.BindJSON(&json); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Request fields malformed", "error": err.Error()})
+		return
+	}
+
+	db := database.Instance()
+
+	destAccountId := c.Param("account_id")
+	db.Where("account_id = ?", destAccountId).First(&accountWhatsapp)
+
+	accountWhatsapp.WhatsappMaxCount = accountWhatsapp.WhatsappMaxCount + json.WhatsappToAdd
+
+	db.Save(&accountWhatsapp)
 }

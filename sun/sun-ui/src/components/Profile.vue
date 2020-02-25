@@ -72,6 +72,38 @@
           </div>
         </div>
       </div>
+      <!-- Whatsapp warning threshold -->
+      <div class="col-xs-12 col-sm-12 col-md-6">
+        <div class="card-pf card-pf-accented">
+          <div class="card-pf-heading">
+            <h2 class="card-pf-title">
+              {{ $t("profile.whatsapp") }}
+              <div v-if="!whatsapp.isLoading" class="fa fa-whatsapp card-info-title right"></div>
+              <div v-if="whatsapp.isLoading" class="spinner spinner-sm right"></div>
+            </h2>
+          </div>
+          <div v-if="!whatsapp.isLoading" class="card-pf-body">
+            <form class="form-horizontal" role="form">
+              <div class="form-group">
+                <label class="col-sm-4 control-label">{{ $t("profile.whatsapp_login_threshold") }}</label>
+                <div class="col-sm-8">
+                  <input v-model="whatsapp.data.whatsapp_threshold" required type="number" class="form-control">
+                </div>
+              </div>
+            </form>
+            <p>{{ $t("profile.whatsapp_threshold_description") }}.</p>
+          </div>
+          <div class="card-pf-footer">
+            <div class="dropdown card-pf-time-frame-filter">
+              <button class="btn btn-default" v-on:click="updateWhatsappThreshold()">{{ $t("update") }}</button>
+            </div>
+            <p>
+              <a href="#" class="card-pf-link-with-icon">
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="modal fade" id="changePassModal" tabindex="-1" role="dialog" aria-labelledby="changePassModalLabel" aria-hidden="true">
@@ -146,10 +178,15 @@ export default {
         isLoading: true,
         data: {}
       },
+      whatsapp: {
+        isLoading: true,
+        data: {}
+      }
     };
   },
   mounted() {
     this.getSmsThreshold();
+    this.getWhatsappThreshold();
   },
   methods: {
     changePassword() {
@@ -187,6 +224,25 @@ export default {
         }
       );
     },
+    updateWhatsappThreshold() {
+      this.whatsapp.isLoading = true;
+
+      this.updateWhatsappThresholdForAccountByAccount(
+        {
+          whatsapp_threshold: parseInt(this.whatsapp.data.whatsapp_threshold) || 0
+        },
+        this.user.login.id,
+        success => {
+          this.whatsapp.isLoading = false;
+          this.whatsapp.data = success.body;
+          this.getWhatsappThreshold();
+        },
+        error => {
+          this.whatsapp.isLoading = false;
+          console.error(error.body);
+        }
+      );
+    },
     getSmsThreshold() {
       this.statsSMSTotalForAccountByAccount(
         this.user.login.id,
@@ -196,6 +252,19 @@ export default {
         },
         error => {
           this.sms.isLoading = false;
+          console.error(error.body);
+        }
+      );
+    },
+    getWhatsappThreshold() {
+      this.statsWhatsappTotalForAccountByAccount(
+        this.user.login.id,
+        success => {
+          this.whatsapp.isLoading = false;
+          this.whatsapp.data = success.body;
+        },
+        error => {
+          this.whatsapp.isLoading = false;
           console.error(error.body);
         }
       );

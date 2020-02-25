@@ -25,6 +25,9 @@ package defaults
 var HotspotPreferences = map[string]string{
 	"user_expiration_days":            "30",
 	"temp_session_duration":           "300",
+	"whatsapp_login":                  "true",
+	"whatsapp_login_max":              "0",
+	"whatsapp_login_threshold":        "0",
 	"facebook_login":                  "true",
 	"facebook_login_page":             "",
 	"linkedin_login":                  "true",

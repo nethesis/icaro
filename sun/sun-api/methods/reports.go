@@ -491,6 +491,34 @@ func GetHistorySMSYear(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
+func GetHistoryWhatsappYear(c *gin.Context) {
+	var response GraphResponse
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
+
+	hotspotId := c.Query("hotspot")
+	hotspotIdInt, err := strconv.Atoi(hotspotId)
+	if err != nil {
+		hotspotIdInt = 0
+	}
+
+	response.Labels = []string{"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"}
+
+	db := database.Instance()
+	chain := db.Table("hotspot_whatsapp_counts").Select("DATE_FORMAT(sent, '%M') AS label, count(*) as data")
+	rows, err := chain.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt)).Group("label").Order("sent").Rows()
+
+	for rows.Next() {
+		var label = ""
+		var data = 0.0
+		rows.Scan(&label, &data)
+
+		response.Set0.Labels = append(response.Set0.Labels, label)
+		response.Set0.Data = append(response.Set0.Data, int(math.Round(data)))
+	}
+
+	c.JSON(http.StatusOK, response)
+}
+
 func GetHistorySMSHistory(c *gin.Context) {
 	var response GraphResponse
 	accountId := c.MustGet("token").(models.AccessToken).AccountId
@@ -514,6 +542,43 @@ func GetHistorySMSHistory(c *gin.Context) {
 
 	db := database.Instance()
 	chain := db.Table("hotspot_sms_counts").Select("DATE_FORMAT(sent, '%d %b') AS label, count(*) AS data").Where("sent >= DATE_SUB(NOW(), INTERVAL ? DAY) AND sent <= NOW()", rangeDateInt)
+	rows, err := chain.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt)).Group("DATE(sent)").Rows()
+
+	for rows.Next() {
+		var label = ""
+		var data = 0.0
+		rows.Scan(&label, &data)
+
+		response.Set0.Labels = append(response.Set0.Labels, label)
+		response.Set0.Data = append(response.Set0.Data, int(math.Round(data)))
+	}
+
+	c.JSON(http.StatusOK, response)
+}
+
+func GetHistoryWhatsappHistory(c *gin.Context) {
+	var response GraphResponse
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
+
+	hotspotId := c.Query("hotspot")
+	hotspotIdInt, err := strconv.Atoi(hotspotId)
+	if err != nil {
+		hotspotIdInt = 0
+	}
+
+	rangeDate := c.Query("range")
+	rangeDateInt, err := strconv.Atoi(rangeDate)
+	if err != nil {
+		rangeDateInt = 0
+	}
+
+	for i := rangeDateInt; i >= 0; i-- {
+		now := time.Now().UTC()
+		response.Labels = append(response.Labels, now.AddDate(0, 0, -i).Format("02 Jan"))
+	}
+
+	db := database.Instance()
+	chain := db.Table("hotspot_whatsapp_counts").Select("DATE_FORMAT(sent, '%d %b') AS label, count(*) AS data").Where("sent >= DATE_SUB(NOW(), INTERVAL ? DAY) AND sent <= NOW()", rangeDateInt)
 	rows, err := chain.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt)).Group("DATE(sent)").Rows()
 
 	for rows.Next() {

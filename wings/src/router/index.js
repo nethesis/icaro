@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import SplashPage from '@/components/SplashPage'
 import LoginPage from '@/components/LoginPage'
+import WhatsappPage from '@/components/social/WhatsappPage'
 import FacebookPage from '@/components/social/FacebookPage'
 import LinkedInPage from '@/components/social/LinkedInPage'
 import InstagramPage from '@/components/social/InstagramPage'
@@ -23,6 +24,11 @@ export default new Router({
       path: '/login',
       name: 'LoginPage',
       component: LoginPage
+    },
+    {
+      path: '/login/whatsapp',
+      name: 'WhatsappPage',
+      component: WhatsappPage
     },
     {
       path: '/login/facebook',

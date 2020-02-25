@@ -10,7 +10,7 @@
             class="pw-input"
             :type="voucherVisible ? 'email' : 'password'"
             :placeholder="$t('login.insert_voucher')"
-          >
+          />
           <i class="braille icon"></i>
           <!-- toggle voucher visibility -->
           <button
@@ -24,7 +24,11 @@
           </button>
         </div>
       </div>
-      <button :style="buttonStyle" v-on:click="validateCode()" class="ui big button">{{ $t("login.validate_code") }}</button>
+      <button
+        :style="buttonStyle"
+        v-on:click="validateCode()"
+        class="ui big button"
+      >{{ $t("login.validate_code") }}</button>
       <div v-if="badCode" class="ui tiny icon negative message">
         <i class="remove icon"></i>
         <div class="content">
@@ -38,8 +42,18 @@
     >
       <h3 :style="textStyle">{{ $t("login.choose_login") }}</h3>
       <div class="ui relaxed list">
+        <div v-if="hotspot.preferences.whatsapp_login == 'true'" class="item">
+          <div @click="changeRoute('/login/whatsapp', false)" class="ui green button big fluid">
+            <i class="whatsapp icon"></i>
+            Whatsapp
+          </div>
+        </div>
         <div v-if="hotspot.preferences.facebook_login == 'true'" class="item">
-          <div @click="changeRoute('/login/facebook', false)" class="ui facebook button big fluid" :style="buttonStyle">
+          <div
+            @click="changeRoute('/login/facebook', false)"
+            class="ui facebook button big fluid"
+            :style="buttonStyle"
+          >
             <i class="facebook icon"></i>
             Facebook
           </div>
@@ -55,7 +69,11 @@
           </div>
         </div>
         <div v-if="hotspot.preferences.linkedin_login == 'true'" class="item">
-          <div @click="changeRoute('/login/linkedin', false)" class="ui linkedin button big fluid" :style="buttonStyle">
+          <div
+            @click="changeRoute('/login/linkedin', false)"
+            class="ui linkedin button big fluid"
+            :style="buttonStyle"
+          >
             <i class="linkedin icon"></i>
             LinkedIn
           </div>
@@ -64,13 +82,21 @@
       <div class="ui divider"></div>
       <div class="ui relaxed list">
         <div v-if="hotspot.preferences.sms_login == 'true'" class="item">
-          <div @click="changeRoute('/login/sms', false)" class="ui button yellow big fluid" :style="buttonStyle">
+          <div
+            @click="changeRoute('/login/sms', false)"
+            class="ui button yellow big fluid"
+            :style="buttonStyle"
+          >
             <i class="talk icon"></i>
             SMS
           </div>
         </div>
         <div v-if="hotspot.preferences.email_login == 'true'" class="item">
-          <div @click="changeRoute('/login/email', false)" class="ui button red big fluid" :style="buttonStyle">
+          <div
+            @click="changeRoute('/login/email', false)"
+            class="ui button red big fluid"
+            :style="buttonStyle"
+          >
             <i class="mail icon"></i>
             Email
           </div>
@@ -79,7 +105,11 @@
       <div v-if="hotspot.preferences.temp_code_login == 'true'" class="ui divider"></div>
       <div class="ui relaxed list">
         <div v-if="hotspot.preferences.temp_code_login == 'true'" class="item">
-          <div @click="changeRoute('/login', true)" class="ui button teal big fluid" :style="buttonStyle">
+          <div
+            @click="changeRoute('/login', true)"
+            class="ui button teal big fluid"
+            :style="buttonStyle"
+          >
             <i class="barcode icon"></i>
             {{ $t("login.code") }}
           </div>
@@ -136,16 +166,20 @@
     >
       <div class="conditions-surveys">
         <div class="ui inline">
-          <input id="conditions" v-model="conditions" type="checkbox" class="ui checkbox field">
+          <input id="conditions" v-model="conditions" type="checkbox" class="ui checkbox field" />
           <label :style="textStyle" for="conditions">{{ $t("login.disclaimer_privacy_accept") }}</label>
         </div>
         <div v-if="hotspot.preferences.marketing_1_enabled == 'true'" class="ui inline">
-          <input id="surveys" v-model="surveys" type="checkbox" class="ui checkbox field">
+          <input id="surveys" v-model="surveys" type="checkbox" class="ui checkbox field" />
           <label :style="textStyle" for="surveys">{{ $t("login.disclaimer_survey_accept") }}</label>
         </div>
       </div>
       <div>
-        <button :style="buttonStyle" v-on:click="navigate()" class="ui big button green">{{ $t("login.navigate") }}</button>
+        <button
+          :style="buttonStyle"
+          v-on:click="navigate()"
+          class="ui big button green"
+        >{{ $t("login.navigate") }}</button>
       </div>
     </div>
   </div>
@@ -178,8 +212,10 @@ export default {
         this.$root.$options.hotspot.integrations = success.body.integrations;
         this.hotspot.disclaimers = success.body.disclaimers;
         this.hotspot.preferences = success.body.preferences;
-        this.textColor = success.body.preferences.captive_84_text_color || '#4A4A4A';
-        this.textFont = success.body.preferences.captive_85_text_style || 'Roboto';
+        this.textColor =
+          success.body.preferences.captive_84_text_color || "#4A4A4A";
+        this.textFont =
+          success.body.preferences.captive_85_text_style || "Roboto";
 
         if (this.$route.query.integration_done && this.$route.query.code) {
           this.voucherAvailable = true;
@@ -214,21 +250,21 @@ export default {
       additionalCountry: "-",
       additionalReason: "-",
       voucherVisible: true,
-      textColor: '#4A4A4A',
-      textFont: 'Roboto',
+      textColor: "#4A4A4A",
+      textFont: "Roboto"
     };
   },
   computed: {
-    textStyle: function () {
+    textStyle: function() {
       return {
         color: this.textColor,
-        'font-family': this.textFont
-      }
+        "font-family": this.textFont
+      };
     },
-    buttonStyle: function () {
+    buttonStyle: function() {
       return {
-        'font-family': this.textFont
-      }
+        "font-family": this.textFont
+      };
     }
   },
   methods: {

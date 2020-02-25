@@ -82,6 +82,18 @@
             "we_are_sending_sms_code": "Use the same password also at the next access by clicking on the 'Sign in' button.",
             "not_code_explain": "Is it the first time you are connecting to this Wi-Fi?",
             "not_code_explain_else": "Else"
+        },
+        "whatsapp": {
+            "number": "Number",
+            "code": "Password",
+            "wait":"Redirecting...",
+            "we_are_sending_whatsapp_code": "In a few moments you will be redirected to Whatsapp. Send the pre-compiled text to login to the hotspot.",
+            "start_navigate": "Start Navigate",
+            "auth_progress": "Authorization in progress",
+            "auth_success": "You are successfully authenticated",
+            "auth_error": "Access Denied",
+            "auth_error_sub": "Something went wrong, the reasons could be the following: 1)The data entered may not be correct. 2)The voucher you are using could be expired. 3)You could have reached your maximum daily time. 4)You could have reached your maximum daily traffic.",
+            "open": "Open Whatsapp"
         }
     }
 }

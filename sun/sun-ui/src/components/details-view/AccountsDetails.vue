@@ -93,6 +93,47 @@
         </div>
       </div>
 
+      <div v-if="isAdmin" class="col-xs-12 col-sm-12 col-md-6">
+        <div class="card-pf card-pf-accented">
+          <div class="card-pf-heading">
+            <h2 class="card-pf-title">
+              {{$t("account.add_whatsapp")}}
+              <div
+                v-if="!whatsapp.isLoading"
+                class="fa fa-whatsapp right"
+                data-toggle="tooltip"
+                data-placement="left"
+              ></div>
+              <div v-if="whatsapp.isLoading" class="spinner spinner-sm right"></div>
+            </h2>
+          </div>
+          <form role="form" v-on:submit.prevent="updateWhatsappCount()">
+            <div v-if="!whatsapp.isLoading" class="card-pf-body">
+              <div class="list-details">
+                <dt>{{ $t("account.whatsapp_sent") }}</dt>
+                <dd>{{whatsapp.data.whatsapp_count}}</dd>
+              </div>
+              <div class="list-details">
+                <dt>{{ $t("account.whatsapp_total") }}</dt>
+                <dd>{{whatsapp.data.whatsapp_max_count}}</dd>
+              </div>
+              <div class="list-details">
+                <dt>{{ $t("account.whatsapp_to_add") }}</dt>
+                <input v-model="whatsapp.data.whatsapp_to_add" required class="form-control">
+              </div>
+            </div>
+            <div v-if="!whatsapp.isLoading" class="card-pf-footer">
+              <div class="dropdown card-pf-time-frame-filter">
+                <button class="btn btn-primary">{{$t('update')}}</button>
+              </div>
+              <p>
+                <a href="#" class="card-pf-link-with-icon"></a>
+              </p>
+            </div>
+          </form>
+        </div>
+      </div>
+
       <div
         v-if="isAdmin && info.data.type == 'reseller'"
         v-for="(i,ik) in integrations"
@@ -109,7 +150,7 @@
               </div>
             </h2>
           </div>
-          <form role="form" v-on:submit.prevent="updateSMSCount()">
+          <form role="form">
             <div class="card-pf-body">
               <div class="list-details">
                 <dt>{{ $t("account.description") }}</dt>
@@ -167,6 +208,9 @@ export default {
     // get sms info
     this.getActualSMSCount();
 
+    // get whatsapp info
+    this.getActualWhatsappCount();
+
     // integrations
     this.getIntegrations();
     this.getMaps();
@@ -177,6 +221,10 @@ export default {
         data: {}
       },
       sms: {
+        isLoading: true,
+        data: {}
+      },
+      whatsapp: {
         isLoading: true,
         data: {}
       },
@@ -246,6 +294,19 @@ export default {
         }
       );
     },
+    getActualWhatsappCount() {
+      this.statsWhatsappTotalForAccountByAccount(
+        this.$route.params.id,
+        success => {
+          this.whatsapp.isLoading = false;
+          this.whatsapp.data = success.body;
+        },
+        error => {
+          this.whatsapp.isLoading = false;
+          console.error(error.body);
+        }
+      );
+    },
     updateSMSCount() {
       this.sms.isLoading = true;
 
@@ -261,6 +322,25 @@ export default {
         },
         error => {
           this.sms.isLoading = false;
+          console.error(error.body);
+        }
+      );
+    },
+    updateWHatsappCount() {
+      this.whatsapp.isLoading = true;
+
+      this.updateWhatsappTotalForAccountByAccount(
+        {
+          whatsapp_to_add: parseInt(this.whatsapp.data.whatsapp_to_add) || 0
+        },
+        this.$route.params.id,
+        success => {
+          this.whatsapp.isLoading = false;
+          this.whatsapp.data = success.body;
+          this.getActualWhatsappCount();
+        },
+        error => {
+          this.whatsapp.isLoading = false;
           console.error(error.body);
         }
       );

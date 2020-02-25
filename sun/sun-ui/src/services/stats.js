@@ -91,12 +91,38 @@ var StatsService = {
         )
         .then(success, error);
     },
+    statsWhatsappTotalForAccount(success, error) {
+      this.$http
+        .get(
+          this.$root.$options.api_scheme +
+          this.$root.$options.api_host +
+          "/api/stats/whatsapp/accounts", {
+            headers: {
+              Token: (this.get("loggedUser") && this.get("loggedUser").token) || ""
+            }
+          }
+        )
+        .then(success, error);
+    },
     statsSMSTotalForAccountByAccount(accountId, success, error) {
       this.$http
         .get(
           this.$root.$options.api_scheme +
           this.$root.$options.api_host +
           "/api/stats/sms/accounts/" + accountId, {
+            headers: {
+              Token: (this.get("loggedUser") && this.get("loggedUser").token) || ""
+            }
+          }
+        )
+        .then(success, error);
+    },
+    statsWhatsappTotalForAccountByAccount(accountId, success, error) {
+      this.$http
+        .get(
+          this.$root.$options.api_scheme +
+          this.$root.$options.api_host +
+          "/api/stats/whatsapp/accounts/" + accountId, {
             headers: {
               Token: (this.get("loggedUser") && this.get("loggedUser").token) || ""
             }
@@ -117,6 +143,19 @@ var StatsService = {
         )
         .then(success, error);
     },
+    updateWhatsappTotalForAccountByAccount(body, accountId, success, error) {
+      this.$http
+        .post(
+          this.$root.$options.api_scheme +
+          this.$root.$options.api_host +
+          "/api/stats/whatsapp/accounts/" + accountId, body, {
+            headers: {
+              Token: (this.get("loggedUser") && this.get("loggedUser").token) || ""
+            }
+          }
+        )
+        .then(success, error);
+    },
     updateSMSThresholdForAccountByAccount(body, accountId, success, error) {
       this.$http
         .put(
@@ -130,12 +169,38 @@ var StatsService = {
         )
         .then(success, error);
     },
+    updateWhatsappThresholdForAccountByAccount(body, accountId, success, error) {
+      this.$http
+        .put(
+          this.$root.$options.api_scheme +
+          this.$root.$options.api_host +
+          "/api/stats/whatsapp/accounts/" + accountId, body, {
+            headers: {
+              Token: (this.get("loggedUser") && this.get("loggedUser").token) || ""
+            }
+          }
+        )
+        .then(success, error);
+    },
     statsSMSSentByHotspot(hotspotId, success, error) {
       this.$http
         .get(
           this.$root.$options.api_scheme +
           this.$root.$options.api_host +
           (hotspotId > 0 ? "/api/stats/sms/hotspots/" + hotspotId : "/api/stats/sms/hotspots"), {
+            headers: {
+              Token: (this.get("loggedUser") && this.get("loggedUser").token) || ""
+            }
+          }
+        )
+        .then(success, error);
+    },
+    statsWhatsappSentByHotspot(hotspotId, success, error) {
+      this.$http
+        .get(
+          this.$root.$options.api_scheme +
+          this.$root.$options.api_host +
+          (hotspotId > 0 ? "/api/stats/whatsapp/hotspots/" + hotspotId : "/api/stats/whatsapp/hotspots"), {
             headers: {
               Token: (this.get("loggedUser") && this.get("loggedUser").token) || ""
             }

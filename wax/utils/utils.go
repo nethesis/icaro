@@ -146,7 +146,11 @@ func CheckTempUserSession(userId int, deviceMac string, sessionKey string) bool 
 
 	// check if user session exists
 	db := database.Instance()
-	db.Where("user_id = ? AND device_mac = ? AND session_key = ?", userId, deviceMac, sessionKey).First(&userTempSession)
+	if userId > 0 {
+		db.Where("user_id = ? AND device_mac = ? AND session_key = ?", userId, deviceMac, sessionKey).First(&userTempSession)
+	} else {
+		db.Where("device_mac = ? AND session_key = ?", deviceMac, sessionKey).First(&userTempSession)
+	}
 
 	// if not exists create one
 	if userTempSession.Id == 0 {
@@ -194,6 +198,14 @@ func DeleteUserSession(userId int, sessionKey string) bool {
 	// delete user session
 	db.Delete(&userSession)
 	return true
+}
+
+func GetAccountWhatsappByAccountId(accountId int) models.AccountWhatsappCount {
+	var accountWhatsapp models.AccountWhatsappCount
+	db := database.Instance()
+	db.Where("account_id = ?", accountId).First(&accountWhatsapp)
+
+	return accountWhatsapp
 }
 
 func GetAccountSMSByAccountId(accountId int) models.AccountSmsCount {
@@ -373,6 +385,99 @@ func GetShortUrlByHash(hash string) models.ShortUrl {
 	return shortUrl
 }
 
+func SendWhatsappMessage(number string, code string, unit models.Unit, auth string) int {
+	// get account sms count
+	db := database.Instance()
+	hotspot := GetHotspotById(unit.HotspotId)
+	accountWhatsapp := GetAccountWhatsappByAccountId(hotspot.AccountId)
+
+	// count sms by hotspot
+	var hotspotWhatsappCount []models.HotspotWhatsappCount
+	db.Where("hotspot_id in (?)", hotspot.Id).Find(&hotspotWhatsappCount)
+
+	hotspotCount := len(hotspotWhatsappCount)
+	hotspotMaxCount := GetHotspotPreferencesByKey(hotspot.Id, "whatsapp_login_max")
+	hotspotMaxCountInt, err := strconv.Atoi(hotspotMaxCount.Value)
+	if err != nil {
+		hotspotMaxCountInt = 0
+	}
+
+	// check if exists an account for sms
+	if accountWhatsapp.Id == 0 {
+		return http.StatusPaymentRequired
+	}
+
+	if accountWhatsapp.WhatsappCount <= accountWhatsapp.WhatsappMaxCount {
+
+		if hotspotCount <= hotspotMaxCountInt || hotspotMaxCountInt == 0 {
+			// check account and hotspot SMS thresholds
+			numWhatsappLeftAccount := accountWhatsapp.WhatsappMaxCount - accountWhatsapp.WhatsappCount
+			numWhatsappLeftHotspot := hotspotMaxCountInt - hotspotCount
+			hotspotWhatsappThreshold, err := strconv.Atoi(GetHotspotPreferencesByKey(hotspot.Id, "whatsapp_login_threshold").Value)
+
+			if accountWhatsapp.WhatsappThreshold > 0 && numWhatsappLeftAccount <= accountWhatsapp.WhatsappThreshold {
+				resellerAccount := GetAccountByAccountId(hotspot.AccountId)
+				SendWhatsappAccountThresholdAlert(resellerAccount, numWhatsappLeftAccount)
+			}
+
+			if hotspotWhatsappThreshold > 0 && numWhatsappLeftHotspot <= hotspotWhatsappThreshold {
+				resellerAccount := GetAccountByAccountId(hotspot.AccountId)
+				SendWhatsappHotspotThresholdAlert(resellerAccount, hotspot, numWhatsappLeftHotspot)
+			}
+
+			// retrieve account info and token
+			accountSid := configuration.Config.Endpoints.Whatsapp.AccountSid
+			authToken := configuration.Config.Endpoints.Whatsapp.AuthToken
+			urlAPI := "https://api.twilio.com/2010-04-01/Accounts/" + accountSid + "/Messages.json"
+
+			// compose message data
+			msgData := url.Values{}
+			msgData.Set("To", number)
+			msgData.Set("From", "whatsapp:"+configuration.Config.Endpoints.Whatsapp.Number)
+			//msgData.Set("MessagingServiceSid", configuration.Config.Endpoints.Whatsapp.ServiceSid)
+			msgData.Set("Body", "Password: "+code+
+				"\n\nLogin Link: "+GenerateShortURL(configuration.Config.Endpoints.Whatsapp.Link+
+				"?"+auth+"&code="+code+"&num="+url.QueryEscape(number))+
+				"\n\nLogout Link: http://logout")
+			msgDataReader := *strings.NewReader(msgData.Encode())
+
+			// create HTTP request client
+			client := &http.Client{
+				Timeout: time.Second * 30,
+			}
+			req, _ := http.NewRequest("POST", urlAPI, &msgDataReader)
+			req.SetBasicAuth(accountSid, authToken)
+			req.Header.Add("Accept", "application/json")
+			req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+
+			// make HTTP POST request
+			resp, err := client.Do(req)
+
+			if err != nil {
+				fmt.Println(err.Error())
+			}
+
+			defer resp.Body.Close()
+
+			// update sms accounting table
+			if resp.StatusCode == 201 {
+				accountWhatsapp.WhatsappCount = accountWhatsapp.WhatsappCount + 1
+				db.Save(&accountWhatsapp)
+			}
+
+			return resp.StatusCode
+		}
+	}
+
+	if configuration.Config.Endpoints.Sms.SendQuotaAlert {
+		resellerAccount := GetAccountByAccountId(hotspot.AccountId)
+		SendSmsQuotaLimitAlert(resellerAccount)
+	}
+
+	return 500
+
+}
+
 func SendSMSCode(number string, code string, unit models.Unit, auth string) int {
 	// get account sms count
 	db := database.Instance()
@@ -469,6 +574,12 @@ func SaveHotspotSMSCount(hotspotSmsCount models.HotspotSmsCount) {
 	// save hotspot sms count
 	db := database.Instance()
 	db.Save(&hotspotSmsCount)
+}
+
+func SaveHotspotWhatsappCount(hotspotWhatsappCount models.HotspotWhatsappCount) {
+	// save hotspot whatsapp count
+	db := database.Instance()
+	db.Save(&hotspotWhatsappCount)
 }
 
 func SendEmailCode(email string, code string, unit models.Unit, auth string) bool {
@@ -643,10 +754,22 @@ func FindAutoLoginUser(users []models.User) models.User {
 	return user
 }
 
+func SendWhatsappAccountThresholdAlert(reseller models.Account, remaining int) bool {
+	subject := "Hotspot Alert: Whatsapp threshold reached"
+	body := fmt.Sprintf("You have left %d Whatsapp in your account.\nPlease buy an additional Whatsapp quota soon, or disable whatsapp login/feedback from your hotspots.\n", remaining)
+	return SendWhatsappAlert(reseller, subject, body)
+}
+
 func SendSmsAccountThresholdAlert(reseller models.Account, remaining int) bool {
 	subject := "Hotspot Alert: SMS threshold reached"
 	body := fmt.Sprintf("You have left %d SMS in your account.\nPlease buy an additional SMS quota soon, or disable sms login/feedback from your hotspots.\n", remaining)
 	return SendSmsAlert(reseller, subject, body)
+}
+
+func SendWhatsappHotspotThresholdAlert(reseller models.Account, hotspot models.Hotspot, remaining int) bool {
+	subject := "Hotspot Alert: Whatsapp threshold reached"
+	body := fmt.Sprintf("You have left %d Whatsapp in your hotspot %s.\nPlease buy an additional Whatsapp quota soon, or disable whatsapp login/feedback from your hotspots.\n", remaining, hotspot.Name)
+	return SendWhatsappAlert(reseller, subject, body)
 }
 
 func SendSmsHotspotThresholdAlert(reseller models.Account, hotspot models.Hotspot, remaining int) bool {
@@ -660,6 +783,35 @@ func SendSmsQuotaLimitAlert(reseller models.Account) bool {
 	body := "You do not have any more SMS to send in your account,\n" +
 		"please buy an additional SMS quota or disable sms login/feedback from your hotspots.\n"
 	return SendSmsAlert(reseller, subject, body)
+}
+
+func SendWhatsappAlert(reseller models.Account, subject string, body string) bool {
+	status := true
+
+	if reseller.Type == "reseller" {
+		m := gomail.NewMessage()
+		m.SetHeader("From", configuration.Config.Endpoints.Email.From)
+		m.SetHeader("To", reseller.Email)
+		m.SetHeader("Subject", subject)
+		m.SetBody("text/plain", body)
+
+		d := gomail.NewDialer(
+			configuration.Config.Endpoints.Email.SMTPHost,
+			configuration.Config.Endpoints.Email.SMTPPort,
+			configuration.Config.Endpoints.Email.SMTPUser,
+			configuration.Config.Endpoints.Email.SMTPPassword,
+		)
+
+		// send the email
+		if err := d.DialAndSend(m); err != nil {
+			fmt.Println(err)
+			status = false
+		}
+	} else {
+		status = false
+	}
+
+	return status
 }
 
 func SendSmsAlert(reseller models.Account, subject string, body string) bool {
