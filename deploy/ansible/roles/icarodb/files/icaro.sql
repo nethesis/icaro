@@ -297,9 +297,9 @@ CREATE TABLE subscription_plans (
 );
 
 INSERT INTO subscription_plans VALUES (1, 'free', 'Free', 'Free limited plan', 0.00, 365, 0, 0, 1, false, false, false);
-INSERT INTO subscription_plans VALUES (2, 'basic', 'Basic', 'Basic plan', 0.00, 365, 500, 500, 1, true, false, false);
-INSERT INTO subscription_plans VALUES (3, 'standard', 'Standard', 'Standard lan', 0.00, 365, 1000, 1000, 10, true, true, false);
-INSERT INTO subscription_plans VALUES (4, 'premium', 'Premium', 'Premium plan', 0.00, 3650, 2000, 2000, 100, true, true, true);
+INSERT INTO subscription_plans VALUES (2, 'basic', 'Basic', 'Basic plan', 0.00, 365, 500, 5000, 1, true, false, false);
+INSERT INTO subscription_plans VALUES (3, 'standard', 'Standard', 'Standard lan', 0.00, 365, 1000, 10000, 10, true, true, false);
+INSERT INTO subscription_plans VALUES (4, 'premium', 'Premium', 'Premium plan', 0.00, 3650, 2000, 20000, 100, true, true, true);
 
 CREATE TABLE subscriptions (
     id serial not null primary key,
