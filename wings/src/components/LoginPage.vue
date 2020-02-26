@@ -42,7 +42,7 @@
     >
       <h3 :style="textStyle">{{ $t("login.choose_login") }}</h3>
       <div class="ui relaxed list">
-        <div v-if="hotspot.preferences.whatsapp_login == 'true'" class="item">
+        <div v-if="hotspot.preferences.whatsapp_login == 'true' && isMobile" class="item">
           <div @click="changeRoute('/login/whatsapp', false)" class="ui green button big fluid">
             <i class="whatsapp icon"></i>
             Whatsapp
@@ -251,7 +251,8 @@ export default {
       additionalReason: "-",
       voucherVisible: true,
       textColor: "#4A4A4A",
-      textFont: "Roboto"
+      textFont: "Roboto",
+      isMobile: /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
     };
   },
   computed: {
