@@ -73,12 +73,15 @@ const webpackConfig = merge(baseWebpackConfig, {
       minify: {
         removeComments: true,
         collapseWhitespace: true,
-        removeAttributeQuotes: true
+        removeAttributeQuotes: false
         // more options:
         // https://github.com/kangax/html-minifier#options-quick-reference
       },
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin
-      chunksSortMode: 'dependency'
+      chunksSortMode: "dependency",
+      title: process.env.APP_TITLE || "Wings",
+      description: process.env.APP_DESCRIPTION || "Wi-Fi",
+      image: process.env.APP_IMAGE || "https://raw.githubusercontent.com/nethesis/icaro/master/sun/sun-ui/static/152.png"
     }),
     // keep module.id stable when vendor modules does not change
     new webpack.HashedModuleIdsPlugin(),
