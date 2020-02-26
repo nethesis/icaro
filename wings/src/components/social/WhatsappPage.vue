@@ -226,7 +226,7 @@ export default {
     redirectAuth() {
       window.location.replace(
         "http://wa.me/" +
-          CONFIG.WHATSAPP_NUMBER +
+          CONFIG.WHATSAPP_NUMBER.replace("+", "") +
           "?text=" +
           encodeURIComponent(this.$route.query.short_code)
       );
