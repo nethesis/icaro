@@ -17,6 +17,12 @@
     dest: /opt/icaro/wings/
     remote_src: yes
 
+- name: Copy Wings config
+  template:
+    src: wings_config.js.j2
+    dest: /opt/icaro/wings/static/config/config.js
+  when: icaro.wax is defined
+
 - name: Remove temp files
   file:
     path:
