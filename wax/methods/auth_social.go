@@ -59,12 +59,6 @@ type WhatsappPOST struct {
 }
 
 func WhatsappAuth(c *gin.Context) {
-	/* requestDump, err := httputil.DumpRequest(c.Request, true)
-	if err != nil {
-		fmt.Println(err)
-	}
-	res1 := strings.Split(string(requestDump), "&")
-	fmt.Println(res1) */
 	var whatsappPOST WhatsappPOST
 	d := form.NewDecoder(c.Request.Body)
 	if err := d.Decode(&whatsappPOST); err != nil {
@@ -101,20 +95,6 @@ func WhatsappAuth(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "whatsapp message not received to user"})
 		return
 	}
-
-	/*number := c.Param("number")
-	digest := c.Query("digest")
-	uuid := c.Query("uuid")
-	sessionId := c.Query("sessionid")
-	reset := c.Query("reset")
-	uamip := c.Query("uamip")
-	uamport := c.Query("uamport")
-	voucherCode := c.Query("voucher_code")
-
-	if number == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"message": "number is required"})
-		return
-	}*/
 
 	// check if user exists
 	// get unit
@@ -187,17 +167,7 @@ func WhatsappAuth(c *gin.Context) {
 			return
 		}
 
-		// add sms statistics
-		hotspotSmsCount := models.HotspotSmsCount{
-			HotspotId: unit.HotspotId,
-			UnitId:    unit.Id,
-			Number:    number,
-			Reset:     false,
-			Sent:      time.Now().UTC(),
-		}
-		utils.SaveHotspotSMSCount(hotspotSmsCount)
-
-		// add sms statistics
+		// add whatsapp statistics
 		hotspotWhatsappCount := models.HotspotWhatsappCount{
 			HotspotId: unit.HotspotId,
 			UnitId:    unit.Id,
@@ -258,16 +228,6 @@ func WhatsappAuth(c *gin.Context) {
 				c.JSON(http.StatusBadRequest, gin.H{"error": "authorization code not send"})
 				return
 			}
-
-			// add sms statistics
-			hotspotSmsCount := models.HotspotSmsCount{
-				HotspotId: unit.HotspotId,
-				UnitId:    unit.Id,
-				Number:    number,
-				Reset:     true,
-				Sent:      time.Now().UTC(),
-			}
-			utils.SaveHotspotSMSCount(hotspotSmsCount)
 
 			// add whatsapp statistics
 			hotspotWhatsappCount := models.HotspotWhatsappCount{

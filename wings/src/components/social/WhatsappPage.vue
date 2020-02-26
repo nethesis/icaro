@@ -233,9 +233,10 @@ export default {
         }
       }
 
-      window.location.href =
+      window.location.replace(
         "http://wa.me/13177950166?text=" +
-        encodeURIComponent("login " + loginString);
+          encodeURIComponent("login " + loginString)
+      );
     },
     getCode: function(reset) {
       var params = this.extractParams();
