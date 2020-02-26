@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <title><%= htmlWebpackPlugin.options.title %></title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>Wings</title>
+    <meta name="description" content="<%= htmlWebpackPlugin.options.description %>">
+    <meta property="og:description" content="<%= htmlWebpackPlugin.options.description %>">
+    <meta property="og:image" content="<%= htmlWebpackPlugin.options.image %>">
     <link href="/wings/static/css/fonts.css" rel="stylesheet">
   </head>
   <body>
