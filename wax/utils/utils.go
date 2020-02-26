@@ -451,11 +451,8 @@ func SendWhatsappMessage(number string, code string, unit models.Unit, auth stri
 			msgData := url.Values{}
 			msgData.Set("To", number)
 			msgData.Set("From", "whatsapp:"+configuration.Config.Endpoints.Whatsapp.Number)
-			//msgData.Set("MessagingServiceSid", configuration.Config.Endpoints.Whatsapp.ServiceSid)
-			msgData.Set("Body", "Password: "+code+
-				"\n\nLogin Link: "+GenerateShortURL(configuration.Config.Endpoints.Whatsapp.Link+
-				"?"+auth+"&code="+code+"&num="+url.QueryEscape(number))+
-				"\n\nLogout Link: http://logout")
+			msgData.Set("Body", GenerateShortURL(configuration.Config.Endpoints.Whatsapp.Link+
+				"?"+auth+"&code="+code+"&num="+url.QueryEscape(number)))
 			msgDataReader := *strings.NewReader(msgData.Encode())
 
 			// create HTTP request client
@@ -478,7 +475,7 @@ func SendWhatsappMessage(number string, code string, unit models.Unit, auth stri
 
 			// update sms accounting table
 			if resp.StatusCode == 201 {
-				accountWhatsapp.WhatsappCount = accountWhatsapp.WhatsappCount + 1
+				accountWhatsapp.WhatsappCount = accountWhatsapp.WhatsappCount + 2
 				db.Save(&accountWhatsapp)
 			}
 
@@ -486,9 +483,9 @@ func SendWhatsappMessage(number string, code string, unit models.Unit, auth stri
 		}
 	}
 
-	if configuration.Config.Endpoints.Sms.SendQuotaAlert {
+	if configuration.Config.Endpoints.Whatsapp.SendQuotaAlert {
 		resellerAccount := GetAccountByAccountId(hotspot.AccountId)
-		SendSmsQuotaLimitAlert(resellerAccount)
+		SendWhatsappQuotaLimitAlert(resellerAccount)
 	}
 
 	return 500
@@ -836,6 +833,13 @@ func SendSmsQuotaLimitAlert(reseller models.Account) bool {
 	body := "You do not have any more SMS to send in your account,\n" +
 		"please buy an additional SMS quota or disable sms login/feedback from your hotspots.\n"
 	return SendSmsAlert(reseller, subject, body)
+}
+
+func SendWhatsappQuotaLimitAlert(reseller models.Account) bool {
+	subject := "Hotspot Alert: Whatsapp quota limit exceeded"
+	body := "You do not have any more Whatsapp to send in your account,\n" +
+		"please buy an additional Whatsapp quota or disable whatsapp login/feedback from your hotspots.\n"
+	return SendWhatsappAlert(reseller, subject, body)
 }
 
 func SendWhatsappAlert(reseller models.Account, subject string, body string) bool {
