@@ -1,0 +1,3 @@
+const CONFIG = {
+  WHATSAPP_NUMBER: "<YOUR_WHATSAPP_NUMBER>",
+};
