@@ -190,7 +190,6 @@ export default {
       countries: require("./../../i18n/countries.json"),
       additionalCountry: "-",
       additionalReason: "-",
-      iOS: /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream,
       passwordVisible: true,
       textColor: "#4A4A4A",
       textFont: "Roboto"
@@ -225,17 +224,11 @@ export default {
       }
     },
     redirectAuth() {
-      var loginString = "";
-      var params = this.extractParams();
-      for (var k in params) {
-        if (params[k]) {
-          loginString += k + "=" + params[k] + "&";
-        }
-      }
-
       window.location.replace(
-        "http://wa.me/13177950166?text=" +
-          encodeURIComponent("login " + loginString)
+        "http://wa.me/" +
+          CONFIG.WHATSAPP_NUMBER +
+          "?text=" +
+          encodeURIComponent(this.$route.query.short_code)
       );
     },
     getCode: function(reset) {
@@ -245,28 +238,25 @@ export default {
       this.doTempSession(
         "",
         function(responseTmp) {
-          // if apple
-          if (this.iOS) {
-            var origin = "http://conncheck." + window.location.host;
-            var pathname = window.location.pathname;
-            var query =
-              "?digest=" +
-              params.digest +
-              "&uuid=" +
-              params.uuid +
-              "&sessionid=" +
-              params.sessionid +
-              "&uamip=" +
-              params.uamip +
-              "&uamport=" +
-              params.uamport +
-              "&user=" +
-              this.userId +
-              "&temp=done";
-            window.location.replace(origin + pathname + query);
-          } else {
-            this.openBtn = true;
-          }
+          var origin = "http://conncheck." + window.location.host;
+          var pathname = window.location.pathname;
+          var query =
+            "?digest=" +
+            params.digest +
+            "&uuid=" +
+            params.uuid +
+            "&sessionid=" +
+            params.sessionid +
+            "&uamip=" +
+            params.uamip +
+            "&uamport=" +
+            params.uamport +
+            "&user=" +
+            this.userId +
+            "&short_code=" +
+            responseTmp.body.short_code +
+            "&temp=done";
+          window.location.replace(origin + pathname + query);
         },
         function(error) {
           this.codeRequested = false;
