@@ -76,7 +76,6 @@ func WhatsappAuth(c *gin.Context) {
 	digest := body.Get("digest")
 	uuid := body.Get("uuid")
 	sessionId := body.Get("sessionid")
-	reset := body.Get("reset")
 	uamip := body.Get("uamip")
 	uamport := body.Get("uamport")
 	voucherCode := body.Get("voucherCode")
@@ -211,43 +210,40 @@ func WhatsappAuth(c *gin.Context) {
 			}
 		}
 
-		// check if is reset
-		if reset == "true" {
-			// get unit
-			unit := utils.GetUnitByUuid(uuid)
+		// get unit
+		unit := utils.GetUnitByUuid(uuid)
 
-			// generate code
-			code := utils.GenerateCode(6)
+		// generate code
+		code := utils.GenerateCode(6)
 
-			// send whatsapp message with code
-			userIdStr := strconv.Itoa(user.Id)
-			status := utils.SendWhatsappMessage(number, code, unit, "digest="+digest+"&uuid="+uuid+"&sessionid="+sessionId+"&uamip="+uamip+"&uamport="+uamport+"&user="+userIdStr)
+		// send whatsapp message with code
+		userIdStr := strconv.Itoa(user.Id)
+		status := utils.SendWhatsappMessage(number, code, unit, "digest="+digest+"&uuid="+uuid+"&sessionid="+sessionId+"&uamip="+uamip+"&uamport="+uamport+"&user="+userIdStr)
 
-			// check response
-			if status != 201 {
-				c.JSON(http.StatusBadRequest, gin.H{"error": "authorization code not send"})
-				return
-			}
-
-			// add whatsapp statistics
-			hotspotWhatsappCount := models.HotspotWhatsappCount{
-				HotspotId: unit.HotspotId,
-				UnitId:    unit.Id,
-				Number:    number,
-				Reset:     true,
-				Sent:      time.Now().UTC(),
-			}
-			utils.SaveHotspotWhatsappCount(hotspotWhatsappCount)
-
-			// update code
-			user.Password = code
+		// check response
+		if status != 201 {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "authorization code not send"})
+			return
 		}
+
+		// add whatsapp statistics
+		hotspotWhatsappCount := models.HotspotWhatsappCount{
+			HotspotId: unit.HotspotId,
+			UnitId:    unit.Id,
+			Number:    number,
+			Reset:     true,
+			Sent:      time.Now().UTC(),
+		}
+		utils.SaveHotspotWhatsappCount(hotspotWhatsappCount)
+
+		// update code
+		user.Password = code
 
 		db := database.Instance()
 		db.Save(&user)
 
 		// response to client
-		c.JSON(http.StatusOK, gin.H{"user_id": number, "exists": true, "reset": reset, "user_db_id": user.Id})
+		c.JSON(http.StatusOK, gin.H{"user_id": number, "exists": true, "user_db_id": user.Id})
 	}
 }
 
