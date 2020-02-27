@@ -36,8 +36,8 @@
     <div v-if="dedaloError && !dedaloExpired" class="ui icon negative message">
       <i class="remove icon"></i>
       <div class="content">
-        <div class="header" :style="textStyle">{{ $t("social.auth_error") }}</div>
-        <p :style="textStyle">{{ $t("social.auth_error_sub") }}</p>
+        <div class="header">{{ $t("social.auth_error") }}</div>
+        <p>{{ $t("social.auth_error_sub") }}</p>
       </div>
     </div>
     <div v-if="dedaloError && dedaloExpired" class="ui icon negative message">
