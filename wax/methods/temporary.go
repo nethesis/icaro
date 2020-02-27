@@ -36,6 +36,7 @@ func Temporary(c *gin.Context, parameters url.Values) {
 	deviceMacAddress := parameters.Get("mac")
 	sessionId := parameters.Get("sessionid")
 	unitMacAddress := parameters.Get("ap")
+	status := parameters.Get("status")
 
 	var user models.User
 
@@ -63,6 +64,13 @@ func Temporary(c *gin.Context, parameters url.Values) {
 	}
 
 	seconds := utils.GetHotspotPreferencesByKey(unit.HotspotId, "temp_session_duration")
-	c.String(http.StatusOK, seconds.Value)
+
+	if status == "new-json" {
+
+		c.JSON(http.StatusOK, gin.H{"sessiontimeout": seconds.Value})
+
+	} else {
+		c.String(http.StatusOK, seconds.Value)
+	}
 
 }
