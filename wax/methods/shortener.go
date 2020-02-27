@@ -33,10 +33,10 @@ import (
 func GetLongUrl(c *gin.Context) {
 	hash := c.Param("hash")
 
-	shortUrl := utils.GetShortUrlByHash(hash)
+	hashData := utils.GetDataByHash(hash)
 
-	if shortUrl.Id > 0 {
-		c.Redirect(http.StatusFound, shortUrl.LongUrl)
+	if hashData.Id > 0 {
+		c.Redirect(http.StatusFound, hashData.LongUrl)
 		return
 	} else {
 		c.JSON(http.StatusNotFound, gin.H{"message": "Shortener hash not found!"})

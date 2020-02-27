@@ -364,42 +364,52 @@ func GenerateCode(max int) string {
 	return string(b)
 }
 
-func GenerateShortURL(longURL string, uamip string, uamport string, keepURL bool) string {
+func GenerateHashByData(data string, uamip string, uamport string, keepURL bool) string {
 
-	var shortUrl models.ShortUrl
+	var hashData models.ShortUrl
 	h := sha1.New()
 	db := database.Instance()
 
-	io.WriteString(h, longURL)
+	io.WriteString(h, data)
 	//Calculate sha-1 hash, convert to hexadecimal representation and take only first 7 digits
 	s := fmt.Sprintf("%.7s", fmt.Sprintf("%x", h.Sum(nil)))
 	//Encode the first 7 digits in Base64 without padding and url safe
 	encoded := base64.URLEncoding.WithPadding(base64.NoPadding).EncodeToString([]byte(s))
 	encodedURL := base64.StdEncoding.WithPadding(base64.StdPadding).EncodeToString([]byte(longURL))
 
-	db.Where("hash = ? ", encoded).First(&shortUrl)
+	db.Where("hash = ? ", encoded).First(&hashData)
 
-	if shortUrl.Id == 0 {
-		shortUrl.Hash = encoded
-		shortUrl.CreatedAt = time.Now().UTC()
+	if hashData.Id == 0 {
+		hashData.Hash = encoded
+		hashData.CreatedAt = time.Now().UTC()
 		if keepURL {
-			shortUrl.LongUrl = longURL
+			hashData.LongUrl = data
 		} else {
-			shortUrl.LongUrl = "http://" + uamip + ":" + uamport + "/www/redirect.chi?url=" + encodedURL
+			hashData.LongUrl = "http://" + uamip + ":" + uamport + "/www/redirect.chi?url=" + encodedURL
 		}
 
-		db.Save(&shortUrl)
+		db.Save(&hashData)
 	}
 
-	return configuration.Config.Shortener.BaseUrl + encoded
+	return encoded
 }
 
-func GetShortUrlByHash(hash string) models.ShortUrl {
-	var shortUrl models.ShortUrl
-	db := database.Instance()
-	db.Where("hash = ? ", hash).First(&shortUrl)
+func GenerateShortURL(longURL string, uamip string, uamport string, keepURL bool) string {
 
-	return shortUrl
+	return configuration.Config.Shortener.BaseUrl + GenerateHashByData(longURL, uamip, uamport, keepURL)
+}
+
+func GetDataByHash(hash string) models.ShortUrl {
+	var hashData models.ShortUrl
+	db := database.Instance()
+	db.Where("hash = ?", hash).First(&hashData)
+
+	return hashData
+}
+
+func DeleteHashData(hash string) {
+	db := database.Instance()
+	db.Where("hash = ?", hash).Delete(models.ShortUrl{})
 }
 
 func SendWhatsappMessage(number string, code string, unit models.Unit, auth string) int {
