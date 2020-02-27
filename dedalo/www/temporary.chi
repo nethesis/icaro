@@ -40,23 +40,17 @@ then
 			$AP_MAC \
 			$HS_ID )
 
-	http_res=$(curl -s -w ",%{http_code}"  "$http_req")
+	sessiontimeout=$(curl -s -L --fail "$http_req")
 
 	if [ "$?" == "0" ]
 	then
-		sessiontimeout=$(echo "$http_res" | cut -d ',' -f 1)
-		http_code=$(echo "$http_res" | cut -d ',' -f 2)
+		http_header 200
 
-		if [ "$http_code" == "200" ]
-		then
+		dedalo query authorize mac "$REMOTE_MAC" username "temporary" sessiontimeout "$sessiontimeout"
 
-			http_header 200
+	elif [ "$?" == "22" ]
 
-			dedalo query authorize mac "$REMOTE_MAC" username "temporary" sessiontimeout "$sessiontimeout"
-
-		else
-			http_header 403
-		fi
+		http_header 403
 
 	else
 		http_header 500
