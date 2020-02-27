@@ -162,6 +162,7 @@
 
   body {
     background: #444;
+    background-attachment: fixed !important;
   }
 
   img {
