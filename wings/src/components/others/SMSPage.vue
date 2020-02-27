@@ -60,8 +60,8 @@
       <div v-if="errors.badNumber" class="ui tiny icon negative message">
         <i class="remove icon"></i>
         <div class="content">
-          <div class="header" :style="textStyle">{{ $t("sms.error_code") }}</div>
-          <p :style="textStyle">{{ $t("sms.error_code_sub") }}</p>
+          <div class="header">{{ $t("sms.error_code") }}</div>
+          <p>{{ $t("sms.error_code_sub") }}</p>
         </div>
       </div>
       <div v-if="codeRequested">
@@ -94,7 +94,11 @@
         </div>
       </div>
       <div class="ui divider"></div>
-      <button :style="buttonStyle" v-on:click="back()" class="big ui red button">{{ $t("login.back") }}</button>
+      <button
+        :style="buttonStyle"
+        v-on:click="back()"
+        class="big ui red button"
+      >{{ $t("login.back") }}</button>
       <button
         v-on:click="execLogin()"
         :disabled="isDisabled()"
@@ -139,8 +143,8 @@
       <div v-if="errors.dedaloError" class="ui icon negative message">
         <i class="remove icon"></i>
         <div class="content">
-          <div class="header" :style="textStyle">{{ $t("sms.auth_error") }}</div>
-          <p :style="textStyle">{{ $t("sms.auth_error_sub") }}</p>
+          <div class="header">{{ $t("sms.auth_error") }}</div>
+          <p>{{ $t("sms.auth_error_sub") }}</p>
         </div>
       </div>
       <div
@@ -158,7 +162,11 @@
           </div>
         </div>
         <div>
-          <button :style="buttonStyle" v-on:click="navigate()" class="ui big button green">{{ $t("login.navigate") }}</button>
+          <button
+            :style="buttonStyle"
+            v-on:click="navigate()"
+            class="ui big button green"
+          >{{ $t("login.navigate") }}</button>
         </div>
       </div>
     </div>
@@ -182,8 +190,10 @@ export default {
         this.$root.$options.hotspot.integrations = success.body.integrations;
         this.hotspot.disclaimers = success.body.disclaimers;
         this.hotspot.preferences = success.body.preferences;
-        this.textColor = success.body.preferences.captive_84_text_color || '#4A4A4A';
-        this.textFont = success.body.preferences.captive_85_text_style || 'Roboto';
+        this.textColor =
+          success.body.preferences.captive_84_text_color || "#4A4A4A";
+        this.textFont =
+          success.body.preferences.captive_85_text_style || "Roboto";
 
         if (this.$route.query.integration_done) {
           var context = this;
@@ -233,21 +243,21 @@ export default {
       additionalCountry: "-",
       additionalReason: "-",
       passwordVisible: true,
-      textColor: '#4A4A4A',
-      textFont: 'Roboto',
+      textColor: "#4A4A4A",
+      textFont: "Roboto"
     };
   },
   computed: {
-    textStyle: function () {
+    textStyle: function() {
       return {
         color: this.textColor,
-        'font-family': this.textFont
-      }
+        "font-family": this.textFont
+      };
     },
-    buttonStyle: function () {
+    buttonStyle: function() {
       return {
-        'font-family': this.textFont
-      }
+        "font-family": this.textFont
+      };
     }
   },
   methods: {

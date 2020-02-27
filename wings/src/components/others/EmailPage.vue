@@ -124,8 +124,8 @@
       <div v-if="errors.dedaloError" class="ui icon negative message">
         <i class="remove icon"></i>
         <div class="content">
-          <div class="header" :style="textStyle">{{ $t("email.auth_error") }}</div>
-          <p :style="textStyle">{{ $t("email.auth_error_sub") }}</p>
+          <div class="header">{{ $t("email.auth_error") }}</div>
+          <p>{{ $t("email.auth_error_sub") }}</p>
         </div>
       </div>
       <div
