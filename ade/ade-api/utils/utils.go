@@ -21,27 +21,38 @@ import (
 
 type surveySend struct {
 	HotspotName           string
-	HotspotLogo           string
 	HotspotDetails        string
 	BgColor               string
 	HotspotSurveyBodyText template.HTML
+	ContainerBgColor      string
+	TitleColor            string
+	TextColor             string
 }
 
 type reviewResponse struct {
-	Message string
-	Stars   []int
-	BgColor string
+	Message          string
+	Stars            []int
+	BgColor          string
+	ContainerBgColor string
+	TitleColor       string
+	TextColor        string
 }
 
 type feedbackResponse struct {
-	Message string
-	BgColor string
+	Message          string
+	BgColor          string
+	ContainerBgColor string
+	TitleColor       string
+	TextColor        string
 }
 
 func GetHotspotPrefs(hotspotId int) map[string]string {
 	hotspotPrefs := []string{"captive_2_title",
 		"captive_3_logo",
 		"captive_7_background",
+		"captive_82_container_bg_color",
+		"captive_83_title_color",
+		"captive_84_text_color",
 		"marketing_9_threshold",
 		"marketing_10_first_url",
 		"marketing_11_second_url",
@@ -85,7 +96,7 @@ func CreateAdeToken(user models.User) models.AdeToken {
 	return adeToken
 }
 
-func compileUserEmailTemplate(Type string, adeToken models.AdeToken, hotspotName string, hotspotLogo string, bgColor string, hotspot models.Hotspot, BodyText string) (string, bool) {
+func compileUserEmailTemplate(Type string, adeToken models.AdeToken, hotspotName string, bgColor string, hotspotContainerBgColor string, hotspotTitleColor string, hotspotTextColor string, hotspotTextStyle string, hotspot models.Hotspot, BodyText string) (string, bool) {
 	var userMessage bytes.Buffer
 	var templateFile string
 	var Url string
@@ -103,10 +114,12 @@ func compileUserEmailTemplate(Type string, adeToken models.AdeToken, hotspotName
 	rp := surveySend{
 		HotspotName: hotspotName,
 		//Skip the "data:image/" of image base64 encoded, workaround for golang html template limitation.
-		HotspotLogo:           hotspotLogo[11:],
 		BgColor:               bgColor,
 		HotspotDetails:        hotspot.BusinessName + " • " + hotspot.BusinessAddress + " • " + hotspot.BusinessEmail,
 		HotspotSurveyBodyText: template.HTML(strings.Replace(BodyText, "$$URL$$", "<a href=\""+Url+"\">Link</a>", -1)),
+		ContainerBgColor:      hotspotContainerBgColor,
+		TitleColor:            hotspotTitleColor,
+		TextColor:             hotspotTextColor,
 	}
 
 	err := t.Execute(&userMessage, &rp)
@@ -118,9 +131,9 @@ func compileUserEmailTemplate(Type string, adeToken models.AdeToken, hotspotName
 	return userMessage.String(), true
 }
 
-func SendFeedBackMessageToUser(adeToken models.AdeToken, userEmail string, hotspotName string, hotspotLogo string, bgColor string, hotspot models.Hotspot, BodyText string) bool {
+func SendFeedBackMessageToUser(adeToken models.AdeToken, userEmail string, hotspotName string, bgColor string, hotspotContainerBgColor string, hotspotTitleColor string, hotspotTextColor string, hotspotTextStyle string, hotspot models.Hotspot, BodyText string) bool {
 
-	userMessage, status := compileUserEmailTemplate("feedback", adeToken, hotspotName, hotspotLogo, bgColor, hotspot, BodyText)
+	userMessage, status := compileUserEmailTemplate("feedback", adeToken, hotspotName, bgColor, hotspotContainerBgColor, hotspotTitleColor, hotspotTextColor, hotspotTextStyle, hotspot, BodyText)
 
 	if status {
 		mailFrom := wax_utils.GetHotspotPreferencesByKey(hotspot.Id, "captive_2_title").Value + " <" + configuration.Config.Endpoints.Email.From + ">"
@@ -139,9 +152,9 @@ func SendFeedBackMessageToUser(adeToken models.AdeToken, userEmail string, hotsp
 	return status
 }
 
-func SendReviewMessageToUser(adeToken models.AdeToken, userEmail string, hotspotName string, hotspotLogo string, bgColor string, hotspot models.Hotspot, BodyText string) bool {
+func SendReviewMessageToUser(adeToken models.AdeToken, userEmail string, hotspotName string, bgColor string, hotspotContainerBgColor string, hotspotTitleColor string, hotspotTextColor string, hotspotTextStyle string, hotspot models.Hotspot, BodyText string) bool {
 
-	userMessage, status := compileUserEmailTemplate("review", adeToken, hotspotName, hotspotLogo, bgColor, hotspot, BodyText)
+	userMessage, status := compileUserEmailTemplate("review", adeToken, hotspotName, bgColor, hotspotContainerBgColor, hotspotTitleColor, hotspotTextColor, hotspotTextStyle, hotspot, BodyText)
 
 	if status {
 		mailFrom := wax_utils.GetHotspotPreferencesByKey(hotspot.Id, "captive_2_title").Value + " <" + configuration.Config.Endpoints.Email.From + ">"
@@ -160,12 +173,15 @@ func SendReviewMessageToUser(adeToken models.AdeToken, userEmail string, hotspot
 	return status
 }
 
-func SendFeedBackMessageToOwner(adeToken models.AdeToken, message string, bgColor string) bool {
+func SendFeedBackMessageToOwner(adeToken models.AdeToken, message string, hotspotPrefs map[string]string) bool {
 	var ownerMessage bytes.Buffer
 
 	rp := feedbackResponse{
-		Message: message,
-		BgColor: bgColor,
+		Message:          message,
+		BgColor:          hotspotPrefs["captive_7_background"],
+		ContainerBgColor: hotspotPrefs["captive_82_container_bg_color"],
+		TitleColor:       hotspotPrefs["captive_83_title_color"],
+		TextColor:        hotspotPrefs["captive_84_text_color"],
 	}
 
 	t, err := template.ParseFiles("templates/feedback_owner.tpl")
@@ -191,7 +207,7 @@ func SendFeedBackMessageToOwner(adeToken models.AdeToken, message string, bgColo
 	return status
 }
 
-func SendReviewMessageToOwner(adeToken models.AdeToken, stars int, message string, bgColor string) bool {
+func SendReviewMessageToOwner(adeToken models.AdeToken, stars int, message string, hotspotPrefs map[string]string) bool {
 	var ownerMessage bytes.Buffer
 	stars_s := strconv.Itoa(stars)
 
@@ -200,9 +216,12 @@ func SendReviewMessageToOwner(adeToken models.AdeToken, stars int, message strin
 		starsFill[i] = 0
 	}
 	rp := reviewResponse{
-		Message: message,
-		Stars:   starsFill,
-		BgColor: bgColor,
+		Message:          message,
+		Stars:            starsFill,
+		BgColor:          hotspotPrefs["captive_7_background"],
+		ContainerBgColor: hotspotPrefs["captive_82_container_bg_color"],
+		TitleColor:       hotspotPrefs["captive_83_title_color"],
+		TextColor:        hotspotPrefs["captive_84_text_color"],
 	}
 
 	t, err := template.ParseFiles("templates/review_owner.tpl")

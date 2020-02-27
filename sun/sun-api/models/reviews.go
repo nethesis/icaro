@@ -24,7 +24,6 @@ package models
 
 type ReviewPage struct {
 	HotspotName string   `json:"hotspot_name"`
-	HotspotLogo string   `json:"hotspot_logo"`
 	BgColor     string   `json:"bg_color"`
 	Urls        []string `json:"urls"`
 	Threshold   int      `json:"threshold"`
