@@ -176,7 +176,7 @@ var AuthMixin = {
                 '&username=' + encodeURIComponent(username)
             ).then(callback);
         },
-        doTempSession: function (username, callback) {
+        doTempSession: function (username, short, callback) {
             var params = this.extractParams()
             var ip = params.uamip || null
             var port = params.uamport || null
@@ -192,7 +192,14 @@ var AuthMixin = {
                 uuid = state.uuid
                 sessionid = state.sessionid
             }
-            var dedaloUrl = ip + ':' + port
+            var dedaloUrl = 'http://' + ip + ':' + port + '/www/temporary.chi?'
+
+            if(username) {
+                dedaloUrl += '&username=' + username
+            }
+            if(short) {
+                dedaloUrl += '&short_code=' + short
+            }
 
             // do dedalo temp session
             this.$http.get(protocol + host + '/wax/aaa/temp' +
