@@ -352,37 +352,47 @@ func GenerateCode(max int) string {
 	return string(b)
 }
 
-func GenerateShortURL(longURL string) string {
+func GenerateHashByData(data string) string {
 
-	var shortUrl models.ShortUrl
+	var hashData models.ShortUrl
 	h := sha1.New()
 	db := database.Instance()
 
-	io.WriteString(h, longURL)
+	io.WriteString(h, data)
 	//Calculate sha-1 hash, convert to hexadecimal representation and take only first 7 digits
 	s := fmt.Sprintf("%.7s", fmt.Sprintf("%x", h.Sum(nil)))
 	//Encode the first 7 digits in Base64 without padding and url safe
 	encoded := base64.URLEncoding.WithPadding(base64.NoPadding).EncodeToString([]byte(s))
 
-	db.Where("hash = ? ", encoded).First(&shortUrl)
+	db.Where("hash = ? ", encoded).First(&hashData)
 
-	if shortUrl.Id == 0 {
-		shortUrl.Hash = encoded
-		shortUrl.CreatedAt = time.Now().UTC()
-		shortUrl.LongUrl = longURL
+	if hashData.Id == 0 {
+		hashData.Hash = encoded
+		hashData.CreatedAt = time.Now().UTC()
+		hashData.LongUrl = data
 
-		db.Save(&shortUrl)
+		db.Save(&hashData)
 	}
 
-	return configuration.Config.Shortener.BaseUrl + encoded
+	return encoded
 }
 
-func GetShortUrlByHash(hash string) models.ShortUrl {
-	var shortUrl models.ShortUrl
-	db := database.Instance()
-	db.Where("hash = ? ", hash).First(&shortUrl)
+func GenerateShortURL(longURL string) string {
 
-	return shortUrl
+	return configuration.Config.Shortener.BaseUrl + GenerateHashByData(longURL)
+}
+
+func GetDataByHash(hash string) models.ShortUrl {
+	var hashData models.ShortUrl
+	db := database.Instance()
+	db.Where("hash = ?", hash).First(&hashData)
+
+	return hashData
+}
+
+func DeleteHashData(hash string) {
+	db := database.Instance()
+	db.Where("hash = ?", hash).Delete(models.ShortUrl{})
 }
 
 func SendWhatsappMessage(number string, code string, unit models.Unit, auth string) int {
