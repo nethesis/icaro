@@ -67,7 +67,18 @@ func WhatsappAuth(c *gin.Context) {
 
 	// parse body
 	var parts = strings.Split(whatsappPOST.Body, " ")
-	body, err := url.ParseQuery(parts[1])
+
+	data := utils.GetDataByHash(parts[1])
+
+	if data.Id == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "invalid short code"})
+		return
+	}
+
+	utils.DeleteHashData(parts[1])
+
+	body, err := url.ParseQuery(data.LongUrl)
+
 	if err != nil {
 		panic(err)
 	}
