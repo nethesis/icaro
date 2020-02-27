@@ -36,7 +36,7 @@ then
 	HS_DIGEST=$(echo -n "$HS_SECRET$HS_UUID" | md5sum | awk '{print $1}')
 	AP_MAC=$(cat /sys/class/net/$HS_INTERFACE/address | tr ':' '-' | awk '{print toupper($0)}')
 
-	http_req=$(printf "%s?digest=%s&uuid=%s&stage=temporary&status=new&mac=%s&sessionid=%s&ap=%s&nasid=%s" \
+	http_req=$(printf "%s?digest=%s&uuid=%s&stage=temporary&status=new-json&mac=%s&sessionid=%s&ap=%s&nasid=%s" \
 			$HS_AAA_URL \
 			$HS_DIGEST \
 			$HS_UUID \
@@ -50,11 +50,11 @@ then
 		http_req=${http_req}&user=$FORM_username
 	fi
 
-	sessiontimeout=$(curl -s -L --fail "$http_req")
+	http_res=$(curl -s -L --fail "$http_req")
 
 	if [ "$?" == "0" ]
 	then
-		http_header 200
+		sessiontimeout=$(echo "$http_res" | jq  '.sessiontimeout')
 
 		dedalo query authorize mac "$REMOTE_MAC" username "temporary" sessiontimeout "$sessiontimeout"
 
