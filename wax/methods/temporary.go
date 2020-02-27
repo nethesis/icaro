@@ -25,6 +25,7 @@ package methods
 import (
 	"net/http"
 	"net/url"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/nethesis/icaro/sun/sun-api/models"
@@ -37,6 +38,7 @@ func Temporary(c *gin.Context, parameters url.Values) {
 	sessionId := parameters.Get("sessionid")
 	unitMacAddress := parameters.Get("ap")
 	status := parameters.Get("status")
+	short_code := parameters.Get("short_code")
 
 	var user models.User
 
@@ -67,7 +69,23 @@ func Temporary(c *gin.Context, parameters url.Values) {
 
 	if status == "new-json" {
 
-		c.JSON(http.StatusOK, gin.H{"sessiontimeout": seconds.Value})
+		shortCodeEnabled, err := strconv.ParseBool(short_code)
+
+		if err == nil && shortCodeEnabled {
+
+			data := url.Values{}
+			data.Set("digest", parameters.Get("digest"))
+			data.Set("sessionid", parameters.Get("sessionid"))
+			data.Set("uamip", parameters.Get("uamip"))
+			data.Set("uamport", "3990")
+
+			hash := utils.GenerateHashByData(data.Encode())
+
+			c.JSON(http.StatusOK, gin.H{"sessiontimeout": seconds.Value, "short_code": hash})
+
+		} else {
+			c.JSON(http.StatusOK, gin.H{"sessiontimeout": seconds.Value})
+		}
 
 	} else {
 		c.String(http.StatusOK, seconds.Value)
