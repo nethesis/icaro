@@ -190,9 +190,11 @@ export default {
       countries: require("./../../i18n/countries.json"),
       additionalCountry: "-",
       additionalReason: "-",
+      iOS: /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream,
       passwordVisible: true,
       textColor: "#4A4A4A",
-      textFont: "Roboto"
+      textFont: "Roboto",
+      shortCode: this.$route.query.short_code
     };
   },
   computed: {
@@ -228,7 +230,7 @@ export default {
         "http://wa.me/" +
           CONFIG.WHATSAPP_NUMBER.replace("+", "") +
           "?text=" +
-          encodeURIComponent(this.$route.query.short_code)
+          encodeURIComponent(this.shortCode)
       );
     },
     getCode: function(reset) {
@@ -236,27 +238,34 @@ export default {
 
       // open temp session for the user
       this.doTempSession(
-        "",
+        null,
+        "true",
         function(responseTmp) {
-          var origin = "http://conncheck." + window.location.host;
-          var pathname = window.location.pathname;
-          var query =
-            "?digest=" +
-            params.digest +
-            "&uuid=" +
-            params.uuid +
-            "&sessionid=" +
-            params.sessionid +
-            "&uamip=" +
-            params.uamip +
-            "&uamport=" +
-            params.uamport +
-            "&user=" +
-            this.userId +
-            "&short_code=" +
-            responseTmp.body.short_code +
-            "&temp=done";
-          window.location.replace(origin + pathname + query);
+          // if apple
+          if (this.iOS) {
+            var origin = "http://conncheck." + window.location.host;
+            var pathname = window.location.pathname;
+            var query =
+              "?digest=" +
+              params.digest +
+              "&uuid=" +
+              params.uuid +
+              "&sessionid=" +
+              params.sessionid +
+              "&uamip=" +
+              params.uamip +
+              "&uamport=" +
+              params.uamport +
+              "&user=" +
+              this.userId +
+              "&short_code=" +
+              responseTmp.body.short_code +
+              "&temp=done";
+            window.location.replace(origin + pathname + query);
+          } else {
+            this.openBtn = true;
+            this.shortCode = responseTmp.body.short_code;
+          }
         },
         function(error) {
           this.codeRequested = false;

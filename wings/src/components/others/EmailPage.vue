@@ -273,6 +273,7 @@ export default {
             // open temp session for the user
             this.doTempSession(
               this.authEmail,
+              null,
               function(responseTmp) {
                 // if apple
                 if (this.iOS) {

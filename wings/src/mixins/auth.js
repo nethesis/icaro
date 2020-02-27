@@ -162,7 +162,7 @@ var AuthMixin = {
             // do dedalo logout
             this.$http.get('http://' + dedaloUrl + '/json/logout').then(callback);
         },
-        doTempSession: function (username, callback) {
+        doTempSession: function (username, short, callback) {
             var params = this.extractParams()
             var ip = params.uamip || null
             var port = params.uamport || null
@@ -172,10 +172,17 @@ var AuthMixin = {
                 ip = state.uamip
                 port = state.uamport
             }
-            var dedaloUrl = ip + ':' + port
+            var dedaloUrl = 'http://' + ip + ':' + port + '/www/temporary.chi?'
+
+            if(username) {
+                dedaloUrl += '&username=' + username
+            }
+            if(short) {
+                dedaloUrl += '&short_code=' + short
+            }
 
             // do dedalo temp session
-            this.$http.get('http://' + dedaloUrl + '/www/temporary.chi?username=' + username).then(callback);
+            this.$http.get(dedaloUrl).then(callback);
         }
     }
 };
