@@ -88,8 +88,8 @@
       <div v-if="errors.dedaloError" class="ui icon negative message">
         <i class="remove icon"></i>
         <div class="content">
-          <div class="header" :style="textStyle">{{ $t("whatsapp.auth_error") }}</div>
-          <p :style="textStyle">{{ $t("whatsapp.auth_error_sub") }}</p>
+          <div class="header">{{ $t("whatsapp.auth_error") }}</div>
+          <p>{{ $t("whatsapp.auth_error_sub") }}</p>
         </div>
       </div>
       <div
