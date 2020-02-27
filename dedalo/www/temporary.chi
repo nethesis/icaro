@@ -25,6 +25,12 @@ http_header ()
 
 }
 
+http_body ()
+{
+	echo
+	echo $1
+}
+
 if [ "$AUTHENTICATED" != "1" ]
 then
 	HS_DIGEST=$(echo -n "$HS_SECRET$HS_UUID" | md5sum | awk '{print $1}')
