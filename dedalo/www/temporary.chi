@@ -41,6 +41,7 @@ http_header ()
 	echo Connection: close
 	echo Cache: none
 	echo Access-Control-Allow-Origin: "$HS_ALLOW_ORIGINS"
+	echo Content: application/json
 
 }
 
@@ -55,14 +56,17 @@ then
 	HS_DIGEST=$(echo -n "$HS_SECRET$HS_UUID" | md5sum | awk '{print $1}')
 	AP_MAC=$(cat /sys/class/net/$HS_INTERFACE/address | tr ':' '-' | awk '{print toupper($0)}')
 
-	http_req=$(printf "%s?digest=%s&uuid=%s&stage=temporary&status=new-json&mac=%s&sessionid=%s&ap=%s&nasid=%s" \
+	http_req=$(printf "%s?digest=%s&uuid=%s&stage=temporary&status=new-json&mac=%s&sessionid=%s&ap=%s&nasid=%s&short_code=%s&uamip=%s" \
 			$HS_AAA_URL \
 			$HS_DIGEST \
 			$HS_UUID \
 			$REMOTE_MAC \
 			$CHI_SESSION_ID \
 			$AP_MAC \
-			$HS_ID )
+			$HS_ID \
+			${FORM_short_code:-false} \
+			$(ip -o -4 addr list tun-dedalo  | awk '{print $4}' | cut -d/ -f1)
+			)
 
 	if [ -n "$FORM_username" ]
 	then
@@ -77,8 +81,17 @@ then
 
 		dedalo query authorize mac "$REMOTE_MAC" username "temporary" sessiontimeout "$sessiontimeout"
 
-	elif [ "$?" == "22" ]
+		short_code=$(echo "$http_res" | jq  -Mcr '. | select(.short_code != null)| .short_code')
 
+		http_header 200
+
+		if [ -n "$short_code" ]
+		then
+			http_body $(jq -Mcr -n --arg short_code $short_code '{"short_code":$short_code}')
+		fi
+
+	elif [ "$?" == "22" ]
+	then
 		http_header 403
 
 	else
@@ -86,7 +99,6 @@ then
 	fi
 
 else
-
 	http_header 404
 
 fi
