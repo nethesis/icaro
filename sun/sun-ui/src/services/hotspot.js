@@ -158,6 +158,20 @@ var HotspotService = {
           uuid
         )
         .then(success, error);
+    },
+    hotspotPrivacyAll(body, success, error) {
+      this.$http
+        .get(
+          this.$root.$options.wax_url +
+          "/wax/privacy/", 
+          body, {
+            headers: {
+              Token:
+                (this.get("loggedUser") && this.get("loggedUser").token) || ""
+            }
+          }
+        )
+        .then(success, error);
     }
   }
 };

@@ -72,6 +72,58 @@
           </div>
         </div>
       </div>
+      <!-- disclaimer -->
+      <div
+        v-if="disclaimers.data && disclaimers.data.length"
+        class="col-xs-12 col-sm-12 col-md-6"
+      >
+        <div class="card-pf card-pf-accented">
+          <div class="card-pf-heading">
+            <h2 class="card-pf-title">
+              {{ $t("profile.default_disclaimer") }}
+              <div v-if="!disclaimers.isLoading" class="pficon pficon-catalog card-info-title right"></div>
+              <div v-if="disclaimers.isLoading" class="spinner spinner-sm right"></div>
+            </h2>
+          </div>
+          <div v-if="!disclaimers.isLoading" class="card-pf-body">
+            <form class="form-horizontal" role="form">
+              <div class="form-group">
+                <label class="col-sm-4 control-label">{{ $t("profile.privacy_disclaimer") }}</label>
+                <div class="col-sm-8">
+                  <select v-model="disclaimers.preferredPrivacyDisclaimerId" class="form-control">
+                    <option value="">{{ $t("profile.default") }}</option>
+                    <option v-for="privacyDisclaimer in disclaimers.privacyDisclaimers" :key="privacyDisclaimer.id" :value="privacyDisclaimer.id">
+                      {{ privacyDisclaimer.title }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-4 control-label">{{ $t("profile.tos_disclaimer") }}</label>
+                <div class="col-sm-8">
+                  <select v-model="disclaimers.preferredTosDisclaimerId" class="form-control">
+                    <option value="">{{ $t("profile.default") }}</option>
+                    <option v-for="tosDisclaimer in disclaimers.tosDisclaimers" :key="tosDisclaimer.id" :value="tosDisclaimer.id">
+                      {{ tosDisclaimer.title }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="card-pf-footer">
+            <div class="dropdown card-pf-time-frame-filter">
+              <span v-if="disclaimers.updateError" class="pficon pficon-error-circle-o bigger update-pref-feedback"></span>
+              <span v-if="disclaimers.updateSuccess" class="pficon pficon-ok update-pref-feedback"></span>
+              <button class="btn btn-default" v-on:click="updateDisclaimers()">{{ $t("update") }}</button>
+            </div>
+            <p>
+              <a href="#" class="card-pf-link-with-icon">
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="modal fade" id="changePassModal" tabindex="-1" role="dialog" aria-labelledby="changePassModalLabel" aria-hidden="true">
@@ -125,10 +177,12 @@ import LoginService from "../services/login";
 import StorageService from "../services/storage";
 import UtilService from "../services/util";
 import StatsService from "../services/stats";
+import DisclaimerService from "../services/disclaimer";
+import PreferenceService from "../services/preference";
 
 export default {
   name: "Profile",
-  mixins: [LoginService, StorageService, UtilService, StatsService],
+  mixins: [LoginService, StorageService, UtilService, StatsService, DisclaimerService, PreferenceService],
   data() {
     return {
       msg: this.$i18n.t("menu.profile"),
@@ -146,10 +200,21 @@ export default {
         isLoading: true,
         data: {}
       },
+      disclaimers: {
+        data: {},
+        isLoading: true,
+        preferredPrivacyDisclaimerId: "",
+        preferredTosDisclaimerId: "",
+        privacyDisclaimers: [],
+        tosDisclaimers: [],
+        updateSuccess: false,
+        updateError: false,
+      },
     };
   },
   mounted() {
     this.getSmsThreshold();
+    this.getDisclaimers();
   },
   methods: {
     changePassword() {
@@ -199,11 +264,88 @@ export default {
           console.error(error.body);
         }
       );
+    },
+    getDisclaimers() {
+      this.disclaimersByAccount(
+        this.user.login.id,
+        success => {
+          this.disclaimers.data = success.body;
+          this.privacy_disclaimers = [];
+          this.tos_disclaimers = [];
+
+          this.disclaimers.data.forEach((disclaimer) => {
+            if (disclaimer.type === "privacy") {
+              this.disclaimers.privacyDisclaimers.push(disclaimer);
+            } else {
+              this.disclaimers.tosDisclaimers.push(disclaimer);
+            }
+          });
+          this.getPreferredDisclaimers();
+        },
+        error => {
+          this.disclaimers.isLoading = false;
+          console.error(error.body);
+        }
+      );
+    },
+    getPreferredDisclaimers() {
+      this.accountPrefGet(
+        this.user.login.id,
+        success => {
+          this.disclaimers.preferredPrivacyDisclaimerId = "";
+          this.disclaimers.preferredTosDisclaimerId = "";
+
+          success.body.forEach((pref) => {
+            if (pref.key === "custom_disclaimers_privacy") {
+              this.disclaimers.preferredPrivacyDisclaimerId = pref.value;
+            } else if (pref.key === "custom_disclaimers_terms") {
+              this.disclaimers.preferredTosDisclaimerId = pref.value;
+            }
+          });
+          this.disclaimers.isLoading = false;
+        },
+        error => {
+          this.disclaimers.isLoading = false;
+          console.error(error.body);
+        }
+      );
+    },
+    updateDisclaimers() {
+      this.updateDisclaimer("custom_disclaimers_privacy", this.disclaimers.preferredPrivacyDisclaimerId);
+      this.updateDisclaimer("custom_disclaimers_terms", this.disclaimers.preferredTosDisclaimerId);
+    },
+    updateDisclaimer(prefKey, prefValue) {
+      this.accountPrefModify(
+        this.user.login.id,
+        {
+          key: prefKey,
+          value: prefValue.toString(),
+          account_id: this.user.login.id,
+        },
+        success => {
+          this.disclaimers.updateSuccess = true;
+          setTimeout(() => {
+            this.disclaimers.updateSuccess = false;
+          }, 2000);
+        },
+        error => {
+          console.error(error.body);
+
+          this.disclaimers.updateError = true;
+          setTimeout(() => {
+            this.disclaimers.updateError = false;
+          }, 2000);
+        }
+      );
     }
   }
 };
 </script>
 
 <style>
-
+.update-pref-feedback {
+  vertical-align: middle;
+  margin-right: 0.4em;
+  font-size: 140%;
+}
 </style>

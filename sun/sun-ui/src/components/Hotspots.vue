@@ -264,6 +264,36 @@
                   >
                 </div>
               </div>
+              <!-- privacy dislaimer -->
+              <div v-if="disclaimers.privacyDisclaimers && disclaimers.privacyDisclaimers.length" class="form-group">
+                <label
+                  class="col-sm-4 control-label"
+                  for="textInput2-modal-markup"
+                >{{ $t("hotspot.privacy_disclaimer") }}</label>
+                <div class="col-sm-8">
+                  <select v-model="disclaimers.selectedPrivacyDisclaimerId" class="form-control">
+                    <option value="">{{ $t("hotspot.disclaimer_default") }}</option>
+                    <option v-for="privacyDisclaimer in disclaimers.privacyDisclaimers" :key="privacyDisclaimer.id" :value="privacyDisclaimer.id">
+                      {{ privacyDisclaimer.title }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <!-- tos dislaimer -->
+              <div v-if="disclaimers.tosDisclaimers && disclaimers.tosDisclaimers.length" class="form-group">
+                <label
+                  class="col-sm-4 control-label"
+                  for="textInput2-modal-markup"
+                >{{ $t("hotspot.tos_disclaimer") }}</label>
+                <div class="col-sm-8">
+                  <select v-model="disclaimers.selectedTosDisclaimerId" class="form-control">
+                    <option value="">{{ $t("hotspot.disclaimer_default") }}</option>
+                    <option v-for="tosDisclaimer in disclaimers.tosDisclaimers" :key="tosDisclaimer.id" :value="tosDisclaimer.id">
+                      {{ tosDisclaimer.title }}
+                    </option>
+                  </select>
+                </div>
+              </div>
               <div v-if="errors.create" class="alert alert-danger alert-dismissable">
                 <span class="pficon pficon-error-circle-o"></span>
                 <strong>{{ $t("hotspot.create_error_title") }}</strong>
@@ -286,12 +316,14 @@
 import HotspotService from "../services/hotspot";
 import StorageService from "../services/storage";
 import UtilService from "../services/util";
+import DisclaimerService from "../services/disclaimer";
+import PreferenceService from "../services/preference";
 
 import HotspotAction from "../directives/HotspotAction.vue";
 
 export default {
   name: "Hotspots",
-  mixins: [HotspotService, StorageService, UtilService],
+  mixins: [HotspotService, StorageService, UtilService, DisclaimerService, PreferenceService],
   components: {
     hotspotAction: HotspotAction
   },
@@ -365,12 +397,26 @@ export default {
       hotspotPage: 1,
       total: 0,
       isAdmin: this.get("loggedUser").account_type == "admin",
-      searchString: ""
+      searchString: "",
+      user: {
+        login: this.get("loggedUser") || null,
+        info: this.$parent.user.info
+      },
+      disclaimers: {
+        data: {},
+        preferredPrivacyDisclaimerId: "",
+        preferredTosDisclaimerId: "",
+        selectedPrivacyDisclaimerId: "",
+        selectedTosDisclaimerId: "",
+        privacyDisclaimers: [],
+        tosDisclaimers: [],
+      },
     };
   },
   mounted() {
     // get hotspot list
     this.getAll();
+    this.getDisclaimers();
   },
   methods: {
     handlePerPage(evt) {
@@ -409,6 +455,9 @@ export default {
     },
     createHotspot() {
       this.newObj.onAction = true;
+      this.newObj.privacy_disclaimer_id = this.disclaimers.selectedPrivacyDisclaimerId ? parseInt(this.disclaimers.selectedPrivacyDisclaimerId) : 0;
+      this.newObj.tos_disclaimer_id = this.disclaimers.selectedTosDisclaimerId ? parseInt(this.disclaimers.selectedTosDisclaimerId) : 0;
+
       this.hotspotCreate(
         this.newObj,
         success => {
@@ -444,7 +493,53 @@ export default {
     },
     availableNextPage() {
       return this.hotspotPage == Math.ceil(this.total / this.hotspotPerPage);
-    }
+    },
+    getDisclaimers() {
+      this.disclaimersByAccount(
+        this.user.login.id,
+        success => {
+          this.disclaimers.data = success.body;
+          this.privacy_disclaimers = [];
+          this.tos_disclaimers = [];
+
+          this.disclaimers.data.forEach((disclaimer) => {
+            if (disclaimer.type === "privacy") {
+              this.disclaimers.privacyDisclaimers.push(disclaimer);
+            } else {
+              this.disclaimers.tosDisclaimers.push(disclaimer);
+            }
+          });
+          this.getPreferredDisclaimers();
+        },
+        error => {
+          console.error(error.body);
+        }
+      );
+    },
+    getPreferredDisclaimers() {
+      this.accountPrefGet(
+        this.user.login.id,
+        success => {
+          this.disclaimers.preferredPrivacyDisclaimerId = "";
+          this.disclaimers.preferredTosDisclaimerId = "";
+          this.disclaimers.selectedPrivacyDisclaimerId = "";
+          this.disclaimers.selectedTosDisclaimerId = "";
+
+          success.body.forEach((pref) => {
+            if (pref.key === "custom_disclaimers_privacy") {
+              this.disclaimers.preferredPrivacyDisclaimerId = pref.value;
+              this.disclaimers.selectedPrivacyDisclaimerId = pref.value;
+            } else if (pref.key === "custom_disclaimers_terms") {
+              this.disclaimers.preferredTosDisclaimerId = pref.value;
+              this.disclaimers.selectedTosDisclaimerId = pref.value;
+            }
+          });
+        },
+        error => {
+          console.error(error.body);
+        }
+      );
+    },
   }
 };
 </script>

@@ -36,7 +36,11 @@
       "change_password_error_sub": "Ci sono stati problemi durante il cambio password, contatta il tuo amministratore.",
       "sms": "SMS",
       "sms_login_threshold": "Soglia di avviso",
-      "sms_threshold_description": "Si riceverà una notifica email quando il numero di SMS rimanenti sarà inferiore alla soglia di avviso"
+      "sms_threshold_description": "Si riceverà una notifica email quando il numero di SMS rimanenti sarà inferiore alla soglia di avviso",
+      "default_disclaimer": "Disclaimer di default",
+      "privacy_disclaimer": "Disclaimer Privacy",
+      "tos_disclaimer": "Disclaimer Termini di utilizzo",
+      "default": "Default"
     },
     "hotspot": {
       "yes": "Sì",
@@ -171,7 +175,10 @@
       "create_voucher_custom": "Crea un voucher custom",
       "voucher_custom_code": "Codice",
       "i_agree": "Acconsento alle condizioni generali di utilizzo",
-      "tos_and_privacy": "ToS e Privacy"
+      "tos_and_privacy": "ToS e Privacy",
+      "privacy_disclaimer": "Disclaimer Privacy",
+      "tos_disclaimer": "Disclaimer Termini di utilizzo",
+      "disclaimer_default": "Default"
     },
     "user": {
       "username": "Utente",
@@ -248,7 +255,18 @@
       "site": "Sito",
       "enable": "Abilita",
       "disable": "Disabilita",
-      "integration": "Integrazione"
+      "integration": "Integrazione",
+      "add_disclaimer": "Aggiungi disclaimer",
+      "no_disclaimer": "Nessun disclaimer",
+      "disclaimers": "Disclaimer",
+      "disclaimer_title": "Nome",
+      "disclaimer_type": "Tipo",
+      "disclaimer_body": "Testo",
+      "privacy": "Privacy",
+      "tos": "Termini di utilizzo",
+      "add": "Aggiungi",
+      "delete_disclaimer": "Elimina disclaimer",
+      "delete_disclaimer_confirm": "Stai per eliminare il disclaimer"
     },
     "unit": {
       "unit": "Unità",
@@ -448,6 +466,8 @@
     "upload_file_not_supported": "Tipo file non supportato, utilizzare file png, jpeg o jpg",
     "upload_file_exceed": "File troppo grande (dimensione massima 700 KB)",
     "result": "Risultato",
-    "results": "Risultati"
+    "results": "Risultati",
+    "are_you_sure": "Sei sicuro",
+    "warning": "Attenzione"
   }
 }

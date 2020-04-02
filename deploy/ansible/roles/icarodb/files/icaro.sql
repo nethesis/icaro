@@ -403,4 +403,42 @@ CREATE TABLE `hotspot_integrations` (
   UNIQUE KEY (`hotspot_id`, `integration_id`),
   PRIMARY KEY(`id`)
 );
+
+/* ------------ */
+
+/* CUSTOM DISCLAIMERS */
+
+CREATE TABLE `disclaimers` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `type` varchar(250) NOT NULL,
+  `title` varchar(250) NOT NULL,
+  `body` text NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`)
+);
+
+CREATE TABLE `disclaimers_hotspots` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `disclaimer_id` bigint(20) unsigned NOT NULL,
+  `hotspot_id` bigint(20) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`),
+  KEY `hotspot_id` (`hotspot_id`),
+  KEY `disclaimer_id` (`disclaimer_id`,`hotspot_id`),
+  CONSTRAINT `disclaimers_hotspots_ibfk_1` FOREIGN KEY (`disclaimer_id`) REFERENCES `disclaimers` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `disclaimers_hotspots_ibfk_2` FOREIGN KEY (`hotspot_id`) REFERENCES `hotspots` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+);
+
+CREATE TABLE `disclaimers_accounts` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `disclaimer_id` bigint(20) unsigned NOT NULL,
+  `account_id` bigint(20) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`),
+  KEY `account_id` (`account_id`),
+  KEY `disclaimer_id` (`disclaimer_id`,`account_id`),
+  CONSTRAINT `disclaimers_accounts_ibfk_1` FOREIGN KEY (`disclaimer_id`) REFERENCES `disclaimers` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `disclaimers_accounts_ibfk_2` FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+);
+
 /* ------------ */

@@ -93,6 +93,88 @@
         </div>
       </div>
 
+      <!-- custom disclaimers -->
+      <div v-if="isAdmin && info.data.type == 'reseller'" class="col-xs-12 col-sm-12 col-md-6">
+        <div class="card-pf card-pf-accented">
+          <div class="card-pf-heading">
+            <h2 class="card-pf-title">
+              {{$t("account.add_disclaimer")}}
+              <div
+                v-if="!disclaimers.isLoading"
+                class="pficon pficon-catalog right"
+                data-toggle="tooltip"
+                data-placement="left"
+              ></div>
+              <div v-if="disclaimers.isLoading" class="spinner spinner-sm right"></div>
+            </h2>
+          </div>
+          <form role="form" v-on:submit.prevent="addDisclaimer()">
+            <div v-if="!disclaimers.isLoading" class="card-pf-body">
+              <div class="list-details">
+                <dt>{{ $t("account.disclaimers") }}</dt>
+              </div>
+              <ul v-if="disclaimers.data.length" class="disclaimer-list">
+                <li v-for="(disclaimer, dk) in disclaimers.data" :key="dk">
+                  <span>{{ disclaimer.title }} ({{ $t("account." + disclaimer.type) }})</span>
+                  <button
+                    type="button"
+                    class="btn btn-danger disclaimer-delete-btn"
+                    @click="showDeleteDisclaimerModal(disclaimer)"
+                  >{{$t('delete')}}</button>
+                </li>
+              </ul>
+              <div v-else class="no-disclaimer">
+                {{$t('account.no_disclaimer')}}
+              </div>
+              <!-- add new disclaimer -->
+              <div class="list-details">
+                <dt>{{ $t("account.disclaimer_type") }}</dt>
+                <span class="disclaimer-type">
+                  <input
+                    v-model="disclaimers.newDisclaimer.type"
+                    type="radio"
+                    id="privacy"
+                    name="disclaimer-type"
+                    value="privacy"
+                  />
+                  <label for="privacy">
+                    <span>{{ $t("account.privacy") }}</span>
+                  </label>
+                </span>
+                <span class="disclaimer-type">
+                  <input
+                    v-model="disclaimers.newDisclaimer.type"
+                    type="radio"
+                    id="tos"
+                    name="disclaimer-type"
+                    value="tos"
+                  />
+                  <label for="tos">
+                    <span>{{ $t("account.tos") }}</span>
+                  </label>
+                </span>
+              </div>
+              <div class="list-details">
+                <dt>{{ $t("account.disclaimer_title") }}</dt>
+                <input v-model="disclaimers.newDisclaimer.title" required class="form-control">
+              </div>
+              <div class="list-details">
+                <dt>{{ $t("account.disclaimer_body") }}</dt>
+                <textarea v-model="disclaimers.newDisclaimer.body" required class="form-control disclaimer-body"></textarea>
+              </div>
+            </div>
+            <div v-if="!disclaimers.isLoading" class="card-pf-footer">
+              <div class="dropdown card-pf-time-frame-filter">
+                <button class="btn btn-primary">{{$t('account.add')}}</button>
+              </div>
+              <p>
+                <a href="#" class="card-pf-link-with-icon"></a>
+              </p>
+            </div>
+          </form>
+        </div>
+      </div>
+
       <div
         v-if="isAdmin && info.data.type == 'reseller'"
         v-for="(i,ik) in integrations"
@@ -137,6 +219,37 @@
         </div>
       </div>
     </div>
+
+    <!-- delete disclaimer modal -->
+    <div class="modal fade" id="deleteDisclaimerModal" tabindex="-1" role="dialog" data-backdrop="static">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">{{$t('account.delete_disclaimer')}}</h4>
+          </div>
+          <form class="form-horizontal" v-on:submit.prevent="deleteDisclaimer()">
+            <div class="modal-body">
+              <div class="alert alert-warning mg-bottom-20">
+                <span class="pficon pficon-warning-triangle-o"></span>
+                <span>
+                  <strong>{{$t('warning')}}:</strong>
+                  {{$t('account.delete_disclaimer_confirm')}}
+                  <strong>{{ disclaimerToDelete.title}} ({{ $t("account." + disclaimerToDelete.type) }})</strong>.
+                </span>
+              </div>
+              <label>{{$t('are_you_sure')}}?</label>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-default" type="button" @click="hideDeleteDisclaimerModal()">{{$t('cancel')}}</button>
+              <button
+                class="btn btn-danger"
+                type="submit"
+              >{{$t('delete')}}</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -147,6 +260,7 @@ import StatsService from "../../services/stats";
 import UtilService from "../../services/util";
 import IntegrationService from "../../services/integration";
 import AccountAction from "../../directives/AccountAction.vue";
+import DisclaimerService from "../../services/disclaimer";
 
 export default {
   name: "AccountsDetails",
@@ -155,7 +269,8 @@ export default {
     StatsService,
     StorageService,
     UtilService,
-    IntegrationService
+    IntegrationService,
+    DisclaimerService
   ],
   components: {
     accountAction: AccountAction
@@ -166,6 +281,9 @@ export default {
 
     // get sms info
     this.getActualSMSCount();
+
+    // get privacy and tos custom disclaimers
+    this.getDisclaimers();
 
     // integrations
     this.getIntegrations();
@@ -180,9 +298,19 @@ export default {
         isLoading: true,
         data: {}
       },
+      disclaimers: {
+        data: {},
+        isLoading: true,
+        newDisclaimer: {
+          title: "",
+          type: "privacy",
+          body: ""
+        },
+      },
       integrations: [],
       maps: {},
-      isAdmin: this.get("loggedUser").account_type == "admin"
+      isAdmin: this.get("loggedUser").account_type == "admin",
+      disclaimerToDelete: {},
     };
   },
   // enable tooltips after rendering
@@ -199,6 +327,45 @@ export default {
         },
         error => {
           this.info.isLoading = false;
+          console.error(error.body);
+        }
+      );
+    },
+    getDisclaimers() {
+      this.disclaimersByAccount(
+        this.$route.params.id,
+        success => {
+          this.disclaimers.data = success.body;
+          this.disclaimers.isLoading = false;
+        },
+        error => {
+          console.error(error.body);
+          this.disclaimers.isLoading = false;
+          this.disclaimers.data = {};
+        }
+      );
+    },
+    addDisclaimer() {
+      this.disclaimers.isLoading = true;
+
+      this.disclaimerCreate(
+        {
+          title: this.disclaimers.newDisclaimer.title,
+          type: this.disclaimers.newDisclaimer.type,
+          body: this.disclaimers.newDisclaimer.body,
+        },
+        this.$route.params.id,
+        success => {
+          this.disclaimers.newDisclaimer = {
+            title: "",
+            type: "privacy",
+            body: ""
+          };
+          this.disclaimers.isLoading = false;
+          this.getDisclaimers();
+        },
+        error => {
+          this.disclaimers.isLoading = false;
           console.error(error.body);
         }
       );
@@ -288,7 +455,28 @@ export default {
           console.error(error.body);
         }
       );
-    }
+    },
+    showDeleteDisclaimerModal(disclaimer) {
+      this.disclaimerToDelete = disclaimer;
+      $('#deleteDisclaimerModal').modal("show");
+    },
+    hideDeleteDisclaimerModal(disclaimer) {
+      this.disclaimerToDelete = {};
+      $('#deleteDisclaimerModal').modal("hide");
+    },
+    deleteDisclaimer() {
+      this.disclaimerDelete(
+        this.disclaimerToDelete.id,
+        success => {
+          this.getDisclaimers();
+        },
+        error => {
+          console.error(error.body);
+        }
+      );
+      this.disclaimerToDelete = {};
+      $('#deleteDisclaimerModal').modal("hide");
+    },
   }
 };
 </script>
@@ -296,5 +484,40 @@ export default {
 <style>
 .img-int {
   height: 20px !important;
+}
+
+.disclaimer-type {
+  margin-right: 2rem;
+}
+
+.disclaimer-body {
+  min-height: 10rem;
+}
+
+.no-disclaimer {
+  margin-bottom: 5px;
+}
+
+.disclaimer-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.disclaimer-list li {
+  display: inline-block;
+  padding: 0.5rem;
+  width: 100%;
+}
+
+.disclaimer-list li:hover {
+  background-color: #C1E6E4;
+}
+
+.disclaimer-delete-btn {
+  float: right;
+}
+
+.mg-bottom-20 {
+  margin-bottom: 20px !important;
 }
 </style>

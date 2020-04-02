@@ -107,8 +107,8 @@ func DefineAPI(router *gin.Engine) {
 		preferences := api.Group("/preferences")
 		{
 			resellersPref := preferences.Group("/accounts")
-			resellersPref.GET("", methods.GetAccountPrefs)
-			resellersPref.PUT("", methods.UpdateAccountPrefs)
+			resellersPref.GET("/:account_id", methods.GetAccountPrefs)
+			resellersPref.PUT("/:account_id", methods.UpdateAccountPrefs)
 
 			hotspotsPref := preferences.Group("/hotspots")
 			hotspotsPref.GET("/:hotspot_id", methods.GetHotspotPrefs)
@@ -203,6 +203,15 @@ func DefineAPI(router *gin.Engine) {
 		subscriptionsPlans := api.Group("/subscription_plans")
 		{
 			subscriptionsPlans.GET("/", methods.GetSubscriptionPlans)
+		}
+
+		disclaimers := api.Group("/disclaimers")
+		{
+			disclaimers.DELETE("/:disclaimer_id", methods.DeleteDisclaimer)
+
+			accountsDisclaimers := disclaimers.Group("/accounts")
+			accountsDisclaimers.GET("/:account_id", methods.GetAccountDisclaimers)
+			accountsDisclaimers.POST("/:account_id", methods.CreateAccountDisclaimer)
 		}
 	}
 
