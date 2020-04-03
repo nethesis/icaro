@@ -87,7 +87,7 @@ CREATE TABLE `disclaimers` (
 
 Used to map custom disclaimers to hotspot, to handle override
 ```sql
-CREATE TABLE `disclaimers_hotspots` (
+CREATE TABLE `disclaimer_hotspots` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `disclaimer_id` bigint(20) unsigned NOT NULL,
   `hotspot_id` bigint(20) unsigned NOT NULL,
@@ -102,7 +102,7 @@ CREATE TABLE `disclaimers_hotspots` (
 
 Used to map custom loaded disclaimers to a particular reseller
 ```sql
-CREATE TABLE `disclaimers_accounts` (
+CREATE TABLE `disclaimer_accounts` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `disclaimer_id` bigint(20) unsigned NOT NULL,
   `account_id` bigint(20) unsigned NOT NULL,
