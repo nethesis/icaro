@@ -79,7 +79,7 @@ CREATE TABLE `disclaimers` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `type` varchar(250) NOT NULL,
   `title` varchar(250) NOT NULL,
-  `body` varchar(250) NOT NULL,
+  `body` text NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
 )
