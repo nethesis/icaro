@@ -102,7 +102,7 @@ CREATE TABLE `disclaimers_hotspots` (
 
 Used to map custom loaded disclaimers to a particular reseller
 ```sql
-CREATE TABLE `disclaimer_accounts` (
+CREATE TABLE `disclaimers_accounts` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `disclaimer_id` bigint(20) unsigned NOT NULL,
   `account_id` bigint(20) unsigned NOT NULL,
