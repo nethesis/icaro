@@ -34,6 +34,7 @@ Wax and Sun database configuration is saved inside the file `/opt/icaro/wax/conf
 ```
 
 ## Disclaimers
+### Default
 Each Captive portal is served from the same cloud server, but each captive portal related to a particular hotspot inherits its configuration.
 
 You must specify the business name during Hotspot creation that will be replaced in the disclaimers for each hotspots.
@@ -60,6 +61,58 @@ inside the disclaimers JSON object:
 Became (if the hotspot's business name is `Great Hotel Ltd` located in `Street of Null` for example)
 ```
 This is a disclaimer test\n\n - chapter 1\n - chapter 2 provided by Great Hotel Ltd located in Street of Null
+```
+
+### Custom
+For each reseller it is possible to upload customized disclaimers. The `admin` user can select a particular reseller and upload disclaimers to his profile both for privacy and for terms of use with a specific attribute.
+
+Once loaded into the profile, the reseller will be able to choose which disclaimer to use by default for all his installations and hotspots, by going to his profile and selecting the relative attribute.
+
+For each hotspot it is possible to override the default disclaimer, choosing in detail the hotspot which one to use.
+
+If the reseller has not uploaded any disclaimers, then the Icaro installation default is used for all hotspots.
+
+**Tables**
+Used to load all custom disclaimers
+```sql
+CREATE TABLE `disclaimers` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `type` varchar(250) NOT NULL,
+  `title` varchar(250) NOT NULL,
+  `body` text NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`)
+)
+```
+
+Used to map custom disclaimers to hotspot, to handle override
+```sql
+CREATE TABLE `disclaimers_hotspots` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `disclaimer_id` bigint(20) unsigned NOT NULL,
+  `hotspot_id` bigint(20) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`),
+  KEY `hotspot_id` (`hotspot_id`),
+  KEY `disclaimer_id` (`disclaimer_id`,`hotspot_id`),
+  CONSTRAINT `disclaimers_hotspots_ibfk_1` FOREIGN KEY (`disclaimer_id`) REFERENCES `disclaimers` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `disclaimers_hotspots_ibfk_2` FOREIGN KEY (`hotspot_id`) REFERENCES `hotspots` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+)
+```
+
+Used to map custom loaded disclaimers to a particular reseller
+```sql
+CREATE TABLE `disclaimers_accounts` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `disclaimer_id` bigint(20) unsigned NOT NULL,
+  `account_id` bigint(20) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`),
+  KEY `account_id` (`account_id`),
+  KEY `disclaimer_id` (`disclaimer_id`,`account_id`),
+  CONSTRAINT `disclaimers_accounts_ibfk_1` FOREIGN KEY (`disclaimer_id`) REFERENCES `disclaimers` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `disclaimers_accounts_ibfk_2` FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+)
 ```
 
 ## Social
