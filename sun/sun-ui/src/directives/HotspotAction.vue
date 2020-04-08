@@ -86,6 +86,34 @@
                   <input v-model="currentObj.business_dpo_mail" type="email" id="textInput2-modal-markup" class="form-control" :placeholder="$t('hotspot.business_dpo_mail')">
                 </div>
               </div>
+              <!-- privacy disclaimer -->
+              <div v-if="disclaimers.privacyDisclaimers && disclaimers.privacyDisclaimers.length > 1" class="form-group">
+                <label
+                  class="col-sm-4 control-label"
+                  for="textInput2-modal-markup"
+                >{{ $t("hotspot.privacy_disclaimer") }}</label>
+                <div class="col-sm-8">
+                  <select v-model="disclaimers.currentPrivacyDisclaimerId" class="form-control">
+                    <option v-for="privacyDisclaimer in disclaimers.privacyDisclaimers" :key="privacyDisclaimer.id" :value="privacyDisclaimer.id">
+                      {{ privacyDisclaimer.title }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <!-- tos disclaimer -->
+              <div v-if="disclaimers.tosDisclaimers && disclaimers.tosDisclaimers.length > 1" class="form-group">
+                <label
+                  class="col-sm-4 control-label"
+                  for="textInput2-modal-markup"
+                >{{ $t("hotspot.tos_disclaimer") }}</label>
+                <div class="col-sm-8">
+                  <select v-model="disclaimers.currentTosDisclaimerId" class="form-control">
+                    <option v-for="tosDisclaimer in disclaimers.tosDisclaimers" :key="tosDisclaimer.id" :value="tosDisclaimer.id">
+                      {{ tosDisclaimer.title }}
+                    </option>
+                  </select>
+                </div>
+              </div>
               <div v-if="errors.update" class="alert alert-danger alert-dismissable">
                 <span class="pficon pficon-error-circle-o"></span>
                 <strong>{{ $t("hotspot.update_error_title") }}</strong>. {{ $t("hotspot.update_error_sub") }}.
@@ -147,15 +175,23 @@ export default {
     };
     return {
       errors: errors,
-      currentObj: currentObj
+      currentObj: currentObj,
+      disclaimers: {
+        currentPrivacyDisclaimerId: 0,
+        currentTosDisclaimerId: 0,
+        privacyDisclaimers: [],
+        tosDisclaimers: [],
+      },
     };
   },
   methods: {
     setCurrentObj(obj) {
       this.currentObj = Object.assign({}, obj);
+      this.getPrivacyInfo(this.currentObj.uuid);
     },
     modifyHotspot(obj) {
       this.currentObj.onAction = true;
+
       this.hotspotModify(
         obj.id,
         {
@@ -165,7 +201,9 @@ export default {
           business_address: obj.business_address,
           business_email: obj.business_email,
           business_dpo: obj.business_dpo,
-          business_dpo_mail: obj.business_dpo_mail
+          business_dpo_mail: obj.business_dpo_mail,
+          privacy_disclaimer_id: this.disclaimers.currentPrivacyDisclaimerId ? parseInt(this.disclaimers.currentPrivacyDisclaimerId) : 0,
+          tos_disclaimer_id: this.disclaimers.currentTosDisclaimerId ? parseInt(this.disclaimers.currentTosDisclaimerId) : 0
         },
         success => {
           this.currentObj.onAction = false;
@@ -197,7 +235,22 @@ export default {
           console.error(error.body.message);
         }
       );
-    }
+    },
+    getPrivacyInfo(uuid) {
+      this.hotspotPrivacy(
+        uuid,
+        success => {
+          this.disclaimers.privacyDisclaimers = success.body.privacy_disclaimers;
+          this.disclaimers.tosDisclaimers = success.body.tos_disclaimers;
+          this.disclaimers.currentPrivacyDisclaimerId = success.body.privacy_selected_id;
+          this.disclaimers.currentTosDisclaimerId = success.body.tos_selected_id;
+          this.$forceUpdate();
+        },
+        error => {
+          console.error(error.body);
+        }
+      );
+    },
   }
 };
 </script>

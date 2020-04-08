@@ -65,10 +65,48 @@ func CreateHotspot(c *gin.Context) {
 	if hotspot.Id == 0 {
 		c.JSON(http.StatusConflict, gin.H{"id": hotspot.Id, "status": "hotspot already exists"})
 	} else {
+		// associate disclaimers to hotspot
+		if json.PrivacyDisclaimerId > 0 {
+			db.Save(&models.DisclaimersHotspots{DisclaimerId: json.PrivacyDisclaimerId, HotspotId: hotspot.Id})
+		}
+
+		if json.TosDisclaimerId > 0 {
+			db.Save(&models.DisclaimersHotspots{DisclaimerId: json.TosDisclaimerId, HotspotId: hotspot.Id})
+		}
+
 		// initialize hotspot preferences
 		utils.SetDefaultHotspotPreferences(hotspot.Id)
 
 		c.JSON(http.StatusCreated, gin.H{"id": hotspot.Id, "status": "success"})
+	}
+}
+
+func updateDisclaimer(hotspotId int, disclaimerId int, disclaimerType string) {
+	var disclaimersHotspots models.DisclaimersHotspots
+	db := database.Instance()
+	db.Where("hotspot_id = ? AND disclaimers.type = ?", hotspotId, disclaimerType).Joins("JOIN disclaimers on disclaimers.id = disclaimers_hotspots.disclaimer_id").First(&disclaimersHotspots)
+
+	if disclaimersHotspots.Id != 0 {
+		// update preference
+		disclaimersHotspots.DisclaimerId = disclaimerId
+		db.Save(&disclaimersHotspots)
+	} else {
+		// preference not found, let's create it
+		disclaimersHotspots := models.DisclaimersHotspots{
+			DisclaimerId: disclaimerId,
+			HotspotId:    hotspotId,
+		}
+		db.Save(&disclaimersHotspots)
+	}
+}
+
+func removeDisclaimer(hotspotId int, disclaimerType string) {
+	var disclaimersHotspots models.DisclaimersHotspots
+	db := database.Instance()
+	db.Where("hotspot_id = ? AND disclaimers.type = ?", hotspotId, disclaimerType).Joins("JOIN disclaimers on disclaimers.id = disclaimers_hotspots.disclaimer_id").First(&disclaimersHotspots)
+
+	if disclaimersHotspots.Id != 0 {
+		db.Delete(&disclaimersHotspots)
 	}
 }
 
@@ -116,6 +154,19 @@ func UpdateHotspot(c *gin.Context) {
 	hotspot.BusinessDPOMail = json.BusinessDPOMail
 
 	db.Save(&hotspot)
+
+	// update hotspot disclaimers
+	if json.PrivacyDisclaimerId > 0 {
+		updateDisclaimer(hotspot.Id, json.PrivacyDisclaimerId, "privacy")
+	} else {
+		removeDisclaimer(hotspot.Id, "privacy")
+	}
+
+	if json.TosDisclaimerId > 0 {
+		updateDisclaimer(hotspot.Id, json.TosDisclaimerId, "tos")
+	} else {
+		removeDisclaimer(hotspot.Id, "tos")
+	}
 
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }

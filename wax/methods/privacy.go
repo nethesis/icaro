@@ -39,19 +39,54 @@ func GetPrivacies(c *gin.Context) {
 	hotspotUuid := c.Param("hotspot_uuid")
 	hotspot := utils.GetHotspotByUuid(hotspotUuid)
 
-	var hotspotIntegrations []models.HotspotIntegration
-	var integrations []models.Integration
-
 	if hotspot.Id == 0 {
 		c.JSON(http.StatusNotFound, gin.H{"id": hotspot.Id, "status": "hotspot not found"})
 		return
 	}
 
-	terms := configuration.Config.Disclaimers.TermsOfUse
-	marketings := configuration.Config.Disclaimers.MarketingUse
+	var hotspotIntegrations []models.HotspotIntegration
+	var integrations []models.Integration
+
+	// default disclaimers
+	defaultPrivacyDisclaimer := models.Disclaimer{Id: 0, Type: "privacy", Title: "Default", Body: configuration.Config.Disclaimers.MarketingUse}
+	defaultTosDisclaimer := models.Disclaimer{Id: 0, Type: "tos", Title: "Default", Body: configuration.Config.Disclaimers.TermsOfUse}
+
+	var privacyDisclaimers []models.Disclaimer
+	var tosDisclaimers []models.Disclaimer
+
+	privacyDisclaimers = append(privacyDisclaimers, defaultPrivacyDisclaimer)
+	tosDisclaimers = append(tosDisclaimers, defaultTosDisclaimer)
+
+	var selectedDisclaimers []models.Disclaimer
+
+	db := database.Instance()
+	db.Select("disclaimers.*").Where("disclaimers_hotspots.hotspot_id = ?", hotspot.Id).Joins("JOIN disclaimers_hotspots on disclaimers_hotspots.disclaimer_id = disclaimers.id").Find(&selectedDisclaimers)
+
+	var selectedPrivacyDisclaimerId = 0
+	var selectedTosDisclaimerId = 0
+
+	for _, disclaimer := range selectedDisclaimers {
+		if disclaimer.Type == "privacy" {
+			selectedPrivacyDisclaimerId = disclaimer.Id
+		} else if disclaimer.Type == "tos" {
+			selectedTosDisclaimerId = disclaimer.Id
+		}
+	}
+
+	var disclaimers []models.Disclaimer
+
+	// all custom disclaimers
+	db.Select("disclaimers.*").Joins("JOIN disclaimers_accounts on disclaimers_accounts.disclaimer_id = disclaimers.id").Where("disclaimers_accounts.account_id = ?", hotspot.AccountId).Find(&disclaimers)
+
+	for _, disclaimer := range disclaimers {
+		if disclaimer.Type == "privacy" {
+			privacyDisclaimers = append(privacyDisclaimers, disclaimer)
+		} else if disclaimer.Type == "tos" {
+			tosDisclaimers = append(tosDisclaimers, disclaimer)
+		}
+	}
 
 	// get integration privacy text
-	db := database.Instance()
 	db.Where("hotspot_id in (?)", hotspot.Id).Find(&hotspotIntegrations)
 
 	for _, hotspotIntegration := range hotspotIntegrations {
@@ -62,23 +97,27 @@ func GetPrivacies(c *gin.Context) {
 		}
 	}
 
-	var termsMessage bytes.Buffer
-	var marketingMessage bytes.Buffer
+	for idx := range privacyDisclaimers {
+		var marketingMessage bytes.Buffer
+		m := template.Must(template.New("marketings").Parse(privacyDisclaimers[idx].Body))
 
-	t := template.Must(template.New("terms").Parse(terms))
-	m := template.Must(template.New("marketings").Parse(marketings))
-
-	errT := t.Execute(&termsMessage, &hotspot)
-	if errT != nil {
-		fmt.Println(errT)
-	}
-	errM := m.Execute(&marketingMessage, &hotspot)
-	if errM != nil {
-		fmt.Println(errM)
+		errM := m.Execute(&marketingMessage, &hotspot)
+		if errM != nil {
+			fmt.Println(errM)
+		}
+		privacyDisclaimers[idx].Body = marketingMessage.String()
 	}
 
-	terms = termsMessage.String()
-	marketings = marketingMessage.String()
+	for idx := range tosDisclaimers {
+		var termsMessage bytes.Buffer
+		t := template.Must(template.New("terms").Parse(tosDisclaimers[idx].Body))
 
-	c.JSON(http.StatusOK, gin.H{"terms": terms, "marketings": marketings})
+		errT := t.Execute(&termsMessage, &hotspot)
+		if errT != nil {
+			fmt.Println(errT)
+		}
+		tosDisclaimers[idx].Body = termsMessage.String()
+	}
+
+	c.JSON(http.StatusOK, gin.H{"privacy_disclaimers": privacyDisclaimers, "tos_disclaimers": tosDisclaimers, "privacy_selected_id": selectedPrivacyDisclaimerId, "tos_selected_id": selectedTosDisclaimerId})
 }

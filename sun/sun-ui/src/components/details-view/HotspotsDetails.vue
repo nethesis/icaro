@@ -835,12 +835,32 @@
           <div v-if="!info.privacy.isLoading" class="card-pf-body">
             <div class="list-details">
               <dt>{{ $t("hotspot.marketing_info") }}</dt>
-              <textarea readonly id="marketings-info" :value="info.privacy.data.marketings"></textarea>
+              <dd>
+                <select
+                  v-if="(user.account_type == 'admin' || user.account_type == 'reseller') && disclaimers.privacyDisclaimers.length > 1"
+                  v-model="disclaimers.currentPrivacyDisclaimerId"
+                  class="disclaimer-select"
+                >
+                  <option v-for="privacyDisclaimer in disclaimers.privacyDisclaimers" :key="privacyDisclaimer.id" :value="privacyDisclaimer.id">
+                    {{ privacyDisclaimer.title }}
+                  </option>
+                </select>
+                <textarea readonly id="marketings-info" :value="selectedPrivacyBody"></textarea>
+              </dd>
             </div>
             <div class="list-details">
-              <dt>{{ $t("hotspot.terms_info") }}</dt>
+              <dt class="tos-title">{{ $t("hotspot.terms_info") }}</dt>
               <dd>
-                <textarea readonly :value="info.privacy.data.terms"></textarea>
+                <select
+                  v-if="(user.account_type == 'admin' || user.account_type == 'reseller') && disclaimers.tosDisclaimers.length > 1"
+                  v-model="disclaimers.currentTosDisclaimerId"
+                  class="disclaimer-select"
+                >
+                  <option v-for="tosDisclaimer in disclaimers.tosDisclaimers" :key="tosDisclaimer.id" :value="tosDisclaimer.id">
+                    {{ tosDisclaimer.title }}
+                  </option>
+                </select>
+                <textarea readonly :value="selectedTosBody"></textarea>
               </dd>
             </div>
           </div>
@@ -848,8 +868,15 @@
             <div class="dropdown card-pf-time-frame-filter">
               <button
                 @click="printPrivacy()"
-                class="btn btn-primary"
+                :class="['btn', user.account_type == 'admin' || user.account_type == 'reseller' ? 'btn-default' : 'btn-primary']"
               >{{$t('hotspot.print_privacy')}}</button>
+              <span v-if="disclaimers.updateError" class="pficon pficon-error-circle-o bigger update-pref-feedback"></span>
+              <span v-if="disclaimers.updateSuccess" class="pficon pficon-ok update-pref-feedback"></span>
+              <button
+                v-if="(user.account_type == 'admin' || user.account_type == 'reseller') && (disclaimers.privacyDisclaimers.length > 1 || disclaimers.tosDisclaimers.length > 1)"
+                @click="updateDisclaimers()"
+                :class="['btn', user.account_type == 'admin' || user.account_type == 'reseller' ? 'btn-primary' : 'btn-default']"
+              >{{$t('update')}}</button>
             </div>
             <p>
               <a href="#" class="card-pf-link-with-icon"></a>
@@ -1740,6 +1767,7 @@ import SessionService from "../../services/session";
 import StatsService from "../../services/stats";
 import StorageService from "../../services/storage";
 import UtilService from "../../services/util";
+import DisclaimerService from "../../services/disclaimer";
 
 import jsPDF from "jspdf";
 import CaptivePortal from "../../directives/CaptivePortal.vue";
@@ -1764,7 +1792,8 @@ export default {
     SessionService,
     StatsService,
     StorageService,
-    UtilService
+    UtilService,
+    DisclaimerService
   ],
   components: {
     hotspotAction: HotspotAction,
@@ -2057,7 +2086,15 @@ export default {
         "captive_84_text_color": 8,
         "captive_85_text_style": 11
       },
-      captivePrefsSorted: []
+      captivePrefsSorted: [],
+      disclaimers: {
+        currentPrivacyDisclaimerId: 0,
+        currentTosDisclaimerId: 0,
+        privacyDisclaimers: [],
+        tosDisclaimers: [],
+        updateSuccess: false,
+        updateError: false,
+      },
     };
   },
   computed: {
@@ -2068,7 +2105,19 @@ export default {
         size = 20;
       }
       return size;
-    }
+    },
+    selectedPrivacyBody: function() {
+      let selectedPrivacyDisclaimer = this.disclaimers.privacyDisclaimers.find((element) => {
+        return element.id == this.disclaimers.currentPrivacyDisclaimerId;
+      });
+      return selectedPrivacyDisclaimer.body;
+    },
+    selectedTosBody: function() {
+      let selectedTosDisclaimer = this.disclaimers.tosDisclaimers.find((element) => {
+        return element.id == this.disclaimers.currentTosDisclaimerId;
+      });
+      return selectedTosDisclaimer.body;
+    },
   },
   methods: {
     dateFormatter(date) {
@@ -2815,7 +2864,10 @@ export default {
         uuid,
         success => {
           this.info.privacy.isLoading = false;
-          this.info.privacy.data = success.body;
+          this.disclaimers.privacyDisclaimers = success.body.privacy_disclaimers;
+          this.disclaimers.tosDisclaimers = success.body.tos_disclaimers;
+          this.disclaimers.currentPrivacyDisclaimerId = success.body.privacy_selected_id;
+          this.disclaimers.currentTosDisclaimerId = success.body.tos_selected_id;
         },
         error => {
           console.error(error.body);
@@ -2824,16 +2876,14 @@ export default {
       );
     },
     printPrivacy() {
-      var bodyPrivacy = this.info.privacy.data.marketings;
-      var finalPrivacy = "data:text/plain;charset=utf-8," + bodyPrivacy;
+      var finalPrivacy = "data:text/plain;charset=utf-8," + this.selectedPrivacyBody;
       var encodedUri = encodeURI(finalPrivacy);
       var link = document.createElement("a");
       link.setAttribute("href", encodedUri);
       link.setAttribute("download", "privacy" + ".txt");
       link.click();
 
-      var bodyTos = this.info.privacy.data.terms;
-      var finalTos = "data:text/plain;charset=utf-8," + bodyTos;
+      var finalTos = "data:text/plain;charset=utf-8," + this.selectedTosBody;
       var encodedUri = encodeURI(finalTos);
       var link = document.createElement("a");
       link.setAttribute("href", encodedUri);
@@ -2851,6 +2901,31 @@ export default {
     toggleAdvancedFilters() {
       this.advancedFilters = !this.advancedFilters;
       this.$forceUpdate();
+    },
+    updateDisclaimers() {
+      this.hotspotModify(
+        this.$route.params.id,
+        {
+          privacy_disclaimer_id: this.disclaimers.currentPrivacyDisclaimerId,
+          tos_disclaimer_id: this.disclaimers.currentTosDisclaimerId
+        },
+        success => {
+          this.disclaimers.updateSuccess = true;
+
+          setTimeout(() => {
+            this.disclaimers.updateSuccess = false;
+          }, 2000);
+          this.getPrivacyInfo(this.info.data.uuid);
+        },
+        error => {
+          console.error(error.body.message);
+
+          this.disclaimers.updateError = true;
+          setTimeout(() => {
+            this.disclaimers.updateError = false;
+          }, 2000);
+        }
+      );
     }
   }
 };
@@ -3143,4 +3218,19 @@ label.block-centered {
   font-size: 12px;
 }
 
+.disclaimer-select {
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.tos-title {
+  margin-top: 1.5rem;
+}
+
+.update-pref-feedback {
+  vertical-align: middle;
+  margin-left: 0.4em;
+  margin-right: 0.4em;
+  font-size: 140%;
+}
 </style>

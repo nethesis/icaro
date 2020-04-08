@@ -36,7 +36,11 @@
       "change_password_error_sub": "Something went wrong on changing password",
       "sms": "SMS",
       "sms_login_threshold": "Warning threshold",
-      "sms_threshold_description": "You'll receive an email when the number of remaining SMS will be lower than the warning threshold"
+      "sms_threshold_description": "You'll receive an email when the number of remaining SMS will be lower than the warning threshold",
+      "default_disclaimer": "Default disclaimers",
+      "privacy_disclaimer": "Privacy disclaimer",
+      "tos_disclaimer": "Terms of use disclaimer",
+      "default": "Default"
     },
     "hotspot": {
       "yes": "Yes",
@@ -171,7 +175,10 @@
       "create_voucher_custom": "Create custom voucher",
       "voucher_custom_code": "Code",
       "i_agree": "I agree to the general user conditions",
-      "tos_and_privacy": "ToS and Privacy"
+      "tos_and_privacy": "ToS and Privacy",
+      "privacy_disclaimer": "Privacy disclaimer",
+      "tos_disclaimer": "Terms of use disclaimer",
+      "disclaimer_default": "Default"
     },
     "user": {
       "username": "Username",
@@ -248,7 +255,18 @@
       "site": "Site",
       "enable": "Enable",
       "disable": "Disable",
-      "integration": "Integration"
+      "integration": "Integration",
+      "add_disclaimer": "Add disclaimer",
+      "no_disclaimer": "No disclaimer",
+      "disclaimers": "Disclaimers",
+      "disclaimer_title": "Name",
+      "disclaimer_type": "Type",
+      "disclaimer_body": "Text",
+      "privacy": "Privacy",
+      "tos": "Terms of Use",
+      "add": "Add",
+      "delete_disclaimer": "Delete disclaimer",
+      "delete_disclaimer_confirm": "You are about to delete disclaimer"
     },
     "unit": {
       "unit": "Unit",
@@ -448,6 +466,8 @@
     "upload_file_not_supported": "File not supported",
     "upload_file_exceed": "File limit exceed (max 700 KB)",
     "result": "result",
-    "results": "results"
+    "results": "results",
+    "are_you_sure": "Are you sure",
+    "warning": "Warning"
   }
 }

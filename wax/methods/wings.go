@@ -67,12 +67,25 @@ func GetWingsPrefs(c *gin.Context) {
 	wingsPrefs.Socials.LinkedInClientId = configuration.Config.AuthSocial.LinkedIn.ClientId
 	wingsPrefs.Socials.InstagramClientId = configuration.Config.AuthSocial.Instagram.ClientId
 
-	// disclaimers
+	// default disclaimers
 	terms := configuration.Config.Disclaimers.TermsOfUse
 	marketings := configuration.Config.Disclaimers.MarketingUse
 
-	// get integration privacy text
+	var disclaimers []models.Disclaimer
 	db := database.Instance()
+
+	// custom disclaimers
+	db.Select("disclaimers.*").Where("disclaimers_hotspots.hotspot_id = ?", hotspot.Id).Joins("JOIN disclaimers_hotspots on disclaimers_hotspots.disclaimer_id = disclaimers.id").Find(&disclaimers)
+
+	for _, disclaimer := range disclaimers {
+		if disclaimer.Type == "privacy" {
+			marketings = disclaimer.Body
+		} else if disclaimer.Type == "tos" {
+			terms = disclaimer.Body
+		}
+	}
+
+	// get integration privacy text
 	db.Where("hotspot_id in (?)", hotspot.Id).Find(&hotspotIntegrations)
 
 	for _, hotspotIntegration := range hotspotIntegrations {

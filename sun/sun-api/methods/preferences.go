@@ -37,45 +37,55 @@ import (
 
 func UpdateAccountPrefs(c *gin.Context) {
 	var accountPref models.AccountPreference
-	accountId := c.MustGet("token").(models.AccessToken).AccountId
-
 	var json models.AccountPreference
+
 	if err := c.BindJSON(&json); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "Request fields malformed", "error": err.Error()})
 		return
 	}
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
+	queryAccountId := accountId
+
+	if accountId == 1 {
+		queryAccountId, _ = strconv.Atoi(c.Param("account_id"))
+	}
 
 	db := database.Instance()
-	if accountId == 1 {
-		db.Where("`key` = ?", json.Key).First(&accountPref)
+	db.Where("`key` = ? AND account_id = ?", json.Key, queryAccountId).First(&accountPref)
+
+	if accountPref.Id != 0 {
+		// update preference
+		accountPref.Value = json.Value
+		db.Save(&accountPref)
+		c.JSON(http.StatusCreated, gin.H{"status": "success"})
 	} else {
-		db.Where("`key` = ? AND account_id = ?", json.Key, accountId).First(&accountPref)
+		// preference not found, let's create it
+		accountPref := models.AccountPreference{
+			AccountId: queryAccountId,
+			Key:       json.Key,
+			Value:     json.Value,
+		}
+		db.Save(&accountPref)
+		c.JSON(http.StatusCreated, gin.H{"status": "success"})
 	}
-
-	if accountPref.Id == 0 {
-		c.JSON(http.StatusNotFound, gin.H{"message": "No preference found!"})
-		return
-	}
-
-	accountPref.Value = json.Value
-
-	db.Save(&accountPref)
-
-	c.JSON(http.StatusCreated, gin.H{"status": "success"})
 }
 
 func GetAccountPrefs(c *gin.Context) {
 	var preferences []models.AccountPreference
 	accountId := c.MustGet("token").(models.AccessToken).AccountId
+	queryAccountId := accountId
 
-	db := database.Instance()
-	db.Where("account_id = ?", accountId).Find(&preferences)
-
-	if len(preferences) <= 0 {
-		c.JSON(http.StatusNotFound, gin.H{"message": "No preferences found!"})
-		return
+	if accountId == 1 {
+		queryAccountId, _ = strconv.Atoi(c.Param("account_id"))
 	}
 
+	db := database.Instance()
+	db.Where("account_id = ?", queryAccountId).Find(&preferences)
+
+	if len(preferences) <= 0 {
+		c.JSON(http.StatusNotFound, gin.H{"message": "No preference found"})
+		return
+	}
 	c.JSON(http.StatusOK, preferences)
 }
 
