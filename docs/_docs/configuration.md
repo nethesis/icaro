@@ -41,20 +41,20 @@ You must specify the business name during Hotspot creation that will be replaced
 
 Terms of use and marketing disclaimers are visualized before the user chooses the login method. To add your disclaimers modify the `/opt/icaro/wax/conf.json` in the `disclaimers` and use
 
-- `{{ .BusinessName }}` for company name.
-- `{{ .BusinessVAT }}` for company VAT.
-- `{{ .BusinessAddress }}` for company address.
-- `{{ .BusinessEmail }}` for company email.
-- `{{ .BusinessDPO }}` for DPO name.
-- `{{ .BusinessDPOMail}}` for DPO mail.
-- `{{ .IntegrationTerms}}` for external integration privacies.
+- `{% raw %}{{ .BusinessName }}{% endraw %}` for company name.
+- `{% raw %}{{ .BusinessVAT }}{% endraw %}` for company VAT.
+- `{% raw %}{{ .BusinessAddress }}{% endraw %}` for company address.
+- `{% raw %}{{ .BusinessEmail }}{% endraw %}` for company email.
+- `{% raw %}{{ .BusinessDPO }}{% endraw %}` for DPO name.
+- `{% raw %}{{ .BusinessDPOMail }}{% endraw %}` for DPO mail.
+- `{% raw %}{{ .IntegrationTerms }}{% endraw %}` for external integration privacies.
 
 inside the disclaimers JSON object:
 
 ```json
 "disclaimers": {
-	"terms_of_use": "This is a disclaimer test\n\n - chapter 1\n - chapter 2 provided by {{ .BusinessName }} located in {{ .BusinessAddress }}",
-	"marketing_use": "This is marketing informationt\n\n - chapter 1\n - chapter 2  provided by {{ .BusinessName }} located in {{ .BusinessAddress }}"
+	"terms_of_use": "This is a disclaimer test\n\n - chapter 1\n - chapter 2 provided by {% raw %}{{ .BusinessName }}{% endraw %} located in {% raw %}{{ .BusinessAddress }}{% endraw %}",
+	"marketing_use": "This is marketing informationt\n\n - chapter 1\n - chapter 2  provided by {% raw %}{{ .BusinessName }}{% endraw %} located in {% raw %}{{ .BusinessAddress }}{% endraw %}"
 }
 ```
 
