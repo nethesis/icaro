@@ -2638,20 +2638,20 @@ export default {
             );
           })
         );
-
-        Promise.all(promises)
-          .then(function() {
-          })
-          .catch(function(err) {
-            console.error(err);
-          });
       }
-      this.vouchersToPrint = voucherList;
-      this.showVoucherPrint = true;
+      var context = this;
+      Promise.all(promises)
+        .then(function() {
+          context.vouchersToPrint = voucherList;
+          context.showVoucherPrint = true;
 
-      setTimeout(async function() {
-        context.printDiv("voucherPrint");
-      }, 500);
+          setTimeout(async function() {
+            context.printDiv("voucherPrint");
+          }, 1000);
+        })
+        .catch(function(err) {
+          console.error(err);
+        });
     },
     printDiv(div_id) {
       $("body").html($("#" + div_id).html());
@@ -2678,7 +2678,9 @@ export default {
         }
       };
 
-      window.print();
+      setTimeout(async function() {
+        window.print();
+      }, 1000);
     },
     printVoucher(voucher) {
       for (let i = 0; i < this.vouchers.usable.length; i++) {
