@@ -120,12 +120,12 @@ var HotspotService = {
         )
         .then(success, error);
     },
-    hotspotUpdateVoucher(id, body, success, error) {
+    hotspotUpdateVouchers(body, success, error) {
       this.$http
         .put(
           this.$root.$options.api_scheme +
           this.$root.$options.api_host +
-          "/api/vouchers/" + id,
+          "/api/vouchers",
           body, {
             headers: {
               Token:

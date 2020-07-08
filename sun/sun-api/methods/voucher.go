@@ -152,30 +152,27 @@ func CreateVouchers(c *gin.Context) {
 	}
 }
 
-func UpdateVoucher(c *gin.Context) {
-	var hotspotVoucher models.HotspotVoucher
+func UpdateVouchers(c *gin.Context) {
+	var hotspotVouchers []models.HotspotVoucher
 	accountId := c.MustGet("token").(models.AccessToken).AccountId
 
-	var json models.HotspotVoucher
+	var json models.HotspotVoucherJSON
 	if err := c.BindJSON(&json); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "Request fields malformed", "error": err.Error()})
 		return
 	}
 
-	voucherId := c.Param("voucher_id")
-
+	voucherIds := json.VoucherIds
+	hotspotIds := utils.ExtractHotspotIds(accountId, (accountId == 1), 0)
 	db := database.Instance()
-	db.Where("id = ? AND hotspot_id in (?)", voucherId, utils.ExtractHotspotIds(accountId, (accountId == 1), 0)).First(&hotspotVoucher)
+	db.Where("id IN (?) AND hotspot_id IN (?)", voucherIds, hotspotIds).Find(&hotspotVouchers)
 
-	if hotspotVoucher.Id == 0 {
+	if len(hotspotVouchers) == 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No hotspot voucher found!"})
 		return
 	}
 
-	if json.Printed {
-		hotspotVoucher.Printed = true
-	}
-	db.Save(&hotspotVoucher)
+	db.Model(models.HotspotVoucher{}).Where("id IN (?) AND hotspot_id IN (?)", voucherIds, hotspotIds).Updates(models.HotspotVoucher{Printed: json.Printed})
 
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
 

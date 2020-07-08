@@ -196,7 +196,7 @@ func DefineAPI(router *gin.Engine) {
 		{
 			vouchers.GET("/:hotspot_id", methods.GetVouchers)
 			vouchers.POST("", methods.CreateVouchers)
-			vouchers.PUT("/:voucher_id", methods.UpdateVoucher)
+			vouchers.PUT("", methods.UpdateVouchers)
 			vouchers.DELETE("/:voucher_id", methods.DeleteVoucher)
 		}
 

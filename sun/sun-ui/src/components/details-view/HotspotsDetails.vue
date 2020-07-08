@@ -1486,8 +1486,8 @@
             <div class="modal-body">
               <div class="alert alert-warning alert-dismissable">
                 <span class="pficon pficon-warning-triangle-o"></span>
-                <strong>{{ $t("hotspot.warning_delete_title") }}</strong>
-                . {{ $t("hotspot.warning_delete_vouchers") }}.
+                <strong>{{ $t("hotspot.warning_delete_title") }}</strong>.
+                {{ $t("hotspot.warning_delete_vouchers") }}.
               </div>
             </div>
             <div class="modal-footer">
@@ -2606,40 +2606,25 @@ export default {
       });
     },
     printVouchers(voucherList) {
+      var voucherIds = voucherList.map(voucher => voucher.id);
       var context = this;
-      var promises = [];
-
-      for (var index = 0; index < voucherList.length; index++) {
-        promises.push(
-          new Promise(function(resolve, reject) {
-            context.hotspotUpdateVoucher(
-              voucherList[index].id,
-              {
-                printed: true
-              },
-              success => {
-                resolve(success);
-              },
-              error => {
-                reject(error);
-              }
-            );
-          })
-        );
-      }
-      var context = this;
-      Promise.all(promises)
-        .then(function() {
+      context.hotspotUpdateVouchers(
+        {
+          voucher_ids: voucherIds,
+          printed: true
+        },
+        success => {
           context.vouchersToPrint = voucherList;
           context.showVoucherPrint = true;
 
           setTimeout(async function() {
             context.printDiv("voucherPrint");
-          }, 1000);
-        })
-        .catch(function(err) {
-          console.error(err);
-        });
+          }, 500);
+        },
+        error => {
+          console.error(error.body);
+        }
+      );
     },
     printDiv(div_id) {
       $("body").html($("#" + div_id).html());
@@ -2668,7 +2653,7 @@ export default {
 
       setTimeout(async function() {
         window.print();
-      }, 1000);
+      }, 500);
     },
     printVoucher(voucher) {
       for (let i = 0; i < this.vouchers.usable.length; i++) {
