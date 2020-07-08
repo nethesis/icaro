@@ -1167,7 +1167,7 @@
                 class="spinner spinner-sm spinner-inline modal-spinner"
               ></span>
               <button type="button" class="btn btn-default" data-dismiss="modal">{{$t('cancel')}}</button>
-              <button type="submit" class="btn btn-primary">{{$t('save')}}</button>
+              <button type="submit" class="btn btn-primary" :disabled="vouchers.isCreating">{{$t('save')}}</button>
             </div>
           </form>
         </div>
@@ -1267,7 +1267,7 @@
                   <input
                     v-model="newVoucher.bandwidth_down"
                     type="number"
-                    id="textInput-modal-markup"
+                    min="0"
                     class="form-control"
                   />
                 </div>
@@ -1281,7 +1281,7 @@
                   <input
                     v-model="newVoucher.bandwidth_up"
                     type="number"
-                    id="textInput-modal-markup"
+                    min="0"
                     class="form-control"
                   />
                 </div>
@@ -1295,7 +1295,7 @@
                   <input
                     v-model="newVoucher.max_traffic"
                     type="number"
-                    id="textInput-modal-markup"
+                    min="0"
                     class="form-control"
                   />
                 </div>
@@ -1309,7 +1309,7 @@
                   <input
                     v-model="newVoucher.max_time"
                     type="number"
-                    id="textInput-modal-markup"
+                    min="0"
                     class="form-control"
                   />
                 </div>
@@ -1355,7 +1355,7 @@
                   <input
                     v-model="newVoucher.duration"
                     type="number"
-                    id="textInput-modal-markup"
+                    min="0"
                     class="form-control"
                   />
                 </div>
@@ -1414,7 +1414,7 @@
                   <input
                     v-model="newVoucher.remain_use"
                     type="number"
-                    id="textInput-modal-markup"
+                    min="1"
                     class="form-control"
                   />
                 </div>
@@ -1456,7 +1456,7 @@
                 class="spinner spinner-sm spinner-inline modal-spinner"
               ></span>
               <button type="button" class="btn btn-default" data-dismiss="modal">{{$t('cancel')}}</button>
-              <button type="submit" class="btn btn-primary">{{$t('save')}}</button>
+              <button type="submit" class="btn btn-primary" :disabled="vouchers.isCreating">{{$t('save')}}</button>
             </div>
           </form>
         </div>
@@ -1496,7 +1496,7 @@
                 class="spinner spinner-sm spinner-inline modal-spinner"
               ></span>
               <button type="button" class="btn btn-default" data-dismiss="modal">{{ $t("cancel") }}</button>
-              <button type="submit" class="btn btn-danger">{{ $t("delete") }}</button>
+              <button type="submit" class="btn btn-danger" :disabled="vouchers.isDeleting">{{ $t("delete") }}</button>
             </div>
           </form>
         </div>
@@ -2203,6 +2203,7 @@ export default {
       this.vouchers.isLoading = true;
       this.hotspotVoucherDelete(
         id,
+        false,
         success => {
           this.vouchers.isLoading = false;
           this.getVouchers();
@@ -2215,37 +2216,22 @@ export default {
       );
     },
     deleteAllVouchers() {
-      var context = this;
-      var promises = [];
       this.vouchers.isDeleting = true;
-
-      for (var v in this.vouchers.data) {
-        var voucher = this.vouchers.data[v];
-        promises.push(
-          new Promise((resolve, reject) => {
-            context.hotspotVoucherDelete(
-              voucher.id,
-              success => {
-                resolve(success);
-              },
-              error => {
-                reject(error);
-              }
-            );
-          })
-        );
-      }
-
-      Promise.all(promises)
-        .then(function() {
+      var hotspotId = this.$route.params.id;
+      var context = this;
+      context.hotspotVoucherDelete(
+        hotspotId,
+        true,
+        success => {
           context.vouchers.isDeleting = false;
           context.getVouchers();
           $("#voucherDeleteAll").modal("toggle");
-        })
-        .catch(function(err) {
-          console.error(err);
+        },
+        error => {
           context.vouchers.isDeleting = false;
-        });
+          console.error(error.body);
+        }
+      );
     },
     getVouchers() {
       this.vouchers.data = [];

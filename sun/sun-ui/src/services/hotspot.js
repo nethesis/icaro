@@ -135,13 +135,12 @@ var HotspotService = {
         )
         .then(success, error);
     },
-    hotspotVoucherDelete(id, success, error) {
+    hotspotVoucherDelete(id, deleteAll, success, error) {
       this.$http
         .delete(
           this.$root.$options.api_scheme +
           this.$root.$options.api_host +
-          "/api/vouchers/" +
-          id, {
+          (deleteAll ? "/api/vouchers/hotspot/" + id : "/api/vouchers/voucher/" + id), {
             headers: {
               Token:
                 (this.get("loggedUser") && this.get("loggedUser").token) || ""

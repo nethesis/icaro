@@ -286,18 +286,46 @@ func GetVouchers(c *gin.Context) {
 func DeleteVoucher(c *gin.Context) {
 	var hotspotVoucher models.HotspotVoucher
 	accountId := c.MustGet("token").(models.AccessToken).AccountId
-
 	voucherId := c.Param("voucher_id")
-
+	hotspotIds := utils.ExtractHotspotIds(accountId, (accountId == 1), 0)
 	db := database.Instance()
-	db.Where("id = ? AND hotspot_id in (?)", voucherId, utils.ExtractHotspotIds(accountId, (accountId == 1), 0)).First(&hotspotVoucher)
+	db.Where("id = ? AND hotspot_id IN (?)", voucherId, hotspotIds).First(&hotspotVoucher)
 
 	if hotspotVoucher.Id == 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No hotspot voucher found!"})
 		return
 	}
-
 	db.Delete(&hotspotVoucher)
+
+	c.JSON(http.StatusOK, gin.H{"status": "success"})
+}
+
+func DeleteAllVouchers(c *gin.Context) {
+	var hotspotVouchers []models.HotspotVoucher
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
+	account := utils.GetAccountById(accountId)
+	hotspotId := c.Param("hotspot_id")
+	hotspotIdInt, err := strconv.Atoi(hotspotId)
+	if err != nil {
+		hotspotIdInt = 0
+	}
+
+	db := database.Instance()
+	chain := db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt))
+
+	// if desk account, get only my voucher not voucher of other users
+	if account.Type == "desk" {
+		chain = chain.Where("owner_id = ?", accountId)
+	}
+
+	chain.Find(&hotspotVouchers)
+
+	if len(hotspotVouchers) <= 0 {
+		c.JSON(http.StatusNotFound, gin.H{"message": "No hotspot vouchers found!"})
+		return
+	}
+
+	chain.Delete(models.HotspotVoucher{})
 
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }
