@@ -948,8 +948,8 @@
                   <input
                     required
                     v-model="vouchersCount"
-                    type="text"
-                    id="textInput-modal-markup"
+                    type="number"
+                    min="1"
                     class="form-control"
                   />
                 </div>
@@ -978,7 +978,7 @@
                   <input
                     v-model="newVoucher.bandwidth_down"
                     type="number"
-                    id="textInput-modal-markup"
+                    min="0"
                     class="form-control"
                   />
                 </div>
@@ -992,7 +992,7 @@
                   <input
                     v-model="newVoucher.bandwidth_up"
                     type="number"
-                    id="textInput-modal-markup"
+                    min="0"
                     class="form-control"
                   />
                 </div>
@@ -1006,7 +1006,7 @@
                   <input
                     v-model="newVoucher.max_traffic"
                     type="number"
-                    id="textInput-modal-markup"
+                    min="0"
                     class="form-control"
                   />
                 </div>
@@ -1020,7 +1020,7 @@
                   <input
                     v-model="newVoucher.max_time"
                     type="number"
-                    id="textInput-modal-markup"
+                    min="0"
                     class="form-control"
                   />
                 </div>
@@ -1066,7 +1066,7 @@
                   <input
                     v-model="newVoucher.duration"
                     type="number"
-                    id="textInput-modal-markup"
+                    min="0"
                     class="form-control"
                   />
                 </div>
@@ -1125,7 +1125,7 @@
                   <input
                     v-model="newVoucher.remain_use"
                     type="number"
-                    id="textInput-modal-markup"
+                    min="1"
                     class="form-control"
                   />
                 </div>
