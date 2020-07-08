@@ -902,7 +902,7 @@
             </button>
             <h4 class="modal-title" id="myModalLabel">{{$t('hotspot.voucher_creation')}}</h4>
           </div>
-          <form class="form-horizontal" v-on:submit.prevent="createVoucher(false)">
+          <form class="form-horizontal" v-on:submit.prevent="createVouchers(false)">
             <div class="modal-body">
               <div v-if="vouchers.typesAvailable == 'all'" class="form-group">
                 <label
@@ -1190,7 +1190,7 @@
             </button>
             <h4 class="modal-title" id="myModalLabel">{{$t('hotspot.voucher_creation')}}</h4>
           </div>
-          <form class="form-horizontal" v-on:submit.prevent="createVoucher(true)">
+          <form class="form-horizontal" v-on:submit.prevent="createVouchers(true)">
             <div class="modal-body">
               <div v-if="vouchers.typesAvailable == 'all'" class="form-group">
                 <label
@@ -2147,69 +2147,59 @@ export default {
         }
       );
     },
-    createVoucher(custom) {
+    createVouchers(custom) {
       this.vouchers.isCreating = true;
 
       var promises = [];
       var context = this;
-      for (var i = 0; i < this.vouchersCount; i++) {
-        promises.push(
-          new Promise(function(resolve, reject) {
-            context.hotspotCreateVoucher(
-              {
-                hotspot_id: parseInt(context.$route.params.id),
-                code: custom
-                  ? context.newVoucher.code
-                  : context.generateVoucher(),
-                auto_login: context.newVoucher.auto_login,
-                bandwidth_down: parseInt(context.newVoucher.bandwidth_down),
-                bandwidth_up: parseInt(context.newVoucher.bandwidth_up),
-                max_traffic:
-                  parseInt(context.newVoucher.max_traffic) * 1024 * 1024,
-                max_time: parseInt(context.newVoucher.max_time) * 60,
-                time: context.newVoucher.time,
-                duration: parseInt(context.newVoucher.duration),
-                expiration: moment(moment(context.newVoucher.expiration)).diff(
-                  moment(new Date()),
-                  "days"
-                ),
-                type: context.newVoucher.type,
-                user_name:
-                  context.newVoucher.type == "auth"
-                    ? context.newVoucher.user_name + (i > 0 ? "-" + i : "")
-                    : null,
-                user_mail:
-                  context.newVoucher.type == "auth"
-                    ? context.newVoucher.user_mail
-                    : null,
-                remain_use:
-                  context.newVoucher.limitless == "true"
-                    ? -1
-                    : parseInt(context.newVoucher.remain_use)
-              },
-              success => {
-                resolve();
-              },
-              error => {
-                reject();
-              }
-            );
-          })
-        );
-      }
-      Promise.all(promises)
-        .then(function() {
+      context.hotspotCreateVouchers(
+        {
+          hotspot_id: parseInt(context.$route.params.id),
+          code: custom
+            ? context.newVoucher.code
+            : "",
+          auto_login: context.newVoucher.auto_login,
+          bandwidth_down: parseInt(context.newVoucher.bandwidth_down),
+          bandwidth_up: parseInt(context.newVoucher.bandwidth_up),
+          max_traffic:
+            parseInt(context.newVoucher.max_traffic) * 1024 * 1024,
+          max_time: parseInt(context.newVoucher.max_time) * 60,
+          time: context.newVoucher.time,
+          duration: parseInt(context.newVoucher.duration),
+          expiration: moment(moment(context.newVoucher.expiration)).diff(
+            moment(new Date()),
+            "days"
+          ),
+          type: context.newVoucher.type,
+          user_name:
+            context.newVoucher.type == "auth"
+              ? context.newVoucher.user_name
+              : null,
+          user_mail:
+            context.newVoucher.type == "auth"
+              ? context.newVoucher.user_mail
+              : null,
+          remain_use:
+            context.newVoucher.limitless == "true"
+              ? -1
+              : parseInt(context.newVoucher.remain_use),
+          num_vouchers: custom
+            ? 1
+            : parseInt(context.vouchersCount)
+        },
+        success => {
           context.vouchers.isCreating = false;
           context.newVoucher.user_name = "";
           context.newVoucher.user_mail = "";
           context.getVouchers();
           $("#voucherModal").modal("hide");
           $("#voucherModalCustom").modal("hide");
-        })
-        .catch(function(err) {
+        },
+        error => {
           console.error(err);
           context.vouchers.isCreating = false;
-        });
+        }
+      );
     },
     deleteVoucher(id) {
       this.vouchers.isLoading = true;

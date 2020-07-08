@@ -146,15 +146,6 @@ var UtilService = {
       }
       return retVal;
     },
-    generateVoucher() {
-      var length = 8,
-        charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toLowerCase(),
-        retVal = "";
-      for (var i = 0, n = charset.length; i < length; ++i) {
-        retVal += charset.charAt(Math.floor(Math.random() * n));
-      }
-      return retVal;
-    },
     getInputType(key, value) {
       var type = "text";
       switch (key) {

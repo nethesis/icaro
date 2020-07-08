@@ -195,7 +195,7 @@ func DefineAPI(router *gin.Engine) {
 		vouchers := api.Group("/vouchers")
 		{
 			vouchers.GET("/:hotspot_id", methods.GetVouchers)
-			vouchers.POST("", methods.CreateVoucher)
+			vouchers.POST("", methods.CreateVouchers)
 			vouchers.PUT("/:voucher_id", methods.UpdateVoucher)
 			vouchers.DELETE("/:voucher_id", methods.DeleteVoucher)
 		}

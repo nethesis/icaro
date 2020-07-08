@@ -105,7 +105,7 @@ var HotspotService = {
         )
         .then(success, error);
     },
-    hotspotCreateVoucher(body, success, error) {
+    hotspotCreateVouchers(body, success, error) {
       this.$http
         .post(
           this.$root.$options.api_scheme +

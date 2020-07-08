@@ -23,6 +23,7 @@
 package methods
 
 import (
+	"math/rand"
 	"net/http"
 	"strconv"
 	"strings"
@@ -42,7 +43,19 @@ type voucherMarketingData struct {
 	Email string `json:"email"`
 }
 
-func CreateVoucher(c *gin.Context) {
+func generateVoucherCode() string {
+	length := 8
+	charset := strings.ToLower("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
+	voucherCode := ""
+	rand.Seed(time.Now().UnixNano())
+
+	for i := 0; i < length; i++ {
+		voucherCode += string(charset[rand.Intn(len(charset))])
+	}
+	return voucherCode
+}
+
+func CreateVouchers(c *gin.Context) {
 	accountId := c.MustGet("token").(models.AccessToken).AccountId
 
 	var json models.HotspotVoucherJSON
@@ -86,40 +99,54 @@ func CreateVoucher(c *gin.Context) {
 	// check hotspot ownership
 	if utils.Contains(utils.ExtractHotspotIds(accountId, (accountId == 1), json.HotspotId), json.HotspotId) {
 		db := database.Instance()
-		db.Save(&hotspotVoucher)
 
-		var newUserId = 0
-		if hotspotVoucher.Type == "auth" {
-			newUser := models.User{
-				HotspotId:            json.HotspotId,
-				Name:                 hotspotVoucher.UserName + " (" + strings.ToUpper(hotspotVoucher.Code) + ")",
-				Username:             strings.ToUpper(hotspotVoucher.Code),
-				Password:             hotspotVoucher.Code,
-				Email:                hotspotVoucher.UserMail,
-				AccountType:          "voucher",
-				Reason:               "",
-				Country:              "",
-				MarketingAuth:        true,
-				SurveyAuth:           true,
-				KbpsDown:             hotspotVoucher.BandwidthDown,
-				KbpsUp:               hotspotVoucher.BandwidthUp,
-				MaxNavigationTraffic: hotspotVoucher.MaxTraffic,
-				MaxNavigationTime:    hotspotVoucher.MaxTime,
-				AutoLogin:            hotspotVoucher.AutoLogin,
+		for i := 0; i < json.NumVouchers; i++ {
+			voucherInstance := hotspotVoucher
+
+			if json.Code == "" || json.NumVouchers > 1 {
+				voucherInstance.Code = generateVoucherCode()
+			}
+			db.Save(&voucherInstance)
+
+			if voucherInstance.Id == 0 {
+				c.JSON(http.StatusConflict, gin.H{"id": voucherInstance.Id, "status": "voucher already exists"})
+				return
 			}
 
-			// create user
-			newUserId = CreateUser(newUser)
+			var newUserId = 0
+			if voucherInstance.Type == "auth" {
+				userName := voucherInstance.UserName
 
-			// create marketing info with user infos
-			waxUtils.CreateUserMarketing(newUserId, voucherMarketingData{Name: hotspotVoucher.UserName, Email: hotspotVoucher.UserMail}, "voucher")
-		}
+				if i > 0 {
+					userName += "-" + strconv.Itoa(i)
+				}
 
-		if hotspotVoucher.Id == 0 {
-			c.JSON(http.StatusConflict, gin.H{"id": hotspotVoucher.Id, "status": "voucher already exists"})
-		} else {
-			c.JSON(http.StatusCreated, gin.H{"id": hotspotVoucher.Id, "status": "success", "userId": newUserId})
+				newUser := models.User{
+					HotspotId:            json.HotspotId,
+					Name:                 userName + " (" + strings.ToUpper(voucherInstance.Code) + ")",
+					Username:             strings.ToUpper(voucherInstance.Code),
+					Password:             voucherInstance.Code,
+					Email:                voucherInstance.UserMail,
+					AccountType:          "voucher",
+					Reason:               "",
+					Country:              "",
+					MarketingAuth:        true,
+					SurveyAuth:           true,
+					KbpsDown:             voucherInstance.BandwidthDown,
+					KbpsUp:               voucherInstance.BandwidthUp,
+					MaxNavigationTraffic: voucherInstance.MaxTraffic,
+					MaxNavigationTime:    voucherInstance.MaxTime,
+					AutoLogin:            voucherInstance.AutoLogin,
+				}
+
+				// create user
+				newUserId = CreateUser(newUser)
+
+				// create marketing info with user infos
+				waxUtils.CreateUserMarketing(newUserId, voucherMarketingData{Name: voucherInstance.UserName, Email: voucherInstance.UserMail}, "voucher")
+			}
 		}
+		c.JSON(http.StatusCreated, gin.H{"status": "success"})
 	} else {
 		c.JSON(http.StatusUnauthorized, gin.H{"message": "This hotspot is not yours"})
 	}
