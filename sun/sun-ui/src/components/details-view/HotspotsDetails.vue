@@ -2149,8 +2149,6 @@ export default {
     },
     createVouchers(custom) {
       this.vouchers.isCreating = true;
-
-      var promises = [];
       var context = this;
       context.hotspotCreateVouchers(
         {
@@ -2810,7 +2808,7 @@ export default {
         error => {
           this.macAuth.isLoading = false;
           this.macAuth.data = [];
-          console.error(error);
+          console.error(error.body);
         }
       );
     },
