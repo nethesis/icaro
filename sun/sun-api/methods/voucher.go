@@ -23,7 +23,6 @@
 package methods
 
 import (
-	"math/rand"
 	"net/http"
 	"strconv"
 	"strings"
@@ -41,18 +40,6 @@ import (
 type voucherMarketingData struct {
 	Name  string `json:"name"`
 	Email string `json:"email"`
-}
-
-func generateVoucherCode() string {
-	length := 8
-	charset := strings.ToLower("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
-	voucherCode := ""
-	rand.Seed(time.Now().UnixNano())
-
-	for i := 0; i < length; i++ {
-		voucherCode += string(charset[rand.Intn(len(charset))])
-	}
-	return voucherCode
 }
 
 func CreateVouchers(c *gin.Context) {
@@ -104,7 +91,7 @@ func CreateVouchers(c *gin.Context) {
 			voucherInstance := hotspotVoucher
 
 			if json.Code == "" || json.NumVouchers > 1 {
-				voucherInstance.Code = generateVoucherCode()
+				voucherInstance.Code = utils.GenerateVoucherCode()
 			}
 			db.Save(&voucherInstance)
 

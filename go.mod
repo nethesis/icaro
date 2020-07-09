@@ -1,7 +1,5 @@
 module github.com/nethesis/icaro
 
-go 1.14
-
 require (
 	github.com/appleboy/gofight/v2 v2.1.2
 	github.com/avct/uasurfer v0.0.0-20180817072212-dc0ec4fd1e87

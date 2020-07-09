@@ -404,7 +404,7 @@
                 $t("hotspot.create_voucher") }}
               </button>
               <button
-                :disabled="vouchers.data.length == 0"
+                :disabled="vouchers.data.length == 0 || vouchers.isPrintingAllVouchers"
                 v-on:click="printAllVoucher()"
                 class="btn btn-default"
                 type="button"
@@ -412,6 +412,7 @@
                 <span class="fa fa-print"></span>
                 {{ $t("hotspot.print_all_voucher") }}
               </button>
+              <div v-if="vouchers.isPrintingAllVouchers" class="spinner spinner-sm print-all-vouchers-loader"></div>
               <button
                 :disabled="vouchers.data.length == 0"
                 v-on:click="exportCSVVoucher()"
@@ -1839,6 +1840,7 @@ export default {
         isLoading: true,
         isDeleting: false,
         isCreating: false,
+        isPrintingAllVouchers: false,
         data: [],
         usable: [],
         filters: {
@@ -2604,6 +2606,7 @@ export default {
           context.showVoucherPrint = true;
 
           setTimeout(async function() {
+            context.vouchers.isPrintingAllVouchers = false;
             context.printDiv("voucherPrint");
           }, 500);
         },
@@ -2651,6 +2654,7 @@ export default {
       }
     },
     printAllVoucher() {
+      this.vouchers.isPrintingAllVouchers = true;
       this.printVouchers(this.vouchers.usable);
     },
     exportCSVVoucher() {
@@ -3193,5 +3197,12 @@ label.block-centered {
   margin-left: 0.4em;
   margin-right: 0.4em;
   font-size: 140%;
+}
+
+.print-all-vouchers-loader {
+  display: inline-block;
+  position: relative;
+  top: 5px;
+  margin-right: 10px;
 }
 </style>
