@@ -64,4 +64,6 @@ type HotspotVoucherJSON struct {
 	Printed       bool      `db:"printed" json:"printed"`
 	OwnerId       int       `db:"owner_id" json:"owner_id"`
 	Created       time.Time `db:"created" json:"created"`
+	NumVouchers   int       `json:"num_vouchers"`
+	VoucherIds    []int     `json:"voucher_ids"`
 }

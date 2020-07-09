@@ -42,7 +42,7 @@ type voucherMarketingData struct {
 	Email string `json:"email"`
 }
 
-func CreateVoucher(c *gin.Context) {
+func CreateVouchers(c *gin.Context) {
 	accountId := c.MustGet("token").(models.AccessToken).AccountId
 
 	var json models.HotspotVoucherJSON
@@ -86,69 +86,80 @@ func CreateVoucher(c *gin.Context) {
 	// check hotspot ownership
 	if utils.Contains(utils.ExtractHotspotIds(accountId, (accountId == 1), json.HotspotId), json.HotspotId) {
 		db := database.Instance()
-		db.Save(&hotspotVoucher)
 
-		var newUserId = 0
-		if hotspotVoucher.Type == "auth" {
-			newUser := models.User{
-				HotspotId:            json.HotspotId,
-				Name:                 hotspotVoucher.UserName + " (" + strings.ToUpper(hotspotVoucher.Code) + ")",
-				Username:             strings.ToUpper(hotspotVoucher.Code),
-				Password:             hotspotVoucher.Code,
-				Email:                hotspotVoucher.UserMail,
-				AccountType:          "voucher",
-				Reason:               "",
-				Country:              "",
-				MarketingAuth:        true,
-				SurveyAuth:           true,
-				KbpsDown:             hotspotVoucher.BandwidthDown,
-				KbpsUp:               hotspotVoucher.BandwidthUp,
-				MaxNavigationTraffic: hotspotVoucher.MaxTraffic,
-				MaxNavigationTime:    hotspotVoucher.MaxTime,
-				AutoLogin:            hotspotVoucher.AutoLogin,
+		for i := 0; i < json.NumVouchers; i++ {
+			voucherInstance := hotspotVoucher
+
+			if json.Code == "" || json.NumVouchers > 1 {
+				voucherInstance.Code = utils.GenerateVoucherCode()
+			}
+			db.Save(&voucherInstance)
+
+			if voucherInstance.Id == 0 {
+				c.JSON(http.StatusConflict, gin.H{"id": voucherInstance.Id, "status": "voucher already exists"})
+				return
 			}
 
-			// create user
-			newUserId = CreateUser(newUser)
+			var newUserId = 0
+			if voucherInstance.Type == "auth" {
+				userName := voucherInstance.UserName
 
-			// create marketing info with user infos
-			waxUtils.CreateUserMarketing(newUserId, voucherMarketingData{Name: hotspotVoucher.UserName, Email: hotspotVoucher.UserMail}, "voucher")
-		}
+				if i > 0 {
+					userName += "-" + strconv.Itoa(i)
+				}
 
-		if hotspotVoucher.Id == 0 {
-			c.JSON(http.StatusConflict, gin.H{"id": hotspotVoucher.Id, "status": "voucher already exists"})
-		} else {
-			c.JSON(http.StatusCreated, gin.H{"id": hotspotVoucher.Id, "status": "success", "userId": newUserId})
+				newUser := models.User{
+					HotspotId:            json.HotspotId,
+					Name:                 userName + " (" + strings.ToUpper(voucherInstance.Code) + ")",
+					Username:             strings.ToUpper(voucherInstance.Code),
+					Password:             voucherInstance.Code,
+					Email:                voucherInstance.UserMail,
+					AccountType:          "voucher",
+					Reason:               "",
+					Country:              "",
+					MarketingAuth:        true,
+					SurveyAuth:           true,
+					KbpsDown:             voucherInstance.BandwidthDown,
+					KbpsUp:               voucherInstance.BandwidthUp,
+					MaxNavigationTraffic: voucherInstance.MaxTraffic,
+					MaxNavigationTime:    voucherInstance.MaxTime,
+					AutoLogin:            voucherInstance.AutoLogin,
+				}
+
+				// create user
+				newUserId = CreateUser(newUser)
+
+				// create marketing info with user infos
+				waxUtils.CreateUserMarketing(newUserId, voucherMarketingData{Name: voucherInstance.UserName, Email: voucherInstance.UserMail}, "voucher")
+			}
 		}
+		c.JSON(http.StatusCreated, gin.H{"status": "success"})
 	} else {
 		c.JSON(http.StatusUnauthorized, gin.H{"message": "This hotspot is not yours"})
 	}
 }
 
-func UpdateVoucher(c *gin.Context) {
-	var hotspotVoucher models.HotspotVoucher
+func UpdateVouchers(c *gin.Context) {
+	var hotspotVouchers []models.HotspotVoucher
 	accountId := c.MustGet("token").(models.AccessToken).AccountId
 
-	var json models.HotspotVoucher
+	var json models.HotspotVoucherJSON
 	if err := c.BindJSON(&json); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "Request fields malformed", "error": err.Error()})
 		return
 	}
 
-	voucherId := c.Param("voucher_id")
-
+	voucherIds := json.VoucherIds
+	hotspotIds := utils.ExtractHotspotIds(accountId, (accountId == 1), 0)
 	db := database.Instance()
-	db.Where("id = ? AND hotspot_id in (?)", voucherId, utils.ExtractHotspotIds(accountId, (accountId == 1), 0)).First(&hotspotVoucher)
+	db.Where("id IN (?) AND hotspot_id IN (?)", voucherIds, hotspotIds).Find(&hotspotVouchers)
 
-	if hotspotVoucher.Id == 0 {
+	if len(hotspotVouchers) == 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No hotspot voucher found!"})
 		return
 	}
 
-	if json.Printed {
-		hotspotVoucher.Printed = true
-	}
-	db.Save(&hotspotVoucher)
+	db.Model(models.HotspotVoucher{}).Where("id IN (?) AND hotspot_id IN (?)", voucherIds, hotspotIds).Updates(models.HotspotVoucher{Printed: json.Printed})
 
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
 
@@ -262,18 +273,46 @@ func GetVouchers(c *gin.Context) {
 func DeleteVoucher(c *gin.Context) {
 	var hotspotVoucher models.HotspotVoucher
 	accountId := c.MustGet("token").(models.AccessToken).AccountId
-
 	voucherId := c.Param("voucher_id")
-
+	hotspotIds := utils.ExtractHotspotIds(accountId, (accountId == 1), 0)
 	db := database.Instance()
-	db.Where("id = ? AND hotspot_id in (?)", voucherId, utils.ExtractHotspotIds(accountId, (accountId == 1), 0)).First(&hotspotVoucher)
+	db.Where("id = ? AND hotspot_id IN (?)", voucherId, hotspotIds).First(&hotspotVoucher)
 
 	if hotspotVoucher.Id == 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No hotspot voucher found!"})
 		return
 	}
-
 	db.Delete(&hotspotVoucher)
+
+	c.JSON(http.StatusOK, gin.H{"status": "success"})
+}
+
+func DeleteAllVouchers(c *gin.Context) {
+	var hotspotVouchers []models.HotspotVoucher
+	accountId := c.MustGet("token").(models.AccessToken).AccountId
+	account := utils.GetAccountById(accountId)
+	hotspotId := c.Param("hotspot_id")
+	hotspotIdInt, err := strconv.Atoi(hotspotId)
+	if err != nil {
+		hotspotIdInt = 0
+	}
+
+	db := database.Instance()
+	chain := db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt))
+
+	// if desk account, get only my voucher not voucher of other users
+	if account.Type == "desk" {
+		chain = chain.Where("owner_id = ?", accountId)
+	}
+
+	chain.Find(&hotspotVouchers)
+
+	if len(hotspotVouchers) <= 0 {
+		c.JSON(http.StatusNotFound, gin.H{"message": "No hotspot vouchers found!"})
+		return
+	}
+
+	chain.Delete(models.HotspotVoucher{})
 
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }

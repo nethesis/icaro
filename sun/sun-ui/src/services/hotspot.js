@@ -105,7 +105,7 @@ var HotspotService = {
         )
         .then(success, error);
     },
-    hotspotCreateVoucher(body, success, error) {
+    hotspotCreateVouchers(body, success, error) {
       this.$http
         .post(
           this.$root.$options.api_scheme +
@@ -120,12 +120,12 @@ var HotspotService = {
         )
         .then(success, error);
     },
-    hotspotUpdateVoucher(id, body, success, error) {
+    hotspotUpdateVouchers(body, success, error) {
       this.$http
         .put(
           this.$root.$options.api_scheme +
           this.$root.$options.api_host +
-          "/api/vouchers/" + id,
+          "/api/vouchers",
           body, {
             headers: {
               Token:
@@ -135,13 +135,12 @@ var HotspotService = {
         )
         .then(success, error);
     },
-    hotspotVoucherDelete(id, success, error) {
+    hotspotVoucherDelete(id, deleteAll, success, error) {
       this.$http
         .delete(
           this.$root.$options.api_scheme +
           this.$root.$options.api_host +
-          "/api/vouchers/" +
-          id, {
+          (deleteAll ? "/api/vouchers/hotspot/" + id : "/api/vouchers/voucher/" + id), {
             headers: {
               Token:
                 (this.get("loggedUser") && this.get("loggedUser").token) || ""

@@ -28,8 +28,10 @@ import (
 	"crypto/sha256"
 	"encoding/json"
 	"fmt"
+	"math/rand"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/nethesis/icaro/sun/sun-api/configuration"
@@ -370,4 +372,16 @@ func CallIntegrationWebHook(integration models.Integration, hostspotId int, stat
 	}
 	return true
 
+}
+
+func GenerateVoucherCode() string {
+	length := 8
+	charset := strings.ToLower("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
+	voucherCode := ""
+	rand.Seed(time.Now().UnixNano())
+
+	for i := 0; i < length; i++ {
+		voucherCode += string(charset[rand.Intn(len(charset))])
+	}
+	return voucherCode
 }

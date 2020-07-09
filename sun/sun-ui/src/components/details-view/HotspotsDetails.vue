@@ -404,7 +404,7 @@
                 $t("hotspot.create_voucher") }}
               </button>
               <button
-                :disabled="vouchers.data.length == 0"
+                :disabled="vouchers.data.length == 0 || vouchers.isPrintingAllVouchers"
                 v-on:click="printAllVoucher()"
                 class="btn btn-default"
                 type="button"
@@ -412,6 +412,7 @@
                 <span class="fa fa-print"></span>
                 {{ $t("hotspot.print_all_voucher") }}
               </button>
+              <div v-if="vouchers.isPrintingAllVouchers" class="spinner spinner-sm print-all-vouchers-loader"></div>
               <button
                 :disabled="vouchers.data.length == 0"
                 v-on:click="exportCSVVoucher()"
@@ -902,7 +903,7 @@
             </button>
             <h4 class="modal-title" id="myModalLabel">{{$t('hotspot.voucher_creation')}}</h4>
           </div>
-          <form class="form-horizontal" v-on:submit.prevent="createVoucher(false)">
+          <form class="form-horizontal" v-on:submit.prevent="createVouchers(false)">
             <div class="modal-body">
               <div v-if="vouchers.typesAvailable == 'all'" class="form-group">
                 <label
@@ -948,8 +949,8 @@
                   <input
                     required
                     v-model="vouchersCount"
-                    type="text"
-                    id="textInput-modal-markup"
+                    type="number"
+                    min="1"
                     class="form-control"
                   />
                 </div>
@@ -978,7 +979,7 @@
                   <input
                     v-model="newVoucher.bandwidth_down"
                     type="number"
-                    id="textInput-modal-markup"
+                    min="0"
                     class="form-control"
                   />
                 </div>
@@ -992,7 +993,7 @@
                   <input
                     v-model="newVoucher.bandwidth_up"
                     type="number"
-                    id="textInput-modal-markup"
+                    min="0"
                     class="form-control"
                   />
                 </div>
@@ -1006,7 +1007,7 @@
                   <input
                     v-model="newVoucher.max_traffic"
                     type="number"
-                    id="textInput-modal-markup"
+                    min="0"
                     class="form-control"
                   />
                 </div>
@@ -1020,7 +1021,7 @@
                   <input
                     v-model="newVoucher.max_time"
                     type="number"
-                    id="textInput-modal-markup"
+                    min="0"
                     class="form-control"
                   />
                 </div>
@@ -1066,7 +1067,7 @@
                   <input
                     v-model="newVoucher.duration"
                     type="number"
-                    id="textInput-modal-markup"
+                    min="0"
                     class="form-control"
                   />
                 </div>
@@ -1125,7 +1126,7 @@
                   <input
                     v-model="newVoucher.remain_use"
                     type="number"
-                    id="textInput-modal-markup"
+                    min="1"
                     class="form-control"
                   />
                 </div>
@@ -1167,7 +1168,7 @@
                 class="spinner spinner-sm spinner-inline modal-spinner"
               ></span>
               <button type="button" class="btn btn-default" data-dismiss="modal">{{$t('cancel')}}</button>
-              <button type="submit" class="btn btn-primary">{{$t('save')}}</button>
+              <button type="submit" class="btn btn-primary" :disabled="vouchers.isCreating">{{$t('save')}}</button>
             </div>
           </form>
         </div>
@@ -1190,7 +1191,7 @@
             </button>
             <h4 class="modal-title" id="myModalLabel">{{$t('hotspot.voucher_creation')}}</h4>
           </div>
-          <form class="form-horizontal" v-on:submit.prevent="createVoucher(true)">
+          <form class="form-horizontal" v-on:submit.prevent="createVouchers(true)">
             <div class="modal-body">
               <div v-if="vouchers.typesAvailable == 'all'" class="form-group">
                 <label
@@ -1267,7 +1268,7 @@
                   <input
                     v-model="newVoucher.bandwidth_down"
                     type="number"
-                    id="textInput-modal-markup"
+                    min="0"
                     class="form-control"
                   />
                 </div>
@@ -1281,7 +1282,7 @@
                   <input
                     v-model="newVoucher.bandwidth_up"
                     type="number"
-                    id="textInput-modal-markup"
+                    min="0"
                     class="form-control"
                   />
                 </div>
@@ -1295,7 +1296,7 @@
                   <input
                     v-model="newVoucher.max_traffic"
                     type="number"
-                    id="textInput-modal-markup"
+                    min="0"
                     class="form-control"
                   />
                 </div>
@@ -1309,7 +1310,7 @@
                   <input
                     v-model="newVoucher.max_time"
                     type="number"
-                    id="textInput-modal-markup"
+                    min="0"
                     class="form-control"
                   />
                 </div>
@@ -1355,7 +1356,7 @@
                   <input
                     v-model="newVoucher.duration"
                     type="number"
-                    id="textInput-modal-markup"
+                    min="0"
                     class="form-control"
                   />
                 </div>
@@ -1414,7 +1415,7 @@
                   <input
                     v-model="newVoucher.remain_use"
                     type="number"
-                    id="textInput-modal-markup"
+                    min="1"
                     class="form-control"
                   />
                 </div>
@@ -1456,7 +1457,7 @@
                 class="spinner spinner-sm spinner-inline modal-spinner"
               ></span>
               <button type="button" class="btn btn-default" data-dismiss="modal">{{$t('cancel')}}</button>
-              <button type="submit" class="btn btn-primary">{{$t('save')}}</button>
+              <button type="submit" class="btn btn-primary" :disabled="vouchers.isCreating">{{$t('save')}}</button>
             </div>
           </form>
         </div>
@@ -1486,8 +1487,8 @@
             <div class="modal-body">
               <div class="alert alert-warning alert-dismissable">
                 <span class="pficon pficon-warning-triangle-o"></span>
-                <strong>{{ $t("hotspot.warning_delete_title") }}</strong>
-                . {{ $t("hotspot.warning_delete_vouchers") }}.
+                <strong>{{ $t("hotspot.warning_delete_title") }}</strong>.
+                {{ $t("hotspot.warning_delete_vouchers") }}.
               </div>
             </div>
             <div class="modal-footer">
@@ -1496,7 +1497,7 @@
                 class="spinner spinner-sm spinner-inline modal-spinner"
               ></span>
               <button type="button" class="btn btn-default" data-dismiss="modal">{{ $t("cancel") }}</button>
-              <button type="submit" class="btn btn-danger">{{ $t("delete") }}</button>
+              <button type="submit" class="btn btn-danger" :disabled="vouchers.isDeleting">{{ $t("delete") }}</button>
             </div>
           </form>
         </div>
@@ -1839,6 +1840,7 @@ export default {
         isLoading: true,
         isDeleting: false,
         isCreating: false,
+        isPrintingAllVouchers: false,
         data: [],
         usable: [],
         filters: {
@@ -2147,74 +2149,63 @@ export default {
         }
       );
     },
-    createVoucher(custom) {
+    createVouchers(custom) {
       this.vouchers.isCreating = true;
-
-      var promises = [];
       var context = this;
-      for (var i = 0; i < this.vouchersCount; i++) {
-        promises.push(
-          new Promise(function(resolve, reject) {
-            context.hotspotCreateVoucher(
-              {
-                hotspot_id: parseInt(context.$route.params.id),
-                code: custom
-                  ? context.newVoucher.code
-                  : context.generateVoucher(),
-                auto_login: context.newVoucher.auto_login,
-                bandwidth_down: parseInt(context.newVoucher.bandwidth_down),
-                bandwidth_up: parseInt(context.newVoucher.bandwidth_up),
-                max_traffic:
-                  parseInt(context.newVoucher.max_traffic) * 1024 * 1024,
-                max_time: parseInt(context.newVoucher.max_time) * 60,
-                time: context.newVoucher.time,
-                duration: parseInt(context.newVoucher.duration),
-                expiration: moment(moment(context.newVoucher.expiration)).diff(
-                  moment(new Date()),
-                  "days"
-                ),
-                type: context.newVoucher.type,
-                user_name:
-                  context.newVoucher.type == "auth"
-                    ? context.newVoucher.user_name + (i > 0 ? "-" + i : "")
-                    : null,
-                user_mail:
-                  context.newVoucher.type == "auth"
-                    ? context.newVoucher.user_mail
-                    : null,
-                remain_use:
-                  context.newVoucher.limitless == "true"
-                    ? -1
-                    : parseInt(context.newVoucher.remain_use)
-              },
-              success => {
-                resolve();
-              },
-              error => {
-                reject();
-              }
-            );
-          })
-        );
-      }
-      Promise.all(promises)
-        .then(function() {
+      context.hotspotCreateVouchers(
+        {
+          hotspot_id: parseInt(context.$route.params.id),
+          code: custom
+            ? context.newVoucher.code
+            : "",
+          auto_login: context.newVoucher.auto_login,
+          bandwidth_down: parseInt(context.newVoucher.bandwidth_down),
+          bandwidth_up: parseInt(context.newVoucher.bandwidth_up),
+          max_traffic:
+            parseInt(context.newVoucher.max_traffic) * 1024 * 1024,
+          max_time: parseInt(context.newVoucher.max_time) * 60,
+          time: context.newVoucher.time,
+          duration: parseInt(context.newVoucher.duration),
+          expiration: moment(moment(context.newVoucher.expiration)).diff(
+            moment(new Date()),
+            "days"
+          ),
+          type: context.newVoucher.type,
+          user_name:
+            context.newVoucher.type == "auth"
+              ? context.newVoucher.user_name
+              : null,
+          user_mail:
+            context.newVoucher.type == "auth"
+              ? context.newVoucher.user_mail
+              : null,
+          remain_use:
+            context.newVoucher.limitless == "true"
+              ? -1
+              : parseInt(context.newVoucher.remain_use),
+          num_vouchers: custom
+            ? 1
+            : parseInt(context.vouchersCount)
+        },
+        success => {
           context.vouchers.isCreating = false;
           context.newVoucher.user_name = "";
           context.newVoucher.user_mail = "";
           context.getVouchers();
           $("#voucherModal").modal("hide");
           $("#voucherModalCustom").modal("hide");
-        })
-        .catch(function(err) {
+        },
+        error => {
           console.error(err);
           context.vouchers.isCreating = false;
-        });
+        }
+      );
     },
     deleteVoucher(id) {
       this.vouchers.isLoading = true;
       this.hotspotVoucherDelete(
         id,
+        false,
         success => {
           this.vouchers.isLoading = false;
           this.getVouchers();
@@ -2227,37 +2218,22 @@ export default {
       );
     },
     deleteAllVouchers() {
-      var context = this;
-      var promises = [];
       this.vouchers.isDeleting = true;
-
-      for (var v in this.vouchers.data) {
-        var voucher = this.vouchers.data[v];
-        promises.push(
-          new Promise((resolve, reject) => {
-            context.hotspotVoucherDelete(
-              voucher.id,
-              success => {
-                resolve(success);
-              },
-              error => {
-                reject(error);
-              }
-            );
-          })
-        );
-      }
-
-      Promise.all(promises)
-        .then(function() {
+      var hotspotId = this.$route.params.id;
+      var context = this;
+      context.hotspotVoucherDelete(
+        hotspotId,
+        true,
+        success => {
           context.vouchers.isDeleting = false;
           context.getVouchers();
           $("#voucherDeleteAll").modal("toggle");
-        })
-        .catch(function(err) {
-          console.error(err);
+        },
+        error => {
           context.vouchers.isDeleting = false;
-        });
+          console.error(error.body);
+        }
+      );
     },
     getVouchers() {
       this.vouchers.data = [];
@@ -2618,40 +2594,26 @@ export default {
       });
     },
     printVouchers(voucherList) {
+      var voucherIds = voucherList.map(voucher => voucher.id);
       var context = this;
-      var promises = [];
+      context.hotspotUpdateVouchers(
+        {
+          voucher_ids: voucherIds,
+          printed: true
+        },
+        success => {
+          context.vouchersToPrint = voucherList;
+          context.showVoucherPrint = true;
 
-      for (var index = 0; index < voucherList.length; index++) {
-        promises.push(
-          new Promise(function(resolve, reject) {
-            context.hotspotUpdateVoucher(
-              voucherList[index].id,
-              {
-                printed: true
-              },
-              success => {
-                resolve(success);
-              },
-              error => {
-                reject(error);
-              }
-            );
-          })
-        );
-
-        Promise.all(promises)
-          .then(function() {
-          })
-          .catch(function(err) {
-            console.error(err);
-          });
-      }
-      this.vouchersToPrint = voucherList;
-      this.showVoucherPrint = true;
-
-      setTimeout(async function() {
-        context.printDiv("voucherPrint");
-      }, 500);
+          setTimeout(async function() {
+            context.vouchers.isPrintingAllVouchers = false;
+            context.printDiv("voucherPrint");
+          }, 500);
+        },
+        error => {
+          console.error(error.body);
+        }
+      );
     },
     printDiv(div_id) {
       $("body").html($("#" + div_id).html());
@@ -2678,7 +2640,9 @@ export default {
         }
       };
 
-      window.print();
+      setTimeout(async function() {
+        window.print();
+      }, 500);
     },
     printVoucher(voucher) {
       for (let i = 0; i < this.vouchers.usable.length; i++) {
@@ -2690,6 +2654,7 @@ export default {
       }
     },
     printAllVoucher() {
+      this.vouchers.isPrintingAllVouchers = true;
       this.printVouchers(this.vouchers.usable);
     },
     exportCSVVoucher() {
@@ -2818,7 +2783,7 @@ export default {
         error => {
           this.macAuth.isLoading = false;
           this.macAuth.data = [];
-          console.error(error);
+          console.error(error.body);
         }
       );
     },
@@ -3232,5 +3197,12 @@ label.block-centered {
   margin-left: 0.4em;
   margin-right: 0.4em;
   font-size: 140%;
+}
+
+.print-all-vouchers-loader {
+  display: inline-block;
+  position: relative;
+  top: 5px;
+  margin-right: 10px;
 }
 </style>
