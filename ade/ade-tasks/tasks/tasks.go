@@ -133,16 +133,16 @@ func sendSurveys(users []User) {
 		db.Where("hotspot_id = ? AND `key` = 'captive_7_background'", u.HotspotId).Find(&hotspotBg)
 
 		var hotspotContainerBgColor models.HotspotPreference
-		db.Where("hotspot_id = ? AND `key` = 'captive_82_container_bg_color'", u.HotspotId).Find(&hotspotBg)
+		db.Where("hotspot_id = ? AND `key` = 'captive_82_container_bg_color'", u.HotspotId).Find(&hotspotContainerBgColor)
 
 		var hotspotTitleColor models.HotspotPreference
-		db.Where("hotspot_id = ? AND `key` = 'captive_83_title_color'", u.HotspotId).Find(&hotspotBg)
+		db.Where("hotspot_id = ? AND `key` = 'captive_83_title_color'", u.HotspotId).Find(&hotspotTitleColor)
 
 		var hotspotTextColor models.HotspotPreference
-		db.Where("hotspot_id = ? AND `key` = 'captive_84_text_color'", u.HotspotId).Find(&hotspotBg)
+		db.Where("hotspot_id = ? AND `key` = 'captive_84_text_color'", u.HotspotId).Find(&hotspotTextColor)
 
 		var hotspotTextStyle models.HotspotPreference
-		db.Where("hotspot_id = ? AND `key` = 'captive_85_text_style'", u.HotspotId).Find(&hotspotBg)
+		db.Where("hotspot_id = ? AND `key` = 'captive_85_text_style'", u.HotspotId).Find(&hotspotTextStyle)
 
 		var marketingEnabled models.HotspotPreference
 		db.Where("hotspot_id = ? AND `key` = 'marketing_1_enabled'", u.HotspotId).Find(&marketingEnabled)

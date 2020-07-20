@@ -23,10 +23,13 @@
 package models
 
 type ReviewPage struct {
-	HotspotName string   `json:"hotspot_name"`
-	BgColor     string   `json:"bg_color"`
-	Urls        []string `json:"urls"`
-	Threshold   int      `json:"threshold"`
+	HotspotName      string   `json:"hotspot_name"`
+	BgColor          string   `json:"bg_color"`
+	TitleColor       string   `json:"title_color"`
+	TextColor        string   `json:"text_color"`
+	ContainerBgColor string   `json:"container_bg_color"`
+	Urls             []string `json:"urls"`
+	Threshold        int      `json:"threshold"`
 }
 
 type ReviewResult struct {

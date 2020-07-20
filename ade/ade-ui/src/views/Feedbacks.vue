@@ -2,7 +2,7 @@
   <div>
     <h2 :style="textStyle" class="ui header center aligned">{{$t('feedbacks')}}</h2>
 
-    <div v-show="feedbackLeave" class="ui message success">
+    <div v-show="feedbackLeave" class="thank-you">
       <div class="content text-center">
         <div class="header" :style="textStyle">{{$t('thank_you_feedback')}}</div>
         <p :style="textStyle">{{$t('thank_you_feedback_text')}}</p>
@@ -21,7 +21,6 @@
             :disabled="message.length < 5 || message.length > 400"
             @click="setFeedback()"
             class="ui button large green"
-            :style="buttonStyle"
           >{{$t('submit')}}</button>
         </div>
       </div>
@@ -37,8 +36,7 @@ export default {
       loading: false,
       message: "",
       feedbackLeave: false,
-      textColor: '#4A4A4A',
-      textFont: 'Roboto'
+      textColor: '#4A4A4A'
     };
   },
   mounted() {
@@ -47,13 +45,7 @@ export default {
   computed: {
     textStyle: function () {
       return {
-        color: this.textColor,
-        'font-family': this.textFont
-      }
-    },
-    buttonStyle: function () {
-      return {
-        'font-family': this.textFont
+        color: this.textColor
       }
     }
   },
@@ -65,11 +57,10 @@ export default {
         this.$route.params.token,
         function(success) {
           this.loading = false;
-          this.hotspot_name = success.hotspot_name;
-          this.hotspot_logo = success.hotspot_logo;
-          $("body").css("background-color", success.bg_color);
-          this.textColor = success.text_color || '#4A4A4A';
-          this.textFont = success.text_style || 'Roboto';
+          this.hotspot_name = success.body.hotspot_name;
+          this.hotspot_logo = success.body.hotspot_logo;
+          $("body").css("background-color", success.body.bg_color);
+          this.textColor = success.body.text_color || '#4A4A4A'
         },
         function(error) {
           this.loading = false;
@@ -100,5 +91,8 @@ export default {
   text-align: right;
   display: block;
   color: #777777;
+}
+.thank-you {
+  margin-bottom: 25px;
 }
 </style>

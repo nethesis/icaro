@@ -45,7 +45,7 @@
     <div v-show="!reviewLeave && stars > 0" class="ui form">
       <div class="ui field">
         <textarea :placeholder="$t('leave_blank_optional')" v-model="message"></textarea>
-        <span class="counter">{{message.length}}/400</span>
+        <span class="counter" :style="textStyle">{{message.length}}/400</span>
       </div>
     </div>
     <!-- END TEXTAREA -->
@@ -61,14 +61,13 @@
             :disabled="message.length > 400"
             @click="setReview()"
             class="ui button large green"
-            :style="buttonStyle"
           >{{$t('submit')}}</button>
         </div>
       </div>
     </div>
     <!-- END SUBMIT -->
     <!-- THANKS -->
-    <div v-show="reviewLeave" class="ui message success">
+    <div v-show="reviewLeave" class="thank-you">
       <div class="content text-center">
         <div class="header" :style="textStyle">{{$t('thank_you_review')}}</div>
         <p :style="textStyle">{{$t('thank_you_review_text')}}.</p>
@@ -85,7 +84,6 @@
           v-for="u in urls"
           :key="u"
           :class="['ui', parseUrl(u, true), 'button']"
-          :style="textStyle"
         >
           <i :class="[parseUrl(u, false), 'icon']"></i>
           {{parseUrl(u, false, true) | capitalize}}
@@ -109,20 +107,13 @@ export default {
       reviewLeave: false,
       urls: [],
       threshold: 3,
-      textColor: '#4A4A4A',
-      textFont: 'Roboto'
+      textColor: '#4A4A4A'
     };
   },
   computed: {
     textStyle: function () {
       return {
-        color: this.textColor,
-        'font-family': this.textFont
-      }
-    },
-    buttonStyle: function () {
-      return {
-        'font-family': this.textFont
+        color: this.textColor
       }
     }
   },
@@ -137,13 +128,9 @@ export default {
         this.$route.params.token,
         function(success) {
           this.loading = false;
-          this.hotspot_name = success.hotspot_name;
-          this.hotspot_logo = success.hotspot_logo;
           this.urls = success.body.urls || [];
           this.threshold = success.body.threshold || 3;
-          $("body").css("background-color", success.bg_color);
-          this.textColor = success.text_color || '#4A4A4A';
-          this.textFont = success.text_style || 'Roboto';
+          this.textColor = success.body.text_color || '#4A4A4A';
         },
         function(error) {
           this.loading = false;
@@ -208,5 +195,8 @@ export default {
   text-align: right;
   display: block;
   color: #777777;
+}
+.thank-you {
+  margin-bottom: 25px;
 }
 </style>
