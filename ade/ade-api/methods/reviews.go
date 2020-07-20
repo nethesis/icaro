@@ -52,6 +52,9 @@ func GetReviewPage(c *gin.Context) {
 
 	reviewPage.HotspotName = hotspotPrefs["captive_2_title"]
 	reviewPage.BgColor = hotspotPrefs["captive_7_background"]
+	reviewPage.TitleColor = hotspotPrefs["captive_83_title_color"]
+	reviewPage.TextColor = hotspotPrefs["captive_84_text_color"]
+	reviewPage.ContainerBgColor = hotspotPrefs["captive_82_container_bg_color"]
 
 	reviewPage.Threshold, _ = strconv.Atoi(hotspotPrefs["marketing_9_threshold"])
 
