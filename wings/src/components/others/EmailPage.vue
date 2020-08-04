@@ -250,7 +250,7 @@ export default {
     getCode: function(reset) {
       this.errors.badMail = false;
       this.bannerShow = true;
-      if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.authEmail.toLowerCase())) {
+      if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,})+$/.test(this.authEmail.toLowerCase())) {
         this.errors.badInput = true;
         return;
       }
