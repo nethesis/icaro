@@ -1,0 +1,88 @@
+{
+    "en": {
+        "splash": {
+            "retrieve_info": "Recuperar informações",
+            "start_navigate": "Navegar",
+            "main_error": "Não podemos avançar. Algumas informações estão em falta.",
+            "main_error_sub": "Ocorreu um erro ao abrir a página",
+            "i_agree": "Aceito os termos e condições",
+            "tos_and_privacy": "Condições e Privacidade",
+            "modal_terms": "Condições de Serviço e Privacidade",
+            "tos": "Condições de Serviço",
+            "privacy": "Privacidade"
+        },
+        "login": {
+            "voucher_title": "Voucher",
+            "insert_voucher": "Inserir voucher",
+            "validate_code": "Validar",
+            "error_voucher_code": "Erro ao validar voucher",
+            "error_voucher_code_sub": "O código de voucher não está correcto",
+            "choose_login": "Escolha o seu Login",
+            "decline": "Recusar",
+            "accept": "Aceitar",
+            "disclaimer_use": "Condições de Serviço,
+            "disclaimer_marketing": "Informações de Marketing",
+            "back": "Voltar",
+            "code": "Voucher",
+            "navigate": "Navegar",
+            "disclaimer_privacy_accept": "Aceito receber Ofertas Promocionais",
+            "disclaimer_survey_accept": "Aceito receber Inquéritos",
+            "additional_info": "",
+            "country": "País",
+            "reason": "Razão da Visita",
+            "business": "Profissional",
+            "family": "Familiar",
+            "other": "Outro"
+        },
+        "social": {
+            "auth_progress": "Autenticação em curso",
+            "auth_success": "Foi autenticado com sucesso",
+            "auth_error": "Acesso Recusado",
+            "auth_error_sub": "Ocorreu um erro, as razões poderam ser as seguintes: 1)Os dados introduzidos não estão correctos. 2)O voucher que está a usar poderá não estar válido. 3)Atingiu o limite de tempo diário. 4)Atingiu o limite de tráfego diário."
+        },
+        "email": {
+            "insert_email": "Insira o seu email",
+            "insert_your_code": "Inserir Código",
+            "code": "Password",
+            "have_code": "Entrar",
+            "not_have_code": "Registar",
+            "get_code": "Registar",
+            "reset_code": "Pedir novo Código",
+            "start_navigate": "Navegar",
+            "error_code": "Erro ao enviar código",
+            "error_code_sub": "Ocorreu um erro, verifique o endereço de email",
+            "auth_progress": "Autorização em curso",
+            "auth_success": "Foi autenticado com sucesso",
+            "auth_error": "Acesso Recusado",
+            "auth_error_sub": "Ocorreu um erro, as razões poderam ser as seguintes: 1)Os dados introduzidos não estão correctos. 2)O código que está a usar poderá não estar válido. 3)Atingiu o limite de tempo diário. 4)Atingiu o limite de tráfego diário.",
+            "wait": "Por favor aguarde",
+            "we_are_sending_email_code": "Se não está a receber o email, por favor desligue da rede WiFi e volte a ligar, verifique o seu email e clique no link do email para navegar. Veja também na caixa de SPAM.",
+            "not_code_explain": "É a primeira vez que se liga ao Wi-Fi?",
+            "not_code_explain_else": "Outro"
+        },
+        "sms": {
+            "number": "Numero",
+            "insert_number": "Insira o seu número de telemóvel",
+            "insert_your_code": "Insira o seu código",
+            "code": "Código",
+            "have_code": "Entrar",
+            "not_have_code": "Registar",
+            "get_code": "Registar",
+            "reset_code": "Pedir novo Código",
+            "start_navigate": "Navegar",
+            "error_code": "Erro ao enviar código",
+            "error_code_sub": "Ocorreu um erro ao enviar o código (por favor escolha o indicativo internacional correcto para o seu número e verifique se não atingiu o limite de envio de SMS)",
+            "auth_progress": "Autorização em curso",
+            "auth_success": "Foi autenticado com sucesso",
+            "auth_error": "Acesso Recusado",
+            "auth_error_sub": "Ocorreu um erro, as razões poderam ser as seguintes: 1)Os dados introduzidos não estão correctos. 2)O código que está a usar poderá não estar válido. 3)Atingiu o limite de tempo diário. 4)Atingiu o limite de tráfego diário.",
+            "select_state": "Escolha distrito",
+            "prefix": "Prefixo",
+            "wait": "A enviar SMS...",
+            "we_are_sending_sms_code": "Use o mesmo código no próximo acesso escolhendo o botão 'Entrar'.",
+            "not_code_explain": "É a primeira vez que se liga ao Wi-Fi?",
+            "not_code_explain_else": "Outro"
+        }
+    }
+}
+
