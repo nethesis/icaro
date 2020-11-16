@@ -32,8 +32,8 @@ type SessionHistory struct {
 	DeviceMAC   string    `db:"device_mac" json:"device_mac"`
 	IpAddress   string    `db:"ip_address" json:"ip_address"`
 	Username    string    `db:"username" json:"username"`
-	BytesUp     int       `db:"bytes_up" json:"bytes_up"`
-	BytesDown   int       `db:"bytes_down" json:"bytes_down"`
+	BytesUp     int64     `db:"bytes_up" json:"bytes_up"`
+	BytesDown   int64     `db:"bytes_down" json:"bytes_down"`
 	Duration    int       `db:"duration" json:"duration"`
 	AuthTime    time.Time `db:"auth_time" json:"auth_time"`
 	StartTime   time.Time `db:"start_time" json:"start_time"`

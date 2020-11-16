@@ -152,7 +152,7 @@ func FacebookAuth(c *gin.Context) {
 		upInt, _ := strconv.Atoi(up.Value)
 
 		maxTraffic := utils.GetHotspotPreferencesByKey(unit.HotspotId, "CoovaChilli-Max-Total-Octets")
-		maxTrafficInt, _ := strconv.Atoi(maxTraffic.Value)
+		maxTrafficInt, _ := strconv.ParseInt(maxTraffic.Value, 10, 64)
 
 		maxTime := utils.GetHotspotPreferencesByKey(unit.HotspotId, "CoovaChilli-Max-Navigation-Time")
 		maxTimeInt, _ := strconv.Atoi(maxTime.Value)
@@ -358,7 +358,7 @@ func LinkedInAuth(c *gin.Context) {
 		upInt, _ := strconv.Atoi(up.Value)
 
 		maxTraffic := utils.GetHotspotPreferencesByKey(unit.HotspotId, "CoovaChilli-Max-Total-Octets")
-		maxTrafficInt, _ := strconv.Atoi(maxTraffic.Value)
+		maxTrafficInt, _ := strconv.ParseInt(maxTraffic.Value, 10, 64)
 
 		maxTime := utils.GetHotspotPreferencesByKey(unit.HotspotId, "CoovaChilli-Max-Navigation-Time")
 		maxTimeInt, _ := strconv.Atoi(maxTime.Value)
@@ -536,7 +536,7 @@ func InstagramAuth(c *gin.Context) {
 		upInt, _ := strconv.Atoi(up.Value)
 
 		maxTraffic := utils.GetHotspotPreferencesByKey(unit.HotspotId, "CoovaChilli-Max-Total-Octets")
-		maxTrafficInt, _ := strconv.Atoi(maxTraffic.Value)
+		maxTrafficInt, _ := strconv.ParseInt(maxTraffic.Value, 10, 64)
 
 		maxTime := utils.GetHotspotPreferencesByKey(unit.HotspotId, "CoovaChilli-Max-Navigation-Time")
 		maxTimeInt, _ := strconv.Atoi(maxTime.Value)

@@ -122,10 +122,10 @@ func stopSession(sessionId string, unitMacAddress string, bytesDown string, byte
 	if d, err := strconv.Atoi(duration); err == nil {
 		session.Duration = d
 	}
-	if bd, err := strconv.Atoi(bytesDown); err == nil {
+	if bd, err := strconv.ParseInt(bytesDown, 10, 64); err == nil {
 		session.BytesDown = bd
 	}
-	if bu, err := strconv.Atoi(bytesUp); err == nil {
+	if bu, err := strconv.ParseInt(bytesUp, 10, 64); err == nil {
 		session.BytesUp = bu
 	}
 
@@ -175,10 +175,10 @@ func updateSession(sessionId string, unitMacAddress string, bytesDown string, by
 	if d, err := strconv.Atoi(duration); err == nil {
 		session.Duration = d
 	}
-	if bd, err := strconv.Atoi(bytesDown); err == nil {
+	if bd, err := strconv.ParseInt(bytesDown, 10, 64); err == nil {
 		session.BytesDown = bd
 	}
-	if bu, err := strconv.Atoi(bytesUp); err == nil {
+	if bu, err := strconv.ParseInt(bytesUp, 10, 64); err == nil {
 		session.BytesUp = bu
 	}
 
