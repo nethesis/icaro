@@ -32,7 +32,7 @@ type HotspotVoucher struct {
 	BandwidthUp   int       `db:"bandwidth_up" json:"bandwidth_up"`
 	BandwidthDown int       `db:"bandwidth_down" json:"bandwidth_down"`
 	Duration      int       `db:"duration" json:"duration"`
-	MaxTraffic    int       `db:"max_traffic" json:"max_traffic"`
+	MaxTraffic    int64     `db:"max_traffic" json:"max_traffic"`
 	MaxTime       int       `db:"max_time" json:"max_time"`
 	RemainUse     int       `db:"remain_use" json:"remain_use"`
 	Expires       time.Time `db:"expires" json:"expires"`
@@ -54,7 +54,7 @@ type HotspotVoucherJSON struct {
 	Time          string    `json:"time"`
 	Duration      int       `db:"duration" json:"duration"`
 	Expiration    int       `json:"expiration"`
-	MaxTraffic    int       `db:"max_traffic" json:"max_traffic"`
+	MaxTraffic    int64     `db:"max_traffic" json:"max_traffic"`
 	MaxTime       int       `db:"max_time" json:"max_time"`
 	RemainUse     int       `db:"remain_use" json:"remain_use"`
 	Expires       time.Time `db:"expires" json:"expires"`

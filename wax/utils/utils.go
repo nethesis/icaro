@@ -539,7 +539,7 @@ func GetUsersByMacAddressAndunitMacAddress(mac string, unitMacAddress string) (b
 	return true, users
 }
 
-func GetTodaySessionTrafficByUser(user models.User) int {
+func GetTodaySessionTrafficByUser(user models.User) int64 {
 	// calculate today midnight
 	now := time.Now().UTC()
 	midnightToday := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location())
@@ -551,7 +551,8 @@ func GetTodaySessionTrafficByUser(user models.User) int {
 	db.Where("update_time >= ? AND user_id = ?", midnightToday, user.Id).Find(&sessions)
 	db.Where("update_time >= ? AND user_id = ?", midnightToday, user.Id).Find(&sessionHistories)
 
-	var todayTraffic = 0
+	var todayTraffic int64
+	todayTraffic = 0
 
 	for _, session := range sessions {
 		todayTraffic += session.BytesDown + session.BytesUp
@@ -587,7 +588,7 @@ func GetTodaySessionTimeByUser(user models.User) int {
 	return todayTime
 }
 
-func CalculateRemainTraffic(user models.User) int {
+func CalculateRemainTraffic(user models.User) int64 {
 	// get today total navigation traffic for user
 	totalTraffic := GetTodaySessionTrafficByUser(user)
 	remainTraffic := user.MaxNavigationTraffic - totalTraffic
