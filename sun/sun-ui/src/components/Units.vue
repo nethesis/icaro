@@ -40,6 +40,10 @@
           <strong>{{ props.row.mac_address }}</strong>
         </td>
         <td class="fancy">{{ props.row.uuid || '-' }}</td>
+        <td class="fancy"><div v-if="unitStates[props.row.id].isLoading" class="spinner spinner-sm"></div>
+          <span class="font" v-if="unitStates[props.row.id].state === 'active' && !unitStates[props.row.id].isLoading"><a class="pficon pficon-ok"></a> {{ $t("unit.active") }}</span>
+          <span v-if="unitStates[props.row.id].state === 'inactive' && !unitStates[props.row.id].isLoading" class="font"><a class="pficon-error-circle-o"></a>{{ $t("unit.inactive") }}</span>
+        </td>
         <td>
           <unit-action details="true" :obj="props.row" :update="getAll"></unit-action>
         </td>
@@ -59,7 +63,7 @@ import UnitService from "../services/unit";
 import StorageService from "../services/storage";
 import HotspotService from "../services/hotspot";
 import UtilService from "../services/util";
-
+import moment from "moment";
 import UnitAtion from "../directives/UnitAction";
 
 export default {
@@ -94,6 +98,11 @@ export default {
           field: "uuid",
           filterable: true
         },
+         {
+          label: this.$i18n.t("unit.status"),
+          field: "status",
+          filterable: true
+        },
         {
           label: this.$i18n.t("action"),
           field: "",
@@ -108,7 +117,9 @@ export default {
       hotspotPage: 1,
       total: 0,
       user: this.get("loggedUser") || null,
-      searchString: ""
+      searchString: "",
+      units: [],
+      unitStates: {},
     };
   },
   mounted() {
@@ -184,6 +195,40 @@ export default {
           this.total = success.body.total;
           this.isLoading = false;
           this.isLoadingTable = false;
+          var m = moment;
+          var context = this;
+          for (var i = 0; i < success.body.data.length; i++) {
+            var unit = success.body.data[i];
+            context.unitStates[unit.id] = {
+              isLoading: true,
+              state: "inactive",
+            };
+            this.unitGetStatus(
+              1,
+              25,
+              unit.id,
+              m().subtract(30, "minutes").toISOString(),
+              m().toISOString(),
+              success => {
+                const url = new URL(success.url);
+                var parsed = url.pathname;
+                var urlParams = new URLSearchParams(parsed);
+                var unitID = urlParams.get("unit");
+                context.unitStates[unitID].state = "active";
+                context.unitStates[unitID].isLoading = false;
+                context.$forceUpdate();
+              },
+              error => {
+                var url = new URL(error.url);
+                var parsed = url.pathname;
+                var urlParams = new URLSearchParams(parsed);
+                var unitID = urlParams.get("unit");
+                context.unitStates[unitID].state = "inactive";
+                context.unitStates[unitID].isLoading = false;
+                context.$forceUpdate();
+              }
+            );
+          }
         },
         error => {
           this.isLoading = false;

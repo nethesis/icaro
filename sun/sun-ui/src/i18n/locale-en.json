@@ -275,7 +275,10 @@
       "name": "Name",
       "uuid": "Unique ID",
       "hotspot_name": "Hotspot",
-      "hotspot_description": "Description"
+      "hotspot_description": "Description",
+      "status": "Status", 
+      "active": "Active",
+      "inactive": "Inactive"
     },
     "session": {
       "session": "Session",
