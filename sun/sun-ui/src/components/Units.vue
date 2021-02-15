@@ -118,7 +118,6 @@ export default {
       total: 0,
       user: this.get("loggedUser") || null,
       searchString: "",
-      units: [],
       unitStates: {},
     };
   },
