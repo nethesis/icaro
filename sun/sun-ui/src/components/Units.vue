@@ -99,18 +99,20 @@
             class="font"
             v-if="
               unitStates[props.row.id].state === 'active' &&
-              !unitStates[props.row.id].isLoading
+              !unitStates[props.row.id].isLoading &&
+              unitStates[props.row.id].length > 0
             "
-            ><a class="pficon pficon-ok"></a> {{ $t("unit.active") }}</span
+            ><span class="fa fa-list"></span>
+            {{ unitStates[props.row.id].length }} {{ $t("unit.active") }}</span
           >
           <span
             v-if="
               unitStates[props.row.id].state === 'inactive' &&
-              !unitStates[props.row.id].isLoading
+              !unitStates[props.row.id].isLoading &&
+              unitStates[props.row.id].length == 0
             "
             class="font"
-            ><a class="pficon-error-circle-o"></a
-            >{{ $t("unit.inactive") }}</span
+            ><span class="fa fa-list"></span>{{ $t("unit.inactive") }}</span
           >
         </td>
         <td>
@@ -288,6 +290,7 @@ export default {
             context.unitStates[unit.id] = {
               isLoading: true,
               state: "inactive",
+              length: 0,
             };
             this.unitGetStatus(
               1,
@@ -302,15 +305,18 @@ export default {
                 var unitID = urlParams.get("unit");
                 context.unitStates[unitID].state = "active";
                 context.unitStates[unitID].isLoading = false;
+                context.unitStates[unitID].length = success.body.data.length;
                 context.$forceUpdate();
               },
               (error) => {
+                console.log("controlla", unit.id);
                 var url = new URL(error.url);
                 var parsed = url.pathname;
                 var urlParams = new URLSearchParams(parsed);
                 var unitID = urlParams.get("unit");
                 context.unitStates[unitID].state = "inactive";
                 context.unitStates[unitID].isLoading = false;
+                context.unitStates[unitID].length = 0;
                 context.$forceUpdate();
               }
             );

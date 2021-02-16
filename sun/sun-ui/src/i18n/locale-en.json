@@ -277,8 +277,8 @@
       "hotspot_name": "Hotspot",
       "hotspot_description": "Description",
       "status": "Status", 
-      "active": "Active",
-      "inactive": "Inactive"
+      "active": "Active session",
+      "inactive": "No active sessions"
     },
     "session": {
       "session": "Session",

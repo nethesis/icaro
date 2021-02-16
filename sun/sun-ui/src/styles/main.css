@@ -7,11 +7,7 @@ body {
   font-family: "Open Sans",Helvetica,Arial,sans-serif;
 }
 
-.pficon pficon-ok{
-  margin-inline: 0px 5px;
-}
-
-.pficon-error-circle-o{
+.fa-list{
   margin-inline: 0px 5px;
 }
 
