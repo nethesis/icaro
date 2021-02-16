@@ -95,22 +95,13 @@
             v-if="unitStates[props.row.id].isLoading"
             class="spinner spinner-sm"
           ></div>
-          <span
-            class="font"
-            v-if="
-              !unitStates[props.row.id].isLoading &&
-              unitStates[props.row.id].length > 0
-            "
-            ><span class="fa fa-list"></span>
-            {{ unitStates[props.row.id].length }} {{ $t("unit.active") }}</span
-          >
-          <span
-            v-if="
-              !unitStates[props.row.id].isLoading &&
+          <span class="font" v-if="!unitStates[props.row.id].isLoading"
+            ><span class="fa fa-list"></span
+            >{{
               unitStates[props.row.id].length == 0
-            "
-            class="font"
-            ><span class="fa fa-list"></span>{{ $t("unit.inactive") }}</span
+                ? $t("unit.inactive")
+                : unitStates[props.row.id].length + " " + $t("unit.active")
+            }}</span
           >
         </td>
         <td>
