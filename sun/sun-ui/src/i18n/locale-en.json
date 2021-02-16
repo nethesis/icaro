@@ -276,7 +276,7 @@
       "uuid": "Unique ID",
       "hotspot_name": "Hotspot",
       "hotspot_description": "Description",
-      "status": "Status", 
+      "sessions": "Sessions", 
       "active": "Active session",
       "inactive": "No active sessions"
     },

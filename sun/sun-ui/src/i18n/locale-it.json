@@ -276,7 +276,7 @@
       "uuid": "ID",
       "hotspot_name": "Hotspot",
       "hotspot_description": "Descrizione",
-      "status": "Stato", 
+      "sessions": "Sessioni", 
       "active": "Sessioni attive", 
       "inactive": "Nessuna sessione attiva"
     },

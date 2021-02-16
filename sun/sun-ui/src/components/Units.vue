@@ -177,8 +177,8 @@ export default {
           filterable: true,
         },
         {
-          label: this.$i18n.t("unit.status"),
-          field: "status",
+          label: this.$i18n.t("unit.sessions"),
+          field: "sessions",
           filterable: true,
         },
         {
