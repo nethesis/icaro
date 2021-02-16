@@ -98,7 +98,6 @@
           <span
             class="font"
             v-if="
-              unitStates[props.row.id].state === 'active' &&
               !unitStates[props.row.id].isLoading &&
               unitStates[props.row.id].length > 0
             "
@@ -107,7 +106,6 @@
           >
           <span
             v-if="
-              unitStates[props.row.id].state === 'inactive' &&
               !unitStates[props.row.id].isLoading &&
               unitStates[props.row.id].length == 0
             "
@@ -289,7 +287,6 @@ export default {
             var unit = success.body.data[i];
             context.unitStates[unit.id] = {
               isLoading: true,
-              state: "inactive",
               length: 0,
             };
             this.unitGetStatus(
@@ -303,18 +300,15 @@ export default {
                 var parsed = url.pathname;
                 var urlParams = new URLSearchParams(parsed);
                 var unitID = urlParams.get("unit");
-                context.unitStates[unitID].state = "active";
                 context.unitStates[unitID].isLoading = false;
                 context.unitStates[unitID].length = success.body.data.length;
                 context.$forceUpdate();
               },
               (error) => {
-                console.log("controlla", unit.id);
                 var url = new URL(error.url);
                 var parsed = url.pathname;
                 var urlParams = new URLSearchParams(parsed);
                 var unitID = urlParams.get("unit");
-                context.unitStates[unitID].state = "inactive";
                 context.unitStates[unitID].isLoading = false;
                 context.unitStates[unitID].length = 0;
                 context.$forceUpdate();
