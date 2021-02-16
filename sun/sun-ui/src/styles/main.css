@@ -3,6 +3,14 @@ body {
   display: none;
 }
 
+.font {
+  font-family: "Open Sans",Helvetica,Arial,sans-serif;
+}
+
+.fa-list{
+  margin-inline: 0px 5px;
+}
+
 h2 {
   padding-left: 15px;
   padding-right: 15px;

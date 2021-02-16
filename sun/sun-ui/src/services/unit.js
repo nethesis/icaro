@@ -63,7 +63,27 @@ var UnitService = {
           }
         )
         .then(success, error);
-    }
+    },
+    unitGetStatus(page, limit, unitId, dateFrom, dateTo, success, error) {
+      this.$http
+        .get(
+          this.$root.$options.api_scheme +
+            this.$root.$options.api_host +
+            "/api/sessions/" +
+            (page ? "&page=" + page : "") +
+            (limit ? "&limit=" + limit : "") +
+            (unitId ? "&unit=" + unitId : "") +
+            (dateFrom ? "&from=" + dateFrom : "") +
+            (dateTo ? "&to=" + dateTo : ""), {
+            headers: {
+              Token:
+                (this.get("loggedUser") && this.get("loggedUser").token) || "",
+            }
+          }
+        )
+        .then(success, error);
+  
+      }
   }
 };
 export default UnitService;
