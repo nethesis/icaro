@@ -69,7 +69,7 @@ var UnitService = {
         .get(
           this.$root.$options.api_scheme +
             this.$root.$options.api_host +
-            "/api/sessions/" +
+            "/api/sessions?" +
             (page ? "&page=" + page : "") +
             (limit ? "&limit=" + limit : "") +
             (unitId ? "&unit=" + unitId : "") +

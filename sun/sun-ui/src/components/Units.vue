@@ -288,7 +288,7 @@ export default {
               m().toISOString(),
               (success) => {
                 const url = new URL(success.url);
-                var parsed = url.pathname;
+                var parsed = url.search;
                 var urlParams = new URLSearchParams(parsed);
                 var unitID = urlParams.get("unit");
                 context.unitStates[unitID].isLoading = false;
@@ -297,7 +297,7 @@ export default {
               },
               (error) => {
                 var url = new URL(error.url);
-                var parsed = url.pathname;
+                var parsed = url.search;
                 var urlParams = new URLSearchParams(parsed);
                 var unitID = urlParams.get("unit");
                 context.unitStates[unitID].isLoading = false;
