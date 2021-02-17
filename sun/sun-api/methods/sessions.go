@@ -67,11 +67,11 @@ func GetSessions(c *gin.Context) {
 	}
 
 	if len(from) > 0 {
-		chain = chain.Where("sessions.start_time >= ?", from)
+		chain = chain.Where("sessions.update_time >= ?", from)
 	}
 
 	if len(to) > 0 {
-		chain = chain.Where("sessions.start_time <= ?", to)
+		chain = chain.Where("sessions.update_time <= ?", to)
 	}
 
 	if len(q) > 0 {
