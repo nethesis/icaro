@@ -527,15 +527,6 @@ export default {
 
           if (data_export.length < 5000) {
             var usersRows = JSON.parse(JSON.stringify(data_export));
-            for (var r in usersRows) {
-              // get only email verified users
-              if (
-                usersRows[r].account_type == "email" &&
-                !usersRows[r].email_verified
-              ) {
-                delete usersRows[r];
-              }
-            }
 
             var columns = this.columns.slice();
 

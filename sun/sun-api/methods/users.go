@@ -252,6 +252,7 @@ func GetUsersExpired(c *gin.Context) {
 	limit := c.Query("limit")
 	hotspotId := c.Query("hotspot")
 	accountType := c.Query("type")
+	marketing := c.Query("marketing")
 	q := c.Query("q")
 
 	hotspotIdInt, err := strconv.Atoi(hotspotId)
@@ -265,16 +266,27 @@ func GetUsersExpired(c *gin.Context) {
 
 	// users expired
 	chain := db.Where("hotspot_id in (?) AND valid_until <= NOW()", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt))
+
 	if len(accountType) > 0 {
 		chain = chain.Where("account_type = ?", accountType)
 	}
+
+	if len(marketing) > 0 {
+		chain = chain.Where("marketing_auth = 1")
+	}
+
 	chain.Find(&users).Count(&totalUsers)
 	chain.Offset(offsets[0]).Limit(offsets[1]).Find(&users)
 
 	// users history
 	chain = db.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt))
+
 	if len(accountType) > 0 {
 		chain = chain.Where("account_type = ?", accountType)
+	}
+
+	if len(marketing) > 0 {
+		chain = chain.Where("marketing_auth = 1")
 	}
 
 	if len(q) > 0 {
