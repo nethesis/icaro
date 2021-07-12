@@ -105,7 +105,7 @@
       "with_limit": "With limit",
       "max_use": "Max use",
       "auto_login": "Auto login",
-      "bypass_macaddress_check": "Disable security timeout (only for HA firewalls)",
+      "bypass_macaddress_check": "Disable security timeout",
       "check_marketing": "Skip marketing consent",
       "check_email_domain": "Allow only specific email domains",
       "check_email_domain_list": "Allowed email domains",

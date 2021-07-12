@@ -105,7 +105,7 @@
       "with_limit": "Limitato",
       "max_use": "Utilizzi",
       "auto_login": "Autologin",
-      "bypass_macaddress_check": "Disabilita timeout di sicurezza (solo per firewall in HA)",
+      "bypass_macaddress_check": "Disabilita timeout di sicurezza",
       "check_marketing": "Non mostrare consenso marketing",
       "check_email_domain": "Consenti solo specifici domini email",
       "check_email_domain_list": "Domini email validi",
