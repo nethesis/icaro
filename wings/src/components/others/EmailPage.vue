@@ -34,9 +34,10 @@
       </p>
 
       <button
+        :disabled="bannerShow"
         v-if="!codeRequested && choosedMode"
         v-on:click="getCode(true)"
-        class="ui blue button request-code"
+        :class="['ui blue button request-code', bannerShow ? 'disabled' : '']"
         :style="buttonStyle"
       >
         {{
@@ -171,6 +172,24 @@ export default {
         this.textFont = success.body.preferences.captive_85_text_style || 'Roboto';
 
         if (this.$route.query.integration_done) {
+          var context = this;
+          context.dedaloRequested = true;
+          context.authorized = false;
+          context.errors.dedaloError = false;
+          setTimeout(function() {
+            context.execLogin();
+          }, 1000);
+        } else if (
+          this.$route.query.email &&
+          this.$route.query.email.length > 0 &&
+          this.$route.query.code &&
+          this.$route.query.code.length > 0 &&
+          this.$route.query.code != "." &&
+          this.$route.query.uamip &&
+          this.$route.query.uamip.length > 0 &&
+          this.$route.query.uamport &&
+          this.$route.query.uamport.length > 0
+        ) {
           var context = this;
           context.dedaloRequested = true;
           context.authorized = false;
