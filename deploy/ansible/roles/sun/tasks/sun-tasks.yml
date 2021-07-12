@@ -46,3 +46,9 @@
     name: sun-tasks@clean-short-urls
     daemon_reload: yes
     enabled: yes
+
+- name: Enable sun-tasks clean-old-sessions service
+  systemd:
+    name: sun-tasks@clean-old-sessions
+    daemon_reload: yes
+    enabled: yes
