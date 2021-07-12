@@ -105,6 +105,7 @@
       "with_limit": "With limit",
       "max_use": "Max use",
       "auto_login": "Auto login",
+      "bypass_macaddress_check": "Disable security timeout (only for HA firewalls)",
       "CoovaChilli-Bandwidth-Max-Down": "Bandwidth Max Down (Kbps) (0 = limitless)",
       "CoovaChilli-Bandwidth-Max-Up": "Bandwidth Max Up (Kbps) (0 = limitless)",
       "CoovaChilli-Max-Navigation-Time": "Daily Navigation Time limit (Minutes) (0 = limitless)",
@@ -276,7 +277,7 @@
       "uuid": "Unique ID",
       "hotspot_name": "Hotspot",
       "hotspot_description": "Description",
-      "sessions": "Sessions", 
+      "sessions": "Sessions",
       "active": "Active session",
       "inactive": "No active sessions"
     },
