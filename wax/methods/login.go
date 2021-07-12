@@ -168,10 +168,16 @@ func Login(c *gin.Context, unitMacAddress string, username string, userMac strin
 	}
 
 	// check if current device is already logged in other units
-	flagOtherLogin := utils.CheckOtherUnitLogin(userMac, unit.Id, unit.HotspotId)
-	if flagOtherLogin {
-		AuthReject(c, "device already logged in an other unit")
-		return
+	// check also if prop "bypass_macaddress_check" is enabled
+	byPassMacAddress := utils.GetHotspotPreferencesByKey(unit.HotspotId, "bypass_macaddress_check")
+	byPassMacAddressBool, _ := strconv.ParseBool(byPassMacAddress.Value)
+
+	if(!byPassMacAddressBool) {
+		flagOtherLogin := utils.CheckOtherUnitLogin(userMac, unit.Id, unit.HotspotId)
+		if flagOtherLogin {
+			AuthReject(c, "device already logged in an other unit")
+			return
+		}
 	}
 
 	// extract preferences

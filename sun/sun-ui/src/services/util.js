@@ -158,6 +158,7 @@ var UtilService = {
         case "temp_code_login":
         case "auto_login":
         case "auth_renew":
+        case "bypass_macaddress_check":
           type = "checkbox";
           break;
         case "sms_login_max":

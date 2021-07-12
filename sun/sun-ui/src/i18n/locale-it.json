@@ -105,6 +105,7 @@
       "with_limit": "Limitato",
       "max_use": "Utilizzi",
       "auto_login": "Autologin",
+      "bypass_macaddress_check": "Disabilita timeout di sicurezza (solo per firewall in HA)",
       "CoovaChilli-Bandwidth-Max-Down": "Banda massima in download per utente (Kbps) (0=illimitato)",
       "CoovaChilli-Bandwidth-Max-Up": "Banda massima in upload per utente (Kbps) (0=illimitato)",
       "CoovaChilli-Max-Navigation-Time": "Durata massima giornaliera (Minuti) (0=illimitato)",
@@ -276,8 +277,8 @@
       "uuid": "ID",
       "hotspot_name": "Hotspot",
       "hotspot_description": "Descrizione",
-      "sessions": "Sessioni", 
-      "active": "Sessioni attive", 
+      "sessions": "Sessioni",
+      "active": "Sessioni attive",
       "inactive": "Nessuna sessione attiva"
     },
     "session": {
