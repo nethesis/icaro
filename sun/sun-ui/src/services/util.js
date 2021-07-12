@@ -159,6 +159,8 @@ var UtilService = {
         case "auto_login":
         case "auth_renew":
         case "bypass_macaddress_check":
+        case "check_email_domain":
+        case "check_marketing":
           type = "checkbox";
           break;
         case "sms_login_max":
