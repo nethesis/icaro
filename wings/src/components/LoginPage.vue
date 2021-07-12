@@ -106,7 +106,7 @@
       </div>
     </div>
 
-    <div v-if="authorized && hotspot.preferences.marketing_0_reason_country == 'true'">
+    <div v-if="authorized && hotspot.preferences.marketing_0_reason_country == 'true' && hotspot.preferences.check_marketing == 'false'">
       <h3 :style="textStyle">{{ $t("login.additional_info") }}</h3>
       <div class="inline field">
         <label :style="textStyle">{{ $t("login.country") }}</label>
@@ -132,14 +132,14 @@
 
     <div
       :class="hotspot.preferences.marketing_0_reason_country == 'true' ? 'adjust-top-big' : ''"
-      v-if="authorized"
+      v-if="authorized && hotspot.preferences.check_marketing == 'false'"
     >
       <div class="conditions-surveys">
         <div class="ui inline">
           <input id="conditions" v-model="conditions" type="checkbox" class="ui checkbox field">
           <label :style="textStyle" for="conditions">{{ $t("login.disclaimer_privacy_accept") }}</label>
         </div>
-        <div v-if="hotspot.preferences.marketing_1_enabled == 'true'" class="ui inline">
+        <div v-if="hotspot.preferences.marketing_1_enabled == 'true' && hotspot.preferences.check_marketing == 'false'" class="ui inline">
           <input id="surveys" v-model="surveys" type="checkbox" class="ui checkbox field">
           <label :style="textStyle" for="surveys">{{ $t("login.disclaimer_survey_accept") }}</label>
         </div>

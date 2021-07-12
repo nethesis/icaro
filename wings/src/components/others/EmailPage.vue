@@ -25,7 +25,7 @@
         <button
           v-if="!codeRequested && !choosedMode"
           v-on:click="chooseMode(true)"
-          class="ui blue button request-code"
+          class="ui blue button inverted request-code"
           :style="buttonStyle"
         >
           {{
@@ -99,7 +99,7 @@
         </div>
       </div>
       <div
-        v-if="authorized && hotspot.preferences.marketing_0_reason_country == 'true' && userId != 0"
+        v-if="authorized && hotspot.preferences.marketing_0_reason_country == 'true' && hotspot.preferences.check_marketing == 'false' && userId != 0"
       >
         <h3 :style="textStyle">{{ $t("login.additional_info") }}</h3>
         <div class="field">
@@ -130,14 +130,14 @@
       </div>
       <div
         :class="hotspot.preferences.marketing_0_reason_country == 'true' ? 'adjust-top-big' : ''"
-        v-if="authorized"
+        v-if="authorized && hotspot.preferences.check_marketing == 'false'"
       >
         <div class="conditions-surveys">
           <div class="ui inline">
             <input id="conditions" v-model="conditions" type="checkbox" class="ui checkbox field" />
             <label :style="textStyle" for="conditions">{{ $t("login.disclaimer_privacy_accept") }}</label>
           </div>
-          <div v-if="hotspot.preferences.marketing_1_enabled == 'true'" class="ui inline">
+          <div v-if="hotspot.preferences.marketing_1_enabled == 'true' && hotspot.preferences.check_marketing == 'false'" class="ui inline">
             <input id="surveys" v-model="surveys" type="checkbox" class="ui checkbox field" />
             <label :style="textStyle" for="surveys">{{ $t("login.disclaimer_survey_accept") }}</label>
           </div>

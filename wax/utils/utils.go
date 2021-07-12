@@ -509,6 +509,15 @@ func Contains(intSlice []int, searchInt int) bool {
 	return false
 }
 
+func ContainsS(stringSlice []string, searchString string) bool {
+	for _, value := range stringSlice {
+		if value == searchString {
+			return true
+		}
+	}
+	return false
+}
+
 func GetUsersByMacAddressAndunitMacAddress(mac string, unitMacAddress string) (bool, []models.User) {
 
 	var users []models.User

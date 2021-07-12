@@ -26,6 +26,7 @@ import (
 	"net/http"
 	"strconv"
 	"time"
+	"strings"
 
 	"github.com/nethesis/icaro/wax/utils"
 
@@ -223,14 +224,42 @@ func EmailAuth(c *gin.Context) {
 	uamport := c.Query("uamport")
 	voucherCode := c.Query("voucher_code")
 
+	// get unit
+	unit := utils.GetUnitByUuid(uuid)
+
 	if email == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "email is required"})
 		return
 	}
 
+	// check if email is in a valid domain
+	checkEmailDomain := utils.GetHotspotPreferencesByKey(unit.HotspotId, "check_email_domain")
+	checkEmailDomainBool, _ := strconv.ParseBool(checkEmailDomain.Value)
+
+	if checkEmailDomainBool {
+		// get allowed domains
+		allowedDomainsStr := utils.GetHotspotPreferencesByKey(unit.HotspotId, "check_email_domain_list")
+		allowedDomains := strings.Split(allowedDomainsStr.Value, ",")
+
+		// extract domain from email
+		parts := strings.Split(email, "@")
+
+		// check if email is valid
+		if len(parts) != 2 {
+			c.JSON(http.StatusBadRequest, gin.H{"message": "email is invalid"})
+			return
+		}
+
+		// get domain
+		domain := parts[1]
+
+		if !utils.ContainsS(allowedDomains, domain) {
+			c.JSON(http.StatusBadRequest, gin.H{"message": "email domain is invalid"})
+			return
+		}
+	}
+
 	// check if user exists
-	// get unit
-	unit := utils.GetUnitByUuid(uuid)
 	user := utils.GetUserByUsernameAndHotspot(email, unit.HotspotId)
 	if user.Id == 0 {
 		// create user

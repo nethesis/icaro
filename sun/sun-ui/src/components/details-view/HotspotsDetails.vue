@@ -461,7 +461,7 @@
                   {{$t('hotspot.'+pref.key)}}
                   <span :class="[getPrefIcon(pref.key)]"></span>
                 </label>
-                <div :class="pref.key == 'facebook_login_page' ? ['col-sm-4', 'col-lg-3'] : ['col-sm-2', 'col-lg-1']">
+                <div :class="(pref.key == 'facebook_login_page' || pref.key == 'check_email_domain_list' ) ? ['col-sm-4', 'col-lg-3'] : ['col-sm-2', 'col-lg-1']">
                   <input
                     v-model="pref.value"
                     :type="getInputType(pref.key, pref.value)"
