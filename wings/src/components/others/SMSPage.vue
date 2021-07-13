@@ -199,6 +199,7 @@ export default {
           this.$route.query.num.length > 0 &&
           this.$route.query.code &&
           this.$route.query.code.length > 0 &&
+          this.$route.query.code != "." &&
           this.$route.query.uamip &&
           this.$route.query.uamip.length > 0 &&
           this.$route.query.uamport &&
@@ -309,10 +310,44 @@ export default {
       // get user id
       this.$http.get(url).then(
         function(responseAuth) {
-          this.codeRequested = true;
           this.authReset = responseAuth.body.exists;
           this.resetDone = responseAuth.body.reset;
           this.userId = responseAuth.body.user_db_id;
+
+          // open temp session for the user
+          this.doTempSession(
+            encodeURIComponent(this.authPrefix + this.authSMS),
+            function(responseTmp) {
+              // if apple
+              if (this.iOS) {
+                var origin = "http://conncheck." + window.location.host;
+                var pathname = window.location.pathname;
+                var query =
+                  "?digest=" +
+                  params.digest +
+                  "&uuid=" +
+                  params.uuid +
+                  "&sessionid=" +
+                  params.sessionid +
+                  "&uamip=" +
+                  params.uamip +
+                  "&uamport=" +
+                  params.uamport +
+                  "&user=" +
+                  this.userId +
+                  "&code=.&num=" +
+                  encodeURIComponent(this.authPrefix + this.authSMS);
+                window.location.replace(origin + pathname + query);
+              } else {
+                this.codeRequested = true;
+              }
+            },
+            function(error) {
+              this.codeRequested = false;
+              this.errors.badNumber = true;
+              console.error(error);
+            }
+          );
         },
         function(error) {
           this.codeRequested = false;
