@@ -316,7 +316,7 @@ export default {
 
           // open temp session for the user
           this.doTempSession(
-            encodeURIComponent(this.authPrefix + this.authSMS),
+            this.authPrefix + this.authSMS,
             function(responseTmp) {
               // if apple
               if (this.iOS) {
