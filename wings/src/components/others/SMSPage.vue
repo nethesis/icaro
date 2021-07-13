@@ -398,23 +398,42 @@ export default {
 
         var pathname = window.location.pathname;
 
-        window.location.replace(redirectUrl + pathname + query);
-      } else {
-        // exec dedalo login
-        this.doDedaloLogin(
-          {
-            id: this.authPrefix + this.authSMS,
-            password: this.authCode || ""
+        this.doDedaloLogout(
+          function(responseDedaloLogout) {
+            window.location.replace(redirectUrl + pathname + query);
           },
-          function(responseDedalo) {
-            if (responseDedalo.body.clientState == 1) {
-              this.authorized = true;
-              this.errors.dedaloError = false;
-            } else {
-              this.authorized = false;
-              this.errors.dedaloError = true;
-              this.errors.badCode = true;
-            }
+          function(error) {
+            this.authorized = false;
+            this.errors.dedaloError = true;
+            console.error(error);
+          }
+        );
+      } else {
+        // exec logout
+        this.doDedaloLogout(
+          function(responseDedaloLogout) {
+            // exec dedalo login
+            this.doDedaloLogin(
+              {
+                id: this.authPrefix + this.authSMS,
+                password: this.authCode || ""
+              },
+              function(responseDedalo) {
+                if (responseDedalo.body.clientState == 1) {
+                  this.authorized = true;
+                  this.errors.dedaloError = false;
+                } else {
+                  this.authorized = false;
+                  this.errors.dedaloError = true;
+                  this.errors.badCode = true;
+                }
+              },
+              function(error) {
+                this.authorized = false;
+                this.errors.dedaloError = true;
+                console.error(error);
+              }
+            );
           },
           function(error) {
             this.authorized = false;
