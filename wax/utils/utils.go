@@ -287,7 +287,7 @@ func GetUserById(id int) models.User {
 func GetUserByUsernameAndHotspot(username string, hotspotId int) models.User {
 	var user models.User
 	db := database.Instance()
-	db.Where("username = ? AND hotspot_id = ?", username, hotspotId).First(&user)
+	db.Where("username LIKE ? AND hotspot_id = ?", "%"+username, hotspotId).First(&user)
 
 	return user
 }

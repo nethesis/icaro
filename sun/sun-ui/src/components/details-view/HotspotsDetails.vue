@@ -456,7 +456,7 @@
             v-on:submit.prevent="updatePreferences(preferences.global)"
           >
             <div v-if="!preferences.isLoading" class="card-pf-body">
-              <div v-for="pref in preferences.global" :key="pref.key" class="form-group">
+              <div v-for="pref in preferences.global" :key="pref.key" v-show="pref.key != 'bypass_macaddress_check' && pref.key != 'check_email_domain' && pref.key != 'check_email_domain_list' && pref.key != 'check_marketing'" class="form-group">
                 <label class="col-sm-4 control-label">
                   {{$t('hotspot.'+pref.key)}}
                   <span :class="[getPrefIcon(pref.key)]"></span>
@@ -482,6 +482,27 @@
                     @click="addSMSCount(pref, smsMaxCountAdd)"
                     class="col-sm-2 btn btn-primary"
                   >{{$t('hotspot.add')}}</button>
+                </div>
+              </div>
+              <div class="divider"></div>
+              <div v-for="pref in preferences.global" :key="pref.key" v-show="pref.key == 'bypass_macaddress_check' || pref.key == 'check_email_domain' || pref.key == 'check_email_domain_list' || pref.key == 'check_marketing'" class="form-group">
+                <label class="col-sm-4 control-label">
+                  {{$t('hotspot.'+pref.key)}}
+                  <span :class="[getPrefIcon(pref.key)]"></span>
+                </label>
+                <div :class="pref.key == 'check_email_domain_list' ? ['col-sm-4', 'col-lg-3'] : ['col-sm-2', 'col-lg-1']">
+                  <input
+                    v-show="pref.key != 'check_email_domain_list'"
+                    v-model="pref.value"
+                    :type="getInputType(pref.key, pref.value)"
+                    id="textInput-markup"
+                    class="form-control"
+                  />
+                  <textarea
+                    v-show="pref.key == 'check_email_domain_list'"
+                    v-model="pref.value"
+                    class="form-control domain-list">
+                  </textarea>
                 </div>
               </div>
             </div>
@@ -2454,6 +2475,10 @@ export default {
             if (pref.key == "CoovaChilli-Max-Navigation-Time") {
               pref.value = parseInt(pref.value) / 60;
             }
+
+            if(pref.key == "check_email_domain_list") {
+              pref.value = pref.value.split(',').join('\n')
+            }
           }
 
           this.preferences.vouchersAvailable = vouchersAvailable;
@@ -2526,6 +2551,10 @@ export default {
 
             if (pref.key == "CoovaChilli-Max-Navigation-Time") {
               pref.value = (pref.value * 60).toString();
+            }
+
+            if (pref.key == "check_email_domain_list") {
+              pref.value = pref.value.split('\n').join(',')
             }
 
             this.hsPrefModify(
@@ -3204,5 +3233,10 @@ label.block-centered {
   position: relative;
   top: 5px;
   margin-right: 10px;
+}
+
+.domain-list {
+  height: 85px !important;
+  min-height: 85px !important;
 }
 </style>
