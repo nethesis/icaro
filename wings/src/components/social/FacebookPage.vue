@@ -42,7 +42,7 @@
     </div>
     <div
       :class="$parent.hotspot.preferences.marketing_0_reason_country == 'true' ? 'adjust-top-big' : ''"
-      v-show="authorized && hotspot.preferences.check_marketing == 'false'"
+      v-if="authorized"
     >
       <div class="conditions-surveys">
         <div class="ui inline" v-if="hotspot.preferences.check_marketing == 'false'">
