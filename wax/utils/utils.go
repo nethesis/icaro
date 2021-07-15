@@ -422,10 +422,9 @@ func SendSMSCode(number string, code string, unit models.Unit, auth string) int 
 			msgData := url.Values{}
 			msgData.Set("To", number)
 			msgData.Set("MessagingServiceSid", configuration.Config.Endpoints.Sms.ServiceSid)
-			msgData.Set("Body", "Codice/Code: "+code+
-				"\n\nLogin Link: "+GenerateShortURL(configuration.Config.Endpoints.Sms.Link+
-				"?"+auth+"&code="+code+"&num="+url.QueryEscape(number))+
-				"\n\nLogout Link: http://logout")
+			msgData.Set("Body", `Login Link: `+GenerateShortURL(configuration.Config.Endpoints.Sms.Link+"?"+auth+"&code="+code+"&num="+url.QueryEscape(number))+`
+\n\nCodice/Code: `+code+`
+\n\nLogout Link: http://logout`)
 			msgDataReader := *strings.NewReader(msgData.Encode())
 
 			// create HTTP request client
@@ -479,10 +478,21 @@ func SendEmailCode(email string, code string, unit models.Unit, auth string) boo
 	m.SetHeader("From", configuration.Config.Endpoints.Email.From)
 	m.SetHeader("To", email)
 	m.SetHeader("Subject", "Wi-Fi: "+hotspot.Description)
-	m.SetBody("text/plain", "Codice/Code: "+code+
-		"\n\nLogin Link: "+GenerateShortURL(configuration.Config.Endpoints.Email.Link+
-		"?"+auth+"&code="+code+"&email="+url.QueryEscape(email))+
-		"\n\nLogout Link: http://logout")
+	m.SetBody("text/plain", `Benvenut*
+\nClicca sul link sottostante per accedere subito ad internet:
+\nLogin Link: `+GenerateShortURL(configuration.Config.Endpoints.Email.Link+"?"+auth+"&code="+code+"&email="+url.QueryEscape(email))+`
+\n\nIn alternativa puoi accedere usando la tua email assieme al seguente codice di accesso:
+\nCodice: `+code+`
+\n\nSe vuoi disconnetterti dal servizio clicca sul seguente link:
+\nLogout link: http://logout
+\n\n\n----------------------------------
+\nWelcome
+\nClick on the link below to immediately access the internet:
+\nLogin Link: `+GenerateShortURL(configuration.Config.Endpoints.Email.Link+"?"+auth+"&code="+code+"&email="+url.QueryEscape(email))+`
+\n\nOtherwise you can log in using your email together with this access code:
+\nCode: `+code+`
+\n\nIf you want to disconnect from the service click on this link:
+\nLogout link: http://logout`)
 
 	d := gomail.NewDialer(
 		configuration.Config.Endpoints.Email.SMTPHost,
