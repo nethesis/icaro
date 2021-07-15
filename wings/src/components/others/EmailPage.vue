@@ -1,6 +1,12 @@
 <template>
   <div class="ui form">
     <div v-if="!dedaloRequested">
+      <div v-if="choosedMode" class="ui compact message info no-margin-top">
+        <div class="content">
+          <div class="header">{{$t('email.wait')}}</div>
+          <p v-html="$t('email.we_are_sending_email_code')"></p>
+        </div>
+      </div>
       <div v-if="choosedMode" class="field" v-bind:class="{ error: errors.badInput }">
         <label :style="textStyle">Email</label>
         <div class="ui big left icon input">
@@ -72,12 +78,6 @@
             </button>
           </div>
         </div>
-        <div v-if="bannerShow" class="ui compact message info no-margin-top">
-          <div class="content">
-            <div class="header">{{$t('email.wait')}}</div>
-            <p>{{$t('email.we_are_sending_email_code')}}</p>
-          </div>
-        </div>
       </div>
       <div class="ui divider"></div>
       <button v-on:click="back()" class="big ui red button" :style="buttonStyle">{{ $t("login.back") }}</button>
@@ -126,15 +126,15 @@
         <i class="remove icon"></i>
         <div class="content">
           <div class="header" :style="textStyle">{{ $t("email.auth_error") }}</div>
-          <p :style="textStyle">{{ $t("email.auth_error_sub") }}</p>
+          <p :style="textStyle" v-html="$t('email.auth_error_sub')"></p>
         </div>
       </div>
       <div
         :class="hotspot.preferences.marketing_0_reason_country == 'true' ? 'adjust-top-big' : ''"
-        v-if="authorized && hotspot.preferences.check_marketing == 'false'"
+        v-show="authorized && hotspot.preferences.check_marketing == 'false'"
       >
         <div class="conditions-surveys">
-          <div class="ui inline">
+          <div class="ui inline" v-if="hotspot.preferences.check_marketing == 'false'">
             <input id="conditions" v-model="conditions" type="checkbox" class="ui checkbox field" />
             <label :style="textStyle" for="conditions">{{ $t("login.disclaimer_privacy_accept") }}</label>
           </div>

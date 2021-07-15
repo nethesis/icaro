@@ -456,7 +456,7 @@
             v-on:submit.prevent="updatePreferences(preferences.global)"
           >
             <div v-if="!preferences.isLoading" class="card-pf-body">
-              <div v-for="pref in preferences.global" :key="pref.key" v-show="pref.key != 'bypass_macaddress_check' && pref.key != 'check_email_domain' && pref.key != 'check_email_domain_list' && pref.key != 'check_marketing'" class="form-group">
+              <div v-for="pref in preferences.global" :key="'new-'+pref.key" v-show="pref.key != 'bypass_macaddress_check' && pref.key != 'check_email_domain' && pref.key != 'check_email_domain_list' && pref.key != 'check_marketing'" class="form-group">
                 <label class="col-sm-4 control-label">
                   {{$t('hotspot.'+pref.key)}}
                   <span :class="[getPrefIcon(pref.key)]"></span>
@@ -2242,19 +2242,30 @@ export default {
       this.vouchers.isDeleting = true;
       var hotspotId = this.$route.params.id;
       var context = this;
-      context.hotspotVoucherDelete(
-        hotspotId,
-        true,
-        success => {
-          context.vouchers.isDeleting = false;
-          context.getVouchers();
-          $("#voucherDeleteAll").modal("toggle");
-        },
-        error => {
-          context.vouchers.isDeleting = false;
-          console.error(error.body);
-        }
-      );
+
+      // loop every voucher
+      var len = this.vouchers.data.length;
+      var i = 0;
+      for(var v in this.vouchers.data) {
+        var voucher = this.vouchers.data[v]
+
+        this.hotspotVoucherDelete(
+          voucher.id,
+          false,
+          success => {
+            context.vouchers.isDeleting = false;
+            i++
+            if(i == len) {
+              context.getVouchers();
+              $("#voucherDeleteAll").modal("toggle");
+            }
+          },
+          error => {
+            console.error(error.body);
+            context.vouchers.isDeleting = false;
+          }
+        );
+      }
     },
     getVouchers() {
       this.vouchers.data = [];
