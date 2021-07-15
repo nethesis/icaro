@@ -42,10 +42,10 @@
     </div>
     <div
       :class="$parent.hotspot.preferences.marketing_0_reason_country == 'true' ? 'adjust-top-big' : ''"
-      v-if="authorized && hotspot.preferences.check_marketing == 'false'"
+      v-show="authorized && hotspot.preferences.check_marketing == 'false'"
     >
       <div class="conditions-surveys">
-        <div class="ui inline">
+        <div class="ui inline" v-if="hotspot.preferences.check_marketing == 'false'">
           <input id="conditions" v-model="conditions" type="checkbox" class="ui checkbox field" />
           <label :style="textStyle" for="conditions">{{ $t("login.disclaimer_privacy_accept") }}</label>
         </div>
