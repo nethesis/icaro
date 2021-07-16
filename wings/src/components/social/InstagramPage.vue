@@ -11,7 +11,7 @@
       </div>
     </div>
     <div
-      v-if="authorized && $parent.hotspot.preferences.marketing_0_reason_country == 'true' && hotspot.preferences.check_marketing == 'false' && userId != 0"
+      v-if="authorized && $parent.hotspot.preferences.marketing_0_reason_country == 'true' && $parent.hotspot.preferences.check_marketing == 'false' && userId != 0"
     >
       <h3 :style="textStyle">{{ $t("login.additional_info") }}</h3>
       <div class="field">
@@ -45,11 +45,11 @@
       v-if="authorized"
     >
       <div class="conditions-surveys">
-        <div class="ui inline" v-if="hotspot.preferences.check_marketing == 'false'">
+        <div class="ui inline" v-if="$parent.hotspot.preferences.check_marketing == 'false'">
           <input id="conditions" v-model="conditions" type="checkbox" class="ui checkbox field" />
           <label :style="textStyle" for="conditions">{{ $t("login.disclaimer_privacy_accept") }}</label>
         </div>
-        <div v-if="$parent.hotspot.preferences.marketing_1_enabled == 'true' && hotspot.preferences.check_marketing == 'false'" class="ui inline">
+        <div v-if="$parent.hotspot.preferences.marketing_1_enabled == 'true' && $parent.hotspot.preferences.check_marketing == 'false'" class="ui inline">
           <input id="surveys" v-model="surveys" type="checkbox" class="ui checkbox field" />
           <label :style="textStyle" for="surveys">{{ $t("login.disclaimer_survey_accept") }}</label>
         </div>
