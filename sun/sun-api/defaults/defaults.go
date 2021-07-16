@@ -40,7 +40,7 @@ var HotspotPreferences = map[string]string{
 	"bypass_macaddress_check":         "false",
 	"check_email_domain":              "false",
 	"check_email_domain_list":         "",
-	"skip_marketing":                  "false",
+	"check_marketing":                  "false",
 	"CoovaChilli-Bandwidth-Max-Down":  "0",
 	"CoovaChilli-Bandwidth-Max-Up":    "0",
 	"CoovaChilli-Max-Total-Octets":    "0",
