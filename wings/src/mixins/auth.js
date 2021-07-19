@@ -112,7 +112,7 @@ var AuthMixin = {
                     url = 'https://api.instagram.com/oauth/authorize/?' +
                         'client_id=' + params.in_client_id +
                         '&state=' + encodeURIComponent(params.digest + "&" + params.uuid + "&" + params.sessionid + "&" + params.uamip + "&" + params.uamport + "&" + params.voucher + "&" + params.nasid) +
-                        '&scope=' + escape('basic') +
+                        '&scope=' + escape('user_profile') +
                         '&redirect_uri=' + escape('http://' + window.location.host + '/wings/login/instagram') +
                         '&response_type=code'
                     break

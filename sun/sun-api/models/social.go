@@ -47,12 +47,13 @@ type LinkedInRespToken struct {
 
 type InstagramRespToken struct {
 	AccessToken string `json:"access_token"`
-	User        struct {
-		Id             string `json:"id"`
-		Username       string `json:"username"`
-		FullName       string `json:"full_name"`
-		ProfilePicture string `json:"profile_picture"`
-	} `json:"user"`
+	// User        struct {
+	// 	Id             string `json:"id"`
+	// 	Username       string `json:"username"`
+	// 	FullName       string `json:"full_name"`
+	// 	ProfilePicture string `json:"profile_picture"`
+	// } `json:"user"`
+	UserId int `json:"user_id"`
 }
 
 type FacebookInspectToken struct {
@@ -99,18 +100,20 @@ type LinkedinEmailDetail struct {
 }
 
 type InstagramUserDetail struct {
-	Data struct {
-		Id             string `json:"id"`
-		Username       string `json:"username"`
-		FullName       string `json:"full_name"`
-		ProfilePicture string `json:"profile_picture"`
-		Bio            string `json:"bio"`
-		Website        string `json:"website"`
-		IsBusiness     bool   `json:"is_business"`
-		Counts         struct {
-			Media      int `json:"media"`
-			Follows    int `json:"follows"`
-			FollowedBy int `json:"followed_by"`
-		} `json:"counts"`
-	} `json:"data"`
+	Id        string `json:"id"`
+	Username  string `json:"username"`
+	// Data struct {
+	// 	Id             string `json:"id"`
+	// 	Username       string `json:"username"`
+	// 	FullName       string `json:"full_name"`
+	// 	ProfilePicture string `json:"profile_picture"`
+	// 	Bio            string `json:"bio"`
+	// 	Website        string `json:"website"`
+	// 	IsBusiness     bool   `json:"is_business"`
+	// 	Counts         struct {
+	// 		Media      int `json:"media"`
+	// 		Follows    int `json:"follows"`
+	// 		FollowedBy int `json:"followed_by"`
+	// 	} `json:"counts"`
+	// } `json:"data"`
 }
