@@ -77,7 +77,7 @@ export default {
     if (params.code && params.state) {
       // extract wings preferences
       this.getPreferences(
-        this.parseState(params.state),
+        this.parseState(params.state, true),
         function(success) {
           this.$parent.hotspot.name = success.body.hotspot_name;
           this.$parent.hotspot.disclaimers = success.body.disclaimers;
@@ -110,7 +110,7 @@ export default {
       // make request to wax
       var url = this.createWaxURL(
         params.code,
-        this.parseState(params.state),
+        this.parseState(params.state, true),
         "social/instagram",
         false,
         this.$route.query.integration_done ? this.$route.query.user : ""
@@ -135,7 +135,7 @@ export default {
             var redirectUrl = this.$root.$options.hotspot.integrations[0]
               .post_auth_redirect_url;
 
-            var appendParams = this.parseState(params.state);
+            var appendParams = this.parseState(params.state, true);
 
             var query =
               "?digest=" +
@@ -184,7 +184,8 @@ export default {
                   context.authorized = false;
                   context.dedaloError = true;
                   console.error(error);
-                }
+                },
+                true
               );
             }, 1000);
           }
@@ -250,7 +251,7 @@ export default {
       if (!this.conditions) {
         this.deleteMarketingInfo(
           this.userId,
-          this.parseState(params.state),
+          this.parseState(params.state, true),
           function(success) {
             context.accept();
           },
@@ -266,7 +267,7 @@ export default {
       if (!this.surveys) {
         this.deleteSurveyInfo(
           this.userId,
-          this.parseState(params.state),
+          this.parseState(params.state, true),
           function(success) {
             context.accept();
           },
@@ -290,7 +291,7 @@ export default {
       ) {
         this.addAdditionalInfo(
           this.userId,
-          this.parseState(params.state),
+          this.parseState(params.state, true),
           {
             reason: this.additionalReason,
             country: this.additionalCountry
