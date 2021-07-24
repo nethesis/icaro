@@ -502,7 +502,6 @@ func InstagramAuth(c *gin.Context) {
 	}
 
 	// extract user info
-	//urlAPI := "https://api.instagram.com/v1/users/self/?access_token=" + inRespToken.AccessToken
 	u := strconv.Itoa(inRespToken.UserId)
 	urlAPI := "https://graph.instagram.com/"+u+"?fields=id,username&access_token=" + inRespToken.AccessToken
 
