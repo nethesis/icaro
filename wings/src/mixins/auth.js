@@ -57,7 +57,12 @@ var AuthMixin = {
                 nasid: nasid
             }
         },
-        parseState: function (state) {
+        parseState: function (state, base64) {
+            if (base64) {
+              state = atob(state)
+              state = decodeURIComponent(state)
+            }
+
             var digest = state.split('&')[0]
             var uuid = state.split('&')[1]
             var sessionid = state.split('&')[2]
@@ -111,21 +116,21 @@ var AuthMixin = {
                 case 'instagram':
                     url = 'https://api.instagram.com/oauth/authorize/?' +
                         'client_id=' + params.in_client_id +
-                        '&state=' + encodeURIComponent(params.digest + "&" + params.uuid + "&" + params.sessionid + "&" + params.uamip + "&" + params.uamport + "&" + params.voucher + "&" + params.nasid) +
-                        '&scope=' + escape('basic') +
-                        '&redirect_uri=' + escape('http://' + window.location.host + '/wings/login/instagram') +
+                        '&state=' + btoa(encodeURIComponent(params.digest + "&" + params.uuid + "&" + params.sessionid + "&" + params.uamip + "&" + params.uamport + "&" + params.voucher + "&" + params.nasid)) +
+                        '&scope=user_profile' +
+                        '&redirect_uri=' + escape('https://' + window.location.host + '/wings/login/instagram') +
                         '&response_type=code'
                     break
             }
             return url
         },
-        doDedaloLogin: function (user, callback) {
+        doDedaloLogin: function (user, callback, error, base64) {
             var params = this.extractParams()
             var ip = params.uamip || null
             var port = params.uamport || null
 
             if (params.state) {
-                var state = this.parseState(params.state)
+                var state = this.parseState(params.state, base64)
                 ip = state.uamip
                 port = state.uamport
             }

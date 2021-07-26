@@ -502,7 +502,8 @@ func InstagramAuth(c *gin.Context) {
 	}
 
 	// extract user info
-	urlAPI := "https://api.instagram.com/v1/users/self/?access_token=" + inRespToken.AccessToken
+	u := strconv.Itoa(inRespToken.UserId)
+	urlAPI := "https://graph.instagram.com/"+u+"?fields=id,username&access_token=" + inRespToken.AccessToken
 
 	resp, err = client.Get(urlAPI)
 	if err != nil {
@@ -517,14 +518,14 @@ func InstagramAuth(c *gin.Context) {
 		fmt.Println(err.Error())
 	}
 
-	if inUserDetail.Data.Id == "" {
+	if inUserDetail.Id == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "access token is invalid"})
 		return
 	}
 
 	// check if user exists
 	unit := utils.GetUnitByUuid(uuid)
-	user := utils.GetUserByUsernameAndHotspot(inUserDetail.Data.Id, unit.HotspotId)
+	user := utils.GetUserByUsernameAndHotspot(inUserDetail.Id, unit.HotspotId)
 	if user.Id == 0 {
 		// create user
 		days := utils.GetHotspotPreferencesByKey(unit.HotspotId, "user_expiration_days")
@@ -560,8 +561,8 @@ func InstagramAuth(c *gin.Context) {
 
 		newUser := models.User{
 			HotspotId:            unit.HotspotId,
-			Name:                 inUserDetail.Data.FullName,
-			Username:             inUserDetail.Data.Id,
+			Name:                 inUserDetail.Username,
+			Username:             inUserDetail.Id,
 			Password:             "",
 			Email:                "",
 			AccountType:          "instagram",
@@ -583,10 +584,10 @@ func InstagramAuth(c *gin.Context) {
 		utils.CreateUserSession(newUser.Id, sessionId)
 
 		// create marketing info with user infos
-		utils.CreateUserMarketing(newUser.Id, inUserDetail.Data, "instagram")
+		utils.CreateUserMarketing(newUser.Id, inUserDetail, "instagram")
 
 		// response to client
-		c.JSON(http.StatusOK, gin.H{"user_id": inUserDetail.Data.Id, "user_db_id": newUser.Id})
+		c.JSON(http.StatusOK, gin.H{"user_id": inUserDetail.Id, "user_db_id": newUser.Id})
 	} else {
 		// update user info
 		days := utils.GetHotspotPreferencesByKey(user.HotspotId, "user_expiration_days")
@@ -599,7 +600,7 @@ func InstagramAuth(c *gin.Context) {
 		utils.CreateUserSession(user.Id, sessionId)
 
 		// create marketing info with user infos
-		utils.CreateUserMarketing(user.Id, inUserDetail.Data, "instagram")
+		utils.CreateUserMarketing(user.Id, inUserDetail, "instagram")
 
 		// retrieve voucher
 		if len(voucherCode) > 0 {
@@ -614,7 +615,7 @@ func InstagramAuth(c *gin.Context) {
 		}
 
 		// response to client
-		c.JSON(http.StatusOK, gin.H{"user_id": inUserDetail.Data.Id, "user_db_id": user.Id})
+		c.JSON(http.StatusOK, gin.H{"user_id": inUserDetail.Id, "user_db_id": user.Id})
 	}
 
 }

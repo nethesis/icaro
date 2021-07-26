@@ -117,8 +117,8 @@ func storeSessions() {
 
 func cleanOldSessions() {
 	db := database.Instance()
-	db.Where("start_time < ?", time.Now().AddDate(0, -6, 0).UTC()).Delete(models.Session{})
-	db.Where("start_time < ?", time.Now().AddDate(0, -6, 0).UTC()).Delete(models.SessionHistory{})
+	db.Where("update_time < ?", time.Now().AddDate(0, -6, 0).UTC()).Delete(models.Session{})
+	db.Where("update_time < ?", time.Now().AddDate(0, -6, 0).UTC()).Delete(models.SessionHistory{})
 }
 
 func cleanShortUrls() {
