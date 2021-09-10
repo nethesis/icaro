@@ -420,6 +420,7 @@ func SendSMSCode(number string, code string, unit models.Unit, auth string) int 
 
 			// compose message data
 			msgData := url.Values{}
+			msgData.Set("From", hotspot.Name)
 			msgData.Set("To", number)
 			msgData.Set("MessagingServiceSid", configuration.Config.Endpoints.Sms.ServiceSid)
 			msgData.Set("Body", `Login Link: `+GenerateShortURL(configuration.Config.Endpoints.Sms.Link+"?"+auth+"&code="+code+"&num="+url.QueryEscape(number))+`
