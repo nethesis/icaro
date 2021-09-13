@@ -442,6 +442,8 @@ Logout Link: http://logout`)
 			// make HTTP POST request
 			resp, err := client.Do(req)
 
+			fmt.Println(resp)
+
 			if err != nil {
 				fmt.Println(err.Error())
 			}
