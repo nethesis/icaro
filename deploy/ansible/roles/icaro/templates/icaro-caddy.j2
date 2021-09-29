@@ -31,6 +31,9 @@ http://{$ICARO_HOSTNAME}/wings {
     if {path} not_starts_with /wings/static/
     to {path} /
   }
+{% if 	icaro.origin_trial_token is defined %}
+  header / Origin-Trial "{{ icaro.origin_trial_token }}"
+{% endif %}
   log / stdout {combined}
 }
 
