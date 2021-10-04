@@ -143,6 +143,9 @@ func SMSAuth(c *gin.Context) {
 		// create marketing info with user infos
 		utils.CreateUserMarketing(newUser.Id, smsMarketingData{Number: number}, "sms")
 
+		// create user auth
+		utils.CreateUserAuth(sessionId, 0, uuid, newUser.Id, newUser.Username, newUser.Password, "pass")
+
 		// response to client
 		c.JSON(http.StatusOK, gin.H{"user_id": number, "user_db_id": newUser.Id})
 	} else {
@@ -208,6 +211,9 @@ func SMSAuth(c *gin.Context) {
 
 		db := database.Instance()
 		db.Save(&user)
+
+		// create user auth
+		utils.CreateUserAuth(sessionId, 0, uuid, user.Id, user.Username, user.Password, "pass")
 
 		// response to client
 		c.JSON(http.StatusOK, gin.H{"user_id": number, "exists": true, "reset": reset, "user_db_id": user.Id})
@@ -331,6 +337,9 @@ func EmailAuth(c *gin.Context) {
 		// create marketing info with user infos
 		utils.CreateUserMarketing(newUser.Id, emailMarketingData{Email: email}, "email")
 
+		// create user auth
+		utils.CreateUserAuth(sessionId, 0, uuid, newUser.Id, newUser.Username, newUser.Password, "pass")
+
 		// response to client
 		c.JSON(http.StatusOK, gin.H{"user_id": email, "user_db_id": newUser.Id})
 	} else {
@@ -386,6 +395,9 @@ func EmailAuth(c *gin.Context) {
 
 		db := database.Instance()
 		db.Save(&user)
+
+		// create user auth
+		utils.CreateUserAuth(sessionId, 0, uuid, user.Id, user.Username, user.Password, "pass")
 
 		// response to client
 		c.JSON(http.StatusOK, gin.H{"user_id": email, "exists": true, "reset": reset, "user_db_id": user.Id})

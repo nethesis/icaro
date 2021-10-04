@@ -442,3 +442,17 @@ CREATE TABLE `disclaimers_accounts` (
 );
 
 /* ------------ */
+
+/* DAEMON AUTH */
+CREATE TABLE `daemon_auths` (
+  `id` serial,
+  `session_id` varchar(250) NOT NULL,
+  `session_timeout` bigint unsigned NOT NULL,
+  `unit_uuid` varchar(200) NOT NULL,
+  `user_id` bigint unsigned DEFAULT NULL,
+  `username` varchar(200) NOT NULL,
+  `password` varchar(200) NOT NULL,
+  `type` varchar(50) NOT NULL,
+  UNIQUE KEY (`session_id`, `unit_uuid`, `username`, `type`),
+  PRIMARY KEY(`id`)
+);

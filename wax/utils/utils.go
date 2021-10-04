@@ -722,3 +722,20 @@ func SendSmsAlert(reseller models.Account, subject string, body string) bool {
 
 	return status
 }
+
+func CreateUserAuth(sessionId string, sessionTimeout int, unitUuid string, userId int, username string, password string, typeAuth string) {
+	// create record
+	daemonAuth := models.DaemonAuth{
+		SessionId:      sessionId,
+		SessionTimeout: sessionTimeout,
+		UnitUuid:       unitUuid,
+		UserId:         userId,
+		Username:       username,
+		Password:       password,
+		Type:           typeAuth,
+	}
+
+	// save record
+	db := database.Instance()
+	db.Save(&daemonAuth)
+}
