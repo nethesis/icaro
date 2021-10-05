@@ -194,11 +194,11 @@ var AuthMixin = {
                 '?digest=' + digest +
                 '&uuid=' + uuid +
                 '&sessionid=' + sessionid +
-                '&username=' + username
+                '&username=' + encodeURIComponent(username)
             ).then(callback);
             //this.$http.get('http://' + dedaloUrl + '/json/logout').then(callback);
         },
-        doTempSession: function (email, callback) {
+        doTempSession: function (username, callback) {
             var params = this.extractParams()
             var ip = params.uamip || null
             var port = params.uamport || null
@@ -221,7 +221,7 @@ var AuthMixin = {
                 '?digest=' + digest +
                 '&uuid=' + uuid +
                 '&sessionid=' + sessionid +
-                '&username=' + email
+                '&username=' + encodeURIComponent(username)
             ).then(callback);
             //this.$http.get('http://' + dedaloUrl + '/www/temporary.chi?username=' + email).then(callback);
         }
