@@ -724,18 +724,43 @@ func SendSmsAlert(reseller models.Account, subject string, body string) bool {
 }
 
 func CreateUserAuth(sessionId string, sessionTimeout int, unitUuid string, userId int, username string, password string, typeAuth string) {
-	// create record
-	daemonAuth := models.DaemonAuth{
-		SessionId:      sessionId,
-		SessionTimeout: sessionTimeout,
-		UnitUuid:       unitUuid,
-		UserId:         userId,
-		Username:       username,
-		Password:       password,
-		Type:           typeAuth,
-	}
-
-	// save record
+	// create db instance
 	db := database.Instance()
-	db.Save(&daemonAuth)
+
+	// switch typeAuth
+	switch typeAuth {
+	case "created", "updated":
+		// create record
+		daemonAuth := models.DaemonAuth{
+			SessionId:      sessionId,
+			SessionTimeout: sessionTimeout,
+			UnitUuid:       unitUuid,
+			UserId:         userId,
+			Username:       username,
+			Password:       password,
+			Type:           typeAuth,
+		}
+
+		// save record
+		db.Save(&daemonAuth)
+
+	case "login", "logout":
+		// search record
+		var daemonAuth models.DaemonAuth
+		db.Where("session_id = ? AND unit_uuid = ? AND username = ?", sessionId, unitUuid, username).First(&daemonAuth)
+
+		// update record
+		daemonAuth.Type = typeAuth
+		db.Save(&daemonAuth)
+
+	case "temporary":
+		// search record
+		var daemonAuth models.DaemonAuth
+		db.Where("session_id = ? AND unit_uuid = ? AND username = ?", sessionId, unitUuid, username).First(&daemonAuth)
+
+		// update record
+		daemonAuth.SessionTimeout = sessionTimeout
+		daemonAuth.Type = typeAuth
+		db.Save(&daemonAuth)
+	}
 }

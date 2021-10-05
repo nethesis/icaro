@@ -128,18 +128,24 @@ var AuthMixin = {
             var params = this.extractParams()
             var ip = params.uamip || null
             var port = params.uamport || null
+            var digest = params.digest || null
+            var uuid = params.uuid || null
+            var sessionid = params.sessionid || null
 
             if (params.state) {
                 var state = this.parseState(params.state, base64)
                 ip = state.uamip
                 port = state.uamport
+                digest = state.digest
+                uuid = state.uuid
+                sessionid = state.sessionid
             }
             var dedaloUrl = ip + ':' + port
 
             this.$http.get(protocol + host + '/wax/aaa/login' +
-                '?digest=' + params.digest +
-                '&uuid=' + params.uuid +
-                '&sessionid=' + params.sessionid +
+                '?digest=' + digest +
+                '&uuid=' + uuid +
+                '&sessionid=' + sessionid +
                 '&username=' + encodeURIComponent(user.id)
             ).then(callback);
 
@@ -169,19 +175,25 @@ var AuthMixin = {
             var params = this.extractParams()
             var ip = params.uamip || null
             var port = params.uamport || null
+            var digest = params.digest || null
+            var uuid = params.uuid || null
+            var sessionid = params.sessionid || null
 
             if (params.state) {
                 var state = this.parseState(params.state)
                 ip = state.uamip
                 port = state.uamport
+                digest = state.digest
+                uuid = state.uuid
+                sessionid = state.sessionid
             }
             var dedaloUrl = ip + ':' + port
 
             // do dedalo logout
             this.$http.get(protocol + host + '/wax/aaa/logout' +
-                '?digest=' + params.digest +
-                '&uuid=' + params.uuid +
-                '&sessionid=' + params.sessionid +
+                '?digest=' + digest +
+                '&uuid=' + uuid +
+                '&sessionid=' + sessionid +
                 '&username=' + username
             ).then(callback);
             //this.$http.get('http://' + dedaloUrl + '/json/logout').then(callback);
@@ -190,19 +202,25 @@ var AuthMixin = {
             var params = this.extractParams()
             var ip = params.uamip || null
             var port = params.uamport || null
+            var digest = params.digest || null
+            var uuid = params.uuid || null
+            var sessionid = params.sessionid || null
 
             if (params.state) {
                 var state = this.parseState(params.state)
                 ip = state.uamip
                 port = state.uamport
+                digest = state.digest
+                uuid = state.uuid
+                sessionid = state.sessionid
             }
             var dedaloUrl = ip + ':' + port
 
             // do dedalo temp session
             this.$http.get(protocol + host + '/wax/aaa/temp' +
-                '?digest=' + params.digest +
-                '&uuid=' + params.uuid +
-                '&sessionid=' + params.sessionid +
+                '?digest=' + digest +
+                '&uuid=' + uuid +
+                '&sessionid=' + sessionid +
                 '&username=' + email
             ).then(callback);
             //this.$http.get('http://' + dedaloUrl + '/www/temporary.chi?username=' + email).then(callback);
