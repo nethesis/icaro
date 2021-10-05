@@ -10,7 +10,7 @@ Source0: https://github.com/nethesis/icaro/archive/master.tar.gz
 %{?systemd_requires}
 BuildRequires: systemd
 BuildArch: noarch
-Requires: coova-chilli-dedalo
+Requires: coova-chilli-dedalo, jq
 
 %description
 Dedalo is the Network Access Controller, runs on the firewall and intercepts all guest connections.
@@ -33,8 +33,10 @@ It's a configuration helper for Coova-Chilli
 %install
 mkdir -p %{buildroot}/opt/icaro/dedalo
 install -D -m644 dedalo/dedalo.service %{buildroot}/%{_unitdir}/dedalo.service
+install -D -m644 dedalo/dedalo_users_auth.service %{buildroot}/%{_unitdir}/dedalo_users_auth.service
 install -D -m644 dedalo/config %{buildroot}/opt/icaro/dedalo/config
 install -D -m755 dedalo/dedalo %{buildroot}/%{_bindir}/dedalo
+install -D -m755 dedalo/dedalo_users_auth.sh %{buildroot}/opt/icaro/dedalo/dedalo_users_auth.sh
 
 mkdir -p %{buildroot}/opt/icaro/dedalo/template
 install -D -m644 dedalo/template/chilli.conf.tpl %{buildroot}/opt/icaro/dedalo/template/chilli.conf.tpl
@@ -53,7 +55,9 @@ touch %{buildroot}/opt/icaro/dedalo/walled_gardens/local.conf
 
 %files
 /usr/lib/systemd/system/dedalo.service
+/usr/lib/systemd/system/dedalo_users_auth.service
 %{_bindir}/dedalo
+/opt/icaro/dedalo/dedalo_users_auth.sh
 %dir /opt/icaro/
 /opt/icaro/dedalo/template/engine
 /opt/icaro/dedalo/www

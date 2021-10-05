@@ -1,0 +1,15 @@
+[Unit]
+Description=Dedalo's users authentcation daemon
+After=dedalo.service
+BindsTo=dedalo.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/icaro/dedalo/
+ExecStart=/opt/icaro/dedalo/dedalo_users_auth.sh
+Restart=on-abort
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
