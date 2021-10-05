@@ -739,6 +739,7 @@ func CreateUserAuth(sessionId string, sessionTimeout int, unitUuid string, userI
 			Username:       username,
 			Password:       password,
 			Type:           typeAuth,
+			Updated:        time.Now().UTC(),
 		}
 
 		// save record
@@ -751,6 +752,7 @@ func CreateUserAuth(sessionId string, sessionTimeout int, unitUuid string, userI
 
 		// update record
 		daemonAuth.Type = typeAuth
+		daemonAuth.Updated = time.Now().UTC()
 		db.Save(&daemonAuth)
 
 	case "temporary":
@@ -761,6 +763,7 @@ func CreateUserAuth(sessionId string, sessionTimeout int, unitUuid string, userI
 		// update record
 		daemonAuth.SessionTimeout = sessionTimeout
 		daemonAuth.Type = typeAuth
+		daemonAuth.Updated = time.Now().UTC()
 		db.Save(&daemonAuth)
 	}
 }

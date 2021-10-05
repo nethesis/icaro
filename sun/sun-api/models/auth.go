@@ -22,13 +22,16 @@
 
 package models
 
+import "time"
+
 type DaemonAuth struct {
-	Id             int    `db:"id" json:"id"`
-	SessionId      string `db:"session_id" json:"session_id"`
-	SessionTimeout int    `db:"session_timeout" json:"session_timeout"`
-	UnitUuid       string `db:"unit_uuid" json:"unit_uuid"`
-	UserId         int    `db:"user_id" json:"user_id"`
-	Username       string `db:"username" json:"username"`
-	Password       string `db:"password" json:"password"`
-	Type           string `db:"type" json:"type"`
+	Id             int       `db:"id" json:"id"`
+	SessionId      string    `db:"session_id" json:"session_id"`
+	SessionTimeout int       `db:"session_timeout" json:"session_timeout"`
+	UnitUuid       string    `db:"unit_uuid" json:"unit_uuid"`
+	UserId         int       `db:"user_id" json:"user_id"`
+	Username       string    `db:"username" json:"username"`
+	Password       string    `db:"password" json:"password"`
+	Type           string    `db:"type" json:"type"`
+	Updated        time.Time `db:"updated" json:"updated"`
 }

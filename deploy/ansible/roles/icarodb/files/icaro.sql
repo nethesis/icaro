@@ -453,6 +453,7 @@ CREATE TABLE `daemon_auths` (
   `username` varchar(200) NOT NULL,
   `password` varchar(200) NOT NULL,
   `type` varchar(50) NOT NULL,
+  `updated` datetime,
   UNIQUE KEY (`session_id`, `unit_uuid`, `username`, `type`),
   PRIMARY KEY(`id`)
 );

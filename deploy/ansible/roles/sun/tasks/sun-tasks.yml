@@ -52,3 +52,9 @@
     name: sun-tasks@clean-old-sessions
     daemon_reload: yes
     enabled: yes
+
+- name: Enable sun-tasks clean-auths service
+  systemd:
+    name: sun-tasks@clean-auths
+    daemon_reload: yes
+    enabled: yes

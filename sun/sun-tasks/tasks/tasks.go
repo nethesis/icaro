@@ -61,6 +61,10 @@ func Init(action string, worker bool) {
 		c.AddFunc("@every 1h", storeUsers)
 		storeUsers()
 
+	case "clean-auths":
+		c.AddFunc("@daily", cleanAuths)
+		cleanAuths()
+
 	default:
 		fmt.Println("Specify a valid action to execute, see -h option")
 	}
@@ -69,6 +73,11 @@ func Init(action string, worker bool) {
 	if worker {
 		c.Run()
 	}
+}
+
+func cleanAuths() {
+	db := database.Instance()
+	db.Where("updated < ? AND type = 'login", time.Now().AddDate(0, 0, -1).UTC()).Delete(models.DaemonAuth{})
 }
 
 func cleanTokens() {
