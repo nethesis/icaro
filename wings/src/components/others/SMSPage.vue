@@ -399,6 +399,7 @@ export default {
         var pathname = window.location.pathname;
 
         this.doDedaloLogout(
+          encodeURIComponent(this.authPrefix + this.authSMS),
           function(responseDedaloLogout) {
             window.location.replace(redirectUrl + pathname + query);
           },
@@ -411,6 +412,7 @@ export default {
       } else {
         // exec logout
         this.doDedaloLogout(
+          encodeURIComponent(this.authPrefix + this.authSMS),
           function(responseDedaloLogout) {
             // exec dedalo login
             this.doDedaloLogin(

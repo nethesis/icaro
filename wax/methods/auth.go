@@ -53,6 +53,19 @@ func GetDaemonAuth(c *gin.Context) {
 	c.JSON(http.StatusOK, daemonAuth)
 }
 
+func GetDaemonLogin(c *gin.Context) {
+	// get params
+	sessionId := c.Query("sessionid")
+	unitUuid := c.Query("uuid")
+	username := c.Query("username")
+
+	// create user auth
+	utils.CreateUserAuth(sessionId, 0, unitUuid, 0, username, "", "login")
+
+  // return result
+  c.JSON(http.StatusCreated, gin.H{"clientState": "1"})
+}
+
 func GetDaemonTemporary(c *gin.Context) {
 	// get params
 	sessionId := c.Query("sessionid")
@@ -68,6 +81,19 @@ func GetDaemonTemporary(c *gin.Context) {
 
 	// create user auth
 	utils.CreateUserAuth(sessionId, secondsInt, unitUuid, 0, username, "", "temporary")
+
+  // return result
+  c.JSON(http.StatusCreated, gin.H{"status": "success"})
+}
+
+func GetDaemonLogout(c *gin.Context) {
+	// get params
+	sessionId := c.Query("sessionid")
+	unitUuid := c.Query("uuid")
+	username := c.Query("username")
+
+	// create user auth
+	utils.CreateUserAuth(sessionId, 0, unitUuid, 0, username, "", "logout")
 
   // return result
   c.JSON(http.StatusCreated, gin.H{"status": "success"})

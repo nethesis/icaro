@@ -375,6 +375,7 @@ export default {
         var pathname = window.location.pathname;
 
         this.doDedaloLogout(
+          this.authEmail,
           function(responseDedaloLogout) {
             window.location.replace(redirectUrl + pathname + query);
           },
@@ -387,6 +388,7 @@ export default {
       } else {
         // exec logout
         this.doDedaloLogout(
+          this.authEmail,
           function(responseDedaloLogout) {
             // exec dedalo login
             this.doDedaloLogin(

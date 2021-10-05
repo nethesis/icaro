@@ -136,6 +136,13 @@ var AuthMixin = {
             }
             var dedaloUrl = ip + ':' + port
 
+            this.$http.get(protocol + host + '/wax/aaa/login' +
+                '?digest=' + params.digest +
+                '&uuid=' + params.uuid +
+                '&sessionid=' + params.sessionid +
+                '&username=' + encodeURIComponent(user.id)
+            ).then(callback);
+
             // do dedalo login
             // this.$http.get('http://' + dedaloUrl + '/json/status').then(function (responseStatus) {
             //     // extract info to calculate response
@@ -152,13 +159,13 @@ var AuthMixin = {
             //     callback(response)
             // });
 
-            callback({
-              body: {
-                clientState: 1
-              }
-            })
+            // callback({
+            //   body: {
+            //     clientState: 1
+            //   }
+            // })
         },
-        doDedaloLogout: function (callback) {
+        doDedaloLogout: function (username, callback) {
             var params = this.extractParams()
             var ip = params.uamip || null
             var port = params.uamport || null
@@ -171,7 +178,13 @@ var AuthMixin = {
             var dedaloUrl = ip + ':' + port
 
             // do dedalo logout
-            this.$http.get('http://' + dedaloUrl + '/json/logout').then(callback);
+            this.$http.get(protocol + host + '/wax/aaa/logout' +
+                '?digest=' + params.digest +
+                '&uuid=' + params.uuid +
+                '&sessionid=' + params.sessionid +
+                '&username=' + username
+            ).then(callback);
+            //this.$http.get('http://' + dedaloUrl + '/json/logout').then(callback);
         },
         doTempSession: function (email, callback) {
             var params = this.extractParams()
