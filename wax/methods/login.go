@@ -221,7 +221,7 @@ func Logins(c *gin.Context) {
 		unitMacAddress := c.Query("ap")
 		user := c.Query("user")
 		userMac := c.Query("mac")
-		password := c.Query("password")
+		password := c.Query("pass")
 		chapPass := c.Query("chap_pass")
 		chapChal := c.Query("chap_chal")
 		sessionId := c.Query("sessionid")
