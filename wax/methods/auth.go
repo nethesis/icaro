@@ -35,21 +35,39 @@ import (
 
 func GetDaemonAuth(c *gin.Context) {
 	var daemonAuths []models.DaemonAuth
+	var daemonAuth models.DaemonAuth
 
 	// get params
 	unitUuid := c.Query("uuid")
+	sessionId := c.Query("sessionid")
 
-	// search in database
+	// init db
 	db := database.Instance()
-	db.Where("unit_uuid = ?", unitUuid).Find(&daemonAuths)
 
-	if len(daemonAuths) == 0 {
-		c.JSON(http.StatusNotFound, gin.H{"message": "No auths found!"})
-		return
+	// check sessionid
+	if len(sessionId) > 0 {
+		// search in database
+		db.Where("session_id = ? AND unit_uuid = ?", sessionId, unitUuid).First(&daemonAuth)
+
+		if daemonAuth.Id == 0 {
+			c.JSON(http.StatusNotFound, gin.H{"message": "No auth found for this session id!"})
+			return
+		}
+
+		// return auth
+		c.JSON(http.StatusOK, daemonAuth)
+	} else {
+		// search in database
+		db.Where("unit_uuid = ?", unitUuid).Find(&daemonAuths)
+
+		if len(daemonAuths) == 0 {
+			c.JSON(http.StatusNotFound, gin.H{"message": "No auths found for this unit!"})
+			return
+		}
+
+		// return auths
+		c.JSON(http.StatusOK, daemonAuths)
 	}
-
-	// return auth
-	c.JSON(http.StatusOK, daemonAuths)
 }
 
 func GetDaemonLogin(c *gin.Context) {
@@ -61,8 +79,8 @@ func GetDaemonLogin(c *gin.Context) {
 	// create user auth
 	utils.CreateUserAuth(sessionId, 0, unitUuid, 0, username, "", "login")
 
-  // return result
-  c.JSON(http.StatusCreated, gin.H{"clientState": "1"})
+	// return result
+	c.JSON(http.StatusCreated, gin.H{"clientState": "1"})
 }
 
 func GetDaemonTemporary(c *gin.Context) {
@@ -72,7 +90,7 @@ func GetDaemonTemporary(c *gin.Context) {
 	username := c.Query("username")
 
 	// get unit
-	unit := utils.GetUnitByUuid(unitUuid);
+	unit := utils.GetUnitByUuid(unitUuid)
 
 	// get session timeout pref
 	seconds := utils.GetHotspotPreferencesByKey(unit.HotspotId, "temp_session_duration")
@@ -81,8 +99,8 @@ func GetDaemonTemporary(c *gin.Context) {
 	// create user auth
 	utils.CreateUserAuth(sessionId, secondsInt, unitUuid, 0, username, "", "temporary")
 
-  // return result
-  c.JSON(http.StatusCreated, gin.H{"status": "success"})
+	// return result
+	c.JSON(http.StatusCreated, gin.H{"status": "success"})
 }
 
 func GetDaemonLogout(c *gin.Context) {
@@ -94,6 +112,6 @@ func GetDaemonLogout(c *gin.Context) {
 	// create user auth
 	utils.CreateUserAuth(sessionId, 0, unitUuid, 0, username, "", "logout")
 
-  // return result
-  c.JSON(http.StatusCreated, gin.H{"status": "success"})
+	// return result
+	c.JSON(http.StatusCreated, gin.H{"status": "success"})
 }
