@@ -34,23 +34,22 @@ import (
 )
 
 func GetDaemonAuth(c *gin.Context) {
-	var daemonAuth models.DaemonAuth
+	var daemonAuths []models.DaemonAuth
 
 	// get params
-	sessionId := c.Query("sessionid")
 	unitUuid := c.Query("uuid")
 
 	// search in database
 	db := database.Instance()
-	db.Where("session_id = ? AND unit_uuid = ?", sessionId, unitUuid).First(&daemonAuth)
+	db.Where("unit_uuid = ?", unitUuid).Find(&daemonAuths)
 
-	if daemonAuth.Id == 0 {
-		c.JSON(http.StatusNotFound, gin.H{"message": "No auth found!"})
+	if len(daemonAuths) == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"message": "No auths found!"})
 		return
 	}
 
 	// return auth
-	c.JSON(http.StatusOK, daemonAuth)
+	c.JSON(http.StatusOK, daemonAuths)
 }
 
 func GetDaemonLogin(c *gin.Context) {
