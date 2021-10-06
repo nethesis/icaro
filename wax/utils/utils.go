@@ -723,6 +723,20 @@ func SendSmsAlert(reseller models.Account, subject string, body string) bool {
 	return status
 }
 
+func CheckUserPassword(user models.User, password string) bool {
+	// search user
+	var userSearch models.User
+	db := database.Instance()
+	db.Where("id = ?", user.Id).First(&userSearch)
+
+	// verify password
+	if password == userSearch.Password {
+		return true
+	}
+
+	return false
+}
+
 func CreateUserAuth(sessionId string, sessionTimeout int, unitUuid string, userId int, username string, password string, typeAuth string) {
 	// create db instance
 	db := database.Instance()
