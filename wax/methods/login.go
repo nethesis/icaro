@@ -157,7 +157,7 @@ func Login(c *gin.Context, unitMacAddress string, username string, userMac strin
 	}
 
 	// check if user credentials are valid with plain
-	if len(password) >= 0 && !utils.CheckUserPassword(user, password) {
+	if len(password) >= 0 && len(chapPass) == 0 && !utils.CheckUserPassword(user, password) {
 		AuthReject(c, "password mismatch with plain")
 		return
 	}
