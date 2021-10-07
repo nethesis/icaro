@@ -776,9 +776,25 @@ func CreateUserAuth(sessionId string, sessionTimeout int, unitUuid string, userI
 		var daemonAuth models.DaemonAuth
 		db.Where("session_id = ? AND unit_uuid = ? AND username = ?", sessionId, unitUuid, username).First(&daemonAuth)
 
-		// update record
-		daemonAuth.Type = typeAuth
-		daemonAuth.Updated = time.Now().UTC()
+		if daemonAuth.Id == 0 {
+			// create new record
+			daemonAuth = models.DaemonAuth{
+				SessionId:      sessionId,
+				SessionTimeout: sessionTimeout,
+				UnitUuid:       unitUuid,
+				UserId:         userId,
+				Username:       username,
+				Password:       password,
+				Type:           typeAuth,
+				Updated:        time.Now().UTC(),
+			}
+		} else {
+			// update record
+			daemonAuth.Type = typeAuth
+			daemonAuth.Updated = time.Now().UTC()
+		}
+
+		// save record
 		db.Save(&daemonAuth)
 
 	case "temporary":
@@ -786,10 +802,26 @@ func CreateUserAuth(sessionId string, sessionTimeout int, unitUuid string, userI
 		var daemonAuth models.DaemonAuth
 		db.Where("session_id = ? AND unit_uuid = ? AND username = ?", sessionId, unitUuid, username).First(&daemonAuth)
 
-		// update record
-		daemonAuth.SessionTimeout = sessionTimeout
-		daemonAuth.Type = typeAuth
-		daemonAuth.Updated = time.Now().UTC()
+		if daemonAuth.Id == 0 {
+			// create new record
+			daemonAuth = models.DaemonAuth{
+				SessionId:      sessionId,
+				SessionTimeout: sessionTimeout,
+				UnitUuid:       unitUuid,
+				UserId:         userId,
+				Username:       username,
+				Password:       password,
+				Type:           typeAuth,
+				Updated:        time.Now().UTC(),
+			}
+		} else {
+			// update record
+			daemonAuth.SessionTimeout = sessionTimeout
+			daemonAuth.Type = typeAuth
+			daemonAuth.Updated = time.Now().UTC()
+		}
+
+		// save record
 		db.Save(&daemonAuth)
 	}
 }
