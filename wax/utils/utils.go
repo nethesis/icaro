@@ -790,6 +790,7 @@ func CreateUserAuth(sessionId string, sessionTimeout int, unitUuid string, userI
 			}
 		} else {
 			// update record
+			daemonAuth.Password = password
 			daemonAuth.Type = typeAuth
 			daemonAuth.Updated = time.Now().UTC()
 		}

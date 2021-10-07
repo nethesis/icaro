@@ -144,7 +144,15 @@
           </div>
         </div>
         <div>
-          <button :style="buttonStyle" v-on:click="navigate()" class="ui big button green">{{ $t("login.navigate") }}</button>
+          <!-- <button :style="buttonStyle" v-on:click="navigate()" class="ui big button green">{{ $t("login.navigate") }}</button> -->
+          <vac :end-time="new Date().getTime() + 9000">
+            <button slot="process" slot-scope="{ timeObj }" class="ui big button green" :disabled="true" :style="buttonStyle">
+              {{ $t("login.navigate_in") }} {{ timeObj.ceil.s }}
+            </button>
+            <button slot="finish" v-on:click="navigate()" class="ui big button green" :style="buttonStyle">
+              {{ $t("login.navigate") }}
+            </button>
+          </vac>
         </div>
       </div>
     </div>
@@ -390,28 +398,34 @@ export default {
         this.doDedaloLogout(
           this.authEmail,
           function(responseDedaloLogout) {
-            // exec dedalo login
-            this.doDedaloLogin(
-              {
-                id: this.authEmail,
-                password: this.authCode || ""
-              },
-              function(responseDedalo) {
-                if (responseDedalo.body.clientState == 1) {
-                  this.authorized = true;
-                  this.errors.dedaloError = false;
-                } else {
-                  this.authorized = false;
-                  this.errors.dedaloError = true;
-                  this.errors.badCode = true;
+            var context = this;
+            context.authorized = true;
+            context.dedaloError = false;
+
+            setTimeout(function() {
+              // exec dedalo login
+              context.doDedaloLogin(
+                {
+                  id: context.authEmail,
+                  password: context.authCode || ""
+                },
+                function(responseDedalo) {
+                  if (responseDedalo.body.clientState == 1) {
+                    context.authorized = true;
+                    context.errors.dedaloError = false;
+                  } else {
+                    context.authorized = false;
+                    context.errors.dedaloError = true;
+                    context.errors.badCode = true;
+                  }
+                },
+                function(error) {
+                  context.authorized = false;
+                  context.errors.dedaloError = true;
+                  console.error(error);
                 }
-              },
-              function(error) {
-                this.authorized = false;
-                this.errors.dedaloError = true;
-                console.error(error);
-              }
-            );
+              );
+            }, 1000);
           },
           function(error) {
             this.authorized = false;

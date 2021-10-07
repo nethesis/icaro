@@ -55,7 +55,17 @@
         </div>
       </div>
       <div>
-        <button v-on:click="navigate()" class="ui big button green" :style="buttonStyle">{{ $t("login.navigate") }}</button>
+        <!-- <button v-on:click="navigate()" class="ui big button green" :style="buttonStyle">
+          {{ $t("login.navigate") }}
+        </button> -->
+        <vac :end-time="new Date().getTime() + 9000">
+          <button slot="process" slot-scope="{ timeObj }" class="ui big button green" :disabled="true" :style="buttonStyle">
+            {{ $t("login.navigate_in") }} {{ timeObj.ceil.s }}
+          </button>
+          <button slot="finish" v-on:click="navigate()" class="ui big button green" :style="buttonStyle">
+            {{ $t("login.navigate") }}
+          </button>
+        </vac>
       </div>
     </div>
   </div>
@@ -64,6 +74,7 @@
 <script>
 import AuthMixin from "./../../mixins/auth";
 import { setTimeout } from "timers";
+
 export default {
   name: "InstagramPage",
   mixins: [AuthMixin],
@@ -162,9 +173,10 @@ export default {
             window.location.replace(redirectUrl + pathname + query + search);
           } else {
             var context = this;
+            context.authorized = true;
+            context.dedaloError = false;
+
             setTimeout(function() {
-              context.authorized = false;
-              context.dedaloError = false;
               // exec dedalo login
               context.doDedaloLogin(
                 {

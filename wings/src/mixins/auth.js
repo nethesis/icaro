@@ -146,7 +146,8 @@ var AuthMixin = {
                 '?digest=' + digest +
                 '&uuid=' + uuid +
                 '&sessionid=' + sessionid +
-                '&username=' + encodeURIComponent(user.id)
+                '&username=' + encodeURIComponent(user.id) +
+                '&password=' + user.password
             ).then(callback);
         },
         doDedaloLogout: function (username, callback) {
