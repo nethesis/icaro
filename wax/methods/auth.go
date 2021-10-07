@@ -82,9 +82,10 @@ func GetDaemonLogin(c *gin.Context) {
 	sessionId := c.Query("sessionid")
 	unitUuid := c.Query("uuid")
 	username := c.Query("username")
+	password := c.Query("password")
 
 	// create user auth
-	utils.CreateUserAuth(sessionId, 0, unitUuid, 0, username, "", "login")
+	utils.CreateUserAuth(sessionId, 0, unitUuid, 0, username, password, "login")
 
 	// return result
 	c.JSON(http.StatusCreated, gin.H{"clientState": "1"})
