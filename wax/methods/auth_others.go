@@ -464,6 +464,7 @@ func MACAuth(c *gin.Context) {
 func VoucherAuth(c *gin.Context) {
 	code := c.Param("code")
 	uuid := c.Query("uuid")
+	sessionId := c.Query("sessionid")
 
 	// extract unit
 	unit := utils.GetUnitByUuid(uuid)
@@ -525,6 +526,9 @@ func VoucherAuth(c *gin.Context) {
 					user.ValidUntil = time.Now().UTC().AddDate(0, 0, duration)
 					db.Save(&user)
 				}
+
+				// create user auth
+				utils.CreateUserAuth(sessionId, 0, uuid, user.Id, user.Username, user.Password, "created")
 
 				c.JSON(http.StatusOK, gin.H{"message": "Voucher is valid", "code": voucher.Code, "type": voucher.Type, "user_db_id": user.Id})
 			}
