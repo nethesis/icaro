@@ -148,28 +148,6 @@ var AuthMixin = {
                 '&sessionid=' + sessionid +
                 '&username=' + encodeURIComponent(user.id)
             ).then(callback);
-
-            // do dedalo login
-            // this.$http.get('http://' + dedaloUrl + '/json/status').then(function (responseStatus) {
-            //     // extract info to calculate response
-            //     var chap_challenge = responseStatus.body.challenge;
-            //     var string_to_hash = "00" + user.password + chap_challenge;
-            //
-            //     // calculate chap_password with challenge
-            //     var response = CryptoJS.MD5(string_to_hash).toString();
-            //
-            //     // do dedalo login
-            //     this.$http.get('http://' + dedaloUrl + '/json/logon?username=' + encodeURIComponent(user.id) +
-            //         '&response=' + response).then(callback);
-            // }, function (response) {
-            //     callback(response)
-            // });
-
-            // callback({
-            //   body: {
-            //     clientState: 1
-            //   }
-            // })
         },
         doDedaloLogout: function (username, callback) {
             var params = this.extractParams()

@@ -319,6 +319,18 @@ func CalcUnitDigest(unit models.Unit) string {
 	return digest
 }
 
+func CheckUnitSecret(uuid string, secret string) bool {
+	// get unit
+	unit := GetUnitByUuid(uuid)
+
+	// check secret
+	if unit.Secret == secret {
+		return true
+	}
+
+	return false
+}
+
 func CalcUserDigest(user models.User, challenge string) string {
 	h := md5.New()
 	io.WriteString(h, "00"+user.Password+challenge)

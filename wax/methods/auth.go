@@ -40,9 +40,16 @@ func GetDaemonAuth(c *gin.Context) {
 	// get params
 	unitUuid := c.Query("uuid")
 	sessionId := c.Query("sessionid")
+	secret := c.Query("secret")
 
 	// init db
 	db := database.Instance()
+
+	// check secret
+	if !utils.CheckUnitSecret(unitUuid, secret) {
+		c.JSON(http.StatusUnauthorized, gin.H{"message": "Invalid secret for this unit"})
+		return
+	}
 
 	// check sessionid
 	if len(sessionId) > 0 {
