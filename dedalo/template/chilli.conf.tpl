@@ -23,6 +23,7 @@ ${HS_DHCPEND:+"dhcpend  $HS_DHCPEND"}
 macauth
 
 uamdomain       "${HS_AAA_HOST}"
+${HS_MAXCLIENTS:+"maxclients       "$HS_MAXCLIENTS""}
 
 include /opt/icaro/dedalo/walled_gardens/local.conf
 include /opt/icaro/dedalo/walled_gardens/facebook.conf
