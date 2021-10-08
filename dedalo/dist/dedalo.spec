@@ -10,7 +10,7 @@ Source0: https://github.com/nethesis/icaro/archive/master.tar.gz
 %{?systemd_requires}
 BuildRequires: systemd
 BuildArch: noarch
-Requires: coova-chilli-dedalo, jq
+Requires: coova-chilli-dedalo, jq, coreutils
 
 %description
 Dedalo is the Network Access Controller, runs on the firewall and intercepts all guest connections.
@@ -50,6 +50,7 @@ install -D -m644 dedalo/walled_gardens/instagram.conf %{buildroot}/opt/icaro/ded
 
 mkdir -p %{buildroot}/opt/icaro/dedalo/www
 install -D -m755 dedalo/www/temporary.chi  %{buildroot}/opt/icaro/dedalo/www/temporary.chi
+install -D -m755 dedalo/www/redirect.chi  %{buildroot}/opt/icaro/dedalo/www/redirect.chi
 touch %{buildroot}/opt/icaro/dedalo/local.conf
 touch %{buildroot}/opt/icaro/dedalo/walled_gardens/local.conf
 
