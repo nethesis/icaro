@@ -1,33 +1,24 @@
 #!/bin/bash
 
 users_auth () {
-	. /opt/icaro/dedalo/config
-	HS_DIGEST=$(echo -n "$HS_SECRET$HS_UUID" | md5sum | awk '{print $1}')
-
-	devices_list=$(dedalo query list | grep -e dnat -e temporary )
-
-	if [ $? -ne 0 ]; then
-		#No device found
-		return 0
-	fi
 
 	IFS=$'\n'
-	for device in $devices_list; do
+	for auth_session in $(echo $1 | jq  --compact-output '.[]'); do
 
-		device_sessionid=$(echo $device | awk '{print $4}')
+		sessionid=$(echo $auth_session | jq -r '.session_id')
 
-		resp_body=$(curl -L -f -s "${HS_AAA_URL}/auth?digest=${HS_DIGEST}&uuid=${HS_UUID}&secret=${HS_SECRET}&sessionid=${device_sessionid}")
-
+		#Check if the sessionid is present on the unit's current sessions list
+		device_session=$(echo "$2" | grep $sessionid)
 		if [ $? -eq 0 ]; then
 
-			auth_type=$(echo ${resp_body} | jq -r '.type')
-			device_mac=$(echo $device | awk '{print $1}')
-			device_username=$(echo $device | awk '{print $6}')
+			device_mac=$(echo $device_session | awk '{print $1}')
+			auth_type=$(echo $auth_session | jq -r '.type')
+			device_username=$(echo $device_session | awk '{print $6}')
 
 			if [ "$auth_type" = "login" ]; then
 
-				username=$(echo ${resp_body} | jq -r '.username')
-				password=$(echo ${resp_body} | jq -r '.password')
+				username=$(echo ${auth_session} | jq -r '.username')
+				password=$(echo ${auth_session} | jq -r '.password')
 
 				#In case of temporary session, first deauthenticate the device
 				if [ "$device_username" = "temporary" ]; then
@@ -41,8 +32,7 @@ users_auth () {
 
 				#Check if a temporary session does not already exist
 				if [ "$device_username" != "temporary" ]; then
-
-					sessiontimeout=$(echo ${resp_body} | jq -r '.sessiontimeout')
+					sessiontimeout=$(echo ${auth_session} | jq -r '.session_timeout')
 					#Open a temporary session
 					dedalo query authorize mac ${device_mac} username "temporary" sessiontimeout ${sessiontimeout}
 
@@ -54,6 +44,20 @@ done
 
 while true
 do
-	users_auth
+	devices_list=$(dedalo query list 2>/dev/null | grep -e dnat -e temporary)
+
+	if [ $? -eq 0 ]; then
+
+		. /opt/icaro/dedalo/config
+		HS_DIGEST=$(echo -n "$HS_SECRET$HS_UUID" | md5sum | awk '{print $1}')
+
+		auth_session_list_json=$(curl -L -f -s "${HS_AAA_URL}/auth?digest=${HS_DIGEST}&uuid=${HS_UUID}&secret=${HS_SECRET}")
+
+		if [ $? -eq 0 ]; then
+
+			users_auth  "$auth_session_list_json" "$devices_list"
+		fi
+	fi
+
 	sleep 10s
 done
