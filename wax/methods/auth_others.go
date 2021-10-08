@@ -25,8 +25,8 @@ package methods
 import (
 	"net/http"
 	"strconv"
-	"time"
 	"strings"
+	"time"
 
 	"github.com/nethesis/icaro/wax/utils"
 
@@ -122,7 +122,7 @@ func SMSAuth(c *gin.Context) {
 
 		// send sms with code
 		userIdStr := strconv.Itoa(newUser.Id)
-		status := utils.SendSMSCode(number, code, unit, "digest="+digest+"&uuid="+uuid+"&sessionid="+sessionId+"&uamip="+uamip+"&uamport="+uamport+"&user="+userIdStr)
+		status := utils.SendSMSCode(number, code, unit, "digest="+digest+"&uuid="+uuid+"&uamip="+uamip+"&uamport="+uamport+"&user="+userIdStr, uamip, uamport)
 
 		// check response
 		if status != 201 {
@@ -187,7 +187,7 @@ func SMSAuth(c *gin.Context) {
 
 			// send sms with code
 			userIdStr := strconv.Itoa(user.Id)
-			status := utils.SendSMSCode(number, code, unit, "digest="+digest+"&uuid="+uuid+"&sessionid="+sessionId+"&uamip="+uamip+"&uamport="+uamport+"&user="+userIdStr)
+			status := utils.SendSMSCode(number, code, unit, "digest="+digest+"&uuid="+uuid+"&uamip="+uamip+"&uamport="+uamport+"&user="+userIdStr, uamip, uamport)
 
 			// check response
 			if status != 201 {
@@ -326,7 +326,7 @@ func EmailAuth(c *gin.Context) {
 
 		// send email with code
 		userIdStr := strconv.Itoa(newUser.Id)
-		status := utils.SendEmailCode(email, code, unit, "digest="+digest+"&uuid="+uuid+"&sessionid="+sessionId+"&uamip="+uamip+"&uamport="+uamport+"&user="+userIdStr)
+		status := utils.SendEmailCode(email, code, unit, "digest="+digest+"&uuid="+uuid+"&uamip="+uamip+"&uamport="+uamport+"&user="+userIdStr, uamip, uamport)
 
 		// check response
 		if !status {
@@ -381,7 +381,7 @@ func EmailAuth(c *gin.Context) {
 
 			// send email with code
 			userIdStr := strconv.Itoa(user.Id)
-			status := utils.SendEmailCode(email, code, unit, "digest="+digest+"&uuid="+uuid+"&sessionid="+sessionId+"&uamip="+uamip+"&uamport="+uamport+"&user="+userIdStr)
+			status := utils.SendEmailCode(email, code, unit, "digest="+digest+"&uuid="+uuid+"&uamip="+uamip+"&uamport="+uamport+"&user="+userIdStr, uamip, uamport)
 
 			// check response
 			if !status {
