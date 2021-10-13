@@ -175,7 +175,6 @@ var AuthMixin = {
                 '&sessionid=' + sessionid +
                 '&username=' + encodeURIComponent(username)
             ).then(callback);
-            //this.$http.get('http://' + dedaloUrl + '/json/logout').then(callback);
         },
         doTempSession: function (username, callback) {
             var params = this.extractParams()
@@ -202,7 +201,6 @@ var AuthMixin = {
                 '&sessionid=' + sessionid +
                 '&username=' + encodeURIComponent(username)
             ).then(callback);
-            //this.$http.get('http://' + dedaloUrl + '/www/temporary.chi?username=' + email).then(callback);
         }
     }
 };
