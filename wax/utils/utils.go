@@ -319,6 +319,18 @@ func CalcUnitDigest(unit models.Unit) string {
 	return digest
 }
 
+func CheckUnitSecret(uuid string, secret string) bool {
+	// get unit
+	unit := GetUnitByUuid(uuid)
+
+	// check secret
+	if unit.Secret == secret {
+		return true
+	}
+
+	return false
+}
+
 func CalcUserDigest(user models.User, challenge string) string {
 	h := md5.New()
 	io.WriteString(h, "00"+user.Password+challenge)
@@ -340,7 +352,7 @@ func GenerateCode(max int) string {
 	return string(b)
 }
 
-func GenerateShortURL(longURL string) string {
+func GenerateShortURL(longURL string, uamip string, uamport string) string {
 
 	var shortUrl models.ShortUrl
 	h := sha1.New()
@@ -351,13 +363,14 @@ func GenerateShortURL(longURL string) string {
 	s := fmt.Sprintf("%.7s", fmt.Sprintf("%x", h.Sum(nil)))
 	//Encode the first 7 digits in Base64 without padding and url safe
 	encoded := base64.URLEncoding.WithPadding(base64.NoPadding).EncodeToString([]byte(s))
+	encodedURL := base64.URLEncoding.WithPadding(base64.NoPadding).EncodeToString([]byte(longURL))
 
 	db.Where("hash = ? ", encoded).First(&shortUrl)
 
 	if shortUrl.Id == 0 {
 		shortUrl.Hash = encoded
 		shortUrl.CreatedAt = time.Now().UTC()
-		shortUrl.LongUrl = longURL
+		shortUrl.LongUrl = "http://" + uamip + ":" + uamport + "/www/redirect.chi?url=" + encodedURL
 
 		db.Save(&shortUrl)
 	}
@@ -373,7 +386,7 @@ func GetShortUrlByHash(hash string) models.ShortUrl {
 	return shortUrl
 }
 
-func SendSMSCode(number string, code string, unit models.Unit, auth string) int {
+func SendSMSCode(number string, code string, unit models.Unit, auth string, uamip string, uamport string) int {
 	// get account sms count
 	db := database.Instance()
 	hotspot := GetHotspotById(unit.HotspotId)
@@ -422,7 +435,7 @@ func SendSMSCode(number string, code string, unit models.Unit, auth string) int 
 			msgData := url.Values{}
 			msgData.Set("To", number)
 			msgData.Set("MessagingServiceSid", configuration.Config.Endpoints.Sms.ServiceSid)
-			msgData.Set("Body", `Login Link: `+GenerateShortURL(configuration.Config.Endpoints.Sms.Link+"?"+auth+"&code="+code+"&num="+url.QueryEscape(number))+`
+			msgData.Set("Body", `Login Link: `+GenerateShortURL(configuration.Config.Endpoints.Sms.Link+"?"+auth+"&code="+code+"&num="+url.QueryEscape(number), uamip, uamport)+`
 
 Codice/Code: `+code+`
 
@@ -472,7 +485,7 @@ func SaveHotspotSMSCount(hotspotSmsCount models.HotspotSmsCount) {
 	db.Save(&hotspotSmsCount)
 }
 
-func SendEmailCode(email string, code string, unit models.Unit, auth string) bool {
+func SendEmailCode(email string, code string, unit models.Unit, auth string, uamip string, uamport string) bool {
 	hotspot := GetHotspotById(unit.HotspotId)
 
 	status := true
@@ -482,7 +495,7 @@ func SendEmailCode(email string, code string, unit models.Unit, auth string) boo
 	m.SetHeader("Subject", "Wi-Fi: "+hotspot.Description)
 	m.SetBody("text/plain", `Benvenut*
 Clicca sul link sottostante per accedere subito ad internet:
-Login Link: `+GenerateShortURL(configuration.Config.Endpoints.Email.Link+"?"+auth+"&code="+code+"&email="+url.QueryEscape(email))+`
+Login Link: `+GenerateShortURL(configuration.Config.Endpoints.Email.Link+"?"+auth+"&code="+code+"&email="+url.QueryEscape(email), uamip, uamport)+`
 
 
 In alternativa puoi accedere usando la tua email assieme al seguente codice di accesso:
@@ -496,7 +509,7 @@ Logout link: http://logout
 
 Welcome
 Click on the link below to immediately access the internet:
-Login Link: `+GenerateShortURL(configuration.Config.Endpoints.Email.Link+"?"+auth+"&code="+code+"&email="+url.QueryEscape(email))+`
+Login Link: `+GenerateShortURL(configuration.Config.Endpoints.Email.Link+"?"+auth+"&code="+code+"&email="+url.QueryEscape(email), uamip, uamport)+`
 
 
 Otherwise you can log in using your email together with this access code:
@@ -721,4 +734,96 @@ func SendSmsAlert(reseller models.Account, subject string, body string) bool {
 	}
 
 	return status
+}
+
+func CheckUserPassword(user models.User, password string) bool {
+	// search user
+	var userSearch models.User
+	db := database.Instance()
+	db.Where("id = ?", user.Id).First(&userSearch)
+
+	// verify password
+	if password == userSearch.Password {
+		return true
+	}
+
+	return false
+}
+
+func CreateUserAuth(sessionId string, sessionTimeout int, unitUuid string, userId int, username string, password string, typeAuth string) {
+	// create db instance
+	db := database.Instance()
+
+	// switch typeAuth
+	switch typeAuth {
+	case "created", "updated":
+		// create record
+		daemonAuth := models.DaemonAuth{
+			SessionId:      sessionId,
+			SessionTimeout: sessionTimeout,
+			UnitUuid:       unitUuid,
+			UserId:         userId,
+			Username:       username,
+			Password:       password,
+			Type:           typeAuth,
+			Updated:        time.Now().UTC(),
+		}
+
+		// save record
+		db.Save(&daemonAuth)
+
+	case "login", "logout":
+		// search record
+		var daemonAuth models.DaemonAuth
+		db.Where("session_id = ? AND unit_uuid = ? AND username = ?", sessionId, unitUuid, username).First(&daemonAuth)
+
+		if daemonAuth.Id == 0 {
+			// create new record
+			daemonAuth = models.DaemonAuth{
+				SessionId:      sessionId,
+				SessionTimeout: sessionTimeout,
+				UnitUuid:       unitUuid,
+				UserId:         userId,
+				Username:       username,
+				Password:       password,
+				Type:           typeAuth,
+				Updated:        time.Now().UTC(),
+			}
+		} else {
+			// update record
+			daemonAuth.Password = password
+			daemonAuth.Type = typeAuth
+			daemonAuth.Updated = time.Now().UTC()
+		}
+
+		// save record
+		db.Save(&daemonAuth)
+
+	case "temporary":
+		// search record
+		var daemonAuth models.DaemonAuth
+		db.Where("session_id = ? AND unit_uuid = ? AND username = ?", sessionId, unitUuid, username).First(&daemonAuth)
+
+		if daemonAuth.Id == 0 {
+			// create new record
+			daemonAuth = models.DaemonAuth{
+				SessionId:      sessionId,
+				SessionTimeout: sessionTimeout,
+				UnitUuid:       unitUuid,
+				UserId:         userId,
+				Username:       username,
+				Password:       password,
+				Type:           typeAuth,
+				Updated:        time.Now().UTC(),
+			}
+		} else {
+			// update record
+			daemonAuth.SessionTimeout = sessionTimeout
+			daemonAuth.Type = typeAuth
+			daemonAuth.Updated = time.Now().UTC()
+		}
+
+		// save record
+		db.Save(&daemonAuth)
+	}
 }

@@ -201,6 +201,9 @@ func FacebookAuth(c *gin.Context) {
 		// create marketing info with user infos
 		utils.CreateUserMarketing(newUser.Id, fbUserDetail, "facebook")
 
+		// create user auth
+		utils.CreateUserAuth(sessionId, 0, uuid, newUser.Id, newUser.Username, newUser.Password, "created")
+
 		// response to client
 		c.JSON(http.StatusOK, gin.H{"user_id": fbInspectToken.Data.UserId, "user_db_id": newUser.Id})
 	} else {
@@ -216,6 +219,9 @@ func FacebookAuth(c *gin.Context) {
 
 		// create marketing info with user infos
 		utils.CreateUserMarketing(user.Id, fbUserDetail, "facebook")
+
+		// create user auth
+		utils.CreateUserAuth(sessionId, 0, uuid, user.Id, user.Username, user.Password, "updated")
 
 		// retrieve voucher
 		if len(voucherCode) > 0 {
@@ -407,6 +413,9 @@ func LinkedInAuth(c *gin.Context) {
 		// create marketing info with user infos
 		utils.CreateUserMarketing(newUser.Id, liUserDetail, "linkedin")
 
+		// create user auth
+		utils.CreateUserAuth(sessionId, 0, uuid, newUser.Id, newUser.Username, newUser.Password, "created")
+
 		// response to client
 		c.JSON(http.StatusOK, gin.H{"user_id": liUserDetail.Id, "user_db_id": newUser.Id})
 	} else {
@@ -422,6 +431,9 @@ func LinkedInAuth(c *gin.Context) {
 
 		// create marketing info with user infos
 		utils.CreateUserMarketing(user.Id, liUserDetail, "linkedin")
+
+		// create user auth
+		utils.CreateUserAuth(sessionId, 0, uuid, user.Id, user.Username, user.Password, "updated")
 
 		// retrieve voucher
 		if len(voucherCode) > 0 {
@@ -586,6 +598,9 @@ func InstagramAuth(c *gin.Context) {
 		// create marketing info with user infos
 		utils.CreateUserMarketing(newUser.Id, inUserDetail, "instagram")
 
+		// create user auth
+		utils.CreateUserAuth(sessionId, 0, uuid, newUser.Id, newUser.Username, newUser.Password, "created")
+
 		// response to client
 		c.JSON(http.StatusOK, gin.H{"user_id": inUserDetail.Id, "user_db_id": newUser.Id})
 	} else {
@@ -601,6 +616,9 @@ func InstagramAuth(c *gin.Context) {
 
 		// create marketing info with user infos
 		utils.CreateUserMarketing(user.Id, inUserDetail, "instagram")
+
+		// create user auth
+		utils.CreateUserAuth(sessionId, 0, uuid, user.Id, user.Username, user.Password, "updated")
 
 		// retrieve voucher
 		if len(voucherCode) > 0 {

@@ -4,6 +4,8 @@ import Vue from 'vue'
 import VueResource from 'vue-resource'
 import VueI18n from 'vue-i18n'
 import VModal from 'vue-js-modal'
+import VueAwesomeCountdown from 'vue-awesome-countdown'
+
 import App from './App'
 import router from './router'
 
@@ -16,6 +18,8 @@ Vue.use(VueI18n)
 Vue.use(VModal, {
   dialog: true
 })
+
+Vue.use(VueAwesomeCountdown, 'vac')
 
 // get browser lang and init locales
 var messages = {}

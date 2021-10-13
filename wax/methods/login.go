@@ -26,8 +26,8 @@ import (
 	"bytes"
 	"fmt"
 	"net/http"
-	"time"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 
@@ -113,7 +113,7 @@ func autoLogin(c *gin.Context, unitMacAddress string, username string, userMac s
 	byPassMacAddress := utils.GetHotspotPreferencesByKey(unit.HotspotId, "bypass_macaddress_check")
 	byPassMacAddressBool, _ := strconv.ParseBool(byPassMacAddress.Value)
 
-	if(!byPassMacAddressBool) {
+	if !byPassMacAddressBool {
 		flagOtherLogin := utils.CheckOtherUnitLogin(userMac, unit.Id, unit.HotspotId)
 		if flagOtherLogin {
 			AuthReject(c, "device already logged in an other unit")
@@ -132,7 +132,7 @@ func autoLogin(c *gin.Context, unitMacAddress string, username string, userMac s
 	AuthAccept(c, outPrefs.String())
 }
 
-func Login(c *gin.Context, unitMacAddress string, username string, userMac string, chapPass string, chapChal string, sessionId string, timezone string) {
+func Login(c *gin.Context, unitMacAddress string, username string, userMac string, password string, chapPass string, chapChal string, sessionId string, timezone string) {
 	// check if unit exists
 	unit := utils.GetUnitByMacAddress(unitMacAddress)
 	if unit.Id <= 0 {
@@ -156,9 +156,15 @@ func Login(c *gin.Context, unitMacAddress string, username string, userMac strin
 		}
 	}
 
-	// check if user credentials are valid
-	if chapPass != utils.CalcUserDigest(user, chapChal) {
-		AuthReject(c, "password mismatch")
+	// check if user credentials are valid with plain
+	if len(password) >= 0 && len(chapPass) == 0 && !utils.CheckUserPassword(user, password) {
+		AuthReject(c, "password mismatch with plain")
+		return
+	}
+
+	// check if user credentials are valid with chap
+	if len(chapPass) > 0 && chapPass != utils.CalcUserDigest(user, chapChal) {
+		AuthReject(c, "password mismatch with chap")
 		return
 	}
 
@@ -179,7 +185,7 @@ func Login(c *gin.Context, unitMacAddress string, username string, userMac strin
 	byPassMacAddress := utils.GetHotspotPreferencesByKey(unit.HotspotId, "bypass_macaddress_check")
 	byPassMacAddressBool, _ := strconv.ParseBool(byPassMacAddress.Value)
 
-	if(!byPassMacAddressBool) {
+	if !byPassMacAddressBool {
 		flagOtherLogin := utils.CheckOtherUnitLogin(userMac, unit.Id, unit.HotspotId)
 		if flagOtherLogin {
 			AuthReject(c, "device already logged in an other unit")
@@ -215,11 +221,12 @@ func Logins(c *gin.Context) {
 		unitMacAddress := c.Query("ap")
 		user := c.Query("user")
 		userMac := c.Query("mac")
+		password := c.Query("pass")
 		chapPass := c.Query("chap_pass")
 		chapChal := c.Query("chap_chal")
 		sessionId := c.Query("sessionid")
 		timezone := c.Query("timezone")
-		Login(c, unitMacAddress, user, userMac, chapPass, chapChal, sessionId, timezone)
+		Login(c, unitMacAddress, user, userMac, password, chapPass, chapChal, sessionId, timezone)
 
 	default:
 		c.String(http.StatusNotFound, "Invalid login service: '%s'", service)

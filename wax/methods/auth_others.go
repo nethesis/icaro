@@ -25,8 +25,8 @@ package methods
 import (
 	"net/http"
 	"strconv"
-	"time"
 	"strings"
+	"time"
 
 	"github.com/nethesis/icaro/wax/utils"
 
@@ -122,7 +122,7 @@ func SMSAuth(c *gin.Context) {
 
 		// send sms with code
 		userIdStr := strconv.Itoa(newUser.Id)
-		status := utils.SendSMSCode(number, code, unit, "digest="+digest+"&uuid="+uuid+"&sessionid="+sessionId+"&uamip="+uamip+"&uamport="+uamport+"&user="+userIdStr)
+		status := utils.SendSMSCode(number, code, unit, "digest="+digest+"&uuid="+uuid+"&uamip="+uamip+"&uamport="+uamport+"&user="+userIdStr, uamip, uamport)
 
 		// check response
 		if status != 201 {
@@ -142,6 +142,9 @@ func SMSAuth(c *gin.Context) {
 
 		// create marketing info with user infos
 		utils.CreateUserMarketing(newUser.Id, smsMarketingData{Number: number}, "sms")
+
+		// create user auth
+		utils.CreateUserAuth(sessionId, 0, uuid, newUser.Id, newUser.Username, newUser.Password, "created")
 
 		// response to client
 		c.JSON(http.StatusOK, gin.H{"user_id": number, "user_db_id": newUser.Id})
@@ -184,7 +187,7 @@ func SMSAuth(c *gin.Context) {
 
 			// send sms with code
 			userIdStr := strconv.Itoa(user.Id)
-			status := utils.SendSMSCode(number, code, unit, "digest="+digest+"&uuid="+uuid+"&sessionid="+sessionId+"&uamip="+uamip+"&uamport="+uamport+"&user="+userIdStr)
+			status := utils.SendSMSCode(number, code, unit, "digest="+digest+"&uuid="+uuid+"&uamip="+uamip+"&uamport="+uamport+"&user="+userIdStr, uamip, uamport)
 
 			// check response
 			if status != 201 {
@@ -208,6 +211,9 @@ func SMSAuth(c *gin.Context) {
 
 		db := database.Instance()
 		db.Save(&user)
+
+		// create user auth
+		utils.CreateUserAuth(sessionId, 0, uuid, user.Id, user.Username, user.Password, "updated")
 
 		// response to client
 		c.JSON(http.StatusOK, gin.H{"user_id": number, "exists": true, "reset": reset, "user_db_id": user.Id})
@@ -320,7 +326,7 @@ func EmailAuth(c *gin.Context) {
 
 		// send email with code
 		userIdStr := strconv.Itoa(newUser.Id)
-		status := utils.SendEmailCode(email, code, unit, "digest="+digest+"&uuid="+uuid+"&sessionid="+sessionId+"&uamip="+uamip+"&uamport="+uamport+"&user="+userIdStr)
+		status := utils.SendEmailCode(email, code, unit, "digest="+digest+"&uuid="+uuid+"&uamip="+uamip+"&uamport="+uamport+"&user="+userIdStr, uamip, uamport)
 
 		// check response
 		if !status {
@@ -330,6 +336,9 @@ func EmailAuth(c *gin.Context) {
 
 		// create marketing info with user infos
 		utils.CreateUserMarketing(newUser.Id, emailMarketingData{Email: email}, "email")
+
+		// create user auth
+		utils.CreateUserAuth(sessionId, 0, uuid, newUser.Id, newUser.Username, newUser.Password, "created")
 
 		// response to client
 		c.JSON(http.StatusOK, gin.H{"user_id": email, "user_db_id": newUser.Id})
@@ -372,7 +381,7 @@ func EmailAuth(c *gin.Context) {
 
 			// send email with code
 			userIdStr := strconv.Itoa(user.Id)
-			status := utils.SendEmailCode(email, code, unit, "digest="+digest+"&uuid="+uuid+"&sessionid="+sessionId+"&uamip="+uamip+"&uamport="+uamport+"&user="+userIdStr)
+			status := utils.SendEmailCode(email, code, unit, "digest="+digest+"&uuid="+uuid+"&uamip="+uamip+"&uamport="+uamport+"&user="+userIdStr, uamip, uamport)
 
 			// check response
 			if !status {
@@ -386,6 +395,9 @@ func EmailAuth(c *gin.Context) {
 
 		db := database.Instance()
 		db.Save(&user)
+
+		// create user auth
+		utils.CreateUserAuth(sessionId, 0, uuid, user.Id, user.Username, user.Password, "updated")
 
 		// response to client
 		c.JSON(http.StatusOK, gin.H{"user_id": email, "exists": true, "reset": reset, "user_db_id": user.Id})
@@ -452,6 +464,7 @@ func MACAuth(c *gin.Context) {
 func VoucherAuth(c *gin.Context) {
 	code := c.Param("code")
 	uuid := c.Query("uuid")
+	sessionId := c.Query("sessionid")
 
 	// extract unit
 	unit := utils.GetUnitByUuid(uuid)
@@ -513,6 +526,9 @@ func VoucherAuth(c *gin.Context) {
 					user.ValidUntil = time.Now().UTC().AddDate(0, 0, duration)
 					db.Save(&user)
 				}
+
+				// create user auth
+				utils.CreateUserAuth(sessionId, 0, uuid, user.Id, user.Username, user.Password, "created")
 
 				c.JSON(http.StatusOK, gin.H{"message": "Voucher is valid", "code": voucher.Code, "type": voucher.Type, "user_db_id": user.Id})
 			}

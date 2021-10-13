@@ -128,59 +128,79 @@ var AuthMixin = {
             var params = this.extractParams()
             var ip = params.uamip || null
             var port = params.uamport || null
+            var digest = params.digest || null
+            var uuid = params.uuid || null
+            var sessionid = params.sessionid || null
 
             if (params.state) {
                 var state = this.parseState(params.state, base64)
                 ip = state.uamip
                 port = state.uamport
+                digest = state.digest
+                uuid = state.uuid
+                sessionid = state.sessionid
             }
             var dedaloUrl = ip + ':' + port
 
-            // do dedalo login
-            this.$http.get('http://' + dedaloUrl + '/json/status').then(function (responseStatus) {
-                // extract info to calculate response
-                var chap_challenge = responseStatus.body.challenge;
-                var string_to_hash = "00" + user.password + chap_challenge;
-
-                // calculate chap_password with challenge
-                var response = CryptoJS.MD5(string_to_hash).toString();
-
-                // do dedalo login
-                this.$http.get('http://' + dedaloUrl + '/json/logon?username=' + encodeURIComponent(user.id) +
-                    '&response=' + response).then(callback);
-            }, function (response) {
-                callback(response)
-            });
+            this.$http.get(protocol + host + '/wax/aaa/login' +
+                '?digest=' + digest +
+                '&uuid=' + uuid +
+                '&sessionid=' + sessionid +
+                '&username=' + encodeURIComponent(user.id) +
+                '&password=' + user.password
+            ).then(callback);
         },
-        doDedaloLogout: function (callback) {
+        doDedaloLogout: function (username, callback) {
             var params = this.extractParams()
             var ip = params.uamip || null
             var port = params.uamport || null
+            var digest = params.digest || null
+            var uuid = params.uuid || null
+            var sessionid = params.sessionid || null
 
             if (params.state) {
                 var state = this.parseState(params.state)
                 ip = state.uamip
                 port = state.uamport
+                digest = state.digest
+                uuid = state.uuid
+                sessionid = state.sessionid
             }
             var dedaloUrl = ip + ':' + port
 
             // do dedalo logout
-            this.$http.get('http://' + dedaloUrl + '/json/logout').then(callback);
+            this.$http.get(protocol + host + '/wax/aaa/logout' +
+                '?digest=' + digest +
+                '&uuid=' + uuid +
+                '&sessionid=' + sessionid +
+                '&username=' + encodeURIComponent(username)
+            ).then(callback);
         },
-        doTempSession: function (email, callback) {
+        doTempSession: function (username, callback) {
             var params = this.extractParams()
             var ip = params.uamip || null
             var port = params.uamport || null
+            var digest = params.digest || null
+            var uuid = params.uuid || null
+            var sessionid = params.sessionid || null
 
             if (params.state) {
                 var state = this.parseState(params.state)
                 ip = state.uamip
                 port = state.uamport
+                digest = state.digest
+                uuid = state.uuid
+                sessionid = state.sessionid
             }
             var dedaloUrl = ip + ':' + port
 
             // do dedalo temp session
-            this.$http.get('http://' + dedaloUrl + '/www/temporary.chi?username=' + email).then(callback);
+            this.$http.get(protocol + host + '/wax/aaa/temp' +
+                '?digest=' + digest +
+                '&uuid=' + uuid +
+                '&sessionid=' + sessionid +
+                '&username=' + encodeURIComponent(username)
+            ).then(callback);
         }
     }
 };
