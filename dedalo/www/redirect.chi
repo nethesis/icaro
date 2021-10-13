@@ -1,4 +1,4 @@
-#!/bin/sh
+<?
 #
 # Copyright (C) 2021 Nethesis S.r.l.
 # http://www.nethesis.it - info@nethesis.it
@@ -19,12 +19,10 @@
 # along with Icaro.  If not, see COPYING.
 #
 
-source /opt/icaro/dedalo/config
-HS_DIGEST=$(echo -n "$HS_SECRET$HS_UUID" | md5sum | awk '{print $1}')
-HS_AAA_HOST=$(echo "$HS_AAA_URL" | sed -e 's|https\?://\([^/:]\+\)\(.*\)|\1|')
-HS_TIMEZONE=$(timedatectl | grep "Time zone" | awk '{print $3}')
-HS_WALLED_GARDEN_INTEGRATIONS=$(find /opt/icaro/dedalo/walled_gardens/integrations/ -type f -exec echo include {} \;)
+url=$(echo "${FORM_url}" | base64 -d)
 
-eval "cat <<EOF
-$(cat "$1")
-EOF" > /opt/icaro/dedalo/chilli.conf
+echo "HTTP/1.1 302 Found"
+echo "Location: ${url}&sessionid=${CHI_SESSION_ID}"
+echo Connection: close
+echo Cache: none
+?>
