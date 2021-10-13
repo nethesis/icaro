@@ -144,7 +144,6 @@
           </div>
         </div>
         <div>
-          <!-- <button :style="buttonStyle" v-on:click="navigate()" class="ui big button green">{{ $t("login.navigate") }}</button> -->
           <vac :end-time="new Date().getTime() + 9000">
             <button slot="process" slot-scope="{ timeObj }" class="ui big button green" :disabled="true" :style="buttonStyle">
               {{ $t("login.navigate_in") }} {{ timeObj.ceil.s }}
