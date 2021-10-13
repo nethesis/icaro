@@ -1,5 +1,5 @@
 Name: dedalo
-Version: 0.3.0
+Version: 0.4.0
 Release: 1%{?dist}
 Summary: Network Access Controller, runs on the firewall and intercepts all guest connections
 
@@ -73,6 +73,12 @@ touch %{buildroot}/opt/icaro/dedalo/walled_gardens/local.conf
 
 
 %changelog
+* Wed Oct 13 2021 Matteo Valentini <matteo.valentini@nethesis.it> - 0.4.0-1
+  - dedalo. add missing license headers
+  - dedalo: add `www/redirect.chi`
+  - dedalo: get list of autenticated unit's sessions
+  - dedalo. add new users auth method
+
 * Tue Jun 11 2019 Matteo Valentini <matteo.valentini@nethesis.it> - 0.3.0-1
   - dedalo. added dynamic walled gardens list for integrations
 
