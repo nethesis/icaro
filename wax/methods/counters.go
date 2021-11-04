@@ -237,6 +237,10 @@ func Counters(c *gin.Context, parameters url.Values) {
 
 	switch status {
 	case "start":
+		// clean daemon auths record
+		db := database.Instance()
+		db.Where("unit_uuid = ? AND username = ? AND type = 'login'", c.Query("uuid"), c.Query("user")).Delete(models.DaemonAuth{})
+
 		if strings.Compare(c.Query("user"), "temporary") != 0 {
 			if strings.Compare(c.Query("user"), c.Query("mac")) == 0 {
 				//autologin
