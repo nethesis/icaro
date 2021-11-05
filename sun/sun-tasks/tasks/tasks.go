@@ -77,12 +77,12 @@ func Init(action string, worker bool) {
 
 func cleanAuths() {
 	db := database.Instance()
-	db.Where("updated < ? AND type = 'login", time.Now().AddDate(0, 0, -1).UTC()).Delete(models.DaemonAuth{})
+	db.Where("updated < ? AND type = 'login'", time.Now().AddDate(0, 0, -1).UTC()).Delete(models.DaemonAuth{})
 }
 
 func cleanTokens() {
 	db := database.Instance()
-	db.Where("expires < ? AND type = 'login", time.Now().UTC()).Delete(models.AccessToken{})
+	db.Where("expires < ? AND type = 'login'", time.Now().UTC()).Delete(models.AccessToken{})
 }
 
 func storeSessions() {
