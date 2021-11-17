@@ -28,7 +28,13 @@
             "reason": "Причина визита",
             "business": "Бизнес",
             "family": "семья",
-            "other": "Другой"
+            "other": "Другой",
+            "with_facebook": "Войти через Facebook",
+            "with_instagram": "Войти через Instagram",
+            "with_linkedin": "Войти через LinkedIn",
+            "with_sms": "Войти через SMS",
+            "with_email": "Войти через Эл. адрес",
+            "with_code": "Войти через Ваучер"
         },
         "social": {
             "auth_progress": "Идёт авторизация",
