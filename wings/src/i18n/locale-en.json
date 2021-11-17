@@ -32,7 +32,13 @@
             "reason": "Reason of the Visit",
             "business": "Business",
             "family": "Family",
-            "other": "Other"
+            "other": "Other",
+            "with_facebook": "Login with Facebook",
+            "with_instagram": "Login with Instagram",
+            "with_linkedin": "Login with LinkedIn",
+            "with_sms": "Login with SMS",
+            "with_email": "Login with Email",
+            "with_code": "Login with Voucher"
         },
         "social": {
             "auth_progress": "Authorization in progress",
