@@ -62,7 +62,7 @@ func Init(action string, worker bool) {
 		storeUsers()
 
 	case "clean-auths":
-		c.AddFunc("@daily", cleanAuths)
+		c.AddFunc("@every 1h", cleanAuths)
 		cleanAuths()
 
 	default:
@@ -77,7 +77,7 @@ func Init(action string, worker bool) {
 
 func cleanAuths() {
 	db := database.Instance()
-	db.Where("updated < ? AND type = 'login'", time.Now().AddDate(0, 0, -1).UTC()).Delete(models.DaemonAuth{})
+	db.Where("updated < ?", time.Now().AddDate(0, 0, -1).UTC()).Delete(models.DaemonAuth{})
 }
 
 func cleanTokens() {
