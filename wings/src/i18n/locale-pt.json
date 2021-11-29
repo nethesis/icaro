@@ -33,7 +33,13 @@
             "reason": "Razão da Visita",
             "business": "Profissional",
             "family": "Familiar",
-            "other": "Outro"
+            "other": "Outro",
+            "with_facebook": "Login com Facebook",
+            "with_instagram": "Login com Instagram",
+            "with_linkedin": "Login com LinkedIn",
+            "with_sms": "Login com SMS",
+            "with_email": "Login com Email",
+            "with_code": "Login com Voucher"
         },
         "social": {
             "auth_progress": "Autenticação em curso",

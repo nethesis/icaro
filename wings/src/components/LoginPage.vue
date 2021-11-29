@@ -41,7 +41,7 @@
         <div v-if="hotspot.preferences.facebook_login == 'true'" class="item">
           <div @click="changeRoute('/login/facebook', false)" class="ui facebook button big fluid" :style="buttonStyle">
             <i class="facebook icon"></i>
-            Facebook
+            {{ $t("login.with_facebook") }}
           </div>
         </div>
         <div v-if="hotspot.preferences.instagram_login == 'true'" class="item">
@@ -51,13 +51,13 @@
             :style="buttonStyle"
           >
             <i class="instagram icon"></i>
-            Instagram
+            {{ $t("login.with_instagram") }}
           </div>
         </div>
         <div v-if="hotspot.preferences.linkedin_login == 'true'" class="item">
           <div @click="changeRoute('/login/linkedin', false)" class="ui linkedin button big fluid" :style="buttonStyle">
             <i class="linkedin icon"></i>
-            LinkedIn
+            {{ $t("login.with_linkedin") }}
           </div>
         </div>
       </div>
@@ -66,13 +66,13 @@
         <div v-if="hotspot.preferences.sms_login == 'true'" class="item">
           <div @click="changeRoute('/login/sms', false)" class="ui button yellow big fluid" :style="buttonStyle">
             <i class="talk icon"></i>
-            SMS
+            {{ $t("login.with_sms") }}
           </div>
         </div>
         <div v-if="hotspot.preferences.email_login == 'true'" class="item">
           <div @click="changeRoute('/login/email', false)" class="ui button red big fluid" :style="buttonStyle">
             <i class="mail icon"></i>
-            Email
+            {{ $t("login.with_email") }}
           </div>
         </div>
       </div>
@@ -81,7 +81,7 @@
         <div v-if="hotspot.preferences.temp_code_login == 'true'" class="item">
           <div @click="changeRoute('/login', true)" class="ui button teal big fluid" :style="buttonStyle">
             <i class="barcode icon"></i>
-            {{ $t("login.code") }}
+            {{ $t("login.with_code") }}
           </div>
         </div>
       </div>
