@@ -102,7 +102,7 @@ func compileUserEmailTemplate(Type string, adeToken models.AdeToken, hotspotName
 	var Url string
 
 	if adeToken.Id != 0 {
-		Url = wax_utils.GenerateShortURL(configuration.Config.Survey.Url+Type+"s/"+adeToken.Token, "", "")
+		Url = wax_utils.GenerateShortURL(configuration.Config.Survey.Url+Type+"s/"+adeToken.Token, "", "", true)
 	} else {
 		Url = "https://example.org/"
 	}
@@ -134,7 +134,6 @@ func compileUserEmailTemplate(Type string, adeToken models.AdeToken, hotspotName
 func SendFeedBackMessageToUser(adeToken models.AdeToken, userEmail string, hotspotName string, bgColor string, hotspotContainerBgColor string, hotspotTitleColor string, hotspotTextColor string, hotspotTextStyle string, hotspot models.Hotspot, BodyText string) bool {
 
 	userMessage, status := compileUserEmailTemplate("feedback", adeToken, hotspotName, bgColor, hotspotContainerBgColor, hotspotTitleColor, hotspotTextColor, hotspotTextStyle, hotspot, BodyText)
-
 	if status {
 		mailFrom := wax_utils.GetHotspotPreferencesByKey(hotspot.Id, "captive_2_title").Value + " <" + configuration.Config.Endpoints.Email.From + ">"
 		mailSubject := strings.Replace(
@@ -305,7 +304,7 @@ func SendSMS(adeToken models.AdeToken, message string, survey string, smsTo stri
 		msgData.Set("Body",
 			hotspot.BusinessName+"\n"+
 				message+"\n"+"Link: "+
-				wax_utils.GenerateShortURL(configuration.Config.Survey.Url+survey+"/"+adeToken.Token, "", ""))
+				wax_utils.GenerateShortURL(configuration.Config.Survey.Url+survey+"/"+adeToken.Token, "", "", true))
 		msgDataReader := *strings.NewReader(msgData.Encode())
 
 		// create HTTP request client

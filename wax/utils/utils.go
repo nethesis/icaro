@@ -352,7 +352,7 @@ func GenerateCode(max int) string {
 	return string(b)
 }
 
-func GenerateShortURL(longURL string, uamip string, uamport string) string {
+func GenerateShortURL(longURL string, uamip string, uamport string, keepURL bool) string {
 
 	var shortUrl models.ShortUrl
 	h := sha1.New()
@@ -370,7 +370,11 @@ func GenerateShortURL(longURL string, uamip string, uamport string) string {
 	if shortUrl.Id == 0 {
 		shortUrl.Hash = encoded
 		shortUrl.CreatedAt = time.Now().UTC()
-		shortUrl.LongUrl = "http://" + uamip + ":" + uamport + "/www/redirect.chi?url=" + encodedURL
+		if keepURL {
+			shortUrl.LongUrl = longURL
+		} else {
+			shortUrl.LongUrl = "http://" + uamip + ":" + uamport + "/www/redirect.chi?url=" + encodedURL
+		}
 
 		db.Save(&shortUrl)
 	}
@@ -435,7 +439,7 @@ func SendSMSCode(number string, code string, unit models.Unit, auth string, uami
 			msgData := url.Values{}
 			msgData.Set("To", number)
 			msgData.Set("MessagingServiceSid", configuration.Config.Endpoints.Sms.ServiceSid)
-			msgData.Set("Body", `Login Link: `+GenerateShortURL(configuration.Config.Endpoints.Sms.Link+"?"+auth+"&code="+code+"&num="+url.QueryEscape(number), uamip, uamport)+`
+			msgData.Set("Body", `Login Link: `+GenerateShortURL(configuration.Config.Endpoints.Sms.Link+"?"+auth+"&code="+code+"&num="+url.QueryEscape(number), uamip, uamport, false)+`
 
 Codice/Code: `+code+`
 
@@ -495,7 +499,7 @@ func SendEmailCode(email string, code string, unit models.Unit, auth string, uam
 	m.SetHeader("Subject", "Wi-Fi: "+hotspot.Description)
 	m.SetBody("text/plain", `Benvenut*
 Clicca sul link sottostante per accedere subito ad internet:
-Login Link: `+GenerateShortURL(configuration.Config.Endpoints.Email.Link+"?"+auth+"&code="+code+"&email="+url.QueryEscape(email), uamip, uamport)+`
+Login Link: `+GenerateShortURL(configuration.Config.Endpoints.Email.Link+"?"+auth+"&code="+code+"&email="+url.QueryEscape(email), uamip, uamport, false)+`
 
 
 In alternativa puoi accedere usando la tua email assieme al seguente codice di accesso:
@@ -509,7 +513,7 @@ Logout link: http://logout
 
 Welcome
 Click on the link below to immediately access the internet:
-Login Link: `+GenerateShortURL(configuration.Config.Endpoints.Email.Link+"?"+auth+"&code="+code+"&email="+url.QueryEscape(email), uamip, uamport)+`
+Login Link: `+GenerateShortURL(configuration.Config.Endpoints.Email.Link+"?"+auth+"&code="+code+"&email="+url.QueryEscape(email), uamip, uamport, false)+`
 
 
 Otherwise you can log in using your email together with this access code:
