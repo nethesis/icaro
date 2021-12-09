@@ -79,7 +79,11 @@ func sendSurveysActive() {
 		FROM users
 		WHERE survey_auth = 1 AND id IN (
 		    SELECT user_id FROM ade_tokens
-		    WHERE feedback_sent_time != "0000-00-00 00:00:00" OR review_sent_time != "0000-00-00 00:00:00"
+		    WHERE (
+					feedback_sent_time != "0000-00-00 00:00:00" OR review_sent_time != "0000-00-00 00:00:00"
+				) AND NOT (
+					feedback_sent_time != "0000-00-00 00:00:00" AND review_sent_time != "0000-00-00 00:00:00"
+				)
 		  )
 
 		UNION
@@ -90,7 +94,6 @@ func sendSurveysActive() {
 		    SELECT user_id FROM ade_tokens
 		  )
 	`).Scan(&users)
-	//db.Where("survey_auth = 1").Find(&users)
 
 	usersList := make([]User, len(users))
 
@@ -114,7 +117,26 @@ func sendSurveysExpired() {
 
 	db := database.Instance()
 
-	db.Where("survey_auth = 1").Find(&users)
+	db.Raw(`
+		SELECT *
+		FROM user_histories
+		WHERE survey_auth = 1 AND user_id IN (
+		    SELECT user_id FROM ade_tokens
+		    WHERE (
+					feedback_sent_time != "0000-00-00 00:00:00" OR review_sent_time != "0000-00-00 00:00:00"
+				) AND NOT (
+					feedback_sent_time != "0000-00-00 00:00:00" AND review_sent_time != "0000-00-00 00:00:00"
+				)
+		  )
+
+		UNION
+
+		SELECT *
+		FROM user_histories
+		WHERE survey_auth = 1 AND user_id NOT IN (
+		    SELECT user_id FROM ade_tokens
+		  )
+	`).Scan(&users)
 
 	usersList := make([]User, len(users))
 
