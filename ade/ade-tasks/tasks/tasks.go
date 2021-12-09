@@ -73,7 +73,6 @@ func sendSurveysActive() {
 	var users []models.User
 
 	db := database.Instance()
-	db.LogMode(true)
 	db.Raw(`
 		SELECT *
 		FROM users
