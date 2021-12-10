@@ -73,6 +73,7 @@ func sendSurveysActive() {
 	var users []models.User
 
 	db := database.Instance()
+
 	db.Raw(`
 		SELECT *
 		FROM users
@@ -83,7 +84,10 @@ func sendSurveysActive() {
 				) AND NOT (
 					feedback_sent_time != "0000-00-00 00:00:00" AND review_sent_time != "0000-00-00 00:00:00"
 				)
-		  )
+		  ) AND hotspot_id IN (
+				SELECT DISTINCT hotspot_id FROM hotspot_preferences
+				WHERE ` + "`" + "key" + "`" + ` = "marketing_1_enabled" AND value = "true"
+			)
 
 		UNION
 
@@ -91,7 +95,10 @@ func sendSurveysActive() {
 		FROM users
 		WHERE survey_auth = 1 AND id NOT IN (
 		    SELECT user_id FROM ade_tokens
-		  )
+		  ) AND hotspot_id IN (
+				SELECT DISTINCT hotspot_id FROM hotspot_preferences
+				WHERE ` + "`" + "key" + "`" + ` = "marketing_1_enabled" AND value = "true"
+			)
 	`).Scan(&users)
 
 	usersList := make([]User, len(users))
@@ -115,7 +122,7 @@ func sendSurveysExpired() {
 	var users []models.UserHistory
 
 	db := database.Instance()
-
+	
 	db.Raw(`
 		SELECT *
 		FROM user_histories
@@ -126,7 +133,10 @@ func sendSurveysExpired() {
 				) AND NOT (
 					feedback_sent_time != "0000-00-00 00:00:00" AND review_sent_time != "0000-00-00 00:00:00"
 				)
-		  )
+		  ) AND hotspot_id IN (
+				SELECT DISTINCT hotspot_id FROM hotspot_preferences
+				WHERE ` + "`" + "key" + "`" + ` = "marketing_1_enabled" AND value = "true"
+			)
 
 		UNION
 
@@ -134,7 +144,10 @@ func sendSurveysExpired() {
 		FROM user_histories
 		WHERE survey_auth = 1 AND user_id NOT IN (
 		    SELECT user_id FROM ade_tokens
-		  )
+		  ) AND hotspot_id IN (
+				SELECT DISTINCT hotspot_id FROM hotspot_preferences
+				WHERE ` + "`" + "key" + "`" + ` = "marketing_1_enabled" AND value = "true"
+			)
 	`).Scan(&users)
 
 	usersList := make([]User, len(users))
