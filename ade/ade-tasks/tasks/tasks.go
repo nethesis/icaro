@@ -73,18 +73,20 @@ func sendSurveysActive() {
 	var users []models.User
 
 	db := database.Instance()
-
+	
 	db.Raw(`
 		SELECT *
 		FROM users
-		WHERE survey_auth = 1 AND id IN (
+		WHERE survey_auth = 1
+		  AND id IN (
 		    SELECT user_id FROM ade_tokens
 		    WHERE (
 					feedback_sent_time != "0000-00-00 00:00:00" OR review_sent_time != "0000-00-00 00:00:00"
 				) AND NOT (
 					feedback_sent_time != "0000-00-00 00:00:00" AND review_sent_time != "0000-00-00 00:00:00"
 				)
-		  ) AND hotspot_id IN (
+		  )
+			AND hotspot_id IN (
 				SELECT DISTINCT hotspot_id FROM hotspot_preferences
 				WHERE ` + "`" + "key" + "`" + ` = "marketing_1_enabled" AND value = "true"
 			)
@@ -94,9 +96,11 @@ func sendSurveysActive() {
 
 		SELECT *
 		FROM users
-		WHERE survey_auth = 1 AND id NOT IN (
+		WHERE survey_auth = 1
+		  AND id NOT IN (
 		    SELECT user_id FROM ade_tokens
-		  ) AND hotspot_id IN (
+		  )
+			AND hotspot_id IN (
 				SELECT DISTINCT hotspot_id FROM hotspot_preferences
 				WHERE ` + "`" + "key" + "`" + ` = "marketing_1_enabled" AND value = "true"
 			)
@@ -128,14 +132,16 @@ func sendSurveysExpired() {
 	db.Raw(`
 		SELECT *
 		FROM user_histories
-		WHERE survey_auth = 1 AND user_id IN (
+		WHERE survey_auth = 1
+		  AND user_id IN (
 		    SELECT user_id FROM ade_tokens
 		    WHERE (
 					feedback_sent_time != "0000-00-00 00:00:00" OR review_sent_time != "0000-00-00 00:00:00"
 				) AND NOT (
 					feedback_sent_time != "0000-00-00 00:00:00" AND review_sent_time != "0000-00-00 00:00:00"
 				)
-		  ) AND hotspot_id IN (
+		  )
+			AND hotspot_id IN (
 				SELECT DISTINCT hotspot_id FROM hotspot_preferences
 				WHERE ` + "`" + "key" + "`" + ` = "marketing_1_enabled" AND value = "true"
 			)
@@ -145,9 +151,11 @@ func sendSurveysExpired() {
 
 		SELECT *
 		FROM user_histories
-		WHERE survey_auth = 1 AND user_id NOT IN (
+		WHERE survey_auth = 1
+		  AND user_id NOT IN (
 		    SELECT user_id FROM ade_tokens
-		  ) AND hotspot_id IN (
+		  )
+			AND hotspot_id IN (
 				SELECT DISTINCT hotspot_id FROM hotspot_preferences
 				WHERE ` + "`" + "key" + "`" + ` = "marketing_1_enabled" AND value = "true"
 			)
