@@ -88,6 +88,7 @@ func sendSurveysActive() {
 				SELECT DISTINCT hotspot_id FROM hotspot_preferences
 				WHERE ` + "`" + "key" + "`" + ` = "marketing_1_enabled" AND value = "true"
 			)
+			AND created >= NOW() - INTERVAL 1 YEAR
 
 		UNION
 
@@ -99,6 +100,7 @@ func sendSurveysActive() {
 				SELECT DISTINCT hotspot_id FROM hotspot_preferences
 				WHERE ` + "`" + "key" + "`" + ` = "marketing_1_enabled" AND value = "true"
 			)
+			AND created >= NOW() - INTERVAL 1 YEAR
 	`).Scan(&users)
 
 	usersList := make([]User, len(users))
@@ -122,7 +124,7 @@ func sendSurveysExpired() {
 	var users []models.UserHistory
 
 	db := database.Instance()
-	
+
 	db.Raw(`
 		SELECT *
 		FROM user_histories
@@ -137,6 +139,7 @@ func sendSurveysExpired() {
 				SELECT DISTINCT hotspot_id FROM hotspot_preferences
 				WHERE ` + "`" + "key" + "`" + ` = "marketing_1_enabled" AND value = "true"
 			)
+			AND created >= NOW() - INTERVAL 1 YEAR
 
 		UNION
 
@@ -148,6 +151,7 @@ func sendSurveysExpired() {
 				SELECT DISTINCT hotspot_id FROM hotspot_preferences
 				WHERE ` + "`" + "key" + "`" + ` = "marketing_1_enabled" AND value = "true"
 			)
+			AND created >= NOW() - INTERVAL 1 YEAR
 	`).Scan(&users)
 
 	usersList := make([]User, len(users))
