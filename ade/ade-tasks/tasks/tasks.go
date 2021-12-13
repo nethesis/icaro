@@ -73,14 +73,44 @@ func sendSurveysActive() {
 	var users []models.User
 
 	db := database.Instance()
+	
+	db.Raw(`
+		SELECT *
+		FROM users
+		WHERE survey_auth = 1
+		  AND id IN (
+		    SELECT user_id FROM ade_tokens
+		    WHERE (
+					feedback_sent_time != "0000-00-00 00:00:00" OR review_sent_time != "0000-00-00 00:00:00"
+				) AND NOT (
+					feedback_sent_time != "0000-00-00 00:00:00" AND review_sent_time != "0000-00-00 00:00:00"
+				)
+		  )
+			AND hotspot_id IN (
+				SELECT DISTINCT hotspot_id FROM hotspot_preferences
+				WHERE ` + "`" + "key" + "`" + ` = "marketing_1_enabled" AND value = "true"
+			)
+			AND created >= NOW() - INTERVAL 1 YEAR
 
-	db.Where("survey_auth = 1").Find(&users)
+		UNION
+
+		SELECT *
+		FROM users
+		WHERE survey_auth = 1
+		  AND id NOT IN (
+		    SELECT user_id FROM ade_tokens
+		  )
+			AND hotspot_id IN (
+				SELECT DISTINCT hotspot_id FROM hotspot_preferences
+				WHERE ` + "`" + "key" + "`" + ` = "marketing_1_enabled" AND value = "true"
+			)
+			AND created >= NOW() - INTERVAL 1 YEAR
+	`).Scan(&users)
 
 	usersList := make([]User, len(users))
 
 	for i, u := range users {
 		usersList[i].Id = u.Id
-		usersList[i].HotspotId = u.HotspotId
 		usersList[i].HotspotId = u.HotspotId
 		usersList[i].Username = u.Username
 		usersList[i].Email = u.Email
@@ -99,7 +129,38 @@ func sendSurveysExpired() {
 
 	db := database.Instance()
 
-	db.Where("survey_auth = 1").Find(&users)
+	db.Raw(`
+		SELECT *
+		FROM user_histories
+		WHERE survey_auth = 1
+		  AND user_id IN (
+		    SELECT user_id FROM ade_tokens
+		    WHERE (
+					feedback_sent_time != "0000-00-00 00:00:00" OR review_sent_time != "0000-00-00 00:00:00"
+				) AND NOT (
+					feedback_sent_time != "0000-00-00 00:00:00" AND review_sent_time != "0000-00-00 00:00:00"
+				)
+		  )
+			AND hotspot_id IN (
+				SELECT DISTINCT hotspot_id FROM hotspot_preferences
+				WHERE ` + "`" + "key" + "`" + ` = "marketing_1_enabled" AND value = "true"
+			)
+			AND created >= NOW() - INTERVAL 1 YEAR
+
+		UNION
+
+		SELECT *
+		FROM user_histories
+		WHERE survey_auth = 1
+		  AND user_id NOT IN (
+		    SELECT user_id FROM ade_tokens
+		  )
+			AND hotspot_id IN (
+				SELECT DISTINCT hotspot_id FROM hotspot_preferences
+				WHERE ` + "`" + "key" + "`" + ` = "marketing_1_enabled" AND value = "true"
+			)
+			AND created >= NOW() - INTERVAL 1 YEAR
+	`).Scan(&users)
 
 	usersList := make([]User, len(users))
 
@@ -175,7 +236,7 @@ func sendSurveys(users []User) {
 		db.Where("hotspot_id = ? AND `key` = 'marketing_14_review_body_text'", u.HotspotId).Find(&hotspotReviewBodyText)
 
 		// if token not exists create token
-		if adeToken.Id == 0 && u.IsActive {
+		if adeToken.Id == 0 && u.IsActive && marketingEnabled.Value == "true" {
 			var user models.User
 			db.Where("id = ?", u.Id).First(&user)
 			adeToken = utils.CreateAdeToken(user)
