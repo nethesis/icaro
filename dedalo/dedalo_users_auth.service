@@ -1,5 +1,5 @@
 [Unit]
-Description=Dedalo's users authentcation daemon
+Description=Dedalo's users authentication daemon
 After=dedalo.service
 BindsTo=dedalo.service
 
