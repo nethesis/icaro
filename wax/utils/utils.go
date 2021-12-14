@@ -363,7 +363,7 @@ func GenerateShortURL(longURL string, uamip string, uamport string, keepURL bool
 	s := fmt.Sprintf("%.7s", fmt.Sprintf("%x", h.Sum(nil)))
 	//Encode the first 7 digits in Base64 without padding and url safe
 	encoded := base64.URLEncoding.WithPadding(base64.NoPadding).EncodeToString([]byte(s))
-	encodedURL := base64.URLEncoding.WithPadding(base64.NoPadding).EncodeToString([]byte(longURL))
+	encodedURL := base64.StdEncoding.WithPadding(base64.StdPadding).EncodeToString([]byte(longURL))
 
 	db.Where("hash = ? ", encoded).First(&shortUrl)
 
