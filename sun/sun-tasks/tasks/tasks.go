@@ -77,7 +77,7 @@ func Init(action string, worker bool) {
 
 func cleanAuths() {
 	db := database.Instance()
-	db.Where("updated < ?", time.Now().AddDate(0, 0, -1).UTC()).Delete(models.DaemonAuth{})
+	db.Where("updated < ?", time.Now().Add(-1 * time.Hour).UTC()).Delete(models.DaemonAuth{})
 }
 
 func cleanTokens() {
