@@ -23,7 +23,8 @@ Available options:
 - ``HS_DHCPEND``: last octet of the last ip address of dhcp range, eg: 192.168.182.55 this value should be only ``55``. (default 254)
 - ``HS_ALLOW_ORIGIN``: hosts allowed to execute CORS requests to Dedalo, usually it corresponds to ``HS_SPLASH_PAGE_URL``, eg: ``http://icaro.mydomain.com``
 - ``HS_DNS1`` and ``HS_DNS2``: primary and secondary dns servers, if not sets, will be used the default servers (OpenDNS).
-- '`USE_UPDOWN_SCRIPTS`: flag for enable/disable use of dedalo's ipup and ipdown scripts.
+- ``HS_MAXCLIENTS``: size of the DHCP IP pool (default `512`).
+- ``USE_UPDOWN_SCRIPTS``: flag for enable/disable use of dedalo's ipup and ipdown scripts.
 
 ### Example
 ```ini
