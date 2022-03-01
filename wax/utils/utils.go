@@ -471,12 +471,16 @@ Logout Link: http://logout`)
 			}
 
 			return resp.StatusCode
+		} else {
+			resellerAccount := GetAccountByAccountId(hotspot.AccountId)
+			SendSmsHotspotThresholdAlert(resellerAccount, hotspot, 0)
 		}
-	}
+	} else {
 
-	if configuration.Config.Endpoints.Sms.SendQuotaAlert {
-		resellerAccount := GetAccountByAccountId(hotspot.AccountId)
-		SendSmsQuotaLimitAlert(resellerAccount)
+		if configuration.Config.Endpoints.Sms.SendQuotaAlert {
+			resellerAccount := GetAccountByAccountId(hotspot.AccountId)
+			SendSmsQuotaLimitAlert(resellerAccount)
+		}
 	}
 
 	return 500
