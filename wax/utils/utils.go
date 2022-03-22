@@ -375,7 +375,7 @@ func GenerateHashByData(data string, uamip string, uamport string, keepURL bool)
 	s := fmt.Sprintf("%.7s", fmt.Sprintf("%x", h.Sum(nil)))
 	//Encode the first 7 digits in Base64 without padding and url safe
 	encoded := base64.URLEncoding.WithPadding(base64.NoPadding).EncodeToString([]byte(s))
-	encodedURL := base64.StdEncoding.WithPadding(base64.StdPadding).EncodeToString([]byte(longURL))
+	encodedURL := base64.StdEncoding.WithPadding(base64.StdPadding).EncodeToString([]byte(data))
 
 	db.Where("hash = ? ", encoded).First(&hashData)
 
@@ -412,7 +412,7 @@ func DeleteHashData(hash string) {
 	db.Where("hash = ?", hash).Delete(models.ShortUrl{})
 }
 
-func SendWhatsappMessage(number string, code string, unit models.Unit, auth string) int {
+func SendWhatsappMessage(number string, code string, unit models.Unit, auth string, uamip string, uamport string) int {
 	// get account sms count
 	db := database.Instance()
 	hotspot := GetHotspotById(unit.HotspotId)
@@ -462,7 +462,7 @@ func SendWhatsappMessage(number string, code string, unit models.Unit, auth stri
 			msgData.Set("To", number)
 			msgData.Set("From", "whatsapp:"+configuration.Config.Endpoints.Whatsapp.Number)
 			msgData.Set("Body", GenerateShortURL(configuration.Config.Endpoints.Whatsapp.Link+
-				"?"+auth+"&code="+code+"&num="+url.QueryEscape(number)))
+				"?"+auth+"&code="+code+"&num="+url.QueryEscape(number), uamip, uamport, false))
 			msgDataReader := *strings.NewReader(msgData.Encode())
 
 			// create HTTP request client
