@@ -350,6 +350,7 @@ export default {
           type: "privacy",
           body: ""
         },
+      },
       whatsapp: {
         isLoading: true,
         data: {}
@@ -358,7 +359,7 @@ export default {
       maps: {},
       isAdmin: this.get("loggedUser").account_type == "admin",
       disclaimerToDelete: {},
-    };
+    }
   },
   // enable tooltips after rendering
   updated: function() {
