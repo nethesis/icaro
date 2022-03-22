@@ -394,6 +394,7 @@ export default {
           }, 2000);
         }
       );
+    },
     getWhatsappThreshold() {
       this.statsWhatsappTotalForAccountByAccount(
         this.user.login.id,
