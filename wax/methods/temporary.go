@@ -39,6 +39,8 @@ func Temporary(c *gin.Context, parameters url.Values) {
 	unitMacAddress := parameters.Get("ap")
 	status := parameters.Get("status")
 	short_code := parameters.Get("short_code")
+	uamip := parameters.Get("uamip")
+	uamport := parameters.Get("uamport")
 
 	var user models.User
 
@@ -80,7 +82,7 @@ func Temporary(c *gin.Context, parameters url.Values) {
 			data.Set("uamip", parameters.Get("uamip"))
 			data.Set("uamport", "3990")
 
-			hash := utils.GenerateHashByData(data.Encode())
+			hash := utils.GenerateHashByData(data.Encode(), uamip, uamport, false)
 
 			c.JSON(http.StatusOK, gin.H{"sessiontimeout": seconds.Value, "short_code": hash})
 

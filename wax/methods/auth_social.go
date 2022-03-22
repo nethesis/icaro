@@ -121,7 +121,7 @@ func WhatsappAuth(c *gin.Context) {
 		upInt, _ := strconv.Atoi(up.Value)
 
 		maxTraffic := utils.GetHotspotPreferencesByKey(unit.HotspotId, "CoovaChilli-Max-Total-Octets")
-		maxTrafficInt, _ := strconv.Atoi(maxTraffic.Value)
+		maxTrafficInt, _ := strconv.ParseInt(maxTraffic.Value, 10, 64)
 
 		maxTime := utils.GetHotspotPreferencesByKey(unit.HotspotId, "CoovaChilli-Max-Navigation-Time")
 		maxTimeInt, _ := strconv.Atoi(maxTime.Value)
@@ -169,7 +169,7 @@ func WhatsappAuth(c *gin.Context) {
 
 		// send whatsapp message with code
 		userIdStr := strconv.Itoa(newUser.Id)
-		status := utils.SendWhatsappMessage(number, code, unit, "digest="+digest+"&uuid="+uuid+"&sessionid="+sessionId+"&uamip="+uamip+"&uamport="+uamport+"&user="+userIdStr)
+		status := utils.SendWhatsappMessage(number, code, unit, "digest="+digest+"&uuid="+uuid+"&sessionid="+sessionId+"&uamip="+uamip+"&uamport="+uamport+"&user="+userIdStr, uamip, uamport)
 
 		// check response
 		if status != 201 {
@@ -229,7 +229,7 @@ func WhatsappAuth(c *gin.Context) {
 
 		// send whatsapp message with code
 		userIdStr := strconv.Itoa(user.Id)
-		status := utils.SendWhatsappMessage(number, code, unit, "digest="+digest+"&uuid="+uuid+"&sessionid="+sessionId+"&uamip="+uamip+"&uamport="+uamport+"&user="+userIdStr)
+		status := utils.SendWhatsappMessage(number, code, unit, "digest="+digest+"&uuid="+uuid+"&sessionid="+sessionId+"&uamip="+uamip+"&uamport="+uamport+"&user="+userIdStr, uamip, uamport)
 
 		// check response
 		if status != 201 {

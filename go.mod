@@ -3,6 +3,7 @@ module github.com/nethesis/icaro
 go 1.15
 
 require (
+	github.com/ajg/form v1.5.1 // indirect
 	github.com/appleboy/gofight/v2 v2.1.2
 	github.com/avct/uasurfer v0.0.0-20180817072212-dc0ec4fd1e87
 	github.com/fatih/structs v1.1.0
