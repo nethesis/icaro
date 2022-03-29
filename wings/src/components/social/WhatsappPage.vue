@@ -1,12 +1,11 @@
 <template>
-  <div class="ui form">
-    <div v-if="!dedaloRequested">
-      <div v-if="choosedMode" class="field" v-bind:class="{ error: errors.badInput }">
-        <label :style="textStyle">{{$t('whatsapp.number')}}</label>
-        <div class="ui big left icon input">
-          <input readonly v-model="authNum" type="tel" :placeholder="$t('whatsapp.insert_email')" />
-          <i class="whatsapp icon"></i>
-        </div>
+<div class="ui form">
+  <div v-if="!dedaloRequested">
+    <div v-if="choosedMode" class="field" v-bind:class="{ error: errors.badInput }">
+      <label :style="textStyle">{{$t('whatsapp.number')}}</label>
+      <div class="ui big left icon input">
+        <input readonly v-model="authNum" type="tel" :placeholder="$t('whatsapp.insert_number')" />
+        <i class="whatsapp icon"></i>
       </div>
 
       <div v-if="!codeRequested" class="not-code-exp">
@@ -150,7 +149,7 @@ export default {
           }, 1000);
         }
 
-        if (!this.$route.query.num && !this.$route.query.code) {
+        if (!this.$route.query.num && !this.$route.query.code && !this.$route.query.temp) {
           this.getCode();
         } else if (this.$route.query.num && this.$route.query.code) {
           this.execLogin();
@@ -228,9 +227,9 @@ export default {
     redirectAuth() {
       window.location.replace(
         "http://wa.me/" +
-          CONFIG.WHATSAPP_NUMBER.replace("+", "") +
-          "?text=" +
-          encodeURIComponent(this.shortCode)
+        CONFIG.WHATSAPP_NUMBER.replace("+", "") +
+        "?text=login " +
+        encodeURIComponent(this.shortCode)
       );
     },
     getCode: function(reset) {

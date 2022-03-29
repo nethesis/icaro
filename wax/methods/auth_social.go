@@ -45,21 +45,25 @@ import (
 )
 
 type WhatsappPOST struct {
-	SmsMessageSid string `form:"SmsMessageSid"`
-	NumMedia      string `form:"NumMedia"`
-	SmsSid        string `form:"SmsSid"`
-	SmsStatus     string `form:"SmsStatus"`
-	Body          string `form:"Body"`
-	To            string `form:"To"`
-	From          string `form:"From"`
-	NumSegments   string `form:"NumSegments"`
-	MessageSid    string `form:"MessageSid"`
-	AccountSid    string `form:"AccountSid"`
-	ApiVersion    string `form:"ApiVersion"`
+	SmsMessageSid    string `form:"SmsMessageSid"`
+	NumMedia         string `form:"NumMedia"`
+	ProfileName      string `form:"ProfileName"`
+	SmsSid           string `form:"SmsSid"`
+	WaId             string `form:"WaId"`
+	SmsStatus        string `form:"SmsStatus"`
+	Body             string `form:"Body"`
+	To               string `form:"To"`
+	NumSegments      string `form:"NumSegments"`
+	ReferralNumMedia string `form:"ReferralNumMedia"`
+	MessageSid       string `form:"MessageSid"`
+	AccountSid       string `form:"AccountSid"`
+	From             string `form:"From"`
+	ApiVersion       string `form:"ApiVersion"`
 }
 
 func WhatsappAuth(c *gin.Context) {
 	var whatsappPOST WhatsappPOST
+
 	d := form.NewDecoder(c.Request.Body)
 	if err := d.Decode(&whatsappPOST); err != nil {
 		return
@@ -67,18 +71,15 @@ func WhatsappAuth(c *gin.Context) {
 
 	// parse body
 	var parts = strings.Split(whatsappPOST.Body, " ")
-
 	data := utils.GetDataByHash(parts[1])
 
 	if data.Id == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "invalid short code"})
 		return
 	}
-
 	utils.DeleteHashData(parts[1])
 
 	body, err := url.ParseQuery(data.LongUrl)
-
 	if err != nil {
 		panic(err)
 	}

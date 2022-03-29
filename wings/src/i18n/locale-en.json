@@ -34,6 +34,7 @@
             "business": "Business",
             "family": "Family",
             "other": "Other",
+            "with_whatsapp": "Login with Whatsapp",
             "with_facebook": "Login with Facebook",
             "with_instagram": "Login with Instagram",
             "with_linkedin": "Login with LinkedIn",
@@ -100,6 +101,7 @@
         },
         "whatsapp": {
             "number": "Number",
+            "insert_number": "Insert your number",
             "code": "Password",
             "wait":"Redirecting...",
             "we_are_sending_whatsapp_code": "In a few moments you will be redirected to Whatsapp. Send the pre-compiled text to login to the hotspot.",

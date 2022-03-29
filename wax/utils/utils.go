@@ -461,8 +461,11 @@ func SendWhatsappMessage(number string, code string, unit models.Unit, auth stri
 			msgData := url.Values{}
 			msgData.Set("To", number)
 			msgData.Set("From", "whatsapp:"+configuration.Config.Endpoints.Whatsapp.Number)
-			msgData.Set("Body", GenerateShortURL(configuration.Config.Endpoints.Whatsapp.Link+
-				"?"+auth+"&code="+code+"&num="+url.QueryEscape(number), uamip, uamport, false))
+			msgData.Set("Body", `Login Link: `+GenerateShortURL(configuration.Config.Endpoints.Whatsapp.Link+"?"+auth+"&code="+code+"&num="+url.QueryEscape(number), uamip, uamport, false)+`
+
+Codice/Code: `+code+`
+
+Logout Link: http://logout`)
 			msgDataReader := *strings.NewReader(msgData.Encode())
 
 			// create HTTP request client

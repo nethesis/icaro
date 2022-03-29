@@ -134,6 +134,7 @@ var AuthMixin = {
             var digest = params.digest || null
             var uuid = params.uuid || null
             var sessionid = params.sessionid || null
+            var voucher = params.voucher || null
 
             if (params.state) {
                 var state = this.parseState(params.state, base64)
@@ -142,8 +143,8 @@ var AuthMixin = {
                 digest = state.digest
                 uuid = state.uuid
                 sessionid = state.sessionid
+                voucher = state.voucher
             }
-            var dedaloUrl = ip + ':' + port
 
             this.$http.get(protocol + host + '/wax/aaa/login' +
                 '?digest=' + digest +
@@ -160,6 +161,7 @@ var AuthMixin = {
             var digest = params.digest || null
             var uuid = params.uuid || null
             var sessionid = params.sessionid || null
+            var voucher = params.voucher || null
 
             if (params.state) {
                 var state = this.parseState(params.state)
@@ -168,8 +170,8 @@ var AuthMixin = {
                 digest = state.digest
                 uuid = state.uuid
                 sessionid = state.sessionid
+                voucher = state.voucher
             }
-            var dedaloUrl = ip + ':' + port
 
             // do dedalo logout
             this.$http.get(protocol + host + '/wax/aaa/logout' +
@@ -187,6 +189,7 @@ var AuthMixin = {
             var uuid = params.uuid || null
             var sessionid = params.sessionid || null
             var mac = params.mac || null
+            var voucher = params.voucher || null
 
             if (params.state) {
                 var state = this.parseState(params.state)
@@ -195,14 +198,7 @@ var AuthMixin = {
                 digest = state.digest
                 uuid = state.uuid
                 sessionid = state.sessionid
-            }
-            var dedaloUrl = 'http://' + ip + ':' + port + '/www/temporary.chi?'
-
-            if(username) {
-                dedaloUrl += '&username=' + username
-            }
-            if(short) {
-                dedaloUrl += '&short_code=' + short
+                voucher = state.voucher
             }
 
             // do dedalo temp session
@@ -212,7 +208,11 @@ var AuthMixin = {
                 '&sessionid=' + sessionid +
                 '&username=' + encodeURIComponent(username) +
                 '&userid=' + userId +
-                '&mac=' + mac
+                '&mac=' + mac +
+                '&uamip=' + ip +
+                '&uamport=' + port +
+                '&voucher=' + voucher +
+                '&short_code=' + short
             ).then(callback);
         }
     }

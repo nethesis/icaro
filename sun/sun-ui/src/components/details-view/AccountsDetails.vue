@@ -493,7 +493,7 @@ export default {
         }
       );
     },
-    updateWHatsappCount() {
+    updateWhatsappCount() {
       this.whatsapp.isLoading = true;
 
       this.updateWhatsappTotalForAccountByAccount(
