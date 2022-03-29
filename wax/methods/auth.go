@@ -93,9 +93,14 @@ func GetDaemonLogin(c *gin.Context) {
 
 func GetDaemonTemporary(c *gin.Context) {
 	// get params
+	digest := c.Query("digest")
 	sessionId := c.Query("sessionid")
 	unitUuid := c.Query("uuid")
 	username := c.Query("username")
+	uamip := c.Query("uamip")
+	uamport := c.Query("uamport")
+	voucher := c.Query("voucher")
+	short := c.Query("short_code")
 
 	// get unit
 	unit := utils.GetUnitByUuid(unitUuid)
@@ -108,7 +113,15 @@ func GetDaemonTemporary(c *gin.Context) {
 	utils.CreateUserAuth(sessionId, secondsInt, unitUuid, 0, username, "", "temporary")
 
 	// return result
-	c.JSON(http.StatusCreated, gin.H{"status": "success"})
+	if len(short) > 0 {
+		// generate short url and return
+		longURL := "digest="+digest+"&uuid="+unitUuid+"&sessionid="+sessionId+"&uamip="+uamip+"&uamport="+uamport+"&voucherCode="+voucher
+		shortCode := utils.GenerateHashByData(longURL, uamip, uamport, true)
+
+		c.JSON(http.StatusCreated, gin.H{"status": "success", "short_code": shortCode})
+	} else {
+		c.JSON(http.StatusCreated, gin.H{"status": "success"})
+	}
 }
 
 func GetDaemonLogout(c *gin.Context) {

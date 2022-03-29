@@ -34,6 +34,7 @@
             "business": "Lavoro",
             "family": "Famiglia",
             "other": "Altro",
+            "with_whatsapp": "Login con Whatsapp",
             "with_facebook": "Login con Facebook",
             "with_instagram": "Login con Instagram",
             "with_linkedin": "Login con LinkedIn",

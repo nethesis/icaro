@@ -45,7 +45,7 @@
         <div v-if="hotspot.preferences.whatsapp_login == 'true' && isMobile" class="item">
           <div @click="changeRoute('/login/whatsapp', false)" class="ui green button big fluid">
             <i class="whatsapp icon"></i>
-            Whatsapp
+            {{ $t("login.with_whatsapp") }}
           </div>
         </div>
         <div v-if="hotspot.preferences.facebook_login == 'true'" class="item">

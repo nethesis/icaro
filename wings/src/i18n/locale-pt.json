@@ -34,6 +34,7 @@
             "business": "Profissional",
             "family": "Familiar",
             "other": "Outro",
+            "with_whatsapp": "Login com Whatsapp",
             "with_facebook": "Login com Facebook",
             "with_instagram": "Login com Instagram",
             "with_linkedin": "Login com LinkedIn",
