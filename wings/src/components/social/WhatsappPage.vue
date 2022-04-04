@@ -7,6 +7,7 @@
         <input readonly v-model="authNum" type="tel" :placeholder="$t('whatsapp.insert_number')" />
         <i class="whatsapp icon"></i>
       </div>
+    </div>
 
       <div v-if="!codeRequested" class="not-code-exp">
         <div class="ui compact message info no-margin-top">
