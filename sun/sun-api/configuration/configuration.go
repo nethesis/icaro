@@ -130,6 +130,15 @@ func Init(ConfigFilePtr *string) {
 	if os.Getenv("FACEBOOK_REDIRECT_URL") != "" {
 		Config.AuthSocial.Facebook.RedirectURI = os.Getenv("FACEBOOK_REDIRECT_URL")
 	}
+	if os.Getenv("GOOGLE_CLIENT_ID") != "" {
+		Config.AuthSocial.Google.ClientId = os.Getenv("GOOGLE_CLIENT_ID")
+	}
+	if os.Getenv("GOOGLE_CLIENT_SECRET") != "" {
+		Config.AuthSocial.Google.ClientSecret = os.Getenv("GOOGLE_CLIENT_SECRET")
+	}
+	if os.Getenv("GOOGLE_CLIENT_REDIRECT_URL") != "" {
+		Config.AuthSocial.Google.RedirectURI = os.Getenv("GOOGLE_REDIRECT_URL")
+	}
 	if os.Getenv("LINKEDIN_CLIENT_ID") != "" {
 		Config.AuthSocial.LinkedIn.ClientId = os.Getenv("LINKEDIN_CLIENT_ID")
 	}
