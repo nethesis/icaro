@@ -35,6 +35,7 @@
             "family": "Family",
             "other": "Other",
             "with_whatsapp": "Login with Whatsapp",
+            "with_google": "Login with Google",
             "with_facebook": "Login with Facebook",
             "with_instagram": "Login with Instagram",
             "with_linkedin": "Login with LinkedIn",

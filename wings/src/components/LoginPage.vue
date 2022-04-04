@@ -51,11 +51,11 @@
         <div v-if="hotspot.preferences.google_login == 'true'" class="item">
           <div
             @click="changeRoute('/login/google', false)"
-            class="ui google plus button big fluid"
+            class="ui google red button big fluid"
             :style="buttonStyle"
           >
-            <i class="google plus icon"></i>
-            {{ $t("login.with_facebook") }}
+            <i class="google icon"></i>
+            {{ $t("login.with_google") }}
           </div>
         </div>
         <div v-if="hotspot.preferences.facebook_login == 'true'" class="item">

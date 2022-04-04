@@ -121,7 +121,7 @@ var AuthMixin = {
                         'client_id=' + params.gl_client_id +
                         '&state=' + encodeURIComponent(params.digest + "&" + params.uuid + "&" + params.sessionid + "&" + params.uamip + "&" + params.uamport) +
                         '&scope=' + escape('profile email https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile') +
-                        '&redirect_uri=' + escape('http://' + window.location.host + '/wings/login/google') +
+                        '&redirect_uri=' + escape('https://' + window.location.host + '/wings/login/google') +
                         '&include_granted_scopes=true' +
                         '&response_type=token'
                     break
