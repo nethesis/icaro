@@ -48,6 +48,16 @@
             {{ $t("login.with_whatsapp") }}
           </div>
         </div>
+        <div v-if="hotspot.preferences.google_login == 'true'" class="item">
+          <div
+            @click="changeRoute('/login/google', false)"
+            class="ui google plus button big fluid"
+            :style="buttonStyle"
+          >
+            <i class="google plus icon"></i>
+            {{ $t("login.with_facebook") }}
+          </div>
+        </div>
         <div v-if="hotspot.preferences.facebook_login == 'true'" class="item">
           <div
             @click="changeRoute('/login/facebook', false)"

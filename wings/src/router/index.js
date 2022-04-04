@@ -4,6 +4,7 @@ import SplashPage from '@/components/SplashPage'
 import LoginPage from '@/components/LoginPage'
 import WhatsappPage from '@/components/social/WhatsappPage'
 import FacebookPage from '@/components/social/FacebookPage'
+import GooglePage from '@/components/social/GooglePage'
 import LinkedInPage from '@/components/social/LinkedInPage'
 import InstagramPage from '@/components/social/InstagramPage'
 import SMSPage from '@/components/others/SMSPage'
@@ -34,6 +35,11 @@ export default new Router({
       path: '/login/facebook',
       name: 'FacebookPage',
       component: FacebookPage
+    },
+    {
+      path: '/login/google',
+      name: 'GooglePage',
+      component: GooglePage
     },
     {
       path: '/login/linkedin',

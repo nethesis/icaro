@@ -107,6 +107,7 @@
       "facebook_login": "Captive Portal login with Facebook",
       "facebook_login_page": "Captive Portal Facebook like page",
       "instagram_login": "Captive Portal login with Instagram",
+      "google_login": "Captive Portal login with Google",
       "linkedin_login": "Captive Portal login with Linkedin",
       "voucher_login": "Voucher Block",
       "temp_code_login": "Captive Portal login with Voucher",
