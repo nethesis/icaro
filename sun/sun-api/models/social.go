@@ -88,18 +88,22 @@ type FacebookUserDetail struct {
 }
 
 type GoogleUserDetail struct {
-	Birthday string `json:"birthday"`
-	Emails   []struct {
-		Value string `json:"value"`
-		Type  string `json:"type"`
-	} `json:"emails"`
-	ObjectType  string `json:"objectType"`
-	Id          string `json:"id"`
-	DisplayName string `json:"displayName"`
-	Language    string `json:"language"`
-	AgeRange    struct {
-		Min int `json:"min"`
-	} `json:"ageRange"`
+	Resourcename string `json:"resourceName"`
+	Etag         string `json:"etag"`
+	Names        []struct {
+		Metadata struct {
+			Primary bool `json:"primary"`
+			Source  struct {
+				Type string `json:"type"`
+				Id   string `json:"id"`
+			} `json:"source"`
+		} `json:"metadata"`
+		DisplayName          string `json:"displayName"`
+		FamilyName           string `json:"familyName"`
+		GivenName            string `json:"givenName"`
+		DisplayNameLastFirst string `json:"displayNameLastFirst"`
+		UnstructuredName     string `json:"unstructuredName"`
+	} `json:"names"`
 }
 
 type LinkedInUserDetail struct {

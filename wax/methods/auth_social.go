@@ -282,8 +282,8 @@ func GoogleAuth(c *gin.Context) {
 	}
 
 	// extract user info
-	url = "https://www.googleapis.com/plus/v1/people/me" +
-		"?access_token=" + code
+	url = "https://content-people.googleapis.com/v1/people/me?personFields=names&" +
+		"access_token=" + code
 
 	resp, err = http.Get(url)
 	if err != nil {
@@ -298,13 +298,14 @@ func GoogleAuth(c *gin.Context) {
 		fmt.Println(err.Error())
 	}
 
-	if glUserDetail.Id == "" {
+	if glUserDetail.Names[0].Metadata.Source.Id == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "access token is invalid"})
 		return
 	}
 
 	// check if user exists
-	user := utils.GetUserByUsername(glUserDetail.Id)
+	unit := utils.GetUnitByUuid(uuid)
+	user := utils.GetUserByUsernameAndHotspot(glUserDetail.Names[0].Metadata.Source.Id, unit.HotspotId)
 	if user.Id == 0 {
 		// create user
 		unit := utils.GetUnitByUuid(uuid)
@@ -312,8 +313,8 @@ func GoogleAuth(c *gin.Context) {
 		daysInt, _ := strconv.Atoi(days.Value)
 		newUser := models.User{
 			HotspotId:   unit.HotspotId,
-			Name:        glUserDetail.DisplayName,
-			Username:    glUserDetail.Id,
+			Name:        glUserDetail.Names[0].DisplayName,
+			Username:    glUserDetail.Names[0].Metadata.Source.Id,
 			Password:    "",
 			Email:       glRespToken.Email,
 			AccountType: "google",
@@ -334,16 +335,15 @@ func GoogleAuth(c *gin.Context) {
 		days := utils.GetHotspotPreferencesByKey(user.HotspotId, "user_expiration_days")
 		daysInt, _ := strconv.Atoi(days.Value)
 		user.ValidUntil = time.Now().UTC().AddDate(0, 0, daysInt)
-		db := database.Database()
+		db := database.Instance()
 		db.Save(&user)
-		db.Close()
 
 		// create user session check
 		utils.CreateUserSession(user.Id, sessionId)
 	}
 
 	// response to client
-	c.JSON(http.StatusOK, gin.H{"user_id": glUserDetail.Id})
+	c.JSON(http.StatusOK, gin.H{"user_id": glUserDetail.Names[0].Metadata.Source.Id})
 }
 
 func FacebookAuth(c *gin.Context) {
