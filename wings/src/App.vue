@@ -49,6 +49,40 @@
           this.titleColor = success.body.preferences.captive_83_title_color || '#4A4A4A'
           this.textFont = success.body.preferences.captive_85_text_style || 'Roboto';
           this.containerBgColor = success.body.preferences.captive_82_container_bg_color || '#ffffffdb';
+
+          // wifi4eu head tags if enabled
+          if (this.hotspot.preferences.wifi4eu_enabled === "true") {
+            // define script with vars
+            var script1 = document.createElement('script');
+            script1.type = 'text/javascript';
+            script1.textContent = 'var wifi4euTimerStart = Date.now();\nvar wifi4euNetworkIdentifier = \''
+              + this.hotspot.preferences.wifi4eu_id +'\';\nvar wifi4euLanguage = \''
+              + this.hotspot.preferences.wifi4eu_lang +'\';'
+              + (this.hotspot.preferences.wifi4eu_zdebug === "true" ? '\nvar selftestModus = true;' : '');
+
+            // define script of wifi4eu
+            var script2 = document.createElement('script');
+            script2.type = 'text/javascript';
+            script2.src = 'https://collection.wifi4eu.ec.europa.eu/wifi4eu.min.js';
+
+            // append script to head
+            document.head.appendChild(script1);
+            document.head.appendChild(script2);
+
+            // create img for banner
+            var img = document.createElement('img')
+            img.id = 'wifi4eubanner';
+            img.width = window.innerWidth;
+            img.height = img.width / 3.50;
+
+            // fire onload event to start wifi4eu script
+            setTimeout(function() {
+              document.body.prepend(img);
+              document.body.style.height = "100%";
+              dispatchEvent(new Event('load'));
+              dispatchEvent(new Event('DOMContentLoaded'));
+            }, 1000)
+          }
         }, function(error) {
           console.error(error)
           this.loading = false
@@ -59,6 +93,7 @@
         }
         loading = false
       }
+
       return {
         hotspot: {
           name: '',
@@ -183,5 +218,9 @@
     .ui.container {
       width: 40% !important;
     }
+  }
+
+  #wifi4eubanner {
+    padding: 20px;
   }
 </style>

@@ -86,6 +86,12 @@ func SetDefaultHotspotPreferences(hotspotId int) {
 	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "marketing_15_feedback_subject_text", Value: configuration.Config.Survey.FeedbackSubjectText})
 	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "marketing_16_review_subject_text", Value: configuration.Config.Survey.ReviewSubjectText})
 
+	// set defaults for wifi4eu
+	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "wifi4eu_enabled", Value: "false"})
+	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "wifi4eu_id", Value: ""})
+	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "wifi4eu_lang", Value: ""})
+	db.Save(&models.HotspotPreference{HotspotId: hotspotId, Key: "wifi4eu_zdebug", Value: "false"})
+
 }
 
 func OffsetCalc(page string, limit string) [2]int {
