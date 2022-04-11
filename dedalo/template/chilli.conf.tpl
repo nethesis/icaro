@@ -29,6 +29,7 @@ include /opt/icaro/dedalo/walled_gardens/local.conf
 include /opt/icaro/dedalo/walled_gardens/facebook.conf
 include /opt/icaro/dedalo/walled_gardens/linkedin.conf
 include /opt/icaro/dedalo/walled_gardens/instagram.conf
+include /opt/icaro/dedalo/walled_gardens/wifi4eu.conf
 
 # list of integrations walled garden
 ${HS_WALLED_GARDEN_INTEGRATIONS}
