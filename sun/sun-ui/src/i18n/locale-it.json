@@ -182,7 +182,12 @@
       "tos_and_privacy": "ToS e Privacy",
       "privacy_disclaimer": "Disclaimer Privacy",
       "tos_disclaimer": "Disclaimer Termini di utilizzo",
-      "disclaimer_default": "Default"
+      "disclaimer_default": "Default",
+      "wifi4eu_enabled": "WiFi4EU Compliance",
+      "wifi4eu_id": "WiFi4EU Identificatore Rete",
+      "wifi4eu_lang": "WiFi4EU Lingua",
+      "wifi4eu_zdebug": "WiFi4EU Autotest",
+      "wifi4eu_zdebug_desc": "La modalità autotest interrompe il corretto funzionamento dell'hotspot e va utilizzata solo per specifiche verifiche. Questa opzione in condizioni normali deve essere sempre disabilitata."
     },
     "user": {
       "username": "Utente",

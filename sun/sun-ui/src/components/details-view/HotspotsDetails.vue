@@ -456,12 +456,14 @@
             v-on:submit.prevent="updatePreferences(preferences.global)"
           >
             <div v-if="!preferences.isLoading" class="card-pf-body">
-              <div v-for="pref in preferences.global" :key="'new-'+pref.key" v-show="pref.key != 'bypass_macaddress_check' && pref.key != 'check_email_domain' && pref.key != 'check_email_domain_list' && pref.key != 'check_marketing'" class="form-group">
+              <div v-for="pref in preferences.global" :key="'new-'+pref.key" v-show="pref.key != 'bypass_macaddress_check' && pref.key != 'check_email_domain' && pref.key != 'check_email_domain_list' && pref.key != 'check_marketing'"
+                :class="[pref.key == 'wifi4eu_enabled' ? 'add-border-sep' : '', 'form-group']">
                 <label class="col-sm-4 control-label">
                   {{$t('hotspot.'+pref.key)}}
                   <span :class="[getPrefIcon(pref.key)]"></span>
+                  <span v-if="pref.key == 'wifi4eu_zdebug'" class="pficon pficon-info" data-toggle="tooltip" data-placement="top" :title="$t('hotspot.wifi4eu_zdebug_desc')"></span>
                 </label>
-                <div :class="(pref.key == 'facebook_login_page' || pref.key == 'check_email_domain_list' ) ? ['col-sm-4', 'col-lg-3'] : ['col-sm-2', 'col-lg-1']">
+                <div :class="(pref.key == 'facebook_login_page' || pref.key == 'check_email_domain_list' || pref.key == 'wifi4eu_id' ) ? ['col-sm-4', 'col-lg-3'] : ['col-sm-2', 'col-lg-1']">
                   <input
                     v-model="pref.value"
                     :type="getInputType(pref.key, pref.value)"
@@ -2133,14 +2135,18 @@ export default {
       let selectedPrivacyDisclaimer = this.disclaimers.privacyDisclaimers.find((element) => {
         return element.id == this.disclaimers.currentPrivacyDisclaimerId;
       });
-      return selectedPrivacyDisclaimer.body;
+      return (selectedPrivacyDisclaimer && selectedPrivacyDisclaimer.body) || "";
     },
     selectedTosBody: function() {
       let selectedTosDisclaimer = this.disclaimers.tosDisclaimers.find((element) => {
         return element.id == this.disclaimers.currentTosDisclaimerId;
       });
-      return selectedTosDisclaimer.body;
+      return (selectedTosDisclaimer && selectedTosDisclaimer.body) || "";
     },
+  },
+  // enable tooltips after rendering
+  updated: function() {
+    $('[data-toggle="tooltip"]').tooltip();
   },
   methods: {
     dateFormatter(date) {
@@ -2881,7 +2887,7 @@ export default {
       );
     },
     printPrivacy() {
-      var finalPrivacy = "data:text/plain;charset=utf-8," + this.selectedPrivacyBody;
+      var finalPrivacy = "data:text/plain;charset=utf-8," + (this.selectedPrivacyBody || "");
       var encodedUri = encodeURI(finalPrivacy);
       var link = document.createElement("a");
       link.setAttribute("href", encodedUri);
@@ -3249,5 +3255,9 @@ label.block-centered {
 .domain-list {
   height: 85px !important;
   min-height: 85px !important;
+}
+
+.add-border-sep {
+  border-top: 1px solid lightgrey;
 }
 </style>

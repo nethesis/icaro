@@ -161,6 +161,8 @@ var UtilService = {
         case "bypass_macaddress_check":
         case "check_email_domain":
         case "check_marketing":
+        case "wifi4eu_enabled":
+        case "wifi4eu_zdebug":
           type = "checkbox";
           break;
         case "sms_login_max":
