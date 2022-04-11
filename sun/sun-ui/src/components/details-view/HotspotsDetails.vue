@@ -456,10 +456,12 @@
             v-on:submit.prevent="updatePreferences(preferences.global)"
           >
             <div v-if="!preferences.isLoading" class="card-pf-body">
-              <div v-for="pref in preferences.global" :key="'new-'+pref.key" v-show="pref.key != 'bypass_macaddress_check' && pref.key != 'check_email_domain' && pref.key != 'check_email_domain_list' && pref.key != 'check_marketing'" class="form-group">
+              <div v-for="pref in preferences.global" :key="'new-'+pref.key" v-show="pref.key != 'bypass_macaddress_check' && pref.key != 'check_email_domain' && pref.key != 'check_email_domain_list' && pref.key != 'check_marketing'"
+                :class="[pref.key == 'wifi4eu_enabled' ? 'add-border-sep' : '', 'form-group']">
                 <label class="col-sm-4 control-label">
                   {{$t('hotspot.'+pref.key)}}
                   <span :class="[getPrefIcon(pref.key)]"></span>
+                  <span v-if="pref.key == 'wifi4eu_zdebug'" class="pficon pficon-info" data-toggle="tooltip" data-placement="top" :title="$t('hotspot.wifi4eu_zdebug_desc')"></span>
                 </label>
                 <div :class="(pref.key == 'facebook_login_page' || pref.key == 'check_email_domain_list' || pref.key == 'wifi4eu_id' ) ? ['col-sm-4', 'col-lg-3'] : ['col-sm-2', 'col-lg-1']">
                   <input
@@ -2142,6 +2144,10 @@ export default {
       return (selectedTosDisclaimer && selectedTosDisclaimer.body) || "";
     },
   },
+  // enable tooltips after rendering
+  updated: function() {
+    $('[data-toggle="tooltip"]').tooltip();
+  },
   methods: {
     dateFormatter(date) {
       return moment(date).format("DD MMMM YYYY");
@@ -3249,5 +3255,9 @@ label.block-centered {
 .domain-list {
   height: 85px !important;
   min-height: 85px !important;
+}
+
+.add-border-sep {
+  border-top: 1px solid lightgrey;
 }
 </style>
