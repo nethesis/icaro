@@ -3259,5 +3259,6 @@ label.block-centered {
 
 .add-border-sep {
   border-top: 1px solid lightgrey;
+  padding-top: 4px;
 }
 </style>
