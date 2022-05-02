@@ -508,49 +508,16 @@ export default {
         null,
         encodeURIComponent(this.searchString),
         success => {
-          var data_export = [];
-          if (this.hotspotShowExpired) {
-            for (var s in success.body.data_users) {
-              var res = success.body.data_users[s];
-              data_export.push(res);
-            }
-            for (var s in success.body.data_user_histories) {
-              var res = success.body.data_user_histories[s];
-              data_export.push(res);
-            }
-          } else {
-            for (var s in success.body.data) {
-              var res = success.body.data[s];
-              data_export.push(res);
-            }
-          }
-
-          if (data_export.length < 5000) {
-            var usersRows = JSON.parse(JSON.stringify(data_export));
-
-            var columns = this.columns.slice();
-
-            delete columns[5];
-            delete columns[6];
-            delete columns[7];
-            delete columns[8];
-            delete columns[9];
-            delete columns[10];
-
-            var csv = this.createCSV(columns, usersRows);
-            this.isLoadingTable = false;
-            this.downloadCSV(csv.cols, csv.rows, "users");
-          } else {
-            this.isLoadingTable = false;
-            this.exportError = true;
-          }
+          this.isLoadingTable = false;
+          var csv = this.createDownloadCSV(success.body.data, this.hotspotShowExpired ? 'expired' : 'active');
         },
         error => {
           this.isLoading = false;
           this.isLoadingTable = false;
           console.error(error);
         },
-        this.hotspotShowMarketing
+        this.hotspotShowMarketing,
+        true
       );
     },
     prevPage() {

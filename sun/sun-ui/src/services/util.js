@@ -243,6 +243,17 @@ var UtilService = {
       link.setAttribute("download", name + date + ".csv");
       link.click();
     },
+    createDownloadCSV(body, title) {
+      var finalCSV = "data:text/csv;charset=utf-8," + body;
+      var encodedUri = encodeURI(finalCSV);
+      var link = document.getElementById("download-csv");
+      link.setAttribute("href", encodedUri);
+      var now = new Date();
+      var date =
+        now.getFullYear() + "_" + (now.getMonth() + 1) + "_" + now.getDate();
+      link.setAttribute("download", title + "_" + date + ".csv");
+      link.click();
+    },
     accountTypeColor(account) {
       switch (account) {
         case "whatsapp":

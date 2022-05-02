@@ -23,10 +23,14 @@
 package methods
 
 import (
+	"bytes"
+	"encoding/csv"
+	"fmt"
 	"net/http"
 	"strconv"
 	"time"
 
+	"github.com/fatih/structs"
 	"github.com/gin-gonic/gin"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 
@@ -206,6 +210,7 @@ func GetUsers(c *gin.Context) {
 	hotspotId := c.Query("hotspot")
 	accountType := c.Query("type")
 	marketing := c.Query("marketing")
+	csvExport := c.Query("csv")
 	q := c.Query("q")
 
 	hotspotIdInt, err := strconv.Atoi(hotspotId)
@@ -238,6 +243,40 @@ func GetUsers(c *gin.Context) {
 		return
 	}
 
+	if len(csvExport) > 0 {
+		// define buffer writer
+		var b []byte
+		buf := bytes.NewBuffer(b)
+		w := csv.NewWriter(buf)
+
+		// extract headers
+		headers := structs.Names(users[0])
+		// write headers to writer
+		if err := w.Write(headers); err != nil {
+			// write failed
+			fmt.Println("error in CSV header creation", err)
+		}
+
+		// extract values
+		for _, user := range users {
+			// loop values
+			values := make([]string, 0)
+			for _, v := range structs.Values(user) {
+				values = append(values, fmt.Sprintf("%v", v))
+			}
+			// write values to writer
+			if err := w.Write(values); err != nil {
+				// write failed
+				fmt.Println("error in CSV values creation", err)
+			}
+		}
+		w.Flush()
+
+		// assign result to users
+		c.JSON(http.StatusOK, gin.H{"data": string(buf.Bytes()), "total": total})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{"data": users, "total": total})
 }
 
@@ -253,6 +292,7 @@ func GetUsersExpired(c *gin.Context) {
 	hotspotId := c.Query("hotspot")
 	accountType := c.Query("type")
 	marketing := c.Query("marketing")
+	csvExport := c.Query("csv")
 	q := c.Query("q")
 
 	hotspotIdInt, err := strconv.Atoi(hotspotId)
@@ -298,6 +338,57 @@ func GetUsersExpired(c *gin.Context) {
 
 	if len(users) == 0 && len(userHistories) == 0 {
 		c.JSON(http.StatusNotFound, gin.H{"message": "No user expired found!"})
+		return
+	}
+
+	if len(csvExport) > 0 {
+		// define buffer writer
+		var b []byte
+		buf := bytes.NewBuffer(b)
+		w := csv.NewWriter(buf)
+
+		// extract headers
+		headers := structs.Names(userHistories[0])
+		headers = utils.RemoveIndex(headers, 1)
+		// write headers to writer
+		if err := w.Write(headers); err != nil {
+			// write failed
+			fmt.Println("error in CSV header creation", err)
+		}
+
+		// extract values for users
+		for _, user := range users {
+			// loop values
+			values := make([]string, 0)
+			for _, v := range structs.Values(user) {
+				values = append(values, fmt.Sprintf("%v", v))
+			}
+			// write values to writer
+			if err := w.Write(values); err != nil {
+				// write failed
+				fmt.Println("error in CSV values creation", err)
+			}
+		}
+		// extract values for userHistories
+		for _, userH := range userHistories {
+			// loop values
+			values := make([]string, 0)
+			for index, v := range structs.Values(userH) {
+				// omit UserId field
+				if index != 1 {
+					values = append(values, fmt.Sprintf("%v", v))
+				}
+			}
+			// write values to writer
+			if err := w.Write(values); err != nil {
+				// write failed
+				fmt.Println("error in CSV values creation", err)
+			}
+		}
+		w.Flush()
+
+		// assign result to users
+		c.JSON(http.StatusOK, gin.H{"data": string(buf.Bytes()), "total": totalHistories + totalUsers})
 		return
 	}
 
