@@ -326,7 +326,7 @@ export default {
               this.doDedaloLogin(
                 {
                   id: responseAuth.body.code,
-                  password: responseAuth.body.code || ""
+                  password: ""
                 },
                 function(responseDedalo) {
                   if (
