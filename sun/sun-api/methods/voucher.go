@@ -112,7 +112,7 @@ func CreateVouchers(c *gin.Context) {
 					HotspotId:            json.HotspotId,
 					Name:                 userName + " (" + strings.ToUpper(voucherInstance.Code) + ")",
 					Username:             strings.ToUpper(voucherInstance.Code),
-					Password:             voucherInstance.Code,
+					Password:             "",
 					Email:                voucherInstance.UserMail,
 					AccountType:          "voucher",
 					Reason:               "",
