@@ -1,10 +1,11 @@
 ---
-- name: Install EPEL repository (epel-release)
+- name: Install yum-plugin-copr
   yum:
-    name: epel-release
+    name: yum-plugin-copr
     state: present
-    enablerepo: extras
-  when: ansible_distribution == "CentOS" and (ansible_distribution_major_version == "6" or ansible_distribution_major_version == "7")
+
+- name: Enable Caddy CORP
+  shell:  yum copr enable -y @caddy/caddy
 
 - name: Install Caddy HTTP/2 web server
   yum:
@@ -18,8 +19,8 @@
 
 - name: Copy Caddy configs
   template:
-    src: icaro-caddy.j2
-    dest:  /etc/caddy/conf.d/icaro.conf
+    src: Caddyfile.j2
+    dest:  /etc/caddy/Caddyfile
 
 - name: Grant caddy to bind on low ports
   capabilities:

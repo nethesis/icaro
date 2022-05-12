@@ -1,0 +1,49 @@
+https://{$ICARO_HOSTNAME} {
+	log
+	root * /opt/icaro/sun-u
+	@survey path /survey /survey/*
+	handle @wings {
+	uri strip_prefix /survey
+		root * /opt/icaro/ade-ui
+	}
+	file_server
+	encode gzip
+{% if icaro.tls is defined and icaro.tls == "self_signed" %}
+	tls internal
+{% elif icaro.tls is defined and icaro.tls == "manual" %}
+	tls /opt/icaro/{$ICARO_HOSTNAME}_cert.pem /opt/icaro/{$ICARO_HOSTNAME}_private_key.pem
+{% endif %}
+
+	@wings path /wings /wings/*
+	redir @wings http://{host}{uri}
+
+	reverse_proxy /api/* {$SUN_API_ORIGIN} {
+		 header_up Host {upstream_hostport}
+	}
+	reverse_proxy /wax/* {$WAX_ORIGIN} {
+		header_up Host {upstream_hostport}
+	}
+	reverse_proxy /ade/* {$ADE_API_ORIGIN} {
+		header_up Host {upstream_hostport}
+	}
+}
+
+http://{$ICARO_HOSTNAME} {
+	log
+	encode gzip
+	file_server
+	@wings path /wings /wings/*
+	handle @wings {
+		uri strip_prefix /wings
+		root * /opt/icaro/wings
+		try_files {path} /
+	}
+
+	@not_wings not path /wings /wings/*
+	redir @not_wings https://{host}{uri}
+}
+
+http://conncheck.{$ICARO_HOSTNAME} {
+	log
+	redir * http://{$ICARO_HOSTNAME}{uri}
+}
