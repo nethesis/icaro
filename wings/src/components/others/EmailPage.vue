@@ -398,8 +398,6 @@ export default {
           this.authEmail,
           function(responseDedaloLogout) {
             var context = this;
-            context.authorized = true;
-            context.dedaloError = false;
 
             setTimeout(function() {
               // exec dedalo login

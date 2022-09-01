@@ -91,6 +91,7 @@ func GetDaemonLogin(c *gin.Context) {
 
 		// return valid result
 		c.JSON(http.StatusCreated, gin.H{"clientState": "1"})
+		return
 	}
 
 	// return invalid result
