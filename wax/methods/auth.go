@@ -84,11 +84,18 @@ func GetDaemonLogin(c *gin.Context) {
 	username := c.Query("username")
 	password := c.Query("password")
 
-	// create user auth
-	utils.CreateUserAuth(sessionId, 0, unitUuid, 0, username, password, "login")
+	// check user exists
+	if utils.CheckUserIsValid(username, password) {
+		// create user auth
+		utils.CreateUserAuth(sessionId, 0, unitUuid, 0, username, password, "login")
 
-	// return result
-	c.JSON(http.StatusCreated, gin.H{"clientState": "1"})
+		// return valid result
+		c.JSON(http.StatusCreated, gin.H{"clientState": "1"})
+		return
+	}
+
+	// return invalid result
+	c.JSON(http.StatusCreated, gin.H{"clientState": "0"})
 }
 
 func GetDaemonTemporary(c *gin.Context) {

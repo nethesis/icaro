@@ -422,8 +422,6 @@ export default {
           this.authPrefix + this.authSMS,
           function(responseDedaloLogout) {
             var context = this;
-            context.authorized = true;
-            context.dedaloError = false;
 
             setTimeout(function() {
               // exec dedalo login
