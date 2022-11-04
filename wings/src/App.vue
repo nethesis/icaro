@@ -65,15 +65,15 @@
             script2.type = 'text/javascript';
             script2.src = 'https://collection.wifi4eu.ec.europa.eu/wifi4eu.min.js';
 
-            // append script to head
-            document.head.appendChild(script1);
-            document.head.appendChild(script2);
-
             // create img for banner
             var img = document.createElement('img')
             img.id = 'wifi4eubanner';
             img.width = window.innerWidth;
             img.height = img.width / 3.50;
+
+            // append script to head
+            document.head.appendChild(script1);
+            document.head.appendChild(script2);
 
             // fire onload event to start wifi4eu script
             setTimeout(function() {
