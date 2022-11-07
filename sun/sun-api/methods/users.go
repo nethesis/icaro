@@ -348,7 +348,13 @@ func GetUsersExpired(c *gin.Context) {
 		w := csv.NewWriter(buf)
 
 		// extract headers
-		headers := structs.Names(userHistories[0])
+		var headers []string
+		if len(users) > 0 {
+			headers = structs.Names(users[0])
+		}
+		if len(userHistories) > 0 {
+			headers = structs.Names(userHistories[0])
+		}
 		headers = utils.RemoveIndex(headers, 1)
 		// write headers to writer
 		if err := w.Write(headers); err != nil {
