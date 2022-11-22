@@ -69,7 +69,9 @@
             var img = document.createElement('img')
             img.id = 'wifi4eubanner';
             img.width = window.innerWidth;
-            img.height = img.width / 3.50;
+            img.height = Math.floor(img.width / 3.50);
+            if (img.height%2 !=0) { img.height += 1 };
+            img.width = img.height * 3.5
 
             // append script to head
             document.head.appendChild(script1);
