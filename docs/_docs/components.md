@@ -7,7 +7,7 @@ Icaro is divided in 4 parts:
 
 - [Dedalo](https://github.com/nethesis/icaro/tree/master/dedalo): network access controller,
   it runs on the firewall and intercepts all guest connections, based on [CoovaChilli](http://coova.github.io/CoovaChilli/)
-  - [dedalo\_users\_auth](https://github.com/nethesis/icaro/tree/master/dedalo): daemon for the users' authentication, asks the authentication backend [Wax](https://github.com/nethesis/icaro/tree/master/wax) if a user is correctly authenticated and, if the response is affirmative, authenticate it to the dedalo instance.
+  - [dedalo\_users\_auth](https://github.com/nethesis/icaro/tree/master/dedalo): daemon for the users' authentication, asks the authentication backend [Wax](https://github.com/nethesis/icaro/tree/master/wax) if a user is correctly authenticated and, if the response is affirmative, it authenticates the user to the dedalo instance.
 - [Wax](https://github.com/nethesis/icaro/tree/master/wax): accounting server, it speaks RADIUS AAA protocol via HTTP with Dedalo
 - [Wings](https://github.com/nethesis/icaro/tree/master/wings): captive portal hosted along with Wax, it's static responsive web page for user login. It talks with Wax and Dedalo
 - Sun: Hotspot Manager applications which is dived in 3 parts
