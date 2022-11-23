@@ -7,6 +7,7 @@ Icaro is divided in 4 parts:
 
 - [Dedalo](https://github.com/nethesis/icaro/tree/master/dedalo): network access controller,
   it runs on the firewall and intercepts all guest connections, based on [CoovaChilli](http://coova.github.io/CoovaChilli/)
+  - [dedalo\_users\_auth](https://github.com/nethesis/icaro/tree/master/dedalo): daemon for the users' authentication, asks the authentication backend [Wax](https://github.com/nethesis/icaro/tree/master/wax) if a user is correctly authenticated and, if the response is affirmative, it authenticates the user to the dedalo instance.
 - [Wax](https://github.com/nethesis/icaro/tree/master/wax): accounting server, it speaks RADIUS AAA protocol via HTTP with Dedalo
 - [Wings](https://github.com/nethesis/icaro/tree/master/wings): captive portal hosted along with Wax, it's static responsive web page for user login. It talks with Wax and Dedalo
 - Sun: Hotspot Manager applications which is dived in 3 parts
@@ -20,7 +21,7 @@ Icaro is divided in 4 parts:
 
 Wax, Sun and Ade use the same MariaDB (or MySQL) database.
 
-Wax, Wings, Ade and Sun are considered server-side componentes, while Dedalo is considered the client one.
+Wax, Wings, Ade and Sun are considered server-side components, while Dedalo and dedalo\_users\_auth are considered the client ones.
 All techincal documentation can be found in the links above.
 
 ## How it works
@@ -41,9 +42,9 @@ This is an high-level overview of the whole architecture:
 
 - The user is forced to login using one of the available methods.
 
-- When the authentication is done, Wings sends an authorization message to Dedalo using [JSON interface](http://coova.github.io/CoovaChilli/JSON/) (**3** in figure)
+- When the authentication is done, Wax marks the user as authenticated (**3** in figure)
 
-- Dedalo asks authorization confirmation to Wax, if the authorization is granted (**4** in figure)
+- Dedalo asks, via dedalo\_users\_auth daemon, authorization confirmation to Wax, if the authorization is granted (**3** and **4** in figure)
 
 ### Secondary interactions
 - After hours or days, if the hotspot's owners have enabled the surveys, an email or sms are sent to the users
