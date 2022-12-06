@@ -477,7 +477,7 @@ func GetHistorySMSYear(c *gin.Context) {
 
 	db := database.Instance()
 	chain := db.Table("hotspot_sms_counts").Select("DATE_FORMAT(sent, '%M') AS label, count(*) as data")
-	rows, err := chain.Where("hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt)).Group("label").Order("sent").Rows()
+	rows, err := chain.Where("YEAR(sent) = YEAR(NOW()) AND hotspot_id in (?)", utils.ExtractHotspotIds(accountId, (accountId == 1), hotspotIdInt)).Group("label").Order("sent").Rows()
 
 	for rows.Next() {
 		var label = ""
