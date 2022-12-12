@@ -96,7 +96,7 @@
       "linkedin_login": "Captive Portal login with Linkedin",
       "voucher_login": "Voucher Block",
       "temp_code_login": "Captive Portal login with Voucher",
-      "temp_session_duration": "Temporary session duration (seconds)",
+      "temp_session_duration": "Temporary session duration (seconds, 0 = limitless)",
       "start_navigate": "Start Navigate",
       "voucher_creation": "Vouchers creation",
       "voucher_creation_count": "Vouchers number",

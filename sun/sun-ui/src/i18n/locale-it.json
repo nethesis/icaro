@@ -96,7 +96,7 @@
       "linkedin_login": "Linkedin Login ",
       "voucher_login": "Blocco Voucher",
       "temp_code_login": "Login tramite voucher autorizzativo",
-      "temp_session_duration": "Durata sessione temporanea (secondi)",
+      "temp_session_duration": "Durata sessione temporanea (secondi, 0=illimitato)",
       "start_navigate": "Naviga",
       "voucher_creation": "Creazione Voucher",
       "voucher_creation_count": "Numero di Voucher",
