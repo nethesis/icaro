@@ -55,7 +55,7 @@ jobs:
           cp ${{ github.workspace }}/wax/testdata/*png .
           go test
       - name: Build binary
-        run: go build
+        run: CGO_ENABLED=0 go build
       - name: Upload binary
         uses: actions/upload-artifact@v3
         with:
