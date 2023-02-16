@@ -65,6 +65,12 @@
             script2.type = 'text/javascript';
             script2.src = 'https://collection.wifi4eu.ec.europa.eu/wifi4eu.min.js';
 
+            // fire onload event to start wifi4eu script
+            script2.onload = function() {
+              dispatchEvent(new Event('load'));
+              dispatchEvent(new Event('DOMContentLoaded'));
+            };
+
             // create img for banner
             var img = document.createElement('img')
             img.id = 'wifi4eubanner';
@@ -73,17 +79,13 @@
             if (img.height%2 !=0) { img.height += 1 };
             img.width = img.height * 3.5
 
+            // append image
+            document.body.prepend(img);
+            document.body.style.height = "100%";
+
             // append script to head
             document.head.appendChild(script1);
             document.head.appendChild(script2);
-
-            // fire onload event to start wifi4eu script
-            setTimeout(function() {
-              document.body.prepend(img);
-              document.body.style.height = "100%";
-              dispatchEvent(new Event('load'));
-              dispatchEvent(new Event('DOMContentLoaded'));
-            }, 1000)
           }
         }, function(error) {
           console.error(error)
