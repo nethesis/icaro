@@ -31,8 +31,8 @@ jobs:
             path: sun/sun-tasks
           - name: ade-api
             path: ade/ade-api
-          - name: ade-api
-            path: ade/ade-api
+          - name: ade-tasks
+            path: ade/ade-tasks
           - name: wax
             path: wax
     steps:
