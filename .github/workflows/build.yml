@@ -1,0 +1,147 @@
+name: Build and release Icaro
+
+on:
+  push:
+
+env:
+  go-version: '1.20'
+  node-version: 8
+  artifacts-retention-days: 5
+
+jobs:
+  go-builds:
+    name: Build ${{ matrix.build.name }}
+    runs-on: ubuntu-latest
+    services:
+      database:
+        image: mysql:5.5
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: true
+        ports:
+          - 3306:3306
+    defaults:
+      run:
+        working-directory: ${{ matrix.build.path }}
+    strategy:
+      matrix:
+        build:
+          - name: sun-api
+            path: sun/sun-api
+          - name: sun-tasks
+            path: sun/sun-tasks
+          - name: ade-api
+            path: ade/ade-api
+          - name: ade-api
+            path: ade/ade-api
+          - name: wax
+            path: wax
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ env.go-version }}
+      - name: Test database
+        run: |
+          mysql -h 127.0.0.1 -u root -e 'CREATE DATABASE icaro'
+          mysql -h 127.0.0.1 -u root icaro < ${{ github.workspace }}/deploy/ansible/roles/icarodb/files/icaro.sql
+          mysql -h 127.0.0.1 -u root icaro < ${{ github.workspace }}/wax/testdata/test-grant.sql
+          mysql -h 127.0.0.1 -u root icaro < ${{ github.workspace }}/wax/testdata/test-records.sql
+      - name: Install dependencies
+        run: go get
+      - name: Test binary
+        run: |
+          cp ${{ github.workspace }}/wax/testdata/config.json .
+          cp ${{ github.workspace }}/wax/testdata/*png .
+          go test
+      - name: Build binary
+        run: go build
+      - name: Upload binary
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.build.name }}
+          path: ${{ matrix.build.path }}/${{ matrix.build.name }}
+          retention-days: ${{ env.artifacts-retention-days }}
+  node-builds:
+    name: Build ${{ matrix.build.name }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ matrix.build.path }}
+    strategy:
+      matrix:
+        build:
+          - name: sun-ui
+            path: sun/sun-ui
+          - name: ade-ui
+            path: ade/ade-ui
+          - name: wings
+            path: wings
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.node-version }}
+      - name: Install dependencies
+        run: npm install
+      - name: Run build
+        run: npm run build
+      - name: Create tar.gz
+        run: cd dist && tar cvzf ../${{ matrix.build.name }}.tar.gz .
+      - name: Upload tar.gz
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.build.name }}
+          path: ${{ matrix.build.path }}/${{ matrix.build.name }}.tar.gz
+          retention-days: ${{ env.artifacts-retention-days }}
+  dedalo:
+    name: Build dedalo
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: dedalo/dist
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build dedalo rmp
+        run: |
+          docker run --name makerpms \
+            --volume $PWD:/srv/makerpms/src:ro ghcr.io/nethserver/makerpms:7 makerpms -s *.spec
+          docker commit makerpms nethserver/build
+          docker cp makerpms:/srv/makerpms/rpmbuild/RPMS/noarch/ RPMS
+          cp RPMS/* dedalo.rpm
+      - name: Upload dedalo
+        uses: actions/upload-artifact@v3
+        with:
+          name: dedalo
+          path: dedalo/dist/dedalo.rpm
+          retention-days: ${{ env.artifacts-retention-days }}
+  release:
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/') ||  github.ref == 'refs/heads/master'
+    needs:
+      - go-builds
+      - node-builds
+      - dedalo
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v3
+        with:
+          path: artifacts
+      - id: release
+        run: |
+          if [ "${{ github.ref }}" == 'refs/heads/master' ]; then
+            echo "prerelease=true" >> $GITHUB_OUTPUT
+            echo "name=Automatic build" >> $GITHUB_OUTPUT
+            echo "tag_name=autobuild" >> $GITHUB_OUTPUT
+            echo "body=$(echo Last autobuild `date`)" >> $GITHUB_OUTPUT
+            git tag -f autobuild && git push -f origin autobuild
+          fi
+      - name: Release Icaro
+        uses: softprops/action-gh-release@v1
+        with:
+          name: ${{ steps.release.outputs.name }}
+          tag_name: ${{ steps.release.outputs.tag_name }}
+          prerelease: ${{ steps.release.outputs.prerelease }}
+          body: ${{ steps.release.outputs.body }}
+          files: ./artifacts/*/*
