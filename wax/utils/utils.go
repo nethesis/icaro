@@ -758,18 +758,29 @@ func CheckUserPassword(user models.User, password string) bool {
 	return false
 }
 
-func CheckUserIsValid(username string, password string) bool {
+func CheckUserIsValid(username string, password string) int {
+	// init db instance
+	db := database.Instance()
+
 	// search user
 	var userSearch models.User
-	db := database.Instance()
 	db.Where("username = ? and password = ?", username, password).First(&userSearch)
 
 	// user exists
 	if userSearch.Id > 0 {
-		return true
+		return 1
+	} else {
+		// search user in history
+		var userSearchH models.UserHistory
+		db.Where("username = ? and password = ?", username, password).First(&userSearchH)
+
+		// user exists in history
+		if userSearchH.Id > 0 {
+			return 2 // user is expired
+		}
 	}
 
-	return false
+	return 0 // user not exists
 }
 
 func CreateUserAuth(sessionId string, sessionTimeout int, unitUuid string, userId int, username string, password string, typeAuth string) {

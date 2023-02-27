@@ -45,7 +45,8 @@
             "auth_progress": "Authorization in progress",
             "auth_success": "You are successfully authenticated",
             "auth_error": "Access Denied",
-            "auth_error_sub": "Something went wrong, the reasons could be the following: 1)The data entered may not be correct. 2)The voucher you are using could be expired. 3)You could have reached your maximum daily time. 4)You could have reached your maximum daily traffic."
+            "auth_error_sub": "Something went wrong, the reasons could be the following: 1) The data entered may not be correct. 2)The voucher you are using could be expired. 3)You could have reached your maximum daily time. 4)You could have reached your maximum daily traffic.",
+            "auth_error_sub_expired": "This user is expired..."
         },
         "email": {
             "insert_email": "Insert your email",
@@ -61,7 +62,8 @@
             "auth_progress": "Authorization in progress",
             "auth_success": "You are successfully authenticated",
             "auth_error": "Access Denied",
-            "auth_error_sub": "Something went wrong, the reasons could be the following:<br>1 )The data entered may not be correct.<br>2) The voucher you are using could be expired.<br>3) You could have reached your maximum daily time.<br>4) You could have reached your maximum daily traffic.",
+            "auth_error_sub": "Something went wrong, the reasons could be the following:<br>1 ) The data entered may not be correct.<br>2) The voucher you are using could be expired.<br>3) You could have reached your maximum daily time.<br>4) You could have reached your maximum daily traffic.",
+            "auth_error_sub_expired": "This user is expired...",
             "wait": "How to proceed:",
             "we_are_sending_email_code": "<br>1) Enter your email and click on \"register\"<br>2) Open the email you received and click on the link to login (you have 5 minutes)<br>3) Alternatively, authenticate with the email and the numeric code you received<br><br>NB If the link does not work properly, make sure you are connected to the wireless network of this establishment",
             "not_code_explain": "Is it the first time you are connecting to this Wi-Fi?",
@@ -83,6 +85,7 @@
             "auth_success": "You are successfully authenticated",
             "auth_error": "Access Denied",
             "auth_error_sub": "Something went wrong, the reasons could be the following:<br>1) The data entered may not be correct.<br>2) The voucher you are using could be expired.<br>3) You could have reached your maximum daily time.<br>4) You could have reached your maximum daily traffic.",
+            "auth_error_sub_expired": "This user is expired...",
             "select_state": "Select state",
             "prefix": "Prefix",
             "wait": "How to proceed:",

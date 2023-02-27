@@ -137,11 +137,18 @@
           </div>
         </div>
       </div>
-      <div v-if="errors.dedaloError" class="ui icon negative message">
+      <div v-if="errors.dedaloError && !errors.dedaloExpired" class="ui icon negative message">
         <i class="remove icon"></i>
         <div class="content">
           <div class="header" :style="textStyle">{{ $t("sms.auth_error") }}</div>
           <p :style="textStyle" v-html="$t('sms.auth_error_sub')"></p>
+        </div>
+      </div>
+      <div v-if="errors.dedaloError && errors.dedaloExpired" class="ui icon negative message">
+        <i class="remove icon"></i>
+        <div class="content">
+          <div class="header" :style="textStyle">{{ $t("sms.auth_error") }}</div>
+          <p :style="textStyle" v-html="$t('sms.auth_error_sub_expired')"></p>
         </div>
       </div>
       <div
@@ -198,6 +205,7 @@ export default {
           context.dedaloRequested = true;
           context.authorized = false;
           context.errors.dedaloError = false;
+          context.errors.dedaloExpired = false;
           setTimeout(function() {
             context.execLogin();
           }, 1000);
@@ -216,6 +224,7 @@ export default {
           context.dedaloRequested = true;
           context.authorized = false;
           context.errors.dedaloError = false;
+          context.errors.dedaloExpired = false;
           setTimeout(function() {
             context.execLogin();
           }, 1000);
@@ -246,6 +255,7 @@ export default {
         badNumber: false,
         badCode: false,
         dedaloError: false,
+        dedaloExpired: false,
         badInput: false
       },
       countries: countries,
@@ -367,6 +377,7 @@ export default {
       this.dedaloRequested = true;
       this.authorized = false;
       this.errors.dedaloError = false;
+      this.errors.dedaloExpired = false;
       this.errors.badCode = false;
 
       if (
@@ -413,6 +424,7 @@ export default {
           function(error) {
             this.authorized = false;
             this.errors.dedaloError = true;
+            this.errors.dedaloExpired = false;
             console.error(error);
           }
         );
@@ -434,15 +446,18 @@ export default {
                   if (responseDedalo.body.clientState == 1) {
                     context.authorized = true;
                     context.errors.dedaloError = false;
+                    context.errors.dedaloExpired = false;
                   } else {
                     context.authorized = false;
                     context.errors.dedaloError = true;
+                    context.errors.dedaloExpired = responseDedalo.body.clientState == 2;
                     context.errors.badCode = true;
                   }
                 },
                 function(error) {
                   context.authorized = false;
                   context.errors.dedaloError = true;
+                  context.errors.dedaloExpired = false;
                   console.error(error);
                 }
               );
@@ -451,6 +466,7 @@ export default {
           function(error) {
             this.authorized = false;
             this.errors.dedaloError = true;
+            this.errors.dedaloExpired = false;
             console.error(error);
           }
         );
