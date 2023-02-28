@@ -102,7 +102,7 @@
     <button
       v-if="dedaloError"
       v-on:click="back()"
-      class="ui big button green"
+      class="ui big button red"
       :style="buttonStyle"
     >{{ $t("login.back") }}</button>
 

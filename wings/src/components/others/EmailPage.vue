@@ -142,6 +142,7 @@
           <p :style="textStyle" v-html="$t('email.auth_error_sub_expired')"></p>
         </div>
       </div>
+      <button v-if="errors.dedaloError" v-on:click="back()" class="big ui red button" :style="buttonStyle">{{ $t("login.back") }}</button>
       <div
         :class="hotspot.preferences.marketing_0_reason_country == 'true' ? 'adjust-top-big' : ''"
         v-if="authorized"
