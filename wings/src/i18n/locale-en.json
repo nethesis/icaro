@@ -65,8 +65,8 @@
             "auth_error_sub" : "Wrong username or password, please try again or go back and register again.",
             "auth_error_sub_expired" : "This account is expired, please register again.",
             "wait": "How to proceed:",
-            "we_are_sending_email_code": "<br>1) Enter your email and click on \"register\"<br>2) Open the email you received and click on the link to login (you have 5 minutes)<br>3) Alternatively, authenticate with the email and the numeric code you received<br><br>NB If the link does not work properly, make sure you are connected to the wireless network of this establishment",
-            "we_are_sending_email_code_signin": "<br>Enter your email and access code to log in.<br><br>If you haven't registered yet, go back and click on \"register\".<br>",
+            "we_are_sending_email_code": "<br>1) Enter your email and click on \"Sign up\"<br>2) Open the email you received and click on the link to login (you have 5 minutes)<br>3) Alternatively, authenticate with the email and the numeric code you received<br><br>NB If the link does not work properly, make sure you are connected to the wireless network of this establishment",
+            "we_are_sending_email_code_signin": "<br>Enter your email and access code to log in.<br><br>If you haven't registered yet, go back and click on \"Sign up\".<br>",
             "not_code_explain": "Is it the first time you are connecting to this Wi-Fi?",
             "not_code_explain_else": "Else"
         },
@@ -90,8 +90,8 @@
             "select_state": "Select state",
             "prefix": "Prefix",
             "wait": "How to proceed:",
-            "we_are_sending_sms_code": "<br>1) Enter your telephone number and click on \"register\"<br>2) Open the SMS received and click on the link to log in<br>3) Alternatively log in with your telephone and the numeric code you received<br><br>NB If the link does not work properly, make sure you are connected to the wireless network of this establishment",
-            "we_are_sending_sms_code_signin": "<br>Enter your telephone number and access code to log in.<br><br>If you haven't registered yet, go back and click on \"register\".<br>",
+            "we_are_sending_sms_code": "<br>1) Enter your telephone number and click on \"Sign up\"<br>2) Open the SMS received and click on the link to log in<br>3) Alternatively log in with your telephone and the numeric code you received<br><br>NB If the link does not work properly, make sure you are connected to the wireless network of this establishment",
+            "we_are_sending_sms_code_signin": "<br>Enter your telephone number and access code to log in.<br><br>If you haven't registered yet, go back and click on \"Sign up\".<br>",
             "not_code_explain": "Is it the first time you are connecting to this Wi-Fi?",
             "not_code_explain_else": "Else"
         }
