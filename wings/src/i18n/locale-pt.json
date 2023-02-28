@@ -66,6 +66,7 @@
             "auth_error_sub_expired": "This user is expired...",
             "wait": "Por favor aguarde",
             "we_are_sending_email_code": "Se não está a receber o email, por favor desligue da rede WiFi e volte a ligar, verifique o seu email e clique no link do email para navegar. Veja também na caixa de SPAM.",
+            "we_are_sending_email_code_signin": "<br>Signin here...",
             "not_code_explain": "É a primeira vez que se liga ao Wi-Fi?",
             "not_code_explain_else": "Outro"
         },
@@ -90,6 +91,7 @@
             "prefix": "Prefixo",
             "wait": "A enviar SMS...",
             "we_are_sending_sms_code": "Use o mesmo código no próximo acesso escolhendo o botão 'Entrar'.",
+            "we_are_sending_sms_code_signin": "<br>Signin here...",
             "not_code_explain": "É a primeira vez que se liga ao Wi-Fi?",
             "not_code_explain_else": "Outro"
         }

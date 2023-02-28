@@ -66,6 +66,7 @@
             "auth_error_sub_expired": "This user is expired...",
             "wait": "Come procedere:",
             "we_are_sending_email_code": "<br>1) Inserisci la tua email e clicca su \"registrati\"<br>2) Apri l'email che hai ricevuto e clicca sul link per autenticarti (hai 5 minuti di tempo)<br>3) In alternativa autenticati con l'email ed il codice numerico che hai ricevuto<br><br>N.B. Se il link non funziona correttamente assicurati di essere connesso alla rete Wireless di questa struttura",
+            "we_are_sending_email_code_signin": "<br>Signin here...",
             "not_code_explain": "È la prima volta che ti connetti alla nostra rete Wi-Fi?",
             "not_code_explain_else": "Altrimenti"
         },
@@ -90,6 +91,7 @@
             "prefix": "Prefisso Internazionale",
             "wait": "Come procedere:",
             "we_are_sending_sms_code": "<br>1) Inserisci il tuo numero di telefono e clicca su \"registrati\"<br>2) Apri l'SMS ricevuto e clicca sul link per autenticarti<br>3) In alternativa autenticati col tuo numero di telefono ed il codice numerico che hai ricevuto<br><br>N.B. Se il link non funziona correttamente assicurati di essere connesso alla rete Wireless di questa struttura",
+            "we_are_sending_sms_code_signin": "<br>Signin here...",
             "not_code_explain": "È la prima volta che ti connetti alla nostra rete Wi-Fi?",
             "not_code_explain_else": "Altrimenti"
         }

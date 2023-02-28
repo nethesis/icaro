@@ -1,10 +1,16 @@
 <template>
   <div class="ui form">
     <div v-if="!dedaloRequested">
-      <div v-if="choosedMode" class="ui compact message info no-margin-top">
+      <div v-if="choosedMode && !codeRequested" class="ui compact message info no-margin-top">
         <div class="content">
           <div class="header">{{$t('sms.wait')}}</div>
           <p v-html="$t('sms.we_are_sending_sms_code')"></p>
+        </div>
+      </div>
+      <div v-if="choosedMode && codeRequested" class="ui compact message info no-margin-top">
+        <div class="content">
+          <div class="header">{{$t('sms.wait')}}</div>
+          <p v-html="$t('sms.we_are_sending_sms_code_signin')"></p>
         </div>
       </div>
       <div

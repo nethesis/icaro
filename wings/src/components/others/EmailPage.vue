@@ -1,10 +1,16 @@
 <template>
   <div class="ui form">
     <div v-if="!dedaloRequested">
-      <div v-if="choosedMode" class="ui compact message info no-margin-top">
+      <div v-if="choosedMode && !codeRequested" class="ui compact message info no-margin-top">
         <div class="content">
           <div class="header">{{$t('email.wait')}}</div>
           <p v-html="$t('email.we_are_sending_email_code')"></p>
+        </div>
+      </div>
+      <div v-if="choosedMode && codeRequested" class="ui compact message info no-margin-top">
+        <div class="content">
+          <div class="header">{{$t('email.wait')}}</div>
+          <p v-html="$t('email.we_are_sending_email_code_signin')"></p>
         </div>
       </div>
       <div v-if="choosedMode" class="field" v-bind:class="{ error: errors.badInput }">

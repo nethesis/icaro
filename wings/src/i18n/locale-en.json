@@ -66,6 +66,7 @@
             "auth_error_sub_expired": "This user is expired...",
             "wait": "How to proceed:",
             "we_are_sending_email_code": "<br>1) Enter your email and click on \"register\"<br>2) Open the email you received and click on the link to login (you have 5 minutes)<br>3) Alternatively, authenticate with the email and the numeric code you received<br><br>NB If the link does not work properly, make sure you are connected to the wireless network of this establishment",
+            "we_are_sending_email_code_signin": "<br>Signin here...",
             "not_code_explain": "Is it the first time you are connecting to this Wi-Fi?",
             "not_code_explain_else": "Else"
         },
@@ -90,6 +91,7 @@
             "prefix": "Prefix",
             "wait": "How to proceed:",
             "we_are_sending_sms_code": "<br>1) Enter your telephone number and click on \"register\"<br>2) Open the SMS received and click on the link to log in<br>3) Alternatively log in with your telephone and the numeric code you received<br><br>NB If the link does not work properly, make sure you are connected to the wireless network of this establishment",
+            "we_are_sending_sms_code_signin": "<br>Signin here...",
             "not_code_explain": "Is it the first time you are connecting to this Wi-Fi?",
             "not_code_explain_else": "Else"
         }
