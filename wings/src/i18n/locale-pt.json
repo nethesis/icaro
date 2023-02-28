@@ -45,8 +45,8 @@
             "auth_progress": "Autenticação em curso",
             "auth_success": "Foi autenticado com sucesso",
             "auth_error": "Acesso Recusado",
-            "auth_error_sub": "Ocorreu um erro, as razões poderam ser as seguintes: 1) Os dados introduzidos não estão correctos. 2)O voucher que está a usar poderá não estar válido. 3)Atingiu o limite de tempo diário. 4)Atingiu o limite de tráfego diário.",
-            "auth_error_sub_expired": "This user is expired..."
+            "auth_error_sub" : "Nome de usuário ou senha incorretos, tente novamente ou volte para se registrar.",
+            "auth_error_sub_expired" : "Esta conta expirou, registre-se novamente."
         },
         "email": {
             "insert_email": "Insira o seu email",
@@ -62,11 +62,11 @@
             "auth_progress": "Autorização em curso",
             "auth_success": "Foi autenticado com sucesso",
             "auth_error": "Acesso Recusado",
-            "auth_error_sub": "Ocorreu um erro, as razões poderam ser as seguintes:<br>1) Os dados introduzidos não estão correctos.<br>2) O código que está a usar poderá não estar válido.<br>3) Atingiu o limite de tempo diário.<br>4) Atingiu o limite de tráfego diário.",
-            "auth_error_sub_expired": "This user is expired...",
+            "auth_error_sub" : "Nome de usuário ou senha incorretos, tente novamente ou volte para se registrar.",
+            "auth_error_sub_expired" : "Esta conta expirou, registre-se novamente.",
             "wait": "Por favor aguarde",
             "we_are_sending_email_code": "Se não está a receber o email, por favor desligue da rede WiFi e volte a ligar, verifique o seu email e clique no link do email para navegar. Veja também na caixa de SPAM.",
-            "we_are_sending_email_code_signin": "<br>Signin here...",
+            "we_are_sending_email_code_signin": "<br>Digite seu e-mail e o código para acessar.<br><br>Se você ainda não se cadastrou, volte e clique em \"Registar\".<br>",
             "not_code_explain": "É a primeira vez que se liga ao Wi-Fi?",
             "not_code_explain_else": "Outro"
         },
@@ -85,13 +85,13 @@
             "auth_progress": "Autorização em curso",
             "auth_success": "Foi autenticado com sucesso",
             "auth_error": "Acesso Recusado",
-            "auth_error_sub": "Ocorreu um erro, as razões poderam ser as seguintes:<br>1) Os dados introduzidos não estão correctos.<br>2) O código que está a usar poderá não estar válido.<br>3) Atingiu o limite de tempo diário.<br>4) Atingiu o limite de tráfego diário.",
-            "auth_error_sub_expired": "This user is expired...",
+            "auth_error_sub" : "Nome de usuário ou senha incorretos, tente novamente ou volte para se registrar.",
+            "auth_error_sub_expired" : "Esta conta expirou, registre-se novamente.",
             "select_state": "Escolha distrito",
             "prefix": "Prefixo",
             "wait": "A enviar SMS...",
             "we_are_sending_sms_code": "Use o mesmo código no próximo acesso escolhendo o botão 'Entrar'.",
-            "we_are_sending_sms_code_signin": "<br>Signin here...",
+            "we_are_sending_sms_code_signin": "<br>Digite seu número de telefone e o código para acessar.<br><br>Se você ainda não se cadastrou, volte e clique em \"Registar\".<br>",
             "not_code_explain": "É a primeira vez que se liga ao Wi-Fi?",
             "not_code_explain_else": "Outro"
         }
