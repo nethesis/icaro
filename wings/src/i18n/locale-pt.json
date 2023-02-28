@@ -45,7 +45,7 @@
             "auth_progress": "Autenticação em curso",
             "auth_success": "Foi autenticado com sucesso",
             "auth_error": "Acesso Recusado",
-            "auth_error_sub" : "Nome de usuário ou senha incorretos, tente novamente ou volte para se registrar.",
+            "auth_error_sub" : "Nome de usuário ou senha incorretos, tente fazer login novamente ou cadastre-se.",
             "auth_error_sub_expired" : "Esta conta expirou, registre-se novamente."
         },
         "email": {
@@ -62,7 +62,7 @@
             "auth_progress": "Autorização em curso",
             "auth_success": "Foi autenticado com sucesso",
             "auth_error": "Acesso Recusado",
-            "auth_error_sub" : "Nome de usuário ou senha incorretos, tente novamente ou volte para se registrar.",
+            "auth_error_sub" : "Nome de usuário ou senha incorretos, tente fazer login novamente ou cadastre-se.",
             "auth_error_sub_expired" : "Esta conta expirou, registre-se novamente.",
             "wait": "Por favor aguarde",
             "we_are_sending_email_code": "Se não está a receber o email, por favor desligue da rede WiFi e volte a ligar, verifique o seu email e clique no link do email para navegar. Veja também na caixa de SPAM.",
@@ -85,7 +85,7 @@
             "auth_progress": "Autorização em curso",
             "auth_success": "Foi autenticado com sucesso",
             "auth_error": "Acesso Recusado",
-            "auth_error_sub" : "Nome de usuário ou senha incorretos, tente novamente ou volte para se registrar.",
+            "auth_error_sub" : "Nome de usuário ou senha incorretos, tente fazer login novamente ou cadastre-se.",
             "auth_error_sub_expired" : "Esta conta expirou, registre-se novamente.",
             "select_state": "Escolha distrito",
             "prefix": "Prefixo",

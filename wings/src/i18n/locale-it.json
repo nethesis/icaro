@@ -45,7 +45,7 @@
             "auth_progress": "Autorizzazione in corso",
             "auth_success": "Ti sei autenticato con successo",
             "auth_error": "Accesso Negato",
-            "auth_error_sub" : "Utente o password errati, riprova nuovamente oppure torna indietro per registrarti.",
+            "auth_error_sub" : "Utente o password errati, riprova nuovamente oppure Registrati.",
             "auth_error_sub_expired" : "Questo account è scaduto, esegui una nuova registrazione."
         },
         "email": {
@@ -62,7 +62,7 @@
             "auth_progress": "Autorizzazione in corso",
             "auth_success": "Ti sei autenticato con successo",
             "auth_error": "Accesso Negato",
-            "auth_error_sub" : "Utente o password errati, riprova nuovamente oppure torna indietro per registrarti.",
+            "auth_error_sub" : "Utente o password errati, riprova nuovamente oppure Registrati.",
             "auth_error_sub_expired" : "Questo account è scaduto, esegui una nuova registrazione.",
             "wait": "Come procedere:",
             "we_are_sending_email_code": "<br>1) Inserisci la tua email e clicca su \"Registrati\"<br>2) Apri l'email che hai ricevuto e clicca sul link per autenticarti (hai 5 minuti di tempo)<br>3) In alternativa autenticati con l'email ed il codice numerico che hai ricevuto<br><br>N.B. Se il link non funziona correttamente assicurati di essere connesso alla rete Wireless di questa struttura",
@@ -85,7 +85,7 @@
             "auth_progress": "Autorizzazione in corso",
             "auth_success": "Ti sei autenticato con successo",
             "auth_error": "Accesso Negato",
-            "auth_error_sub" : "Utente o password errati, riprova nuovamente oppure torna indietro per registrarti.",
+            "auth_error_sub" : "Utente o password errati, riprova nuovamente oppure Registrati.",
             "auth_error_sub_expired" : "Questo account è scaduto, esegui una nuova registrazione.",
             "select_state": "Seleziona Stato",
             "prefix": "Prefisso Internazionale",
