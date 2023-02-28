@@ -86,16 +86,23 @@
         </div>
       </div>
     </div>
-    <div v-if="dedaloError" class="ui icon negative message">
+    <div v-if="dedaloError && !dedaloExpired" class="ui icon negative message">
       <div class="content">
         <div class="header">{{ $t("social.auth_error") }}</div>
         <p>{{ $t("social.auth_error_sub") }}</p>
       </div>
     </div>
+    <div v-if="dedaloError && dedaloExpired" class="ui icon negative message">
+      <div class="content">
+        <div class="header">{{ $t("social.auth_error") }}</div>
+        <p>{{ $t("social.auth_error_sub_expired") }}</p>
+      </div>
+    </div>
+    
     <button
       v-if="dedaloError"
       v-on:click="back()"
-      class="ui big button green"
+      class="ui big button red"
       :style="buttonStyle"
     >{{ $t("login.back") }}</button>
 
@@ -169,6 +176,7 @@ export default {
     var badInput = false;
     var authorized = false;
     var dedaloError = false;
+    var dedaloExpired = false;
 
     var authCode = "";
     if (this.$root.$options.hotspot.preferences.voucher_login == "true") {
@@ -193,6 +201,7 @@ export default {
           this.voucherValidated = false;
           this.authorized = false;
           this.dedaloError = false;
+          this.dedaloExpired = false;
           this.authCode = this.$route.query.code;
           this.validateCode();
         }
@@ -214,6 +223,7 @@ export default {
       badInput: badInput,
       authorized: authorized,
       dedaloError: dedaloError,
+      dedaloExpired: dedaloExpired,
       userId: 0,
       conditions: false,
       surveys: false,
@@ -248,6 +258,7 @@ export default {
       this.badInput = false;
       this.authorized = false;
       this.dedaloError = false;
+      this.dedaloExpired = false;
     },
     changeRoute: function(path, withCode) {
       if (withCode) {
@@ -336,15 +347,18 @@ export default {
                   ) {
                     context.authorized = true;
                     context.dedaloError = false;
+                    context.dedaloExpired = false;
                     context.$forceUpdate();
                   } else {
                     context.authorized = false;
                     context.dedaloError = true;
+                    context.dedaloExpired = responseDedalo.body.clientState == 2;
                   }
                 },
                 function(error) {
                   this.authorized = false;
                   this.dedaloError = true;
+                  this.dedaloExpired = false;
                   console.error(error);
                 }
               );

@@ -1,10 +1,16 @@
 <template>
   <div class="ui form">
     <div v-if="!dedaloRequested">
-      <div v-if="choosedMode" class="ui compact message info no-margin-top">
+      <div v-if="choosedMode && !codeRequested" class="ui compact message info no-margin-top">
         <div class="content">
           <div class="header">{{$t('sms.wait')}}</div>
           <p v-html="$t('sms.we_are_sending_sms_code')"></p>
+        </div>
+      </div>
+      <div v-if="choosedMode && codeRequested" class="ui compact message info no-margin-top">
+        <div class="content">
+          <div class="header">{{$t('sms.wait')}}</div>
+          <p v-html="$t('sms.we_are_sending_sms_code_signin')"></p>
         </div>
       </div>
       <div
@@ -137,13 +143,21 @@
           </div>
         </div>
       </div>
-      <div v-if="errors.dedaloError" class="ui icon negative message">
+      <div v-if="errors.dedaloError && !errors.dedaloExpired" class="ui icon negative message">
         <i class="remove icon"></i>
         <div class="content">
           <div class="header" :style="textStyle">{{ $t("sms.auth_error") }}</div>
           <p :style="textStyle" v-html="$t('sms.auth_error_sub')"></p>
         </div>
       </div>
+      <div v-if="errors.dedaloError && errors.dedaloExpired" class="ui icon negative message">
+        <i class="remove icon"></i>
+        <div class="content">
+          <div class="header" :style="textStyle">{{ $t("sms.auth_error") }}</div>
+          <p :style="textStyle" v-html="$t('sms.auth_error_sub_expired')"></p>
+        </div>
+      </div>
+      <button v-if="errors.dedaloError" v-on:click="back()" class="big ui red button" :style="buttonStyle">{{ $t("login.back") }}</button>
       <div
         :class="hotspot.preferences.marketing_0_reason_country == 'true' ? 'adjust-top-big' : ''"
         v-if="authorized"
@@ -198,6 +212,7 @@ export default {
           context.dedaloRequested = true;
           context.authorized = false;
           context.errors.dedaloError = false;
+          context.errors.dedaloExpired = false;
           setTimeout(function() {
             context.execLogin();
           }, 1000);
@@ -216,6 +231,7 @@ export default {
           context.dedaloRequested = true;
           context.authorized = false;
           context.errors.dedaloError = false;
+          context.errors.dedaloExpired = false;
           setTimeout(function() {
             context.execLogin();
           }, 1000);
@@ -246,6 +262,7 @@ export default {
         badNumber: false,
         badCode: false,
         dedaloError: false,
+        dedaloExpired: false,
         badInput: false
       },
       countries: countries,
@@ -367,6 +384,7 @@ export default {
       this.dedaloRequested = true;
       this.authorized = false;
       this.errors.dedaloError = false;
+      this.errors.dedaloExpired = false;
       this.errors.badCode = false;
 
       if (
@@ -413,6 +431,7 @@ export default {
           function(error) {
             this.authorized = false;
             this.errors.dedaloError = true;
+            this.errors.dedaloExpired = false;
             console.error(error);
           }
         );
@@ -434,15 +453,18 @@ export default {
                   if (responseDedalo.body.clientState == 1) {
                     context.authorized = true;
                     context.errors.dedaloError = false;
+                    context.errors.dedaloExpired = false;
                   } else {
                     context.authorized = false;
                     context.errors.dedaloError = true;
+                    context.errors.dedaloExpired = responseDedalo.body.clientState == 2;
                     context.errors.badCode = true;
                   }
                 },
                 function(error) {
                   context.authorized = false;
                   context.errors.dedaloError = true;
+                  context.errors.dedaloExpired = false;
                   console.error(error);
                 }
               );
@@ -451,6 +473,7 @@ export default {
           function(error) {
             this.authorized = false;
             this.errors.dedaloError = true;
+            this.errors.dedaloExpired = false;
             console.error(error);
           }
         );
