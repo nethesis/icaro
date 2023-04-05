@@ -1,37 +1,78 @@
-PRIVACY POLICY
+Informativa sul trattamento dei dati personali
+Ai sensi degli artt. 13 e 14 del Regolamento 2016/679/UE
 
-RIFERIMENTI NORMATIVI
-    • Direttiva 2002/58/CE - relativa al "trattamento dei dati personali e alla tutela della vita privata nel settore delle comunicazioni elettroniche"
-    • Regolamento (UE) 2016/679 del parlamento europeo e del consiglio del 27 aprile 2016 relativo alla protezione delle persone fisiche con riguardo al trattamento dei dati personali, nonché alla libera circolazione di tali dati e che abroga la direttiva 95/46/ce (Regolamento Generale sulla Protezione dei Dati).
-    • Decreto Legislativo 30 giugno 2003, n. 196 - "Codice Privacy" così come modificato dal D.Lgs. 101/2018
+In conformità con i requisiti posti dal Regolamento Generale in materia di protezione dei dati personali il Titolare del trattamento fornisce all’interessato le seguenti informazioni in relazione ai trattamenti di dati personali effettuati.
 
-IL TITOLARE DEL TRATTAMENTO
+TRATTAMENTO
+	Denominazione 	sito my.nethspot.com
+	Descrizione 	Si tratta dei dati raccolti automaticamente durante la navigazione esclusivamente sul sito internet del Titolare all'indirizzo my.nethspot.com e quelli comunicati spontaneamente dall'Utente tramite il modulo di contatto.
+	Data ultima revisione 	03/04/2023
 
-Il “Titolare” è {{ .BusinessName }} (P.IVA/C.F. : {{ .BusinessVAT }}) con sede legale in  {{ .BusinessAddress }}.
+	Titolare del trattamento
+	Nome 	Nethesis s.r.l.U.
+	Indirizzo 	Via degli Olmi 12, 61121 Pesaro (PU) - ITALIA
+	P.IVA / CF 	02734760412 / 02734760412 
+	Legale rappresentante 	CRISTIAN MANONI
+	Contatto privacy 	privacy@nethesis.it
+	PEC 	nethesis@pec.it
+	Telefono 	07211791157
+	
+	DPO - Responsabile della protezione dei dati
+	Nome 	Avvera s.r.l.
+	Indirizzo 	Largo Umberto Boccioni, 1 – 21040 Origgio (VA) -
 
-FINALITA’DEL TRATTAMENTO DEI DATI e TEMPI DI CONSERVAZIONE
 
-La informiamo che i Suoi dati personali, raccolti in occasione della sua registrazione al servizio di navigazione nella rete internet in modalità Wi-Fi (“Servizio”), da lei liberamente conferiti, sono trattati dal Titolare del Trattamento al solo fine di gestire la sua corretta registrazione ed essere in grado di fornirle il Servizio da lei richiesto. La informiamo altresì che a seguito dell’utilizzo del Servizio potrebbero essere registrati anche i dati relativi alla sua navigazione sul web. La invitiamo pertanto a prendere attentamente visione dei termini e condizioni del servizio al fine di procedere con una corretta navigazione.  Il trattamento dei Suoi dati è necessario per dare seguito a detta finalità e dare corretta esecuzione al contratto di Servizio (art. 6 par. 1 lettera b) del GDPR). I dati raccolti, sia in fase di registrazione che relativi alla sua navigazione, saranno conservati esclusivamente il tempo necessario per garantirle un corretto e completo riscontro nonché per finalità di sicurezza (comunque al massimo sei mesi).
-Previo suo espresso consenso [richiesto esplicitamente nelle schermate successive] (art. 6 par. 1 lettera a) del GDPR), i suoi dati saranno comunicati alla struttura presso la quale Lei utilizza il presente Servizio per le seguenti finalità:
-1) Invio di comunicazioni inerenti nuove offerte, comunicazioni promozionali mediante email o sms, ricerche statistiche, marketing e profilazione di dati (es. motivo, preferenze e tipologia del soggiorno,interessi alle attività collaterali, etc.)
-2) Rilevazione del grado di soddisfazione della clientela.
+Se intende richiedere ulteriori informazioni sul trattamento dei Suoi dati personali o per l'eventuale esercizio dei Suoi diritti, potrà rivolgersi per iscritto direttamente al contatto privacy sopra indicato.
 
-FACOLTATIVITA’ DEL CONFERIMENTO DEI DATI
-Il conferimento dei Suoi dati personali è libero, tuttavia il mancato conferimento degli stessi ci impedirà di riscontrare la sua richiesta. Qualora decida di fornirci i Suoi dati, la informiamo che questi saranno trattati da personale autorizzato dal Titolare del Trattamento.
+DATI TRATTATI 
+	Dati di navigazione (quali: indirizzo IP, indirizzi URI/URL, orario di accesso ecc.)
+	Dati particolari trattati : nessuno
+	
+IN CASO DI ACCESSO AL SERVIZIO HOTSPOT VEDERE ANCHE LE INTEGRAZIONI SUL DOCUMENTO "USE" https://my.nethspot.com/use
 
-CONDIVISIONE, COMUNICAZIONE E DIFFUSIONE DEI DATI
-{{ if .IntegrationTerms }}{{ .IntegrationTerms }}
-In nessun altro caso{{else}}In nessun caso{{ end }} i suoi dati saranno diffusi ma la informiamo che potranno essere comunicati a terzi soggetti che svolgono, per conto del Titolare stesso, specifici servizi volti a garantirle il corretto perseguimento delle citate finalità. I dati raccolti potranno essere trasferiti o comunicati ad altre società per attività strettamente connesse e strumentali all’operatività del servizio, come la gestione del sistema informatico. I dati personali forniti dagli utenti che inoltrano richieste di invio di materiale informativo (brochure, materiale informativo, ecc.) sono utilizzati al solo fine di eseguire il servizio o la prestazione richiesta e sono comunicati a terzi nel solo caso in cui ciò sia a tal fine necessario (società che forniscono servizi di imbustamento, etichettatura, spedizione). Al di fuori di questi casi, i dati personali non saranno comunicati salvo previsione contrattuale o di legge, ovvero salvo specifico consenso richiesto all’interessato.
-In questo senso, i dati personali potrebbero essere trasmessi a terze parti, ma solo ed esclusivamente nel caso in cui:
-    a) vi sia consenso esplicito a condividere i dati con terze parti;
-    b) vi sia la necessità di condividere con terzi le informazioni al fine di prestare il servizio richiesto;
-    c) ciò sia necessario per adempiere a richieste dell'Autorità Giudiziaria o di Pubblica Sicurezza.
-Nessun dato derivante dal servizio web viene diffuso.
+In conformità con i requisiti posti dal Regolamento Generale in materia di protezione dei dati personali il Titolare del trattamento fornisce all’interessato le seguenti informazioni in relazione ai trattamenti di dati personali effettuati.
 
-DIRITTI DEGLI INTERESSATI
-Le ricordiamo infine che, ai sensi degli articoli 15 e ss. del GDPR, lei ha diritto di ottenere la conferma dell’esistenza o meno di dati che la riguardano, di ottenere l’indicazione dell’origine e delle finalità e modalità del trattamento, l’aggiornamento, la rettificazione, la portabilità, l’integrazione dei dati nonché la cancellazione dei dati trattati in violazione di legge o qualora sussista uno dei motivi specificati dall’articolo 17 del GDPR.
-Lei ha, altresì, il diritto di proporre reclamo a un'autorità di controllo qualora ritenesse che i diritti qui indicati non le siano stati riconosciuti ovvero di adire le opportune sedi giudiziarie (artt. 77 e 79 GDPR).
-{{ if and .BusinessDPO .BusinessDPOMail }}Per esercitare tali diritti può rivolgersi direttamente al Titolare del Trattamento sopra indicato, in alternativa può rivolgersi al Responsabile per la protezione dei dati {{ .BusinessDPO }} inviando un messaggio di posta elettronica all’indirizzo {{ .BusinessDPOMail }}.{{else}}Per esercitare tali diritti può rivolgersi direttamente al Titolare del trattamento sopra indicato, oppure inviare un messaggio di posta elettronica all’indirizzo {{ .BusinessEmail }}.{{ end }}
-LEGGE E GIURISDIZIONE
-L'interpretazione e l'esecuzione di queste condizioni sono regolate dalla legge italiana. Il Foro di appartenenza del Titolare del trattamento, sarà competente in via esclusiva per qualsiasi controversia comunque connessa a queste condizioni. Il Titolare si riserva di ottenere rimedi urgenti presso qualunque Corte anche all'estero, per proteggere i propri interessi e far rispettare i propri diritti.
 
+FINALITÀ DEL TRATTAMENTO 
+Navigazione nel sito
+
+Interessati:
+	Utenti sito internet
+
+Base giuridica: 
+legittimo interesse (art. 6, par. 1 lett. f) e considerando 47 GDPR): il trattamento è necessario per il perseguimento del legittimo interesse del titolare del trattamento o di terzi, a condizione che non prevalgano gli interessi o i diritti e le libertà fondamentali dell’interessato che richiedono la protezione dei dati personali, tenuto conto delle ragionevoli aspettative nutrite dall’interessato in base alla sua relazione con il titolare del trattamento. Attività strettamente necessarie al funzionamento del sito e all’erogazione del servizio di navigazione sulla piattaforma. 
+
+Durata del trattamento: 
+fino alla durata della sessione di navigazione. 
+	
+Natura del conferimento: necessaria al fine di permettere la navigazione del sito web.Il trattamento è necessario per il perseguimento del legittimo interesse del titolare del trattamento o di terzi
+ 	
+Responsabili del trattamento:
+	L'elenco aggiornato dei Responsabili del trattamento è disponibile presso la sede legale del Titolare e sarà fornito previa richiesta scritta.
+
+
+DIRITTI DEGLI INTERESSATI - Artt. da 15 a 22 e dall'art. 13 del GDPR.
+
+Diritto di accesso
+	L'interessato ha diritto, secondo quanto previsto dagli artt. da 15 a 22 e dall' art. 13 del GDPR di richiedere al titolare l'accesso ai propri dati personali.
+
+Diritto di rettifica.
+	L'interessato ha diritto, secondo quanto previsto dagli artt. da 15 a 22 e dall' art. 13 del GDPR di richiedere al titolare la rettifica dei propri dati personali.
+
+Diritto di cancellazione.
+	L'interessato ha diritto, secondo quanto previsto dagli artt. da 15 a 22 e dall' art. 13 del GDPR di richiedere al titolare la cancellazione dei propri dati personali.
+
+Diritto di limitazione.
+	L'interessato ha diritto, secondo quanto previsto dagli artt. da 15 a 22 e dall' art. 13 del GDPR di richiedere al titolare la limitazione dei dati che lo riguardano.
+
+Diritto di opposizione.
+	L'interessato ha diritto, secondo quanto previsto dagli artt. da 15 a 22 e dall' art. 13 del GDPR di opporsi al loro trattamento.
+
+Diritto di portabilità.
+	L'interessato ha diritto, secondo quanto previsto dagli artt. da 15 a 22 e dall' art. 13 del GDPR di esercitare il proprio diritto alla portabilità dei dati.
+
+Diritto di revoca.
+	L'interessato ha diritto, secondo quanto previsto dagli artt. da 15 a 22 e dall' art. 13 del GDPR di esercitare il proprio diritto alla revoca del consenso.
+
+Diritto di reclamo.
+	L'interessato ha diritto, secondo quanto previsto dagli artt. da 15 a 22 e dall' art. 13 del GDPR di esercitare il proprio diritto di porre reclamo dinanzi all'autorità di controllo.
