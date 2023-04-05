@@ -1,48 +1,127 @@
-﻿CONDIZIONI GENERALI E NORME DI UTILIZZO DEL SERVIZIO DI RETE WIRELESS
-Le presenti condizioni generali definiscono e disciplinano le modalità ed i termini in base ai quali il “Fornitore del servizio” mette a disposizione il servizio di accesso ad Internet tramite rete senza fili denominato nel prosieguo “Il Servizio”.
- 
-1. FINALITA'
-Il Fornitore del servizio (in qualità di Titolare del trattamento) ha attivato delle aree Hot Spot WiFi. L’attivazione del servizio permette, previa registrazione di accedere alla rete Internet in modalità WI-FI nelle aree appositamente abilitate.
- 
-2. CARATTERISTICHE DELLA RETE WIFI
-2.1 - Per accedere al servizio WiFi occorre registrarsi on-line; la password di accesso sarà inviata al telefono cellulare o all’indirizzo e-mail indicato in fase di registrazione, salva l’ipotesi di autenticazione con account social scelti dal fornitore del servizio.
-2.2 - Per utilizzare il servizio è necessario: 
+Informativa sul trattamento dei dati personali
+Ai sensi degli artt. 13 e 14 del Regolamento 2016/679/UE
+In conformità con i requisiti posti dal Regolamento Generale in materia di protezione dei dati personali il Titolare del trattamento fornisce all’interessato le seguenti informazioni in relazione ai trattamenti di dati personali effettuati.
+
+1. TRATTAMENTO
+	Denominazione: 	
+	UTILIZZO DEL SERVIZIO DI RETE WIRELESS
+	
+	Descrizione:
+	Il Titolare ha attivato delle aree Hot Spot WiFi limitrofe alla propria sede. L’attivazione del servizio permette, previa registrazione di accedere alla rete Internet in modalità WI-FI nelle aree appositamente abilitate.		
+	Data ultima revisione 	03/04/2023
+
+2. TITOLARE DEL TRATTAMENTO
+
+	Nome: 	{{ .BusinessName }}
+	Indirizzo: 	{{ .BusinessAddress }}
+	P.IVA / CF:  {{ .BusinessVAT }} 
+	Contatto privacy: 	{{ .BusinessEmail }}
+
+{{ if and .BusinessDPO .BusinessDPOMail }}
+DPO - Responsabile della protezione dei dati
+	Nome: 	{{ .BusinessDPO }}
+	Email 	{{ .BusinessDPOMail }}
+{{end}}
+Se intende richiedere ulteriori informazioni sul trattamento dei Suoi dati personali o per l'eventuale esercizio dei Suoi diritti, potrà rivolgersi per iscritto direttamente al contatto privacy sopra indicato.
+
+
+3. DATI TRATTATI
+Dati comuni:
+	Dati di login (1 tra i seguenti):
+		- Profilo della piattaforma di terze parti utilizzata
+		- Codice voucher
+		- Email o numero telefonico 
+
+	Dati di navigazione (quali: indirizzo IP, indirizzi URI/URL, orario di accesso e durata, ecc.)
+	
+Dati particolari: nessuno
+	
+In conformità con i requisiti posti dal Regolamento Generale in materia di protezione dei dati personali il Titolare del trattamento fornisce all’interessato le seguenti informazioni in relazione ai trattamenti di dati personali effettuati.
+
+
+4. FINALITÀ DEL TRATTAMENTO
+4.1 Accesso al servizio hotspot.
+Il Titolare ha attivato delle aree hotspot WiFi limitrofe alla propria sede. L’attivazione del servizio permette, previa registrazione di accedere alla rete Internet in modalità WI-FI nelle aree appositamente abilitate. Il Titolare raccoglie informazioni personali da soggetti interessati che utilizzano il servizio. Il numero ed il tipo di dati raccolti sono quelli strettamente necessari a questa fase del rapporto.Per accedere al servizio WiFi occorre registrarsi on-line; la password di accesso sarà inviata al telefono cellulare o all’indirizzo e-mail indicato in fase di registrazione, salva l’ipotesi di autenticazione con account social scelti dal Titolare. 
+
+Interessati:
+	Utenti del servizio.
+	
+Base giuridica: 
+	Il trattamento è necessario all'esecuzione di un contratto di cui l'interessato è parte o all'esecuzione di misure precontrattuali adottate su richiesta dello stesso.
+ 
+Durata del trattamento:
+	I log delle connessioni (contenenti inizio, fine e durata della connessione) vengono conservati per 6 mesi per fini di sicurezza e controllo.
+	I dati di login (utente della piattaforma, voucher, email, sms)  vengono conservati per 12 mesi dall'ultimo collegamento.	
+
+4.2 Richiesta di informazioni pubblicitarie o promozionali.
+Previo espresso consenso, i dati forniti saranno trattati al fine di dar seguito alla richiesta di iscrizione alla nostra newsletter automatizzata contenente materiale pubblicitario e/o promozionale e restare sempre aggiornato sulle ultime novità proposte dal Titolare. 
+Le ricordiamo che avrà sempre la possibilità di revocare il consenso a tale iscrizione cliccando sull’apposito link presente in ogni newsletter o inviando una comunicazione ai contatti sopra indicati.
+Il numero ed il tipo di dati raccolti sono quelli strettamente necessari a questa fase del rapporto.
+
+	Base giuridica:  l'interessato ha espresso il consenso al trattamento dei propri dati personali per la suddetta finalità.
+
+Durata del trattamento:
+	I dati di contatto (utente della piattaforma, email, sms)  vengono conservati per 12 mesi dall'ultimo collegamento.
+ 
+ 4.3 Rilevazione del grado di soddisfazione della clientela.
+ Previo espresso consenso, i dati forniti saranno trattati al fine di dar seguito all'invio di comunicazioni per rilevare il grado di soddisfazione della clientela.
+ Le ricordiamo che avrà sempre la possibilità di revocare il consenso inviando una comunicazione ai contatti sopra indicati. 
+ Il numero ed il tipo di dati raccolti sono quelli strettamente necessari a questa fase del rapporto.
+
+	Base giuridica:  l'interessato ha espresso il consenso al trattamento dei propri dati personali per la suddetta finalità.
+
+Durata del trattamento:
+	I dati di contatto (utente della piattaforma, email, sms)  vengono conservati per 12 mesi dall'ultimo collegamento.
+
+Responsabili del trattamento:
+	L'elenco aggiornato dei Responsabili del trattamento è disponibile presso la sede legale del Titolare e sarà fornito previa richiesta scritta. 
+
+
+5. CONFERIMENTO DEI DATI
+Per utilizzare il servizio è necessario: 
     • recarsi in un'area coperta dal servizio WiFi del fornitore;
     • eseguire una scansione delle reti disponibili e selezionare la rete WiFi del fornitore;
-    • si aprirà in automatico il pannello del captive portal che permette di utilizzare il servizio;
+    • procedere con la registrazione nel pannello del captive portal che permette di utilizzare il servizio;
     • se non si aprisse in automatico aprire il browser internet e collegarsi in http ad un qualsisi sito internet e la homepage di accesso al servizio apparirà automaticamente;
-    • accedere utilizzando una delle modalità di autenticazione disponibili: Facebook, Instagram o Linkedin oppure tramite email, SMS, WhatsApp (con queste 3 ultime modalità si riceverà una password di accesso via email, SMS o WhatsApp a seconda della scelta fatta).
-2.3 - Il servizio WiFi non prevede un servizio di assistenza fornito dal Fornitore del servizio, contattare eventualmente il responsabile della struttura che ospita il servizio.
- 
-3. DESCRIZIONE E CARATTERISTICHE DEL SERVIZIO
-3.1 - Il servizio WiFi  consente, previa richiesta di abilitazione, di accedere alla rete Internet in modalità WI-FI nelle aree appositamente abilitate.
-3.2 - Il servizio può essere utilizzato dall’utente con proprie apparecchiature portatili compatibili (PC, notebook, smartphone, tablet, ecc.) e dotate di scheda di rete certificata dal marchio WI-FI, opportunamente configurate. E’ a carico dell'utente l'onere di dotarsi a proprie cura e spese della strumentazione tecnica necessaria per accedere al servizio e della sua corretta configurazione per collegarsi alla rete wireless.
-3.3 - L'erogazione del servizio e la sua qualità non sono garantite. Il servizio è fornito tramite l’utilizzo di frequenze in banda condivisa e senza protezione da interferenze. Il servizio è fornito con rete libera, non protetta da crittografia del traffico; se ne sconsiglia pertanto l’utilizzo in caso di comunicazioni contenenti dati con carattere di riservatezza.
-3.4 - Con la richiesta di abilitazione l'utente deve dichiarare di aver attentamente letto ed espressamente accettato tutti i termini e le condizioni di utilizzo del servizio indicate nel presente documento oltre alla documentazione informativa sulla privacy. L’effettuazione del primo utilizzo del servizio costituirà ulteriore implicita accettazione da parte dell'utente delle condizioni contenute nel presente documento.
-3.5 - In nessun caso il Fornitore del servizio sarà ritenuto responsabile del mancato e/o inesatto adempimento o rispetto da parte dell'utente di ogni eventuale procedura di legge e regolamento in relazione all’uso del servizio.
+    • accedere utilizzando a propria scelta una delle modalità di autenticazione disponibili: Facebook, Instagram, Linkedin, codice voucher, email o via SMS (con queste 2 ultime modalità si riceverà una password per email o SMS a seconda della scelta fatta).
 
-4. EROGAZIONE DEL SERVIZIO
-4.1 – Il Fornitore del servizio non offre alcuna garanzia e non è obbligato in alcun modo circa la qualità del servizio, in particolare con riguardo alla tenuta, bontà e perdurare dei collegamenti.
-4.2 - Il Fornitore del servizio si riserva il diritto di sospendere e/o interrompere e/o variare, in qualsiasi momento e senza onere di preavviso, il servizio e non potrà comunque essere considerato responsabile nei confronti sia dell'utente che di terzi per la intervenuta sospensione ovvero interruzione. In tal caso, l’utente non potrà vantare diritti all'utilizzazione del servizio.
-4.3 - Il Fornitore del servizio potrà integrare e/o modificare unilateralmente, in qualsiasi momento e senza preavviso, le condizioni e i termini del presente documento. Le eventuali modifiche e/o integrazioni potranno essere comunicate all'utente, tramite comunicazione sulla pagina di login e opportunamente pubblicate nel sito web. La continuazione nell'utilizzo del servizio successivamente alla comunicazione implica di fatto l'accettazione delle nuove condizioni.
- 
-5. MODALITA’ E CREDENZIALI D’ACCESSO
-5.1 - L'accesso al servizio può avvenire nelle seguenti modalità:
-a) Accesso tramite social network (Facebook, Instagram, Linkedin), in questo caso l’utente accede al sistema autenticandosi con le stesse credenziali con cui si collega allo specifico social network. L’autenticazione viene effettuata direttamente sul social e non coinvolge il sistema Hot Spot che pertanto non può disporre in alcun modo dei dati di accesso dell’utente.
-b) Accesso tramite indirizzo email o numero telefonico, in questo caso l’utente inserisce la propria email o il proprio numero telefonico e riceve un codice tramite il quale potrà autenticarsi. Il codice (password) sarà generata in automatico dal sistema, in caso di necessità l’utente può richiedere un nuovo codice.
-c) Accesso tramite WhatsApp, cliccando su questa modalità viene aperto automaticamente WhatsApp dove sarà presente un messaggio precompilato da inviare, appena inviato il messaggio si riceverà un codice d'accesso all'hotspot tramite WhatsApp. Il codice (password) sarà generata in automatico dal sistema, in caso di necessità l’utente può richiedere un nuovo codice.
 
-La durata del singolo account è variabile e dipende esclusivamente dalla configurazione del servizio.
-5.2 - Le credenziali di accesso sono strettamente personali e non cedibili a terzi, a titolo gratuito o oneroso, temporaneamente o definitivamente. L'utente è il solo ed unico responsabile della conservazione e della riservatezza delle proprie credenziali e, conseguentemente, rimane il solo ed unico responsabile per tutti gli usi ad essa connessi o correlati, (ivi compresi danni e conseguenze pregiudizievoli arrecati al Fornitore del servizio e/o a terzi). L'utente è informato del fatto che la conoscenza delle proprie credenziali da parte di terzi consentirebbe a questi ultimi l'utilizzo del servizio in nome dell'utente medesimo.
-5.3 - L'utente s'impegna a non consentire l'utilizzo, a qualunque titolo, del servizio a terzi, del cui comportamento in rete si assume, ai sensi delle presenti condizioni d'uso, comunque la responsabilità.
-5.4  - L'utente si impegna a comunicare quanto prima l'eventuale furto, smarrimento o perdita della password, utilizzando gli strumenti messi a disposizione. In ogni caso, resta inteso che l'utente sarà responsabile delle conseguenze derivanti dal furto, dalla perdita o dallo smarrimento di tale password.
- 
-6. IMPEGNI ED OBBLIGHI DELL’UTENTE
-Il Fornitore del servizio raccomanda il rispetto delle norme della “buona educazione”.
-6.1 - L'utente si impegna a non utilizzare il servizio per effettuare comunicazioni che arrechino danni o turbative ai servizi di rete o a terzi o che violino leggi e regolamenti vigenti. In particolare, in via esemplificativa e non esaustiva, l'utente si impegna a non scambiare in rete, attraverso il servizio, materiale in violazione della legge sul diritto d'autore, o di altri diritti di proprietà intellettuale o industriale.
-L’utente è direttamente responsabile delle attività svolte durante la connessione Internet tramite il servizio hotspot wi-fi.
-Le credenziali di accesso al servizio, che l’utente ha l’obbligo di custodire al fine di evitarne anche il temporaneo utilizzo da parte di altri, sollevando il Fornitore del servizio da ogni responsabilità per eventuali utilizzi impropri, sono strettamente personali e non possono essere cedute dall’utente ad altre persone.
-6.2 - L'utente si impegna a:
+6. MODALITÀ DI ACCESSO ED AUTENTICAZIONE
+	L'accesso al servizio può avvenire nelle seguenti modalità:
+	a) Accesso tramite social network (Facebook, Instagram, Linkedin), in questo caso l’utente accede al sistema autenticandosi con le stesse credenziali con cui si collega allo specifico social network. L’autenticazione viene effettuata direttamente sul social e non coinvolge il sistema Hot Spot che pertanto non può disporre in alcun modo dei dati di accesso dell’utente.
+	b) Accesso tramite voucher: in questo caso l'utente riceve un codice voucher strettamente personale che gli consente l'autenticazione immediata senza dover inserire altri dati
+	c) Accesso tramite indirizzo email o numero telefonico, in questo caso l’utente inserisce la propria email o il proprio numero telefonico e riceve un codice tramite il quale potrà autenticarsi. Il codice (password) sarà generata in automatico dal sistema, in caso di necessità l’utente può richiedere un nuovo codice.
+
+	La durata del singolo account è variabile e dipende esclusivamente dalla configurazione del servizio.
+	Le credenziali di accesso sono strettamente personali e non cedibili a terzi, a titolo gratuito o oneroso, temporaneamente o definitivamente. L'utente è il solo ed unico responsabile della conservazione e della riservatezza delle proprie credenziali e, conseguentemente, rimane il solo ed unico responsabile per tutti gli usi ad essa connessi o correlati, (ivi compresi danni e conseguenze pregiudizievoli arrecati al Titolare e/o a terzi). L'utente è informato del fatto che la conoscenza delle proprie credenziali da parte di terzi consentirebbe a questi ultimi l'utilizzo del servizio in nome dell'utente medesimo.
+	L'utente s'impegna a non consentire l'utilizzo, a qualunque titolo, del servizio a terzi, del cui comportamento in rete si assume, ai sensi delle presenti condizioni d'uso, comunque la responsabilità.
+	L'utente si impegna a comunicare quanto prima l'eventuale furto, smarrimento o perdita della password, utilizzando gli strumenti messi a disposizione. In ogni caso, resta inteso che l'utente sarà responsabile delle conseguenze derivanti dal furto, dalla perdita o dallo smarrimento di tale password.
+
+
+7. EROGAZIONE DEL SERVIZIO 
+	Il Titolare non offre alcuna garanzia e non è obbligato in alcun modo circa la qualità del servizio, in particolare con riguardo alla tenuta, bontà e perdurare dei collegamenti.
+	Il Titolare si riserva il diritto di sospendere e/o interrompere e/o variare il servizio in qualsiasi momento e senza onere di preavviso.
+	Il titolare non potrà comunque essere considerato responsabile nei confronti sia dell'utente che di terzi per la intervenuta sospensione ovvero interruzione. In tal caso, l’utente non potrà vantare diritti all'utilizzazione del servizio.
+	Il Titolare potrà integrare e/o modificare unilateralmente, in qualsiasi momento e senza preavviso, le condizioni e i termini del presente documento. Le eventuali modifiche e/o integrazioni potranno essere comunicate all'utente, tramite comunicazione sulla pagina di login e opportunamente pubblicate nel sito web. La continuazione nell'utilizzo del servizio successivamente alla comunicazione implica di fatto l'accettazione delle nuove condizioni.
+
+
+8. CONDIVISIONE, COMUNICAZIONE E DIFFUSIONE DEI DATI
+{{ if .IntegrationTerms }}{{ .IntegrationTerms }}
+In nessun altro caso{{else}}In nessun caso{{ end }} i dati degli utenti saranno diffusi ma potrebbero essere comunicati a terzi soggetti che svolgono, per conto del Titolare stesso, specifici servizi volti a garantire il corretto perseguimento delle citate finalità. I dati raccolti potranno essere trasferiti o comunicati ad altre società per attività strettamente connesse e strumentali all’operatività del servizio, come la gestione del sistema informatico. 
+I dati personali forniti dagli utenti che inoltrano richieste di invio di materiale informativo (brochure, materiale informativo, ecc.) sono utilizzati al solo fine di eseguire il servizio o la prestazione richiesta e sono comunicati a terzi nel solo caso in cui ciò sia a tal fine necessario (società che forniscono servizi di imbustamento, etichettatura, spedizione). Al di fuori di questi casi, i dati personali non saranno comunicati salvo previsione contrattuale o di legge, ovvero salvo specifico consenso richiesto all’interessato. 
+In questo senso, i dati personali potrebbero essere trasmessi a terze parti, ma solo ed esclusivamente nel caso in cui: 
+    a) vi sia consenso esplicito a condividere i dati con terze parti;
+    b) vi sia la necessità di condividere con terzi le informazioni al fine di prestare il servizio richiesto; 
+    c) ciò sia necessario per adempiere a richieste dell'Autorità Giudiziaria o di Pubblica Sicurezza.
+Nessun dato derivante dal servizio web viene diffuso.
+
+
+9. IMPEGNI ED OBBLIGHI DELL’UTENTE
+	Il Titolare raccomanda il rispetto delle norme della “buona educazione”.
+	L'utente si impegna a non utilizzare il servizio per effettuare comunicazioni che arrechino danni o turbative ai servizi di rete o a terzi o che violino leggi e regolamenti vigenti. In particolare, in via esemplificativa e non esaustiva, l'utente si impegna a non scambiare in rete, attraverso il servizio, materiale in violazione della legge sul diritto d'autore, o di altri diritti di proprietà intellettuale o industriale.
+	L’utente è direttamente responsabile delle attività svolte durante la connessione Internet tramite il servizio hotspot wi-fi.
+	Le credenziali di accesso al servizio, che l’utente ha l’obbligo di custodire al fine di evitarne anche il temporaneo utilizzo da parte di altri, sollevando l’Amministrazione Comunale da ogni responsabilità per eventuali utilizzi impropri, sono strettamente personali e non possono essere cedute dall’utente ad altre persone.
+	L'utente si impegna a:
     • utilizzare il servizio per le finalità personali per cui è stato concesso, in particolare si impegna a non utilizzare il servizio per fini commerciali;
     • dotare il proprio apparato WIFI di adeguate protezioni contro virus o altro genere di intrusioni, che possano arrecare danni a terzi o alla stessa rete;
     • non inviare tramite posta elettronica messaggi pubblicitari e/o promozionali o comunicazioni ad altri utenti e/o gruppi di discussione senza che sia stato richiesto ed ottenuto il relativo consenso ovvero senza che tale invio sia stato sollecitato in modo esplicito (spam);
@@ -51,16 +130,41 @@ Le credenziali di accesso al servizio, che l’utente ha l’obbligo di custodir
     • non trasmettere materiale e/o messaggi che incoraggino terzi a mettere in atto una condotta illecita e/o criminosa passibile di responsabilità penale o civile;
     • non immettere in rete informazioni che possano presentare forme o contenuti di carattere pornografico, osceno, blasfemo, razzista, diffamatorio, offensivo o che istighi alla violenza;
     • osservare le leggi vigenti in materia di diritto d’autore e tutela della privacy nonché le specifiche norme penali relative al settore informatico e alla comunicazione elettronica, oltre ad ogni altra disposizione generale di legge;
-    • sollevare il Fornitore del servizio da qualsiasi responsabilità per qualsiasi evento subito o arrecato a terzi nell'ambito del servizio WiFi.
-6.3 - L'utente si impegna a non occupare il canale radio per scopi diversi da quelli di ricevere il servizio di rete wireless, né tantomeno ad installare access-point o ripetitori WiFi
-6.4 – Il Fornitore del servizio, in qualità di società erogatrice del servizio, si riserva il diritto di cessare l’erogazione del servizio unilateralmente e in qualsiasi momento, senza obbligo di alcuna motivazione, senza preavviso e senza alcun indennizzo, qualora determini, a suo insindacabile giudizio, che l'utente abbia violato anche solo uno degli obblighi qui indicati.
- 
-7. RESPONSABILITA’
-7.1 - L'utente è responsabile di ogni violazione delle presenti condizioni d'uso e si impegna a non utilizzare il servizio in modo improprio, in violazione di leggi, regolamenti o provvedimenti amministrativi e si assume ogni responsabilità in merito alla corretta fruizione del servizio. L’utente si impegna a tener indenne il Fornitore del servizio da qualsiasi pretesa e rivendicazione a qualsiasi titolo avanzate anche da terzi in relazione all’utilizzo del servizio.
-7.2 - L'utente si assume ogni responsabilità ed onere circa il contenuto e le forme delle comunicazioni realizzate tramite il servizio e si impegna a tenere indenne il Fornitore del servizio da ogni pretesa o azione di terzi, in conseguenza a tali comunicazioni. Con tale presa di responsabilità, l'utente esonera espressamente il Fornitore del servizio da qualunque responsabilità e onere di accertamento e/o controllo al riguardo.
-7.3 - L'utente s'impegna a tenere indenne il Fornitore del servizio da tutte le eventuali perdite, danni, costi e oneri, ivi comprese le eventuali spese legali, che dovessero essere sostenute dall’utente in conseguenza dell'utilizzo del servizio.
-7.4 - Il Fornitore del servizio non sarà responsabile verso l'utente e/o suoi aventi causa e verso terzi per i danni diretti, indiretti o consequenziali, comprese le perdite e i costi supportati in conseguenza a sospensioni o interruzioni del servizio.
+    • sollevare il Titolare da qualsiasi responsabilità per qualsiasi evento subito o arrecato a terzi nell'ambito del servizio WiFi.
+    • non occupare il canale radio per scopi diversi da quelli di ricevere il servizio di rete wireless, né tantomeno ad installare access-point o ripetitori WiFi
+	
+	Il Titolare, in qualità di società erogatrice del servizio, si riserva il diritto di cessare l’erogazione del servizio unilateralmente e in qualsiasi momento, senza obbligo di alcuna motivazione, senza preavviso e senza alcun indennizzo, qualora determini, a suo insindacabile giudizio, che l'utente abbia violato anche solo uno degli obblighi qui indicati.
+ 
+ 
+10. RESPONSABILITA’
+	L'utente è responsabile di ogni violazione delle presenti condizioni d'uso e si impegna a non utilizzare il servizio in modo improprio, in violazione di leggi, regolamenti o provvedimenti amministrativi e si assume ogni responsabilità in merito alla corretta fruizione del servizio. L’utente si impegna a tener indenne il Titolare da qualsiasi pretesa e rivendicazione a qualsiasi titolo avanzate anche da terzi in relazione all’utilizzo del servizio.
+	L'utente si assume ogni responsabilità ed onere circa il contenuto e le forme delle comunicazioni realizzate tramite il servizio e si impegna a tenere indenne il Titolare da ogni pretesa o azione di terzi, in conseguenza a tali comunicazioni. Con tale presa di responsabilità, l'utente esonera espressamente il Titolare da qualunque responsabilità e onere di accertamento e/o controllo al riguardo.
+	L'utente s'impegna a tenere indenne il Titolare da tutte le eventuali perdite, danni, costi e oneri, ivi comprese le eventuali spese legali, che dovessero essere sostenute dall’utente in conseguenza dell'utilizzo del servizio.
+	Il Titolare non sarà responsabile verso l'utente e/o suoi aventi causa e verso terzi per i danni diretti, indiretti o consequenziali, comprese le perdite e i costi supportati in conseguenza a sospensioni o interruzioni del servizio.
 
-Il Fornitore del servizio:
-{{ .BusinessName }} (P.IVA/C.F. : {{ .BusinessVAT }}) con sede legale in {{ .BusinessAddress }}.
+	
+11. DIRITTI DEGLI INTERESSATI - Artt. da 15 a 22 e dall'art. 13 del GDPR.
 
+Diritto di accesso.
+	L'interessato ha diritto, secondo quanto previsto dagli artt. da 15 a 22 e dall' art. 13 del GDPR di richiedere al titolare l'accesso ai propri dati personali.
+
+Diritto di rettifica.
+	L'interessato ha diritto, secondo quanto previsto dagli artt. da 15 a 22 e dall' art. 13 del GDPR di richiedere al titolare la rettifica dei propri dati personali.
+
+Diritto di cancellazione.
+	L'interessato ha diritto, secondo quanto previsto dagli artt. da 15 a 22 e dall' art. 13 del GDPR di richiedere al titolare la cancellazione dei propri dati personali.
+
+Diritto di limitazione.
+	L'interessato ha diritto, secondo quanto previsto dagli artt. da 15 a 22 e dall' art. 13 del GDPR di richiedere al titolare la limitazione dei dati che lo riguardano.
+
+Diritto di opposizione.
+	L'interessato ha diritto, secondo quanto previsto dagli artt. da 15 a 22 e dall' art. 13 del GDPR di opporsi al loro trattamento.
+
+Diritto di portabilità.
+	L'interessato ha diritto, secondo quanto previsto dagli artt. da 15 a 22 e dall' art. 13 del GDPR di esercitare il proprio diritto alla portabilità dei dati.
+
+Diritto di revoca.
+	L'interessato ha diritto, secondo quanto previsto dagli artt. da 15 a 22 e dall' art. 13 del GDPR di esercitare il proprio diritto alla revoca del consenso.
+
+Diritto di reclamo.
+	L'interessato ha diritto, secondo quanto previsto dagli artt. da 15 a 22 e dall' art. 13 del GDPR di esercitare il proprio diritto di porre reclamo dinanzi all'autorità di controllo.
