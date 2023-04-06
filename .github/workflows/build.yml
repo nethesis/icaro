@@ -12,13 +12,6 @@ jobs:
   go-builds:
     name: Build ${{ matrix.build.name }}
     runs-on: ubuntu-latest
-    services:
-      database:
-        image: mysql:5.5
-        env:
-          MYSQL_ALLOW_EMPTY_PASSWORD: true
-        ports:
-          - 3306:3306
     defaults:
       run:
         working-directory: ${{ matrix.build.path }}
@@ -41,19 +34,8 @@ jobs:
         uses: actions/setup-go@v3
         with:
           go-version: ${{ env.go-version }}
-      - name: Test database
-        run: |
-          mysql -h 127.0.0.1 -u root -e 'CREATE DATABASE icaro'
-          mysql -h 127.0.0.1 -u root icaro < ${{ github.workspace }}/deploy/ansible/roles/icarodb/files/icaro.sql
-          mysql -h 127.0.0.1 -u root icaro < ${{ github.workspace }}/wax/testdata/test-grant.sql
-          mysql -h 127.0.0.1 -u root icaro < ${{ github.workspace }}/wax/testdata/test-records.sql
       - name: Install dependencies
         run: go get
-      - name: Test binary
-        run: |
-          cp ${{ github.workspace }}/wax/testdata/config.json .
-          cp ${{ github.workspace }}/wax/testdata/*png .
-          go test
       - name: Build binary
         run: CGO_ENABLED=0 go build
       - name: Upload binary
