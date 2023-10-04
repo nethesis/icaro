@@ -4,9 +4,6 @@ icaro:
   version: "autobuild"
   hostname: "localhost"
   tls: "self_signed"
-  # Google Chrome trial token for allow Private Network Access from non-secure contexts
-  # see https://developer.chrome.com/blog/private-network-access-update/#register-deprecation-trial
-  #origin_trial_token: ""
   db_root_password: "YourMariaDBPassWordHere"
   sun_api_origin: "http://localhost:8080"
   wax_origin: "http://localhost:8081"
