@@ -65,6 +65,10 @@ func Init(action string, worker bool) {
 		c.AddFunc("@every 1h", cleanAuths)
 		cleanAuths()
 
+	case "clean-users":
+		c.AddFunc("@daily", cleanUsers)
+		cleanUsers()
+
 	default:
 		fmt.Println("Specify a valid action to execute, see -h option")
 	}
@@ -73,6 +77,13 @@ func Init(action string, worker bool) {
 	if worker {
 		c.Run()
 	}
+}
+
+func cleanUsers() {
+	db := database.Instance()
+
+	db.Where("valid_until != 0 AND valid_until < ?", time.Now().AddDate(0, -24, 0).UTC()).Delete(models.User{})        // delete older than 24 months
+	db.Where("valid_until != 0 AND valid_until < ?", time.Now().AddDate(0, -24, 0).UTC()).Delete(models.UserHistory{}) // delete older than 24 months
 }
 
 func cleanAuths() {
