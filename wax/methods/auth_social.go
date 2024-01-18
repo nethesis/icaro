@@ -78,7 +78,7 @@ func FacebookAuth(c *gin.Context) {
 	}
 
 	// retrieve access token
-	url := "https://graph.facebook.com/v2.11/oauth/access_token?" +
+	url := "https://graph.facebook.com/v17.0/oauth/access_token?" +
 		"client_id=" + clientId +
 		"&redirect_uri=" + redirectURI +
 		"&client_secret=" + clientSecret +
