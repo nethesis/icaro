@@ -9,6 +9,19 @@ TRATTAMENTO
 	Data ultima revisione 	03/04/2023
 
 	Titolare del trattamento
+
+	Nome: 	{{ .BusinessName }}
+	Indirizzo: 	{{ .BusinessAddress }}
+	P.IVA / CF:  {{ .BusinessVAT }} 
+	Contatto privacy: 	{{ .BusinessEmail }}
+
+{{ if and .BusinessDPO .BusinessDPOMail }}
+DPO - Responsabile della protezione dei dati
+	Nome: 	{{ .BusinessDPO }}
+	Email 	{{ .BusinessDPOMail }}
+{{end}}
+
+	Responsabile del trattamento
 	Nome 	Nethesis s.r.l.U.
 	Indirizzo 	Via degli Olmi 12, 61121 Pesaro (PU) - ITALIA
 	P.IVA / CF 	02734760412 / 02734760412 
