@@ -2887,17 +2887,15 @@ export default {
       );
     },
     printPrivacy() {
-      var finalPrivacy = "data:text/plain;charset=utf-8," + (this.selectedPrivacyBody || "");
-      var encodedUri = encodeURI(finalPrivacy);
+      var finalPrivacy = "data:text/plain;charset=utf-8," + encodeURIComponent(this.selectedPrivacyBody || "");
       var link = document.createElement("a");
-      link.setAttribute("href", encodedUri);
+      link.setAttribute("href", finalPrivacy);
       link.setAttribute("download", "privacy" + ".txt");
       link.click();
 
-      var finalTos = "data:text/plain;charset=utf-8," + this.selectedTosBody;
-      var encodedUri = encodeURI(finalTos);
+      var finalTos = "data:text/plain;charset=utf-8," + encodeURIComponent(this.selectedTosBody || "");
       var link = document.createElement("a");
-      link.setAttribute("href", encodedUri);
+      link.setAttribute("href", finalTos);
       link.setAttribute("download", "tos" + ".txt");
       link.click();
     },
