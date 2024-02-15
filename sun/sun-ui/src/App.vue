@@ -91,6 +91,7 @@
             </a>
           </div>
           <div>Copyright &copy; {{currentYear()}} {{companyName}}</div>
+          <div><a href="/privacy" target="blank">Privacy</a></div>
         </div>
         <!--/.container-->
       </div>
