@@ -54,6 +54,7 @@
             "code": "Password",
             "have_code": "Entrar",
             "not_have_code": "Registar",
+            "not_have_code_and_skip": "Registar e Navegar",
             "get_code": "Registar",
             "reset_code": "Pedir novo Código",
             "start_navigate": "Navegar",
@@ -68,7 +69,8 @@
             "we_are_sending_email_code": "Se não está a receber o email, por favor desligue da rede WiFi e volte a ligar, verifique o seu email e clique no link do email para navegar. Veja também na caixa de SPAM.",
             "we_are_sending_email_code_signin": "<br>Digite seu e-mail e o código para acessar.<br><br>Se você ainda não se cadastrou, volte e clique em \"Registar\".<br>",
             "not_code_explain": "É a primeira vez que se liga ao Wi-Fi?",
-            "not_code_explain_else": "Outro"
+            "not_code_explain_else": "Outro",
+            "not_code_explain_skip_auth": "<b>message here</b>"
         },
         "sms": {
             "number": "Numero",
@@ -90,6 +92,7 @@
             "select_state": "Escolha distrito",
             "prefix": "Prefixo",
             "wait": "A enviar SMS...",
+            "wait_skip_auth_text": "<b>text here</b>",
             "we_are_sending_sms_code": "Use o mesmo código no próximo acesso escolhendo o botão 'Entrar'.",
             "we_are_sending_sms_code_signin": "<br>Digite seu número de telefone e o código para acessar.<br><br>Se você ainda não se cadastrou, volte e clique em \"Registar\".<br>",
             "not_code_explain": "É a primeira vez que se liga ao Wi-Fi?",

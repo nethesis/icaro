@@ -54,6 +54,7 @@
             "code": "Codice",
             "have_code": "Accedi",
             "not_have_code": "Registrati",
+            "not_have_code_and_skip": "Registrati e Naviga",
             "get_code": "Registrati",
             "reset_code": "Inviami un nuovo codice",
             "start_navigate": "Naviga",
@@ -65,10 +66,12 @@
             "auth_error_sub" : "Utente o password errati, riprova nuovamente oppure Registrati.",
             "auth_error_sub_expired" : "Questo account è scaduto, esegui una nuova registrazione.",
             "wait": "Come procedere:",
+            "wait_skip_auth_text": "<b>text here</b>",
             "we_are_sending_email_code": "<br>1) Inserisci la tua email e clicca su \"Registrati\"<br>2) Apri l'email che hai ricevuto e clicca sul link per autenticarti (hai 5 minuti di tempo)<br>3) In alternativa autenticati con l'email ed il codice numerico che hai ricevuto<br><br>N.B. Se il link non funziona correttamente assicurati di essere connesso alla rete Wireless di questa struttura",
             "we_are_sending_email_code_signin": "<br>Inserisci la tua email ed il codice per accedere.<br><br>Se non ti sei ancora registrato torna indietro e clicca su \"Registrati\".<br>",
             "not_code_explain": "È la prima volta che ti connetti alla nostra rete Wi-Fi?",
-            "not_code_explain_else": "Altrimenti"
+            "not_code_explain_else": "Altrimenti",
+            "not_code_explain_skip_auth": "<b>message here</b>"
         },
         "sms": {
             "number": "Numero telefonico",

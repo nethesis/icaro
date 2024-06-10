@@ -1,16 +1,22 @@
 <template>
   <div class="ui form">
     <div v-if="!dedaloRequested">
-      <div v-if="choosedMode && !codeRequested" class="ui compact message info no-margin-top">
+      <div v-if="choosedMode && !codeRequested && hotspot.preferences.email_login_skip_auth == 'false'" class="ui compact message info no-margin-top">
         <div class="content">
           <div class="header">{{$t('email.wait')}}</div>
           <p v-html="$t('email.we_are_sending_email_code')"></p>
         </div>
       </div>
-      <div v-if="choosedMode && codeRequested" class="ui compact message info no-margin-top">
+      <div v-if="choosedMode && codeRequested && hotspot.preferences.email_login_skip_auth == 'false'" class="ui compact message info no-margin-top">
         <div class="content">
           <div class="header">{{$t('email.wait')}}</div>
           <p v-html="$t('email.we_are_sending_email_code_signin')"></p>
+        </div>
+      </div>
+      <div v-if="choosedMode && !codeRequested && hotspot.preferences.email_login_skip_auth == 'true'" class="ui compact message info no-margin-top">
+        <div class="content">
+          <div class="header">{{$t('email.wait')}}</div>
+          <p v-html="$t('email.wait_skip_auth_text')"></p>
         </div>
       </div>
       <div v-if="choosedMode" class="field" v-bind:class="{ error: errors.badInput }">
@@ -21,7 +27,7 @@
         </div>
       </div>
       <p v-if="!codeRequested && !choosedMode" class="not-code-exp">
-        <label :style="textStyle">{{$t("email.not_code_explain") }}</label>
+        <label :style="textStyle">{{hotspot.preferences.email_login_skip_auth == 'true' ? $t("email.not_code_explain_skip_auth") : $t("email.not_code_explain") }}</label>
         <br />
         <br />
         <button v-on:click="chooseMode()" class="ui blue button request-code" :style="buttonStyle">
@@ -30,7 +36,7 @@
         </button>
       </p>
 
-      <p v-if="!codeRequested && !choosedMode" class="not-code-exp">
+      <p v-if="!codeRequested && !choosedMode && hotspot.preferences.email_login_skip_auth == 'false'" class="not-code-exp">
         <label :style="textStyle">{{$t("email.not_code_explain_else") }}</label>
         <br />
         <br />
@@ -53,7 +59,7 @@
         :style="buttonStyle"
       >
         {{
-        $t("email.get_code") }}
+        hotspot.preferences.email_login_skip_auth == 'false' ? $t("email.get_code") : $t("email.not_have_code_and_skip") }}
       </button>
       <div v-if="errors.badMail" class="ui tiny icon negative message">
         <i class="remove icon"></i>
@@ -90,6 +96,7 @@
       <button
         v-on:click="execLogin()"
         :disabled="isDisabled()"
+        v-if="hotspot.preferences.email_login_skip_auth == 'false'"
         class="big ui green button"
         :style="buttonStyle"
       >{{ $t("email.start_navigate") }}</button>
@@ -149,8 +156,8 @@
       >
         <div class="conditions-surveys">
           <div class="ui inline" v-if="hotspot.preferences.check_marketing == 'false'">
-            <input id="conditions" v-model="conditions" type="checkbox" class="ui checkbox field" />
-            <label :style="textStyle" for="conditions">{{ $t("login.disclaimer_privacy_accept") }}</label>
+            <input v-if="hotspot.preferences.email_login_skip_auth == 'false'" id="conditions" v-model="conditions" type="checkbox" class="ui checkbox field" />
+            <label v-if="hotspot.preferences.email_login_skip_auth == 'false'" :style="textStyle" for="conditions">{{ $t("login.disclaimer_privacy_accept") }}</label>
           </div>
           <div v-if="hotspot.preferences.marketing_1_enabled == 'true' && hotspot.preferences.check_marketing == 'false'" class="ui inline">
             <input id="surveys" v-model="surveys" type="checkbox" class="ui checkbox field" />
@@ -316,29 +323,39 @@ export default {
             // open temp session for the user
             this.doTempSession(
               this.authEmail,
+              this.userId,
               function(responseTmp) {
-                // if apple
-                if (this.iOS) {
-                  var origin = "http://conncheck." + window.location.host;
-                  var pathname = window.location.pathname;
-                  var query =
-                    "?digest=" +
-                    params.digest +
-                    "&uuid=" +
-                    params.uuid +
-                    "&sessionid=" +
-                    params.sessionid +
-                    "&uamip=" +
-                    params.uamip +
-                    "&uamport=" +
-                    params.uamport +
-                    "&user=" +
-                    this.userId +
-                    "&code=.&email=" +
-                    this.authEmail;
-                  window.location.replace(origin + pathname + query);
+                // check if skip auth is enabled
+                if(responseTmp.body.skip_auth == "true") {
+                  this.dedaloRequested = true;
+                  this.authorized = true;
+                  this.errors.dedaloError = false;
+                  this.errors.dedaloExpired = false;
+                  this.authCode = "skip_code";
                 } else {
-                  this.codeRequested = true;
+                  // if apple
+                  if (this.iOS) {
+                    var origin = "http://conncheck." + window.location.host;
+                    var pathname = window.location.pathname;
+                    var query =
+                      "?digest=" +
+                      params.digest +
+                      "&uuid=" +
+                      params.uuid +
+                      "&sessionid=" +
+                      params.sessionid +
+                      "&uamip=" +
+                      params.uamip +
+                      "&uamport=" +
+                      params.uamport +
+                      "&user=" +
+                      this.userId +
+                      "&code=.&email=" +
+                      this.authEmail;
+                    window.location.replace(origin + pathname + query);
+                  } else {
+                    this.codeRequested = true;
+                  }
                 }
               },
               function(error) {

@@ -341,6 +341,7 @@ export default {
           // open temp session for the user
           this.doTempSession(
             this.authPrefix + this.authSMS,
+            this.userId,
             function(responseTmp) {
               // if apple
               if (this.iOS) {
