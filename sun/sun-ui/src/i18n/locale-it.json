@@ -90,6 +90,7 @@
       "voucher_expiration_days": "Durata account con Voucher (giorni)",
       "sms_login": "SMS Login",
       "email_login": "Email Login",
+      "email_login_skip_auth": "Evita la verifica email",
       "facebook_login": "Facebook Login",
       "facebook_login_page": "Richiedi Like su questa pagina facebook",
       "instagram_login": "Instagram Login",

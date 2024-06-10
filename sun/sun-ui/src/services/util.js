@@ -112,6 +112,9 @@ var UtilService = {
         case "email_login":
           icon = "fa fa-envelope-square login-pref-option";
           break;
+        case "email_login_skip_auth":
+          icon = "fa fa-envelope-open login-pref-option adjust-icon-size";
+          break;
         case "sms_login":
           icon = "fa fa-commenting login-pref-option";
           break;
@@ -153,6 +156,7 @@ var UtilService = {
         case "instagram_login":
         case "linkedin_login":
         case "email_login":
+        case "email_login_skip_auth":
         case "sms_login":
         case "voucher_login":
         case "temp_code_login":

@@ -90,6 +90,7 @@
       "voucher_expiration_days": "Voucher expiration (days)",
       "sms_login": "Captive Portal login with SMS",
       "email_login": "Captive Portal login with Email",
+      "email_login_skip_auth": "Avoid email verification",
       "facebook_login": "Captive Portal login with Facebook",
       "facebook_login_page": "Captive Portal Facebook like page",
       "instagram_login": "Captive Portal login with Instagram",
