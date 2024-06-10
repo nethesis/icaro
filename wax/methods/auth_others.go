@@ -229,6 +229,7 @@ func EmailAuth(c *gin.Context) {
 	uamip := c.Query("uamip")
 	uamport := c.Query("uamport")
 	voucherCode := c.Query("voucher_code")
+	mac := c.Query("mac")
 
 	// get unit
 	unit := utils.GetUnitByUuid(uuid)
@@ -303,10 +304,21 @@ func EmailAuth(c *gin.Context) {
 		// generate code
 		code := utils.GenerateCode(6)
 
+		// define username
+		newUsername := email
+
+		// check if there is skip_auth option
+		skipVerification := utils.GetHotspotPreferencesByKey(unit.HotspotId, "email_login_skip_auth")
+
+		// add mac address to username if skip_auth is enabled
+		if skipVerification.Value == "true" {
+			newUsername += ":" + mac
+		}
+
 		newUser := models.User{
 			HotspotId:            unit.HotspotId,
-			Name:                 email,
-			Username:             email,
+			Name:                 newUsername,
+			Username:             newUsername,
 			Password:             code,
 			Email:                email,
 			AccountType:          "email",
@@ -324,14 +336,16 @@ func EmailAuth(c *gin.Context) {
 		}
 		newUser.Id = methods.CreateUser(newUser)
 
-		// send email with code
-		userIdStr := strconv.Itoa(newUser.Id)
-		status := utils.SendEmailCode(email, code, unit, "digest="+digest+"&uuid="+uuid+"&uamip="+uamip+"&uamport="+uamport+"&user="+userIdStr, uamip, uamport)
+		// send email with code, only if skip auth is false
+		if skipVerification.Value == "false" {
+			userIdStr := strconv.Itoa(newUser.Id)
+			status := utils.SendEmailCode(email, code, unit, "digest="+digest+"&uuid="+uuid+"&uamip="+uamip+"&uamport="+uamport+"&user="+userIdStr, uamip, uamport)
 
-		// check response
-		if !status {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "authorization code not sent"})
-			return
+			// check response
+			if !status {
+				c.JSON(http.StatusBadRequest, gin.H{"error": "authorization code not sent"})
+				return
+			}
 		}
 
 		// create marketing info with user infos
