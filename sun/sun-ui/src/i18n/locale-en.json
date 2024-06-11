@@ -195,7 +195,10 @@
       "wifi4eu_id": "WiFi4EU Network Identifier",
       "wifi4eu_lang": "WiFi4EU Language",
       "wifi4eu_zdebug": "WiFi4EU Self-test",
-      "wifi4eu_zdebug_desc": "The self-test mode interrupts the correct functioning of the hotspot and should only be used for specific tests. This option should always be disabled under normal conditions."
+      "wifi4eu_zdebug_desc": "The self-test mode interrupts the correct functioning of the hotspot and should only be used for specific tests. This option should always be disabled under normal conditions.",
+      "warning_privacy": "Warning",
+      "warning_privacy_text": "Warning text",
+      "profile_link": "Profile link"
     },
     "user": {
       "username": "Username",

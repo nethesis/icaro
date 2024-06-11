@@ -38,6 +38,7 @@ import (
 func GetPrivacies(c *gin.Context) {
 	hotspotUuid := c.Param("hotspot_uuid")
 	hotspot := utils.GetHotspotByUuid(hotspotUuid)
+	account := utils.GetAccountByAccountId(hotspot.AccountId)
 
 	if hotspot.Id == 0 {
 		c.JSON(http.StatusNotFound, gin.H{"id": hotspot.Id, "status": "hotspot not found"})
@@ -101,7 +102,7 @@ func GetPrivacies(c *gin.Context) {
 		var marketingMessage bytes.Buffer
 		m := template.Must(template.New("marketings").Parse(privacyDisclaimers[idx].Body))
 
-		errM := m.Execute(&marketingMessage, &hotspot)
+		errM := m.Execute(&marketingMessage, &account)
 		if errM != nil {
 			fmt.Println(errM)
 		}
