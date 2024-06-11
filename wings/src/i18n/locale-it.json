@@ -71,7 +71,7 @@
             "we_are_sending_email_code_signin": "<br>Inserisci la tua email ed il codice per accedere.<br><br>Se non ti sei ancora registrato torna indietro e clicca su \"Registrati\".<br>",
             "not_code_explain": "È la prima volta che ti connetti alla nostra rete Wi-Fi?",
             "not_code_explain_else": "Altrimenti",
-            "not_code_explain_skip_auth": "<b>message here</b>"
+            "not_code_explain_skip_auth": "Inserisci la tua email per accedere a Internet."
         },
         "sms": {
             "number": "Numero telefonico",
