@@ -266,8 +266,19 @@ func EmailAuth(c *gin.Context) {
 		}
 	}
 
+	// check if there is skip_auth option
+	skipVerification := utils.GetHotspotPreferencesByKey(unit.HotspotId, "email_login_skip_auth")
+
+	// set default username to search
+	usernameToCheck := email
+
+	// compose email with or without mac_address
+	if skipVerification.Value == "true" {
+		usernameToCheck += ":" + mac
+	}
+
 	// check if user exists
-	user := utils.GetUserByUsernameAndHotspot(email, unit.HotspotId)
+	user := utils.GetUserByUsernameAndHotspot(usernameToCheck, unit.HotspotId)
 	if user.Id == 0 {
 		// create user
 		days := utils.GetHotspotPreferencesByKey(unit.HotspotId, "user_expiration_days")
@@ -306,13 +317,14 @@ func EmailAuth(c *gin.Context) {
 
 		// define username
 		newUsername := email
-
-		// check if there is skip_auth option
-		skipVerification := utils.GetHotspotPreferencesByKey(unit.HotspotId, "email_login_skip_auth")
+		newValidUntil := time.Now().UTC().AddDate(0, 0, daysInt+1)
 
 		// add mac address to username if skip_auth is enabled
 		if skipVerification.Value == "true" {
 			newUsername += ":" + mac
+
+			// skip_auth accounts are valid for 8 hours
+			newValidUntil = time.Now().UTC().Add(time.Hour * time.Duration(8))
 		}
 
 		newUser := models.User{
@@ -332,7 +344,7 @@ func EmailAuth(c *gin.Context) {
 			MaxNavigationTime:    maxTimeInt,
 			AutoLogin:            autoLoginBool,
 			ValidFrom:            time.Now().UTC(),
-			ValidUntil:           time.Now().UTC().AddDate(0, 0, daysInt+1),
+			ValidUntil:           newValidUntil,
 		}
 		newUser.Id = methods.CreateUser(newUser)
 
