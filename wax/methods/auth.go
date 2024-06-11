@@ -104,6 +104,8 @@ func GetDaemonTemporary(c *gin.Context) {
 	sessionId := c.Query("sessionid")
 	unitUuid := c.Query("uuid")
 	username := c.Query("username")
+	userId := c.Query("userid")
+	mac := c.Query("mac")
 
 	// get unit
 	unit := utils.GetUnitByUuid(unitUuid)
@@ -112,11 +114,25 @@ func GetDaemonTemporary(c *gin.Context) {
 	seconds := utils.GetHotspotPreferencesByKey(unit.HotspotId, "temp_session_duration")
 	secondsInt, _ := strconv.Atoi(seconds.Value)
 
+	// get email verification skip
+	skipVerification := utils.GetHotspotPreferencesByKey(unit.HotspotId, "email_login_skip_auth")
+
 	// create user auth
-	utils.CreateUserAuth(sessionId, secondsInt, unitUuid, 0, username, "", "temporary")
+	if skipVerification.Value == "true" {
+		// convert userId to int
+		userIdInt, _ := strconv.Atoi(userId)
+
+		// get user password
+		password := utils.GetUserById(userIdInt).Password
+
+		// set credentials
+		utils.CreateUserAuth(sessionId, 0, unitUuid, 0, username+":"+mac, password, "login")
+	} else {
+		utils.CreateUserAuth(sessionId, secondsInt, unitUuid, 0, username, "", "temporary")
+	}
 
 	// return result
-	c.JSON(http.StatusCreated, gin.H{"status": "success"})
+	c.JSON(http.StatusCreated, gin.H{"status": "success", "skip_auth": skipVerification.Value})
 }
 
 func GetDaemonLogout(c *gin.Context) {

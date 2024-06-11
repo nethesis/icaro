@@ -479,3 +479,7 @@ a {
 .text-align-right {
   text-align: right;
 }
+
+.adjust-icon-size {
+  font-size: 17px !important;
+}

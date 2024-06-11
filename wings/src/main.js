@@ -56,6 +56,7 @@ new Vue({
     sessionid: '',
     uamip: '',
     uamport: '',
+    mac: '',
     onError: false,
     preferences: {},
     socials: {},

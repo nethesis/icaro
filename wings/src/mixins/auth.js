@@ -43,6 +43,7 @@ var AuthMixin = {
             var nasid = this.$root.$options.hotspot.nasid || null
             var uamip = this.$root.$options.hotspot.uamip || null
             var uamport = this.$root.$options.hotspot.uamport || null
+            var mac = this.$root.$options.hotspot.mac || null
             var voucher = this.$root.$options.session && this.$root.$options.session['voucherCode'] ? this.$root.$options.session['voucherCode'] : null
 
             return {
@@ -54,7 +55,8 @@ var AuthMixin = {
                 uamip: uamip,
                 uamport: uamport,
                 voucher: voucher,
-                nasid: nasid
+                nasid: nasid,
+                mac: mac
             }
         },
         parseState: function (state, base64) {
@@ -90,7 +92,8 @@ var AuthMixin = {
                 '&uamport=' + params.uamport +
                 '&voucher_code=' + params.voucher +
                 '&nasid=' + params.nasid +
-                '&user=' + user
+                '&user=' + user +
+                '&mac=' + params.mac
             return url
         },
         getSocialLoginURL: function (params, social) {
@@ -176,13 +179,14 @@ var AuthMixin = {
                 '&username=' + encodeURIComponent(username)
             ).then(callback);
         },
-        doTempSession: function (username, callback) {
+        doTempSession: function (username, userId, callback) {
             var params = this.extractParams()
             var ip = params.uamip || null
             var port = params.uamport || null
             var digest = params.digest || null
             var uuid = params.uuid || null
             var sessionid = params.sessionid || null
+            var mac = params.mac || null
 
             if (params.state) {
                 var state = this.parseState(params.state)
@@ -199,7 +203,9 @@ var AuthMixin = {
                 '?digest=' + digest +
                 '&uuid=' + uuid +
                 '&sessionid=' + sessionid +
-                '&username=' + encodeURIComponent(username)
+                '&username=' + encodeURIComponent(username) +
+                '&userid=' + userId +
+                '&mac=' + mac
             ).then(callback);
         }
     }

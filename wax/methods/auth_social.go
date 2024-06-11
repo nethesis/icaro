@@ -530,10 +530,8 @@ func InstagramAuth(c *gin.Context) {
 		fmt.Println(err.Error())
 	}
 
-	if inUserDetail.Id == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"message": "access token is invalid"})
-		return
-	}
+	inUserDetail.Username = "user-" + u
+	inUserDetail.Id = u
 
 	// check if user exists
 	unit := utils.GetUnitByUuid(uuid)

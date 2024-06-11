@@ -54,6 +54,7 @@
             "code": "Code",
             "have_code": "Sign in",
             "not_have_code": "Sign up",
+            "not_have_code_and_skip": "Sign up and Navigate",
             "get_code": "Sign up",
             "reset_code": "Request new code",
             "start_navigate": "Start Navigate",
@@ -65,10 +66,12 @@
             "auth_error_sub" : "Wrong username or password, please try again or Sign up.",
             "auth_error_sub_expired" : "This account is expired, please Sign Up again.",
             "wait": "How to proceed:",
+            "wait_skip_auth_text": "Enter you email, click on 'Sign Up and Navigate' and you will be able to browse the internet.",
             "we_are_sending_email_code": "<br>1) Enter your email and click on \"Sign up\"<br>2) Open the email you received and click on the link to login (you have 5 minutes)<br>3) Alternatively, authenticate with the email and the numeric code you received<br><br>NB If the link does not work properly, make sure you are connected to the wireless network of this establishment",
             "we_are_sending_email_code_signin": "<br>Enter your email and access code to log in.<br><br>If you haven't registered yet, go back and click on \"Sign up\".<br>",
             "not_code_explain": "Is it the first time you are connecting to this Wi-Fi?",
-            "not_code_explain_else": "Else"
+            "not_code_explain_else": "Else",
+            "not_code_explain_skip_auth": "Enter you email to continue browsing."
         },
         "sms": {
             "number": "Number",
