@@ -71,7 +71,7 @@
             "we_are_sending_email_code_signin": "<br>Digite seu e-mail e o código para acessar.<br><br>Se você ainda não se cadastrou, volte e clique em \"Registar\".<br>",
             "not_code_explain": "É a primeira vez que se liga ao Wi-Fi?",
             "not_code_explain_else": "Outro",
-            "not_code_explain_skip_auth": "<b>message here</b>"
+            "not_code_explain_skip_auth": "Insira seu e-mail para acessar a Internet."
         },
         "sms": {
             "number": "Numero",
