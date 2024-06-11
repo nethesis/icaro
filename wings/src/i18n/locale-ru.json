@@ -66,7 +66,7 @@
             "we_are_sending_email_code_signin": "<br>Введите адрес электронной почты и код доступа для входа.<br><br>Если вы еще не зарегистрированы, вернитесь назад и нажмите \"зарегистрироваться\".<br>",
             "not_code_explain": "Вы впервые подключаетесь к нашей сети Wi-Fi?",
             "not_code_explain_else": "еще",
-            "not_code_explain_skip_auth": "<b>message here</b>"
+            "not_code_explain_skip_auth": "Укажите свою электронную почту для доступа в Интернет."
         },
         "sms": {
             "number": "Номер телефона",
