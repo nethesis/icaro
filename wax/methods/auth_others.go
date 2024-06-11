@@ -368,7 +368,7 @@ func EmailAuth(c *gin.Context) {
 		// update user info
 		days := utils.GetHotspotPreferencesByKey(user.HotspotId, "user_expiration_days")
 		daysInt, _ := strconv.Atoi(days.Value)
-		user.ValidUntil = time.Now().UTC().AddDate(0, 0, daysInt)
+		user.ValidUntil = time.Now().UTC().AddDate(0, 0, daysInt+1)
 
 		// create user session check
 		utils.CreateUserSession(user.Id, sessionId)
