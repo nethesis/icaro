@@ -66,7 +66,7 @@
             "auth_error_sub" : "Nome de usuário ou senha incorretos, tente fazer login novamente ou cadastre-se.",
             "auth_error_sub_expired" : "Esta conta expirou, registre-se novamente.",
             "wait": "Por favor aguarde",
-            "wait_skip_auth_text": "<b>text here</b>",
+            "wait_skip_auth_text": "Insira seu e-mail, clique em 'Registrar e Navegar' e abra acesso imediato à Internet",
             "we_are_sending_email_code": "Se não está a receber o email, por favor desligue da rede WiFi e volte a ligar, verifique o seu email e clique no link do email para navegar. Veja também na caixa de SPAM.",
             "we_are_sending_email_code_signin": "<br>Digite seu e-mail e o código para acessar.<br><br>Se você ainda não se cadastrou, volte e clique em \"Registar\".<br>",
             "not_code_explain": "É a primeira vez que se liga ao Wi-Fi?",
