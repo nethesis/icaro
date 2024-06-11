@@ -317,14 +317,10 @@ func EmailAuth(c *gin.Context) {
 
 		// define username
 		newUsername := email
-		newValidUntil := time.Now().UTC().AddDate(0, 0, daysInt+1)
 
 		// add mac address to username if skip_auth is enabled
 		if skipVerification.Value == "true" {
 			newUsername += ":" + mac
-
-			// skip_auth accounts are valid for 8 hours
-			newValidUntil = time.Now().UTC().Add(time.Hour * time.Duration(8))
 		}
 
 		newUser := models.User{
@@ -344,7 +340,7 @@ func EmailAuth(c *gin.Context) {
 			MaxNavigationTime:    maxTimeInt,
 			AutoLogin:            autoLoginBool,
 			ValidFrom:            time.Now().UTC(),
-			ValidUntil:           newValidUntil,
+			ValidUntil:           time.Now().UTC().AddDate(0, 0, daysInt+1),
 		}
 		newUser.Id = methods.CreateUser(newUser)
 
