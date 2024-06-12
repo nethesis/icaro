@@ -12,15 +12,15 @@ In conformità con i requisiti posti dal Regolamento Generale in materia di prot
 
     Responsabile del trattamento
 {{ if .PrivacyName}}
-    Nome          {{ .PrivacyName }}
-    Indirizzo     {{ .PrivacyAddress }}
-    P.IVA / CF    {{ .PrivacyVAT }}
+    Ragione Sociale      {{ .PrivacyName }}
+    Indirizzo            {{ .PrivacyAddress }}
+    P.IVA / CF           {{ .PrivacyVAT }}
     Contatto privacy     {{ .PrivacyEmail }}
 
     {{ if and .PrivacyDPO .PrivacyDPOMail }}
         DPO - Responsabile della protezione dei dati
-        Nome      {{ .PrivacyDPO }}
-        Email     {{ .PrivacyDPOMail }}
+        Nome DPO      {{ .PrivacyDPO }}
+        Email DPO     {{ .PrivacyDPOMail }}
     {{ end }}
 {{ else }}
        Rivenditore del servizio contrattualizzato con il Titolare del trattamento
