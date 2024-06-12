@@ -52,6 +52,10 @@
             </h2>
           </div>
           <form v-if="!privacy.isLoading" class="form-horizontal" role="form" v-on:submit.prevent="updatePrivacyFields()">
+            <div class="alert alert-info alert-dismissable">
+              <span class="pficon pficon-info"></span>
+              <strong>{{ $t('profile.info')}}.</strong> {{ $t('profile.privacy_info') }}.
+            </div>
             <div class="card-pf-body">
                 <div class="form-group">
                   <label class="col-sm-4 control-label">{{ $t("profile.privacy_name") }}</label>

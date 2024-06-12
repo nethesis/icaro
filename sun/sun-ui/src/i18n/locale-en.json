@@ -47,7 +47,8 @@
       "privacy_address": "Reseller's business address",
       "privacy_email": "Reseller's privacy email",
       "privacy_dpo": "Reseller's business DPO (optional)",
-      "privacy_dpo_mail": "Reseller's business DPO email (optional)"
+      "privacy_dpo_mail": "Reseller's business DPO email (optional)",
+      "privacy_info": "Privacy info here"
     },
     "hotspot": {
       "yes": "Yes",

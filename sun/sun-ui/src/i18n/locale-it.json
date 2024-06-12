@@ -47,7 +47,8 @@
       "privacy_address": "Indirizzo",
       "privacy_email": "Email per comunicazioni privacy",
       "privacy_dpo": "Nome del DPO (opzionale)",
-      "privacy_dpo_mail": "Email del DPO (opzionale)"
+      "privacy_dpo_mail": "Email del DPO (opzionale)",
+      "privacy_info": "Privacy info here"
     },
     "hotspot": {
       "yes": "Sì",
