@@ -8,6 +8,12 @@ CREATE TABLE `accounts` (
   `username` varchar (200) NOT NULL,
   `password` varchar (200) NOT NULL,
   `email` varchar(250),
+  `privacy_name` varchar(512),
+  `privacy_vat` varchar(512),
+  `privacy_address` varchar(512),
+  `privacy_email` varchar(512),
+  `privacy_dpo` varchar(512),
+  `privacy_dpo_mail` varchar(512),
   `created` datetime,
   UNIQUE KEY (`username`),
   UNIQUE KEY (`uuid`),
@@ -17,7 +23,7 @@ CREATE TABLE `accounts` (
 );
 
 /* CREATE DEFAULT ADMIN USER */
-INSERT INTO `accounts` VALUES (1, 0, "", "admin", "Admin", "admin", MD5("admin"), "", NOW());
+INSERT INTO `accounts` VALUES (1, 0, "", "admin", "Admin", "admin", MD5("admin"), "", "", "", "", "", "", "", NOW());
 
 CREATE TABLE `account_preferences` (
   `id` serial,

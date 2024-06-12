@@ -40,7 +40,15 @@
       "default_disclaimer": "Default disclaimers",
       "privacy_disclaimer": "Privacy disclaimer",
       "tos_disclaimer": "Terms of use disclaimer",
-      "default": "Default"
+      "default": "Default",
+      "privacy_fields": "Privacy fields",
+      "privacy_name": "Reseller's business name",
+      "privacy_vat": "Reseller's business VAT",
+      "privacy_address": "Reseller's business address",
+      "privacy_email": "Reseller's privacy email",
+      "privacy_dpo": "Reseller's business DPO (optional)",
+      "privacy_dpo_mail": "Reseller's business DPO email (optional)",
+      "privacy_info": "The reseller data entered in this section will be used to complete the privacy notice displayed to service users, identifying the reseller as the data controller in compliance with the GDPR"
     },
     "hotspot": {
       "yes": "Yes",
@@ -188,7 +196,10 @@
       "wifi4eu_id": "WiFi4EU Network Identifier",
       "wifi4eu_lang": "WiFi4EU Language",
       "wifi4eu_zdebug": "WiFi4EU Self-test",
-      "wifi4eu_zdebug_desc": "The self-test mode interrupts the correct functioning of the hotspot and should only be used for specific tests. This option should always be disabled under normal conditions."
+      "wifi4eu_zdebug_desc": "The self-test mode interrupts the correct functioning of the hotspot and should only be used for specific tests. This option should always be disabled under normal conditions.",
+      "warning_privacy": "Warning",
+      "warning_privacy_text": "It is necessary to fill in the reseller data before proceeding.",
+      "profile_link": "Link to reseller profile"
     },
     "user": {
       "username": "Username",

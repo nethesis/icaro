@@ -49,6 +49,9 @@ func GetWingsPrefs(c *gin.Context) {
 	// extract hotspot info
 	hotspot := utils.GetHotspotById(unit.HotspotId)
 
+	// extract account info
+	account := utils.GetAccountByAccountId(hotspot.AccountId)
+
 	// get hotspot preferences
 	prefs := utils.GetHotspotPreferences(hotspot.Id)
 
@@ -106,7 +109,7 @@ func GetWingsPrefs(c *gin.Context) {
 	if errT != nil {
 		fmt.Println(errT)
 	}
-	errM := m.Execute(&marketingMessage, &hotspot)
+	errM := m.Execute(&marketingMessage, &account)
 	if errM != nil {
 		fmt.Println(errM)
 	}

@@ -483,3 +483,9 @@ a {
 .adjust-icon-size {
   font-size: 17px !important;
 }
+
+.create-hotspot-warning {
+  float: right;
+  margin-right: 170px;
+  margin-top: -56px;
+}

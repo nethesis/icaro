@@ -40,6 +40,73 @@
           </div>
         </div>
       </div>
+
+      <!-- privacy fields -->
+      <div v-if="user.info.type == 'reseller'" class="col-xs-12 col-sm-12 col-md-6">
+        <div class="card-pf card-pf-accented">
+          <div class="card-pf-heading">
+            <h2 class="card-pf-title">
+              {{ $t("profile.privacy_fields") }}
+              <div v-if="!privacy.isLoading" class="fa fa-lock card-info-title right"></div>
+              <div v-if="privacy.isLoading" class="spinner spinner-sm right"></div>
+            </h2>
+          </div>
+          <form v-if="!privacy.isLoading" class="form-horizontal" role="form" v-on:submit.prevent="updatePrivacyFields()">
+            <div class="alert alert-info alert-dismissable">
+              <span class="pficon pficon-info"></span>
+              <strong>{{ $t('profile.info')}}.</strong> {{ $t('profile.privacy_info') }}.
+            </div>
+            <div class="card-pf-body">
+                <div class="form-group">
+                  <label class="col-sm-4 control-label">{{ $t("profile.privacy_name") }}</label>
+                  <div class="col-sm-8">
+                    <input v-model="user.info.privacy_name" required type="text" class="form-control">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label">{{ $t("profile.privacy_vat") }}</label>
+                  <div class="col-sm-8">
+                    <input v-model="user.info.privacy_vat" required type="number" class="form-control">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label">{{ $t("profile.privacy_address") }}</label>
+                  <div class="col-sm-8">
+                    <input v-model="user.info.privacy_address" required type="text" class="form-control">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label">{{ $t("profile.privacy_email") }}</label>
+                  <div class="col-sm-8">
+                    <input v-model="user.info.privacy_email" required type="email" class="form-control">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label">{{ $t("profile.privacy_dpo") }}</label>
+                  <div class="col-sm-8">
+                    <input v-model="user.info.privacy_dpo" type="text" class="form-control">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label">{{ $t("profile.privacy_dpo_mail") }}</label>
+                  <div class="col-sm-8">
+                    <input v-model="user.info.privacy_dpo_mail" type="email" class="form-control">
+                  </div>
+                </div>
+            </div>
+            <div class="card-pf-footer">
+              <div class="dropdown card-pf-time-frame-filter">
+                <button type="submit" class="btn btn-default">{{ $t("update") }}</button>
+              </div>
+              <p>
+                <a href="#" class="card-pf-link-with-icon">
+                </a>
+              </p>
+            </div>
+          </form>
+        </div>
+      </div>
+
       <!-- SMS warning threshold -->
       <div class="col-xs-12 col-sm-12 col-md-6">
         <div class="card-pf card-pf-accented">
@@ -72,6 +139,7 @@
           </div>
         </div>
       </div>
+
       <!-- disclaimer -->
       <div
         v-if="disclaimers.data && disclaimers.data.length"
@@ -179,10 +247,11 @@ import UtilService from "../services/util";
 import StatsService from "../services/stats";
 import DisclaimerService from "../services/disclaimer";
 import PreferenceService from "../services/preference";
+import AccountService from '../services/account';
 
 export default {
   name: "Profile",
-  mixins: [LoginService, StorageService, UtilService, StatsService, DisclaimerService, PreferenceService],
+  mixins: [LoginService, StorageService, UtilService, StatsService, DisclaimerService, PreferenceService, AccountService],
   data() {
     return {
       msg: this.$i18n.t("menu.profile"),
@@ -199,6 +268,9 @@ export default {
       sms: {
         isLoading: true,
         data: {}
+      },
+      privacy: {
+        isLoading: false,
       },
       disclaimers: {
         data: {},
@@ -337,6 +409,24 @@ export default {
           }, 2000);
         }
       );
+    },
+    updatePrivacyFields() {
+      this.privacy.isLoading = true;
+      this.accountModify(this.user.login.id, {
+        privacy_name: this.user.info.privacy_name,
+        privacy_vat:  this.user.info.privacy_vat,
+        privacy_address:  this.user.info.privacy_address,
+        privacy_email:  this.user.info.privacy_email,
+        privacy_dpo:  this.user.info.privacy_dpo,
+        privacy_dpo_mail:  this.user.info.privacy_dpo_mail,
+      },
+      success => {
+        this.privacy.isLoading = false;
+      },
+      error => {
+        this.privacy.isLoading = false;
+        console.error(error.body.message);
+      });
     }
   }
 };

@@ -2,11 +2,16 @@
   <div>
     <h2>{{ msg }}</h2>
     <div v-if="isLoading" class="spinner spinner-lg"></div>
+    <div v-if="rows.length > 0 && !privacyFilled()" class="alert alert-warning alert-dismissable create-hotspot-warning">
+      <span class="pficon pficon-warning-triangle-o"></span>
+      <strong>{{ $t('hotspot.warning_privacy') }}!</strong> {{ $t('hotspot.warning_privacy_text') }} <a href="#/profile" class="alert-link">{{ $t('hotspot.profile_link') }}</a>
+    </div>
     <button
       v-if="rows.length > 0 && !isLoading && !isAdmin"
       data-toggle="modal"
       data-target="#HScreateModal"
       class="btn btn-primary btn-lg create-hotspot"
+      :disabled="!privacyFilled()"
     >{{ $t('hotspot.create_new') }}</button>
     <div v-if="rows.length == 0 && !isLoading && !isAdmin" class="blank-slate-pf" id>
       <div class="blank-slate-pf-icon">
@@ -19,7 +24,13 @@
           data-toggle="modal"
           data-target="#HScreateModal"
           class="btn btn-primary btn-lg"
+          :disabled="!privacyFilled()"
         >{{ $t('hotspot.create_new') }}</button>
+      </div>
+      <br/>
+      <div v-if="!privacyFilled()" class="alert alert-warning alert-dismissable">
+        <span class="pficon pficon-warning-triangle-o"></span>
+        <strong>{{ $t('hotspot.warning_privacy') }}!</strong> {{ $t('hotspot.warning_privacy_text') }} <a href="#/profile" class="alert-link">{{ $t('hotspot.profile_link') }}</a>
       </div>
     </div>
     <div
@@ -410,7 +421,7 @@ export default {
         selectedTosDisclaimerId: "",
         privacyDisclaimers: [],
         tosDisclaimers: [],
-      },
+      }
     };
   },
   mounted() {
@@ -419,6 +430,14 @@ export default {
     this.getDisclaimers();
   },
   methods: {
+    privacyFilled() {
+      return (
+        this.user.info.privacy_name.length > 0 &&
+        this.user.info.privacy_vat.length > 0 &&
+        this.user.info.privacy_address.length > 0 &&
+        this.user.info.privacy_email.length > 0
+      )
+    },
     handlePerPage(evt) {
       this.set("hotspots_per_page", evt.currentPerPage);
     },

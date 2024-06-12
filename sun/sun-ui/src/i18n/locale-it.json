@@ -40,7 +40,15 @@
       "default_disclaimer": "Disclaimer di default",
       "privacy_disclaimer": "Disclaimer Privacy",
       "tos_disclaimer": "Disclaimer Termini di utilizzo",
-      "default": "Default"
+      "default": "Default",
+      "privacy_fields": "Dati privacy Reseller",
+      "privacy_name": "Ragione Sociale",
+      "privacy_vat": "Partita IVA/CF",
+      "privacy_address": "Indirizzo",
+      "privacy_email": "Email per comunicazioni privacy",
+      "privacy_dpo": "Nome del DPO (opzionale)",
+      "privacy_dpo_mail": "Email del DPO (opzionale)",
+      "privacy_info": "I dati del rivenditore inseriti in questa sezione saranno usati per compilare l'informativa privacy visualizzata agli utilizzatori del servizio qualificandolo come responsabile del trattamento in ottemperanza al GDPR"
     },
     "hotspot": {
       "yes": "Sì",
@@ -188,7 +196,10 @@
       "wifi4eu_id": "WiFi4EU Identificatore Rete",
       "wifi4eu_lang": "WiFi4EU Lingua",
       "wifi4eu_zdebug": "WiFi4EU Autotest",
-      "wifi4eu_zdebug_desc": "La modalità autotest interrompe il corretto funzionamento dell'hotspot e va utilizzata solo per specifiche verifiche. Questa opzione in condizioni normali deve essere sempre disabilitata."
+      "wifi4eu_zdebug_desc": "La modalità autotest interrompe il corretto funzionamento dell'hotspot e va utilizzata solo per specifiche verifiche. Questa opzione in condizioni normali deve essere sempre disabilitata.",
+      "warning_privacy": "Attenzione",
+      "warning_privacy_text": "È necessario compilare i dati reseller prima di procedere",
+      "profile_link": "Link al profilo reseller"
     },
     "user": {
       "username": "Utente",
