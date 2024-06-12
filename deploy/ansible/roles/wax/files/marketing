@@ -19,11 +19,17 @@ In conformità con i requisiti posti dal Regolamento Generale in materia di prot
        P.IVA / CF    {{ or .PrivacyVAT \"02734760412 / 02734760412\" }}
        Contatto privacy     {{ or .PrivacyEmail \"privacy@nethesis.it\" }}
 
+{{ if .PrivacyName}}
 {{ if and .PrivacyDPO .PrivacyDPOMail }}
     DPO - Responsabile della protezione dei dati
        Nome      {{ or .PrivacyDPO \"Avvera s.r.l.\" }}
        Email     {{ or .PrivacyDPOMail \"avvera@legalmail.it\" }}
-{{end}}
+{{ end }}
+{{ else }}
+    DPO - Responsabile della protezione dei dati
+       Nome      Avvera s.r.l.
+       Email     avvera@legalmail.it
+{{ end }}
     Dati trattati nell'utilizzo dell'Hotspot
        VEDERE LE INTEGRAZIONI SUL DOCUMENTO "Terms of use"
 
