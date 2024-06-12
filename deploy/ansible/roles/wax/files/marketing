@@ -11,25 +11,21 @@ In conformità con i requisiti posti dal Regolamento Generale in materia di prot
            Riportato nel Termini di servizio
 
     Responsabile del trattamento
-       Rivenditore del servizio contrattualizzato con il Titolare del trattamento
-
-    Sub-Responsabile del trattamento
-       Nome          {{ or .PrivacyName \"Nethesis s.r.l.U.\" }}
-       Indirizzo     {{ or .PrivacyAddress \"Via degli Olmi 8, 61122 Pesaro (PU) - ITALIA\" }}
-       P.IVA / CF    {{ or .PrivacyVAT \"02734760412 / 02734760412\" }}
-       Contatto privacy     {{ or .PrivacyEmail \"privacy@nethesis.it\" }}
-
 {{ if .PrivacyName}}
-{{ if and .PrivacyDPO .PrivacyDPOMail }}
-    DPO - Responsabile della protezione dei dati
-       Nome      {{ or .PrivacyDPO \"Avvera s.r.l.\" }}
-       Email     {{ or .PrivacyDPOMail \"avvera@legalmail.it\" }}
-{{ end }}
+    Nome          {{ or .PrivacyName \"Nethesis s.r.l.U.\" }}
+    Indirizzo     {{ or .PrivacyAddress \"Via degli Olmi 8, 61122 Pesaro (PU) - ITALIA\" }}
+    P.IVA / CF    {{ or .PrivacyVAT \"02734760412 / 02734760412\" }}
+    Contatto privacy     {{ or .PrivacyEmail \"privacy@nethesis.it\" }}
+
+    {{ if and .PrivacyDPO .PrivacyDPOMail }}
+        DPO - Responsabile della protezione dei dati
+        Nome      {{ or .PrivacyDPO \"Avvera s.r.l.\" }}
+        Email     {{ or .PrivacyDPOMail \"avvera@legalmail.it\" }}
+    {{ end }}
 {{ else }}
-    DPO - Responsabile della protezione dei dati
-       Nome      Avvera s.r.l.
-       Email     avvera@legalmail.it
+       Rivenditore del servizio contrattualizzato con il Titolare del trattamento
 {{ end }}
+
     Dati trattati nell'utilizzo dell'Hotspot
        VEDERE LE INTEGRAZIONI SUL DOCUMENTO "Terms of use"
 
