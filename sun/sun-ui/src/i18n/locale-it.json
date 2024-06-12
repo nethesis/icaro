@@ -48,7 +48,7 @@
       "privacy_email": "Email per comunicazioni privacy",
       "privacy_dpo": "Nome del DPO (opzionale)",
       "privacy_dpo_mail": "Email del DPO (opzionale)",
-      "privacy_info": "I dati del rivenditore inseriti in questa sezione saranno usati per compilare l'informativa privacy visualizzata agli utilizzatori del servizio qualificandolo come responsabile del trattamento in ottemperanza al GDPR."
+      "privacy_info": "I dati del rivenditore inseriti in questa sezione saranno usati per compilare l'informativa privacy visualizzata agli utilizzatori del servizio qualificandolo come responsabile del trattamento in ottemperanza al GDPR"
     },
     "hotspot": {
       "yes": "Sì",
