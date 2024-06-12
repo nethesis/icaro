@@ -41,13 +41,13 @@
       "privacy_disclaimer": "Disclaimer Privacy",
       "tos_disclaimer": "Disclaimer Termini di utilizzo",
       "default": "Default",
-      "privacy_fields": "Privacy fields",
-      "privacy_name": "Reseller's business name",
-      "privacy_vat": "Reseller's business VAT",
-      "privacy_address": "Reseller's business address",
-      "privacy_email": "Reseller's business email",
-      "privacy_dpo": "Reseller's business DPO (optional)",
-      "privacy_dpo_mail": "Reseller's business DPO email (optional)"
+      "privacy_fields": "Dati privacy Reseller",
+      "privacy_name": "Ragione Sociale",
+      "privacy_vat": "Partita IVA/CF",
+      "privacy_address": "Indirizzo",
+      "privacy_email": "Email per comunicazioni privacy",
+      "privacy_dpo": "NOme del DPO (opzionale)",
+      "privacy_dpo_mail": "Email del DPO (opzionale)"
     },
     "hotspot": {
       "yes": "Sì",
