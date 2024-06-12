@@ -40,7 +40,14 @@
       "default_disclaimer": "Disclaimer di default",
       "privacy_disclaimer": "Disclaimer Privacy",
       "tos_disclaimer": "Disclaimer Termini di utilizzo",
-      "default": "Default"
+      "default": "Default",
+      "privacy_fields": "Privacy fields",
+      "privacy_name": "Reseller's business name",
+      "privacy_vat": "Reseller's business VAT",
+      "privacy_address": "Reseller's business address",
+      "privacy_email": "Reseller's business email",
+      "privacy_dpo": "Reseller's business DPO (optional)",
+      "privacy_dpo_mail": "Reseller's business DPO email (optional)"
     },
     "hotspot": {
       "yes": "Sì",
