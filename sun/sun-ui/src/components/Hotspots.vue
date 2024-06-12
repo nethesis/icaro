@@ -4,7 +4,7 @@
     <div v-if="isLoading" class="spinner spinner-lg"></div>
     <div v-if="rows.length > 0 && !privacyFilled()" class="alert alert-warning alert-dismissable create-hotspot-warning">
       <span class="pficon pficon-warning-triangle-o"></span>
-      <strong>{{ $t('hotspot.warning_privacy') }}!</strong> {{ $t('hotspot.warning_privacy_text') }}: <a href="#/profile" class="alert-link">{{ $t('hotspot.profile_link') }}</a>
+      <strong>{{ $t('hotspot.warning_privacy') }}!</strong> {{ $t('hotspot.warning_privacy_text') }} <a href="#/profile" class="alert-link">{{ $t('hotspot.profile_link') }}</a>
     </div>
     <button
       v-if="rows.length > 0 && !isLoading && !isAdmin"
@@ -30,7 +30,7 @@
       <br/>
       <div v-if="!privacyFilled()" class="alert alert-warning alert-dismissable">
         <span class="pficon pficon-warning-triangle-o"></span>
-        <strong>{{ $t('hotspot.warning_privacy') }}!</strong> {{ $t('hotspot.warning_privacy_text') }}: <a href="#/profile" class="alert-link">{{ $t('hotspot.profile_link') }}</a>
+        <strong>{{ $t('hotspot.warning_privacy') }}!</strong> {{ $t('hotspot.warning_privacy_text') }} <a href="#/profile" class="alert-link">{{ $t('hotspot.profile_link') }}</a>
       </div>
     </div>
     <div

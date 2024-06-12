@@ -16,7 +16,6 @@ In conformità con i requisiti posti dal Regolamento Generale in materia di prot
         Indirizzo            {{ .PrivacyAddress }}
         P.IVA / CF           {{ .PrivacyVAT }}
         Contatto privacy     {{ .PrivacyEmail }}
-
     {{ if and .PrivacyDPO .PrivacyDPOMail }}
         DPO - Responsabile della protezione dei dati
             Nome DPO         {{ .PrivacyDPO }}
@@ -25,7 +24,6 @@ In conformità con i requisiti posti dal Regolamento Generale in materia di prot
 {{ else }}
         Rivenditore del servizio contrattualizzato con il Titolare del trattamento
 {{ end }}
-
     Dati trattati nell'utilizzo dell'Hotspot
         VEDERE LE INTEGRAZIONI SUL DOCUMENTO "Terms of use"
 
