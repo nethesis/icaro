@@ -45,7 +45,7 @@
       "privacy_name": "Reseller's business name",
       "privacy_vat": "Reseller's business VAT",
       "privacy_address": "Reseller's business address",
-      "privacy_email": "Reseller's business email",
+      "privacy_email": "Reseller's privacy email",
       "privacy_dpo": "Reseller's business DPO (optional)",
       "privacy_dpo_mail": "Reseller's business DPO email (optional)"
     },
