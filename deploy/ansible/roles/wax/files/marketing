@@ -19,10 +19,11 @@ In conformità con i requisiti posti dal Regolamento Generale in materia di prot
        P.IVA / CF    {{ or .PrivacyVAT \"02734760412 / 02734760412\" }}
        Contatto privacy     {{ or .PrivacyEmail \"privacy@nethesis.it\" }}
 
-       DPO - Responsabile della protezione dei dati
+{{ if and .PrivacyDPO .PrivacyDPOMail }}
+    DPO - Responsabile della protezione dei dati
        Nome      {{ or .PrivacyDPO \"Avvera s.r.l.\" }}
        Email     {{ or .PrivacyDPOMail \"avvera@legalmail.it\" }}
-
+{{end}}
     Dati trattati nell'utilizzo dell'Hotspot
        VEDERE LE INTEGRAZIONI SUL DOCUMENTO "Terms of use"
 
@@ -54,7 +55,7 @@ In conformità con i requisiti posti dal Regolamento Generale in materia di prot
         PEC 	                nethesis@pec.it
         Telefono 	            07211791157
 
-        DPO - Responsabile della protezione dei dati
+    DPO - Responsabile della protezione dei dati
         Nome 	    Avvera s.r.l.
         Indirizzo 	Largo Umberto Boccioni, 1 – 21040 Origgio (VA) -
 
