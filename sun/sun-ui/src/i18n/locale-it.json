@@ -46,7 +46,7 @@
       "privacy_vat": "Partita IVA/CF",
       "privacy_address": "Indirizzo",
       "privacy_email": "Email per comunicazioni privacy",
-      "privacy_dpo": "NOme del DPO (opzionale)",
+      "privacy_dpo": "Nome del DPO (opzionale)",
       "privacy_dpo_mail": "Email del DPO (opzionale)"
     },
     "hotspot": {
