@@ -4,96 +4,96 @@ Ai sensi degli artt. 13 e 14 del Regolamento 2016/679/UE
 In conformità con i requisiti posti dal Regolamento Generale in materia di protezione dei dati personali il Titolare del trattamento fornisce all’interessato le seguenti informazioni in relazione ai trattamenti di dati personali effettuati.
 
 1. TRATTAMENTO HOTSPOT
-	Denominazione 	
-	   UTILIZZO DEL SERVIZIO DI RETE WIRELESS
+    Denominazione
+       UTILIZZO DEL SERVIZIO DI RETE WIRELESS
 
-	Titolare del trattamento
-           Riportato nel Termini di servizio 
+    Titolare del trattamento
+           Riportato nel Termini di servizio
 
-	Responsabile del trattamento
-	   Rivenditore del servizio contrattualizzato con il Titolare del trattamento
+    Responsabile del trattamento
+       Rivenditore del servizio contrattualizzato con il Titolare del trattamento
 
-	Sub-Responsabile del trattamento
-	   Nome 	{{ .PrivacyName }}
-	   Indirizzo 	{{ .PrivacyAddress }}
-	   P.IVA / CF 	{{ .PrivacyVAT }} 
-	   Contatto privacy 	{{ .PrivacyEmail }}
-	
-	   DPO - Responsabile della protezione dei dati
-	   Nome 	{{ .PrivacyDPO }}
-	   Email 	{{ .PrivacyDPOMail }}
+    Sub-Responsabile del trattamento
+       Nome          {{ or .PrivacyName \"Nethesis s.r.l.U.\" }}
+       Indirizzo     {{ or .PrivacyAddress \"Via degli Olmi 8, 61122 Pesaro (PU) - ITALIA\" }}
+       P.IVA / CF    {{ or .PrivacyVAT \"02734760412 / 02734760412\" }}
+       Contatto privacy     {{ or .PrivacyEmail \"privacy@nethesis.it\" }}
 
-	Dati trattati nell'utilizzo dell'Hotspot
-	   VEDERE LE INTEGRAZIONI SUL DOCUMENTO "Terms of use"
+       DPO - Responsabile della protezione dei dati
+       Nome      {{ or .PrivacyDPO \"Avvera s.r.l.\" }}
+       Email     {{ or .PrivacyDPOMail \"avvera@legalmail.it\" }}
 
-	Durata del trattamento: 
-	   VEDERE LE INTEGRAZIONI SUL DOCUMENTO "Terms of use"
+    Dati trattati nell'utilizzo dell'Hotspot
+       VEDERE LE INTEGRAZIONI SUL DOCUMENTO "Terms of use"
 
-	Base giuridica: 
-   	   VEDERE LE INTEGRAZIONI SUL DOCUMENTO "Terms of use"
-	
-	Natura del conferimento:
-	   VEDERE LE INTEGRAZIONI SUL DOCUMENTO "Terms of use"
+    Durata del trattamento:
+       VEDERE LE INTEGRAZIONI SUL DOCUMENTO "Terms of use"
+
+    Base giuridica:
+          VEDERE LE INTEGRAZIONI SUL DOCUMENTO "Terms of use"
+
+    Natura del conferimento:
+       VEDERE LE INTEGRAZIONI SUL DOCUMENTO "Terms of use"
 
 2. TRATTAMENTO USO DEL SITO
-	Denominazione 	
-           Navigazione del sito web che ospita il servizio di autenticazione 
+    Denominazione
+        Navigazione del sito web che ospita il servizio di autenticazione
 
-	Descrizione 	
-           Si tratta dei dati raccolti automaticamente durante la navigazione esclusivamente sul sito internet del Titolare all'indirizzo my.nethspot.com e quelli comunicati spontaneamente dall'Utente tramite il modulo di contatto.
+    Descrizione
+        Si tratta dei dati raccolti automaticamente durante la navigazione esclusivamente sul sito internet del Titolare all'indirizzo my.nethspot.com e quelli comunicati spontaneamente dall'Utente tramite il modulo di contatto.
 
-	Data ultima revisione
-    	   15/02/2024
+    Data ultima revisione
+        15/02/2024
 
-	Titolare del trattamento
-	   Nome 	{{ .PrivacyName }}
-	   Indirizzo 	{{ .PrivacyAddress }}
-	   P.IVA / CF 	{{ .PrivacyVAT }}
-	   Contatto privacy 	{{ .PrivacyEmail }}
-	
-	   DPO - Responsabile della protezione dei dati
-	   Nome 	{{ .PrivacyDPO }}
-	   Email 	{{ .PrivacyDPOMail }}
+    Titolare del trattamento
+        Nome          {{ or .PrivacyName \"Nethesis s.r.l.U.\" }}
+        Indirizzo     {{ or .PrivacyAddress \"Via degli Olmi 8, 61122 Pesaro (PU) - ITALIA\" }}
+        P.IVA / CF    {{ or .PrivacyVAT \"02734760412 / 02734760412\" }}
+        Contatto privacy     {{ or .PrivacyEmail \"privacy@nethesis.it\" }}
 
-	Dati trattati nella navigazione del sito
-	   Dati di navigazione (quali: indirizzo IP, indirizzi URI/URL, orario di accesso ecc.)
-	   Dati particolari trattati : nessuno
+        DPO - Responsabile della protezione dei dati
+        Nome      {{ or .PrivacyDPO \"Avvera s.r.l.\" }}
+        Email     {{ or .PrivacyDPOMail \"avvera@legalmail.it\" }}
 
-	Durata del trattamento: 
-	   conservazione dei log per 180 giorni. 
+    Dati trattati nella navigazione del sito
+       Dati di navigazione (quali: indirizzo IP, indirizzi URI/URL, orario di accesso ecc.)
+       Dati particolari trattati : nessuno
 
-	Base giuridica: 
-	   legittimo interesse (art. 6, par. 1 lett. f) e considerando 47 GDPR): il trattamento è necessario per il perseguimento del legittimo interesse del titolare del trattamento o di terzi, a condizione che non prevalgano gli interessi o i diritti e le libertà fondamentali dell’interessato che richiedono la protezione dei dati personali, tenuto conto delle ragionevoli aspettative nutrite dall’interessato in base alla sua relazione con il titolare del trattamento. Attività strettamente necessarie al funzionamento del sito e all’erogazione del servizio di navigazione sulla piattaforma. 
-	
-	Natura del conferimento:
-	   necessaria al fine di permettere la navigazione del sito web.Il trattamento è necessario per il perseguimento del legittimo interesse del titolare del trattamento o di terzi
+    Durata del trattamento:
+       conservazione dei log per 180 giorni.
+
+    Base giuridica:
+       legittimo interesse (art. 6, par. 1 lett. f) e considerando 47 GDPR): il trattamento è necessario per il perseguimento del legittimo interesse del titolare del trattamento o di terzi, a condizione che non prevalgano gli interessi o i diritti e le libertà fondamentali dell’interessato che richiedono la protezione dei dati personali, tenuto conto delle ragionevoli aspettative nutrite dall’interessato in base alla sua relazione con il titolare del trattamento. Attività strettamente necessarie al funzionamento del sito e all’erogazione del servizio di navigazione sulla piattaforma.
+
+    Natura del conferimento:
+       necessaria al fine di permettere la navigazione del sito web.Il trattamento è necessario per il perseguimento del legittimo interesse del titolare del trattamento o di terzi
 
 Se intende richiedere ulteriori informazioni sul trattamento dei Suoi dati personali o per l'eventuale esercizio dei Suoi diritti, potrà rivolgersi per iscritto direttamente al contatto privacy sopra indicato.
 
 In conformità con i requisiti posti dal Regolamento Generale in materia di protezione dei dati personali il Titolare del trattamento fornisce all’interessato le seguenti informazioni in relazione ai trattamenti di dati personali effettuati.
- 	
+
 DIRITTI DEGLI INTERESSATI - Artt. da 15 a 22 e dall'art. 13 del GDPR.
 
 Diritto di accesso
-	L'interessato ha diritto, secondo quanto previsto dagli artt. da 15 a 22 e dall' art. 13 del GDPR di richiedere al titolare l'accesso ai propri dati personali.
+    L'interessato ha diritto, secondo quanto previsto dagli artt. da 15 a 22 e dall' art. 13 del GDPR di richiedere al titolare l'accesso ai propri dati personali.
 
 Diritto di rettifica.
-	L'interessato ha diritto, secondo quanto previsto dagli artt. da 15 a 22 e dall' art. 13 del GDPR di richiedere al titolare la rettifica dei propri dati personali.
+    L'interessato ha diritto, secondo quanto previsto dagli artt. da 15 a 22 e dall' art. 13 del GDPR di richiedere al titolare la rettifica dei propri dati personali.
 
 Diritto di cancellazione.
-	L'interessato ha diritto, secondo quanto previsto dagli artt. da 15 a 22 e dall' art. 13 del GDPR di richiedere al titolare la cancellazione dei propri dati personali.
+    L'interessato ha diritto, secondo quanto previsto dagli artt. da 15 a 22 e dall' art. 13 del GDPR di richiedere al titolare la cancellazione dei propri dati personali.
 
 Diritto di limitazione.
-	L'interessato ha diritto, secondo quanto previsto dagli artt. da 15 a 22 e dall' art. 13 del GDPR di richiedere al titolare la limitazione dei dati che lo riguardano.
+    L'interessato ha diritto, secondo quanto previsto dagli artt. da 15 a 22 e dall' art. 13 del GDPR di richiedere al titolare la limitazione dei dati che lo riguardano.
 
 Diritto di opposizione.
-	L'interessato ha diritto, secondo quanto previsto dagli artt. da 15 a 22 e dall' art. 13 del GDPR di opporsi al loro trattamento.
+    L'interessato ha diritto, secondo quanto previsto dagli artt. da 15 a 22 e dall' art. 13 del GDPR di opporsi al loro trattamento.
 
 Diritto di portabilità.
-	L'interessato ha diritto, secondo quanto previsto dagli artt. da 15 a 22 e dall' art. 13 del GDPR di esercitare il proprio diritto alla portabilità dei dati.
+    L'interessato ha diritto, secondo quanto previsto dagli artt. da 15 a 22 e dall' art. 13 del GDPR di esercitare il proprio diritto alla portabilità dei dati.
 
 Diritto di revoca.
-	L'interessato ha diritto, secondo quanto previsto dagli artt. da 15 a 22 e dall' art. 13 del GDPR di esercitare il proprio diritto alla revoca del consenso.
+    L'interessato ha diritto, secondo quanto previsto dagli artt. da 15 a 22 e dall' art. 13 del GDPR di esercitare il proprio diritto alla revoca del consenso.
 
 Diritto di reclamo.
-	L'interessato ha diritto, secondo quanto previsto dagli artt. da 15 a 22 e dall' art. 13 del GDPR di esercitare il proprio diritto di porre reclamo dinanzi all'autorità di controllo.
+    L'interessato ha diritto, secondo quanto previsto dagli artt. da 15 a 22 e dall' art. 13 del GDPR di esercitare il proprio diritto di porre reclamo dinanzi all'autorità di controllo.
