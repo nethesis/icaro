@@ -14,17 +14,14 @@ In conformità con i requisiti posti dal Regolamento Generale in materia di prot
 	   Rivenditore del servizio contrattualizzato con il Titolare del trattamento
 
 	Sub-Responsabile del trattamento
-	   Nome 	Nethesis s.r.l.U.
-	   Indirizzo 	Via degli Olmi 8, 61122 Pesaro (PU) - ITALIA
-	   P.IVA / CF 	02734760412 / 02734760412 
-	   Legale rappresentante 	CRISTIAN MANONI
-	   Contatto privacy 	privacy@nethesis.it
-	   PEC 	nethesis@pec.it
-	   Telefono 	07211791157
+	   Nome 	{{ .PrivacyName }}
+	   Indirizzo 	{{ .PrivacyAddress }}
+	   P.IVA / CF 	{{ .PrivacyVAT }} 
+	   Contatto privacy 	{{ .PrivacyEmail }}
 	
 	   DPO - Responsabile della protezione dei dati
-	   Nome 	Avvera s.r.l.
-	   Indirizzo 	Largo Umberto Boccioni, 1 – 21040 Origgio (VA) -
+	   Nome 	{{ .PrivacyDPO }}
+	   Email 	{{ .PrivacyDPOMail }}
 
 	Dati trattati nell'utilizzo dell'Hotspot
 	   VEDERE LE INTEGRAZIONI SUL DOCUMENTO "Terms of use"
@@ -49,17 +46,14 @@ In conformità con i requisiti posti dal Regolamento Generale in materia di prot
     	   15/02/2024
 
 	Titolare del trattamento
-	   Nome 	Nethesis s.r.l.U.
-	   Indirizzo 	Via degli Olmi 8, 61122 Pesaro (PU) - ITALIA
-	   P.IVA / CF 	02734760412 / 02734760412 
-	   Legale rappresentante 	CRISTIAN MANONI
-	   Contatto privacy 	privacy@nethesis.it
-	   PEC 	nethesis@pec.it
-	   Telefono 	07211791157
+	   Nome 	{{ .PrivacyName }}
+	   Indirizzo 	{{ .PrivacyAddress }}
+	   P.IVA / CF 	{{ .PrivacyVAT }}
+	   Contatto privacy 	{{ .PrivacyEmail }}
 	
 	   DPO - Responsabile della protezione dei dati
-	   Nome 	Avvera s.r.l.
-	   Indirizzo 	Largo Umberto Boccioni, 1 – 21040 Origgio (VA) -
+	   Nome 	{{ .PrivacyDPO }}
+	   Email 	{{ .PrivacyDPOMail }}
 
 	Dati trattati nella navigazione del sito
 	   Dati di navigazione (quali: indirizzo IP, indirizzi URI/URL, orario di accesso ecc.)

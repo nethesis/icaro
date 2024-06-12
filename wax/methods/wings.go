@@ -105,11 +105,11 @@ func GetWingsPrefs(c *gin.Context) {
 	t := template.Must(template.New("terms").Parse(terms))
 	m := template.Must(template.New("marketings").Parse(marketings))
 
-	errT := t.Execute(&termsMessage, &account)
+	errT := t.Execute(&termsMessage, &hotspot)
 	if errT != nil {
 		fmt.Println(errT)
 	}
-	errM := m.Execute(&marketingMessage, &hotspot)
+	errM := m.Execute(&marketingMessage, &account)
 	if errM != nil {
 		fmt.Println(errM)
 	}
