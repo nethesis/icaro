@@ -48,7 +48,7 @@
       "privacy_email": "Reseller's privacy email",
       "privacy_dpo": "Reseller's business DPO (optional)",
       "privacy_dpo_mail": "Reseller's business DPO email (optional)",
-      "privacy_info": "Privacy info here"
+      "privacy_info": "The reseller data entered in this section will be used to complete the privacy notice displayed to service users, identifying the reseller as the data controller in compliance with the GDPR."
     },
     "hotspot": {
       "yes": "Yes",
