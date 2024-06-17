@@ -310,9 +310,9 @@ CREATE TABLE subscriptions (
     id serial not null primary key,
     account_id bigint unsigned not null references accounts(id),
     subscription_plan_id bigint not null references subscription_plans(id),
-    valid_from timestamp null,
-    valid_until timestamp null,
-    created timestamp default current_timestamp
+    valid_from datetime null,
+    valid_until datetime null,
+    created datetime default current_timestamp
 );
 
 /* -------------------- */
