@@ -312,7 +312,7 @@ CREATE TABLE subscriptions (
     subscription_plan_id bigint not null references subscription_plans(id),
     valid_from datetime null,
     valid_until datetime null,
-    created datetime default current_timestamp
+    created datetime null
 );
 
 /* -------------------- */
