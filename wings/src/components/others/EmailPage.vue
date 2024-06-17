@@ -332,7 +332,6 @@ export default {
                   this.errors.dedaloError = false;
                   this.errors.dedaloExpired = false;
                   this.authCode = "skip_code";
-                  this.deleteInfo();
                 } else {
                   // if apple
                   if (this.iOS) {
