@@ -9,8 +9,8 @@ net             ${HS_NETWORK}
 dhcpif          ${HS_INTERFACE}
 tundev          tun-dedalo
 uamanydns
-dns1            "${HS_DNS1:-208.67.222.222}"
-dns2            "${HS_DNS2:-208.67.220.220}"
+dns1            "${HS_DNS1:-8.8.8.8}"
+dns2            "${HS_DNS2:-1.1.1.1}"
 uamport         3990
 locationname    "${HS_UNIT_NAME}"
 uamaaaurl       "${HS_AAA_URL}/?digest=${HS_DIGEST}&uuid=${HS_UUID}&timezone=${HS_TIMEZONE}"
