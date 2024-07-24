@@ -1,5 +1,5 @@
 Name: dedalo
-Version: 0.4.2
+Version: 0.4.3
 Release: 1%{?dist}
 Summary: Network Access Controller, runs on the firewall and intercepts all guest connections
 
@@ -75,6 +75,9 @@ touch %{buildroot}/opt/icaro/dedalo/walled_gardens/local.conf
 
 
 %changelog
+* Wed Jul 24 2024 Matteo Valentini <matteo.valentini@nethesis.it> - 0.4.3-1
+- Update dns servers on chilli.conf (#193)
+
 * Wed Apr 13 2022 Matteo Valentini <matteo.valentini@nethesis.it> - 0.4.2-1
 - dedalo, sun & wings. added WiFi4EU support (#168)
 
