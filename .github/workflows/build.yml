@@ -39,7 +39,7 @@ jobs:
       - name: Build binary
         run: CGO_ENABLED=0 go build
       - name: Upload binary
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4.4.0
         with:
           name: ${{ matrix.build.name }}
           path: ${{ matrix.build.path }}/${{ matrix.build.name }}
@@ -72,7 +72,7 @@ jobs:
       - name: Create tar.gz
         run: cd dist && tar cvzf ../${{ matrix.build.name }}.tar.gz .
       - name: Upload tar.gz
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4.4.0
         with:
           name: ${{ matrix.build.name }}
           path: ${{ matrix.build.path }}/${{ matrix.build.name }}.tar.gz
@@ -93,7 +93,7 @@ jobs:
           docker cp makerpms:/srv/makerpms/rpmbuild/RPMS/noarch/ RPMS
           cp RPMS/* dedalo.rpm
       - name: Upload dedalo
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4.4.0
         with:
           name: dedalo
           path: dedalo/dist/dedalo.rpm
@@ -107,7 +107,7 @@ jobs:
       - dedalo
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4.1.8
         with:
           path: artifacts
       - id: release
