@@ -324,6 +324,7 @@ export default {
             this.doTempSession(
               this.authEmail,
               this.userId,
+              null,
               function(responseTmp) {
                 // check if skip auth is enabled
                 if(responseTmp.body.skip_auth == "true") {

@@ -239,6 +239,7 @@ export default {
       // open temp session for the user
       this.doTempSession(
         null,
+        this.userId,
         "true",
         function(responseTmp) {
           // if apple

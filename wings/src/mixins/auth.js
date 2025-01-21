@@ -200,7 +200,7 @@ var AuthMixin = {
                 '&username=' + encodeURIComponent(username)
             ).then(callback);
         },
-        doTempSession: function (username, userId, callback) {
+        doTempSession: function (username, userId, short, callback) {
             var params = this.extractParams()
             var ip = params.uamip || null
             var port = params.uamport || null

@@ -348,6 +348,7 @@ export default {
           this.doTempSession(
             this.authPrefix + this.authSMS,
             this.userId,
+            null,
             function(responseTmp) {
               // if apple
               if (this.iOS) {
