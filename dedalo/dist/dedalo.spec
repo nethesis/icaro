@@ -66,7 +66,6 @@ touch %{buildroot}/opt/icaro/dedalo/walled_gardens/local.conf
 %config(noreplace) /opt/icaro/dedalo/config
 %config /opt/icaro/dedalo/template/chilli.conf.tpl
 %config /opt/icaro/dedalo/walled_gardens/facebook.conf
-%config /opt/icaro/dedalo/walled_gardens/google.conf
 %config /opt/icaro/dedalo/walled_gardens/linkedin.conf
 %config /opt/icaro/dedalo/walled_gardens/instagram.conf
 %config /opt/icaro/dedalo/walled_gardens/wifi4eu.conf
