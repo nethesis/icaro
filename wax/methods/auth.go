@@ -123,7 +123,7 @@ func GetDaemonTemporary(c *gin.Context) {
 	skipVerification := utils.GetHotspotPreferencesByKey(unit.HotspotId, "email_login_skip_auth")
 
 	// create user auth
-	if skipVerification.Value == "true" {
+	if skipVerification.Value == "true" && username != "whatsapp" {
 		// convert userId to int
 		userIdInt, _ := strconv.Atoi(userId)
 
@@ -133,6 +133,10 @@ func GetDaemonTemporary(c *gin.Context) {
 		// set credentials
 		utils.CreateUserAuth(sessionId, 0, unitUuid, 0, username+":"+mac, password, "login")
 	} else {
+		// handle whatsapp case
+		if username == "whatsapp" {
+			username = username + ":" + sessionId
+		}
 		utils.CreateUserAuth(sessionId, secondsInt, unitUuid, 0, username, "", "temporary")
 	}
 
@@ -153,6 +157,11 @@ func GetDaemonLogout(c *gin.Context) {
 	sessionId := c.Query("sessionid")
 	unitUuid := c.Query("uuid")
 	username := c.Query("username")
+
+	// handle whatsapp case
+	if username == "whatsapp" {
+		username = username + ":" + sessionId
+	}
 
 	// create user auth
 	utils.CreateUserAuth(sessionId, 0, unitUuid, 0, username, "", "logout")

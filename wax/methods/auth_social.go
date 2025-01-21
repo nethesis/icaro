@@ -59,6 +59,7 @@ type WhatsappPOST struct {
 	AccountSid       string `form:"AccountSid"`
 	From             string `form:"From"`
 	ApiVersion       string `form:"ApiVersion"`
+	MessageType      string `form:"MessageType"`
 }
 
 func WhatsappAuth(c *gin.Context) {
@@ -191,6 +192,9 @@ func WhatsappAuth(c *gin.Context) {
 		// create marketing info with user infos
 		utils.CreateUserMarketing(newUser.Id, smsMarketingData{Number: number}, "whatsapp")
 
+		// create user auth
+		utils.CreateUserAuth(sessionId, 0, uuid, newUser.Id, newUser.Username, newUser.Password, "created")
+
 		// response to client
 		c.JSON(http.StatusOK, gin.H{"user_id": number, "user_db_id": newUser.Id})
 	} else {
@@ -253,6 +257,9 @@ func WhatsappAuth(c *gin.Context) {
 
 		db := database.Instance()
 		db.Save(&user)
+
+		// create user auth
+		utils.CreateUserAuth(sessionId, 0, uuid, user.Id, user.Username, user.Password, "updated")
 
 		// response to client
 		c.JSON(http.StatusOK, gin.H{"user_id": number, "exists": true, "user_db_id": user.Id})

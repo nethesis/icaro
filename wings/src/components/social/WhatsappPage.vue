@@ -225,12 +225,12 @@ export default {
         this.codeRequested = true;
       }
     },
-    redirectAuth() {
+    redirectAuth(shortCode) {
       window.location.replace(
         "http://wa.me/" +
         CONFIG.WHATSAPP_NUMBER.replace("+", "") +
         "?text=login " +
-        encodeURIComponent(this.shortCode)
+        encodeURIComponent(shortCode || this.shortCode)
       );
     },
     getCode: function(reset) {
@@ -238,12 +238,12 @@ export default {
 
       // open temp session for the user
       this.doTempSession(
-        null,
+        "whatsapp",
         this.userId,
         "true",
         function(responseTmp) {
           // if apple
-          if (this.iOS) {
+          /*if (this.iOS) {
             var origin = "http://conncheck." + window.location.host;
             var pathname = window.location.pathname;
             var query =
@@ -266,7 +266,8 @@ export default {
           } else {
             this.openBtn = true;
             this.shortCode = responseTmp.body.short_code;
-          }
+          }*/
+         this.redirectAuth(responseTmp.body.short_code);
         },
         function(error) {
           this.codeRequested = false;
@@ -318,6 +319,7 @@ export default {
         var pathname = window.location.pathname;
 
         this.doDedaloLogout(
+          "whatsapp",
           function(responseDedaloLogout) {
             window.location.replace(redirectUrl + pathname + query);
           },
@@ -330,6 +332,7 @@ export default {
       } else {
         // exec logout
         this.doDedaloLogout(
+          "whatsapp",
           function(responseDedaloLogout) {
             // exec dedalo login
             this.doDedaloLogin(

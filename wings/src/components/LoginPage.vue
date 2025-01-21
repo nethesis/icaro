@@ -42,7 +42,7 @@
     >
       <h3 :style="textStyle">{{ $t("login.choose_login") }}</h3>
       <div class="ui relaxed list">
-        <div v-if="hotspot.preferences.whatsapp_login == 'true' && isMobile" class="item">
+        <div v-if="hotspot.preferences.whatsapp_login == 'true'" class="item">
           <div @click="changeRoute('/login/whatsapp', false)" class="ui green button big fluid">
             <i class="whatsapp icon"></i>
             {{ $t("login.with_whatsapp") }}

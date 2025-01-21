@@ -991,11 +991,21 @@ func CreateUserAuth(sessionId string, sessionTimeout int, unitUuid string, userI
 				Type:           typeAuth,
 				Updated:        time.Now().UTC(),
 			}
+
+			// delete whatsapp "logout" record
+			var whatsappLogout models.DaemonAuth
+			db.Where("session_id = ? AND unit_uuid = ? AND username = ? AND type = 'logout'", sessionId, unitUuid, "whatsapp"+":"+sessionId).First(&whatsappLogout)
+			db.Delete(&whatsappLogout)
 		} else {
 			// update record
 			daemonAuth.Password = password
 			daemonAuth.Type = typeAuth
 			daemonAuth.Updated = time.Now().UTC()
+
+			// delete whatsapp "logout" record
+			var whatsappLogout models.DaemonAuth
+			db.Where("session_id = ? AND unit_uuid = ? AND username = ? AND type = 'logout'", sessionId, unitUuid, "whatsapp"+":"+sessionId).First(&whatsappLogout)
+			db.Delete(&whatsappLogout)
 		}
 
 		// save record
