@@ -119,7 +119,6 @@ CREATE TABLE `disclaimers_accounts` (
 For the social logins, each platforms as its application registration process, here the links to create new apps for:
 - **Facebook**: [create new app](https://developers.facebook.com/apps)
 - **LinkedIn**: [create new app](https://www.linkedin.com/developer/apps)
-- **Instagram**: [create new app](https://www.instagram.com/developer/)
 
 After the registration insert your variables inside the file `/opt/icaro/wax/conf.json` in the `auth_social` part.
 ```json
@@ -133,11 +132,6 @@ After the registration insert your variables inside the file `/opt/icaro/wax/con
 		"client_id": "li_client_id",
 		"client_secret": "li_client_secret",
 		"redirect_uri": "http://<icaro_instance>/wings/login/linkedin"
-	},
-	"instagram": {
-		"client_id": "in_client_id",
-		"client_secret": "in_client_secret",
-		"redirect_uri": "http://<icaro_instance>/wings/login/instagram"
 	}
 }
 ```
@@ -215,12 +209,6 @@ This variables are common to all backends:
 * `LINKEDIN_CLIENT_ID` LinkedIn Oauth2 Client ID
 * `LINKEDIN_CLIENT_SECRET` LinkedIn Oauth2 Client Secret
 * `LINKEDIN_REDIRECT_URL` LinkedIn Oauth2 Redirect URL
-
-##### Instagram
-
-* `INSTAGRAM_CLIENT_ID` Instagram Oauth2 Client ID
-* `INSTAGRAM_CLIENT_SECRET` Instagram Oauth2 Client Secret
-* `INSTAGRAM_REDIRECT_URL` Instagram Oauth2 Redirect URL
 
 #### Email & SMS
 

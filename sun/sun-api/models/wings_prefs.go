@@ -36,9 +36,8 @@ type WingsPrefs struct {
 		MarketingUse string `json:"marketing_use"`
 	} `json:"disclaimers"`
 	Socials struct {
-		FacebookClientId  string `json:"facebook_client_id"`
-		LinkedInClientId  string `json:"linkedin_client_id"`
-		InstagramClientId string `json:"instagram_client_id"`
+		FacebookClientId string `json:"facebook_client_id"`
+		LinkedInClientId string `json:"linkedin_client_id"`
 	} `json:"socials"`
 	Integrations []IntegrationWings `json:"integrations"`
 }

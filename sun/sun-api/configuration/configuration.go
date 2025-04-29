@@ -139,15 +139,6 @@ func Init(ConfigFilePtr *string) {
 	if os.Getenv("LINKEDIN_REDIRECT_URL") != "" {
 		Config.AuthSocial.LinkedIn.RedirectURI = os.Getenv("LINKEDIN_REDIRECT_URL")
 	}
-	if os.Getenv("INSTAGRAM_CLIENT_ID") != "" {
-		Config.AuthSocial.Instagram.ClientId = os.Getenv("INSTAGRAM_CLIENT_ID")
-	}
-	if os.Getenv("INSTAGRAM_CLIENT_SECRET") != "" {
-		Config.AuthSocial.Instagram.ClientSecret = os.Getenv("INSTAGRAM_CLIENT_SECRET")
-	}
-	if os.Getenv("INSTAGRAM_REDIRECT_URL") != "" {
-		Config.AuthSocial.Instagram.RedirectURI = os.Getenv("INSTAGRAM_REDIRECT_URL")
-	}
 
 	if os.Getenv("SMS_ACCOUNT_SID") != "" {
 		Config.Endpoints.Sms.AccountSid = os.Getenv("SMS_ACCOUNT_SID")

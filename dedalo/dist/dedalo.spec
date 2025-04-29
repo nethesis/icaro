@@ -46,7 +46,6 @@ mkdir -p %{buildroot}/opt/icaro/dedalo/walled_gardens
 mkdir -p %{buildroot}/opt/icaro/dedalo/walled_gardens/integrations
 install -D -m644 dedalo/walled_gardens/facebook.conf %{buildroot}/opt/icaro/dedalo/walled_gardens/facebook.conf
 install -D -m644 dedalo/walled_gardens/linkedin.conf %{buildroot}/opt/icaro/dedalo/walled_gardens/linkedin.conf
-install -D -m644 dedalo/walled_gardens/instagram.conf %{buildroot}/opt/icaro/dedalo/walled_gardens/instagram.conf
 install -D -m644 dedalo/walled_gardens/wifi4eu.conf %{buildroot}/opt/icaro/dedalo/walled_gardens/wifi4eu.conf
 
 mkdir -p %{buildroot}/opt/icaro/dedalo/www
@@ -67,7 +66,6 @@ touch %{buildroot}/opt/icaro/dedalo/walled_gardens/local.conf
 %config /opt/icaro/dedalo/template/chilli.conf.tpl
 %config /opt/icaro/dedalo/walled_gardens/facebook.conf
 %config /opt/icaro/dedalo/walled_gardens/linkedin.conf
-%config /opt/icaro/dedalo/walled_gardens/instagram.conf
 %config /opt/icaro/dedalo/walled_gardens/wifi4eu.conf
 %config(noreplace) /opt/icaro/dedalo/walled_gardens/local.conf
 %config(noreplace) /opt/icaro/dedalo/local.conf
