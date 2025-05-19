@@ -43,11 +43,7 @@ Login type after the voucher check:
   * SMS
   * Social (only if voucher are not payed)
     * Facebook
-      * Like Gate not mandatory with timeout option (avoid to put like if you waiting for N seconds) (**Not yet implemented**)
-      * FB Checkin (**Not yet implemented**)
-    * Instagram
     * Linkedin
-    * Twitter (**Not yet implemented**)
   * Code (this is the voucher authentication explained above)
 
 Social logins are valid only for a specific period of time.

@@ -82,12 +82,12 @@ Per utilizzare il servizio è necessario:
     • eseguire una scansione delle reti disponibili e selezionare la rete WiFi del fornitore;
     • procedere con la registrazione nel pannello del captive portal che permette di utilizzare il servizio;
     • se non si aprisse in automatico aprire il browser internet e collegarsi in http ad un qualsisi sito internet e la homepage di accesso al servizio apparirà automaticamente;
-    • accedere utilizzando a propria scelta una delle modalità di autenticazione disponibili: Facebook, Instagram, Linkedin, codice voucher, email o via SMS (con queste 2 ultime modalità si riceverà una password per email o SMS a seconda della scelta fatta).
+    • accedere utilizzando a propria scelta una delle modalità di autenticazione disponibili: Facebook, Linkedin, codice voucher, email o via SMS (con queste 2 ultime modalità si riceverà una password per email o SMS a seconda della scelta fatta).
 
 
 6. MODALITÀ DI ACCESSO ED AUTENTICAZIONE
 	L'accesso al servizio può avvenire nelle seguenti modalità:
-	a) Accesso tramite social network (Facebook, Instagram, Linkedin), in questo caso l’utente accede al sistema autenticandosi con le stesse credenziali con cui si collega allo specifico social network. L’autenticazione viene effettuata direttamente sul social e non coinvolge il sistema Hot Spot che pertanto non può disporre in alcun modo dei dati di accesso dell’utente.
+	a) Accesso tramite social network (Facebook, Linkedin), in questo caso l’utente accede al sistema autenticandosi con le stesse credenziali con cui si collega allo specifico social network. L’autenticazione viene effettuata direttamente sul social e non coinvolge il sistema Hot Spot che pertanto non può disporre in alcun modo dei dati di accesso dell’utente.
 	b) Accesso tramite voucher: in questo caso l'utente riceve un codice voucher strettamente personale che gli consente l'autenticazione immediata senza dover inserire altri dati
 	c) Accesso tramite indirizzo email o numero telefonico, in questo caso l’utente inserisce la propria email o il proprio numero telefonico e riceve un codice tramite il quale potrà autenticarsi. Il codice (password) sarà generata in automatico dal sistema, in caso di necessità l’utente può richiedere un nuovo codice.
 

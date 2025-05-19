@@ -30,13 +30,6 @@
             "client_secret": "{{ icaro.wax.linkedin_client_secret }}",
             "redirect_uri": "http://{{ icaro.hostname }}/wings/login/linkedin"
 {% endif %}
-        },
-        "instagram": {
-{% if icaro.wax.instagram_client_id is defined and icaro.wax.instagram_client_secret is defined %}
-            "client_id": "{{ icaro.wax.instagram_client_id }}",
-            "client_secret": "{{ icaro.wax.instagram_client_secret }}",
-            "redirect_uri": "http://{{ icaro.hostname }}/wings/login/instagram"
-{% endif %}
         }
     },
     "endpoints": {

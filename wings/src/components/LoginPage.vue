@@ -44,16 +44,6 @@
             {{ $t("login.with_facebook") }}
           </div>
         </div>
-        <div v-if="hotspot.preferences.instagram_login == 'true'" class="item">
-          <div
-            @click="changeRoute('/login/instagram', false)"
-            class="ui instagram button big fluid"
-            :style="buttonStyle"
-          >
-            <i class="instagram icon"></i>
-            {{ $t("login.with_instagram") }}
-          </div>
-        </div>
         <div v-if="hotspot.preferences.linkedin_login == 'true'" class="item">
           <div @click="changeRoute('/login/linkedin', false)" class="ui linkedin button big fluid" :style="buttonStyle">
             <i class="linkedin icon"></i>
