@@ -103,5 +103,14 @@ icaro.sun_api.email_smtp_password is defined %}
         "verb": "POST",
         "endpoint": "/api/users"
     }]
+    },
+    "oidc": {
+        "issuer": "{{ icaro.sun_api.oidc_issuer | default('') }}",
+        "client_id": "{{ icaro.sun_api.oidc_client_id | default('') }}",
+        "client_secret": "{{ icaro.sun_api.oidc_client_secret | default('') }}",
+        "redirect_uri": "{{ icaro.sun_api.oidc_redirect_uri | default('http://localhost:8080/api/auth/oidc/callback') }}",
+        "frontend_url": "{{ icaro.sun_api.oidc_frontend_url | default('http://localhost:8081') }}",
+        "scopes": {{ icaro.sun_api.oidc_scopes | default(['openid', 'profile', 'email', 'roles', 'urn:logto:scope:organizations', 'urn:logto:scope:organization_roles']) | to_json }},
+        "role_mapping": {{ icaro.sun_api.oidc_role_mapping | default(['super admin:admin', 'admin:reseller']) | to_json }}
     }
 }

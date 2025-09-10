@@ -53,6 +53,15 @@ type Configuration struct {
 		Origins []string `json:"origins"`
 		Methods []string `json:"methods"`
 	} `json:"cors"`
+	OIDC struct {
+		Issuer       string   `json:"issuer"`
+		ClientID     string   `json:"client_id"`
+		ClientSecret string   `json:"client_secret"`
+		RedirectURI  string   `json:"redirect_uri"`
+		FrontendURL  string   `json:"frontend_url"`
+		Scopes       []string `json:"scopes"`
+		RoleMapping  []string `json:"role_mapping"`
+	} `json:"oidc"`
 	Disclaimers struct {
 		TermsOfUse   string `json:"terms_of_use"`
 		MarketingUse string `json:"marketing_use"`
