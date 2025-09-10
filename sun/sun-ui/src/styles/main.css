@@ -489,3 +489,71 @@ a {
   margin-right: 170px;
   margin-top: -56px;
 }
+
+/* OIDC Login Styles */
+.login-button {
+  margin-bottom: 30px;
+}
+
+@media screen and (max-width: 767px) {
+  .oidc-login-section .col-sm-offset-2 {
+    display: flow-root;
+  }
+}
+
+.oidc-login-section {
+  margin-top: 15px;
+}
+
+.login-separator {
+  text-align: center;
+  margin: 0px 0 15px 0;
+  position: relative;
+}
+
+.login-separator:before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.login-separator span {
+  background: rgba(0, 0, 0, 0.8);
+  color: rgba(255, 255, 255, 0.7);
+  padding: 0 15px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  z-index: 1;
+}
+
+.btn-nethesis {
+  background: #0087db !important;
+  border: none !important;
+  color: white !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+  border-radius: 4px !important;
+}
+
+.btn-nethesis:hover,
+.btn-nethesis:focus {
+  background: #0fa3ff !important;
+  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transform: translateY(-1px);
+}
+
+.btn-nethesis:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.btn-nethesis i {
+  margin-right: 8px;
+}

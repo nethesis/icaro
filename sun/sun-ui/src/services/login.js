@@ -60,6 +60,16 @@ var LoginService = {
           }
         )
         .then(success, error);
+    },
+    execOIDCLogin() {
+      window.location.href = this.$root.$options.api_scheme +
+        this.$root.$options.api_host +
+        "/api/auth/oidc/login";
+    },
+    getOIDCConfig(success, error) {
+      this.$http
+        .get(this.$root.$options.api_scheme + this.$root.$options.api_host + "/api/auth/oidc/config")
+        .then(success, error);
     }
   }
 };
