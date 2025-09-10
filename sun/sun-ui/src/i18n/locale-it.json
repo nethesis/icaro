@@ -5,7 +5,19 @@
       "insert_username": "Inserire  il tuo utente",
       "insert_password": "Inserisci la tua password",
       "user_error": "Utente non valido",
-      "password_error": "Password non valida"
+      "password_error": "Password non valida",
+      "or": "oppure",
+      "login_with": "Accedi con",
+      "copyright": "Copyright",
+      "access_denied": "Accesso Negato",
+      "unauthorized_role_message": "Il tuo ruolo non ha i permessi per accedere a questo sistema.",
+      "missing_code_message": "Autenticazione fallita: codice di autorizzazione mancante.",
+      "invalid_state_message": "Autenticazione fallita: token di sicurezza non valido.",
+      "token_exchange_failed_message": "Autenticazione fallita: impossibile scambiare i token.",
+      "account_creation_failed_message": "Autenticazione fallita: impossibile creare l'account.",
+      "no_admin_account_found_message": "Autenticazione fallita: account amministratore non trovato.",
+      "exchange_failed_message": "Autenticazione fallita: scambio sicuro del token fallito.",
+      "generic_oidc_error_message": "Autenticazione fallita: riprova o contatta il supporto."
     },
     "dashboard": {
       "preferences": "Preferenze",

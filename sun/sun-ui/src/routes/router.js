@@ -30,6 +30,57 @@ const router = new Router({
       }
     },
     {
+      path: '/login/callback',
+      name: 'LoginCallback',
+      component: {
+        template: '<div>Processing login...</div>',
+        async created() {
+          // Handle OIDC callback with secure code exchange
+          const code = this.$route.query.code;
+
+          if (code) {
+            try {
+              // Exchange the temporary code for token
+              const response = await this.$http.post(
+                this.$root.$options.api_scheme +
+                this.$root.$options.api_host +
+                "/api/auth/oidc/exchange",
+                { code: code }
+              );
+
+              if (response.status === 200) {
+                const data = response.data;
+
+                // Create user object similar to regular login
+                const loggedUser = {
+                  token: data.token,
+                  expires: new Date(parseInt(data.expires) * 1000).toString(),
+                  id: parseInt(data.id),
+                  account_type: data.account_type
+                };
+
+                // Save to localStorage
+                localStorage.setItem('loggedUser', JSON.stringify(loggedUser));
+
+                // Force page reload to trigger App.vue initialization with new login status
+                window.location.href = '/';
+              } else {
+                // Exchange failed, redirect to login with error
+                window.location.href = '/?error=exchange_failed';
+              }
+            } catch (error) {
+              console.error('OIDC code exchange failed:', error);
+              // Exchange failed, redirect to login with error
+              window.location.href = '/?error=exchange_failed';
+            }
+          } else {
+            // No code provided, something went wrong
+            window.location.href = '/?error=missing_code';
+          }
+        }
+      }
+    },
+    {
       path: "/hotspots",
       name: "Hotspots",
       component: Hotspots,
@@ -161,6 +212,12 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
+  // Always allow OIDC callback route
+  if (to.name === 'LoginCallback') {
+    next();
+    return;
+  }
+
   var user = JSON.parse(localStorage.getItem("loggedUser"));
   if (user && to.meta.roles && to.meta.roles.indexOf(user.account_type) >= 0) {
     next();
