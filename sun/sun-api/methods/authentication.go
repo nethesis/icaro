@@ -332,12 +332,9 @@ func mapRoleToIcaro(externalRoles []string, config configuration.Configuration) 
 		}
 	}
 
-	// Only allow specific role mappings - no defaults for unauthorized roles
+	// If no role mapping configured, deny access - no default mappings for security
 	if len(roleMapping) == 0 {
-		roleMapping = map[string]string{
-			"super admin": "admin",
-			"admin":       "reseller",
-		}
+		return ""
 	}
 
 	// Find the highest priority role mapping - only check authorized roles
@@ -544,12 +541,8 @@ func OIDCCallback(c *gin.Context) {
 	var account models.Account
 
 	if icaroRole == "admin" {
-		// If user should be admin, use the existing admin account (typically id=1)
-		db.Where("type = ? AND id = 1", "admin").First(&account)
-		if account.Id == 0 {
-			// Fallback: find any admin account if id=1 doesn't exist
-			db.Where("type = ?", "admin").First(&account)
-		}
+		// If user should be admin, find the primary admin account (lowest ID)
+		db.Where("type = ?", "admin").Order("id ASC").First(&account)
 
 		if account.Id == 0 {
 			// No admin account found, create error
@@ -609,8 +602,13 @@ func OIDCCallback(c *gin.Context) {
 
 	db.Save(&accessToken)
 
-	// Generate a temporary one-time code (expires in 2 minutes)
-	tempCode := fmt.Sprintf("%x", sha256.Sum256([]byte(fmt.Sprintf("%s_%s_%d", authToken, time.Now().String(), account.Id))))[:32]
+	// Generate a cryptographically secure temporary one-time code (expires in 2 minutes)
+	codeBytes := make([]byte, 16)
+	if _, err := rand.Read(codeBytes); err != nil {
+		c.Redirect(http.StatusTemporaryRedirect, config.OIDC.FrontendURL+"/?error=code_generation_failed")
+		return
+	}
+	tempCode := fmt.Sprintf("%x", codeBytes)
 	codeExpiration := time.Now().Add(2 * time.Minute)
 
 	// Store the code with token and account information
