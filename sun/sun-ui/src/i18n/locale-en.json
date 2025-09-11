@@ -2,7 +2,7 @@
   "en": {
     "login": {
       "welcome": "Welcome to",
-      "insert_username": "Insert you username",
+      "insert_username": "Insert your username",
       "insert_password": "Insert your password",
       "user_error": "Invalid username",
       "password_error": "Invalid password",
