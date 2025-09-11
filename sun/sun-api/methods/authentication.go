@@ -45,6 +45,12 @@ import (
 	"github.com/nethesis/icaro/sun/sun-api/utils"
 )
 
+// Global cleanup context and cancel function
+var (
+	cleanupCtx    context.Context
+	cleanupCancel context.CancelFunc
+)
+
 func Login(c *gin.Context) {
 	var account models.Account
 	var subscription models.Subscription
@@ -243,17 +249,31 @@ func (c *OIDCCodeStore) CleanupExpiredCodes() {
 	}
 }
 
-// Initialize cleanup routine
+// Initialize cleanup routine with graceful shutdown support
 func init() {
+	cleanupCtx, cleanupCancel = context.WithCancel(context.Background())
+
 	go func() {
 		ticker := time.NewTicker(5 * time.Minute)
 		defer ticker.Stop()
 
-		for range ticker.C {
-			stateStore.CleanupExpiredStates()
-			codeStore.CleanupExpiredCodes()
+		for {
+			select {
+			case <-cleanupCtx.Done():
+				return
+			case <-ticker.C:
+				stateStore.CleanupExpiredStates()
+				codeStore.CleanupExpiredCodes()
+			}
 		}
 	}()
+}
+
+// StopCleanupRoutine stops the background cleanup goroutine gracefully
+func StopCleanupRoutine() {
+	if cleanupCancel != nil {
+		cleanupCancel()
+	}
 }
 
 // generateSecureState generates a cryptographically secure random state string
@@ -337,20 +357,7 @@ func mapRoleToIcaro(externalRoles []string, config configuration.Configuration) 
 		return ""
 	}
 
-	// Find the highest priority role mapping - only check authorized roles
-	priorityOrder := []string{"super admin", "admin"}
-
-	for _, priority := range priorityOrder {
-		for _, externalRole := range externalRoles {
-			if strings.EqualFold(externalRole, priority) {
-				if icaroRole, exists := roleMapping[priority]; exists {
-					return icaroRole
-				}
-			}
-		}
-	}
-
-	// Check for any other configured role mappings (only those in config)
+	// Check for role mappings based on configured roles only
 	for _, externalRole := range externalRoles {
 		for configRole, icaroRole := range roleMapping {
 			if strings.EqualFold(externalRole, configRole) {
