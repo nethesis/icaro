@@ -20,6 +20,12 @@ import Devices from "../components/Devices.vue";
 
 Vue.use(Router);
 
+// Error redirect constants
+const ERROR_ROUTES = {
+  EXCHANGE_FAILED: '/?error=exchange_failed',
+  MISSING_CODE: '/?error=missing_code'
+};
+
 const router = new Router({
   routes: [{
       path: "/",
@@ -62,20 +68,21 @@ const router = new Router({
                 // Save to localStorage
                 localStorage.setItem('loggedUser', JSON.stringify(loggedUser));
 
-                // Force page reload to trigger App.vue initialization with new login status
+                // For successful OIDC login, we need a full page reload to reinitialize the app
+                // This is safe because we're redirecting to our own root path after successful auth
                 window.location.href = '/';
               } else {
                 // Exchange failed, redirect to login with error
-                window.location.href = '/?error=exchange_failed';
+                this.$router.push(ERROR_ROUTES.EXCHANGE_FAILED);
               }
             } catch (error) {
               console.error('OIDC code exchange failed:', error);
               // Exchange failed, redirect to login with error
-              window.location.href = '/?error=exchange_failed';
+              this.$router.push(ERROR_ROUTES.EXCHANGE_FAILED);
             }
           } else {
             // No code provided, something went wrong
-            window.location.href = '/?error=missing_code';
+            this.$router.push(ERROR_ROUTES.MISSING_CODE);
           }
         }
       }
