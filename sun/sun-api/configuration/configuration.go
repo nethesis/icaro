@@ -232,6 +232,28 @@ func Init(ConfigFilePtr *string) {
 		Config.Survey.Url = os.Getenv("SURVEY_URL")
 	}
 
+	if os.Getenv("OIDC_ISSUER") != "" {
+		Config.OIDC.Issuer = os.Getenv("OIDC_ISSUER")
+	}
+	if os.Getenv("OIDC_CLIENT_ID") != "" {
+		Config.OIDC.ClientID = os.Getenv("OIDC_CLIENT_ID")
+	}
+	if os.Getenv("OIDC_CLIENT_SECRET") != "" {
+		Config.OIDC.ClientSecret = os.Getenv("OIDC_CLIENT_SECRET")
+	}
+	if os.Getenv("OIDC_REDIRECT_URI") != "" {
+		Config.OIDC.RedirectURI = os.Getenv("OIDC_REDIRECT_URI")
+	}
+	if os.Getenv("OIDC_FRONTEND_URL") != "" {
+		Config.OIDC.FrontendURL = os.Getenv("OIDC_FRONTEND_URL")
+	}
+	if os.Getenv("OIDC_SCOPES") != "" {
+		Config.OIDC.Scopes = strings.Split(os.Getenv("OIDC_SCOPES"), " ")
+	}
+	if os.Getenv("OIDC_ROLE_MAPPING") != "" {
+		Config.OIDC.RoleMapping = strings.Split(os.Getenv("OIDC_ROLE_MAPPING"), " ")
+	}
+
 	Config.CaptivePortal.LogoContents = ""
 	if _, err := os.Stat(Config.CaptivePortal.Logo); err == nil {
 		if data, errRead := ioutil.ReadFile(Config.CaptivePortal.Logo); errRead == nil {
