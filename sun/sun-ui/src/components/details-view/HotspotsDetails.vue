@@ -1793,7 +1793,6 @@ import StorageService from "../../services/storage";
 import UtilService from "../../services/util";
 import DisclaimerService from "../../services/disclaimer";
 
-import jsPDF from "jspdf";
 import CaptivePortal from "../../directives/CaptivePortal.vue";
 import HotspotAction from "../../directives/HotspotAction.vue";
 import PictureInput from "vue-picture-input";
