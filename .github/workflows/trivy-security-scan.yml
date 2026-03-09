@@ -36,7 +36,7 @@ jobs:
 
       - name: Run Trivy vulnerability scanner
         if: github.event_name != 'release' || steps.verify-tag.outputs.valid_tag == 'true'
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@0.35.0
         with:
           scan-type: 'fs'
           format: 'sarif'
@@ -51,7 +51,7 @@ jobs:
 
       - name: Update GitHub Dependency Graph
         if: github.event_name != 'release' || steps.verify-tag.outputs.valid_tag == 'true'
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@0.35.0
         with:
           scan-type: 'fs'
           format: 'github'
@@ -59,7 +59,7 @@ jobs:
 
       - name: Generate CycloneDX SBOM
         if: github.event_name == 'release' && steps.verify-tag.outputs.valid_tag == 'true'
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@0.35.0
         with:
           scan-type: 'fs'
           format: 'cyclonedx'
