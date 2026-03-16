@@ -2,10 +2,22 @@
   "en": {
     "login": {
       "welcome": "Welcome to",
-      "insert_username": "Insert you username",
+      "insert_username": "Insert your username",
       "insert_password": "Insert your password",
       "user_error": "Invalid username",
-      "password_error": "Invalid password"
+      "password_error": "Invalid password",
+      "or": "or",
+      "login_with": "Login with",
+      "copyright": "Copyright",
+      "access_denied": "Access Denied",
+      "unauthorized_role_message": "Your role does not have permission to access this system.",
+      "missing_code_message": "Authentication failed: missing authorization code.",
+      "invalid_state_message": "Authentication failed: invalid security token.",
+      "token_exchange_failed_message": "Authentication failed: unable to exchange tokens.",
+      "account_creation_failed_message": "Authentication failed: unable to create account.",
+      "no_admin_account_found_message": "Authentication failed: admin account not found.",
+      "exchange_failed_message": "Authentication failed: secure token exchange failed.",
+      "generic_oidc_error_message": "Authentication failed: please try again or contact support."
     },
     "dashboard": {
       "preferences": "Preferences",

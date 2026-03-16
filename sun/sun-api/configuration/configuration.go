@@ -53,6 +53,15 @@ type Configuration struct {
 		Origins []string `json:"origins"`
 		Methods []string `json:"methods"`
 	} `json:"cors"`
+	OIDC struct {
+		Issuer       string   `json:"issuer"`
+		ClientID     string   `json:"client_id"`
+		ClientSecret string   `json:"client_secret"`
+		RedirectURI  string   `json:"redirect_uri"`
+		FrontendURL  string   `json:"frontend_url"`
+		Scopes       []string `json:"scopes"`
+		RoleMapping  []string `json:"role_mapping"`
+	} `json:"oidc"`
 	Disclaimers struct {
 		TermsOfUse   string `json:"terms_of_use"`
 		MarketingUse string `json:"marketing_use"`
@@ -221,6 +230,28 @@ func Init(ConfigFilePtr *string) {
 
 	if os.Getenv("SURVEY_URL") != "" {
 		Config.Survey.Url = os.Getenv("SURVEY_URL")
+	}
+
+	if os.Getenv("OIDC_ISSUER") != "" {
+		Config.OIDC.Issuer = os.Getenv("OIDC_ISSUER")
+	}
+	if os.Getenv("OIDC_CLIENT_ID") != "" {
+		Config.OIDC.ClientID = os.Getenv("OIDC_CLIENT_ID")
+	}
+	if os.Getenv("OIDC_CLIENT_SECRET") != "" {
+		Config.OIDC.ClientSecret = os.Getenv("OIDC_CLIENT_SECRET")
+	}
+	if os.Getenv("OIDC_REDIRECT_URI") != "" {
+		Config.OIDC.RedirectURI = os.Getenv("OIDC_REDIRECT_URI")
+	}
+	if os.Getenv("OIDC_FRONTEND_URL") != "" {
+		Config.OIDC.FrontendURL = os.Getenv("OIDC_FRONTEND_URL")
+	}
+	if os.Getenv("OIDC_SCOPES") != "" {
+		Config.OIDC.Scopes = strings.Split(os.Getenv("OIDC_SCOPES"), " ")
+	}
+	if os.Getenv("OIDC_ROLE_MAPPING") != "" {
+		Config.OIDC.RoleMapping = strings.Split(os.Getenv("OIDC_ROLE_MAPPING"), " ")
 	}
 
 	Config.CaptivePortal.LogoContents = ""
