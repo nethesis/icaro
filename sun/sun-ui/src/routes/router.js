@@ -62,7 +62,8 @@ const router = new Router({
                   token: data.token,
                   expires: new Date(parseInt(data.expires) * 1000).toString(),
                   id: parseInt(data.id),
-                  account_type: data.account_type
+                  account_type: data.account_type,
+                  subscription: data.subscription
                 };
 
                 // Save to localStorage

@@ -28,8 +28,11 @@ import (
 	"crypto/rand"
 	"crypto/sha256"
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
+	"net/url"
 	"strings"
 	"sync"
 	"time"
@@ -50,6 +53,33 @@ var (
 	cleanupCtx    context.Context
 	cleanupCancel context.CancelFunc
 )
+
+// Cached OIDC provider: discovery and JWKS are fetched once and reused
+// across logins instead of hitting the identity provider on every request
+var (
+	oidcProviderMu sync.Mutex
+	oidcProvider   *oidc.Provider
+)
+
+// getOIDCProvider returns the cached OIDC provider, initializing it on
+// first use. The provider is created with a background context because it
+// outlives the request that triggered its initialization.
+func getOIDCProvider(issuer string) (*oidc.Provider, error) {
+	oidcProviderMu.Lock()
+	defer oidcProviderMu.Unlock()
+
+	if oidcProvider != nil {
+		return oidcProvider, nil
+	}
+
+	provider, err := oidc.NewProvider(context.Background(), issuer)
+	if err != nil {
+		return nil, err
+	}
+
+	oidcProvider = provider
+	return provider, nil
+}
 
 func Login(c *gin.Context) {
 	var account models.Account
@@ -135,10 +165,22 @@ func Logout(c *gin.Context) {
 	}
 }
 
+// Name of the cookie that binds the OIDC state to the browser that
+// initiated the login flow (prevents login CSRF / session fixation)
+const oidcStateCookieName = "icaro_oidc_state"
+
+// OIDCStateData holds the per-login-attempt secrets generated at /login
+// and needed again at /callback
+type OIDCStateData struct {
+	Expires      time.Time
+	Nonce        string
+	PKCEVerifier string
+}
+
 // OIDCStateStore manages OIDC state tokens with expiration
 type OIDCStateStore struct {
 	mu     sync.RWMutex
-	states map[string]time.Time
+	states map[string]OIDCStateData
 }
 
 // OIDCCodeStore manages temporary codes for secure token exchange
@@ -155,7 +197,7 @@ type OIDCCodeData struct {
 
 // Global state store instance
 var stateStore = &OIDCStateStore{
-	states: make(map[string]time.Time),
+	states: make(map[string]OIDCStateData),
 }
 
 // Global code store instance
@@ -163,32 +205,54 @@ var codeStore = &OIDCCodeStore{
 	codes: make(map[string]OIDCCodeData),
 }
 
-// StoreState stores a state token with expiration time
-func (s *OIDCStateStore) StoreState(state string, expiration time.Time) {
+// maxPendingOIDCStates bounds the memory used by pending login attempts:
+// above this threshold new attempts are rejected until older ones expire
+// (10 minutes) or complete, so spamming /auth/oidc/login cannot grow the
+// store without limit
+const maxPendingOIDCStates = 10000
+
+// StoreState stores a state token with its associated per-attempt data.
+// Returns false if the store is full.
+func (s *OIDCStateStore) StoreState(state string, data OIDCStateData) bool {
 	s.mu.Lock()
 	defer s.mu.Unlock()
-	s.states[state] = expiration
+
+	if len(s.states) >= maxPendingOIDCStates {
+		// purge expired entries before giving up
+		now := time.Now()
+		for st, d := range s.states {
+			if now.After(d.Expires) {
+				delete(s.states, st)
+			}
+		}
+		if len(s.states) >= maxPendingOIDCStates {
+			return false
+		}
+	}
+
+	s.states[state] = data
+	return true
 }
 
 // ValidateAndRemoveState checks if state is valid and removes it
-func (s *OIDCStateStore) ValidateAndRemoveState(state string) bool {
+func (s *OIDCStateStore) ValidateAndRemoveState(state string) (OIDCStateData, bool) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	expiration, exists := s.states[state]
+	data, exists := s.states[state]
 	if !exists {
-		return false
+		return OIDCStateData{}, false
 	}
 
 	// Remove the state regardless of expiration (one-time use)
 	delete(s.states, state)
 
 	// Check if state has expired
-	if time.Now().After(expiration) {
-		return false
+	if time.Now().After(data.Expires) {
+		return OIDCStateData{}, false
 	}
 
-	return true
+	return data, true
 }
 
 // CleanupExpiredStates removes expired states (should be called periodically)
@@ -197,8 +261,8 @@ func (s *OIDCStateStore) CleanupExpiredStates() {
 	defer s.mu.Unlock()
 
 	now := time.Now()
-	for state, expiration := range s.states {
-		if now.After(expiration) {
+	for state, data := range s.states {
+		if now.After(data.Expires) {
 			delete(s.states, state)
 		}
 	}
@@ -276,14 +340,21 @@ func StopCleanupRoutine() {
 	}
 }
 
-// generateSecureState generates a cryptographically secure random state string
-func generateSecureState() (string, error) {
+// generateSecureRandomString generates a cryptographically secure random
+// URL-safe string (used for state, nonce and PKCE verifier)
+func generateSecureRandomString() (string, error) {
 	b := make([]byte, 32)
 	_, err := rand.Read(b)
 	if err != nil {
 		return "", err
 	}
-	return base64.URLEncoding.EncodeToString(b), nil
+	return base64.RawURLEncoding.EncodeToString(b), nil
+}
+
+// pkceChallengeS256 derives the S256 code challenge from a PKCE verifier
+func pkceChallengeS256(verifier string) string {
+	sum := sha256.Sum256([]byte(verifier))
+	return base64.RawURLEncoding.EncodeToString(sum[:])
 }
 
 // createOAuth2Config creates the OAuth2 configuration based on the OIDC config
@@ -307,7 +378,48 @@ func createOAuth2Config(config configuration.Configuration, provider *oidc.Provi
 	}
 }
 
-// extractRolesFromClaims extracts roles from various possible claim fields
+// hasRoleIgnoreCase reports whether the given role appears in roles
+func hasRoleIgnoreCase(roles []string, want string) bool {
+	for _, role := range roles {
+		if strings.EqualFold(role, want) {
+			return true
+		}
+	}
+	return false
+}
+
+// extractOrgIDsWithRole returns the IDs of the organizations where the user
+// holds the given role, from the Logto "organization_roles" claim
+// (entries have the form "<organization_id>:<role_name>")
+func extractOrgIDsWithRole(claims map[string]interface{}, adminRole string) []string {
+	var orgIDs []string
+
+	rolesClaim, ok := claims["organization_roles"].([]interface{})
+	if !ok {
+		return orgIDs
+	}
+
+	for _, entry := range rolesClaim {
+		entryStr, ok := entry.(string)
+		if !ok {
+			continue
+		}
+		idx := strings.LastIndex(entryStr, ":")
+		if idx <= 0 {
+			continue
+		}
+		if strings.EqualFold(entryStr[idx+1:], adminRole) {
+			orgIDs = append(orgIDs, entryStr[:idx])
+		}
+	}
+
+	return orgIDs
+}
+
+// extractRolesFromClaims extracts roles from all possible claim fields.
+// All fields are collected (not just the first non-empty one) so that
+// e.g. Logto organization roles are considered even when the user also
+// has unrelated global roles.
 func extractRolesFromClaims(claims map[string]interface{}) []string {
 	var roles []string
 
@@ -315,53 +427,52 @@ func extractRolesFromClaims(claims map[string]interface{}) []string {
 	roleFields := []string{"roles", "role", "groups", "organizations", "organization_roles"}
 
 	for _, field := range roleFields {
-		if fieldValue, exists := claims[field]; exists {
-			// Handle array of roles
-			if roleSlice, ok := fieldValue.([]interface{}); ok {
-				for _, role := range roleSlice {
-					if roleStr, ok := role.(string); ok {
-						roles = append(roles, roleStr)
-					}
+		fieldValue, exists := claims[field]
+		if !exists {
+			continue
+		}
+		// Handle array of roles
+		if roleSlice, ok := fieldValue.([]interface{}); ok {
+			for _, role := range roleSlice {
+				if roleStr, ok := role.(string); ok {
+					roles = append(roles, roleStr)
 				}
 			}
-			// Handle single role as string
-			if roleStr, ok := fieldValue.(string); ok {
-				roles = append(roles, roleStr)
-			}
 		}
-
-		// If we found roles, stop looking
-		if len(roles) > 0 {
-			break
+		// Handle single role as string
+		if roleStr, ok := fieldValue.(string); ok {
+			roles = append(roles, roleStr)
 		}
 	}
 
 	return roles
 }
 
-// mapRoleToIcaro maps external roles to Icaro roles based on configuration
-// Returns empty string if role is not authorized for OIDC login
+// mapRoleToIcaro maps external roles to Icaro roles based on configuration.
+// Mappings are evaluated in configuration order, so the first mapping wins:
+// list the most privileged roles first (e.g. "super admin:admin" before
+// "admin:reseller"). Returns empty string if no role is authorized.
 func mapRoleToIcaro(externalRoles []string, config configuration.Configuration) string {
-	// Parse role mapping from configuration: "external:internal" format
-	roleMapping := make(map[string]string)
-
-	for _, mapping := range config.OIDC.RoleMapping {
-		parts := strings.Split(mapping, ":")
-		if len(parts) == 2 {
-			roleMapping[strings.TrimSpace(parts[0])] = strings.TrimSpace(parts[1])
-		}
-	}
-
 	// If no role mapping configured, deny access - no default mappings for security
-	if len(roleMapping) == 0 {
-		return ""
-	}
+	for _, mapping := range config.OIDC.RoleMapping {
+		// Parse role mapping from configuration: "external:internal" format
+		parts := strings.Split(mapping, ":")
+		if len(parts) != 2 {
+			continue
+		}
+		configRole := strings.TrimSpace(parts[0])
+		icaroRole := strings.TrimSpace(parts[1])
 
-	// Check for role mappings based on configured roles only
-	for _, externalRole := range externalRoles {
-		for configRole, icaroRole := range roleMapping {
+		for _, externalRole := range externalRoles {
 			if strings.EqualFold(externalRole, configRole) {
 				return icaroRole
+			}
+			// Logto organization roles come as "<organization_id>:<role_name>":
+			// match the role name part as well
+			if idx := strings.LastIndex(externalRole, ":"); idx >= 0 {
+				if strings.EqualFold(externalRole[idx+1:], configRole) {
+					return icaroRole
+				}
 			}
 		}
 	}
@@ -390,6 +501,134 @@ func validateOIDCConfig(config configuration.Configuration) error {
 	return nil
 }
 
+// myResellerResponse mirrors the relevant part of My's GET /resellers/:id
+type myResellerResponse struct {
+	Code int `json:"code"`
+	Data struct {
+		ID          string                 `json:"id"`
+		LogtoID     *string                `json:"logto_id"`
+		Name        string                 `json:"name"`
+		CustomData  map[string]interface{} `json:"custom_data"`
+		SuspendedAt *string                `json:"suspended_at"`
+	} `json:"data"`
+}
+
+// provisionCompanyAccount creates the Icaro company account for a My
+// reseller organization on its first OIDC login. The organization is
+// verified against the My API (must exist as an active reseller) before
+// anything is created. Returns the account, or a frontend error code.
+func provisionCompanyAccount(orgID string) (*models.Account, string) {
+	config := configuration.Config
+
+	if config.OIDC.MyAPIURL == "" || config.OIDC.MyAPIKey == "" || config.OIDC.DefaultSubscriptionPlanID == 0 {
+		// JIT provisioning not configured: only organizations already
+		// linked to an account may log in
+		log.Println("OIDC company login denied: organization", orgID, "not linked and JIT provisioning not configured")
+		return nil, "account_not_found"
+	}
+
+	// Verify the organization on My: GET /resellers/:id looks up by
+	// Logto organization ID and excludes deleted organizations
+	req, err := http.NewRequest("GET", strings.TrimRight(config.OIDC.MyAPIURL, "/")+"/resellers/"+url.PathEscape(orgID), nil)
+	if err != nil {
+		log.Println("OIDC provisioning: request creation failed:", err)
+		return nil, "provisioning_failed"
+	}
+	req.Header.Set("Authorization", "Bearer "+config.OIDC.MyAPIKey)
+
+	client := &http.Client{Timeout: 10 * time.Second}
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Println("OIDC provisioning: My API unreachable:", err)
+		return nil, "provisioning_failed"
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode == http.StatusNotFound {
+		// The organization exists on Logto but is not a reseller on My
+		log.Println("OIDC company login denied: organization", orgID, "is not a reseller on My")
+		return nil, "account_not_found"
+	}
+	if resp.StatusCode != http.StatusOK {
+		log.Println("OIDC provisioning: My API returned status", resp.StatusCode, "for organization", orgID)
+		return nil, "provisioning_failed"
+	}
+
+	var myResp myResellerResponse
+	if err := json.NewDecoder(resp.Body).Decode(&myResp); err != nil {
+		log.Println("OIDC provisioning: invalid My API response:", err)
+		return nil, "provisioning_failed"
+	}
+
+	if myResp.Data.SuspendedAt != nil {
+		log.Println("OIDC company login denied: organization", orgID, "is suspended on My")
+		return nil, "org_suspended"
+	}
+
+	// Organization contact email from custom data, when available
+	orgEmail := ""
+	for _, key := range []string{"email", "contactEmail", "contact_email"} {
+		if v, ok := myResp.Data.CustomData[key].(string); ok && v != "" {
+			orgEmail = v
+			break
+		}
+	}
+
+	name := myResp.Data.Name
+	if name == "" {
+		name = orgID
+	}
+
+	// JIT company accounts are created by the primary admin
+	db := database.Instance()
+	var admin models.Account
+	db.Where("type = ?", "admin").Order("id ASC").First(&admin)
+
+	logtoOrgID := orgID
+	account := models.Account{
+		CreatorId:  admin.Id,
+		Uuid:       orgID, // stable unique identifier for accounts born from My organizations
+		LogtoOrgId: &logtoOrgID,
+		Type:       "reseller",
+		Name:       name,
+		Username:   orgID,
+		Password:   "", // OIDC-only account, no password login
+		Email:      orgEmail,
+		Created:    time.Now().UTC(),
+	}
+	if err := db.Create(&account).Error; err != nil {
+		log.Println("OIDC provisioning: account creation failed for organization", orgID, ":", err)
+		return nil, "account_creation_failed"
+	}
+
+	// Create the subscription with the configured default plan and the
+	// SMS accounting, mirroring the classic account creation
+	var subscriptionPlan models.SubscriptionPlan
+	db.Where("id = ?", config.OIDC.DefaultSubscriptionPlanID).First(&subscriptionPlan)
+	if subscriptionPlan.ID == 0 {
+		log.Println("OIDC provisioning: default subscription plan", config.OIDC.DefaultSubscriptionPlanID, "not found")
+		return nil, "account_creation_failed"
+	}
+
+	subscription := models.Subscription{
+		AccountID:          account.Id,
+		SubscriptionPlanID: subscriptionPlan.ID,
+		ValidFrom:          time.Now().UTC(),
+		ValidUntil:         time.Now().UTC().AddDate(0, 0, subscriptionPlan.Period),
+		Created:            time.Now().UTC(),
+	}
+	db.Save(&subscription)
+
+	accountSMS := models.AccountSmsCount{
+		AccountId:   account.Id,
+		SmsMaxCount: subscriptionPlan.IncludedSMS,
+	}
+	db.Save(&accountSMS)
+
+	log.Println("OIDC provisioning: created company account", account.Id, "for My organization", orgID, "("+name+")")
+	return &account, ""
+}
+
 func GetOIDCConfig(c *gin.Context) {
 	config := configuration.Config
 
@@ -411,33 +650,65 @@ func OIDCLogin(c *gin.Context) {
 
 	// Validate OIDC configuration
 	if err := validateOIDCConfig(config); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"message": "OIDC configuration error", "error": err.Error()})
+		log.Println("OIDC configuration error:", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "OIDC configuration error"})
 		return
 	}
 
-	ctx := context.Background()
-
-	// Always use auto-discovery for endpoints
-	provider, err := oidc.NewProvider(ctx, config.OIDC.Issuer)
+	// Always use auto-discovery for endpoints (cached after first use)
+	provider, err := getOIDCProvider(config.OIDC.Issuer)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to get OIDC provider", "error": err.Error()})
+		log.Println("OIDC provider initialization failed:", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to get OIDC provider"})
 		return
 	}
 
 	oauth2Config := createOAuth2Config(config, provider)
 
-	// Generate secure random state
-	state, err := generateSecureState()
+	// Generate secure random state, nonce and PKCE verifier
+	state, err := generateSecureRandomString()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to generate state", "error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to generate state"})
+		return
+	}
+	nonce, err := generateSecureRandomString()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to generate nonce"})
+		return
+	}
+	pkceVerifier, err := generateSecureRandomString()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to generate PKCE verifier"})
 		return
 	}
 
 	// Store state with expiration (valid for 10 minutes)
-	stateStore.StoreState(state, time.Now().Add(10*time.Minute))
+	stored := stateStore.StoreState(state, OIDCStateData{
+		Expires:      time.Now().Add(10 * time.Minute),
+		Nonce:        nonce,
+		PKCEVerifier: pkceVerifier,
+	})
+	if !stored {
+		log.Println("OIDC state store is full, rejecting login attempt")
+		c.JSON(http.StatusServiceUnavailable, gin.H{"message": "Too many pending login attempts, retry later"})
+		return
+	}
 
-	// Get authorization URL
-	authURL := oauth2Config.AuthCodeURL(state, oauth2.AccessTypeOffline)
+	// Bind the state to this browser with a short-lived HttpOnly cookie:
+	// the callback only accepts a state that matches the cookie, so a state
+	// minted for another browser cannot be replayed (login CSRF protection).
+	// SameSite=Lax cookies are sent on the top-level GET navigation back
+	// from the identity provider.
+	c.SetSameSite(http.SameSiteLaxMode)
+	c.SetCookie(oidcStateCookieName, state, 600, "/", "", strings.HasPrefix(config.OIDC.RedirectURI, "https://"), true)
+
+	// Get authorization URL (with nonce and PKCE challenge)
+	authURL := oauth2Config.AuthCodeURL(
+		state,
+		oauth2.SetAuthURLParam("nonce", nonce),
+		oauth2.SetAuthURLParam("code_challenge", pkceChallengeS256(pkceVerifier)),
+		oauth2.SetAuthURLParam("code_challenge_method", "S256"),
+	)
 
 	// Redirect to authorization URL
 	c.Redirect(http.StatusTemporaryRedirect, authURL)
@@ -449,7 +720,8 @@ func OIDCCallback(c *gin.Context) {
 
 	// Validate OIDC configuration
 	if err := validateOIDCConfig(config); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"message": "OIDC configuration error", "error": err.Error()})
+		log.Println("OIDC configuration error:", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "OIDC configuration error"})
 		return
 	}
 
@@ -467,24 +739,41 @@ func OIDCCallback(c *gin.Context) {
 		return
 	}
 
-	// Validate state
-	if !stateStore.ValidateAndRemoveState(state) {
+	// The state must match the cookie set when this browser started the
+	// flow: a valid state minted for a different browser is rejected
+	// (login CSRF protection)
+	stateCookie, err := c.Cookie(oidcStateCookieName)
+	if err != nil || stateCookie != state {
 		c.Redirect(http.StatusTemporaryRedirect, config.OIDC.FrontendURL+"/?error=invalid_state")
 		return
 	}
 
-	// Initialize OIDC provider
-	provider, err := oidc.NewProvider(ctx, config.OIDC.Issuer)
+	// Clear the state cookie: it is one-time use like the state itself
+	c.SetSameSite(http.SameSiteLaxMode)
+	c.SetCookie(oidcStateCookieName, "", -1, "/", "", strings.HasPrefix(config.OIDC.RedirectURI, "https://"), true)
+
+	// Validate state and retrieve the nonce and PKCE verifier of this attempt
+	stateData, valid := stateStore.ValidateAndRemoveState(state)
+	if !valid {
+		c.Redirect(http.StatusTemporaryRedirect, config.OIDC.FrontendURL+"/?error=invalid_state")
+		return
+	}
+
+	// Initialize OIDC provider (cached after first use)
+	provider, err := getOIDCProvider(config.OIDC.Issuer)
 	if err != nil {
+		log.Println("OIDC provider initialization failed:", err)
 		c.Redirect(http.StatusTemporaryRedirect, config.OIDC.FrontendURL+"/?error=provider_init_failed")
 		return
 	}
 
 	oauth2Config := createOAuth2Config(config, provider)
 
-	// Exchange authorization code for token
-	token, err := oauth2Config.Exchange(ctx, code)
+	// Exchange authorization code for token (PKCE verifier proves this is
+	// the same client that started the flow)
+	token, err := oauth2Config.Exchange(ctx, code, oauth2.SetAuthURLParam("code_verifier", stateData.PKCEVerifier))
 	if err != nil {
+		log.Println("OIDC token exchange failed:", err)
 		c.Redirect(http.StatusTemporaryRedirect, config.OIDC.FrontendURL+"/?error=token_exchange_failed")
 		return
 	}
@@ -505,7 +794,15 @@ func OIDCCallback(c *gin.Context) {
 	// Verify ID token
 	idToken, err := verifier.Verify(ctx, rawIDToken)
 	if err != nil {
+		log.Println("OIDC ID token verification failed:", err)
 		c.Redirect(http.StatusTemporaryRedirect, config.OIDC.FrontendURL+"/?error=token_verification_failed")
+		return
+	}
+
+	// The ID token must carry the nonce generated for this attempt:
+	// binds the token to this login flow and prevents replay
+	if idToken.Nonce != stateData.Nonce {
+		c.Redirect(http.StatusTemporaryRedirect, config.OIDC.FrontendURL+"/?error=invalid_nonce")
 		return
 	}
 
@@ -519,29 +816,17 @@ func OIDCCallback(c *gin.Context) {
 	// Extract user information
 	sub, _ := claims["sub"].(string)
 	email, _ := claims["email"].(string)
-	name, _ := claims["name"].(string)
-
-	if name == "" {
-		name, _ = claims["preferred_username"].(string)
-	}
-	if name == "" {
-		name = email
-	}
 
 	if sub == "" || email == "" {
 		c.Redirect(http.StatusTemporaryRedirect, config.OIDC.FrontendURL+"/?error=missing_user_info")
 		return
 	}
 
-	// Extract and map roles
+	// Extract and map global roles: the only mapping expected here is
+	// "super admin:admin" (My super admins act as the Icaro admin); any
+	// other user logs in as their company via the organization claims
 	roles := extractRolesFromClaims(claims)
 	icaroRole := mapRoleToIcaro(roles, config)
-
-	// Block access if role is not authorized for OIDC login
-	if icaroRole == "" {
-		c.Redirect(http.StatusTemporaryRedirect, config.OIDC.FrontendURL+"/?error=unauthorized_role")
-		return
-	}
 
 	// Handle account mapping based on role
 	db := database.Instance()
@@ -560,43 +845,61 @@ func OIDCCallback(c *gin.Context) {
 		// Use the existing admin account - don't modify it
 		// This allows super admin from Logto to act as the main admin
 	} else {
-		// For non-admin roles, look for existing account by email first, then Logto sub
-		db.Where("email = ?", email).First(&account)
-
-		if account.Id == 0 {
-			// If not found by email, try by Logto sub
-			db.Where("username = ? OR uuid = ?", sub, sub).First(&account)
+		// Company login: on My the global role says what the user may do
+		// ("Admin" of their company) and the organization-role encodes
+		// the organization type ("Reseller"). Both are required; the
+		// organization then maps to the Icaro company account through
+		// accounts.logto_org_id (immutable link, never matched by email)
+		if !hasRoleIgnoreCase(roles, config.OIDC.OrgAdminRole) {
+			log.Printf("OIDC company login denied for %s: missing global role %q (roles=%v)",
+				email, config.OIDC.OrgAdminRole, claims["roles"])
+			c.Redirect(http.StatusTemporaryRedirect, config.OIDC.FrontendURL+"/?error=unauthorized_role")
+			return
 		}
 
-		if account.Id == 0 {
-			// Create new account for non-admin users if none found
-			account = models.Account{
-				Username: sub,
-				Password: "", // No password for OIDC accounts
-				Name:     name,
-				Email:    email,
-				Type:     icaroRole,
-				Uuid:     sub, // Use Logto subject ID as UUID for traceability
-				Created:  time.Now().UTC(),
-			}
+		adminOrgIDs := extractOrgIDsWithRole(claims, config.OIDC.OrgResellerRole)
+		if len(adminOrgIDs) == 0 {
+			log.Printf("OIDC company login denied for %s: no organization with role %q (organization_roles=%v)",
+				email, config.OIDC.OrgResellerRole, claims["organization_roles"])
+			c.Redirect(http.StatusTemporaryRedirect, config.OIDC.FrontendURL+"/?error=unauthorized_role")
+			return
+		}
 
-			// Create the account
-			if err := db.Create(&account).Error; err != nil {
-				c.Redirect(http.StatusTemporaryRedirect, config.OIDC.FrontendURL+"/?error=account_creation_failed")
+		db.Where("logto_org_id IN (?)", adminOrgIDs).First(&account)
+
+		if account.Id == 0 {
+			// First login of this organization: verify on My that it is
+			// an active reseller, then create the linked company account
+			// (the modern equivalent of the old "Get credentials" action)
+			newAccount, errCode := provisionCompanyAccount(adminOrgIDs[0])
+			if errCode != "" {
+				c.Redirect(http.StatusTemporaryRedirect, config.OIDC.FrontendURL+"/?error="+errCode)
 				return
 			}
+			account = *newAccount
 		}
-		// If user exists, do not update - use existing account as is
+
+		// The linked account must be a company (reseller) account
+		if account.Type != "reseller" {
+			c.Redirect(http.StatusTemporaryRedirect, config.OIDC.FrontendURL+"/?error=role_mismatch")
+			return
+		}
 	}
 
-	// Create authorization token for the session
-	h := sha256.New()
-	h.Write([]byte(time.Now().UTC().String() + sub + rawIDToken))
-	authToken := fmt.Sprintf("%x", h.Sum(nil))
+	// Create authorization token for the session (256 random bits, same
+	// length as the sha256-hex tokens issued by the password login)
+	tokenBytes := make([]byte, 32)
+	if _, err := rand.Read(tokenBytes); err != nil {
+		c.Redirect(http.StatusTemporaryRedirect, config.OIDC.FrontendURL+"/?error=code_generation_failed")
+		return
+	}
+	authToken := fmt.Sprintf("%x", tokenBytes)
 
 	// Set expiration date
 	expires := time.Now().UTC().AddDate(0, 0, configuration.Config.TokenExpiresDays)
 
+	// The company account is shared by all org admins: record which My
+	// user actually logged in for auditing
 	accessToken := models.AccessToken{
 		AccountId:   account.Id,
 		Token:       authToken,
@@ -604,7 +907,7 @@ func OIDCCallback(c *gin.Context) {
 		Type:        "oidc",
 		Expires:     expires,
 		ACLs:        "full",
-		Description: "OIDC Login",
+		Description: fmt.Sprintf("OIDC login by %s (%s)", email, sub),
 	}
 
 	db.Save(&accessToken)
@@ -664,11 +967,22 @@ func OIDCExchange(c *gin.Context) {
 		return
 	}
 
+	// Load the subscription like the password login does
+	var subscription models.Subscription
+	db.Set("gorm:auto_preload", true)
+	if account.Type == "reseller" {
+		db.Preload("SubscriptionPlan").Where("account_id = ?", account.Id).First(&subscription)
+	} else {
+		db.Preload("SubscriptionPlan").Where("account_id = ?", account.CreatorId).First(&subscription)
+	}
+	subscription.Expired = subscription.ValidUntil.Before(time.Now().UTC())
+
 	// Return the token information
 	c.JSON(http.StatusOK, gin.H{
 		"token":        codeData.Token,
 		"expires":      accessToken.Expires.Unix(),
 		"id":           account.Id,
 		"account_type": account.Type,
+		"subscription": subscription,
 	})
 }

@@ -111,6 +111,11 @@ icaro.sun_api.email_smtp_password is defined %}
         "redirect_uri": "{{ icaro.sun_api.oidc_redirect_uri | default('http://localhost:8080/api/auth/oidc/callback') }}",
         "frontend_url": "{{ icaro.sun_api.oidc_frontend_url | default('http://localhost:8081') }}",
         "scopes": {{ icaro.sun_api.oidc_scopes | default(['openid', 'profile', 'email', 'roles', 'urn:logto:scope:organizations', 'urn:logto:scope:organization_roles']) | to_json }},
-        "role_mapping": {{ icaro.sun_api.oidc_role_mapping | default(['super admin:admin', 'admin:reseller']) | to_json }}
+        "role_mapping": {{ icaro.sun_api.oidc_role_mapping | default(['super admin:admin']) | to_json }},
+        "org_admin_role": "{{ icaro.sun_api.oidc_org_admin_role | default('Admin') }}",
+        "org_reseller_role": "{{ icaro.sun_api.oidc_org_reseller_role | default('Reseller') }}",
+        "my_api_url": "{{ icaro.sun_api.oidc_my_api_url | default('') }}",
+        "my_api_key": "{{ icaro.sun_api.oidc_my_api_key | default('') }}",
+        "default_subscription_plan_id": {{ icaro.sun_api.oidc_default_subscription_plan_id | default(4) }}
     }
 }

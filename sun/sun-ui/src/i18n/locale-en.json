@@ -14,7 +14,11 @@
       "missing_code_message": "Authentication failed: missing authorization code.",
       "invalid_state_message": "Authentication failed: invalid security token.",
       "token_exchange_failed_message": "Authentication failed: unable to exchange tokens.",
-      "account_creation_failed_message": "Authentication failed: unable to create account.",
+      "email_not_verified_message": "Authentication failed: your email address is not verified.",
+      "account_not_found_message": "Access denied: no account matches your user, contact your administrator.",
+      "role_mismatch_message": "Access denied: your role does not match your account type, contact your administrator.",
+      "org_suspended_message": "Access denied: your organization is suspended, contact your administrator.",
+      "account_creation_failed_message": "Authentication failed: unable to activate your company account, please retry or contact support.",
       "no_admin_account_found_message": "Authentication failed: admin account not found.",
       "exchange_failed_message": "Authentication failed: secure token exchange failed.",
       "generic_oidc_error_message": "Authentication failed: please try again or contact support."

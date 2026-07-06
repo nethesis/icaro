@@ -447,6 +447,13 @@ export default {
       info: {}
     };
 
+    // A denied OIDC login must not silently resume a previous session:
+    // drop the stored session so the error is visible on the login page
+    if (new URLSearchParams(window.location.search).get("error")) {
+      this.delete("loggedUser");
+      user.login = null;
+    }
+
     var errors = {
       username: false,
       password: false
@@ -518,9 +525,19 @@ export default {
         case 'missing_code':
           return this.$t('login.missing_code_message');
         case 'invalid_state':
+        case 'invalid_nonce':
           return this.$t('login.invalid_state_message');
         case 'token_exchange_failed':
           return this.$t('login.token_exchange_failed_message');
+        case 'email_not_verified':
+          return this.$t('login.email_not_verified_message');
+        case 'account_not_found':
+          return this.$t('login.account_not_found_message');
+        case 'role_mismatch':
+          return this.$t('login.role_mismatch_message');
+        case 'org_suspended':
+          return this.$t('login.org_suspended_message');
+        case 'provisioning_failed':
         case 'account_creation_failed':
           return this.$t('login.account_creation_failed_message');
         case 'no_admin_account_found':

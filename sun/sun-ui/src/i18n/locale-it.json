@@ -14,7 +14,11 @@
       "missing_code_message": "Autenticazione fallita: codice di autorizzazione mancante.",
       "invalid_state_message": "Autenticazione fallita: token di sicurezza non valido.",
       "token_exchange_failed_message": "Autenticazione fallita: impossibile scambiare i token.",
-      "account_creation_failed_message": "Autenticazione fallita: impossibile creare l'account.",
+      "email_not_verified_message": "Autenticazione fallita: il tuo indirizzo email non è verificato.",
+      "account_not_found_message": "Accesso negato: nessun account corrisponde al tuo utente, contatta il tuo amministratore.",
+      "role_mismatch_message": "Accesso negato: il tuo ruolo non corrisponde al tipo del tuo account, contatta il tuo amministratore.",
+      "org_suspended_message": "Accesso negato: la tua organizzazione risulta sospesa, contatta il tuo amministratore.",
+      "account_creation_failed_message": "Autenticazione fallita: impossibile attivare l'account della tua azienda, riprova o contatta il supporto.",
       "no_admin_account_found_message": "Autenticazione fallita: account amministratore non trovato.",
       "exchange_failed_message": "Autenticazione fallita: scambio sicuro del token fallito.",
       "generic_oidc_error_message": "Autenticazione fallita: riprova o contatta il supporto."
