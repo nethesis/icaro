@@ -3,6 +3,7 @@ CREATE TABLE `accounts` (
   `id` serial,
   `creator_id` bigint unsigned NOT NULL,
   `uuid` varchar(200),
+  `logto_org_id` varchar(64) DEFAULT NULL,
   `type` varchar(200) NOT NULL,
   `name` varchar(200) NOT NULL,
   `username` varchar (200) NOT NULL,
@@ -17,6 +18,7 @@ CREATE TABLE `accounts` (
   `created` datetime,
   UNIQUE KEY (`username`),
   UNIQUE KEY (`uuid`),
+  UNIQUE KEY (`logto_org_id`),
   KEY(`username`),
   KEY(`uuid`),
   PRIMARY KEY(`id`)

@@ -28,6 +28,7 @@ type Account struct {
 	Id             int       `db:"id" json:"id"`
 	CreatorId      int       `db:"creator_id" json:"creator_id"`
 	Uuid           string    `db:"uuid" json:"uuid"`
+	LogtoOrgId     *string   `db:"logto_org_id" json:"logto_org_id"` // My/Logto organization linked to this company account (nil = classic account)
 	Type           string    `db:"type" json:"type"`
 	Name           string    `db:"name" json:"name"`
 	Username       string    `db:"username" json:"username"`
