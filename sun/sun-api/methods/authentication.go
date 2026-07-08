@@ -175,6 +175,9 @@ type OIDCStateData struct {
 	Expires      time.Time
 	Nonce        string
 	PKCEVerifier string
+	// PairID links this login attempt to a device pairing started via
+	// /auth/oidc/device/start (empty for regular SPA logins)
+	PairID string
 }
 
 // OIDCStateStore manages OIDC state tokens with expiration
@@ -328,6 +331,7 @@ func init() {
 			case <-ticker.C:
 				stateStore.CleanupExpiredStates()
 				codeStore.CleanupExpiredCodes()
+				pairingStore.CleanupExpiredPairings()
 			}
 		}
 	}()
@@ -355,6 +359,19 @@ func generateSecureRandomString() (string, error) {
 func pkceChallengeS256(verifier string) string {
 	sum := sha256.Sum256([]byte(verifier))
 	return base64.RawURLEncoding.EncodeToString(sum[:])
+}
+
+// oidcFail reports a callback failure to the right consumer: the SPA via
+// redirect for regular logins, the polling unit (plus a minimal page in
+// the popup) for device pairing flows
+func oidcFail(c *gin.Context, pairID string, errorCode string) {
+	if pairID != "" {
+		pairingStore.Fail(pairID, errorCode)
+		pairingResultPage(c, false, "Unit not linked",
+			fmt.Sprintf("The unit could not be linked (%s).", errorCode), nil)
+		return
+	}
+	c.Redirect(http.StatusTemporaryRedirect, configuration.Config.OIDC.FrontendURL+"/?error="+errorCode)
 }
 
 // createOAuth2Config creates the OAuth2 configuration based on the OIDC config
@@ -665,6 +682,14 @@ func OIDCLogin(c *gin.Context) {
 
 	oauth2Config := createOAuth2Config(config, provider)
 
+	// Device pairing flow: bind this login attempt to a pending pairing
+	// created via /auth/oidc/device/start
+	pairID := c.Query("pair")
+	if pairID != "" && !pairingStore.IsPending(pairID) {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Unknown or expired pairing request"})
+		return
+	}
+
 	// Generate secure random state, nonce and PKCE verifier
 	state, err := generateSecureRandomString()
 	if err != nil {
@@ -687,6 +712,7 @@ func OIDCLogin(c *gin.Context) {
 		Expires:      time.Now().Add(10 * time.Minute),
 		Nonce:        nonce,
 		PKCEVerifier: pkceVerifier,
+		PairID:       pairID,
 	})
 	if !stored {
 		log.Println("OIDC state store is full, rejecting login attempt")
@@ -763,7 +789,7 @@ func OIDCCallback(c *gin.Context) {
 	provider, err := getOIDCProvider(config.OIDC.Issuer)
 	if err != nil {
 		log.Println("OIDC provider initialization failed:", err)
-		c.Redirect(http.StatusTemporaryRedirect, config.OIDC.FrontendURL+"/?error=provider_init_failed")
+		oidcFail(c, stateData.PairID, "provider_init_failed")
 		return
 	}
 
@@ -774,14 +800,14 @@ func OIDCCallback(c *gin.Context) {
 	token, err := oauth2Config.Exchange(ctx, code, oauth2.SetAuthURLParam("code_verifier", stateData.PKCEVerifier))
 	if err != nil {
 		log.Println("OIDC token exchange failed:", err)
-		c.Redirect(http.StatusTemporaryRedirect, config.OIDC.FrontendURL+"/?error=token_exchange_failed")
+		oidcFail(c, stateData.PairID, "token_exchange_failed")
 		return
 	}
 
 	// Extract and verify ID token
 	rawIDToken, ok := token.Extra("id_token").(string)
 	if !ok {
-		c.Redirect(http.StatusTemporaryRedirect, config.OIDC.FrontendURL+"/?error=no_id_token")
+		oidcFail(c, stateData.PairID, "no_id_token")
 		return
 	}
 
@@ -795,21 +821,21 @@ func OIDCCallback(c *gin.Context) {
 	idToken, err := verifier.Verify(ctx, rawIDToken)
 	if err != nil {
 		log.Println("OIDC ID token verification failed:", err)
-		c.Redirect(http.StatusTemporaryRedirect, config.OIDC.FrontendURL+"/?error=token_verification_failed")
+		oidcFail(c, stateData.PairID, "token_verification_failed")
 		return
 	}
 
 	// The ID token must carry the nonce generated for this attempt:
 	// binds the token to this login flow and prevents replay
 	if idToken.Nonce != stateData.Nonce {
-		c.Redirect(http.StatusTemporaryRedirect, config.OIDC.FrontendURL+"/?error=invalid_nonce")
+		oidcFail(c, stateData.PairID, "invalid_nonce")
 		return
 	}
 
 	// Extract claims
 	var claims map[string]interface{}
 	if err := idToken.Claims(&claims); err != nil {
-		c.Redirect(http.StatusTemporaryRedirect, config.OIDC.FrontendURL+"/?error=claims_extraction_failed")
+		oidcFail(c, stateData.PairID, "claims_extraction_failed")
 		return
 	}
 
@@ -818,7 +844,7 @@ func OIDCCallback(c *gin.Context) {
 	email, _ := claims["email"].(string)
 
 	if sub == "" || email == "" {
-		c.Redirect(http.StatusTemporaryRedirect, config.OIDC.FrontendURL+"/?error=missing_user_info")
+		oidcFail(c, stateData.PairID, "missing_user_info")
 		return
 	}
 
@@ -838,7 +864,7 @@ func OIDCCallback(c *gin.Context) {
 
 		if account.Id == 0 {
 			// No admin account found, create error
-			c.Redirect(http.StatusTemporaryRedirect, config.OIDC.FrontendURL+"/?error=no_admin_account_found")
+			oidcFail(c, stateData.PairID, "no_admin_account_found")
 			return
 		}
 
@@ -853,7 +879,7 @@ func OIDCCallback(c *gin.Context) {
 		if !hasRoleIgnoreCase(roles, config.OIDC.OrgAdminRole) {
 			log.Printf("OIDC company login denied for %s: missing global role %q (roles=%v)",
 				email, config.OIDC.OrgAdminRole, claims["roles"])
-			c.Redirect(http.StatusTemporaryRedirect, config.OIDC.FrontendURL+"/?error=unauthorized_role")
+			oidcFail(c, stateData.PairID, "unauthorized_role")
 			return
 		}
 
@@ -861,7 +887,7 @@ func OIDCCallback(c *gin.Context) {
 		if len(adminOrgIDs) == 0 {
 			log.Printf("OIDC company login denied for %s: no organization with role %q (organization_roles=%v)",
 				email, config.OIDC.OrgResellerRole, claims["organization_roles"])
-			c.Redirect(http.StatusTemporaryRedirect, config.OIDC.FrontendURL+"/?error=unauthorized_role")
+			oidcFail(c, stateData.PairID, "unauthorized_role")
 			return
 		}
 
@@ -873,7 +899,7 @@ func OIDCCallback(c *gin.Context) {
 			// (the modern equivalent of the old "Get credentials" action)
 			newAccount, errCode := provisionCompanyAccount(adminOrgIDs[0])
 			if errCode != "" {
-				c.Redirect(http.StatusTemporaryRedirect, config.OIDC.FrontendURL+"/?error="+errCode)
+				oidcFail(c, stateData.PairID, errCode)
 				return
 			}
 			account = *newAccount
@@ -881,7 +907,7 @@ func OIDCCallback(c *gin.Context) {
 
 		// The linked account must be a company (reseller) account
 		if account.Type != "reseller" {
-			c.Redirect(http.StatusTemporaryRedirect, config.OIDC.FrontendURL+"/?error=role_mismatch")
+			oidcFail(c, stateData.PairID, "role_mismatch")
 			return
 		}
 	}
@@ -890,7 +916,7 @@ func OIDCCallback(c *gin.Context) {
 	// length as the sha256-hex tokens issued by the password login)
 	tokenBytes := make([]byte, 32)
 	if _, err := rand.Read(tokenBytes); err != nil {
-		c.Redirect(http.StatusTemporaryRedirect, config.OIDC.FrontendURL+"/?error=code_generation_failed")
+		oidcFail(c, stateData.PairID, "code_generation_failed")
 		return
 	}
 	authToken := fmt.Sprintf("%x", tokenBytes)
@@ -899,7 +925,15 @@ func OIDCCallback(c *gin.Context) {
 	expires := time.Now().UTC().AddDate(0, 0, configuration.Config.TokenExpiresDays)
 
 	// The company account is shared by all org admins: record which My
-	// user actually logged in for auditing
+	// user actually logged in for auditing; device pairings also record
+	// which unit holds the token, so it can be told apart from browser
+	// sessions and revoked selectively
+	description := fmt.Sprintf("OIDC login by %s (%s)", email, sub)
+	if stateData.PairID != "" {
+		description = fmt.Sprintf("OIDC device pairing by %s (%s), unit: %s",
+			email, sub, pairingStore.PendingUnitName(stateData.PairID))
+	}
+
 	accessToken := models.AccessToken{
 		AccountId:   account.Id,
 		Token:       authToken,
@@ -907,15 +941,38 @@ func OIDCCallback(c *gin.Context) {
 		Type:        "oidc",
 		Expires:     expires,
 		ACLs:        "full",
-		Description: fmt.Sprintf("OIDC login by %s (%s)", email, sub),
+		Description: description,
 	}
 
 	db.Save(&accessToken)
 
+	// Device pairing flow: hand the token to the unit that started the
+	// pairing (picked up via /auth/oidc/device/poll) instead of the SPA;
+	// the popup only tells the user the window can be closed, the outcome
+	// summary lives in the unit UI
+	if stateData.PairID != "" {
+		unitName, ok := pairingStore.Complete(stateData.PairID, authToken, expires, account.Id, account.Name, email)
+		if !ok {
+			// the pairing expired while the user was logging in: nobody
+			// can ever pick this token up, drop it
+			db.Delete(&accessToken)
+			pairingResultPage(c, false, "Pairing expired",
+				"The pairing request expired, restart it from your unit.", nil)
+			return
+		}
+		pairingResultPage(c, true, "Unit linked",
+			"The unit has been authenticated on the hotspot manager.", []pairingDetail{
+				{Label: "Account", Value: account.Name},
+				{Label: "Logged in as", Value: email},
+				{Label: "Unit", Value: unitName},
+			})
+		return
+	}
+
 	// Generate a cryptographically secure temporary one-time code (expires in 2 minutes)
 	codeBytes := make([]byte, 16)
 	if _, err := rand.Read(codeBytes); err != nil {
-		c.Redirect(http.StatusTemporaryRedirect, config.OIDC.FrontendURL+"/?error=code_generation_failed")
+		oidcFail(c, stateData.PairID, "code_generation_failed")
 		return
 	}
 	tempCode := fmt.Sprintf("%x", codeBytes)

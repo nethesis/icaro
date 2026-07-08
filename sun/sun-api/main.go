@@ -54,6 +54,8 @@ func DefineAPI(router *gin.Engine) {
 	api.GET("/auth/oidc/login", methods.OIDCLogin)
 	api.GET("/auth/oidc/callback", methods.OIDCCallback)
 	api.POST("/auth/oidc/exchange", methods.OIDCExchange)
+	api.POST("/auth/oidc/device/start", methods.OIDCDeviceStart)
+	api.POST("/auth/oidc/device/poll", methods.OIDCDevicePoll)
 
 	api.Use(middleware.AAWall)
 	{
