@@ -532,28 +532,31 @@ a {
   z-index: 1;
 }
 
+/* Outlined button matching the NethSecurity UI secondary style */
 .btn-nethesis {
-  background: #0087db !important;
-  border: none !important;
-  color: white !important;
+  background: #ffffff !important;
+  border: 1px solid #d1d5db !important;
+  color: #0e7490 !important;
+  font-weight: 600 !important;
   transition: all 0.3s ease !important;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
   border-radius: 4px !important;
 }
 
 .btn-nethesis:hover,
 .btn-nethesis:focus {
-  background: #0fa3ff !important;
-  color: white;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  transform: translateY(-1px);
+  background: #f9fafb !important;
+  color: #155e75 !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .btn-nethesis:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  background: #f3f4f6 !important;
 }
 
-.btn-nethesis i {
+.btn-nethesis-icon {
+  width: 20px;
+  height: 20px;
   margin-right: 8px;
+  vertical-align: -5px;
 }

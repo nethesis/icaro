@@ -71,7 +71,7 @@
                     <div class="login-separator">
                     </div>
                     <button type="button" class="btn btn-nethesis btn-lg btn-block" v-on:click="doOIDCLogin()" tabindex="5">
-                      <i class="fa fa-cloud"></i>
+                      <img src="/static/my-nethesis.svg" class="btn-nethesis-icon" alt="" aria-hidden="true">
                       {{ $t("login.login_with") }} {{oidcConfig.provider_name || 'My Nethesis'}}
                     </button>
                   </div>

@@ -355,6 +355,9 @@ func pairingResultPage(c *gin.Context, success bool, title string, message strin
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>%s</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
     --gray-50: #f9fafb; --gray-100: #f3f4f6; --gray-200: #e5e7eb; --gray-400: #9ca3af;
@@ -364,13 +367,13 @@ func pairingResultPage(c *gin.Context, success bool, title string, message strin
   }
   * { box-sizing: border-box; }
   body {
-    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-family: "Poppins", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     display: flex; align-items: center; justify-content: center; min-height: 100vh;
     margin: 0; padding: 1.5rem; background: var(--gray-50); color: var(--gray-700);
   }
   .card {
     background: #fff; border: 1px solid var(--gray-200); border-radius: .5rem;
-    padding: 2rem; width: 100%%; max-width: 26rem;
+    padding: 2rem 2.5rem; width: 100%%; max-width: 34rem;
     box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
     text-align: center;
   }
@@ -378,22 +381,19 @@ func pairingResultPage(c *gin.Context, success bool, title string, message strin
   .icon.ok { color: var(--green-600); }
   .icon.err { color: var(--red-600); }
   h1 { font-size: 1.125rem; font-weight: 600; color: var(--gray-900); margin: 0 0 .5rem; }
-  .message { font-size: .875rem; color: var(--gray-500); margin: 0 0 1.25rem; }
-  .details {
-    text-align: left; border: 1px solid var(--gray-200); border-radius: .375rem;
-    divide-color: var(--gray-200); margin-bottom: 1.25rem; font-size: .875rem;
-  }
-  .row { display: flex; justify-content: space-between; gap: 1rem; padding: .625rem .875rem; }
+  .message { font-size: .875rem; font-weight: 400; color: var(--gray-500); margin: 0 0 1.25rem; }
+  .details { text-align: left; margin-bottom: 1.25rem; font-size: .875rem; }
+  .row { display: flex; justify-content: space-between; gap: 1rem; padding: .75rem 0; }
   .row + .row { border-top: 1px solid var(--gray-200); }
   .label { color: var(--gray-500); white-space: nowrap; }
   .value { color: var(--gray-900); font-weight: 500; overflow-wrap: anywhere; text-align: right; }
-  .hint { font-size: .875rem; color: var(--gray-500); margin: 0; }
+  .hint { font-size: .875rem; font-weight: 400; color: var(--gray-500); margin: 0; }
   @media (prefers-color-scheme: dark) {
     body { background: var(--gray-950); color: var(--gray-200); }
     .card { background: var(--gray-900); border-color: var(--gray-700); }
     h1 { color: var(--gray-50); }
     .message, .hint, .label { color: var(--gray-400); }
-    .details, .row + .row { border-color: var(--gray-700); }
+    .row + .row { border-color: var(--gray-700); }
     .value { color: var(--gray-50); }
     .icon.ok { color: var(--green-500); }
     .icon.err { color: var(--red-500); }
