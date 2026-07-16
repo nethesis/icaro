@@ -72,6 +72,9 @@ type Configuration struct {
 		MyAPIURL                  string `json:"my_api_url"`
 		MyAPIKey                  string `json:"my_api_key"`
 		DefaultSubscriptionPlanID int    `json:"default_subscription_plan_id"`
+		// Audience expected on the ID token presented to /api/userinfo
+		// (My's own Logto app id); empty = audience check disabled
+		UserinfoAudience string `json:"userinfo_audience"`
 	} `json:"oidc"`
 	Disclaimers struct {
 		TermsOfUse   string `json:"terms_of_use"`
@@ -279,6 +282,9 @@ func Init(ConfigFilePtr *string) {
 	}
 	if os.Getenv("OIDC_ORG_RESELLER_ROLE") != "" {
 		Config.OIDC.OrgResellerRole = os.Getenv("OIDC_ORG_RESELLER_ROLE")
+	}
+	if os.Getenv("OIDC_USERINFO_AUDIENCE") != "" {
+		Config.OIDC.UserinfoAudience = os.Getenv("OIDC_USERINFO_AUDIENCE")
 	}
 	if os.Getenv("OIDC_MY_API_URL") != "" {
 		Config.OIDC.MyAPIURL = os.Getenv("OIDC_MY_API_URL")
