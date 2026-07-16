@@ -75,6 +75,12 @@ type Configuration struct {
 		// Audience expected on the ID token presented to /api/userinfo
 		// (My's own Logto app id); empty = audience check disabled
 		UserinfoAudience string `json:"userinfo_audience"`
+		// Whether the "Login with My Nethesis" button is shown on the
+		// Sun login page. When false the OIDC endpoints stay fully
+		// functional (so the entry from the My dashboard keeps working),
+		// only the button is hidden — used for a soft launch where the
+		// flow is reachable from My but not advertised on Sun itself.
+		ShowLoginButton *bool `json:"show_login_button"`
 	} `json:"oidc"`
 	Disclaimers struct {
 		TermsOfUse   string `json:"terms_of_use"`
@@ -285,6 +291,10 @@ func Init(ConfigFilePtr *string) {
 	}
 	if os.Getenv("OIDC_USERINFO_AUDIENCE") != "" {
 		Config.OIDC.UserinfoAudience = os.Getenv("OIDC_USERINFO_AUDIENCE")
+	}
+	if os.Getenv("OIDC_SHOW_LOGIN_BUTTON") != "" {
+		showButton, _ := strconv.ParseBool(os.Getenv("OIDC_SHOW_LOGIN_BUTTON"))
+		Config.OIDC.ShowLoginButton = &showButton
 	}
 	if os.Getenv("OIDC_MY_API_URL") != "" {
 		Config.OIDC.MyAPIURL = os.Getenv("OIDC_MY_API_URL")

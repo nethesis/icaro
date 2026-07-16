@@ -649,13 +649,22 @@ func provisionCompanyAccount(orgID string) (*models.Account, string) {
 func GetOIDCConfig(c *gin.Context) {
 	config := configuration.Config
 
+	enabled := config.OIDC.Issuer != "" && config.OIDC.ClientID != ""
+
+	// The button is shown only when OIDC works and it is not explicitly
+	// hidden. Hiding it (show_login_button=false) keeps the OIDC endpoints
+	// live for the entry from the My dashboard while removing the button
+	// from the Sun login page (soft launch).
+	showButton := enabled && (config.OIDC.ShowLoginButton == nil || *config.OIDC.ShowLoginButton)
+
 	// Return only public configuration information
 	response := gin.H{
-		"enabled": config.OIDC.Issuer != "" && config.OIDC.ClientID != "",
+		"enabled":      enabled,
+		"login_button": showButton,
 	}
 
 	// Only add provider name if OIDC is properly configured
-	if config.OIDC.Issuer != "" && config.OIDC.ClientID != "" {
+	if enabled {
 		response["provider_name"] = "My Nethesis"
 	}
 
