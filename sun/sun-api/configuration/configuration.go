@@ -75,6 +75,10 @@ type Configuration struct {
 		// Audience expected on the ID token presented to /api/userinfo
 		// (My's own Logto app id); empty = audience check disabled
 		UserinfoAudience string `json:"userinfo_audience"`
+		// Browser origins allowed to call /api/userinfo cross-origin (the
+		// My dashboard, per environment). Separate from the Sun frontend
+		// CORS above: only /api/userinfo honors these.
+		UserinfoOrigins []string `json:"userinfo_origins"`
 		// Whether the "Login with My Nethesis" button is shown on the
 		// Sun login page. When false the OIDC endpoints stay fully
 		// functional (so the entry from the My dashboard keeps working),
@@ -291,6 +295,12 @@ func Init(ConfigFilePtr *string) {
 	}
 	if os.Getenv("OIDC_USERINFO_AUDIENCE") != "" {
 		Config.OIDC.UserinfoAudience = os.Getenv("OIDC_USERINFO_AUDIENCE")
+	}
+	if os.Getenv("OIDC_USERINFO_ORIGINS") != "" {
+		// space or comma separated list of allowed My dashboard origins
+		Config.OIDC.UserinfoOrigins = strings.FieldsFunc(os.Getenv("OIDC_USERINFO_ORIGINS"), func(r rune) bool {
+			return r == ' ' || r == ','
+		})
 	}
 	if os.Getenv("OIDC_SHOW_LOGIN_BUTTON") != "" {
 		showButton, _ := strconv.ParseBool(os.Getenv("OIDC_SHOW_LOGIN_BUTTON"))
