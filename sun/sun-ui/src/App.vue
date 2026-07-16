@@ -66,7 +66,7 @@
                 </div>
 
                 <!-- Separator and OIDC Login -->
-                <div v-if="oidcConfig && oidcConfig.enabled" class="form-group oidc-login-section">
+                <div v-if="oidcConfig && oidcConfig.login_button" class="form-group oidc-login-section">
                   <div class="col-sm-offset-2 col-sm-10 col-md-offset-2 col-md-10">
                     <div class="login-separator">
                     </div>
