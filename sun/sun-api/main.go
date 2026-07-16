@@ -36,12 +36,41 @@ import (
 )
 
 func DefineAPI(router *gin.Engine) {
-	// cors
+	// Global CORS for the Sun frontend talking to its own API
 	corsConf := cors.DefaultConfig()
 	corsConf.AllowOrigins = configuration.Config.Cors.Origins
 	corsConf.AllowHeaders = configuration.Config.Cors.Headers
 	corsConf.AllowMethods = configuration.Config.Cors.Methods
-	router.Use(cors.New(corsConf))
+	globalCORS := cors.New(corsConf)
+
+	// /api/userinfo is called cross-origin by the My dashboard widget with
+	// its own allowlist (the My origins per environment), distinct from the
+	// Sun frontend CORS above. Handle it here — reflecting the matched
+	// origin, answering the OPTIONS preflight with 204 — so the global
+	// middleware never rejects those origins. The Bearer token check in the
+	// handler is unchanged: CORS is additive, not a substitute for auth.
+	userinfoOrigins := configuration.Config.OIDC.UserinfoOrigins
+	router.Use(func(c *gin.Context) {
+		if c.Request.URL.Path != "/api/userinfo" {
+			globalCORS(c)
+			return
+		}
+		origin := c.GetHeader("Origin")
+		for _, allowed := range userinfoOrigins {
+			if origin != "" && origin == allowed {
+				c.Header("Access-Control-Allow-Origin", origin)
+				c.Header("Vary", "Origin")
+				c.Header("Access-Control-Allow-Headers", "Authorization, Content-Type")
+				c.Header("Access-Control-Allow-Methods", "GET, OPTIONS")
+				break
+			}
+		}
+		if c.Request.Method == http.MethodOptions {
+			c.AbortWithStatus(http.StatusNoContent)
+			return
+		}
+		c.Next()
+	})
 
 	health := router.Group("/health")
 	health.GET("/check", methods.HealthCheck)

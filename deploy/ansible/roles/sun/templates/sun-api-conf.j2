@@ -118,6 +118,7 @@ icaro.sun_api.email_smtp_password is defined %}
         "my_api_key": "{{ icaro.sun_api.oidc_my_api_key | default('') }}",
         "default_subscription_plan_id": {{ icaro.sun_api.oidc_default_subscription_plan_id | default(4) }},
         "userinfo_audience": "{{ icaro.sun_api.oidc_userinfo_audience | default('') }}",
+        "userinfo_origins": {{ icaro.sun_api.oidc_userinfo_origins | default(['https://my.nethesis.it', 'https://beta.my.nethesis.it']) | to_json }},
         "show_login_button": {{ icaro.sun_api.oidc_show_login_button | default(true) | lower }}
     }
 }
