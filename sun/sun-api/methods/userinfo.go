@@ -35,15 +35,12 @@ import (
 	"github.com/nethesis/icaro/sun/sun-api/models"
 )
 
-// emptyUserInfo answers 200 with an empty widget: for the My dashboard a
-// missing/invalid/unlinked identity simply means "nothing to show", and a
-// non-2xx status would surface an error banner in the UI
-func emptyUserInfo(c *gin.Context, msg string) {
-	c.JSON(http.StatusOK, gin.H{
-		"status": "empty",
-		"msg":    msg,
-		"widget": gin.H{"items": []gin.H{}},
-	})
+// errUserInfo answers with a machine-readable error code and no prose: the
+// response is data-only and language-neutral, so the consumer (the My
+// dashboard) maps the code to a localized message. The widget is a
+// nice-to-have and the frontend stays silent on non-2xx.
+func errUserInfo(c *gin.Context, status int, code string) {
+	c.JSON(status, gin.H{"error": code})
 }
 
 // UserInfo returns aggregate statistics for the company (reseller) of the
@@ -51,25 +48,28 @@ func emptyUserInfo(c *gin.Context, msg string) {
 // the user's Logto ID token as bearer: the token is verified against the
 // same issuer used for the OIDC login, and the company is resolved through
 // the organization claims exactly like the login flow (never by email).
+//
+// The response is data-only (raw counters + a link): the consumer composes
+// its own widget from these, so there are no prebuilt labels/strings here.
 func UserInfo(c *gin.Context) {
 	config := configuration.Config
 
 	if config.OIDC.Issuer == "" {
-		emptyUserInfo(c, "OIDC not configured")
+		errUserInfo(c, http.StatusInternalServerError, "oidc_not_configured")
 		return
 	}
 
 	// Bearer token from the Authorization header
 	authParts := strings.SplitN(c.GetHeader("Authorization"), " ", 2)
 	if len(authParts) != 2 || !strings.EqualFold(authParts[0], "Bearer") {
-		emptyUserInfo(c, "Missing or invalid authorization header")
+		errUserInfo(c, http.StatusUnauthorized, "invalid_authorization")
 		return
 	}
 
 	provider, err := getOIDCProvider(config.OIDC.Issuer)
 	if err != nil {
 		log.Println("userinfo: OIDC provider initialization failed:", err)
-		emptyUserInfo(c, "Cannot retrieve OIDC provider")
+		errUserInfo(c, http.StatusInternalServerError, "oidc_provider_unavailable")
 		return
 	}
 
@@ -79,7 +79,7 @@ func UserInfo(c *gin.Context) {
 	idToken, err := verifier.Verify(c.Request.Context(), authParts[1])
 	if err != nil {
 		log.Println("userinfo denied: invalid token:", err)
-		emptyUserInfo(c, "Invalid token")
+		errUserInfo(c, http.StatusUnauthorized, "invalid_token")
 		return
 	}
 
@@ -93,14 +93,14 @@ func UserInfo(c *gin.Context) {
 		}
 		if !audOk {
 			log.Println("userinfo denied: audience mismatch:", idToken.Audience)
-			emptyUserInfo(c, "Invalid token: audience mismatch")
+			errUserInfo(c, http.StatusUnauthorized, "invalid_audience")
 			return
 		}
 	}
 
 	var claims map[string]interface{}
 	if err := idToken.Claims(&claims); err != nil {
-		emptyUserInfo(c, "Invalid token: claims extraction failed")
+		errUserInfo(c, http.StatusUnauthorized, "invalid_token")
 		return
 	}
 
@@ -110,7 +110,7 @@ func UserInfo(c *gin.Context) {
 	if len(orgIDs) == 0 {
 		log.Printf("userinfo denied for %v: no organization with role %q (organization_roles=%v)",
 			claims["email"], config.OIDC.OrgResellerRole, claims["organization_roles"])
-		emptyUserInfo(c, "No reseller organization in token")
+		errUserInfo(c, http.StatusForbidden, "no_reseller_organization")
 		return
 	}
 
@@ -119,7 +119,7 @@ func UserInfo(c *gin.Context) {
 	db.Where("logto_org_id IN (?)", orgIDs).First(&account)
 	if account.Id == 0 || account.Type != "reseller" {
 		log.Printf("userinfo denied for %v: no company account linked to organizations %v", claims["email"], orgIDs)
-		emptyUserInfo(c, "No company account linked to the organization")
+		errUserInfo(c, http.StatusNotFound, "company_not_found")
 		return
 	}
 
@@ -148,32 +148,12 @@ func UserInfo(c *gin.Context) {
 		smsRemaining = 0
 	}
 
-	// SMS tone: warn the reseller when the remaining quota gets thin
-	smsTone := "neutral"
-	if sms.SmsMaxCount > 0 {
-		switch {
-		case smsRemaining*100 <= sms.SmsMaxCount*10:
-			smsTone = "danger"
-		case smsRemaining*100 <= sms.SmsMaxCount*25:
-			smsTone = "warning"
-		}
-	}
-
-	// Generic widget contract consumed by the My dashboard: My renders
-	// `widget.items` without knowing anything about NethSpot
+	// Data-only response: raw counters + a link to the NethSpot frontend. The
+	// consumer builds its own widget (labels/tones/per-row links) from these;
+	// no prebuilt strings live here.
 	base := strings.TrimRight(config.OIDC.FrontendURL, "/")
-	widgetItems := []gin.H{
-		{"label": "Hotspot", "value": hotspots, "tone": "neutral", "link": base + "/#/hotspots"},
-		{"label": "Unit", "value": units, "tone": "neutral", "link": base + "/#/units"},
-		{"label": "Utenti", "value": guests, "tone": "neutral", "link": base + "/#/users"},
-		{"label": "SMS residui", "value": smsRemaining, "tone": smsTone, "link": base + "/"},
-	}
-
 	c.JSON(http.StatusOK, gin.H{
-		"status":  "ok",
-		"msg":     "Company " + account.Name + " authenticated",
-		"company": account.Name,
-		// Raw counters, for consumers that want to build their own view
+		"company":  account.Name,
 		"hotspots": hotspots,
 		"units":    units,
 		"users":    guests,
@@ -185,9 +165,6 @@ func UserInfo(c *gin.Context) {
 			"max":       sms.SmsMaxCount,
 			"remaining": smsRemaining,
 		},
-		// Generic contract rendered by the My dashboard
-		"widget": gin.H{
-			"items": widgetItems,
-		},
+		"link": base + "/",
 	})
 }
