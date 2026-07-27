@@ -82,13 +82,13 @@ func Init(action string, worker bool) {
 func cleanUsers() {
 	db := database.Instance()
 
-	db.Where("valid_until != 0 AND valid_until < ?", time.Now().AddDate(0, -24, 0).UTC()).Delete(models.User{})        // delete older than 24 months
-	db.Where("valid_until != 0 AND valid_until < ?", time.Now().AddDate(0, -24, 0).UTC()).Delete(models.UserHistory{}) // delete older than 24 months
+	db.Where("valid_until != 0 AND valid_until < ?", time.Now().AddDate(0, -12, 0).UTC()).Delete(models.User{})        // delete older than 12 months
+	db.Where("valid_until != 0 AND valid_until < ?", time.Now().AddDate(0, -12, 0).UTC()).Delete(models.UserHistory{}) // delete older than 12 months
 }
 
 func cleanAuths() {
 	db := database.Instance()
-	db.Where("updated < ?", time.Now().Add(-1 * time.Hour).UTC()).Delete(models.DaemonAuth{})
+	db.Where("updated < ?", time.Now().Add(-1*time.Hour).UTC()).Delete(models.DaemonAuth{})
 }
 
 func cleanTokens() {
