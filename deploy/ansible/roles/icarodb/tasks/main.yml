@@ -1,98 +1,128 @@
 ---
 - name: Install mariadb server
-  yum:
+  ansible.builtin.dnf:
     name: mariadb-server
     state: present
 
 - name: Install ansible dependencies
-  yum:
-    name: MySQL-python
+  ansible.builtin.dnf:
+    name: python3-PyMySQL
     state: present
 
 - name: Enable and start mariadb server
-  service:
+  ansible.builtin.service:
     name: mariadb
     state: started
-    enabled: yes
+    enabled: true
 
 - name: Create a new database with name 'icaro'
-  mysql_db:
+  community.mysql.mysql_db:
     name: icaro
     state: present
+    login_unix_socket: /var/lib/mysql/mysql.sock
 
 - name: Copy icaro.sql to host
-  copy:
+  ansible.builtin.copy:
     src: icaro.sql
     dest: /tmp/icaro.sql
 
 - name: Import Icaro scheme
-  mysql_db:
+  community.mysql.mysql_db:
     name: icaro
     state: import
     target: /tmp/icaro.sql
+    login_unix_socket: /var/lib/mysql/mysql.sock
 
 - name: Create Sun-Api's user
-  mysql_user:
+  community.mysql.mysql_user:
     name: "{{ icaro.sun_api.db_username }}"
     password: "{{ icaro.sun_api.db_password }}"
     priv: "icaro.*:INSERT,SELECT,UPDATE,DELETE"
     host: "%"
     state: present
+    login_unix_socket: /var/lib/mysql/mysql.sock
 
 - name: Create Wax's user
-  mysql_user:
+  community.mysql.mysql_user:
     name: "{{ icaro.wax.db_username }}"
     password: "{{ icaro.wax.db_password }}"
     priv: "icaro.*:INSERT,SELECT,UPDATE,DELETE"
     host: "%"
     state: present
+    login_unix_socket: /var/lib/mysql/mysql.sock
 
 - name: Create Ade-Api's user
-  mysql_user:
+  community.mysql.mysql_user:
     name: "{{ icaro.ade_api.db_username }}"
     password: "{{ icaro.ade_api.db_password }}"
     priv: "icaro.*:INSERT,SELECT,UPDATE,DELETE"
     host: "%"
     state: present
+    login_unix_socket: /var/lib/mysql/mysql.sock
 
 - name: Create Ade-Tasks's user
-  mysql_user:
+  community.mysql.mysql_user:
     name: "{{ icaro.ade_tasks.db_username }}"
     password: "{{ icaro.ade_tasks.db_password }}"
     priv: "icaro.*:INSERT,SELECT,UPDATE,DELETE"
     host: "%"
     state: present
+    login_unix_socket: /var/lib/mysql/mysql.sock
 
-- stat:
-    path: /root/.my.cnf
-  register: mariadb_pass
+- name: Remove anonymous MariaDB users
+  community.mysql.mysql_user:
+    name: ""
+    host_all: true
+    state: absent
+    login_unix_socket: /var/lib/mysql/mysql.sock
 
-- name: Hardening mariadb installation
-  shell: |
-    mysql_secure_installation <<EOF
+- name: Collect MariaDB users
+  community.mysql.mysql_info:
+    filter:
+      - users_info
+    login_unix_socket: /var/lib/mysql/mysql.sock
+  register: mariadb_users
 
-    y
-    {{ icaro.db_root_password }}
-    {{ icaro.db_root_password }}
-    y
-    y
-    y
-    y
-    EOF
-  when: mariadb_pass.stat.exists == False
+- name: Remove remote MariaDB root users
+  community.mysql.mysql_user:
+    name: root
+    host: "{{ item.host }}"
+    state: absent
+    login_unix_socket: /var/lib/mysql/mysql.sock
+  loop: "{{ mariadb_users.users_info }}"
+  loop_control:
+    label: "root@{{ item.host }}"
+  when:
+    - item.name == "root"
+    - item.host not in ["localhost", "127.0.0.1", "::1"]
+
+- name: Remove the MariaDB test database
+  community.mysql.mysql_db:
+    name: test
+    state: absent
+    login_unix_socket: /var/lib/mysql/mysql.sock
+
+- name: Set the MariaDB root password
+  community.mysql.mysql_user:
+    name: root
+    host: localhost
+    password: "{{ icaro.db_root_password }}"
+    check_implicit_admin: true
+    login_user: root
+    login_password: "{{ icaro.db_root_password }}"
+    login_unix_socket: /var/lib/mysql/mysql.sock
 
 - name: Copy mysql conf file
-  template:
+  ansible.builtin.template:
     src: my.cnf.j2
     dest: /root/.my.cnf
 
 - name: Remove ansible dependencies
-  yum:
-    name: MySQL-python
+  ansible.builtin.dnf:
+    name: python3-PyMySQL
     state: absent
 
 - name: Remove temp files
-  file:
-    path:
-      - /tmp/icaro.sql
+  ansible.builtin.file:
+    path: /tmp/icaro.sql
     state: absent
