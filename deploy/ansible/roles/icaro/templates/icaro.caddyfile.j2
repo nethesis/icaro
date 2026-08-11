@@ -1,0 +1,74 @@
+https://{$ICARO_HOSTNAME} {
+	encode gzip
+{% if icaro.tls is defined and icaro.tls == "self_signed" %}
+	tls internal
+{% elif icaro.tls is defined and icaro.tls == "manual" %}
+	tls /opt/icaro/{$ICARO_HOSTNAME}_cert.pem /opt/icaro/{$ICARO_HOSTNAME}_private_key.pem
+{% endif %}
+	log {
+		output stdout
+	}
+
+	@wings path /wings /wings/*
+	handle @wings {
+		redir http://{host}{uri} permanent
+	}
+
+	@api path /api /api/*
+	handle @api {
+		reverse_proxy {$SUN_API_ORIGIN}
+	}
+
+	@wax path /wax /wax/*
+	handle @wax {
+		reverse_proxy {$WAX_ORIGIN}
+	}
+
+	@ade path /ade /ade/*
+	handle @ade {
+		reverse_proxy {$ADE_API_ORIGIN}
+	}
+
+	@survey path /survey /survey/*
+	handle @survey {
+		uri strip_prefix /survey
+		root * /opt/icaro/ade-ui
+		file_server
+	}
+
+	handle {
+		root * /opt/icaro/sun-ui
+		file_server
+	}
+}
+
+http://{$ICARO_HOSTNAME} {
+	log {
+		output stdout
+	}
+
+	@wings path /wings /wings/*
+	handle @wings {
+		uri strip_prefix /wings
+		root * /opt/icaro/wings
+{% if icaro.origin_trial_token is defined %}
+		header Origin-Trial "{{ icaro.origin_trial_token }}"
+{% endif %}
+		@static path /static/*
+		handle @static {
+			file_server
+		}
+		handle {
+			try_files {path} /index.html
+			file_server
+		}
+	}
+
+	handle {
+		redir https://{host}{uri} permanent
+	}
+}
+
+http://conncheck.{$ICARO_HOSTNAME} {
+	redir http://{$ICARO_HOSTNAME}{uri} permanent
+}
