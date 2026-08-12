@@ -94,7 +94,7 @@
     - ansible_facts['selinux']['mode'] == 'enforcing'
   changed_when: true
 
-- name: Enable Caddy after cloud-init
+- name: Enable Caddy server
   ansible.builtin.systemd_service:
     name: caddy
     enabled: true
