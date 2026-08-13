@@ -55,6 +55,12 @@ sudo install -o root -g caddy -m 0640 private_key.pem \
 Caddy serves the APIs, dashboard, and survey over HTTPS. The `/wings` captive
 portal remains HTTP-only, and other HTTP requests are redirected to HTTPS.
 
+Caddy access logs are written to standard output in Apache Common Log Format
+by default. Set `icaro.caddy_log_format: "json"` to use Caddy's native JSON
+format instead. The default `common` setting installs the
+[`transform-encoder`](https://github.com/caddyserver/transform-encoder) plugin
+during provisioning.
+
 The playbook intentionally disables SELinux persistently. If the fresh host is
 enforcing during provisioning, it switches to permissive mode immediately and
 becomes disabled after reboot.
