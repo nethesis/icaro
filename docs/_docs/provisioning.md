@@ -64,6 +64,12 @@ Caddy v2 keeps the dashboard, API proxies, and `/survey` on HTTPS. The
 `/wings` captive portal remains available only over HTTP; all other HTTP paths
 redirect to HTTPS.
 
+Caddy writes access logs to standard output in Apache Common Log Format by
+default. Set `icaro.caddy_log_format: "json"` to select Caddy's native JSON
+format. The default `common` option installs the
+[`transform-encoder`](https://github.com/caddyserver/transform-encoder) plugin
+during provisioning.
+
 The playbook preserves the deployment's existing SELinux policy: it disables
 SELinux in `/etc/selinux/config` and immediately leaves enforcing mode when
 necessary. The final Vagrant reboot starts Caddy and the other services in the
