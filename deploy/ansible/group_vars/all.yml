@@ -4,6 +4,8 @@ icaro:
   version: "autobuild"
   hostname: "localhost"
   tls: "self_signed"
+  # Access log format: common (Apache Common Log Format) or json.
+  caddy_log_format: "common"
   # Google Chrome trial token for allow Private Network Access from non-secure contexts
   # see https://developer.chrome.com/blog/private-network-access-update/#register-deprecation-trial
   #origin_trial_token: ""

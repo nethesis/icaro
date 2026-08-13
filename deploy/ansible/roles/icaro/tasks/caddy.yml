@@ -19,6 +19,38 @@
     name: caddy
     state: present
 
+- name: Validate the Caddy access log format
+  ansible.builtin.assert:
+    that:
+      - (icaro.caddy_log_format | default('common')) in ['common', 'json']
+    fail_msg: >-
+      icaro.caddy_log_format must be either "common" or "json".
+
+- name: List installed third-party Caddy packages
+  ansible.builtin.command:
+    argv:
+      - /usr/bin/caddy
+      - list-modules
+      - --packages
+      - --skip-standard
+  register: caddy_third_party_packages
+  changed_when: false
+  check_mode: false
+  when: (icaro.caddy_log_format | default('common')) == 'common'
+
+- name: Install the Caddy transform encoder plugin
+  ansible.builtin.command:
+    argv:
+      - /usr/bin/caddy
+      - add-package
+      - github.com/caddyserver/transform-encoder
+  when:
+    - (icaro.caddy_log_format | default('common')) == 'common'
+    - >-
+      'github.com/caddyserver/transform-encoder'
+      not in (caddy_third_party_packages.stdout | default(''))
+  changed_when: true
+
 - name: Create Caddy configuration directories
   ansible.builtin.file:
     path: "{{ item }}"
