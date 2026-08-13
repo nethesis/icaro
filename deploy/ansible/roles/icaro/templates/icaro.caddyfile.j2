@@ -7,6 +7,9 @@ https://{$ICARO_HOSTNAME} {
 {% endif %}
 	log {
 		output stdout
+{% if (icaro.caddy_log_format | default('common')) == 'common' %}
+		format transform "{common_log}"
+{% endif %}
 	}
 
 	@wings path /wings /wings/*
@@ -45,6 +48,9 @@ https://{$ICARO_HOSTNAME} {
 http://{$ICARO_HOSTNAME} {
 	log {
 		output stdout
+{% if (icaro.caddy_log_format | default('common')) == 'common' %}
+		format transform "{common_log}"
+{% endif %}
 	}
 
 	@wings path /wings /wings/*
