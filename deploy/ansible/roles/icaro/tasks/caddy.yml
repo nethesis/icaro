@@ -1,47 +1,133 @@
 ---
-- name: Install EPEL repository (epel-release)
-  yum:
-    name: epel-release
+- name: Install the official Caddy repository plugin
+  ansible.builtin.dnf:
+    name: dnf-plugins-core
     state: present
-    enablerepo: extras
-  when: ansible_distribution == "CentOS" and (ansible_distribution_major_version == "6" or ansible_distribution_major_version == "7")
 
-- name: Install Caddy HTTP/2 web server
-  yum:
+- name: Enable the official Caddy COPR repository
+  ansible.builtin.command:
+    argv:
+      - dnf
+      - -y
+      - copr
+      - enable
+      - "@caddy/caddy"
+  changed_when: true
+
+- name: Install Caddy from the official repository
+  ansible.builtin.dnf:
     name: caddy
     state: present
 
-- name: Copy Caddy envfile
-  template:
+- name: Validate the Caddy access log format
+  ansible.builtin.assert:
+    that:
+      - (icaro.caddy_log_format | default('common')) in ['common', 'json']
+    fail_msg: >-
+      icaro.caddy_log_format must be either "common" or "json".
+
+- name: List installed third-party Caddy packages
+  ansible.builtin.command:
+    argv:
+      - /usr/bin/caddy
+      - list-modules
+      - --packages
+      - --skip-standard
+  register: caddy_third_party_packages
+  changed_when: false
+  check_mode: false
+  when: (icaro.caddy_log_format | default('common')) == 'common'
+
+- name: Install the Caddy transform encoder plugin
+  ansible.builtin.command:
+    argv:
+      - /usr/bin/caddy
+      - add-package
+      - github.com/caddyserver/transform-encoder
+  when:
+    - (icaro.caddy_log_format | default('common')) == 'common'
+    - >-
+      'github.com/caddyserver/transform-encoder'
+      not in (caddy_third_party_packages.stdout | default(''))
+  changed_when: true
+
+- name: Create Caddy configuration directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+  loop:
+    - /etc/caddy/Caddyfile.d
+    - /etc/systemd/system/caddy.service.d
+
+- name: Install the Caddy entrypoint configuration
+  ansible.builtin.template:
+    src: Caddyfile.j2
+    dest: /etc/caddy/Caddyfile
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Copy the Icaro Caddy environment
+  ansible.builtin.template:
     src: icaro-caddy-envfile.j2
     dest: /etc/caddy/envfile
+    owner: root
+    group: root
+    mode: "0644"
 
-- name: Copy Caddy configs
-  template:
-    src: icaro-caddy.j2
-    dest:  /etc/caddy/conf.d/icaro.conf
+- name: Install the Caddy v2 Icaro configuration
+  ansible.builtin.template:
+    src: icaro.caddyfile.j2
+    dest: /etc/caddy/Caddyfile.d/icaro.caddyfile
+    owner: root
+    group: root
+    mode: "0644"
 
-- name: Grant caddy to bind on low ports
-  capabilities:
-    path: /usr/bin/caddy
-    capability: cap_net_bind_service=+ep
-    state: present
+- name: Validate the Caddy v2 configuration
+  ansible.builtin.command:
+    argv:
+      - /usr/bin/caddy
+      - adapt
+      - --config
+      - /etc/caddy/Caddyfile
+      - --adapter
+      - caddyfile
+  environment:
+    ICARO_HOSTNAME: icaro.invalid
+    SUN_API_ORIGIN: https://sun.invalid
+    WAX_ORIGIN: https://wax.invalid
+    ADE_API_ORIGIN: https://ade.invalid
+  changed_when: false
 
-- name: Make caddy start after cloud-init (create dir)
-  file:
-    name: /etc/systemd/system/caddy.service.d
-    state: directory
-
-- name: Make caddy start after cloud-init (copy file)
-  copy:
+- name: Install the Caddy service override
+  ansible.builtin.copy:
     src: etc/systemd/system/caddy.service.d/override.conf
     dest: /etc/systemd/system/caddy.service.d/override.conf
+    owner: root
+    group: root
+    mode: "0644"
 
-- name: Disable SELinux
-  selinux:
-    state: disabled
+- name: Disable SELinux persistently
+  ansible.builtin.lineinfile:
+    path: /etc/selinux/config
+    regexp: '^SELINUX='
+    line: SELINUX=disabled
+
+- name: Put SELinux in permissive mode until reboot
+  ansible.builtin.command:
+    argv:
+      - setenforce
+      - "0"
+  when:
+    - ansible_facts['selinux']['status'] == 'enabled'
+    - ansible_facts['selinux']['mode'] == 'enforcing'
+  changed_when: true
 
 - name: Enable Caddy server
-  service:
+  ansible.builtin.systemd_service:
     name: caddy
-    enabled: yes
+    enabled: true
+    daemon_reload: true
