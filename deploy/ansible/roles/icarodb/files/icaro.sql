@@ -25,7 +25,8 @@ CREATE TABLE `accounts` (
 );
 
 /* CREATE DEFAULT ADMIN USER */
-INSERT INTO `accounts` VALUES (1, 0, "", "admin", "Admin", "admin", MD5("admin"), "", "", "", "", "", "", "", NOW());
+INSERT INTO `accounts` (`id`, `creator_id`, `uuid`, `type`, `name`, `username`, `password`, `email`, `privacy_name`, `privacy_vat`, `privacy_address`, `privacy_email`, `privacy_dpo`, `privacy_dpo_mail`, `created`)
+VALUES (1, 0, "", "admin", "Admin", "admin", MD5("admin"), "", "", "", "", "", "", "", NOW());
 
 CREATE TABLE `account_preferences` (
   `id` serial,
