@@ -230,10 +230,10 @@ var UtilService = {
       for (var r in rows) {
         body += '"' + rows[r].join('","') + '"' + "\r\n";
       }
-      var finalCSV = "data:text/csv;charset=utf-8," + header + body;
-      var encodedUri = encodeURI(finalCSV);
+      // use a Blob: a data URI gets truncated at the first "#" in the data
+      var blob = new Blob([header + body], { type: "text/csv;charset=utf-8" });
       var link = document.getElementById("download-csv");
-      link.setAttribute("href", encodedUri);
+      link.setAttribute("href", URL.createObjectURL(blob));
       var now = new Date();
       var date =
         now.getFullYear() + "_" + (now.getMonth() + 1) + "_" + now.getDate();
@@ -241,10 +241,10 @@ var UtilService = {
       link.click();
     },
     createDownloadCSV(body, title) {
-      var finalCSV = "data:text/csv;charset=utf-8," + body;
-      var encodedUri = encodeURI(finalCSV);
+      // use a Blob: a data URI gets truncated at the first "#" in the data
+      var blob = new Blob([body], { type: "text/csv;charset=utf-8" });
       var link = document.getElementById("download-csv");
-      link.setAttribute("href", encodedUri);
+      link.setAttribute("href", URL.createObjectURL(blob));
       var now = new Date();
       var date =
         now.getFullYear() + "_" + (now.getMonth() + 1) + "_" + now.getDate();
